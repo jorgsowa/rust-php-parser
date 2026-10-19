@@ -134,46 +134,58 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
     }
 
     // Prefix unary operators
+    // A run of prefix operators is collected in a loop rather than by recursion,
+    // so chains like `~~~~…$x` do not consume the nesting budget.
     if let Some(right_bp) = precedence::prefix_binding_power(kind) {
-        let op_token = parser.advance();
-        let mut operand = parse_expr_bp(parser, right_bp);
-        // PHP grammar quirk: assignment operators bind tighter than prefix unary.
-        // e.g., -$x += 1  parses as  -(($x += 1)),  not  (-$x) += 1
-        //
-        // Exception: `++` and `--` require a variable (l-value) as operand — PHP enforces
-        // this at parse time (`++$x += 1` is a syntax error in PHP). Skip the assignment
-        // continuation for those two operators.
-        if parser.current_kind().is_assignment_op()
-            && !matches!(op_token.kind, TokenKind::PlusPlus | TokenKind::MinusMinus)
-        {
-            operand = parse_assign_continuation(parser, operand);
+        let mut ops = vec![(parser.advance(), right_bp)];
+        while let Some(right_bp) = precedence::prefix_binding_power(parser.current_kind()) {
+            ops.push((parser.advance(), right_bp));
         }
-        let op = match op_token.kind {
-            TokenKind::Minus => UnaryPrefixOp::Negate,
-            TokenKind::Plus => UnaryPrefixOp::Plus,
-            TokenKind::Bang => UnaryPrefixOp::BooleanNot,
-            TokenKind::Tilde => UnaryPrefixOp::BitwiseNot,
-            TokenKind::PlusPlus => UnaryPrefixOp::PreIncrement,
-            TokenKind::MinusMinus => UnaryPrefixOp::PreDecrement,
-            _ => unreachable!(
-                "prefix_binding_power only returns Some for -, +, !, ~, ++, --, got {:?}",
-                op_token.kind
-            ),
-        };
-        if matches!(
-            op,
-            UnaryPrefixOp::PreIncrement | UnaryPrefixOp::PreDecrement
-        ) {
-            super::check_increment_operand(parser, &operand);
-        }
-        let span = op_token.span.merge(operand.span);
-        return Expr {
-            kind: ExprKind::UnaryPrefix(UnaryPrefixExpr {
+        let mut operand = parse_expr_bp(parser, ops.last().unwrap().1);
+        loop {
+            let (op_token, _) = ops.pop().expect("prefix operator stack is non-empty");
+            // PHP grammar quirk: assignment operators bind tighter than prefix unary.
+            // e.g., -$x += 1  parses as  -(($x += 1)),  not  (-$x) += 1
+            //
+            // Exception: `++` and `--` require a variable (l-value) as operand — PHP enforces
+            // this at parse time (`++$x += 1` is a syntax error in PHP). Skip the assignment
+            // continuation for those two operators.
+            if parser.current_kind().is_assignment_op()
+                && !matches!(op_token.kind, TokenKind::PlusPlus | TokenKind::MinusMinus)
+            {
+                operand = parse_assign_continuation(parser, operand);
+            }
+            let op = match op_token.kind {
+                TokenKind::Minus => UnaryPrefixOp::Negate,
+                TokenKind::Plus => UnaryPrefixOp::Plus,
+                TokenKind::Bang => UnaryPrefixOp::BooleanNot,
+                TokenKind::Tilde => UnaryPrefixOp::BitwiseNot,
+                TokenKind::PlusPlus => UnaryPrefixOp::PreIncrement,
+                TokenKind::MinusMinus => UnaryPrefixOp::PreDecrement,
+                _ => unreachable!(
+                    "prefix_binding_power only returns Some for -, +, !, ~, ++, --, got {:?}",
+                    op_token.kind
+                ),
+            };
+            if matches!(
                 op,
-                operand: parser.alloc(operand),
-            }),
-            span,
-        };
+                UnaryPrefixOp::PreIncrement | UnaryPrefixOp::PreDecrement
+            ) {
+                super::check_increment_operand(parser, &operand);
+            }
+            let span = op_token.span.merge(operand.span);
+            let expr = Expr {
+                kind: ExprKind::UnaryPrefix(UnaryPrefixExpr {
+                    op,
+                    operand: parser.alloc(operand),
+                }),
+                span,
+            };
+            operand = match ops.last() {
+                Some(&(_, outer_bp)) => parse_expr_continue(parser, expr, outer_bp),
+                None => return expr,
+            };
+        }
     }
 
     match kind {

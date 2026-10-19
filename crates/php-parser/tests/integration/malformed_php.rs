@@ -340,16 +340,25 @@ fn very_long_concatenation_chain() {
     assert_no_errors(&code);
 }
 
-/// Long left-associative chains are built in a loop by the parser, so their
-/// depth is unbounded; converting them to the owned AST and dropping it must
-/// not recurse once per link. This runs on a small stack to prove it.
+/// A run of prefix operators is parsed in a loop, so it does not use up the
+/// nesting budget (php-src's stack_limit_013 nests 7,676 `~`).
+#[test]
+fn very_long_prefix_chain() {
+    assert_no_errors(&format!("<?php $test = [\n    {}1\n];", "~".repeat(7_676)));
+    assert_no_errors(&format!("<?php $a = {}$b;", "~-!+".repeat(5_000)));
+}
+
+/// Long operator chains are built in a loop by the parser, so their depth is
+/// unbounded; converting them to the owned AST and dropping it must not
+/// recurse once per link. This runs on a small stack to prove it.
 #[test]
 fn very_long_chains_owned() {
     let concat = format!("<?php echo $a{};", " . $a".repeat(20_000));
     let methods = format!("<?php $a{};", "->b()".repeat(20_000));
     let mixed = format!("<?php $a{};", "?->b[0]::C->d(...)".repeat(5_000));
+    let prefix = format!("<?php $a = {}$b;", "~-!+".repeat(5_000));
     with_stack(256 * 1024, move || {
-        for code in [concat, methods, mixed] {
+        for code in [concat, methods, mixed, prefix] {
             let result = php_rs_parser::parse(&code);
             assert!(result.errors.is_empty(), "{:?}", result.errors);
             drop(result);

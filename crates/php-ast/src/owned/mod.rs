@@ -1149,12 +1149,12 @@ pub enum ExprKind {
 // ---------------------------------------------------------------------------
 // Expression chains
 //
-// The parser builds left-associative operator chains and postfix chains
-// (`$a . $b . …`, `$x->a()->b()…`, `$a[0][1]…`) in a loop rather than by
-// recursion, so their length is limited only by the input. Converting or
-// dropping such a chain one recursive call per link would overflow the stack,
-// so these helpers expose the operand each link continues from and the
-// conversions and `Drop` walk it iteratively. The `*_is_chain`,
+// The parser builds left-associative operator chains, prefix and postfix
+// chains (`$a . $b . …`, `~~$a`, `$x->a()->b()…`, `$a[0][1]…`) in a loop
+// rather than by recursion, so their length is limited only by the input.
+// Converting or dropping such a chain one recursive call per link would
+// overflow the stack, so these helpers expose the operand each link continues
+// from and the conversions and `Drop` walk it iteratively. The `*_is_chain`,
 // `*_chain_operand*` and `*_link_kind` functions must agree on the variants and
 // on which field is the operand.
 // ---------------------------------------------------------------------------
@@ -1231,6 +1231,7 @@ fn arena_is_chain(k: &arena_ast::ExprKind<'_, '_>) -> bool {
         k,
         arena_ast::ExprKind::Assign(_)
             | arena_ast::ExprKind::Binary(_)
+            | arena_ast::ExprKind::UnaryPrefix(_)
             | arena_ast::ExprKind::UnaryPostfix(_)
             | arena_ast::ExprKind::Ternary(_)
             | arena_ast::ExprKind::NullCoalesce(_)
@@ -1257,6 +1258,7 @@ fn owned_is_chain(k: &ExprKind) -> bool {
         k,
         ExprKind::Assign(_)
             | ExprKind::Binary(_)
+            | ExprKind::UnaryPrefix(_)
             | ExprKind::UnaryPostfix(_)
             | ExprKind::Ternary(_)
             | ExprKind::NullCoalesce(_)
@@ -1284,6 +1286,7 @@ fn arena_chain_operand<'a, 'arena, 'src>(
     match k {
         K::Assign(a) => Some(a.target),
         K::Binary(b) => Some(b.left),
+        K::UnaryPrefix(u) => Some(u.operand),
         K::UnaryPostfix(u) => Some(u.operand),
         K::Ternary(t) => Some(t.condition),
         K::NullCoalesce(n) => Some(n.left),
@@ -1312,6 +1315,7 @@ fn owned_chain_operand(k: &ExprKind) -> Option<&Expr> {
     match k {
         ExprKind::Assign(a) => Some(&a.target),
         ExprKind::Binary(b) => Some(&b.left),
+        ExprKind::UnaryPrefix(u) => Some(&u.operand),
         ExprKind::UnaryPostfix(u) => Some(&u.operand),
         ExprKind::Ternary(t) => Some(&t.condition),
         ExprKind::NullCoalesce(n) => Some(&n.left),
@@ -1339,6 +1343,7 @@ fn owned_chain_operand_mut(k: &mut ExprKind) -> Option<&mut Expr> {
     match k {
         ExprKind::Assign(a) => Some(&mut a.target),
         ExprKind::Binary(b) => Some(&mut b.left),
+        ExprKind::UnaryPrefix(u) => Some(&mut u.operand),
         ExprKind::UnaryPostfix(u) => Some(&mut u.operand),
         ExprKind::Ternary(t) => Some(&mut t.condition),
         ExprKind::NullCoalesce(n) => Some(&mut n.left),
@@ -2553,10 +2558,6 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
         }
         arena_ast::ExprKind::Identifier(s) => ExprKind::Identifier(s.as_str().into()),
         arena_ast::ExprKind::Name(name) => ExprKind::Name(owned_name(name)),
-        arena_ast::ExprKind::UnaryPrefix(u) => ExprKind::UnaryPrefix(UnaryPrefixExpr {
-            op: u.op,
-            operand: Box::new(owned_expr(u.operand)),
-        }),
         arena_ast::ExprKind::Array(elems) => ExprKind::Array(
             elems
                 .iter()
@@ -2651,6 +2652,7 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
         arena_ast::ExprKind::Error => ExprKind::Error,
         arena_ast::ExprKind::Assign(_)
         | arena_ast::ExprKind::Binary(_)
+        | arena_ast::ExprKind::UnaryPrefix(_)
         | arena_ast::ExprKind::UnaryPostfix(_)
         | arena_ast::ExprKind::Ternary(_)
         | arena_ast::ExprKind::NullCoalesce(_)
@@ -2685,6 +2687,10 @@ fn owned_link_kind(k: &arena_ast::ExprKind<'_, '_>, operand: Expr) -> ExprKind {
             left: Box::new(operand),
             op: b.op,
             right: Box::new(owned_expr(b.right)),
+        }),
+        arena_ast::ExprKind::UnaryPrefix(u) => ExprKind::UnaryPrefix(UnaryPrefixExpr {
+            op: u.op,
+            operand: Box::new(operand),
         }),
         arena_ast::ExprKind::UnaryPostfix(u) => ExprKind::UnaryPostfix(UnaryPostfixExpr {
             operand: Box::new(operand),
@@ -3522,10 +3528,6 @@ fn av_leaf_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
         }
         ExprKind::Identifier(s) => arena_ast::ExprKind::Identifier(av_namestr(arena, s)),
         ExprKind::Name(name) => arena_ast::ExprKind::Name(av_name(arena, name)),
-        ExprKind::UnaryPrefix(u) => arena_ast::ExprKind::UnaryPrefix(arena_ast::UnaryPrefixExpr {
-            op: u.op,
-            operand: arena.alloc(av_expr(arena, &u.operand)),
-        }),
         ExprKind::Array(elems) => {
             let mut v = arena_ast::ArenaVec::with_capacity_in(elems.len(), arena);
             for e in elems.iter() {
@@ -3631,6 +3633,7 @@ fn av_leaf_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
         ExprKind::Error => arena_ast::ExprKind::Error,
         ExprKind::Assign(_)
         | ExprKind::Binary(_)
+        | ExprKind::UnaryPrefix(_)
         | ExprKind::UnaryPostfix(_)
         | ExprKind::Ternary(_)
         | ExprKind::NullCoalesce(_)
@@ -3669,6 +3672,10 @@ fn av_link_kind<'a>(
             left: arena.alloc(operand),
             op: b.op,
             right: arena.alloc(av_expr(arena, &b.right)),
+        }),
+        ExprKind::UnaryPrefix(u) => arena_ast::ExprKind::UnaryPrefix(arena_ast::UnaryPrefixExpr {
+            op: u.op,
+            operand: arena.alloc(operand),
         }),
         ExprKind::UnaryPostfix(u) => {
             arena_ast::ExprKind::UnaryPostfix(arena_ast::UnaryPostfixExpr {

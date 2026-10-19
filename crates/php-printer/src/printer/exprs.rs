@@ -107,6 +107,51 @@ impl<'src> Printer<'src> {
         }
     }
 
+    /// Print a prefix operation whose operand may be a prefix operation of any
+    /// depth. Each nested operand gets what `print_expr` would do for it, but
+    /// in a loop: operators and parentheses on the way down, closing
+    /// parentheses on the way back up.
+    fn print_unary_prefix_chain(&mut self, expr: &Expr) {
+        let mut links = LinkStack::new();
+        let mut outer: Option<(&str, usize)> = None;
+        let mut node = expr;
+        while let ExprKind::UnaryPrefix(unary) = &node.kind {
+            let op = unary_prefix_op_str(unary.op);
+            self.w(op);
+            if let Some((outer_op, operand_start)) = outer {
+                self.separate_prefix_op(outer_op, operand_start);
+            }
+            let operand_start = self.output.len();
+            let prec = expr_precedence(&node.kind);
+            node = unary.operand;
+            if matches!(node.kind, ExprKind::UnaryPrefix(_)) {
+                self.flush_inline_comments(node.span.start);
+                let needs_parens = self.open_paren(node, prec);
+                links.push((needs_parens, self.at_tail));
+                if needs_parens {
+                    self.at_tail = true;
+                }
+                outer = Some((op, operand_start));
+            } else {
+                self.print_expr(node, prec);
+                self.separate_prefix_op(op, operand_start);
+            }
+        }
+        while let Some((needs_parens, at_tail)) = links.pop() {
+            if needs_parens {
+                self.w(")");
+            }
+            self.at_tail = at_tail;
+        }
+    }
+
+    /// `- -$a` must not become `--$a`, nor `+ ++$a` become `+++$a`.
+    fn separate_prefix_op(&mut self, op: &str, operand_start: usize) {
+        if matches!(op, "-" | "+") && self.output[operand_start..].starts_with(op) {
+            self.output.insert(operand_start, ' ');
+        }
+    }
+
     /// Print `expr`, except for its chain operand, which `print_expr` has
     /// already printed.
     fn print_expr_inner(&mut self, expr: &Expr) {
@@ -209,16 +254,7 @@ impl<'src> Printer<'src> {
                     self.print_expr(binary.right, rhs_prec);
                 }
             }
-            ExprKind::UnaryPrefix(unary) => {
-                let op = unary_prefix_op_str(unary.op);
-                self.w(op);
-                let operand_start = self.output.len();
-                self.print_expr(unary.operand, expr_precedence(&expr.kind));
-                // `- -$a` must not become `--$a`, nor `+ ++$a` become `+++$a`.
-                if matches!(op, "-" | "+") && self.output[operand_start..].starts_with(op) {
-                    self.output.insert(operand_start, ' ');
-                }
-            }
+            ExprKind::UnaryPrefix(_) => self.print_unary_prefix_chain(expr),
             ExprKind::UnaryPostfix(unary) => self.w(unary_postfix_op_str(unary.op)),
             ExprKind::Ternary(ternary) => {
                 if let Some(then_expr) = &ternary.then_expr {

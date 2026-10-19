@@ -414,6 +414,7 @@ fn long_chains_print_in_full() {
             format!("<?php echo $a{};", " . $a".repeat(20_000)),
             format!("<?php $a{};", "->b()".repeat(20_000)),
             format!("<?php $a{};", "?->b[0]::C->d(...)".repeat(2_000)),
+            format!("<?php $a = {}1;", "~- +".repeat(5_000)),
         ] {
             assert_round_trips(&code);
         }

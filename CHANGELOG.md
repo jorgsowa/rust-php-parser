@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A long run of prefix operators (`~~~…$x`, as in php-src's `stack_limit_013`) hit "maximum nesting depth exceeded"; such runs are parsed, converted to and from the owned AST, dropped and printed without recursion, like other operator chains (`php-rs-parser`, `php-ast`, `php-printer`).
 - Errors PHP raises only while compiling (such as "Cannot use lexical variable $c as a parameter name") were reported in the right operand of `&&`, `||`, `and` or `or` after a constant that decides the result (`assert(false && …)`); PHP never compiles that operand, so only syntax errors are reported there (`php-rs-parser`).
 - `<?php` directly followed by a character other than whitespace (``<?php`ls`;``) opened PHP code; PHP reads it as inline HTML (`php-lexer`).
 - `"$a[k"` (and the heredoc and backtick forms) silently dropped the unclosed subscript; the parser now reports "unclosed '[' in string interpolation" and keeps the text (`php-rs-parser`).
