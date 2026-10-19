@@ -123,6 +123,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `__construct` was recognized only in lowercase, so promoted parameters in `__CONSTRUCT` were rejected and its return type and `final private` checks were skipped (`php-rs-parser`).
 - A return type on `__destruct` is reported (`php-rs-parser`).
 - Abstract and interface method body errors and the constructor return type error use PHP's wording, including the class and method name (`php-rs-parser`).
+- `declare` directives are checked like PHP: a value that is not a literal, `strict_types` or `encoding` that is not the first statement, `strict_types` in block mode or with a value other than `0` or `1`, and the warnings for unsupported directives and the ignored `encoding` (`php-rs-parser`).
 
 ---
 

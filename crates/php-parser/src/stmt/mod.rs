@@ -2324,6 +2324,7 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     parser.advance();
     parser.expect(TokenKind::LeftParen);
     let mut directives = parser.alloc_vec();
+    let mut directive_spans = Vec::new();
     loop {
         if parser.check(TokenKind::RightParen) {
             parser.trailing_comma_error("identifier");
@@ -2335,6 +2336,7 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
             parser.expect(TokenKind::Equals);
             let value = expr::parse_expr(parser);
             directives.push((name, value));
+            directive_spans.push(Span::new(t.span.start, parser.previous_end()));
         }
         if parser.eat(TokenKind::Comma).is_none() {
             break;
@@ -2367,6 +2369,13 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
         (Some(parser.alloc(s)), false)
     };
 
+    // Nested statements, including those of a braced namespace, never come first.
+    let first_stmt = parser.stmt_depth == 1 && !parser.top_level_code_seen;
+    let has_body = body.is_some_and(|b| !matches!(b.kind, StmtKind::Error));
+    for ((name, value), span) in directives.iter().zip(directive_spans) {
+        check_declare_directive(parser, name, value, has_body, first_stmt, span);
+    }
+
     let span = Span::new(start, parser.previous_end());
     Stmt {
         kind: StmtKind::Declare(parser.alloc(DeclareStmt {
@@ -2376,6 +2385,72 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
         })),
         span,
         doc_comment: None,
+    }
+}
+
+/// Report what PHP rejects in one `name=value` directive of a `declare` statement.
+fn check_declare_directive(
+    parser: &mut Parser<'_, '_>,
+    name: &str,
+    value: &Expr<'_, '_>,
+    has_body: bool,
+    first_stmt: bool,
+    span: Span,
+) {
+    let mut value = value;
+    while let ExprKind::Parenthesized(inner) = &value.kind {
+        value = inner;
+    }
+    let is_literal = match &value.kind {
+        ExprKind::Int(_) | ExprKind::Float(_) | ExprKind::String(_) | ExprKind::Nowdoc { .. } => {
+            true
+        }
+        ExprKind::Heredoc { parts, .. } => {
+            parts.iter().all(|p| matches!(p, StringPart::Literal(_)))
+        }
+        _ => false,
+    };
+    let message = if name.eq_ignore_ascii_case("encoding") {
+        // Checked while parsing, before the checks of the other directives.
+        if !is_literal {
+            Some("Encoding must be a literal".to_string())
+        } else {
+            parser.error(ParseError::ForbiddenWarning {
+                message: "declare(encoding=...) ignored because Zend multibyte feature is turned off by settings".into(),
+                span,
+            });
+            // Unlike `strict_types`, an empty statement before it is not allowed.
+            (!first_stmt || parser.top_level_nop_seen).then(|| {
+                "Encoding declaration pragma must be the very first statement in the script"
+                    .to_string()
+            })
+        }
+    } else if !is_literal {
+        Some(format!("declare({name}) value must be a literal"))
+    } else if name.eq_ignore_ascii_case("strict_types") {
+        if !first_stmt {
+            Some("strict_types declaration must be the very first statement in the script".into())
+        } else if has_body {
+            Some("strict_types declaration must not use block mode".into())
+        } else if !matches!(value.kind, ExprKind::Int(0 | 1)) {
+            Some("strict_types declaration must have 0 or 1 as its value".into())
+        } else {
+            None
+        }
+    } else {
+        if !name.eq_ignore_ascii_case("ticks") {
+            parser.error(ParseError::ForbiddenWarning {
+                message: format!("Unsupported declare '{name}'").into(),
+                span,
+            });
+        }
+        None
+    };
+    if let Some(message) = message {
+        parser.error(ParseError::Forbidden {
+            message: message.into(),
+            span,
+        });
     }
 }
 

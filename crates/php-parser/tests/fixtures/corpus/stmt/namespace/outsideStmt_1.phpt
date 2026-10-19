@@ -7,6 +7,8 @@ namespace B {
 __halt_compiler()
 ?>
 Hi!
+===errors===
+Unsupported declare 'A'
 ===ast===
 {
   "stmts": [

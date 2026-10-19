@@ -14,6 +14,8 @@ while ($a) $A;
 do $A; while ($a);
 
 declare (a='b') $C;
+===errors===
+Unsupported declare 'a'
 ===ast===
 {
   "stmts": [

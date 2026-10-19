@@ -9,6 +9,12 @@ declare (A='B', C='D') {
 
 declare (A='B', C='D'):
 enddeclare;
+===errors===
+Unsupported declare 'X'
+Unsupported declare 'A'
+Unsupported declare 'C'
+Unsupported declare 'A'
+Unsupported declare 'C'
 ===ast===
 {
   "stmts": [
