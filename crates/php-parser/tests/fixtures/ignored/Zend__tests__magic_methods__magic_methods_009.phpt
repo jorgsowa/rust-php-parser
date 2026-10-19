@@ -1,5 +1,4 @@
 ===config===
-ignore=non-fatal warning: non-public magic method
 min_php=8.5
 ===source===
 <?php
@@ -10,3 +9,110 @@ class a {
 }
 
 ?>
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "a",
+            "span": {
+              "start": 13,
+              "end": 14
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": {
+                    "name": "__callstatic",
+                    "span": {
+                      "start": 47,
+                      "end": 59
+                    }
+                  },
+                  "visibility": "Protected",
+                  "is_static": true,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [
+                    {
+                      "name": {
+                        "name": "a",
+                        "span": {
+                          "start": 60,
+                          "end": 62
+                        }
+                      },
+                      "type_hint": null,
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": null,
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 60,
+                        "end": 62
+                      }
+                    },
+                    {
+                      "name": {
+                        "name": "b",
+                        "span": {
+                          "start": 64,
+                          "end": 66
+                        }
+                      },
+                      "type_hint": null,
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": null,
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 64,
+                        "end": 66
+                      }
+                    }
+                  ],
+                  "return_type": null,
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 21,
+                "end": 75
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 77
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 77
+  }
+}

@@ -9,7 +9,6 @@ class A {
 }
 ===errors===
 Method A::__get() cannot be static
-The magic method A::__get() must have public visibility
 A::__get(): Parameter #1 ($n) must be of type string when declared
 Method A::__set() must take exactly 2 arguments
 A::__set(): Return type must be void when declared

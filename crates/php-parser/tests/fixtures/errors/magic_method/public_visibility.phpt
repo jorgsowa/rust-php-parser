@@ -1,7 +1,5 @@
-===config===
-ignore=non-fatal warning: non-public magic method
 ===description===
-PHP warns (does not fatal) when a magic method other than __construct, __destruct and __clone is not public.
+PHP only warns when a magic method other than __construct, __destruct and __clone is not public, so the parser reports nothing.
 ===source===
 <?php
 class A {

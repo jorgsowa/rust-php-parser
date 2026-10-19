@@ -1347,7 +1347,6 @@ pub(super) fn parse_method_member<'arena, 'src>(
             &params,
             return_type.as_ref(),
             member_span,
-            in_interface,
         );
     }
 
@@ -1393,7 +1392,6 @@ enum MagicReturn {
 struct MagicSignature {
     arg_count: Option<usize>,
     is_static: bool,
-    must_be_public: bool,
     /// Builtin type each leading parameter's declared type must include.
     param_types: &'static [(BuiltinType, &'static str)],
     return_type: MagicReturn,
@@ -1404,62 +1402,52 @@ fn magic_method_signature(lower_name: &str) -> Option<MagicSignature> {
     const ARRAY: (BuiltinType, &str) = (BuiltinType::Array, "array");
     const VOID: MagicReturn = MagicReturn::Within(&[BuiltinType::Void], "void");
     const RETURN_ARRAY: MagicReturn = MagicReturn::Within(&[BuiltinType::Array], "array");
-    let (arg_count, is_static, must_be_public, param_types, return_type): (
-        _,
-        _,
-        _,
-        &'static [_],
-        _,
-    ) = match lower_name {
-        "__construct" => (None, false, false, &[], MagicReturn::Forbidden),
-        "__destruct" => (Some(0), false, false, &[], MagicReturn::Forbidden),
-        "__clone" => (Some(0), false, false, &[], VOID),
-        "__get" => (Some(1), false, true, &[STRING], MagicReturn::Any),
-        "__set" => (Some(2), false, true, &[STRING], VOID),
-        "__unset" => (Some(1), false, true, &[STRING], VOID),
+    let (arg_count, is_static, param_types, return_type): (_, _, &'static [_], _) = match lower_name
+    {
+        "__construct" => (None, false, &[], MagicReturn::Forbidden),
+        "__destruct" => (Some(0), false, &[], MagicReturn::Forbidden),
+        "__clone" => (Some(0), false, &[], VOID),
+        "__get" => (Some(1), false, &[STRING], MagicReturn::Any),
+        "__set" => (Some(2), false, &[STRING], VOID),
+        "__unset" => (Some(1), false, &[STRING], VOID),
         "__isset" => (
             Some(1),
             false,
-            true,
             &[STRING],
             MagicReturn::Within(
                 &[BuiltinType::Bool, BuiltinType::True, BuiltinType::False],
                 "bool",
             ),
         ),
-        "__call" => (Some(2), false, true, &[STRING, ARRAY], MagicReturn::Any),
-        "__callstatic" => (Some(2), true, true, &[STRING, ARRAY], MagicReturn::Any),
+        "__call" => (Some(2), false, &[STRING, ARRAY], MagicReturn::Any),
+        "__callstatic" => (Some(2), true, &[STRING, ARRAY], MagicReturn::Any),
         "__tostring" => (
             Some(0),
             false,
-            true,
             &[],
             MagicReturn::Within(&[BuiltinType::String], "string"),
         ),
         "__debuginfo" => (
             Some(0),
             false,
-            true,
             &[],
             MagicReturn::Within(&[BuiltinType::Array, BuiltinType::Null], "?array"),
         ),
-        "__serialize" | "__sleep" => (Some(0), false, true, &[], RETURN_ARRAY),
-        "__unserialize" => (Some(1), false, true, &[ARRAY], VOID),
+        "__serialize" | "__sleep" => (Some(0), false, &[], RETURN_ARRAY),
+        "__unserialize" => (Some(1), false, &[ARRAY], VOID),
         "__set_state" => (
             Some(1),
-            true,
             true,
             &[ARRAY],
             MagicReturn::Within(&[BuiltinType::Object], "object"),
         ),
-        "__invoke" => (None, false, true, &[], MagicReturn::Any),
-        "__wakeup" => (Some(0), false, true, &[], VOID),
+        "__invoke" => (None, false, &[], MagicReturn::Any),
+        "__wakeup" => (Some(0), false, &[], VOID),
         _ => return None,
     };
     Some(MagicSignature {
         arg_count,
         is_static,
-        must_be_public,
         param_types,
         return_type,
     })
@@ -1493,7 +1481,6 @@ fn type_members(ty: &TypeHint<'_, '_>, builtins: &mut Vec<BuiltinType>) -> bool 
     }
 }
 
-#[allow(clippy::too_many_arguments)]
 fn check_magic_method(
     parser: &mut Parser<'_, '_>,
     signature: &MagicSignature,
@@ -1502,7 +1489,6 @@ fn check_magic_method(
     params: &[Param<'_, '_>],
     return_type: Option<&TypeHint<'_, '_>>,
     member_span: Span,
-    in_interface: bool,
 ) {
     // PHP leaves a variadic parameter out of the argument count.
     let fixed_params: Vec<&Param> = params.iter().filter(|p| !p.variadic).collect();
@@ -1533,20 +1519,6 @@ fn check_magic_method(
         };
         parser.error(ParseError::Forbidden {
             message: format!("Method {method_label} {requirement}").into(),
-            span: member_span,
-        });
-    }
-
-    // Interfaces already reject non-public methods.
-    if signature.must_be_public
-        && !in_interface
-        && matches!(
-            mods.visibility,
-            Some(Visibility::Protected | Visibility::Private)
-        )
-    {
-        parser.error(ParseError::ForbiddenWarning {
-            message: format!("The magic method {method_label} must have public visibility").into(),
             span: member_span,
         });
     }
