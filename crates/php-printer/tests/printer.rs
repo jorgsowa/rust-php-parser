@@ -32,7 +32,7 @@ struct PrinterFixture {
     strip_parens: bool,
 }
 
-fn parse_printer_fixture(content: &str) -> PrinterFixture {
+fn parse_printer_fixture(content: &str) -> Result<PrinterFixture, String> {
     let (raw_config, rest) = if let Some(after) = content.strip_prefix("===config===\n") {
         let end = after
             .find("===source===\n")
@@ -69,17 +69,19 @@ fn parse_printer_fixture(content: &str) -> PrinterFixture {
             no_source = true;
         } else if line == "strip_parens=true" {
             strip_parens = true;
+        } else {
+            return Err(format!("unknown config line `{line}`"));
         }
     }
 
-    PrinterFixture {
+    Ok(PrinterFixture {
         raw_config,
         source: source.to_string(),
         expected: expected.to_string(),
         config,
         no_source,
         strip_parens,
-    }
+    })
 }
 
 /// Drops every `Parenthesized` node.
@@ -146,7 +148,16 @@ fn fixtures() {
             .to_string_lossy()
             .to_string();
         let content = std::fs::read_to_string(path).unwrap();
-        let fixture = parse_printer_fixture(&content);
+        let fixture = match parse_printer_fixture(&content) {
+            Ok(fixture) => fixture,
+            Err(e) => {
+                failures
+                    .lock()
+                    .unwrap()
+                    .push(format!("malformed fixture {rel}: {e}"));
+                return;
+            }
+        };
 
         let (actual, source_shape) = print_fixture(&fixture, &fixture.source);
 
