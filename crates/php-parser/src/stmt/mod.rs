@@ -1173,6 +1173,8 @@ fn parse_function<'arena, 'src>(
         parser.missing_ident()
     };
 
+    // A function declared in a method body has no class scope.
+    let saved_class_scope = parser.class_scope.take();
     let open_paren = parser.expect(TokenKind::LeftParen);
     let open_paren_span = open_paren.map(|t| t.span).unwrap_or(parser.current_span());
     let params = parse_param_list(parser);
@@ -1206,6 +1208,7 @@ fn parse_function<'arena, 'src>(
             parser.advance();
         }
     }
+    parser.class_scope = saved_class_scope;
     parser.function_depth -= 1;
     parser.by_ref_function = saved_by_ref;
     parser.static_vars = saved_static_vars;
@@ -1538,13 +1541,6 @@ pub fn parse_param_list<'arena, 'src>(
                 span: Span::new(param_start, parser.previous_end()),
             });
         }
-        if set_visibility.is_some() && type_hint.is_none() {
-            parser.error(ParseError::Forbidden {
-                message: "Property with asymmetric visibility must have type".into(),
-                span: Span::new(param_start, parser.previous_end()),
-            });
-        }
-
         // by-ref
         let by_ref = parser.eat(TokenKind::Ampersand).is_some();
 
@@ -1557,6 +1553,16 @@ pub fn parse_param_list<'arena, 'src>(
             .map(|t| parser.variable_ident(t))
             .unwrap_or(parser.missing_ident());
         check_param_name(parser, name, &params);
+        if let (Some(_), None, Some(name)) = (set_visibility, &type_hint, name.as_str()) {
+            let class = parser.class_member_prefix();
+            parser.error(ParseError::Forbidden {
+                message: format!(
+                    "Property with asymmetric visibility {class}${name} must have type"
+                )
+                .into(),
+                span: Span::new(param_start, parser.previous_end()),
+            });
+        }
         if let Some(type_hint) = &type_hint {
             let reported = parser.reject_return_only_param_type(type_hint);
             if let (false, Some(_), Some(name)) = (reported, first_modifier_span, name.as_str()) {
@@ -1617,6 +1623,14 @@ pub fn parse_param_list<'arena, 'src>(
                 message: "A readonly property cannot declare hooks".into(),
                 span: hook.span,
             });
+        }
+        if let Some(name) = name.as_str().filter(|name| {
+            set_visibility.is_some()
+                && !hooks.is_empty()
+                && class::is_virtual_property(name, &hooks)
+        }) {
+            let span = Span::new(param_start, parser.previous_end());
+            class::check_virtual_set_visibility(parser, name, &hooks, span);
         }
 
         let param_end = if !hooks.is_empty() {

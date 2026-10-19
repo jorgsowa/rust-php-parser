@@ -1038,6 +1038,16 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         type_hint
     }
 
+    /// Report a named class-like declaration inside a class member body.
+    pub(crate) fn check_class_nesting(&mut self, name_span: Span) {
+        if self.class_scope.is_some() {
+            self.error(ParseError::Forbidden {
+                message: "Class declarations may not be nested".into(),
+                span: name_span,
+            });
+        }
+    }
+
     /// Scope for the body of a class-like declaration named `name` (`None` for an anonymous
     /// class) that extends `parent`.
     pub(crate) fn class_scope_for(

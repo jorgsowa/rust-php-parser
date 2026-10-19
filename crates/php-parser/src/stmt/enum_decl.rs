@@ -62,6 +62,7 @@ pub(super) fn parse_enum<'arena, 'src>(
 
     let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
+    parser.check_class_nesting(name.span);
     let scope = parser.class_scope_for(name.as_str(), None, false);
     let outer_scope = parser.class_scope.replace(scope);
 

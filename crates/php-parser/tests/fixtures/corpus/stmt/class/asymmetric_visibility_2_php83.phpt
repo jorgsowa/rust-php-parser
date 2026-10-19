@@ -10,10 +10,10 @@ class Test {
 ===errors===
 cannot use multiple set-visibility modifiers
 'asymmetric visibility' requires PHP 8.4 or higher
-Property with asymmetric visibility must have type
+Property with asymmetric visibility Test::$x must have type
 cannot use multiple set-visibility modifiers
 'asymmetric visibility' requires PHP 8.4 or higher
-Property with asymmetric visibility must have type
+Property with asymmetric visibility Test::$x must have type
 Cannot redeclare property $x
 ===php_error===
 PHP Parse error:  syntax error, unexpected token ")", expecting amp in Standard input code on line 3

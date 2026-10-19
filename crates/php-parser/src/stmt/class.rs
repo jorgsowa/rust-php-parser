@@ -120,6 +120,7 @@ pub(super) fn parse_class<'arena, 'src>(
 
     let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
+    parser.check_class_nesting(name.span);
     let scope = parser.class_scope_for(name.as_str(), extends.as_ref(), false);
     let members = parse_class_members(parser, false, false, scope);
     if modifiers.is_readonly {
@@ -185,7 +186,14 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
         loop {
             match parser.current_kind() {
                 TokenKind::Final => {
+                    let span = parser.current_span();
                     parser.advance();
+                    if is_final {
+                        parser.error(ParseError::Forbidden {
+                            message: "Multiple final modifiers are not allowed".into(),
+                            span,
+                        });
+                    }
                     is_final = true;
                 }
                 TokenKind::Ampersand => {
@@ -193,22 +201,47 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                     by_ref = true;
                     break;
                 }
-                // Error: invalid modifiers on hooks
                 TokenKind::Public
                 | TokenKind::Protected
                 | TokenKind::Private
                 | TokenKind::Abstract
                 | TokenKind::Static
                 | TokenKind::Readonly => {
-                    let span = parser.current_span();
-                    parser.error(ParseError::Expected {
-                        expected: "'get' or 'set'".into(),
-                        found: parser.current_kind().description().into(),
-                        span,
-                    });
+                    let start = parser.start_span();
+                    let keyword = parser.current_text().to_ascii_lowercase();
                     parser.advance();
+                    let is_visibility =
+                        matches!(keyword.as_str(), "public" | "protected" | "private");
+                    let modifier =
+                        if is_visibility && parser.set_visibility_follows(parser.previous_end()) {
+                            parser.advance(); // consume (
+                            parser.advance(); // consume "set"
+                            parser.expect(TokenKind::RightParen);
+                            format!("{keyword}(set)")
+                        } else {
+                            keyword
+                        };
+                    parser.error(ParseError::Forbidden {
+                        message: format!("Cannot use the {modifier} modifier on a property hook")
+                            .into(),
+                        span: Span::new(start, parser.previous_end()),
+                    });
                 }
                 _ => break,
+            }
+        }
+
+        if parser.version >= PhpVersion::Php85 {
+            for attr in hook_attrs.iter() {
+                if parser
+                    .resolve_class_name(&attr.name)
+                    .eq_ignore_ascii_case("NoDiscard")
+                {
+                    parser.error(ParseError::Forbidden {
+                        message: "#[\\NoDiscard] is not supported for property hooks".into(),
+                        span: attr.span,
+                    });
+                }
             }
         }
 
@@ -378,6 +411,105 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
         });
     }
     hooks
+}
+
+/// Whether no hook body accesses `$this->{name}`, which makes the property virtual (no backing store).
+pub(super) fn is_virtual_property(name: &str, hooks: &[PropertyHook<'_, '_>]) -> bool {
+    use php_ast::visitor::{walk_expr, walk_stmt, Visitor};
+    use std::ops::ControlFlow;
+
+    struct UsesProperty<'n> {
+        name: &'n str,
+    }
+    // PHP folds constant names before looking for the property: `${"th" . "is"}->{("x")}`.
+    fn folded_str(expr: &Expr<'_, '_>) -> Option<String> {
+        match &expr.kind {
+            ExprKind::String(s) => Some(s.as_str().to_owned()),
+            ExprKind::Parenthesized(inner) => folded_str(inner),
+            ExprKind::Binary(b) if b.op == BinaryOp::Concat => {
+                Some(folded_str(b.left)? + &folded_str(b.right)?)
+            }
+            _ => None,
+        }
+    }
+    fn is_this(expr: &Expr<'_, '_>) -> bool {
+        match &expr.kind {
+            ExprKind::Variable(name) => name.as_str() == "this",
+            ExprKind::Parenthesized(inner) => is_this(inner),
+            ExprKind::VariableVariable(inner) => folded_str(inner).is_some_and(|s| s == "this"),
+            _ => false,
+        }
+    }
+    fn is_name(expr: &Expr<'_, '_>, name: &str) -> bool {
+        match &expr.kind {
+            ExprKind::Identifier(p) => p.as_str() == name,
+            _ => folded_str(expr).is_some_and(|s| s == name),
+        }
+    }
+    impl<'a, 's> Visitor<'a, 's> for UsesProperty<'_> {
+        fn visit_stmt(&mut self, stmt: &Stmt<'a, 's>) -> ControlFlow<()> {
+            match stmt.kind {
+                StmtKind::Function(_)
+                | StmtKind::Class(_)
+                | StmtKind::Interface(_)
+                | StmtKind::Trait(_)
+                | StmtKind::Enum(_) => ControlFlow::Continue(()),
+                _ => walk_stmt(self, stmt),
+            }
+        }
+
+        fn visit_expr(&mut self, expr: &Expr<'a, 's>) -> ControlFlow<()> {
+            match &expr.kind {
+                // `$this` in a nested function or class is not the hooked object.
+                ExprKind::Closure(_) | ExprKind::ArrowFunction(_) | ExprKind::AnonymousClass(_) => {
+                    ControlFlow::Continue(())
+                }
+                ExprKind::PropertyAccess(access) | ExprKind::NullsafePropertyAccess(access)
+                    if is_this(access.object) && is_name(access.property, self.name) =>
+                {
+                    ControlFlow::Break(())
+                }
+                _ => walk_expr(self, expr),
+            }
+        }
+    }
+
+    let mut visitor = UsesProperty { name };
+    !hooks.iter().any(|hook| match &hook.body {
+        PropertyHookBody::Block(block) => block
+            .stmts
+            .iter()
+            .any(|stmt| visitor.visit_stmt(stmt).is_break()),
+        // `set => expr` assigns the result to the backing property.
+        PropertyHookBody::Expression(_) if hook.kind == PropertyHookKind::Set => true,
+        PropertyHookBody::Expression(expr) => visitor.visit_expr(expr).is_break(),
+        _ => false,
+    })
+}
+
+/// Report asymmetric visibility on a virtual property that lacks a `get` or `set` hook.
+pub(super) fn check_virtual_set_visibility(
+    parser: &mut Parser<'_, '_>,
+    name: &str,
+    hooks: &[PropertyHook<'_, '_>],
+    span: Span,
+) {
+    let has = |kind| hooks.iter().any(|hook| hook.kind == kind);
+    let access = if !has(PropertyHookKind::Get) {
+        "Write-only"
+    } else if !has(PropertyHookKind::Set) {
+        "Read-only"
+    } else {
+        return;
+    };
+    let class = parser.class_member_prefix();
+    parser.error(ParseError::Forbidden {
+        message: format!(
+            "{access} virtual property {class}${name} must not specify asymmetric visibility"
+        )
+        .into(),
+        span,
+    });
 }
 
 pub(super) struct ClassMemberModifiers {
@@ -1165,10 +1297,33 @@ fn parse_property_member<'arena, 'src>(
         parser.alloc_vec()
     };
     if mods.set_visibility.is_some() && type_hint.is_none() {
+        let class = parser.class_member_prefix();
         parser.error(ParseError::Forbidden {
-            message: "Property with asymmetric visibility must have type".into(),
+            message: format!(
+                "Property with asymmetric visibility {class}${prop_name} must have type"
+            )
+            .into(),
             span: Span::new(member_start, parser.previous_end()),
         });
+    }
+    if let Some(name) = prop_name
+        .as_str()
+        .filter(|name| !hooks.is_empty() && is_virtual_property(name, &hooks))
+    {
+        let span = Span::new(member_start, parser.previous_end());
+        if default.is_some() {
+            let class = parser.class_member_prefix();
+            parser.error(ParseError::Forbidden {
+                message: format!(
+                    "Cannot specify default value for virtual hooked property {class}${name}"
+                )
+                .into(),
+                span,
+            });
+        }
+        if mods.set_visibility.is_some() {
+            check_virtual_set_visibility(parser, name, &hooks, span);
+        }
     }
     // PHP rule: set visibility must be EQUAL OR NARROWER than get visibility.
     // `private public(set)` is invalid because public-set widens beyond private-get.
@@ -1377,6 +1532,7 @@ pub(super) fn parse_interface<'arena, 'src>(
 
     let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
+    parser.check_class_nesting(name.span);
     let scope = parser.class_scope_for(name.as_str(), None, false);
     let members = parse_class_members(parser, true, false, scope);
     parser.expect(TokenKind::RightBrace);
@@ -1429,6 +1585,7 @@ pub(super) fn parse_trait<'arena, 'src>(
 
     let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
+    parser.check_class_nesting(name.span);
     let scope = parser.class_scope_for(name.as_str(), None, true);
     let members = parse_class_members(parser, false, true, scope);
     parser.expect(TokenKind::RightBrace);

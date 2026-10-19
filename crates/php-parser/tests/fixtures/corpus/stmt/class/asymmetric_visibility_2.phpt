@@ -8,9 +8,9 @@ class Test {
 }
 ===errors===
 cannot use multiple set-visibility modifiers
-Property with asymmetric visibility must have type
+Property with asymmetric visibility Test::$x must have type
 cannot use multiple set-visibility modifiers
-Property with asymmetric visibility must have type
+Property with asymmetric visibility Test::$x must have type
 Cannot redeclare property $x
 ===php_error===
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 3

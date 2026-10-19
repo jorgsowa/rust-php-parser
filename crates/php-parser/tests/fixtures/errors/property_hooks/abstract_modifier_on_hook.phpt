@@ -8,7 +8,7 @@ class Foo {
     }
 }
 ===errors===
-expected 'get' or 'set', found 'abstract'
+Cannot use the abstract modifier on a property hook
 ===php_error===
 PHP Fatal error:  Cannot use the abstract modifier on a property hook in Standard input code on line 4
 ===ast===

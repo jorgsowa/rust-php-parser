@@ -12,16 +12,16 @@ class Test {
     }
 }
 ===errors===
-expected 'get' or 'set', found 'public'
-expected 'get' or 'set', found 'public'
-expected 'get' or 'set', found 'protected'
+Cannot use the public modifier on a property hook
+Cannot use the public modifier on a property hook
+Cannot use the protected modifier on a property hook
 duplicate 'get' hook
-expected 'get' or 'set', found 'private'
+Cannot use the private modifier on a property hook
 duplicate 'get' hook
-expected 'get' or 'set', found 'abstract'
-expected 'get' or 'set', found 'static'
+Cannot use the abstract modifier on a property hook
+Cannot use the static modifier on a property hook
 duplicate 'get' hook
-expected 'get' or 'set', found 'readonly'
+Cannot use the readonly modifier on a property hook
 duplicate 'get' hook
 ===php_error===
 PHP Fatal error:  Cannot use the public modifier on a property hook in Standard input code on line 4

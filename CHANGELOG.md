@@ -116,6 +116,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Duplicate class types in a union or intersection are compared after name resolution, so `\Foo|Foo`, `namespace\A|A`, `\X\A|B` after `use X\A as B`, `A|self` in class `A` and `iterable|\Traversable` are reported, and `iterable|Traversable` in a namespace is no longer reported (`php-rs-parser`).
 - `A&null`, `A&true` and `A&false` were syntax errors; they parse and are reported as builtin types in an intersection (`php-rs-parser`).
 - `mixed`, `void` and `never` misuse, `Cannot redefine class constant` and the set hook parameter type error use PHP's wording, including the class name (`php-rs-parser`).
+- Property hook rules are checked like PHP: visibility, `abstract`, `static` and `readonly` on a hook, repeated `final`, `#[\NoDiscard]` on a hook (8.5), a default value on a virtual property, and asymmetric visibility on a read-only or write-only virtual property. A property is virtual when no hook accesses `$this->name` outside a nested function or class (`php-rs-parser`).
+- A named class, interface, trait or enum declared inside a class member body is reported as nested; a function declared in a method body no longer has the method's class scope (`php-rs-parser`).
+- `Property with asymmetric visibility … must have type` names the property (`php-rs-parser`).
 
 ---
 
