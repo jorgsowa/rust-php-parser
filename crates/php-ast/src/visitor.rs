@@ -4,9 +4,10 @@ use crate::ast::*;
 
 /// Visitor trait for immutable AST traversal.
 ///
-/// All methods return `ControlFlow<()>`:
+/// All methods return `ControlFlow<Self::Break>`:
 /// - `ControlFlow::Continue(())` — keep walking.
-/// - `ControlFlow::Break(())` — stop the entire traversal immediately.
+/// - `ControlFlow::Break(value)` — stop the entire traversal immediately; `value` is returned
+///   by the call that started the walk. Use `type Break = ();` when there is nothing to return.
 ///
 /// Default implementations recursively walk child nodes, so implementors
 /// only need to override the node types they care about.
@@ -24,6 +25,7 @@ use crate::ast::*;
 /// struct VarCounter { count: usize }
 ///
 /// impl<'arena, 'src> Visitor<'arena, 'src> for VarCounter {
+///     type Break = ();
 ///     fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<()> {
 ///         if matches!(&expr.kind, ExprKind::Variable(_)) {
 ///             self.count += 1;
@@ -33,78 +35,94 @@ use crate::ast::*;
 /// }
 /// ```
 pub trait Visitor<'arena, 'src> {
+    /// Value carried by [`ControlFlow::Break`] when a visit stops the walk early; use `()` to
+    /// stop without a result.
+    type Break;
+
     /// Visits the root program node.
-    fn visit_program(&mut self, program: &Program<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_program(&mut self, program: &Program<'arena, 'src>) -> ControlFlow<Self::Break> {
         walk_program(self, program)
     }
 
     /// Visits a statement.
-    fn visit_stmt(&mut self, stmt: &Stmt<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_stmt(&mut self, stmt: &Stmt<'arena, 'src>) -> ControlFlow<Self::Break> {
         walk_stmt(self, stmt)
     }
 
     /// Visits a block of statements.
-    fn visit_block(&mut self, block: &Block<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_block(&mut self, block: &Block<'arena, 'src>) -> ControlFlow<Self::Break> {
         walk_block(self, block)
     }
 
     /// Visits an expression.
-    fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<Self::Break> {
         walk_expr(self, expr)
     }
 
     /// Visits a function parameter.
-    fn visit_param(&mut self, param: &Param<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_param(&mut self, param: &Param<'arena, 'src>) -> ControlFlow<Self::Break> {
         walk_param(self, param)
     }
 
     /// Visits a call argument.
-    fn visit_arg(&mut self, arg: &Arg<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_arg(&mut self, arg: &Arg<'arena, 'src>) -> ControlFlow<Self::Break> {
         walk_arg(self, arg)
     }
 
     /// Visits a class-like member.
-    fn visit_class_member(&mut self, member: &ClassMember<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_class_member(
+        &mut self,
+        member: &ClassMember<'arena, 'src>,
+    ) -> ControlFlow<Self::Break> {
         walk_class_member(self, member)
     }
 
     /// Visits an enum member.
-    fn visit_enum_member(&mut self, member: &EnumMember<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_enum_member(&mut self, member: &EnumMember<'arena, 'src>) -> ControlFlow<Self::Break> {
         walk_enum_member(self, member)
     }
 
     /// Visits a property hook (`get`/`set`).
-    fn visit_property_hook(&mut self, hook: &PropertyHook<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_property_hook(
+        &mut self,
+        hook: &PropertyHook<'arena, 'src>,
+    ) -> ControlFlow<Self::Break> {
         walk_property_hook(self, hook)
     }
 
     /// Visits a type hint.
-    fn visit_type_hint(&mut self, type_hint: &TypeHint<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_type_hint(&mut self, type_hint: &TypeHint<'arena, 'src>) -> ControlFlow<Self::Break> {
         walk_type_hint(self, type_hint)
     }
 
     /// Visits an attribute.
-    fn visit_attribute(&mut self, attribute: &Attribute<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_attribute(&mut self, attribute: &Attribute<'arena, 'src>) -> ControlFlow<Self::Break> {
         walk_attribute(self, attribute)
     }
 
     /// Visits a `catch` clause.
-    fn visit_catch_clause(&mut self, catch: &CatchClause<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_catch_clause(
+        &mut self,
+        catch: &CatchClause<'arena, 'src>,
+    ) -> ControlFlow<Self::Break> {
         walk_catch_clause(self, catch)
     }
 
     /// Visits a `match` arm.
-    fn visit_match_arm(&mut self, arm: &MatchArm<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_match_arm(&mut self, arm: &MatchArm<'arena, 'src>) -> ControlFlow<Self::Break> {
         walk_match_arm(self, arm)
     }
 
     /// Visits a closure `use` variable.
-    fn visit_closure_use_var(&mut self, _var: &ClosureUseVar<'src>) -> ControlFlow<()> {
+    fn visit_closure_use_var(&mut self, _var: &ClosureUseVar<'src>) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
 
     /// Visits a `use Trait;` declaration.
-    fn visit_trait_use(&mut self, trait_use: &TraitUseDecl<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_trait_use(
+        &mut self,
+        trait_use: &TraitUseDecl<'arena, 'src>,
+    ) -> ControlFlow<Self::Break> {
         walk_trait_use(self, trait_use)
     }
 
@@ -112,12 +130,12 @@ pub trait Visitor<'arena, 'src> {
     fn visit_trait_adaptation(
         &mut self,
         adaptation: &TraitAdaptation<'arena, 'src>,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         walk_trait_adaptation(self, adaptation)
     }
 
     /// Visits a name reference.
-    fn visit_name(&mut self, _name: &Name<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_name(&mut self, _name: &Name<'arena, 'src>) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
 
@@ -125,7 +143,7 @@ pub trait Visitor<'arena, 'src> {
     ///
     /// Comments live in `ParseResult::comments`
     /// separately from AST nodes. Use [`walk_comments`] to drive this hook.
-    fn visit_comment(&mut self, _comment: &Comment<'src>) -> ControlFlow<()> {
+    fn visit_comment(&mut self, _comment: &Comment<'src>) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
 }
@@ -141,7 +159,7 @@ pub trait Visitor<'arena, 'src> {
 pub fn walk_name<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     name: &Name<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     visitor.visit_name(name)
 }
 
@@ -160,7 +178,7 @@ pub fn walk_name<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_comments<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     comments: &[Comment<'src>],
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     for comment in comments {
         visitor.visit_comment(comment)?;
     }
@@ -177,7 +195,7 @@ pub fn walk_comments<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 /// # use php_ast::ast::*;
 /// # use std::ops::ControlFlow;
 /// # struct V;
-/// # impl<'a, 'b> Visitor<'a, 'b> for V {}
+/// # impl<'a, 'b> Visitor<'a, 'b> for V { type Break = (); }
 /// # fn example<'a, 'b>(v: &mut V, program: &Program<'a, 'b>) {
 /// walk_program(v, program);
 /// # }
@@ -185,7 +203,7 @@ pub fn walk_comments<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_program<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     program: &Program<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     for stmt in program.stmts.iter() {
         visitor.visit_stmt(stmt)?;
     }
@@ -196,7 +214,7 @@ pub fn walk_program<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_block<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     block: &Block<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     for stmt in block.stmts.iter() {
         visitor.visit_stmt(stmt)?;
     }
@@ -210,7 +228,7 @@ pub fn walk_block<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     stmt: &Stmt<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     match &stmt.kind {
         StmtKind::Expression(expr) => {
             visitor.visit_expr(expr)?;
@@ -394,7 +412,7 @@ pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_expr<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     expr: &Expr<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     match &expr.kind {
         ExprKind::Name(name) => visitor.visit_name(name)?,
         ExprKind::Assign(assign) => {
@@ -607,7 +625,7 @@ pub fn walk_expr<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_param<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     param: &Param<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     walk_attributes(visitor, &param.attributes)?;
     if let Some(type_hint) = &param.type_hint {
         visitor.visit_type_hint(type_hint)?;
@@ -625,7 +643,7 @@ pub fn walk_param<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_arg<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     arg: &Arg<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     if let Some(name) = &arg.name {
         visitor.visit_name(name)?;
     }
@@ -639,7 +657,7 @@ pub fn walk_arg<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_class_member<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     member: &ClassMember<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     match &member.kind {
         ClassMemberKind::Property(prop) => {
             walk_property_decl(visitor, prop)?;
@@ -661,7 +679,7 @@ pub fn walk_class_member<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_property_hook<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     hook: &PropertyHook<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     walk_attributes(visitor, &hook.attributes)?;
     for param in hook.params.iter() {
         visitor.visit_param(param)?;
@@ -682,7 +700,7 @@ pub fn walk_property_hook<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_enum_member<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     member: &EnumMember<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     match &member.kind {
         EnumMemberKind::Case(case) => {
             walk_attributes(visitor, &case.attributes)?;
@@ -707,7 +725,7 @@ pub fn walk_enum_member<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_type_hint<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     type_hint: &TypeHint<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     match &type_hint.kind {
         TypeHintKind::Nullable(inner) => {
             visitor.visit_type_hint(inner)?;
@@ -729,7 +747,7 @@ pub fn walk_type_hint<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_attribute<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     attribute: &Attribute<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     visitor.visit_name(&attribute.name)?;
     for arg in attribute.args.iter() {
         visitor.visit_arg(arg)?;
@@ -741,7 +759,7 @@ pub fn walk_attribute<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_catch_clause<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     catch: &CatchClause<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     for ty in catch.types.iter() {
         visitor.visit_name(ty)?;
     }
@@ -753,7 +771,7 @@ pub fn walk_catch_clause<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_match_arm<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     arm: &MatchArm<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     if let Some(conditions) = &arm.conditions {
         for cond in conditions.iter() {
             visitor.visit_expr(cond)?;
@@ -766,7 +784,7 @@ pub fn walk_match_arm<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_trait_use<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     trait_use: &TraitUseDecl<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     for name in trait_use.traits.iter() {
         visitor.visit_name(name)?;
     }
@@ -780,7 +798,7 @@ pub fn walk_trait_use<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 pub fn walk_trait_adaptation<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     adaptation: &TraitAdaptation<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     match &adaptation.kind {
         TraitAdaptationKind::Precedence {
             trait_name,
@@ -822,7 +840,7 @@ fn walk_function_like<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     attributes: &[Attribute<'arena, 'src>],
     params: &[Param<'arena, 'src>],
     return_type: &Option<TypeHint<'arena, 'src>>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     walk_attributes(visitor, attributes)?;
     for param in params.iter() {
         visitor.visit_param(param)?;
@@ -837,7 +855,7 @@ fn walk_function_like<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 fn walk_method_decl<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     method: &MethodDecl<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     walk_function_like(
         visitor,
         &method.attributes,
@@ -854,7 +872,7 @@ fn walk_method_decl<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 fn walk_class_const_decl<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     cc: &ClassConstDecl<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     walk_attributes(visitor, &cc.attributes)?;
     if let Some(type_hint) = &cc.type_hint {
         visitor.visit_type_hint(type_hint)?;
@@ -866,7 +884,7 @@ fn walk_class_const_decl<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 fn walk_property_decl<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     prop: &PropertyDecl<'arena, 'src>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     walk_attributes(visitor, &prop.attributes)?;
     if let Some(type_hint) = &prop.type_hint {
         visitor.visit_type_hint(type_hint)?;
@@ -883,7 +901,7 @@ fn walk_property_decl<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
 fn walk_attributes<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     attributes: &[Attribute<'arena, 'src>],
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     for attr in attributes.iter() {
         visitor.visit_attribute(attr)?;
     }
@@ -939,6 +957,7 @@ pub struct Scope<'src> {
 /// struct MethodCollector { methods: Vec<String> }
 ///
 /// impl<'arena, 'src> ScopeVisitor<'arena, 'src> for MethodCollector {
+///     type Break = ();
 ///     fn visit_class_member(
 ///         &mut self,
 ///         member: &ClassMember<'arena, 'src>,
@@ -956,20 +975,32 @@ pub struct Scope<'src> {
 /// }
 /// ```
 pub trait ScopeVisitor<'arena, 'src> {
+    /// Value carried by [`ControlFlow::Break`] when a visit stops the walk early; use `()` to
+    /// stop without a result.
+    type Break;
+
     /// Visits the root program node with the enclosing scope.
     fn visit_program(
         &mut self,
         _program: &Program<'arena, 'src>,
         _scope: &Scope<'src>,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Visits a statement with the enclosing scope.
-    fn visit_stmt(&mut self, _stmt: &Stmt<'arena, 'src>, _scope: &Scope<'src>) -> ControlFlow<()> {
+    fn visit_stmt(
+        &mut self,
+        _stmt: &Stmt<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Visits an expression with the enclosing scope.
-    fn visit_expr(&mut self, _expr: &Expr<'arena, 'src>, _scope: &Scope<'src>) -> ControlFlow<()> {
+    fn visit_expr(
+        &mut self,
+        _expr: &Expr<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Visits a function parameter with the enclosing scope.
@@ -977,11 +1008,15 @@ pub trait ScopeVisitor<'arena, 'src> {
         &mut self,
         _param: &Param<'arena, 'src>,
         _scope: &Scope<'src>,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Visits a call argument with the enclosing scope.
-    fn visit_arg(&mut self, _arg: &Arg<'arena, 'src>, _scope: &Scope<'src>) -> ControlFlow<()> {
+    fn visit_arg(
+        &mut self,
+        _arg: &Arg<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Visits a class-like member with the enclosing scope.
@@ -989,7 +1024,7 @@ pub trait ScopeVisitor<'arena, 'src> {
         &mut self,
         _member: &ClassMember<'arena, 'src>,
         _scope: &Scope<'src>,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Visits an enum member with the enclosing scope.
@@ -997,7 +1032,7 @@ pub trait ScopeVisitor<'arena, 'src> {
         &mut self,
         _member: &EnumMember<'arena, 'src>,
         _scope: &Scope<'src>,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Visits a property hook (`get`/`set`) with the enclosing scope.
@@ -1005,7 +1040,7 @@ pub trait ScopeVisitor<'arena, 'src> {
         &mut self,
         _hook: &PropertyHook<'arena, 'src>,
         _scope: &Scope<'src>,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Visits a type hint with the enclosing scope.
@@ -1013,7 +1048,7 @@ pub trait ScopeVisitor<'arena, 'src> {
         &mut self,
         _type_hint: &TypeHint<'arena, 'src>,
         _scope: &Scope<'src>,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Visits an attribute with the enclosing scope.
@@ -1021,7 +1056,7 @@ pub trait ScopeVisitor<'arena, 'src> {
         &mut self,
         _attribute: &Attribute<'arena, 'src>,
         _scope: &Scope<'src>,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Visits a `catch` clause with the enclosing scope.
@@ -1029,7 +1064,7 @@ pub trait ScopeVisitor<'arena, 'src> {
         &mut self,
         _catch: &CatchClause<'arena, 'src>,
         _scope: &Scope<'src>,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Visits a `match` arm with the enclosing scope.
@@ -1037,7 +1072,7 @@ pub trait ScopeVisitor<'arena, 'src> {
         &mut self,
         _arm: &MatchArm<'arena, 'src>,
         _scope: &Scope<'src>,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Visits a closure `use` variable with the enclosing scope.
@@ -1045,7 +1080,7 @@ pub trait ScopeVisitor<'arena, 'src> {
         &mut self,
         _var: &ClosureUseVar<'src>,
         _scope: &Scope<'src>,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
 
@@ -1054,7 +1089,7 @@ pub trait ScopeVisitor<'arena, 'src> {
         &mut self,
         _trait_use: &TraitUseDecl<'arena, 'src>,
         _scope: &Scope<'src>,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
 
@@ -1063,7 +1098,7 @@ pub trait ScopeVisitor<'arena, 'src> {
         &mut self,
         _adaptation: &TraitAdaptation<'arena, 'src>,
         _scope: &Scope<'src>,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
 
@@ -1072,17 +1107,25 @@ pub trait ScopeVisitor<'arena, 'src> {
         &mut self,
         _block: &Block<'arena, 'src>,
         _scope: &Scope<'src>,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
 
     /// Visits a name reference with the enclosing scope.
-    fn visit_name(&mut self, _name: &Name<'arena, 'src>, _scope: &Scope<'src>) -> ControlFlow<()> {
+    fn visit_name(
+        &mut self,
+        _name: &Name<'arena, 'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
 
     /// Visits a comment with the enclosing scope.
-    fn visit_comment(&mut self, _comment: &Comment<'src>, _scope: &Scope<'src>) -> ControlFlow<()> {
+    fn visit_comment(
+        &mut self,
+        _comment: &Comment<'src>,
+        _scope: &Scope<'src>,
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
 }
@@ -1100,7 +1143,7 @@ pub trait ScopeVisitor<'arena, 'src> {
 /// # use php_ast::ast::*;
 /// # use std::ops::ControlFlow;
 /// # struct MyVisitor;
-/// # impl<'a, 'b> ScopeVisitor<'a, 'b> for MyVisitor {}
+/// # impl<'a, 'b> ScopeVisitor<'a, 'b> for MyVisitor { type Break = (); }
 /// # fn parse<'a, 'b>(_: &'a bumpalo::Bump, _: &'b str) -> Program<'a, 'b> { unimplemented!() }
 /// let arena = bumpalo::Bump::new();
 /// let src = "<?php class Foo { public function bar() {} }";
@@ -1148,20 +1191,22 @@ impl<'src, V> ScopeWalker<'src, V> {
 
 impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> ScopeWalker<'src, V> {
     /// Walks `program`, calling [`ScopeVisitor`] methods with scope context.
-    pub fn walk(&mut self, program: &Program<'arena, 'src>) -> ControlFlow<()> {
+    pub fn walk(&mut self, program: &Program<'arena, 'src>) -> ControlFlow<V::Break> {
         self.visit_program(program)
     }
 }
 
 impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for ScopeWalker<'src, V> {
-    fn visit_program(&mut self, program: &Program<'arena, 'src>) -> ControlFlow<()> {
+    type Break = V::Break;
+
+    fn visit_program(&mut self, program: &Program<'arena, 'src>) -> ControlFlow<V::Break> {
         // A previous walk may have ended inside a namespace or after a `Break`.
         self.scope = Scope::default();
         self.inner.visit_program(program, &self.scope)?;
         walk_program(self, program)
     }
 
-    fn visit_stmt(&mut self, stmt: &Stmt<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_stmt(&mut self, stmt: &Stmt<'arena, 'src>) -> ControlFlow<V::Break> {
         self.inner.visit_stmt(stmt, &self.scope)?;
         match &stmt.kind {
             StmtKind::Function(func) => {
@@ -1229,7 +1274,7 @@ impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for Scop
         ControlFlow::Continue(())
     }
 
-    fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<V::Break> {
         self.inner.visit_expr(expr, &self.scope)?;
         match &expr.kind {
             ExprKind::Closure(_) | ExprKind::ArrowFunction(_) => {
@@ -1251,7 +1296,7 @@ impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for Scop
         ControlFlow::Continue(())
     }
 
-    fn visit_class_member(&mut self, member: &ClassMember<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_class_member(&mut self, member: &ClassMember<'arena, 'src>) -> ControlFlow<V::Break> {
         self.inner.visit_class_member(member, &self.scope)?;
         if let ClassMemberKind::Method(method) = &member.kind {
             let prev_fn = std::mem::replace(&mut self.scope.function_name, method.name.as_str());
@@ -1263,7 +1308,7 @@ impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for Scop
         ControlFlow::Continue(())
     }
 
-    fn visit_enum_member(&mut self, member: &EnumMember<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_enum_member(&mut self, member: &EnumMember<'arena, 'src>) -> ControlFlow<V::Break> {
         self.inner.visit_enum_member(member, &self.scope)?;
         if let EnumMemberKind::Method(method) = &member.kind {
             let prev_fn = std::mem::replace(&mut self.scope.function_name, method.name.as_str());
@@ -1275,46 +1320,46 @@ impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for Scop
         ControlFlow::Continue(())
     }
 
-    fn visit_param(&mut self, param: &Param<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_param(&mut self, param: &Param<'arena, 'src>) -> ControlFlow<V::Break> {
         self.inner.visit_param(param, &self.scope)?;
         walk_param(self, param)
     }
 
-    fn visit_arg(&mut self, arg: &Arg<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_arg(&mut self, arg: &Arg<'arena, 'src>) -> ControlFlow<V::Break> {
         self.inner.visit_arg(arg, &self.scope)?;
         walk_arg(self, arg)
     }
 
-    fn visit_property_hook(&mut self, hook: &PropertyHook<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_property_hook(&mut self, hook: &PropertyHook<'arena, 'src>) -> ControlFlow<V::Break> {
         self.inner.visit_property_hook(hook, &self.scope)?;
         walk_property_hook(self, hook)
     }
 
-    fn visit_type_hint(&mut self, type_hint: &TypeHint<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_type_hint(&mut self, type_hint: &TypeHint<'arena, 'src>) -> ControlFlow<V::Break> {
         self.inner.visit_type_hint(type_hint, &self.scope)?;
         walk_type_hint(self, type_hint)
     }
 
-    fn visit_attribute(&mut self, attribute: &Attribute<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_attribute(&mut self, attribute: &Attribute<'arena, 'src>) -> ControlFlow<V::Break> {
         self.inner.visit_attribute(attribute, &self.scope)?;
         walk_attribute(self, attribute)
     }
 
-    fn visit_catch_clause(&mut self, catch: &CatchClause<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_catch_clause(&mut self, catch: &CatchClause<'arena, 'src>) -> ControlFlow<V::Break> {
         self.inner.visit_catch_clause(catch, &self.scope)?;
         walk_catch_clause(self, catch)
     }
 
-    fn visit_match_arm(&mut self, arm: &MatchArm<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_match_arm(&mut self, arm: &MatchArm<'arena, 'src>) -> ControlFlow<V::Break> {
         self.inner.visit_match_arm(arm, &self.scope)?;
         walk_match_arm(self, arm)
     }
 
-    fn visit_closure_use_var(&mut self, var: &ClosureUseVar<'src>) -> ControlFlow<()> {
+    fn visit_closure_use_var(&mut self, var: &ClosureUseVar<'src>) -> ControlFlow<V::Break> {
         self.inner.visit_closure_use_var(var, &self.scope)
     }
 
-    fn visit_trait_use(&mut self, trait_use: &TraitUseDecl<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_trait_use(&mut self, trait_use: &TraitUseDecl<'arena, 'src>) -> ControlFlow<V::Break> {
         self.inner.visit_trait_use(trait_use, &self.scope)?;
         walk_trait_use(self, trait_use)
     }
@@ -1322,21 +1367,21 @@ impl<'arena, 'src, V: ScopeVisitor<'arena, 'src>> Visitor<'arena, 'src> for Scop
     fn visit_trait_adaptation(
         &mut self,
         adaptation: &TraitAdaptation<'arena, 'src>,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<V::Break> {
         self.inner.visit_trait_adaptation(adaptation, &self.scope)?;
         walk_trait_adaptation(self, adaptation)
     }
 
-    fn visit_block(&mut self, block: &Block<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_block(&mut self, block: &Block<'arena, 'src>) -> ControlFlow<V::Break> {
         self.inner.visit_block(block, &self.scope)?;
         walk_block(self, block)
     }
 
-    fn visit_name(&mut self, name: &Name<'arena, 'src>) -> ControlFlow<()> {
+    fn visit_name(&mut self, name: &Name<'arena, 'src>) -> ControlFlow<V::Break> {
         self.inner.visit_name(name, &self.scope)
     }
 
-    fn visit_comment(&mut self, comment: &Comment<'src>) -> ControlFlow<()> {
+    fn visit_comment(&mut self, comment: &Comment<'src>) -> ControlFlow<V::Break> {
         self.inner.visit_comment(comment, &self.scope)
     }
 }
@@ -1354,6 +1399,7 @@ mod tests {
     }
 
     impl<'arena, 'src> Visitor<'arena, 'src> for VarCounter {
+        type Break = ();
         fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<()> {
             if matches!(&expr.kind, ExprKind::Variable(_)) {
                 self.count += 1;
@@ -1444,6 +1490,7 @@ mod tests {
             found: Option<String>,
         }
         impl<'arena, 'src> Visitor<'arena, 'src> for FindFirst {
+            type Break = ();
             fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<()> {
                 if let ExprKind::Variable(name) = &expr.kind {
                     self.found = Some(name.to_string());
@@ -1534,6 +1581,7 @@ mod tests {
             expr_count: usize,
         }
         impl<'arena, 'src> Visitor<'arena, 'src> for SkipFunctions {
+            type Break = ();
             fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<()> {
                 self.expr_count += 1;
                 walk_expr(self, expr)

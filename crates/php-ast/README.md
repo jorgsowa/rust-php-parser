@@ -11,6 +11,7 @@ use std::ops::ControlFlow;
 struct VarCounter(usize);
 
 impl OwnedVisitor for VarCounter {
+    type Break = ();
     fn visit_expr(&mut self, expr: &Expr) -> ControlFlow<()> {
         if matches!(expr.kind, ExprKind::Variable(_)) {
             self.0 += 1;

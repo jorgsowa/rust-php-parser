@@ -33,6 +33,7 @@ impl NodeCounter {
 }
 
 impl<'a, 'src> Visitor<'a, 'src> for NodeCounter {
+    type Break = ();
     fn visit_stmt(&mut self, stmt: &Stmt<'a, 'src>) -> ControlFlow<()> {
         let name = match &stmt.kind {
             StmtKind::Expression(_) => "Expression",
@@ -160,9 +161,9 @@ impl<'a, 'src> Visitor<'a, 'src> for NodeCounter {
                 // mutually exclusive: hooked > readonly > static > typed > plain
                 if !prop.hooks.is_empty() {
                     self.bump("Property (hooked)");
-                } else if prop.is_readonly {
+                } else if prop.modifiers.is_readonly {
                     self.bump("Property (readonly)");
-                } else if prop.is_static {
+                } else if prop.modifiers.is_static {
                     self.bump("Property (static)");
                 } else if prop.type_hint.is_some() {
                     self.bump("Property (typed)");
@@ -173,11 +174,11 @@ impl<'a, 'src> Visitor<'a, 'src> for NodeCounter {
             ClassMemberKind::Method(method) => {
                 self.bump("Method");
                 // mutually exclusive: abstract > final > static > typed > plain
-                if method.is_abstract {
+                if method.modifiers.is_abstract {
                     self.bump("Method (abstract)");
-                } else if method.is_final {
+                } else if method.modifiers.is_final {
                     self.bump("Method (final)");
-                } else if method.is_static {
+                } else if method.modifiers.is_static {
                     self.bump("Method (static)");
                 } else if method.return_type.is_some() {
                     self.bump("Method (typed return)");
@@ -199,9 +200,9 @@ impl<'a, 'src> Visitor<'a, 'src> for NodeCounter {
     fn visit_param(&mut self, param: &Param<'a, 'src>) -> ControlFlow<()> {
         self.bump("Param");
         // mutually exclusive: promoted > readonly > variadic > typed > plain
-        if param.visibility.is_some() {
+        if param.modifiers.visibility.is_some() {
             self.bump("Param (promoted)");
-        } else if param.is_readonly {
+        } else if param.modifiers.is_readonly {
             self.bump("Param (readonly)");
         } else if param.variadic {
             self.bump("Param (variadic)");

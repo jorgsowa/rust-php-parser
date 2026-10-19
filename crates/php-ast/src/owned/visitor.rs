@@ -14,6 +14,7 @@
 //! struct VarCounter { count: usize }
 //!
 //! impl OwnedVisitor for VarCounter {
+//!     type Break = ();
 //!     fn visit_expr(&mut self, expr: &Expr) -> ControlFlow<()> {
 //!         if matches!(&expr.kind, ExprKind::Variable(_)) {
 //!             self.count += 1;
@@ -33,9 +34,10 @@ use super::*;
 
 /// Visitor trait for immutable traversal of owned (lifetime-free) AST nodes.
 ///
-/// All methods return `ControlFlow<()>`:
+/// All methods return `ControlFlow<Self::Break>`:
 /// - `ControlFlow::Continue(())` — keep walking.
-/// - `ControlFlow::Break(())` — stop the entire traversal immediately.
+/// - `ControlFlow::Break(value)` — stop the entire traversal immediately; `value` is returned
+///   by the call that started the walk. Use `type Break = ();` when there is nothing to return.
 ///
 /// Default implementations recurse into child nodes, so implementors only need
 /// to override the node types they care about.
@@ -43,93 +45,97 @@ use super::*;
 /// To **skip** a subtree, override the method and return `Continue(())`
 /// without calling the corresponding `walk_owned_*` function.
 pub trait OwnedVisitor {
+    /// Value carried by [`ControlFlow::Break`] when a visit stops the walk early; use `()` to
+    /// stop without a result.
+    type Break;
+
     /// Visits a program node.
-    fn visit_program(&mut self, program: &Program) -> ControlFlow<()> {
+    fn visit_program(&mut self, program: &Program) -> ControlFlow<Self::Break> {
         walk_owned_program(self, program)
     }
 
     /// Visits a statement node.
-    fn visit_stmt(&mut self, stmt: &Stmt) -> ControlFlow<()> {
+    fn visit_stmt(&mut self, stmt: &Stmt) -> ControlFlow<Self::Break> {
         walk_owned_stmt(self, stmt)
     }
 
     /// Visits a block node.
-    fn visit_block(&mut self, block: &Block) -> ControlFlow<()> {
+    fn visit_block(&mut self, block: &Block) -> ControlFlow<Self::Break> {
         walk_owned_block(self, block)
     }
 
     /// Visits an expression node.
-    fn visit_expr(&mut self, expr: &Expr) -> ControlFlow<()> {
+    fn visit_expr(&mut self, expr: &Expr) -> ControlFlow<Self::Break> {
         walk_owned_expr(self, expr)
     }
 
     /// Visits a param node.
-    fn visit_param(&mut self, param: &Param) -> ControlFlow<()> {
+    fn visit_param(&mut self, param: &Param) -> ControlFlow<Self::Break> {
         walk_owned_param(self, param)
     }
 
     /// Visits an arg node.
-    fn visit_arg(&mut self, arg: &Arg) -> ControlFlow<()> {
+    fn visit_arg(&mut self, arg: &Arg) -> ControlFlow<Self::Break> {
         walk_owned_arg(self, arg)
     }
 
     /// Visits a class member node.
-    fn visit_class_member(&mut self, member: &ClassMember) -> ControlFlow<()> {
+    fn visit_class_member(&mut self, member: &ClassMember) -> ControlFlow<Self::Break> {
         walk_owned_class_member(self, member)
     }
 
     /// Visits an enum member node.
-    fn visit_enum_member(&mut self, member: &EnumMember) -> ControlFlow<()> {
+    fn visit_enum_member(&mut self, member: &EnumMember) -> ControlFlow<Self::Break> {
         walk_owned_enum_member(self, member)
     }
 
     /// Visits a property hook node.
-    fn visit_property_hook(&mut self, hook: &PropertyHook) -> ControlFlow<()> {
+    fn visit_property_hook(&mut self, hook: &PropertyHook) -> ControlFlow<Self::Break> {
         walk_owned_property_hook(self, hook)
     }
 
     /// Visits a type hint node.
-    fn visit_type_hint(&mut self, type_hint: &TypeHint) -> ControlFlow<()> {
+    fn visit_type_hint(&mut self, type_hint: &TypeHint) -> ControlFlow<Self::Break> {
         walk_owned_type_hint(self, type_hint)
     }
 
     /// Visits an attribute node.
-    fn visit_attribute(&mut self, attribute: &Attribute) -> ControlFlow<()> {
+    fn visit_attribute(&mut self, attribute: &Attribute) -> ControlFlow<Self::Break> {
         walk_owned_attribute(self, attribute)
     }
 
     /// Visits a catch clause node.
-    fn visit_catch_clause(&mut self, catch: &CatchClause) -> ControlFlow<()> {
+    fn visit_catch_clause(&mut self, catch: &CatchClause) -> ControlFlow<Self::Break> {
         walk_owned_catch_clause(self, catch)
     }
 
     /// Visits a match arm node.
-    fn visit_match_arm(&mut self, arm: &MatchArm) -> ControlFlow<()> {
+    fn visit_match_arm(&mut self, arm: &MatchArm) -> ControlFlow<Self::Break> {
         walk_owned_match_arm(self, arm)
     }
 
     /// Visits a closure use var node.
-    fn visit_closure_use_var(&mut self, _var: &ClosureUseVar) -> ControlFlow<()> {
+    fn visit_closure_use_var(&mut self, _var: &ClosureUseVar) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
 
     /// Visits a trait use node.
-    fn visit_trait_use(&mut self, trait_use: &TraitUseDecl) -> ControlFlow<()> {
+    fn visit_trait_use(&mut self, trait_use: &TraitUseDecl) -> ControlFlow<Self::Break> {
         walk_owned_trait_use(self, trait_use)
     }
 
     /// Visits a trait adaptation node.
-    fn visit_trait_adaptation(&mut self, adaptation: &TraitAdaptation) -> ControlFlow<()> {
+    fn visit_trait_adaptation(&mut self, adaptation: &TraitAdaptation) -> ControlFlow<Self::Break> {
         walk_owned_trait_adaptation(self, adaptation)
     }
 
     /// Visits a name node.
-    fn visit_name(&mut self, _name: &Name) -> ControlFlow<()> {
+    fn visit_name(&mut self, _name: &Name) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
 
     /// Visits a comment node.
-    fn visit_comment(&mut self, _comment: &Comment) -> ControlFlow<()> {
+    fn visit_comment(&mut self, _comment: &Comment) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
 }
@@ -144,7 +150,10 @@ pub trait OwnedVisitor {
 /// This function exists for symmetry with [`walk_owned_expr`] and friends so
 /// that an override of [`OwnedVisitor::visit_name`] can call the default
 /// behaviour by name.
-pub fn walk_owned_name<V: OwnedVisitor + ?Sized>(visitor: &mut V, name: &Name) -> ControlFlow<()> {
+pub fn walk_owned_name<V: OwnedVisitor + ?Sized>(
+    visitor: &mut V,
+    name: &Name,
+) -> ControlFlow<V::Break> {
     visitor.visit_name(name)
 }
 
@@ -152,7 +161,7 @@ pub fn walk_owned_name<V: OwnedVisitor + ?Sized>(visitor: &mut V, name: &Name) -
 pub fn walk_owned_comments<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     comments: &[Comment],
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     for comment in comments {
         visitor.visit_comment(comment)?;
     }
@@ -163,7 +172,7 @@ pub fn walk_owned_comments<V: OwnedVisitor + ?Sized>(
 pub fn walk_owned_program<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     program: &Program,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     for stmt in program.stmts.iter() {
         visitor.visit_stmt(stmt)?;
     }
@@ -174,7 +183,7 @@ pub fn walk_owned_program<V: OwnedVisitor + ?Sized>(
 pub fn walk_owned_block<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     block: &Block,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     for stmt in block.stmts.iter() {
         visitor.visit_stmt(stmt)?;
     }
@@ -182,7 +191,10 @@ pub fn walk_owned_block<V: OwnedVisitor + ?Sized>(
 }
 
 /// Walks the children of a statement.
-pub fn walk_owned_stmt<V: OwnedVisitor + ?Sized>(visitor: &mut V, stmt: &Stmt) -> ControlFlow<()> {
+pub fn walk_owned_stmt<V: OwnedVisitor + ?Sized>(
+    visitor: &mut V,
+    stmt: &Stmt,
+) -> ControlFlow<V::Break> {
     match &stmt.kind {
         StmtKind::Expression(expr) => {
             visitor.visit_expr(expr)?;
@@ -360,7 +372,10 @@ pub fn walk_owned_stmt<V: OwnedVisitor + ?Sized>(visitor: &mut V, stmt: &Stmt) -
 }
 
 /// Dispatches `expr` to the appropriate child visitors based on its [`ExprKind`].
-pub fn walk_owned_expr<V: OwnedVisitor + ?Sized>(visitor: &mut V, expr: &Expr) -> ControlFlow<()> {
+pub fn walk_owned_expr<V: OwnedVisitor + ?Sized>(
+    visitor: &mut V,
+    expr: &Expr,
+) -> ControlFlow<V::Break> {
     match &expr.kind {
         ExprKind::Name(name) => visitor.visit_name(name)?,
         ExprKind::Assign(assign) => {
@@ -578,7 +593,7 @@ pub fn walk_owned_expr<V: OwnedVisitor + ?Sized>(visitor: &mut V, expr: &Expr) -
 pub fn walk_owned_param<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     param: &Param,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     walk_owned_attributes(visitor, &param.attributes)?;
     if let Some(type_hint) = &param.type_hint {
         visitor.visit_type_hint(type_hint)?;
@@ -593,7 +608,10 @@ pub fn walk_owned_param<V: OwnedVisitor + ?Sized>(
 }
 
 /// Visits the value expression of a call argument, skipping PHP 8.6 placeholders.
-pub fn walk_owned_arg<V: OwnedVisitor + ?Sized>(visitor: &mut V, arg: &Arg) -> ControlFlow<()> {
+pub fn walk_owned_arg<V: OwnedVisitor + ?Sized>(
+    visitor: &mut V,
+    arg: &Arg,
+) -> ControlFlow<V::Break> {
     if let Some(name) = &arg.name {
         visitor.visit_name(name)?;
     }
@@ -607,7 +625,7 @@ pub fn walk_owned_arg<V: OwnedVisitor + ?Sized>(visitor: &mut V, arg: &Arg) -> C
 pub fn walk_owned_class_member<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     member: &ClassMember,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     match &member.kind {
         ClassMemberKind::Property(prop) => {
             walk_owned_property_decl(visitor, prop)?;
@@ -629,7 +647,7 @@ pub fn walk_owned_class_member<V: OwnedVisitor + ?Sized>(
 pub fn walk_owned_property_hook<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     hook: &PropertyHook,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     walk_owned_attributes(visitor, &hook.attributes)?;
     for param in hook.params.iter() {
         visitor.visit_param(param)?;
@@ -650,7 +668,7 @@ pub fn walk_owned_property_hook<V: OwnedVisitor + ?Sized>(
 pub fn walk_owned_enum_member<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     member: &EnumMember,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     match &member.kind {
         EnumMemberKind::Case(case) => {
             walk_owned_attributes(visitor, &case.attributes)?;
@@ -675,7 +693,7 @@ pub fn walk_owned_enum_member<V: OwnedVisitor + ?Sized>(
 pub fn walk_owned_type_hint<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     type_hint: &TypeHint,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     match &type_hint.kind {
         TypeHintKind::Nullable(inner) => {
             visitor.visit_type_hint(inner)?;
@@ -697,7 +715,7 @@ pub fn walk_owned_type_hint<V: OwnedVisitor + ?Sized>(
 pub fn walk_owned_attribute<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     attribute: &Attribute,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     visitor.visit_name(&attribute.name)?;
     for arg in attribute.args.iter() {
         visitor.visit_arg(arg)?;
@@ -709,7 +727,7 @@ pub fn walk_owned_attribute<V: OwnedVisitor + ?Sized>(
 pub fn walk_owned_catch_clause<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     catch: &CatchClause,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     for ty in catch.types.iter() {
         visitor.visit_name(ty)?;
     }
@@ -721,7 +739,7 @@ pub fn walk_owned_catch_clause<V: OwnedVisitor + ?Sized>(
 pub fn walk_owned_match_arm<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     arm: &MatchArm,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     if let Some(conditions) = &arm.conditions {
         for cond in conditions.iter() {
             visitor.visit_expr(cond)?;
@@ -734,7 +752,7 @@ pub fn walk_owned_match_arm<V: OwnedVisitor + ?Sized>(
 pub fn walk_owned_trait_use<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     trait_use: &TraitUseDecl,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     for name in trait_use.traits.iter() {
         visitor.visit_name(name)?;
     }
@@ -748,7 +766,7 @@ pub fn walk_owned_trait_use<V: OwnedVisitor + ?Sized>(
 pub fn walk_owned_trait_adaptation<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     adaptation: &TraitAdaptation,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     match &adaptation.kind {
         TraitAdaptationKind::Precedence {
             trait_name,
@@ -788,7 +806,7 @@ fn walk_owned_function_like<V: OwnedVisitor + ?Sized>(
     attributes: &[Attribute],
     params: &[Param],
     return_type: &Option<TypeHint>,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     walk_owned_attributes(visitor, attributes)?;
     for param in params.iter() {
         visitor.visit_param(param)?;
@@ -802,7 +820,7 @@ fn walk_owned_function_like<V: OwnedVisitor + ?Sized>(
 fn walk_owned_method_decl<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     method: &MethodDecl,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     walk_owned_function_like(
         visitor,
         &method.attributes,
@@ -818,7 +836,7 @@ fn walk_owned_method_decl<V: OwnedVisitor + ?Sized>(
 fn walk_owned_class_const_decl<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     cc: &ClassConstDecl,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     walk_owned_attributes(visitor, &cc.attributes)?;
     if let Some(type_hint) = &cc.type_hint {
         visitor.visit_type_hint(type_hint)?;
@@ -829,7 +847,7 @@ fn walk_owned_class_const_decl<V: OwnedVisitor + ?Sized>(
 fn walk_owned_property_decl<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     prop: &PropertyDecl,
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     walk_owned_attributes(visitor, &prop.attributes)?;
     if let Some(type_hint) = &prop.type_hint {
         visitor.visit_type_hint(type_hint)?;
@@ -846,7 +864,7 @@ fn walk_owned_property_decl<V: OwnedVisitor + ?Sized>(
 fn walk_owned_attributes<V: OwnedVisitor + ?Sized>(
     visitor: &mut V,
     attributes: &[Attribute],
-) -> ControlFlow<()> {
+) -> ControlFlow<V::Break> {
     for attr in attributes.iter() {
         visitor.visit_attribute(attr)?;
     }
@@ -877,24 +895,32 @@ pub struct OwnedScope {
 /// Every visit method receives an [`OwnedScope`] describing the lexical context
 /// at that node. Drive traversal with [`OwnedScopeWalker`].
 pub trait OwnedScopeVisitor {
+    /// Value carried by [`ControlFlow::Break`] when a visit stops the walk early; use `()` to
+    /// stop without a result.
+    type Break;
+
     /// Called for each program with its enclosing scope.
-    fn visit_program(&mut self, _program: &Program, _scope: &OwnedScope) -> ControlFlow<()> {
+    fn visit_program(
+        &mut self,
+        _program: &Program,
+        _scope: &OwnedScope,
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each statement with its enclosing scope.
-    fn visit_stmt(&mut self, _stmt: &Stmt, _scope: &OwnedScope) -> ControlFlow<()> {
+    fn visit_stmt(&mut self, _stmt: &Stmt, _scope: &OwnedScope) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each expression with its enclosing scope.
-    fn visit_expr(&mut self, _expr: &Expr, _scope: &OwnedScope) -> ControlFlow<()> {
+    fn visit_expr(&mut self, _expr: &Expr, _scope: &OwnedScope) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each param with its enclosing scope.
-    fn visit_param(&mut self, _param: &Param, _scope: &OwnedScope) -> ControlFlow<()> {
+    fn visit_param(&mut self, _param: &Param, _scope: &OwnedScope) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each arg with its enclosing scope.
-    fn visit_arg(&mut self, _arg: &Arg, _scope: &OwnedScope) -> ControlFlow<()> {
+    fn visit_arg(&mut self, _arg: &Arg, _scope: &OwnedScope) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each class member with its enclosing scope.
@@ -902,11 +928,15 @@ pub trait OwnedScopeVisitor {
         &mut self,
         _member: &ClassMember,
         _scope: &OwnedScope,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each enum member with its enclosing scope.
-    fn visit_enum_member(&mut self, _member: &EnumMember, _scope: &OwnedScope) -> ControlFlow<()> {
+    fn visit_enum_member(
+        &mut self,
+        _member: &EnumMember,
+        _scope: &OwnedScope,
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each property hook with its enclosing scope.
@@ -914,23 +944,39 @@ pub trait OwnedScopeVisitor {
         &mut self,
         _hook: &PropertyHook,
         _scope: &OwnedScope,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each type hint with its enclosing scope.
-    fn visit_type_hint(&mut self, _type_hint: &TypeHint, _scope: &OwnedScope) -> ControlFlow<()> {
+    fn visit_type_hint(
+        &mut self,
+        _type_hint: &TypeHint,
+        _scope: &OwnedScope,
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each attribute with its enclosing scope.
-    fn visit_attribute(&mut self, _attribute: &Attribute, _scope: &OwnedScope) -> ControlFlow<()> {
+    fn visit_attribute(
+        &mut self,
+        _attribute: &Attribute,
+        _scope: &OwnedScope,
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each catch clause with its enclosing scope.
-    fn visit_catch_clause(&mut self, _catch: &CatchClause, _scope: &OwnedScope) -> ControlFlow<()> {
+    fn visit_catch_clause(
+        &mut self,
+        _catch: &CatchClause,
+        _scope: &OwnedScope,
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each match arm with its enclosing scope.
-    fn visit_match_arm(&mut self, _arm: &MatchArm, _scope: &OwnedScope) -> ControlFlow<()> {
+    fn visit_match_arm(
+        &mut self,
+        _arm: &MatchArm,
+        _scope: &OwnedScope,
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each closure use var with its enclosing scope.
@@ -938,7 +984,7 @@ pub trait OwnedScopeVisitor {
         &mut self,
         _var: &ClosureUseVar,
         _scope: &OwnedScope,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each trait use with its enclosing scope.
@@ -946,7 +992,7 @@ pub trait OwnedScopeVisitor {
         &mut self,
         _trait_use: &TraitUseDecl,
         _scope: &OwnedScope,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each trait adaptation with its enclosing scope.
@@ -954,19 +1000,23 @@ pub trait OwnedScopeVisitor {
         &mut self,
         _adaptation: &TraitAdaptation,
         _scope: &OwnedScope,
-    ) -> ControlFlow<()> {
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each block with its enclosing scope.
-    fn visit_block(&mut self, _block: &Block, _scope: &OwnedScope) -> ControlFlow<()> {
+    fn visit_block(&mut self, _block: &Block, _scope: &OwnedScope) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each name reference with its enclosing scope.
-    fn visit_name(&mut self, _name: &Name, _scope: &OwnedScope) -> ControlFlow<()> {
+    fn visit_name(&mut self, _name: &Name, _scope: &OwnedScope) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
     /// Called for each comment with its enclosing scope.
-    fn visit_comment(&mut self, _comment: &Comment, _scope: &OwnedScope) -> ControlFlow<()> {
+    fn visit_comment(
+        &mut self,
+        _comment: &Comment,
+        _scope: &OwnedScope,
+    ) -> ControlFlow<Self::Break> {
         ControlFlow::Continue(())
     }
 }
@@ -1004,7 +1054,7 @@ impl<V> OwnedScopeWalker<V> {
 
 impl<V: OwnedScopeVisitor> OwnedScopeWalker<V> {
     /// Walks `program`, calling [`OwnedScopeVisitor`] methods with scope context.
-    pub fn walk(&mut self, program: &Program) -> ControlFlow<()> {
+    pub fn walk(&mut self, program: &Program) -> ControlFlow<V::Break> {
         self.visit_program(program)
     }
 }
@@ -1023,14 +1073,16 @@ fn owned_name_repr(name: &Name) -> Option<String> {
 }
 
 impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {
-    fn visit_program(&mut self, program: &Program) -> ControlFlow<()> {
+    type Break = V::Break;
+
+    fn visit_program(&mut self, program: &Program) -> ControlFlow<V::Break> {
         // A previous walk may have ended inside a namespace or after a `Break`.
         self.scope = OwnedScope::default();
         self.inner.visit_program(program, &self.scope)?;
         walk_owned_program(self, program)
     }
 
-    fn visit_stmt(&mut self, stmt: &Stmt) -> ControlFlow<()> {
+    fn visit_stmt(&mut self, stmt: &Stmt) -> ControlFlow<V::Break> {
         self.inner.visit_stmt(stmt, &self.scope)?;
         match &stmt.kind {
             StmtKind::Function(func) => {
@@ -1101,7 +1153,7 @@ impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {
         ControlFlow::Continue(())
     }
 
-    fn visit_expr(&mut self, expr: &Expr) -> ControlFlow<()> {
+    fn visit_expr(&mut self, expr: &Expr) -> ControlFlow<V::Break> {
         self.inner.visit_expr(expr, &self.scope)?;
         match &expr.kind {
             ExprKind::Closure(_) | ExprKind::ArrowFunction(_) => {
@@ -1123,7 +1175,7 @@ impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {
         ControlFlow::Continue(())
     }
 
-    fn visit_class_member(&mut self, member: &ClassMember) -> ControlFlow<()> {
+    fn visit_class_member(&mut self, member: &ClassMember) -> ControlFlow<V::Break> {
         self.inner.visit_class_member(member, &self.scope)?;
         if let ClassMemberKind::Method(method) = &member.kind {
             let fn_name = method.name.as_str().map(str::to_owned);
@@ -1136,7 +1188,7 @@ impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {
         ControlFlow::Continue(())
     }
 
-    fn visit_enum_member(&mut self, member: &EnumMember) -> ControlFlow<()> {
+    fn visit_enum_member(&mut self, member: &EnumMember) -> ControlFlow<V::Break> {
         self.inner.visit_enum_member(member, &self.scope)?;
         if let EnumMemberKind::Method(method) = &member.kind {
             let fn_name = method.name.as_str().map(str::to_owned);
@@ -1149,65 +1201,65 @@ impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {
         ControlFlow::Continue(())
     }
 
-    fn visit_param(&mut self, param: &Param) -> ControlFlow<()> {
+    fn visit_param(&mut self, param: &Param) -> ControlFlow<V::Break> {
         self.inner.visit_param(param, &self.scope)?;
         walk_owned_param(self, param)
     }
 
-    fn visit_arg(&mut self, arg: &Arg) -> ControlFlow<()> {
+    fn visit_arg(&mut self, arg: &Arg) -> ControlFlow<V::Break> {
         self.inner.visit_arg(arg, &self.scope)?;
         walk_owned_arg(self, arg)
     }
 
-    fn visit_property_hook(&mut self, hook: &PropertyHook) -> ControlFlow<()> {
+    fn visit_property_hook(&mut self, hook: &PropertyHook) -> ControlFlow<V::Break> {
         self.inner.visit_property_hook(hook, &self.scope)?;
         walk_owned_property_hook(self, hook)
     }
 
-    fn visit_type_hint(&mut self, type_hint: &TypeHint) -> ControlFlow<()> {
+    fn visit_type_hint(&mut self, type_hint: &TypeHint) -> ControlFlow<V::Break> {
         self.inner.visit_type_hint(type_hint, &self.scope)?;
         walk_owned_type_hint(self, type_hint)
     }
 
-    fn visit_attribute(&mut self, attribute: &Attribute) -> ControlFlow<()> {
+    fn visit_attribute(&mut self, attribute: &Attribute) -> ControlFlow<V::Break> {
         self.inner.visit_attribute(attribute, &self.scope)?;
         walk_owned_attribute(self, attribute)
     }
 
-    fn visit_catch_clause(&mut self, catch: &CatchClause) -> ControlFlow<()> {
+    fn visit_catch_clause(&mut self, catch: &CatchClause) -> ControlFlow<V::Break> {
         self.inner.visit_catch_clause(catch, &self.scope)?;
         walk_owned_catch_clause(self, catch)
     }
 
-    fn visit_match_arm(&mut self, arm: &MatchArm) -> ControlFlow<()> {
+    fn visit_match_arm(&mut self, arm: &MatchArm) -> ControlFlow<V::Break> {
         self.inner.visit_match_arm(arm, &self.scope)?;
         walk_owned_match_arm(self, arm)
     }
 
-    fn visit_closure_use_var(&mut self, var: &ClosureUseVar) -> ControlFlow<()> {
+    fn visit_closure_use_var(&mut self, var: &ClosureUseVar) -> ControlFlow<V::Break> {
         self.inner.visit_closure_use_var(var, &self.scope)
     }
 
-    fn visit_trait_use(&mut self, trait_use: &TraitUseDecl) -> ControlFlow<()> {
+    fn visit_trait_use(&mut self, trait_use: &TraitUseDecl) -> ControlFlow<V::Break> {
         self.inner.visit_trait_use(trait_use, &self.scope)?;
         walk_owned_trait_use(self, trait_use)
     }
 
-    fn visit_trait_adaptation(&mut self, adaptation: &TraitAdaptation) -> ControlFlow<()> {
+    fn visit_trait_adaptation(&mut self, adaptation: &TraitAdaptation) -> ControlFlow<V::Break> {
         self.inner.visit_trait_adaptation(adaptation, &self.scope)?;
         walk_owned_trait_adaptation(self, adaptation)
     }
 
-    fn visit_block(&mut self, block: &Block) -> ControlFlow<()> {
+    fn visit_block(&mut self, block: &Block) -> ControlFlow<V::Break> {
         self.inner.visit_block(block, &self.scope)?;
         walk_owned_block(self, block)
     }
 
-    fn visit_name(&mut self, name: &Name) -> ControlFlow<()> {
+    fn visit_name(&mut self, name: &Name) -> ControlFlow<V::Break> {
         self.inner.visit_name(name, &self.scope)
     }
 
-    fn visit_comment(&mut self, comment: &Comment) -> ControlFlow<()> {
+    fn visit_comment(&mut self, comment: &Comment) -> ControlFlow<V::Break> {
         self.inner.visit_comment(comment, &self.scope)
     }
 }
@@ -1274,6 +1326,7 @@ mod tests {
     }
 
     impl OwnedVisitor for VarCounter {
+        type Break = ();
         fn visit_expr(&mut self, expr: &Expr) -> ControlFlow<()> {
             if matches!(&expr.kind, ExprKind::Variable(_)) {
                 self.count += 1;
@@ -1312,6 +1365,7 @@ mod tests {
             found: Option<String>,
         }
         impl OwnedVisitor for FindFirst {
+            type Break = ();
             fn visit_expr(&mut self, expr: &Expr) -> ControlFlow<()> {
                 if let ExprKind::Variable(name) = &expr.kind {
                     self.found = Some(name.to_string());
@@ -1351,6 +1405,7 @@ mod tests {
             expr_count: usize,
         }
         impl OwnedVisitor for SkipFunctions {
+            type Break = ();
             fn visit_expr(&mut self, expr: &Expr) -> ControlFlow<()> {
                 self.expr_count += 1;
                 walk_owned_expr(self, expr)
@@ -1411,6 +1466,7 @@ mod tests {
             methods: Vec<String>,
         }
         impl OwnedScopeVisitor for MethodCollector {
+            type Break = ();
             fn visit_class_member(
                 &mut self,
                 member: &ClassMember,

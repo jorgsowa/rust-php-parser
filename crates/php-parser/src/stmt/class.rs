@@ -445,6 +445,7 @@ pub(super) fn is_virtual_property(name: &str, hooks: &[PropertyHook<'_, '_>]) ->
         }
     }
     impl<'a, 's> Visitor<'a, 's> for UsesProperty<'_> {
+        type Break = ();
         fn visit_stmt(&mut self, stmt: &Stmt<'a, 's>) -> ControlFlow<()> {
             match stmt.kind {
                 StmtKind::Function(_)

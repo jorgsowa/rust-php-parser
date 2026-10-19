@@ -13,6 +13,7 @@ struct Linter {
 }
 
 impl OwnedVisitor for Linter {
+    type Break = ();
     fn visit_expr(&mut self, expr: &Expr) -> ControlFlow<()> {
         match &expr.kind {
             ExprKind::Eval(_) => self.findings.push((expr.span.start, "avoid eval()")),

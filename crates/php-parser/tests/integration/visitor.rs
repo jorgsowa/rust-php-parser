@@ -15,6 +15,7 @@ struct NameCollector {
 }
 
 impl<'arena, 'src> Visitor<'arena, 'src> for NameCollector {
+    type Break = ();
     fn visit_name(&mut self, name: &Name<'arena, 'src>) -> ControlFlow<()> {
         self.names.push(name.to_string_repr().to_string());
         ControlFlow::Continue(())
@@ -51,6 +52,7 @@ struct NodeCounter {
 }
 
 impl<'arena, 'src> Visitor<'arena, 'src> for NodeCounter {
+    type Break = ();
     fn visit_stmt(&mut self, stmt: &Stmt<'arena, 'src>) -> ControlFlow<()> {
         self.stmts += 1;
         visitor::walk_stmt(self, stmt)
@@ -254,6 +256,7 @@ fn early_break_stops_traversal() {
                 var_count: usize,
             }
             impl<'arena, 'src> Visitor<'arena, 'src> for StopAfterFirst {
+                type Break = ();
                 fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<()> {
                     if matches!(&expr.kind, ExprKind::Variable(_)) {
                         self.var_count += 1;
@@ -291,6 +294,7 @@ fn walks_nested_closures_and_control_flow() {
                 names: Vec<String>,
             }
             impl<'arena, 'src> Visitor<'arena, 'src> for VarCollector {
+                type Break = ();
                 fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<()> {
                     if let ExprKind::Variable(name) = &expr.kind {
                         self.names.push(name.to_string());
@@ -349,6 +353,7 @@ fn walks_class_property_and_method_types() {
                 types: Vec<String>,
             }
             impl<'arena, 'src> Visitor<'arena, 'src> for TypeCollector {
+                type Break = ();
                 fn visit_type_hint(&mut self, th: &TypeHint<'arena, 'src>) -> ControlFlow<()> {
                     match &th.kind {
                         TypeHintKind::Keyword(builtin, _) => {
@@ -393,6 +398,7 @@ struct MethodScopeCollector {
 }
 
 impl<'arena, 'src> ScopeVisitor<'arena, 'src> for MethodScopeCollector {
+    type Break = ();
     fn visit_class_member(
         &mut self,
         member: &ClassMember<'arena, 'src>,
@@ -442,6 +448,7 @@ fn scope_visitor_tracks_namespace() {
                 fn_namespaces: Vec<Option<String>>,
             }
             impl<'arena, 'src> ScopeVisitor<'arena, 'src> for NsCollector {
+                type Break = ();
                 fn visit_stmt(
                     &mut self,
                     stmt: &Stmt<'arena, 'src>,
@@ -474,6 +481,7 @@ fn scope_walker_resets_scope_between_walks() {
                 at_program: Vec<(Option<String>, Option<String>)>,
             }
             impl<'arena, 'src> ScopeVisitor<'arena, 'src> for ProgramScopes {
+                type Break = ();
                 fn visit_program(
                     &mut self,
                     _program: &Program<'arena, 'src>,
@@ -516,6 +524,7 @@ fn owned_scope_walker_resets_scope_between_walks() {
         at_program: Vec<(Option<String>, Option<String>)>,
     }
     impl OwnedScopeVisitor for ProgramScopes {
+        type Break = ();
         fn visit_program(
             &mut self,
             _program: &OwnedProgram,
@@ -561,6 +570,7 @@ fn scope_visitor_function_name_inside_body() {
                 fn_names: Vec<Option<String>>,
             }
             impl<'arena, 'src> ScopeVisitor<'arena, 'src> for FnCollector {
+                type Break = ();
                 fn visit_stmt(
                     &mut self,
                     stmt: &Stmt<'arena, 'src>,
@@ -595,6 +605,7 @@ fn scope_visitor_closure_clears_function_name() {
                 names_inside_closure: Vec<Option<String>>,
             }
             impl<'arena, 'src> ScopeVisitor<'arena, 'src> for FnNameCollector {
+                type Break = ();
                 fn visit_expr(
                     &mut self,
                     expr: &Expr<'arena, 'src>,
@@ -636,6 +647,7 @@ fn scope_visitor_method_tracks_class_and_function() {
                 captures: Vec<(Option<String>, Option<String>)>,
             }
             impl<'arena, 'src> ScopeVisitor<'arena, 'src> for ScopeCapture {
+                type Break = ();
                 fn visit_stmt(
                     &mut self,
                     stmt: &Stmt<'arena, 'src>,
@@ -678,6 +690,7 @@ fn scope_visitor_braced_namespace_scopes_correctly() {
                 entries: Vec<(Option<String>, String)>,
             }
             impl<'arena, 'src> ScopeVisitor<'arena, 'src> for NsFnCollector {
+                type Break = ();
                 fn visit_stmt(
                     &mut self,
                     stmt: &Stmt<'arena, 'src>,
@@ -719,6 +732,7 @@ fn scope_visitor_enum_method_tracks_enum_and_function() {
                 method_scopes: Vec<(Option<String>, Option<String>)>,
             }
             impl<'arena, 'src> ScopeVisitor<'arena, 'src> for EnumScopeCollector {
+                type Break = ();
                 fn visit_enum_member(
                     &mut self,
                     member: &EnumMember<'arena, 'src>,
@@ -759,6 +773,7 @@ fn walks_trait_use_adaptations() {
                 count: usize,
             }
             impl<'arena, 'src> Visitor<'arena, 'src> for AdaptationCounter {
+                type Break = ();
                 fn visit_trait_adaptation(
                     &mut self,
                     _adaptation: &TraitAdaptation<'arena, 'src>,
@@ -790,6 +805,7 @@ fn walk_trait_use_can_be_called_directly() {
                 alias: usize,
             }
             impl<'arena, 'src> Visitor<'arena, 'src> for AdaptationKindCollector {
+                type Break = ();
                 fn visit_class_member(
                     &mut self,
                     member: &ClassMember<'arena, 'src>,
@@ -839,6 +855,7 @@ fn scope_visitor_visits_trait_adaptations() {
                 class_names: Vec<Option<String>>,
             }
             impl<'arena, 'src> ScopeVisitor<'arena, 'src> for AdaptationScopeCollector {
+                type Break = ();
                 fn visit_trait_adaptation(
                     &mut self,
                     _adaptation: &TraitAdaptation<'arena, 'src>,
@@ -910,6 +927,7 @@ fn visits_namespace_named_arg_and_trait_adaptation_names() {
         names: Vec<String>,
     }
     impl php_ast::owned::OwnedVisitor for OwnedNameCollector {
+        type Break = ();
         fn visit_name(&mut self, name: &php_ast::owned::Name) -> ControlFlow<()> {
             self.names.push(name.parts.join("\\"));
             ControlFlow::Continue(())
@@ -1028,6 +1046,7 @@ fn walk_comments_visits_all_non_attached_comments() {
         kinds: Vec<CommentKind>,
     }
     impl<'arena, 'src> Visitor<'arena, 'src> for CommentCollector {
+        type Break = ();
         fn visit_comment(&mut self, comment: &Comment<'src>) -> ControlFlow<()> {
             self.kinds.push(comment.kind);
             ControlFlow::Continue(())
@@ -1052,6 +1071,7 @@ fn scope_walker_delegates_visit_comment() {
         seen: Vec<(&'src str, Option<&'src str>)>,
     }
     impl<'arena, 'src> ScopeVisitor<'arena, 'src> for ScopeCommentCollector<'src> {
+        type Break = ();
         fn visit_comment(
             &mut self,
             comment: &Comment<'src>,
@@ -1087,6 +1107,7 @@ fn name_resolver_resolves_class_extends() {
                 resolved: Vec<ResolvedName>,
             }
             impl<'arena, 'src> ScopeVisitor<'arena, 'src> for Collector {
+                type Break = ();
                 fn visit_stmt(
                     &mut self,
                     stmt: &Stmt<'arena, 'src>,
@@ -1151,6 +1172,7 @@ fn name_resolver_resolves_expression_names() {
         resolved: Vec<ResolvedName>,
     }
     impl<'arena, 'src> ScopeVisitor<'arena, 'src> for Collector {
+        type Break = ();
         fn visit_stmt(
             &mut self,
             stmt: &Stmt<'arena, 'src>,
@@ -1212,6 +1234,7 @@ fn scope_visitor_visits_names_and_blocks_with_scope() {
         blocks_in: Vec<Option<String>>,
     }
     impl<'arena, 'src> ScopeVisitor<'arena, 'src> for Collector {
+        type Break = ();
         fn visit_name(
             &mut self,
             name: &Name<'arena, 'src>,
@@ -1272,6 +1295,7 @@ fn owned_scope_visitor_visits_names_and_blocks_with_scope() {
         blocks_in: Vec<Option<String>>,
     }
     impl OwnedScopeVisitor for Collector {
+        type Break = ();
         fn visit_name(&mut self, name: &OwnedName, scope: &OwnedScope) -> ControlFlow<()> {
             self.names
                 .push((name.parts.join("\\"), scope.class_name.clone()));
@@ -1343,6 +1367,7 @@ fn owned_block_walk_and_fold_are_overridable() {
     use php_ast::owned::{fold_owned_block, walk_owned_block, Block, OwnedFold, OwnedVisitor};
     struct CountBlocks(usize);
     impl OwnedVisitor for CountBlocks {
+        type Break = ();
         fn visit_block(&mut self, block: &Block) -> ControlFlow<()> {
             self.0 += 1;
             walk_owned_block(self, block)
@@ -1362,4 +1387,74 @@ fn owned_block_walk_and_fold_are_overridable() {
     let _ = folder.fold_program(&result.program);
     assert!(visited > 0);
     assert_eq!(folder.0, visited);
+}
+
+/// Stops at the first integer literal and returns it through `Break`.
+struct FirstInt;
+
+impl<'arena, 'src> Visitor<'arena, 'src> for FirstInt {
+    type Break = i64;
+    fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<i64> {
+        if let ExprKind::Int(n) = expr.kind {
+            return ControlFlow::Break(n);
+        }
+        visitor::walk_expr(self, expr)
+    }
+}
+
+#[test]
+fn break_carries_a_value_out_of_the_walk() {
+    with_parsed("<?php $a = f(1 + 2, 3);", |_, program| {
+        assert_eq!(FirstInt.visit_program(program), ControlFlow::Break(1));
+    });
+    with_parsed("<?php $a = $b;", |_, program| {
+        assert_eq!(FirstInt.visit_program(program), ControlFlow::Continue(()));
+    });
+}
+
+#[test]
+fn scope_walker_forwards_the_inner_break_value() {
+    struct InClass;
+    impl<'arena, 'src> ScopeVisitor<'arena, 'src> for InClass {
+        type Break = String;
+        fn visit_expr(
+            &mut self,
+            expr: &Expr<'arena, 'src>,
+            scope: &Scope<'src>,
+        ) -> ControlFlow<String> {
+            match (&expr.kind, scope.class_name) {
+                (ExprKind::Int(_), Some(class)) => ControlFlow::Break(class.to_string()),
+                _ => ControlFlow::Continue(()),
+            }
+        }
+    }
+    with_parsed(
+        "<?php $x = 1; class Foo { function f() { return 2; } }",
+        |src, program| {
+            let mut walker = ScopeWalker::new(src, InClass);
+            assert_eq!(walker.walk(program), ControlFlow::Break("Foo".to_string()));
+        },
+    );
+}
+
+#[test]
+fn owned_visitor_break_carries_a_value() {
+    use php_ast::owned::visitor::{walk_owned_expr, OwnedVisitor};
+    use php_ast::owned::{Expr as OwnedExpr, ExprKind as OwnedExprKind};
+
+    struct FirstVar;
+    impl OwnedVisitor for FirstVar {
+        type Break = String;
+        fn visit_expr(&mut self, expr: &OwnedExpr) -> ControlFlow<String> {
+            if let OwnedExprKind::Variable(name) = &expr.kind {
+                return ControlFlow::Break(name.to_string());
+            }
+            walk_owned_expr(self, expr)
+        }
+    }
+    let result = php_rs_parser::parse("<?php f(1, $first, $second);");
+    assert_eq!(
+        FirstVar.visit_program(&result.program),
+        ControlFlow::Break("first".to_string())
+    );
 }

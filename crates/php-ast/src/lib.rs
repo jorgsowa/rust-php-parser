@@ -26,6 +26,7 @@
 //! struct FunctionCallCounter(usize);
 //!
 //! impl<'arena, 'src> Visitor<'arena, 'src> for FunctionCallCounter {
+//!     type Break = ();
 //!     fn visit_expr(&mut self, expr: &Expr<'arena, 'src>) -> ControlFlow<()> {
 //!         if matches!(expr.kind, ExprKind::FunctionCall(_)) {
 //!             self.0 += 1;

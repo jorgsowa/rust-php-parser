@@ -3285,6 +3285,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         }
     }
     impl<'a, 's> Visitor<'a, 's> for EmptyDims {
+        type Break = ();
         fn visit_stmt(&mut self, stmt: &Stmt<'a, 's>) -> ControlFlow<()> {
             match &stmt.kind {
                 StmtKind::Foreach(f) => {
@@ -3492,6 +3493,7 @@ pub(crate) fn check_void_casts<'arena, 'src>(
         }
     }
     impl<'a, 's> Visitor<'a, 's> for VoidCasts {
+        type Break = ();
         fn visit_stmt(&mut self, stmt: &Stmt<'a, 's>) -> ControlFlow<()> {
             match &stmt.kind {
                 StmtKind::Expression(expr) => self.statement_expr(expr),
@@ -3840,6 +3842,7 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
         }
     }
     impl<'a, 's> Visitor<'a, 's> for ClassRefs<'s> {
+        type Break = ();
         fn visit_stmt(&mut self, stmt: &Stmt<'a, 's>) -> ControlFlow<()> {
             match &stmt.kind {
                 StmtKind::Function(_) => self.in_code(Code::Function, |v| {
