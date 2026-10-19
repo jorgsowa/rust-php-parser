@@ -20,11 +20,11 @@ pub enum PhpVersion {
     Php80,
     /// PHP 8.1 — enums, `readonly` properties/parameters, intersection types, first-class callables, `never` type.
     Php81,
-    /// PHP 8.2 — `readonly class`, DNF types, `true` type.
+    /// PHP 8.2 — `readonly class` (also `abstract readonly class`), DNF types, `true` type.
     Php82,
     /// PHP 8.3 — typed class/enum constants.
     Php83,
-    /// PHP 8.4 — `abstract readonly class`, property hooks, asymmetric visibility.
+    /// PHP 8.4 — property hooks, asymmetric visibility.
     Php84,
     /// PHP 8.5 — pipe operator (`|>`), `clone` with property overrides, `final` promoted properties,
     ///           asymmetric visibility on static properties.

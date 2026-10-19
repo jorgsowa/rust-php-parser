@@ -186,9 +186,9 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             } else if parser.check(TokenKind::Readonly)
                 && parser.peek_kind() == Some(TokenKind::Class)
             {
-                // `abstract readonly class` — valid in PHP 8.4
+                // `abstract readonly class` — valid since PHP 8.2
                 let span = parser.current_span();
-                parser.require_version(PhpVersion::Php84, "abstract readonly class", span);
+                parser.require_version(PhpVersion::Php82, "abstract readonly class", span);
                 parser.advance(); // consume 'readonly'
                 class::parse_class(
                     parser,
@@ -284,9 +284,9 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             } else if parser.peek_kind() == Some(TokenKind::Abstract)
                 && parser.peek2_kind() == Some(TokenKind::Class)
             {
-                // `readonly abstract class` — valid in PHP 8.4
+                // `readonly abstract class` — valid since PHP 8.2
                 let span = parser.current_span();
-                parser.require_version(PhpVersion::Php84, "abstract readonly class", span);
+                parser.require_version(PhpVersion::Php82, "abstract readonly class", span);
                 parser.advance(); // consume 'readonly'
                 parser.advance(); // consume 'abstract'
                 class::parse_class(
@@ -469,9 +469,9 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             } else if parser.check(TokenKind::Readonly)
                 && parser.peek_kind() == Some(TokenKind::Class)
             {
-                // `abstract readonly class` — valid in PHP 8.4
+                // `abstract readonly class` — valid since PHP 8.2
                 let span = parser.current_span();
-                parser.require_version(PhpVersion::Php84, "abstract readonly class", span);
+                parser.require_version(PhpVersion::Php82, "abstract readonly class", span);
                 parser.advance(); // consume 'readonly'
                 return class::parse_class(parser, class_modifiers(true, false, true), attributes);
             } else if parser.check(TokenKind::Final) {
@@ -533,8 +533,8 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             } else if parser.check(TokenKind::Abstract)
                 && parser.peek_kind() == Some(TokenKind::Class)
             {
-                // `readonly abstract class` — valid in PHP 8.4
-                parser.require_version(PhpVersion::Php84, "abstract readonly class", readonly_span);
+                // `readonly abstract class` — valid since PHP 8.2
+                parser.require_version(PhpVersion::Php82, "abstract readonly class", readonly_span);
                 parser.advance(); // consume 'abstract'
                 return class::parse_class(parser, class_modifiers(true, false, true), attributes);
             } else {

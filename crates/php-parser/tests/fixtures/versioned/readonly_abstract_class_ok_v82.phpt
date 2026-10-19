@@ -1,12 +1,8 @@
 ===config===
-min_php=8.1
-max_php=8.1
+min_php=8.2
+max_php=8.2
 ===source===
-<?php abstract readonly class Foo {}
-===errors===
-'abstract readonly class' requires PHP 8.4 or higher
-===php_error===
-PHP Parse error:  syntax error, unexpected token "readonly", expecting "abstract" or "final" or "class" in Standard input code on line 1
+<?php readonly abstract class Foo {}
 ===ast===
 {
   "stmts": [
