@@ -158,6 +158,33 @@ pub struct Name {
     pub span: Span,
 }
 
+impl Name {
+    /// Source range of the name.
+    pub fn span(&self) -> Span {
+        self.span
+    }
+
+    /// Qualification form of the name.
+    pub fn kind(&self) -> NameKind {
+        self.kind
+    }
+
+    /// Joins all parts with `\` and prepends `\` if fully qualified; empty for an error name.
+    pub fn to_string_repr(&self) -> String {
+        let joined = self.join_parts();
+        if self.kind == NameKind::FullyQualified {
+            format!("\\{joined}")
+        } else {
+            joined
+        }
+    }
+
+    /// Joins all parts with `\` without any leading backslash.
+    pub fn join_parts(&self) -> String {
+        self.parts.join("\\")
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Comment
 // ---------------------------------------------------------------------------
@@ -865,6 +892,10 @@ pub struct StaticVar {
 // ---------------------------------------------------------------------------
 
 /// An expression.
+///
+/// `Expr` implements `Drop` so that a very long chain of nested expressions (`$a->b->c->...`)
+/// is freed without recursing. A type that implements `Drop` cannot be destructured, so take
+/// the kind out with [`Expr::into_kind`] or `std::mem::replace`.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Expr {
@@ -872,6 +903,21 @@ pub struct Expr {
     pub kind: ExprKind,
     /// Source span.
     pub span: Span,
+}
+
+impl Expr {
+    /// Returns the name string for `Variable` and `Identifier` nodes, `None` for everything else.
+    pub fn name_str(&self) -> Option<&str> {
+        match &self.kind {
+            ExprKind::Variable(s) | ExprKind::Identifier(s) => Some(s),
+            _ => None,
+        }
+    }
+
+    /// Consumes the expression and returns its kind without cloning it.
+    pub fn into_kind(mut self) -> ExprKind {
+        std::mem::replace(&mut self.kind, ExprKind::Error)
+    }
 }
 
 /// The kind of an expression.

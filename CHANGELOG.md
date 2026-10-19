@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Fold::fold_stmts` hook, called for the program, every block and every `case` body, so a fold can delete, split or insert statements; the free `fold_stmts` is public (`php-ast`).
 - `php_ast::Modifiers` (`visibility`, `set_visibility`, `is_static`, `is_abstract`, `is_final`, `is_readonly`; `Modifiers::new()` and `is_empty()`), shared by methods, properties, parameters, class constants and property hooks (`php-ast`).
 - `new` constructors for the structs below; each takes the fields that identify the node (and the arena when it has vector fields) and leaves the rest empty (`php-ast`).
+- Owned `Name::span()`, `kind()`, `to_string_repr()` and `join_parts()`, `Expr::name_str()` and `Expr::into_kind()`, like their arena counterparts. `Expr` implements `Drop` (so long chains are freed iteratively), which is now documented; take the kind out with `into_kind()` instead of destructuring (`php-ast`).
 
 ### Changed
 
