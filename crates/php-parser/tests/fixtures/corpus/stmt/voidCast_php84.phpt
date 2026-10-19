@@ -126,12 +126,12 @@ PHP Parse error:  syntax error, unexpected identifier "foo" in Standard input co
       "kind": {
         "Expression": {
           "kind": {
-            "Binary": {
-              "left": {
+            "Cast": [
+              "Void",
+              {
                 "kind": {
-                  "Cast": [
-                    "Void",
-                    {
+                  "Binary": {
+                    "left": {
                       "kind": {
                         "Variable": "a"
                       },
@@ -139,25 +139,25 @@ PHP Parse error:  syntax error, unexpected identifier "foo" in Standard input co
                         "start": 41,
                         "end": 43
                       }
+                    },
+                    "op": "LogicalOr",
+                    "right": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 47,
+                        "end": 49
+                      }
                     }
-                  ]
+                  }
                 },
                 "span": {
-                  "start": 35,
-                  "end": 43
-                }
-              },
-              "op": "LogicalOr",
-              "right": {
-                "kind": {
-                  "Variable": "b"
-                },
-                "span": {
-                  "start": 47,
+                  "start": 41,
                   "end": 49
                 }
               }
-            }
+            ]
           },
           "span": {
             "start": 35,

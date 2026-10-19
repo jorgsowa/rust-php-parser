@@ -2367,7 +2367,13 @@ fn try_parse_cast<'arena, 'src>(
         });
     }
 
-    let mut operand = parse_expr_bp(parser, precedence::HIGH_PREFIX_BP);
+    // `(void)` is a statement prefix, not an operator: its operand is the whole expression.
+    let operand_bp = if cast_kind == CastKind::Void {
+        0
+    } else {
+        precedence::HIGH_PREFIX_BP
+    };
+    let mut operand = parse_expr_bp(parser, operand_bp);
     // PHP grammar quirk: assignment binds tighter than casts.
     if parser.current_kind().is_assignment_op() {
         operand = parse_assign_continuation(parser, operand);

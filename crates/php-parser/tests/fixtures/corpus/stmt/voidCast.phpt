@@ -119,12 +119,12 @@ PHP Parse error:  syntax error, unexpected token "(void)" in Standard input code
       "kind": {
         "Expression": {
           "kind": {
-            "Binary": {
-              "left": {
+            "Cast": [
+              "Void",
+              {
                 "kind": {
-                  "Cast": [
-                    "Void",
-                    {
+                  "Binary": {
+                    "left": {
                       "kind": {
                         "Variable": "a"
                       },
@@ -132,25 +132,25 @@ PHP Parse error:  syntax error, unexpected token "(void)" in Standard input code
                         "start": 41,
                         "end": 43
                       }
+                    },
+                    "op": "LogicalOr",
+                    "right": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 47,
+                        "end": 49
+                      }
                     }
-                  ]
+                  }
                 },
                 "span": {
-                  "start": 35,
-                  "end": 43
-                }
-              },
-              "op": "LogicalOr",
-              "right": {
-                "kind": {
-                  "Variable": "b"
-                },
-                "span": {
-                  "start": 47,
+                  "start": 41,
                   "end": 49
                 }
               }
-            }
+            ]
           },
           "span": {
             "start": 35,
