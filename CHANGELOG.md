@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `include $a or $b` and `$x = throw $e or 1` were parsed as `(include $a) or $b` and `throw $e` followed by `or 1`; `include`, `require` and `throw` bind looser than the word operators, so the operand takes them (`php-rs-parser`).
 - `yield $a or $b` (also `and`, `xor`, `yield from` and `yield $k => $v`) was parsed as `yield ($a or $b)`; PHP binds `yield` tighter than the word operators, so it is `(yield $a) or $b` (`php-rs-parser`).
 - `clone($a)->b = 1` was parsed as `(clone $a)->b = 1`; PHP reads the parentheses as grouping, so it is `clone (($a)->b = 1)`, and the printer wrote code PHP rejects. The same goes for `->`, `?->`, `::`, `[` and `(` after `clone(...)` (`php-rs-parser`).
 - Report methods without a body outside interfaces and abstract declarations, abstract methods in anonymous classes, and variadic promoted constructor parameters, like PHP (`php-rs-parser`).

@@ -738,7 +738,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let token = parser.advance();
             let span = token.span;
             parser.require_version(PhpVersion::Php80, "throw expressions", span);
-            let expr = parse_expr_bp(parser, ASSIGNMENT_BP);
+            let expr = parse_expr(parser);
             let merged = span.merge(expr.span);
             Expr {
                 kind: ExprKind::Throw(parser.alloc(expr)),
@@ -841,7 +841,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         // include / include_once / require / require_once
         TokenKind::Include => {
             let token = parser.advance();
-            let inner = parse_expr_bp(parser, ASSIGNMENT_BP);
+            let inner = parse_expr(parser);
             let span = token.span.merge(inner.span);
             Expr {
                 kind: ExprKind::Include(IncludeKind::Include, parser.alloc(inner)),
@@ -850,7 +850,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         }
         TokenKind::IncludeOnce => {
             let token = parser.advance();
-            let inner = parse_expr_bp(parser, ASSIGNMENT_BP);
+            let inner = parse_expr(parser);
             let span = token.span.merge(inner.span);
             Expr {
                 kind: ExprKind::Include(IncludeKind::IncludeOnce, parser.alloc(inner)),
@@ -859,7 +859,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         }
         TokenKind::Require => {
             let token = parser.advance();
-            let inner = parse_expr_bp(parser, ASSIGNMENT_BP);
+            let inner = parse_expr(parser);
             let span = token.span.merge(inner.span);
             Expr {
                 kind: ExprKind::Include(IncludeKind::Require, parser.alloc(inner)),
@@ -868,7 +868,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         }
         TokenKind::RequireOnce => {
             let token = parser.advance();
-            let inner = parse_expr_bp(parser, ASSIGNMENT_BP);
+            let inner = parse_expr(parser);
             let span = token.span.merge(inner.span);
             Expr {
                 kind: ExprKind::Include(IncludeKind::RequireOnce, parser.alloc(inner)),
