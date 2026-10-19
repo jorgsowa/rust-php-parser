@@ -1,12 +1,5 @@
-===config===
-ignore=non-fatal warning: final private method
 ===description===
-PHP emits a warning (not fatal) for `final private` methods:
-"Private methods cannot be final as they are never overridden by other classes".
-The parser surfaces this as a ForbiddenWarning diagnostic
-(severity = Warning); `php -l` still exits 0 so there is no
-===php_error=== section. __construct is excluded — PHP allows
-`final private __construct`.
+PHP only warns about `final private` methods, so the parser reports nothing.
 ===source===
 <?php
 class A {

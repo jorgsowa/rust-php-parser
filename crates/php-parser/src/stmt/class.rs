@@ -1331,18 +1331,6 @@ pub(super) fn parse_method_member<'arena, 'src>(
         });
     }
 
-    // `final private` method — PHP warns (does not fatal):
-    // "Private methods cannot be final as they are never overridden by other classes".
-    // Excluded: __construct (which has its own semantics around final).
-    if mods.is_final && mods.visibility == Some(Visibility::Private) && !is_constructor {
-        parser.error(ParseError::ForbiddenWarning {
-            message:
-                "Private methods cannot be final as they are never overridden by other classes"
-                    .into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
-    }
-
     if let (Some(rt), Some(b)) = (&return_type, body) {
         super::check_returns_against_type(parser, b, rt);
     }
