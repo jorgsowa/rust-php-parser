@@ -1267,6 +1267,10 @@ fn classify_void_or_never<'arena, 'src>(rt: &TypeHint<'arena, 'src>) -> Option<b
     }
 }
 
+pub(crate) fn is_void_type(rt: &TypeHint<'_, '_>) -> bool {
+    classify_void_or_never(rt) == Some(true)
+}
+
 /// Walks `body` and emits a diagnostic for every `return` statement that
 /// violates `void` ("must not return a value") or `never` ("must not return")
 /// semantics. Recurses through control-flow nesting (`if`, `while`, …) but

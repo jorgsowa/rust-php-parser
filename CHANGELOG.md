@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `return` with a value in a `void` closure, a `return` in a `never` closure and any `fn(): void => expr` were accepted; PHP rejects them like it does for functions and methods (`php-rs-parser`).
 - `final private $x` (also static, readonly, hooked, in traits and anonymous classes) was accepted; PHP rejects it with "Property cannot be both final and private" (`php-rs-parser`).
 - Dereferencing a heredoc or nowdoc (`<<<X ... X->b`, `X[0]`, `X::C`, `X()`) was accepted; PHP rejects it, and the parser now reports "Cannot dereference this expression" (`php-rs-parser`).
 - Writes through `(clone $a)` and `f(...)` (`(clone $a)->b = 1`, `(clone $a)[0]++`, `unset((clone $a)->b)`, `&(clone $a)[0]`) were accepted; PHP rejects them with "Cannot use result of built-in function in write context" (`php-rs-parser`).

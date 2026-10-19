@@ -1551,6 +1551,9 @@ pub(crate) fn parse_closure<'arena, 'src>(
         stmts: body_stmts,
         span: Span::new(brace_start, end),
     });
+    if let Some(rt) = &return_type {
+        stmt::check_returns_against_type(parser, body, rt);
+    }
     parser.check_attributes(
         &attributes,
         &AttrSite::new(AttrTarget::Function).with_return_type(return_type.as_ref()),
@@ -1654,6 +1657,12 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
     parser.static_vars = saved_static_vars;
     parser.restore_class_keywords(saved_class_keywords);
     let span = Span::new(start, body.span.end);
+    if return_type.as_ref().is_some_and(stmt::is_void_type) {
+        parser.error(ParseError::Forbidden {
+            message: "A void function must not return a value".into(),
+            span: body.span,
+        });
+    }
     parser.check_attributes(
         &attributes,
         &AttrSite::new(AttrTarget::Function).with_return_type(return_type.as_ref()),
