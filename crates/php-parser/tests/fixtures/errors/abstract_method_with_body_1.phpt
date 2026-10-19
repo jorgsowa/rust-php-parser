@@ -1,7 +1,7 @@
 ===source===
 <?php abstract class Foo { abstract function bar() { echo 'body'; } }
 ===errors===
-abstract method cannot contain a body
+Abstract function Foo::bar() cannot contain body
 ===php_error===
 PHP Fatal error:  Abstract function Foo::bar() cannot contain body in Standard input code on line 1
 ===ast===

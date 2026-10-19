@@ -512,6 +512,37 @@ pub(super) fn check_virtual_set_visibility(
     });
 }
 
+/// Report hook bodies that don't match whether the property is abstract; every hook of an
+/// interface property is abstract.
+pub(super) fn check_hook_bodies(
+    parser: &mut Parser<'_, '_>,
+    hooks: &[PropertyHook<'_, '_>],
+    abstract_property: bool,
+    in_interface: bool,
+    is_private: bool,
+) {
+    for hook in hooks {
+        let has_body = !matches!(hook.body, PropertyHookBody::Abstract);
+        let message = if !has_body && !abstract_property {
+            "Non-abstract property hook must have a body"
+        } else if has_body && in_interface {
+            "Abstract property hook cannot have body"
+        } else if has_body {
+            continue;
+        } else if hook.is_final {
+            "Property hook cannot be both abstract and final"
+        } else if is_private && !in_interface {
+            "Property hook cannot be both abstract and private"
+        } else {
+            continue;
+        };
+        parser.error(ParseError::Forbidden {
+            message: message.into(),
+            span: hook.span,
+        });
+    }
+}
+
 pub(super) struct ClassMemberModifiers {
     pub(super) visibility: Option<Visibility>,
     pub(super) set_visibility: Option<Visibility>,
@@ -580,13 +611,26 @@ pub fn parse_class_members<'arena, 'src>(
                     parser.current_span(),
                 );
             }
-            parse_class_const_member(parser, &mut members, member_attrs, member_start, &mods);
+            parse_class_const_member(
+                parser,
+                &mut members,
+                member_attrs,
+                member_start,
+                &mods,
+                in_interface,
+            );
             continue;
         }
 
         if parser.check(TokenKind::Function) {
-            let member =
-                parse_method_member(parser, member_attrs, member_start, &mods, in_interface);
+            let member = parse_method_member(
+                parser,
+                member_attrs,
+                member_start,
+                &mods,
+                in_interface,
+                in_trait,
+            );
             if let ClassMemberKind::Method(decl) = &member.kind {
                 if let Some(name) = decl.name.as_str() {
                     let key = name.to_ascii_lowercase();
@@ -700,11 +744,7 @@ pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[Clas
                     .is_some_and(|n| n.eq_ignore_ascii_case("__construct")) =>
             {
                 for param in m.params.iter() {
-                    let promoted = param.visibility.is_some()
-                        || param.set_visibility.is_some()
-                        || param.is_readonly
-                        || !param.hooks.is_empty();
-                    if !promoted || param.is_readonly {
+                    if !is_promoted_param(param) || param.is_readonly {
                         continue;
                     }
                     if param.type_hint.is_none() {
@@ -724,6 +764,13 @@ pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[Clas
             _ => {}
         }
     }
+}
+
+fn is_promoted_param(param: &Param<'_, '_>) -> bool {
+    param.visibility.is_some()
+        || param.set_visibility.is_some()
+        || param.is_readonly
+        || !param.hooks.is_empty()
 }
 
 /// Report a class constant or enum case named like an earlier one; constant names are
@@ -976,6 +1023,7 @@ fn parse_class_const_member<'arena, 'src>(
     member_attrs: ArenaVec<'arena, Attribute<'arena, 'src>>,
     member_start: u32,
     mods: &ClassMemberModifiers,
+    in_interface: bool,
 ) {
     if mods.is_static {
         parser.error(ParseError::Forbidden {
@@ -1043,6 +1091,16 @@ fn parse_class_const_member<'arena, 'src>(
     }
     parser.expect(TokenKind::Semicolon);
     let span = Span::new(member_start, parser.previous_end());
+    if let (true, Some(Visibility::Protected | Visibility::Private), Some((name, _))) =
+        (in_interface, mods.visibility, const_items.first())
+    {
+        let class = parser.class_member_prefix();
+        parser.error(ParseError::Forbidden {
+            message: format!("Access type for interface constant {class}{name} must be public")
+                .into(),
+            span,
+        });
+    }
     // Allocate the type hint into the arena so all items can share a reference
     let shared_type_hint: Option<&'arena _> = const_type.map(|th| parser.alloc(th));
     let mut const_iter = const_items.into_iter();
@@ -1086,6 +1144,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
     member_start: u32,
     mods: &ClassMemberModifiers,
     in_interface: bool,
+    in_trait: bool,
 ) -> ClassMember<'arena, 'src> {
     parser.advance(); // consume `function`
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
@@ -1102,9 +1161,20 @@ pub(super) fn parse_method_member<'arena, 'src>(
 
     parser.expect(TokenKind::LeftParen);
     let was_in_constructor = parser.in_constructor;
-    parser.in_constructor = method_name.as_str() == Some("__construct");
+    let is_constructor = method_name
+        .as_str()
+        .is_some_and(|n| n.eq_ignore_ascii_case("__construct"));
+    parser.in_constructor = is_constructor;
     let params = super::parse_param_list(parser);
     parser.in_constructor = was_in_constructor;
+    if is_constructor && (mods.is_abstract || in_interface) {
+        for param in params.iter().filter(|p| is_promoted_param(p)) {
+            parser.error(ParseError::Forbidden {
+                message: "Cannot declare promoted property in an abstract constructor".into(),
+                span: param.span,
+            });
+        }
+    }
     parser.expect(TokenKind::RightParen);
 
     let return_type = if parser.eat(TokenKind::Colon).is_some() {
@@ -1153,17 +1223,52 @@ pub(super) fn parse_method_member<'arena, 'src>(
         None
     };
 
-    if mods.is_abstract && body.is_some() {
-        parser.error(ParseError::Forbidden {
-            message: "abstract method cannot contain a body".into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
-    }
-    if in_interface && body.is_some() {
-        parser.error(ParseError::Forbidden {
-            message: "interface method cannot contain a body".into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
+    let member_span = Span::new(member_start, parser.previous_end());
+    let method_label = format!("{}{}()", parser.class_member_prefix(), method_name);
+    if in_interface {
+        if matches!(
+            mods.visibility,
+            Some(Visibility::Protected | Visibility::Private)
+        ) {
+            parser.error(ParseError::Forbidden {
+                message: format!("Access type for interface method {method_label} must be public")
+                    .into(),
+                span: member_span,
+            });
+        }
+        // `abstract final` is already reported by the modifier parser.
+        if mods.is_final && !mods.is_abstract {
+            parser.error(ParseError::Forbidden {
+                message: format!("Interface method {method_label} must not be final").into(),
+                span: member_span,
+            });
+        }
+        if mods.is_abstract {
+            parser.error(ParseError::Forbidden {
+                message: format!("Interface method {method_label} must not be abstract").into(),
+                span: member_span,
+            });
+        } else if body.is_some() {
+            parser.error(ParseError::Forbidden {
+                message: format!("Interface function {method_label} cannot contain body").into(),
+                span: member_span,
+            });
+        }
+    } else if mods.is_abstract {
+        // Traits may declare abstract private methods.
+        if mods.visibility == Some(Visibility::Private) && !in_trait {
+            parser.error(ParseError::Forbidden {
+                message: format!("Abstract function {method_label} cannot be declared private")
+                    .into(),
+                span: member_span,
+            });
+        }
+        if body.is_some() {
+            parser.error(ParseError::Forbidden {
+                message: format!("Abstract function {method_label} cannot contain body").into(),
+                span: member_span,
+            });
+        }
     }
     if mods.is_readonly {
         parser.error(ParseError::Forbidden {
@@ -1175,10 +1280,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
     // `final private` method — PHP warns (does not fatal):
     // "Private methods cannot be final as they are never overridden by other classes".
     // Excluded: __construct (which has its own semantics around final).
-    if mods.is_final
-        && mods.visibility == Some(Visibility::Private)
-        && method_name.as_str() != Some("__construct")
-    {
+    if mods.is_final && mods.visibility == Some(Visibility::Private) && !is_constructor {
         parser.error(ParseError::ForbiddenWarning {
             message:
                 "Private methods cannot be final as they are never overridden by other classes"
@@ -1191,12 +1293,13 @@ pub(super) fn parse_method_member<'arena, 'src>(
         super::check_returns_against_type(parser, b, rt);
     }
 
-    // __construct cannot declare a return type or be static. PHP errors:
-    // "Method A::__construct() cannot declare a return type" / "cannot be static".
-    if method_name.as_str() == Some("__construct") {
+    let is_destructor = method_name
+        .as_str()
+        .is_some_and(|n| n.eq_ignore_ascii_case("__destruct"));
+    if is_constructor || is_destructor {
         if let Some(rt) = &return_type {
             parser.error(ParseError::Forbidden {
-                message: "Method __construct() cannot declare a return type".into(),
+                message: format!("Method {method_label} cannot declare a return type").into(),
                 span: rt.span,
             });
         }
@@ -1282,8 +1385,28 @@ fn parse_property_member<'arena, 'src>(
 
     // Property hooks: { get { ... } set { ... } } — PHP 8.4+
     let had_hooks_block = parser.check(TokenKind::LeftBrace);
-    // abstract is only valid on properties with hooks (abstract property hooks, PHP 8.4+)
-    if mods.is_abstract && !had_hooks_block {
+    if in_interface {
+        let span = Span::new(member_start, parser.previous_end());
+        let mut report = |message: &'static str| {
+            parser.error(ParseError::Forbidden {
+                message: message.into(),
+                span,
+            })
+        };
+        if mods.is_abstract {
+            report("Property in interface cannot be explicitly abstract. All interface members are implicitly abstract");
+        }
+        if matches!(
+            mods.visibility,
+            Some(Visibility::Protected | Visibility::Private)
+        ) {
+            report("Property in interface cannot be protected or private");
+        }
+        if mods.is_final {
+            report("Property in interface cannot be final");
+        }
+    } else if mods.is_abstract && !had_hooks_block {
+        // abstract is only valid on properties with hooks (abstract property hooks, PHP 8.4+)
         parser.error(ParseError::Forbidden {
             message: "properties cannot be abstract".into(),
             span: Span::new(member_start, parser.previous_end()),
@@ -1296,6 +1419,30 @@ fn parse_property_member<'arena, 'src>(
     } else {
         parser.alloc_vec()
     };
+    check_hook_bodies(
+        parser,
+        &hooks,
+        mods.is_abstract || in_interface,
+        in_interface,
+        mods.visibility == Some(Visibility::Private),
+    );
+    if let (true, false, Some(name)) = (
+        mods.is_abstract && !in_interface,
+        hooks.is_empty()
+            || hooks
+                .iter()
+                .any(|h| matches!(h.body, PropertyHookBody::Abstract)),
+        prop_name.as_str(),
+    ) {
+        let class = parser.class_member_prefix();
+        parser.error(ParseError::Forbidden {
+            message: format!(
+                "Abstract property {class}${name} must specify at least one abstract hook"
+            )
+            .into(),
+            span: Span::new(member_start, parser.previous_end()),
+        });
+    }
     if mods.set_visibility.is_some() && type_hint.is_none() {
         let class = parser.class_member_prefix();
         parser.error(ParseError::Forbidden {

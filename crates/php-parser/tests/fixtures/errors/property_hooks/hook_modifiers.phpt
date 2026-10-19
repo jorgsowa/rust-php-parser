@@ -22,7 +22,9 @@ Cannot use the private modifier on a property hook
 Cannot use the private(set) modifier on a property hook
 Cannot use the private modifier on a property hook
 Cannot use the abstract modifier on a property hook
+Non-abstract property hook must have a body
 Cannot use the abstract modifier on a property hook
+Non-abstract property hook must have a body
 Cannot use the static modifier on a property hook
 Cannot use the readonly modifier on a property hook
 Multiple final modifiers are not allowed

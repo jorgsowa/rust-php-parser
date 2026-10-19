@@ -1617,6 +1617,7 @@ pub fn parse_param_list<'arena, 'src>(
         } else {
             parser.alloc_vec()
         };
+        class::check_hook_bodies(parser, &hooks, false, false, false);
 
         if let Some(hook) = hooks.first().filter(|_| is_readonly) {
             parser.error(ParseError::Forbidden {

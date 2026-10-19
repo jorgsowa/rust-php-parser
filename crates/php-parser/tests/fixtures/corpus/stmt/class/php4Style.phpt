@@ -9,7 +9,7 @@ class A {
     static abstract function baz() {}
 }
 ===errors===
-abstract method cannot contain a body
+Abstract function A::baz() cannot contain body
 ===php_error===
 PHP Fatal error:  Class A declares abstract method baz() and must therefore be declared abstract in Standard input code on line 6
 ===ast===

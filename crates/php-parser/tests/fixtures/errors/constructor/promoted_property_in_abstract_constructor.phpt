@@ -1,0 +1,369 @@
+===config===
+min_php=8.4
+===source===
+<?php
+abstract class A {
+    abstract public function __construct(public $a, $b, private readonly int $c, protected(set) string $d);
+}
+interface I {
+    public function __Construct(public $a);
+}
+trait T {
+    abstract function __construct(public $a { get => 1; });
+}
+===errors===
+Cannot declare promoted property in an abstract constructor
+Cannot declare promoted property in an abstract constructor
+Cannot declare promoted property in an abstract constructor
+Cannot declare promoted property in an abstract constructor
+Cannot declare promoted property in an abstract constructor
+===php_error===
+PHP Fatal error:  Cannot declare promoted property in an abstract constructor in Standard input code on line 3
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 21,
+              "end": 22
+            }
+          },
+          "modifiers": {
+            "is_abstract": true,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 54,
+                      "end": 65
+                    }
+                  },
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": true,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [
+                    {
+                      "name": {
+                        "name": "a",
+                        "span": {
+                          "start": 73,
+                          "end": 75
+                        }
+                      },
+                      "type_hint": null,
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": "Public",
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 66,
+                        "end": 75
+                      }
+                    },
+                    {
+                      "name": {
+                        "name": "b",
+                        "span": {
+                          "start": 77,
+                          "end": 79
+                        }
+                      },
+                      "type_hint": null,
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": null,
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 77,
+                        "end": 79
+                      }
+                    },
+                    {
+                      "name": {
+                        "name": "c",
+                        "span": {
+                          "start": 102,
+                          "end": 104
+                        }
+                      },
+                      "type_hint": {
+                        "kind": {
+                          "Named": {
+                            "parts": [
+                              "int"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 98,
+                              "end": 101
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 98,
+                          "end": 101
+                        }
+                      },
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": true,
+                      "is_final": false,
+                      "visibility": "Private",
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 81,
+                        "end": 104
+                      }
+                    },
+                    {
+                      "name": {
+                        "name": "d",
+                        "span": {
+                          "start": 128,
+                          "end": 130
+                        }
+                      },
+                      "type_hint": {
+                        "kind": {
+                          "Named": {
+                            "parts": [
+                              "string"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 121,
+                              "end": 127
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 121,
+                          "end": 127
+                        }
+                      },
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": null,
+                      "set_visibility": "Protected",
+                      "attributes": [],
+                      "span": {
+                        "start": 106,
+                        "end": 130
+                      }
+                    }
+                  ],
+                  "return_type": null,
+                  "body": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 29,
+                "end": 132
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 15,
+        "end": 134
+      }
+    },
+    {
+      "kind": {
+        "Interface": {
+          "name": {
+            "name": "I",
+            "span": {
+              "start": 145,
+              "end": 146
+            }
+          },
+          "extends": [],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": {
+                    "name": "__Construct",
+                    "span": {
+                      "start": 169,
+                      "end": 180
+                    }
+                  },
+                  "visibility": "Public",
+                  "is_static": false,
+                  "is_abstract": false,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [
+                    {
+                      "name": {
+                        "name": "a",
+                        "span": {
+                          "start": 188,
+                          "end": 190
+                        }
+                      },
+                      "type_hint": null,
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": "Public",
+                      "set_visibility": null,
+                      "attributes": [],
+                      "span": {
+                        "start": 181,
+                        "end": 190
+                      }
+                    }
+                  ],
+                  "return_type": null,
+                  "body": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 153,
+                "end": 192
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 135,
+        "end": 194
+      }
+    },
+    {
+      "kind": {
+        "Trait": {
+          "name": {
+            "name": "T",
+            "span": {
+              "start": 201,
+              "end": 202
+            }
+          },
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 227,
+                      "end": 238
+                    }
+                  },
+                  "visibility": null,
+                  "is_static": false,
+                  "is_abstract": true,
+                  "is_final": false,
+                  "by_ref": false,
+                  "params": [
+                    {
+                      "name": {
+                        "name": "a",
+                        "span": {
+                          "start": 246,
+                          "end": 248
+                        }
+                      },
+                      "type_hint": null,
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "is_readonly": false,
+                      "is_final": false,
+                      "visibility": "Public",
+                      "set_visibility": null,
+                      "attributes": [],
+                      "hooks": [
+                        {
+                          "kind": "Get",
+                          "body": {
+                            "Expression": {
+                              "kind": {
+                                "Int": 1
+                              },
+                              "span": {
+                                "start": 258,
+                                "end": 259
+                              }
+                            }
+                          },
+                          "is_final": false,
+                          "by_ref": false,
+                          "params": [],
+                          "attributes": [],
+                          "span": {
+                            "start": 251,
+                            "end": 260
+                          }
+                        }
+                      ],
+                      "span": {
+                        "start": 239,
+                        "end": 262
+                      }
+                    }
+                  ],
+                  "return_type": null,
+                  "body": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 209,
+                "end": 264
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 195,
+        "end": 266
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 266
+  }
+}

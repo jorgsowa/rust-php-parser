@@ -7,7 +7,7 @@ class A {
     public function __construct(): self {}
 }
 ===errors===
-Method __construct() cannot declare a return type
+Method A::__construct() cannot declare a return type
 ===php_error===
 PHP Fatal error:  Method A::__construct() cannot declare a return type in Standard input code on line 3
 ===ast===

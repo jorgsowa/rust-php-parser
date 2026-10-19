@@ -314,8 +314,14 @@ pub(super) fn parse_enum<'arena, 'src>(
                 is_final,
                 is_readonly,
             };
-            let member =
-                super::class::parse_method_member(parser, member_attrs, member_start, &mods, false);
+            let member = super::class::parse_method_member(
+                parser,
+                member_attrs,
+                member_start,
+                &mods,
+                false,
+                false,
+            );
             if let ClassMemberKind::Method(method) = member.kind {
                 members.push(EnumMember {
                     kind: EnumMemberKind::Method(method),

@@ -23,6 +23,11 @@ Cannot use the static modifier on a property hook
 duplicate 'get' hook
 Cannot use the readonly modifier on a property hook
 duplicate 'get' hook
+Non-abstract property hook must have a body
+Non-abstract property hook must have a body
+Non-abstract property hook must have a body
+Non-abstract property hook must have a body
+Non-abstract property hook must have a body
 ===php_error===
 PHP Fatal error:  Cannot use the public modifier on a property hook in Standard input code on line 4
 ===ast===

@@ -119,6 +119,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Property hook rules are checked like PHP: visibility, `abstract`, `static` and `readonly` on a hook, repeated `final`, `#[\NoDiscard]` on a hook (8.5), a default value on a virtual property, and asymmetric visibility on a read-only or write-only virtual property. A property is virtual when no hook accesses `$this->name` outside a nested function or class (`php-rs-parser`).
 - A named class, interface, trait or enum declared inside a class member body is reported as nested; a function declared in a method body no longer has the method's class scope (`php-rs-parser`).
 - `Property with asymmetric visibility … must have type` names the property (`php-rs-parser`).
+- Interface member rules are checked like PHP: non-public constants, methods and properties, `final` and `abstract` methods, and `final` or explicitly `abstract` properties. A promoted property in an abstract or interface constructor is reported, as are an `abstract private` method outside a trait, a hook without a body on a non-abstract property, a hook with a body in an interface, an abstract hook that is `final` or on a `private` property, and an abstract property without an abstract hook (`php-rs-parser`).
+- `__construct` was recognized only in lowercase, so promoted parameters in `__CONSTRUCT` were rejected and its return type and `final private` checks were skipped (`php-rs-parser`).
+- A return type on `__destruct` is reported (`php-rs-parser`).
+- Abstract and interface method body errors and the constructor return type error use PHP's wording, including the class and method name (`php-rs-parser`).
 
 ---
 

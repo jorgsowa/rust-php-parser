@@ -6,7 +6,7 @@ interface I {
     public $a = 1 { get; }
 }
 abstract class A {
-    public $b = 1 { get; }
+    abstract public $b = 1 { get; }
     public $c = 1 { get => 1; }
     public $d = 1 { set { } }
     public $e = 1 { get => $this->E; }
@@ -131,22 +131,23 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                   "name": {
                     "name": "b",
                     "span": {
-                      "start": 79,
-                      "end": 81
+                      "start": 88,
+                      "end": 90
                     }
                   },
                   "visibility": "Public",
                   "set_visibility": null,
                   "is_static": false,
                   "is_readonly": false,
+                  "is_abstract": true,
                   "type_hint": null,
                   "default": {
                     "kind": {
                       "Int": 1
                     },
                     "span": {
-                      "start": 84,
-                      "end": 85
+                      "start": 93,
+                      "end": 94
                     }
                   },
                   "attributes": [],
@@ -159,8 +160,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "params": [],
                       "attributes": [],
                       "span": {
-                        "start": 88,
-                        "end": 92
+                        "start": 97,
+                        "end": 101
                       }
                     }
                   ]
@@ -168,7 +169,7 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
               },
               "span": {
                 "start": 72,
-                "end": 94
+                "end": 103
               }
             },
             {
@@ -177,8 +178,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                   "name": {
                     "name": "c",
                     "span": {
-                      "start": 106,
-                      "end": 108
+                      "start": 115,
+                      "end": 117
                     }
                   },
                   "visibility": "Public",
@@ -191,8 +192,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "Int": 1
                     },
                     "span": {
-                      "start": 111,
-                      "end": 112
+                      "start": 120,
+                      "end": 121
                     }
                   },
                   "attributes": [],
@@ -205,8 +206,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                             "Int": 1
                           },
                           "span": {
-                            "start": 122,
-                            "end": 123
+                            "start": 131,
+                            "end": 132
                           }
                         }
                       },
@@ -215,16 +216,16 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "params": [],
                       "attributes": [],
                       "span": {
-                        "start": 115,
-                        "end": 124
+                        "start": 124,
+                        "end": 133
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 99,
-                "end": 126
+                "start": 108,
+                "end": 135
               }
             },
             {
@@ -233,8 +234,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                   "name": {
                     "name": "d",
                     "span": {
-                      "start": 138,
-                      "end": 140
+                      "start": 147,
+                      "end": 149
                     }
                   },
                   "visibility": "Public",
@@ -247,8 +248,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "Int": 1
                     },
                     "span": {
-                      "start": 143,
-                      "end": 144
+                      "start": 152,
+                      "end": 153
                     }
                   },
                   "attributes": [],
@@ -263,16 +264,16 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "params": [],
                       "attributes": [],
                       "span": {
-                        "start": 147,
-                        "end": 154
+                        "start": 156,
+                        "end": 163
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 131,
-                "end": 156
+                "start": 140,
+                "end": 165
               }
             },
             {
@@ -281,8 +282,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                   "name": {
                     "name": "e",
                     "span": {
-                      "start": 168,
-                      "end": 170
+                      "start": 177,
+                      "end": 179
                     }
                   },
                   "visibility": "Public",
@@ -295,8 +296,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "Int": 1
                     },
                     "span": {
-                      "start": 173,
-                      "end": 174
+                      "start": 182,
+                      "end": 183
                     }
                   },
                   "attributes": [],
@@ -312,8 +313,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                   "Variable": "this"
                                 },
                                 "span": {
-                                  "start": 184,
-                                  "end": 189
+                                  "start": 193,
+                                  "end": 198
                                 }
                               },
                               "property": {
@@ -321,15 +322,15 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                   "Identifier": "E"
                                 },
                                 "span": {
-                                  "start": 191,
-                                  "end": 192
+                                  "start": 200,
+                                  "end": 201
                                 }
                               }
                             }
                           },
                           "span": {
-                            "start": 184,
-                            "end": 192
+                            "start": 193,
+                            "end": 201
                           }
                         }
                       },
@@ -338,16 +339,16 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "params": [],
                       "attributes": [],
                       "span": {
-                        "start": 177,
-                        "end": 193
+                        "start": 186,
+                        "end": 202
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 161,
-                "end": 195
+                "start": 170,
+                "end": 204
               }
             },
             {
@@ -356,8 +357,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                   "name": {
                     "name": "f",
                     "span": {
-                      "start": 207,
-                      "end": 209
+                      "start": 216,
+                      "end": 218
                     }
                   },
                   "visibility": "Public",
@@ -370,8 +371,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "Int": 1
                     },
                     "span": {
-                      "start": 212,
-                      "end": 213
+                      "start": 221,
+                      "end": 222
                     }
                   },
                   "attributes": [],
@@ -387,8 +388,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                   "Variable": "this"
                                 },
                                 "span": {
-                                  "start": 223,
-                                  "end": 228
+                                  "start": 232,
+                                  "end": 237
                                 }
                               },
                               "method": {
@@ -396,16 +397,16 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                   "Identifier": "f"
                                 },
                                 "span": {
-                                  "start": 230,
-                                  "end": 231
+                                  "start": 239,
+                                  "end": 240
                                 }
                               },
                               "args": []
                             }
                           },
                           "span": {
-                            "start": 223,
-                            "end": 233
+                            "start": 232,
+                            "end": 242
                           }
                         }
                       },
@@ -414,16 +415,16 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "params": [],
                       "attributes": [],
                       "span": {
-                        "start": 216,
-                        "end": 234
+                        "start": 225,
+                        "end": 243
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 200,
-                "end": 236
+                "start": 209,
+                "end": 245
               }
             },
             {
@@ -432,8 +433,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                   "name": {
                     "name": "g",
                     "span": {
-                      "start": 248,
-                      "end": 250
+                      "start": 257,
+                      "end": 259
                     }
                   },
                   "visibility": "Public",
@@ -446,8 +447,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "Int": 1
                     },
                     "span": {
-                      "start": 253,
-                      "end": 254
+                      "start": 262,
+                      "end": 263
                     }
                   },
                   "attributes": [],
@@ -466,14 +467,14 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                     ],
                                     "kind": "Unqualified",
                                     "span": {
-                                      "start": 264,
-                                      "end": 268
+                                      "start": 273,
+                                      "end": 277
                                     }
                                   }
                                 },
                                 "span": {
-                                  "start": 264,
-                                  "end": 268
+                                  "start": 273,
+                                  "end": 277
                                 }
                               },
                               "member": {
@@ -481,15 +482,15 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                   "Identifier": "g"
                                 },
                                 "span": {
-                                  "start": 270,
-                                  "end": 272
+                                  "start": 279,
+                                  "end": 281
                                 }
                               }
                             }
                           },
                           "span": {
-                            "start": 264,
-                            "end": 272
+                            "start": 273,
+                            "end": 281
                           }
                         }
                       },
@@ -498,16 +499,16 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "params": [],
                       "attributes": [],
                       "span": {
-                        "start": 257,
-                        "end": 273
+                        "start": 266,
+                        "end": 282
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 241,
-                "end": 275
+                "start": 250,
+                "end": 284
               }
             },
             {
@@ -516,8 +517,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                   "name": {
                     "name": "h",
                     "span": {
-                      "start": 287,
-                      "end": 289
+                      "start": 296,
+                      "end": 298
                     }
                   },
                   "visibility": "Public",
@@ -530,8 +531,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "Int": 1
                     },
                     "span": {
-                      "start": 292,
-                      "end": 293
+                      "start": 301,
+                      "end": 302
                     }
                   },
                   "attributes": [],
@@ -547,8 +548,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                   "Variable": "that"
                                 },
                                 "span": {
-                                  "start": 303,
-                                  "end": 308
+                                  "start": 312,
+                                  "end": 317
                                 }
                               },
                               "property": {
@@ -556,15 +557,15 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                   "Identifier": "h"
                                 },
                                 "span": {
-                                  "start": 310,
-                                  "end": 311
+                                  "start": 319,
+                                  "end": 320
                                 }
                               }
                             }
                           },
                           "span": {
-                            "start": 303,
-                            "end": 311
+                            "start": 312,
+                            "end": 320
                           }
                         }
                       },
@@ -573,16 +574,16 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "params": [],
                       "attributes": [],
                       "span": {
-                        "start": 296,
-                        "end": 312
+                        "start": 305,
+                        "end": 321
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 280,
-                "end": 314
+                "start": 289,
+                "end": 323
               }
             },
             {
@@ -591,8 +592,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                   "name": {
                     "name": "i",
                     "span": {
-                      "start": 326,
-                      "end": 328
+                      "start": 335,
+                      "end": 337
                     }
                   },
                   "visibility": "Public",
@@ -605,8 +606,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "Int": 1
                     },
                     "span": {
-                      "start": 331,
-                      "end": 332
+                      "start": 340,
+                      "end": 341
                     }
                   },
                   "attributes": [],
@@ -622,8 +623,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                   "Variable": "this"
                                 },
                                 "span": {
-                                  "start": 342,
-                                  "end": 347
+                                  "start": 351,
+                                  "end": 356
                                 }
                               },
                               "member": {
@@ -631,15 +632,15 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                   "Identifier": "i"
                                 },
                                 "span": {
-                                  "start": 349,
-                                  "end": 351
+                                  "start": 358,
+                                  "end": 360
                                 }
                               }
                             }
                           },
                           "span": {
-                            "start": 342,
-                            "end": 351
+                            "start": 351,
+                            "end": 360
                           }
                         }
                       },
@@ -648,16 +649,16 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "params": [],
                       "attributes": [],
                       "span": {
-                        "start": 335,
-                        "end": 352
+                        "start": 344,
+                        "end": 361
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 319,
-                "end": 354
+                "start": 328,
+                "end": 363
               }
             },
             {
@@ -666,8 +667,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                   "name": {
                     "name": "j",
                     "span": {
-                      "start": 366,
-                      "end": 368
+                      "start": 375,
+                      "end": 377
                     }
                   },
                   "visibility": "Public",
@@ -680,8 +681,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "Int": 1
                     },
                     "span": {
-                      "start": 371,
-                      "end": 372
+                      "start": 380,
+                      "end": 381
                     }
                   },
                   "attributes": [],
@@ -704,8 +705,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                         "Variable": "this"
                                       },
                                       "span": {
-                                        "start": 390,
-                                        "end": 395
+                                        "start": 399,
+                                        "end": 404
                                       }
                                     },
                                     "property": {
@@ -713,23 +714,23 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                         "Identifier": "j"
                                       },
                                       "span": {
-                                        "start": 397,
-                                        "end": 398
+                                        "start": 406,
+                                        "end": 407
                                       }
                                     }
                                   }
                                 },
                                 "span": {
-                                  "start": 390,
-                                  "end": 398
+                                  "start": 399,
+                                  "end": 407
                                 }
                               },
                               "attributes": []
                             }
                           },
                           "span": {
-                            "start": 382,
-                            "end": 398
+                            "start": 391,
+                            "end": 407
                           }
                         }
                       },
@@ -738,16 +739,16 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "params": [],
                       "attributes": [],
                       "span": {
-                        "start": 375,
-                        "end": 399
+                        "start": 384,
+                        "end": 408
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 359,
-                "end": 401
+                "start": 368,
+                "end": 410
               }
             },
             {
@@ -756,8 +757,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                   "name": {
                     "name": "k",
                     "span": {
-                      "start": 413,
-                      "end": 415
+                      "start": 422,
+                      "end": 424
                     }
                   },
                   "visibility": "Public",
@@ -770,8 +771,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "Int": 1
                     },
                     "span": {
-                      "start": 418,
-                      "end": 419
+                      "start": 427,
+                      "end": 428
                     }
                   },
                   "attributes": [],
@@ -798,8 +799,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                               "Variable": "this"
                                             },
                                             "span": {
-                                              "start": 450,
-                                              "end": 455
+                                              "start": 459,
+                                              "end": 464
                                             }
                                           },
                                           "property": {
@@ -807,21 +808,21 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                               "Identifier": "k"
                                             },
                                             "span": {
-                                              "start": 457,
-                                              "end": 458
+                                              "start": 466,
+                                              "end": 467
                                             }
                                           }
                                         }
                                       },
                                       "span": {
-                                        "start": 450,
-                                        "end": 458
+                                        "start": 459,
+                                        "end": 467
                                       }
                                     }
                                   },
                                   "span": {
-                                    "start": 443,
-                                    "end": 459
+                                    "start": 452,
+                                    "end": 468
                                   }
                                 }
                               ],
@@ -829,8 +830,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                             }
                           },
                           "span": {
-                            "start": 429,
-                            "end": 461
+                            "start": 438,
+                            "end": 470
                           }
                         }
                       },
@@ -839,16 +840,16 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "params": [],
                       "attributes": [],
                       "span": {
-                        "start": 422,
-                        "end": 462
+                        "start": 431,
+                        "end": 471
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 406,
-                "end": 464
+                "start": 415,
+                "end": 473
               }
             },
             {
@@ -857,8 +858,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                   "name": {
                     "name": "l",
                     "span": {
-                      "start": 476,
-                      "end": 478
+                      "start": 485,
+                      "end": 487
                     }
                   },
                   "visibility": "Public",
@@ -871,8 +872,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "Int": 1
                     },
                     "span": {
-                      "start": 481,
-                      "end": 482
+                      "start": 490,
+                      "end": 491
                     }
                   },
                   "attributes": [],
@@ -901,8 +902,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                             "name": {
                                               "name": "m",
                                               "span": {
-                                                "start": 511,
-                                                "end": 513
+                                                "start": 520,
+                                                "end": 522
                                               }
                                             },
                                             "visibility": "Public",
@@ -915,8 +916,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                           }
                                         },
                                         "span": {
-                                          "start": 504,
-                                          "end": 513
+                                          "start": 513,
+                                          "end": 522
                                         }
                                       },
                                       {
@@ -925,8 +926,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                             "name": {
                                               "name": "f",
                                               "span": {
-                                                "start": 524,
-                                                "end": 525
+                                                "start": 533,
+                                                "end": 534
                                               }
                                             },
                                             "visibility": null,
@@ -947,8 +948,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                                             "Variable": "this"
                                                           },
                                                           "span": {
-                                                            "start": 537,
-                                                            "end": 542
+                                                            "start": 546,
+                                                            "end": 551
                                                           }
                                                         },
                                                         "property": {
@@ -956,21 +957,21 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                                             "Identifier": "l"
                                                           },
                                                           "span": {
-                                                            "start": 544,
-                                                            "end": 545
+                                                            "start": 553,
+                                                            "end": 554
                                                           }
                                                         }
                                                       }
                                                     },
                                                     "span": {
-                                                      "start": 537,
-                                                      "end": 545
+                                                      "start": 546,
+                                                      "end": 554
                                                     }
                                                   }
                                                 },
                                                 "span": {
-                                                  "start": 530,
-                                                  "end": 546
+                                                  "start": 539,
+                                                  "end": 555
                                                 }
                                               }
                                             ],
@@ -978,8 +979,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                           }
                                         },
                                         "span": {
-                                          "start": 515,
-                                          "end": 548
+                                          "start": 524,
+                                          "end": 557
                                         }
                                       }
                                     ],
@@ -987,16 +988,16 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                   }
                                 },
                                 "span": {
-                                  "start": 492,
-                                  "end": 550
+                                  "start": 501,
+                                  "end": 559
                                 }
                               },
                               "args": []
                             }
                           },
                           "span": {
-                            "start": 492,
-                            "end": 550
+                            "start": 501,
+                            "end": 559
                           }
                         }
                       },
@@ -1005,16 +1006,16 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "params": [],
                       "attributes": [],
                       "span": {
-                        "start": 485,
-                        "end": 551
+                        "start": 494,
+                        "end": 560
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 469,
-                "end": 553
+                "start": 478,
+                "end": 562
               }
             },
             {
@@ -1023,8 +1024,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                   "name": {
                     "name": "n",
                     "span": {
-                      "start": 565,
-                      "end": 567
+                      "start": 574,
+                      "end": 576
                     }
                   },
                   "visibility": "Public",
@@ -1037,8 +1038,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "Int": 1
                     },
                     "span": {
-                      "start": 570,
-                      "end": 571
+                      "start": 579,
+                      "end": 580
                     }
                   },
                   "attributes": [],
@@ -1053,8 +1054,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                 "name": {
                                   "name": "n",
                                   "span": {
-                                    "start": 589,
-                                    "end": 590
+                                    "start": 598,
+                                    "end": 599
                                   }
                                 },
                                 "params": [],
@@ -1069,8 +1070,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                                 "Variable": "this"
                                               },
                                               "span": {
-                                                "start": 602,
-                                                "end": 607
+                                                "start": 611,
+                                                "end": 616
                                               }
                                             },
                                             "property": {
@@ -1078,21 +1079,21 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                                 "Identifier": "n"
                                               },
                                               "span": {
-                                                "start": 609,
-                                                "end": 610
+                                                "start": 618,
+                                                "end": 619
                                               }
                                             }
                                           }
                                         },
                                         "span": {
-                                          "start": 602,
-                                          "end": 610
+                                          "start": 611,
+                                          "end": 619
                                         }
                                       }
                                     },
                                     "span": {
-                                      "start": 595,
-                                      "end": 611
+                                      "start": 604,
+                                      "end": 620
                                     }
                                   }
                                 ],
@@ -1102,8 +1103,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                               }
                             },
                             "span": {
-                              "start": 580,
-                              "end": 613
+                              "start": 589,
+                              "end": 622
                             }
                           },
                           {
@@ -1113,14 +1114,14 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                   "Int": 1
                                 },
                                 "span": {
-                                  "start": 621,
-                                  "end": 622
+                                  "start": 630,
+                                  "end": 631
                                 }
                               }
                             },
                             "span": {
-                              "start": 614,
-                              "end": 623
+                              "start": 623,
+                              "end": 632
                             }
                           }
                         ]
@@ -1130,16 +1131,16 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "params": [],
                       "attributes": [],
                       "span": {
-                        "start": 574,
-                        "end": 625
+                        "start": 583,
+                        "end": 634
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 558,
-                "end": 627
+                "start": 567,
+                "end": 636
               }
             },
             {
@@ -1148,8 +1149,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                   "name": {
                     "name": "o",
                     "span": {
-                      "start": 643,
-                      "end": 645
+                      "start": 652,
+                      "end": 654
                     }
                   },
                   "visibility": "Public",
@@ -1164,14 +1165,14 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                         ],
                         "kind": "Unqualified",
                         "span": {
-                          "start": 639,
-                          "end": 642
+                          "start": 648,
+                          "end": 651
                         }
                       }
                     },
                     "span": {
-                      "start": 639,
-                      "end": 642
+                      "start": 648,
+                      "end": 651
                     }
                   },
                   "default": {
@@ -1179,8 +1180,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "Int": 1
                     },
                     "span": {
-                      "start": 648,
-                      "end": 649
+                      "start": 657,
+                      "end": 658
                     }
                   },
                   "attributes": [],
@@ -1196,8 +1197,8 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                   "Variable": "this"
                                 },
                                 "span": {
-                                  "start": 659,
-                                  "end": 664
+                                  "start": 668,
+                                  "end": 673
                                 }
                               },
                               "property": {
@@ -1205,15 +1206,15 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                   "Identifier": "p"
                                 },
                                 "span": {
-                                  "start": 666,
-                                  "end": 667
+                                  "start": 675,
+                                  "end": 676
                                 }
                               }
                             }
                           },
                           "span": {
-                            "start": 659,
-                            "end": 667
+                            "start": 668,
+                            "end": 676
                           }
                         }
                       },
@@ -1222,16 +1223,16 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "params": [],
                       "attributes": [],
                       "span": {
-                        "start": 652,
-                        "end": 668
+                        "start": 661,
+                        "end": 677
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 632,
-                "end": 670
+                "start": 641,
+                "end": 679
               }
             }
           ],
@@ -1240,12 +1241,12 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
       },
       "span": {
         "start": 58,
-        "end": 672
+        "end": 681
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 672
+    "end": 681
   }
 }
