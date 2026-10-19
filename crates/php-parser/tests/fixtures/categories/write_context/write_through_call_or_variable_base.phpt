@@ -414,52 +414,60 @@ isset(OBJ->a);
       "kind": {
         "Expression": {
           "kind": {
-            "Assign": {
-              "target": {
-                "kind": {
-                  "PropertyAccess": {
-                    "object": {
-                      "kind": {
-                        "Clone": {
+            "Clone": {
+              "kind": {
+                "Assign": {
+                  "target": {
+                    "kind": {
+                      "PropertyAccess": {
+                        "object": {
                           "kind": {
-                            "Variable": "a"
+                            "Parenthesized": {
+                              "kind": {
+                                "Variable": "a"
+                              },
+                              "span": {
+                                "start": 83,
+                                "end": 85
+                              }
+                            }
                           },
                           "span": {
-                            "start": 83,
-                            "end": 85
+                            "start": 82,
+                            "end": 86
+                          }
+                        },
+                        "property": {
+                          "kind": {
+                            "Identifier": "b"
+                          },
+                          "span": {
+                            "start": 88,
+                            "end": 89
                           }
                         }
-                      },
-                      "span": {
-                        "start": 77,
-                        "end": 86
                       }
                     },
-                    "property": {
-                      "kind": {
-                        "Identifier": "b"
-                      },
-                      "span": {
-                        "start": 88,
-                        "end": 89
-                      }
+                    "span": {
+                      "start": 82,
+                      "end": 89
+                    }
+                  },
+                  "op": "Assign",
+                  "value": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 92,
+                      "end": 93
                     }
                   }
-                },
-                "span": {
-                  "start": 77,
-                  "end": 89
                 }
               },
-              "op": "Assign",
-              "value": {
-                "kind": {
-                  "Int": 1
-                },
-                "span": {
-                  "start": 92,
-                  "end": 93
-                }
+              "span": {
+                "start": 82,
+                "end": 93
               }
             }
           },

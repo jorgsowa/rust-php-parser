@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `clone($a)->b = 1` was parsed as `(clone $a)->b = 1`; PHP reads the parentheses as grouping, so it is `clone (($a)->b = 1)`, and the printer wrote code PHP rejects. The same goes for `->`, `?->`, `::`, `[` and `(` after `clone(...)` (`php-rs-parser`).
 - Report methods without a body outside interfaces and abstract declarations, abstract methods in anonymous classes, and variadic promoted constructor parameters, like PHP (`php-rs-parser`).
 - `new namespace\Foo` dropped the `namespace\` prefix of the class name (`php-rs-parser`).
 - `declare(...) ?>` took the inline HTML after `?>` as its body instead of ending at `?>` like at `;`, so the printer wrote `declare(strict_types=1) { ?>...`, which PHP rejects (`php-rs-parser`).

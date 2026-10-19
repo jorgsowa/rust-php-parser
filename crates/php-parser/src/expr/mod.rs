@@ -1118,8 +1118,30 @@ pub fn parse_expr_bp<'arena, 'src>(
             span: parser.current_span(),
         };
     }
-    let mut lhs = parse_atom(parser);
+    let lhs = parse_atom(parser);
+    parse_expr_rest(parser, lhs, min_bp)
+}
 
+/// Continue an expression whose first operand `lhs` is already parsed.
+pub(crate) fn parse_expr_continue<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    lhs: Expr<'arena, 'src>,
+    min_bp: u8,
+) -> Expr<'arena, 'src> {
+    if !parser.enter_nesting() {
+        return Expr {
+            kind: ExprKind::Error,
+            span: parser.current_span(),
+        };
+    }
+    parse_expr_rest(parser, lhs, min_bp)
+}
+
+fn parse_expr_rest<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    mut lhs: Expr<'arena, 'src>,
+    min_bp: u8,
+) -> Expr<'arena, 'src> {
     loop {
         let kind = parser.current_kind();
 

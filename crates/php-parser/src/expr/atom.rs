@@ -9,7 +9,9 @@ use crate::precedence::{self, ASSIGNMENT_BP};
 use crate::stmt;
 use crate::version::PhpVersion;
 
-use super::{parse_assign_continuation, parse_expr, parse_expr_bp, parse_member_name};
+use super::{
+    parse_assign_continuation, parse_expr, parse_expr_bp, parse_expr_continue, parse_member_name,
+};
 
 /// Cast keyword strings and their CastKind values
 const CAST_KEYWORDS: &[(&str, CastKind)] = &[
@@ -965,6 +967,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     value: &src[token.span.start as usize..token.span.end as usize],
                     span: token.span,
                 };
+                let open_paren_start = parser.current_span().start;
                 match parse_arg_list_or_callable(parser) {
                     ArgListResult::CallableMarker => {
                         // clone(...) — first-class callable (PHP 8.5)
@@ -997,6 +1000,30 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                                     .next()
                                     .expect("is_simple: args.len() == 1 checked above"),
                             );
+                            if matches!(
+                                parser.current_kind(),
+                                TokenKind::Arrow
+                                    | TokenKind::NullsafeArrow
+                                    | TokenKind::DoubleColon
+                                    | TokenKind::LeftBracket
+                                    | TokenKind::LeftParen
+                            ) {
+                                // `clone($a)->b` is `clone (($a)->b)`: the parentheses are only grouping
+                                let grouped = Expr {
+                                    kind: ExprKind::Parenthesized(parser.alloc(object)),
+                                    span: Span::new(open_paren_start, parser.previous_end()),
+                                };
+                                let mut operand =
+                                    parse_expr_continue(parser, grouped, precedence::CLONE_BP);
+                                if parser.current_kind().is_assignment_op() {
+                                    operand = parse_assign_continuation(parser, operand);
+                                }
+                                let span = token.span.merge(operand.span);
+                                return Expr {
+                                    kind: ExprKind::Clone(parser.alloc(operand)),
+                                    span,
+                                };
+                            }
                             Expr {
                                 kind: ExprKind::Clone(parser.alloc(object)),
                                 span,
