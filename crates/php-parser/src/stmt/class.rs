@@ -5,7 +5,7 @@ use php_lexer::TokenKind;
 use crate::diagnostics::ParseError;
 use crate::expr;
 use crate::instrument;
-use crate::parser::Parser;
+use crate::parser::{ClassScope, Parser};
 use crate::version::PhpVersion;
 
 // =============================================================================
@@ -120,7 +120,8 @@ pub(super) fn parse_class<'arena, 'src>(
 
     let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
-    let members = parse_class_members(parser, false, false);
+    let scope = parser.class_scope_for(name.as_str(), extends.as_ref(), false);
+    let members = parse_class_members(parser, false, false, scope);
     if modifiers.is_readonly {
         check_readonly_class_members(parser, &members);
     }
@@ -392,7 +393,9 @@ pub fn parse_class_members<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     in_interface: bool,
     in_trait: bool,
+    scope: ClassScope,
 ) -> ArenaVec<'arena, ClassMember<'arena, 'src>> {
+    let outer_scope = parser.class_scope.replace(scope);
     // March 2026: reduce from 16 to 4 for class members
     // Most classes have 3-10 members; larger classes grow efficiently
     let mut members = parser.alloc_vec_with_capacity(4);
@@ -470,6 +473,10 @@ pub fn parse_class_members<'arena, 'src>(
         let type_hint = if parser.could_be_type_hint() && !parser.check(TokenKind::Variable) {
             let type_hint = parser.parse_type_hint();
             parser.reject_static_type(&type_hint, "property");
+            if parser.check(TokenKind::Variable) {
+                let name = parser.current_text();
+                parser.reject_member_type(&type_hint, "Property", name);
+            }
             Some(type_hint)
         } else {
             None
@@ -514,7 +521,8 @@ pub fn parse_class_members<'arena, 'src>(
         ClassMemberKind::ClassConst(c) => Some(&c.name),
         _ => None,
     });
-    report_redefined_constants(parser, names, None);
+    report_redefined_constants(parser, names);
+    parser.class_scope = outer_scope;
     members
 }
 
@@ -591,14 +599,13 @@ pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[Clas
 pub(super) fn report_redefined_constants<'a, 'src: 'a>(
     parser: &mut Parser<'_, 'src>,
     names: impl Iterator<Item = &'a Ident<'src>>,
-    class_name: Option<&str>,
 ) {
     let mut seen = std::collections::HashSet::new();
     for name in names {
         let Some(text) = name.as_str() else { continue };
         if !seen.insert(text) {
-            let message = match class_name {
-                Some(class) => format!("Cannot redefine class constant {class}::{text}"),
+            let message = match &parser.class_scope {
+                Some(scope) => format!("Cannot redefine class constant {}::{text}", scope.name),
                 None => format!("Cannot redefine class constant {text}"),
             };
             parser.error(ParseError::Forbidden {
@@ -885,6 +892,11 @@ fn parse_class_const_member<'arena, 'src>(
             });
             parser.missing_ident()
         };
+        if let (Some(ty), Some(name), true) =
+            (&const_type, const_name.as_str(), const_items.is_empty())
+        {
+            parser.reject_member_type(ty, "Class constant", name);
+        }
         parser.expect(TokenKind::Equals);
         let value = expr::parse_expr(parser);
         expr::check_const_expr(parser, &value, false);
@@ -1175,10 +1187,11 @@ fn parse_property_member<'arena, 'src>(
             if hook.kind == PropertyHookKind::Set {
                 if let Some(param) = hook.params.first() {
                     if param.type_hint.is_some() {
+                        let class = parser.class_member_prefix();
                         parser.error(ParseError::Forbidden {
                             message: format!(
-                                "Type of parameter ${} of hook set must be compatible with property type",
-                                param.name
+                                "Type of parameter ${} of hook {class}${}::set must be compatible with property type",
+                                param.name, prop_name
                             )
                             .into(),
                             span: hook.span,
@@ -1364,7 +1377,8 @@ pub(super) fn parse_interface<'arena, 'src>(
 
     let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
-    let members = parse_class_members(parser, true, false);
+    let scope = parser.class_scope_for(name.as_str(), None, false);
+    let members = parse_class_members(parser, true, false, scope);
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
 
@@ -1415,7 +1429,8 @@ pub(super) fn parse_trait<'arena, 'src>(
 
     let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
-    let members = parse_class_members(parser, false, true);
+    let scope = parser.class_scope_for(name.as_str(), None, true);
+    let members = parse_class_members(parser, false, true, scope);
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
 

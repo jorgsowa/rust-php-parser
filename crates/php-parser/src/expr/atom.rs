@@ -1270,7 +1270,8 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
 
         let brace_start = parser.start_span();
         parser.expect(TokenKind::LeftBrace);
-        let members = stmt::parse_class_members(parser, false, false);
+        let scope = parser.class_scope_for(None, extends.as_ref(), false);
+        let members = stmt::parse_class_members(parser, false, false, scope);
         if anon_readonly {
             stmt::check_readonly_class_members(parser, &members);
         }
@@ -1466,6 +1467,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
     }
 
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
+    let saved_class_keywords = parser.unresolve_class_keywords();
 
     parser.expect(TokenKind::LeftParen);
     let params = stmt::parse_param_list(parser);
@@ -1515,6 +1517,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
     parser.has_goto_or_label = saved_has_goto_or_label;
     parser.finally_loop_depth = saved_finally_loop_depth;
     parser.loop_depth = saved_loop_depth;
+    parser.restore_class_keywords(saved_class_keywords);
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
     let body = parser.alloc(Block {
@@ -1593,6 +1596,7 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
     attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
 ) -> Expr<'arena, 'src> {
     parser.advance(); // consume 'fn'
+    let saved_class_keywords = parser.unresolve_class_keywords();
 
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
 
@@ -1616,6 +1620,7 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
     parser.function_depth -= 1;
     parser.by_ref_function = saved_by_ref;
     parser.static_vars = saved_static_vars;
+    parser.restore_class_keywords(saved_class_keywords);
     let span = Span::new(start, body.span.end);
 
     Expr {

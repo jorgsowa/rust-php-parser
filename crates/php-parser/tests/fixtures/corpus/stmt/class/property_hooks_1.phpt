@@ -21,7 +21,7 @@ class Test {
     }
 }
 ===errors===
-Type of parameter $value of hook set must be compatible with property type
+Type of parameter $value of hook Test::$prop4::set must be compatible with property type
 ===php_error===
 PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be compatible with property type in Standard input code on line 17
 ===ast===

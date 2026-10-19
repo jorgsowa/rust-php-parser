@@ -10,7 +10,7 @@ enum E {
     const X = 1;
 }
 ===errors===
-Cannot redefine class constant A
+Cannot redefine class constant C::A
 Cannot redefine class constant E::X
 ===php_error===
 PHP Fatal error:  Cannot redefine class constant C::A in Standard input code on line 4

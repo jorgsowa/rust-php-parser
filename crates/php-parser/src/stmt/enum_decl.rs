@@ -62,6 +62,8 @@ pub(super) fn parse_enum<'arena, 'src>(
 
     let brace_start = parser.start_span();
     parser.expect(TokenKind::LeftBrace);
+    let scope = parser.class_scope_for(name.as_str(), None, false);
+    let outer_scope = parser.class_scope.replace(scope);
 
     let mut members = parser.alloc_vec_with_capacity(4);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
@@ -248,6 +250,13 @@ pub(super) fn parse_enum<'arena, 'src>(
                     });
                     parser.missing_ident()
                 };
+                if let (Some(ty), Some(name), true) = (
+                    const_type,
+                    const_name.as_str(),
+                    members.len() == first_index,
+                ) {
+                    parser.reject_member_type(ty, "Class constant", name);
+                }
                 parser.expect(TokenKind::Equals);
                 let value = expr::parse_expr(parser);
                 expr::check_const_expr(parser, &value, false);
@@ -327,7 +336,8 @@ pub(super) fn parse_enum<'arena, 'src>(
         EnumMemberKind::ClassConst(c) => Some(&c.name),
         _ => None,
     });
-    super::class::report_redefined_constants(parser, constants, name.as_str());
+    super::class::report_redefined_constants(parser, constants);
+    parser.class_scope = outer_scope;
 
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();

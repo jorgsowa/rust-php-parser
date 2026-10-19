@@ -6,9 +6,9 @@ function a(): int|void {}
 function b(): int|never {}
 function c(): int|mixed {}
 ===errors===
-void cannot be used as part of a union type
-never cannot be used as part of a union type
-mixed cannot be used as part of a union type
+Void can only be used as a standalone type
+never can only be used as a standalone type
+Type mixed can only be used as a standalone type
 ===php_error===
 PHP Fatal error:  Void can only be used as a standalone type in Standard input code on line 2
 ===ast===

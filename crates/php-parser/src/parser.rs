@@ -146,6 +146,48 @@ pub struct Parser<'arena, 'src> {
     pub(crate) has_class_keyword_ref: bool,
     /// The namespace of the code being parsed, as written in its declaration.
     pub(crate) namespace: Option<String>,
+    /// Class imports (`use A\B as C`) of the current namespace, keyed by lowercase alias.
+    pub(crate) class_imports: std::collections::HashMap<String, String>,
+    /// The class, interface, trait or enum whose body is being parsed.
+    pub(crate) class_scope: Option<ClassScope>,
+}
+
+/// Whether a token after `&` in a type starts another intersection member rather than a
+/// by-reference parameter name.
+fn starts_intersection_member(kind: TokenKind) -> bool {
+    matches!(
+        kind,
+        TokenKind::Identifier
+            | TokenKind::Backslash
+            | TokenKind::Self_
+            | TokenKind::Parent_
+            | TokenKind::Static
+            | TokenKind::Namespace
+            | TokenKind::Array
+            | TokenKind::Null
+            | TokenKind::True
+            | TokenKind::False
+    )
+}
+
+/// PHP's message for a builtin type that must be used alone, as in `?void` or `never|null`.
+fn standalone_type_message(builtin: BuiltinType) -> Option<&'static str> {
+    match builtin {
+        BuiltinType::Void => Some("Void can only be used as a standalone type"),
+        BuiltinType::Never => Some("never can only be used as a standalone type"),
+        BuiltinType::Mixed => Some("Type mixed can only be used as a standalone type"),
+        _ => None,
+    }
+}
+
+/// A class-like declaration as type diagnostics name it.
+pub(crate) struct ClassScope {
+    /// Namespace-qualified name used in messages; `class@anonymous` for anonymous classes.
+    pub(crate) name: String,
+    /// What `self` resolves to at compile time; `None` in traits and closures.
+    pub(crate) self_name: Option<String>,
+    /// What `parent` resolves to at compile time.
+    pub(crate) parent_name: Option<String>,
 }
 
 impl<'arena, 'src> Parser<'arena, 'src> {
@@ -190,6 +232,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             empty_dim_count: 0,
             has_class_keyword_ref: false,
             namespace: None,
+            class_imports: std::collections::HashMap::new(),
+            class_scope: None,
         }
     }
 
@@ -239,6 +283,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             empty_dim_count: 0,
             has_class_keyword_ref: false,
             namespace: None,
+            class_imports: std::collections::HashMap::new(),
+            class_scope: None,
         }
     }
 
@@ -986,9 +1032,386 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// Parse a type hint: `?T`, `A|B`, `A&B`, `(A&B)|C` (DNF), or simple type.
     pub fn parse_type_hint(&mut self) -> TypeHint<'arena, 'src> {
         let type_hint = self.parse_type_hint_unchecked();
+        self.check_type_composition(&type_hint);
         self.check_duplicate_types(&type_hint);
         self.check_qualified_type_names(&type_hint);
         type_hint
+    }
+
+    /// Scope for the body of a class-like declaration named `name` (`None` for an anonymous
+    /// class) that extends `parent`.
+    pub(crate) fn class_scope_for(
+        &self,
+        name: Option<&str>,
+        parent: Option<&Name<'_, '_>>,
+        is_trait: bool,
+    ) -> ClassScope {
+        let name = match (name, &self.namespace) {
+            (None, _) => "class@anonymous".to_owned(),
+            (Some(name), Some(namespace)) => format!("{namespace}\\{name}"),
+            (Some(name), None) => name.to_owned(),
+        };
+        ClassScope {
+            self_name: (!is_trait).then(|| name.clone()),
+            parent_name: parent.map(|p| self.resolve_class_name(p)),
+            name,
+        }
+    }
+
+    /// `Name::` of the enclosing class-like declaration, for naming its members in messages.
+    pub(crate) fn class_member_prefix(&self) -> String {
+        self.class_scope
+            .as_ref()
+            .map(|scope| format!("{}::", scope.name))
+            .unwrap_or_default()
+    }
+
+    /// Leave `self` and `parent` unresolved, as PHP does in closures, until
+    /// [`restore_class_keywords`](Self::restore_class_keywords).
+    pub(crate) fn unresolve_class_keywords(&mut self) -> Option<(Option<String>, Option<String>)> {
+        let scope = self.class_scope.as_mut()?;
+        Some((scope.self_name.take(), scope.parent_name.take()))
+    }
+
+    pub(crate) fn restore_class_keywords(
+        &mut self,
+        saved: Option<(Option<String>, Option<String>)>,
+    ) {
+        if let (Some(scope), Some((self_name, parent_name))) = (self.class_scope.as_mut(), saved) {
+            scope.self_name = self_name;
+            scope.parent_name = parent_name;
+        }
+    }
+
+    /// The fully qualified name a class name refers to, without the leading `\`.
+    pub(crate) fn resolve_class_name(&self, name: &Name<'_, '_>) -> String {
+        let parts = name.parts_slice();
+        let (base, rest) = match name.kind() {
+            NameKind::FullyQualified => return parts.join("\\"),
+            NameKind::Relative => (self.namespace.as_deref(), parts),
+            _ => match parts.split_first().and_then(|(first, rest)| {
+                Some((self.class_imports.get(&first.to_ascii_lowercase())?, rest))
+            }) {
+                Some((import, rest)) => (Some(import.as_str()), rest),
+                None => (self.namespace.as_deref(), parts),
+            },
+        };
+        let mut resolved = base.unwrap_or_default().to_owned();
+        for part in rest {
+            if !resolved.is_empty() {
+                resolved.push('\\');
+            }
+            resolved.push_str(part);
+        }
+        resolved
+    }
+
+    /// The type as PHP spells it in messages: resolved class names first, then builtin types
+    /// in a fixed order, with `iterable` expanded to `Traversable|array`.
+    pub(crate) fn type_display(&self, ty: &TypeHint<'_, '_>) -> String {
+        let scope = self.class_scope.as_ref();
+        match &ty.kind {
+            TypeHintKind::Named(name) => self.resolve_class_name(name),
+            TypeHintKind::Keyword(builtin @ (BuiltinType::Self_ | BuiltinType::Parent_), span) => {
+                let resolved = scope.and_then(|s| match builtin {
+                    BuiltinType::Self_ => s.self_name.clone(),
+                    _ => s.parent_name.clone(),
+                });
+                resolved
+                    .unwrap_or_else(|| self.source[span.start as usize..span.end as usize].into())
+            }
+            TypeHintKind::Keyword(BuiltinType::Iterable, _) => "Traversable|array".into(),
+            TypeHintKind::Keyword(builtin, _) => builtin.as_str().into(),
+            TypeHintKind::Nullable(inner) => format!("?{}", self.type_display(inner)),
+            TypeHintKind::Intersection(types) => types
+                .iter()
+                .map(|t| self.type_display(t))
+                .collect::<Vec<_>>()
+                .join("&"),
+            TypeHintKind::Union(types) => {
+                let mut parts = Vec::new();
+                let mut builtins = Vec::new();
+                for t in types.iter() {
+                    match &t.kind {
+                        TypeHintKind::Intersection(_) => {
+                            parts.push(format!("({})", self.type_display(t)));
+                        }
+                        TypeHintKind::Keyword(BuiltinType::Iterable, _) => {
+                            parts.push("Traversable".into());
+                            builtins.push(BuiltinType::Array);
+                        }
+                        TypeHintKind::Keyword(builtin, _)
+                            if !matches!(builtin, BuiltinType::Self_ | BuiltinType::Parent_) =>
+                        {
+                            builtins.push(*builtin)
+                        }
+                        _ => parts.push(self.type_display(t)),
+                    }
+                }
+                let has = |b: BuiltinType| builtins.contains(&b);
+                for builtin in [
+                    BuiltinType::Static,
+                    BuiltinType::Callable,
+                    BuiltinType::Object,
+                    BuiltinType::Array,
+                    BuiltinType::String,
+                    BuiltinType::Int,
+                    BuiltinType::Float,
+                ] {
+                    if has(builtin) {
+                        parts.push(builtin.as_str().into());
+                    }
+                }
+                if has(BuiltinType::Bool) || has(BuiltinType::True) && has(BuiltinType::False) {
+                    parts.push("bool".into());
+                } else if has(BuiltinType::False) {
+                    parts.push("false".into());
+                } else if has(BuiltinType::True) {
+                    parts.push("true".into());
+                }
+                for builtin in [BuiltinType::Void, BuiltinType::Never] {
+                    if has(builtin) {
+                        parts.push(builtin.as_str().into());
+                    }
+                }
+                if has(BuiltinType::Null) {
+                    if let [single] = parts.as_slice() {
+                        if !single.contains(['|', '&']) {
+                            return format!("?{single}");
+                        }
+                    }
+                    parts.push("null".into());
+                }
+                parts.join("|")
+            }
+            _ => String::new(),
+        }
+    }
+
+    /// Lowercase name a class type resolves to, for comparing types; `None` for other types.
+    fn class_type_key(&self, ty: &TypeHint<'_, '_>) -> Option<String> {
+        match &ty.kind {
+            TypeHintKind::Named(_)
+            | TypeHintKind::Keyword(BuiltinType::Self_ | BuiltinType::Parent_, _) => {
+                Some(self.type_display(ty).to_ascii_lowercase())
+            }
+            _ => None,
+        }
+    }
+
+    /// Report builtin types where PHP only allows them alone, builtin types in intersections,
+    /// and union members that another member already covers.
+    fn check_type_composition(&mut self, type_hint: &TypeHint<'arena, 'src>) {
+        match &type_hint.kind {
+            TypeHintKind::Nullable(inner) => {
+                let TypeHintKind::Keyword(builtin, span) = &inner.kind else {
+                    return;
+                };
+                let message = match builtin {
+                    BuiltinType::Mixed => {
+                        "Type mixed cannot be marked as nullable since mixed already includes null"
+                    }
+                    BuiltinType::Null => "null cannot be marked as nullable",
+                    _ => match standalone_type_message(*builtin) {
+                        Some(message) => message,
+                        None => return,
+                    },
+                };
+                self.error(ParseError::Forbidden {
+                    message: message.into(),
+                    span: *span,
+                });
+            }
+            TypeHintKind::Union(types) => {
+                for ty in types.iter() {
+                    match &ty.kind {
+                        TypeHintKind::Keyword(builtin, span) => {
+                            if let Some(message) = standalone_type_message(*builtin) {
+                                self.error(ParseError::Forbidden {
+                                    message: message.into(),
+                                    span: *span,
+                                });
+                            }
+                        }
+                        TypeHintKind::Intersection(members) => {
+                            self.check_intersection_members(members)
+                        }
+                        _ => {}
+                    }
+                }
+                self.check_object_with_class_type(type_hint, types);
+                self.check_redundant_intersections(types);
+            }
+            TypeHintKind::Intersection(members) => self.check_intersection_members(members),
+            _ => {}
+        }
+    }
+
+    /// Report a builtin type in an intersection; `self` and `parent` are allowed only where
+    /// they resolve to a class at compile time.
+    fn check_intersection_members(&mut self, members: &[TypeHint<'arena, 'src>]) {
+        for ty in members {
+            let TypeHintKind::Keyword(builtin, span) = &ty.kind else {
+                continue;
+            };
+            if let BuiltinType::Self_ | BuiltinType::Parent_ = builtin {
+                // Outside any class the class scope walk reports them instead.
+                let unresolved = self.class_scope.as_ref().is_some_and(|scope| {
+                    scope.self_name.is_none()
+                        || *builtin == BuiltinType::Parent_ && scope.parent_name.is_none()
+                });
+                if !unresolved {
+                    continue;
+                }
+            }
+            let message = format!(
+                "Type {} cannot be part of an intersection type",
+                self.type_display(ty)
+            );
+            self.error(ParseError::Forbidden {
+                message: message.into(),
+                span: *span,
+            });
+        }
+    }
+
+    /// Report `object` in a union with a class type, which `object` already covers.
+    fn check_object_with_class_type(
+        &mut self,
+        type_hint: &TypeHint<'arena, 'src>,
+        types: &[TypeHint<'arena, 'src>],
+    ) {
+        let has_object = types
+            .iter()
+            .any(|t| matches!(t.kind, TypeHintKind::Keyword(BuiltinType::Object, _)));
+        let has_class = types.iter().any(|t| {
+            matches!(
+                t.kind,
+                TypeHintKind::Named(_)
+                    | TypeHintKind::Intersection(_)
+                    | TypeHintKind::Keyword(
+                        BuiltinType::Self_ | BuiltinType::Parent_ | BuiltinType::Static,
+                        _
+                    )
+            )
+        });
+        if has_object && has_class {
+            let message = format!(
+                "Type {} contains both object and a class type, which is redundant",
+                self.type_display(type_hint)
+            );
+            self.error(ParseError::Forbidden {
+                message: message.into(),
+                span: type_hint.span,
+            });
+        }
+    }
+
+    /// Report an intersection in a union that is as or more restrictive than an earlier member
+    /// (`A|(A&B)`), or an earlier intersection that is more restrictive than a later member.
+    fn check_redundant_intersections(&mut self, types: &[TypeHint<'arena, 'src>]) {
+        let is_intersection =
+            |t: &TypeHint<'_, '_>| matches!(t.kind, TypeHintKind::Intersection(_));
+        if !types.iter().any(is_intersection) {
+            return;
+        }
+        let class_sets: Vec<Option<Vec<String>>> = types
+            .iter()
+            .map(|t| match &t.kind {
+                TypeHintKind::Intersection(members) => {
+                    members.iter().map(|m| self.class_type_key(m)).collect()
+                }
+                _ => self.class_type_key(t).map(|key| vec![key]),
+            })
+            .collect();
+        for (i, ty) in types.iter().enumerate() {
+            let Some(current) = &class_sets[i] else {
+                continue;
+            };
+            for (j, earlier) in types[..i].iter().enumerate() {
+                let Some(previous) = &class_sets[j] else {
+                    continue;
+                };
+                // Repeated single class types are left to the duplicate type check.
+                if !is_intersection(ty) && !is_intersection(earlier) {
+                    continue;
+                }
+                let (smaller, larger, smaller_set, larger_set) = if current.len() < previous.len() {
+                    (ty, earlier, current, previous)
+                } else {
+                    (earlier, ty, previous, current)
+                };
+                if !smaller_set.iter().all(|key| larger_set.contains(key)) {
+                    continue;
+                }
+                let message = if smaller_set.len() == larger_set.len() {
+                    format!(
+                        "Type {} is redundant with type {}",
+                        self.type_display(ty),
+                        self.type_display(earlier)
+                    )
+                } else {
+                    format!(
+                        "Type {} is redundant as it is more restrictive than type {}",
+                        self.type_display(larger),
+                        self.type_display(smaller)
+                    )
+                };
+                self.error(ParseError::Forbidden {
+                    message: message.into(),
+                    span: ty.span,
+                });
+                break;
+            }
+        }
+    }
+
+    /// Report `void` or `never` as a parameter type; returns whether it reported one.
+    pub(crate) fn reject_return_only_param_type(&mut self, type_hint: &TypeHint<'_, '_>) -> bool {
+        let TypeHintKind::Keyword(builtin @ (BuiltinType::Void | BuiltinType::Never), span) =
+            &type_hint.kind
+        else {
+            return false;
+        };
+        self.error(ParseError::Forbidden {
+            message: format!("{} cannot be used as a parameter type", builtin.as_str()).into(),
+            span: *span,
+        });
+        true
+    }
+
+    /// Report `void`, `never` or `callable` as the type of `member`, a property or class constant
+    /// that `subject` (`Property`, `Class constant`) describes.
+    pub(crate) fn reject_member_type(
+        &mut self,
+        type_hint: &TypeHint<'_, '_>,
+        subject: &str,
+        member: &str,
+    ) {
+        let is_callable = |t: &TypeHint<'_, '_>| {
+            matches!(t.kind, TypeHintKind::Keyword(BuiltinType::Callable, _))
+        };
+        let invalid = match &type_hint.kind {
+            TypeHintKind::Keyword(
+                BuiltinType::Void | BuiltinType::Never | BuiltinType::Callable,
+                _,
+            ) => true,
+            TypeHintKind::Nullable(inner) => is_callable(inner),
+            TypeHintKind::Union(types) => types.iter().any(is_callable),
+            _ => false,
+        };
+        if !invalid {
+            return;
+        }
+        let class = self.class_member_prefix();
+        let message = format!(
+            "{subject} {class}{member} cannot have type {}",
+            self.type_display(type_hint)
+        );
+        self.error(ParseError::Forbidden {
+            message: message.into(),
+            span: type_hint.span,
+        });
     }
 
     /// Report a builtin type or class keyword written with a namespace, as in `\int`, `\self`,
@@ -1058,7 +1481,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
-    /// Report a type listed twice in a union or intersection, comparing class names
+    /// Report a type listed twice in a union or intersection, comparing resolved class names
     /// case-insensitively; `bool` covers `true` and `false`, `iterable` covers `array`.
     fn check_duplicate_types(&mut self, type_hint: &TypeHint<'arena, 'src>) {
         let (types, kind) = match &type_hint.kind {
@@ -1073,7 +1496,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         for (ty, key) in types.iter().zip(&keys) {
             let Some(key) = key else { continue };
             let covered = has_bool && matches!(key.as_str(), "true" | "false")
-                || has_iterable && matches!(key.as_str(), "array" | "traversable");
+                || has_iterable && matches!(key.as_str(), "array" | "\\traversable");
             if !seen.insert(key.clone()) || covered {
                 let text = &self.source[ty.span.start as usize..ty.span.end as usize];
                 self.error(ParseError::Forbidden {
@@ -1087,18 +1510,18 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
-    /// Comparison key for [`check_duplicate_types`](Self::check_duplicate_types): lowercase,
-    /// with the members of an intersection sorted so `A&B` and `B&A` match.
+    /// Comparison key for [`check_duplicate_types`](Self::check_duplicate_types): the builtin
+    /// type or the lowercase resolved class name after a `\`. Intersections in a union are compared by
+    /// [`check_redundant_intersections`](Self::check_redundant_intersections) instead.
     fn type_hint_key(&self, ty: &TypeHint<'arena, 'src>) -> Option<String> {
-        if let TypeHintKind::Intersection(types) = &ty.kind {
-            let mut parts = types
-                .iter()
-                .map(|t| self.type_hint_key(t))
-                .collect::<Option<Vec<_>>>()?;
-            parts.sort();
-            return Some(parts.join("&"));
+        match &ty.kind {
+            TypeHintKind::Keyword(builtin, _)
+                if !matches!(builtin, BuiltinType::Self_ | BuiltinType::Parent_) =>
+            {
+                Some(builtin.as_str().into())
+            }
+            _ => self.class_type_key(ty).map(|key| format!("\\{key}")),
         }
-        self.type_hint_to_string(ty).map(|s| s.to_ascii_lowercase())
     }
 
     fn parse_type_hint_unchecked(&mut self) -> TypeHint<'arena, 'src> {
@@ -1108,13 +1531,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         if self.eat(TokenKind::Question).is_some() {
             let inner = self.parse_simple_type();
             let span = Span::new(start, inner.span.end);
-            // Validate that mixed is not used with nullable
-            if let TypeHintKind::Keyword(BuiltinType::Mixed, _) = &inner.kind {
-                self.error(ParseError::Forbidden {
-                    message: "mixed cannot be used with nullable type".into(),
-                    span: inner.span,
-                });
-            }
             return TypeHint {
                 kind: TypeHintKind::Nullable(self.alloc(inner)),
                 span,
@@ -1146,23 +1562,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     span,
                 });
             }
-            // void, never, and mixed cannot appear in union types
-            for ty in types.iter() {
-                if let TypeHintKind::Keyword(builtin, _) = &ty.kind {
-                    let msg = match builtin {
-                        BuiltinType::Void => Some("void cannot be used as part of a union type"),
-                        BuiltinType::Never => Some("never cannot be used as part of a union type"),
-                        BuiltinType::Mixed => Some("mixed cannot be used as part of a union type"),
-                        _ => None,
-                    };
-                    if let Some(msg) = msg {
-                        self.error(ParseError::Forbidden {
-                            message: msg.into(),
-                            span: ty.span,
-                        });
-                    }
-                }
-            }
             // DNF types (parenthesized intersection in union) require PHP 8.2
             let has_dnf = types
                 .iter()
@@ -1180,20 +1579,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         if self.check(TokenKind::Ampersand) {
             // Only parse as intersection if the next token after & looks like a type
             // (not a variable, which would be a by-ref param)
-            let peek = self.peek_kind();
-            let looks_like_type = matches!(
-                peek,
-                Some(
-                    TokenKind::Identifier
-                        | TokenKind::Backslash
-                        | TokenKind::Self_
-                        | TokenKind::Parent_
-                        | TokenKind::Static
-                        | TokenKind::Namespace
-                        | TokenKind::Array
-                )
-            );
-            if looks_like_type {
+            if self.peek_kind().is_some_and(starts_intersection_member) {
                 let span = self.current_span();
                 self.require_version(PhpVersion::Php81, "intersection types", span);
 
@@ -1216,15 +1602,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 // Check if there's a union after this intersection (DNF: A&B|C&D)
                 if self.check(TokenKind::Pipe) {
                     self.require_version(PhpVersion::Php82, "DNF types", Span::new(start, end));
-                    // Validate that mixed is not used in intersection types
-                    for ty in types.iter() {
-                        if let TypeHintKind::Keyword(BuiltinType::Mixed, _) = &ty.kind {
-                            self.error(ParseError::Forbidden {
-                                message: "mixed cannot be used in intersection types".into(),
-                                span: ty.span,
-                            });
-                        }
-                    }
                     let intersection_span = Span::new(start, end);
                     let intersection = TypeHint {
                         kind: TypeHintKind::Intersection(types),
@@ -1241,20 +1618,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
                         // Check if this union member is an intersection
                         while self.check(TokenKind::Ampersand) {
-                            let peek = self.peek_kind();
-                            let looks_like_type = matches!(
-                                peek,
-                                Some(
-                                    TokenKind::Identifier
-                                        | TokenKind::Backslash
-                                        | TokenKind::Self_
-                                        | TokenKind::Parent_
-                                        | TokenKind::Static
-                                        | TokenKind::Namespace
-                                        | TokenKind::Array
-                                )
-                            );
-                            if !looks_like_type {
+                            if !self.peek_kind().is_some_and(starts_intersection_member) {
                                 break;
                             }
                             self.eat(TokenKind::Ampersand);
@@ -1286,15 +1650,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 } else {
                     // Just an intersection, no union
                     let span = Span::new(start, end);
-                    // Validate that mixed is not used in intersection types
-                    for ty in types.iter() {
-                        if let TypeHintKind::Keyword(BuiltinType::Mixed, _) = &ty.kind {
-                            self.error(ParseError::Forbidden {
-                                message: "mixed cannot be used in intersection types".into(),
-                                span: ty.span,
-                            });
-                        }
-                    }
                     return TypeHint {
                         kind: TypeHintKind::Intersection(types),
                         span,
@@ -1332,50 +1687,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
 
         first
-    }
-
-    /// Convert a type hint to a string representation for comparison purposes.
-    fn type_hint_to_string(&self, ty: &TypeHint<'arena, 'src>) -> Option<String> {
-        match &ty.kind {
-            TypeHintKind::Keyword(builtin, _) => {
-                let name = match builtin {
-                    BuiltinType::Int => "int",
-                    BuiltinType::Float => "float",
-                    BuiltinType::String => "string",
-                    BuiltinType::Bool => "bool",
-                    BuiltinType::Void => "void",
-                    BuiltinType::Never => "never",
-                    BuiltinType::Mixed => "mixed",
-                    BuiltinType::Object => "object",
-                    BuiltinType::Iterable => "iterable",
-                    BuiltinType::Callable => "callable",
-                    BuiltinType::Array => "array",
-                    BuiltinType::Self_ => "self",
-                    BuiltinType::Parent_ => "parent",
-                    BuiltinType::Static => "static",
-                    BuiltinType::Null => "null",
-                    BuiltinType::True => "true",
-                    BuiltinType::False => "false",
-                    _ => return None,
-                };
-                Some(name.to_string())
-            }
-            TypeHintKind::Named(name) => match name {
-                Name::Simple { value, .. } => Some(value.to_string()),
-                Name::Complex { parts, kind, .. } => {
-                    let prefix = match kind {
-                        NameKind::Unqualified | NameKind::Qualified => "",
-                        NameKind::FullyQualified => "\\",
-                        NameKind::Relative => "namespace\\",
-                        _ => return None,
-                    };
-                    let joined = parts.iter().copied().collect::<Vec<_>>().join("\\");
-                    Some(format!("{}{}", prefix, joined))
-                }
-                _ => None,
-            },
-            _ => None,
-        }
     }
 
     /// Parse a type element: either a simple type or a parenthesized type (intersection, union, or mixed DNF).
@@ -1448,15 +1759,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             // Check if there are union operators after the intersection
             if self.check(TokenKind::Pipe) {
                 // This is a DNF type: (A&B|C)
-                // Validate that mixed is not used in intersection types
-                for ty in types.iter() {
-                    if let TypeHintKind::Keyword(BuiltinType::Mixed, _) = &ty.kind {
-                        self.error(ParseError::Forbidden {
-                            message: "mixed cannot be used in intersection types".into(),
-                            span: ty.span,
-                        });
-                    }
-                }
                 self.advance(); // consume |
 
                 // Wrap the first intersection member
@@ -1483,15 +1785,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                             member_types.push(self.parse_simple_type());
                         }
 
-                        // Validate that mixed is not used in intersection types
-                        for ty in member_types.iter() {
-                            if let TypeHintKind::Keyword(BuiltinType::Mixed, _) = &ty.kind {
-                                self.error(ParseError::Forbidden {
-                                    message: "mixed cannot be used in intersection types".into(),
-                                    span: ty.span,
-                                });
-                            }
-                        }
                         let mspan = Span::new(member_start, self.previous_end());
                         union_members.push(TypeHint {
                             kind: TypeHintKind::Intersection(member_types),
@@ -1515,15 +1808,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 }
             } else {
                 // Just a parenthesized intersection
-                // Validate that mixed is not used in intersection types
-                for ty in types.iter() {
-                    if let TypeHintKind::Keyword(BuiltinType::Mixed, _) = &ty.kind {
-                        self.error(ParseError::Forbidden {
-                            message: "mixed cannot be used in intersection types".into(),
-                            span: ty.span,
-                        });
-                    }
-                }
                 let end = self.previous_end();
                 TypeHint {
                     kind: TypeHintKind::Intersection(types),
@@ -1550,15 +1834,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         member_types.push(self.parse_simple_type());
                     }
 
-                    // Validate that mixed is not used in intersection types
-                    for ty in member_types.iter() {
-                        if let TypeHintKind::Keyword(BuiltinType::Mixed, _) = &ty.kind {
-                            self.error(ParseError::Forbidden {
-                                message: "mixed cannot be used in intersection types".into(),
-                                span: ty.span,
-                            });
-                        }
-                    }
                     let mspan = Span::new(member_start, self.previous_end());
                     union_members.push(TypeHint {
                         kind: TypeHintKind::Intersection(member_types),

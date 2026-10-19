@@ -6,7 +6,7 @@ min_php=8.1
 function foo(mixed&Foo $x) { }
 
 ===errors===
-mixed cannot be used in intersection types
+Type mixed cannot be part of an intersection type
 ===php_error===
 PHP Fatal error:  Type mixed cannot be part of an intersection type in Standard input code on line 2
 ===ast===

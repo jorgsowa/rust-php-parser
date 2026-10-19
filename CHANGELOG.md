@@ -112,6 +112,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Argument unpacking in an attribute, such as `#[A(...$x)]`, is reported (`php-rs-parser`).
 - A literal that is not a string used as a class name, such as `(1)::A`, `new (1)` or `$a instanceof (1)`, is reported ("Illegal class name"; `Cannot use "::class" on array` for `([])::class`) (`php-rs-parser`).
 - The right side of `instanceof` accepted any expression, such as `$a instanceof f()`, `"A"` or `A::B`; only a class name, a variable or a parenthesized expression is allowed (`php-rs-parser`).
+- Type declarations are checked like PHP does at compile time: `void` and `never` outside a standalone return type (`?void`, `never|null`, `void $a`), `?null`, builtin types in intersections (`int&A`, `static&A`, and `self&A` in traits and closures), `void`, `never` and `callable` property and class constant types, `object` together with a class type (`object|A`), and intersections made redundant by another member (`A|(A&B)`, `(A&B)|(A&B&C)`). Messages name the types as PHP does, with class names resolved (`Property N\A::$a cannot have type X\Y|callable`) (`php-rs-parser`).
+- Duplicate class types in a union or intersection are compared after name resolution, so `\Foo|Foo`, `namespace\A|A`, `\X\A|B` after `use X\A as B`, `A|self` in class `A` and `iterable|\Traversable` are reported, and `iterable|Traversable` in a namespace is no longer reported (`php-rs-parser`).
+- `A&null`, `A&true` and `A&false` were syntax errors; they parse and are reported as builtin types in an intersection (`php-rs-parser`).
+- `mixed`, `void` and `never` misuse, `Cannot redefine class constant` and the set hook parameter type error use PHP's wording, including the class name (`php-rs-parser`).
 
 ---
 

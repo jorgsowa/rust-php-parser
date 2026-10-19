@@ -11,7 +11,7 @@ Duplicate type 'FOO' in union type
 Duplicate type 'FOO' in intersection type
 Duplicate type 'true' in union type
 Duplicate type 'array' in union type
-Duplicate type '(B&A)' in union type
+Type B&A is redundant with type A&B
 ===php_error===
 PHP Fatal error:  Duplicate type FOO is redundant in Standard input code on line 2
 ===ast===

@@ -6,7 +6,7 @@ min_php=8.0
 function foo(?mixed $x) { }
 
 ===errors===
-mixed cannot be used with nullable type
+Type mixed cannot be marked as nullable since mixed already includes null
 ===php_error===
 PHP Fatal error:  Type mixed cannot be marked as nullable since mixed already includes null in Standard input code on line 2
 ===ast===
