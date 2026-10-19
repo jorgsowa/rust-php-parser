@@ -16,9 +16,8 @@ enum NameStrInner<'arena, 'src> {
 /// A name string from either the source buffer or the bump arena. Use [`as_str`](NameStr::as_str)
 /// or `Deref` to get the string value — the allocation origin is an internal parser detail.
 ///
-/// Build one with [`NameStr::new_in`], or move one into another arena with
-/// [`fold_name_str`](crate::fold::fold_name_str). The hidden `__*` constructors
-/// and accessors exist for the parser and are not part of the stable API.
+/// Build one with [`NameStr::new_in`], [`NameStr::from_source`] or [`NameStr::from_arena`],
+/// or move one into another arena with [`fold_name_str`](crate::fold::fold_name_str).
 ///
 /// Using this as the payload for both `ExprKind::Variable` and `ExprKind::Identifier`
 /// gives them the same binding type, so or-patterns compile natively:
@@ -40,36 +39,20 @@ impl<'arena, 'src> NameStr<'arena, 'src> {
         Self(NameStrInner::Arena(arena.alloc_str(s)))
     }
 
-    /// Borrowed directly from the source buffer.
-    #[doc(hidden)]
+    /// Borrows `s` from the source buffer.
     #[inline]
-    pub fn __src(s: &'src str) -> Self {
+    pub fn from_source(s: &'src str) -> Self {
         Self(NameStrInner::Src(s))
     }
 
-    /// Allocated in the bump arena (e.g. a joined qualified name or a keyword).
-    #[doc(hidden)]
+    /// Wraps a string already allocated in the bump arena.
     #[inline]
-    pub fn __arena(s: &'arena str) -> Self {
+    pub fn from_arena(s: &'arena str) -> Self {
         Self(NameStrInner::Arena(s))
     }
 
-    /// Returns the arena slice if this value was arena-allocated, otherwise `None`.
-    /// Used internally to avoid re-allocating strings already in the arena.
-    #[doc(hidden)]
     #[inline]
-    pub fn __into_arena_str(self) -> Option<&'arena str> {
-        match self.0 {
-            NameStrInner::Arena(s) => Some(s),
-            NameStrInner::Src(_) => None,
-        }
-    }
-
-    /// Returns the source slice if this value was borrowed from the source buffer, otherwise `None`.
-    /// Used by the fold infrastructure to preserve source-borrowed strings without re-allocation.
-    #[doc(hidden)]
-    #[inline]
-    pub fn __into_src_str(self) -> Option<&'src str> {
+    pub(crate) fn into_src_str(self) -> Option<&'src str> {
         match self.0 {
             NameStrInner::Src(s) => Some(s),
             NameStrInner::Arena(_) => None,

@@ -1366,15 +1366,15 @@ mod tests {
     fn counts_variables() {
         let arena = bumpalo::Bump::new();
         let var_x = arena.alloc(Expr {
-            kind: ExprKind::Variable(NameStr::__src("x")),
+            kind: ExprKind::Variable(NameStr::from_source("x")),
             span: Span::DUMMY,
         });
         let var_y = arena.alloc(Expr {
-            kind: ExprKind::Variable(NameStr::__src("y")),
+            kind: ExprKind::Variable(NameStr::from_source("y")),
             span: Span::DUMMY,
         });
         let var_z = arena.alloc(Expr {
-            kind: ExprKind::Variable(NameStr::__src("z")),
+            kind: ExprKind::Variable(NameStr::from_source("z")),
             span: Span::DUMMY,
         });
         let binary = arena.alloc(Expr {
@@ -1414,11 +1414,11 @@ mod tests {
     fn early_termination() {
         let arena = bumpalo::Bump::new();
         let var_a = arena.alloc(Expr {
-            kind: ExprKind::Variable(NameStr::__src("a")),
+            kind: ExprKind::Variable(NameStr::from_source("a")),
             span: Span::DUMMY,
         });
         let var_b = arena.alloc(Expr {
-            kind: ExprKind::Variable(NameStr::__src("b")),
+            kind: ExprKind::Variable(NameStr::from_source("b")),
             span: Span::DUMMY,
         });
         let binary = arena.alloc(Expr {

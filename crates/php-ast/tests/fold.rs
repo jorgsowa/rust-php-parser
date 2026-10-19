@@ -21,7 +21,7 @@ fn identity_fold_preserves_expression_stmt() {
         span: Span::DUMMY,
     });
     let var_x = arena.alloc(Expr {
-        kind: ExprKind::Variable(NameStr::__src("x")),
+        kind: ExprKind::Variable(NameStr::from_source("x")),
         span: Span::DUMMY,
     });
     let assign = arena.alloc(Expr {
@@ -60,7 +60,7 @@ fn identity_fold_preserves_arena_strings() {
 
     let s = arena.alloc_str("hello world");
     let expr = Expr {
-        kind: ExprKind::String(NameStr::__arena(s)),
+        kind: ExprKind::String(NameStr::from_arena(s)),
         span: Span::DUMMY,
     };
     let folded_expr = Identity.fold_expr(&out, &expr);
@@ -75,7 +75,8 @@ fn identity_fold_preserves_source_name_str() {
     // PHP: $myVar;
     let out = Bump::new();
 
-    let name = NameStr::__src("myVar");
+    let src = "myVar";
+    let name = NameStr::from_source(src);
     let expr = Expr {
         kind: ExprKind::Variable(name),
         span: Span::DUMMY,
@@ -84,9 +85,10 @@ fn identity_fold_preserves_source_name_str() {
     match folded_expr.kind {
         ExprKind::Variable(n) => {
             assert_eq!(n.as_str(), "myVar");
-            assert!(
-                n.__into_src_str().is_some(),
-                "src-borrowed name should stay as Src"
+            assert_eq!(
+                n.as_str().as_ptr(),
+                src.as_ptr(),
+                "src-borrowed name should keep pointing into the source"
             );
         }
         _ => panic!("expected Variable"),
@@ -100,7 +102,7 @@ fn arena_name_str_is_reallocated_into_new_arena() {
     let out = Bump::new();
 
     let s = src_arena.alloc_str("arenaName");
-    let name = NameStr::__arena(s);
+    let name = NameStr::from_arena(s);
     let expr = Expr {
         kind: ExprKind::Variable(name),
         span: Span::DUMMY,
@@ -110,10 +112,6 @@ fn arena_name_str_is_reallocated_into_new_arena() {
         panic!("expected Variable")
     };
     assert_eq!(n.as_str(), "arenaName");
-    assert!(
-        n.__into_arena_str().is_some(),
-        "arena-borrowed name should remain as Arena after fold"
-    );
     // Must point into `out`, not into `src_arena`
     assert_ne!(
         n.as_str().as_ptr(),
@@ -130,7 +128,7 @@ fn string_literal_is_reallocated_into_new_arena() {
 
     let s = src_arena.alloc_str("hello world");
     let expr = Expr {
-        kind: ExprKind::String(NameStr::__arena(s)),
+        kind: ExprKind::String(NameStr::from_arena(s)),
         span: Span::DUMMY,
     };
     let folded_expr = Identity.fold_expr(&out, &expr);
@@ -204,10 +202,14 @@ fn custom_fold_closure_use_var_no_arena_param() {
 fn fold_name_str_pub_preserves_src_variant() {
     // PHP: Foo  (NameStr::Src — source-borrowed, should stay Src after fold)
     let out = Bump::new();
-    let name = NameStr::__src("Foo");
-    let result = fold_name_str(name, &out);
+    let src = "Foo";
+    let result = fold_name_str(NameStr::from_source(src), &out);
     assert_eq!(result.as_str(), "Foo");
-    assert!(result.__into_src_str().is_some(), "Src should remain Src");
+    assert_eq!(
+        result.as_str().as_ptr(),
+        src.as_ptr(),
+        "Src should stay borrowed"
+    );
 }
 
 #[test]
@@ -216,13 +218,9 @@ fn fold_name_str_pub_reallocates_arena_variant() {
     let src_arena = Bump::new();
     let out = Bump::new();
     let s = src_arena.alloc_str("Bar");
-    let name = NameStr::__arena(s);
+    let name = NameStr::from_arena(s);
     let result = fold_name_str(name, &out);
     assert_eq!(result.as_str(), "Bar");
-    assert!(
-        result.__into_arena_str().is_some(),
-        "Arena should remain Arena"
-    );
     assert_ne!(
         result.as_str().as_ptr(),
         s.as_ptr(),
@@ -326,7 +324,7 @@ fn string_part_literal_in_interpolated_string_is_reallocated() {
     let out = Bump::new();
     let s = src.alloc_str("hello ");
     let var_expr = Expr {
-        kind: ExprKind::Variable(NameStr::__src("name")),
+        kind: ExprKind::Variable(NameStr::from_source("name")),
         span: Span::DUMMY,
     };
     let mut parts = ArenaVec::new_in(&src);
@@ -843,7 +841,7 @@ fn fold_match_arm_override_dispatched_for_both_arm_kinds() {
     let arena = Bump::new();
     let out = Bump::new();
     let subject = arena.alloc(Expr {
-        kind: ExprKind::Variable(NameStr::__src("x")),
+        kind: ExprKind::Variable(NameStr::from_source("x")),
         span: Span::DUMMY,
     });
     let mut conds = ArenaVec::new_in(&arena);
@@ -1041,12 +1039,12 @@ fn foreach_without_key_stays_none() {
     });
     let foreach = arena.alloc(ForeachStmt {
         expr: Expr {
-            kind: ExprKind::Variable(NameStr::__src("items")),
+            kind: ExprKind::Variable(NameStr::from_source("items")),
             span: Span::DUMMY,
         },
         key: None,
         value: Expr {
-            kind: ExprKind::Variable(NameStr::__src("item")),
+            kind: ExprKind::Variable(NameStr::from_source("item")),
             span: Span::DUMMY,
         },
         by_ref: false,

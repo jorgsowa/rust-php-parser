@@ -1282,10 +1282,10 @@ pub fn fold_name_str<'new, 'src>(
     name: NameStr<'_, 'src>,
     arena: &'new Bump,
 ) -> NameStr<'new, 'src> {
-    if let Some(s) = name.__into_src_str() {
-        NameStr::__src(s)
+    if let Some(s) = name.into_src_str() {
+        NameStr::from_source(s)
     } else {
-        NameStr::__arena(arena.alloc_str(name.as_str()))
+        NameStr::from_arena(arena.alloc_str(name.as_str()))
     }
 }
 

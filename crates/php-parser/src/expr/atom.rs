@@ -298,7 +298,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let inner = without_open.strip_suffix('\'').unwrap_or(without_open);
             // Fast path: the lexer saw no backslash, so inner is a verbatim source slice
             let value = if parser.is_verbatim_string(token.span.start) {
-                NameStr::__src(inner)
+                NameStr::from_source(inner)
             } else {
                 // Decode single-quote escape sequences: \' → ' and \\ → \
                 let mut decoded = String::with_capacity(inner.len());
@@ -332,7 +332,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                         i += ch.len_utf8();
                     }
                 }
-                NameStr::__arena(parser.arena.alloc_str(&decoded))
+                NameStr::from_arena(parser.arena.alloc_str(&decoded))
             };
             Expr {
                 kind: ExprKind::String(value),
@@ -353,7 +353,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             // strings, so it is safe to treat the missing closing quote as absent here.
             let Some(without_open) = stripped.strip_prefix('"') else {
                 return Expr {
-                    kind: ExprKind::String(NameStr::__src("")),
+                    kind: ExprKind::String(NameStr::from_source("")),
                     span: token.span,
                 };
             };
@@ -362,7 +362,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             if parser.is_verbatim_string(token.span.start) {
                 // The lexer saw no backslash and no `$`: a verbatim source slice.
                 Expr {
-                    kind: ExprKind::String(NameStr::__src(inner)),
+                    kind: ExprKind::String(NameStr::from_source(inner)),
                     span: token.span,
                 }
             } else if super::interpolation::has_interpolation(inner) {
@@ -386,7 +386,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             } else if memchr::memchr(b'\\', inner.as_bytes()).is_none() {
                 // No interpolation and no escapes — verbatim source slice
                 Expr {
-                    kind: ExprKind::String(NameStr::__src(inner)),
+                    kind: ExprKind::String(NameStr::from_source(inner)),
                     span: token.span,
                 }
             } else {
@@ -409,7 +409,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                         .expect("parts.len() == 1 checked above")
                     {
                         StringPart::Literal(s) => Expr {
-                            kind: ExprKind::String(NameStr::__arena(s)),
+                            kind: ExprKind::String(NameStr::from_arena(s)),
                             span: token.span,
                         },
                         part => {
@@ -627,7 +627,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let token = parser.advance();
             let name = parser.variable_name(token);
             Expr {
-                kind: ExprKind::Variable(NameStr::__src(name)),
+                kind: ExprKind::Variable(NameStr::from_source(name)),
                 span: token.span,
             }
         }
@@ -1193,7 +1193,7 @@ fn parse_new_variable_tail<'arena, 'src>(
                 let token = parser.advance(); // $prop
                 let var_name = parser.variable_name(token);
                 let member = parser.alloc(Expr {
-                    kind: ExprKind::Identifier(NameStr::__src(var_name)),
+                    kind: ExprKind::Identifier(NameStr::from_source(var_name)),
                     span: token.span,
                 });
                 let span = Span::new(base.span.start, token.span.end);
@@ -1343,7 +1343,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             // new $className()
             let t = parser.advance();
             Expr {
-                kind: ExprKind::Variable(NameStr::__src(parser.variable_name(t))),
+                kind: ExprKind::Variable(NameStr::from_source(parser.variable_name(t))),
                 span: t.span,
             }
         }

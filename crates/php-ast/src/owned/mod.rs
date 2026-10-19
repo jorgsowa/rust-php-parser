@@ -2926,7 +2926,7 @@ fn av_exprs<'a>(
 }
 
 fn av_namestr<'a>(arena: &'a bumpalo::Bump, s: &str) -> arena_ast::NameStr<'a, 'a> {
-    arena_ast::NameStr::__arena(arena.alloc_str(s))
+    arena_ast::NameStr::from_arena(arena.alloc_str(s))
 }
 
 /// Convert an expression kind that is not a chain link (see [`owned_chain_operand`]).

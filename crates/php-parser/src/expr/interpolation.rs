@@ -87,7 +87,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                     let var_offset = base_offset + var_start as u32;
 
                     let mut expr = Expr {
-                        kind: ExprKind::Variable(NameStr::__src(var_name)),
+                        kind: ExprKind::Variable(NameStr::from_source(var_name)),
                         span: Span::new(var_offset, base_offset + i as u32),
                     };
 
@@ -109,7 +109,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                         let access = PropertyAccessExpr {
                             object: arena.alloc(expr),
                             property: arena.alloc(Expr {
-                                kind: ExprKind::Identifier(NameStr::__src(prop_name)),
+                                kind: ExprKind::Identifier(NameStr::from_source(prop_name)),
                                 span: prop_span,
                             }),
                         };
@@ -381,7 +381,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                     let var_offset = body_offset + var_start as u32;
 
                     let mut expr = Expr {
-                        kind: ExprKind::Variable(NameStr::__src(var_name)),
+                        kind: ExprKind::Variable(NameStr::from_source(var_name)),
                         span: Span::new(var_offset, body_offset + i as u32),
                     };
 
@@ -401,7 +401,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                         let access = PropertyAccessExpr {
                             object: arena.alloc(expr),
                             property: arena.alloc(Expr {
-                                kind: ExprKind::Identifier(NameStr::__src(prop_name)),
+                                kind: ExprKind::Identifier(NameStr::from_source(prop_name)),
                                 span: prop_span,
                             }),
                         };
@@ -857,7 +857,7 @@ fn parse_simple_index<'arena, 'src>(
         let name_start = idx_offset as usize + 1;
         let name_end = idx_offset as usize + idx_str.len();
         return Expr {
-            kind: ExprKind::Variable(NameStr::__src(&source[name_start..name_end])),
+            kind: ExprKind::Variable(NameStr::from_source(&source[name_start..name_end])),
             span,
         };
     }
@@ -865,7 +865,7 @@ fn parse_simple_index<'arena, 'src>(
     let key_start = idx_offset as usize;
     let key_end = idx_end as usize;
     Expr {
-        kind: ExprKind::String(NameStr::__src(&source[key_start..key_end])),
+        kind: ExprKind::String(NameStr::from_source(&source[key_start..key_end])),
         span,
     }
 }
@@ -959,7 +959,7 @@ fn parse_dollar_brace<'arena, 'src>(
     }
 
     let var = Expr {
-        kind: ExprKind::Variable(NameStr::__src(&text[content_start..name_end])),
+        kind: ExprKind::Variable(NameStr::from_source(&text[content_start..name_end])),
         span: Span::new(offset + content_start as u32, offset + name_end as u32),
     };
     if name_end == close {
