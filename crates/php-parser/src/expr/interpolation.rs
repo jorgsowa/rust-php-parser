@@ -162,6 +162,15 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                                     span,
                                 };
                             }
+                        } else {
+                            errors.push(ParseError::Forbidden {
+                                message: "unclosed '[' in string interpolation".into(),
+                                span: Span::new(
+                                    base_offset + bracket_start as u32,
+                                    base_offset + len as u32,
+                                ),
+                            });
+                            i = bracket_start;
                         }
                     }
 
@@ -448,6 +457,15 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                                     span,
                                 };
                             }
+                        } else {
+                            errors.push(ParseError::Forbidden {
+                                message: "unclosed '[' in string interpolation".into(),
+                                span: Span::new(
+                                    body_offset + bracket_start as u32,
+                                    body_offset + len as u32,
+                                ),
+                            });
+                            i = bracket_start;
                         }
                     }
                     parts.push(StringPart::Expr(expr));
