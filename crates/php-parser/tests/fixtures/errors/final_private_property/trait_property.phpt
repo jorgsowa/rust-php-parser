@@ -1,0 +1,62 @@
+===config===
+min_php=8.4
+===source===
+<?php
+trait T { final private $x; }
+===errors===
+Property cannot be both final and private
+===php_error===
+PHP Fatal error:  Property cannot be both final and private in Standard input code on line 2
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Trait": {
+          "name": {
+            "name": "T",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": {
+                    "name": "x",
+                    "span": {
+                      "start": 30,
+                      "end": 32
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_final": true
+                  },
+                  "type_hint": null,
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 16,
+                "end": 32
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 35
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 35
+  }
+}

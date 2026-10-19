@@ -1752,6 +1752,12 @@ fn parse_property_member<'arena, 'src>(
             span: Span::new(member_start, parser.previous_end()),
         });
     }
+    if mods.is_final && mods.visibility == Some(Visibility::Private) {
+        parser.error(ParseError::Forbidden {
+            message: "Property cannot be both final and private".into(),
+            span: Span::new(member_start, parser.previous_end()),
+        });
+    }
     if mods.is_final {
         // `final` properties became valid in PHP 8.4; older targets reject them.
         parser.require_version(
