@@ -95,8 +95,8 @@ pub(crate) fn check_increment_operand(parser: &mut Parser<'_, '_>, operand: &Exp
             | ExprKind::Error
     ) {
         "Cannot increment or decrement an expression that is not a variable"
-    } else if is_temporary_write_target(&operand.kind) {
-        "Cannot use temporary expression in write context"
+    } else if let Some(message) = temporary_write_message(&operand.kind) {
+        message
     } else if has_nullsafe_link(&operand.kind) {
         "Can't use nullsafe operator in write context"
     } else {
@@ -116,8 +116,8 @@ pub(crate) fn check_write_target(
     target: &Expr<'_, '_>,
     allow_list: bool,
 ) {
-    let message = if is_temporary_write_target(&target.kind) {
-        "Cannot use temporary expression in write context"
+    let message = if let Some(message) = temporary_write_message(&target.kind) {
+        message
     } else if has_nullsafe_link(&target.kind) {
         "Can't use nullsafe operator in write context"
     } else if !is_valid_assignment_target(&target.kind)
@@ -364,7 +364,7 @@ fn is_valid_destructure_element(kind: &ExprKind<'_, '_>) -> bool {
         _ => {
             is_valid_assignment_target(kind)
                 && !has_nullsafe_link(kind)
-                && !is_temporary_write_target(kind)
+                && temporary_write_message(kind).is_none()
         }
     }
 }
@@ -908,8 +908,9 @@ fn check_mixed_list_short_syntax<'arena, 'src>(
 
 /// True if `kind` is an index or property fetch chain whose base is not a variable or a
 /// call, such as `[0, 1][0]`, `FOO->a` or `(new A)->b`. PHP rejects writes to these with
-/// "Cannot use temporary expression in write context".
-fn is_temporary_write_target(kind: &ExprKind<'_, '_>) -> bool {
+/// "Cannot use temporary expression in write context"; for `clone $a` and `f(...)` bases the
+/// message is "Cannot use result of built-in function in write context".
+fn temporary_write_message(kind: &ExprKind<'_, '_>) -> Option<&'static str> {
     let mut cur = kind;
     let mut saw_access = false;
     loop {
@@ -923,28 +924,31 @@ fn is_temporary_write_target(kind: &ExprKind<'_, '_>) -> bool {
                 cur = &p.object.kind;
             }
             // Reported as a nullsafe write instead.
-            ExprKind::NullsafePropertyAccess(_) => return false,
+            ExprKind::NullsafePropertyAccess(_) => return None,
             ExprKind::Parenthesized(inner) => cur = &inner.kind,
             _ => break,
         }
     }
-    saw_access
-        && !matches!(
-            cur,
-            ExprKind::Variable(_)
-                | ExprKind::VariableVariable(_)
-                | ExprKind::StaticPropertyAccess(_)
-                | ExprKind::StaticPropertyAccessDynamic { .. }
-                | ExprKind::FunctionCall(_)
-                | ExprKind::MethodCall(_)
-                | ExprKind::NullsafeMethodCall(_)
-                | ExprKind::StaticMethodCall(_)
-                | ExprKind::CallableCreate(_)
-                | ExprKind::Clone(_)
-                | ExprKind::CloneWith(..)
-                | ExprKind::StaticMethodCallDynamic(_)
-                | ExprKind::Error
-        )
+    if !saw_access {
+        return None;
+    }
+    match cur {
+        ExprKind::Clone(_) | ExprKind::CallableCreate(_) => {
+            Some("Cannot use result of built-in function in write context")
+        }
+        ExprKind::Variable(_)
+        | ExprKind::VariableVariable(_)
+        | ExprKind::StaticPropertyAccess(_)
+        | ExprKind::StaticPropertyAccessDynamic { .. }
+        | ExprKind::FunctionCall(_)
+        | ExprKind::MethodCall(_)
+        | ExprKind::NullsafeMethodCall(_)
+        | ExprKind::StaticMethodCall(_)
+        | ExprKind::StaticMethodCallDynamic(_)
+        | ExprKind::CloneWith(..)
+        | ExprKind::Error => None,
+        _ => Some("Cannot use temporary expression in write context"),
+    }
 }
 
 /// Parse an assignment operator and its RHS, treating `lhs` as the assignment target.
@@ -983,9 +987,9 @@ fn parse_assign_continuation<'arena, 'src>(
             message: "Cannot use increment/decrement as an assignment target.".into(),
             span,
         });
-    } else if is_temporary_write_target(&lhs.kind) {
+    } else if let Some(message) = temporary_write_message(&lhs.kind) {
         parser.error(ParseError::Forbidden {
-            message: "Cannot use temporary expression in write context".into(),
+            message: message.into(),
             span: lhs.span,
         });
     } else if !is_valid_assignment_target(&lhs.kind) {
@@ -1079,9 +1083,9 @@ fn parse_assign_continuation<'arena, 'src>(
             message: "Cannot assign reference to non referenceable value".into(),
             span: rhs.span,
         });
-    } else if by_ref && is_temporary_write_target(&rhs.kind) {
+    } else if let Some(message) = by_ref.then(|| temporary_write_message(&rhs.kind)).flatten() {
         parser.error(ParseError::Forbidden {
-            message: "Cannot use temporary expression in write context".into(),
+            message: message.into(),
             span: rhs.span,
         });
     } else if by_ref {
