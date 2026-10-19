@@ -1690,7 +1690,12 @@ fn parse_property_member<'arena, 'src>(
         .filter(|name| !hooks.is_empty() && is_virtual_property(name, &hooks))
     {
         let span = Span::new(member_start, parser.previous_end());
-        if default.is_some() {
+        let has_parent = parser
+            .class_scope
+            .as_ref()
+            .is_some_and(|scope| scope.parent_name.is_some());
+        // With a parent, PHP defers the check to inheritance.
+        if default.is_some() && !has_parent {
             let class = parser.class_member_prefix();
             parser.error(ParseError::Forbidden {
                 message: format!(
