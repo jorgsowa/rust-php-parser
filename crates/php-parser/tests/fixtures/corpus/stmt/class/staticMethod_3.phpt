@@ -1,7 +1,7 @@
 ===source===
 <?php class A { static function __clone() {} }
 ===errors===
-Method __clone() cannot be static
+Method A::__clone() cannot be static
 ===php_error===
 PHP Fatal error:  Method A::__clone() cannot be static in Standard input code on line 1
 ===ast===

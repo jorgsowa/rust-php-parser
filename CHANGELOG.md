@@ -124,6 +124,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A return type on `__destruct` is reported (`php-rs-parser`).
 - Abstract and interface method body errors and the constructor return type error use PHP's wording, including the class and method name (`php-rs-parser`).
 - `declare` directives are checked like PHP: a value that is not a literal, `strict_types` or `encoding` that is not the first statement, `strict_types` in block mode or with a value other than `0` or `1`, and the warnings for unsupported directives and the ignored `encoding` (`php-rs-parser`).
+- Magic method signatures are checked like PHP: argument count, by-reference arguments, parameter and return types, and the warning for a non-public magic method. Static-modifier and redeclaration messages name the class (`Method A::__get() cannot be static`, `Cannot redeclare A::f()`) (`php-rs-parser`).
+- Duplicate enum methods and a promoted constructor property redeclaring a declared property are reported (`php-rs-parser`).
 
 ---
 

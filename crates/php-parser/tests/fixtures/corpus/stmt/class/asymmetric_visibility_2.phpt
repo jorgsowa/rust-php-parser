@@ -11,7 +11,7 @@ cannot use multiple set-visibility modifiers
 Property with asymmetric visibility Test::$x must have type
 cannot use multiple set-visibility modifiers
 Property with asymmetric visibility Test::$x must have type
-Cannot redeclare property $x
+Cannot redeclare Test::$x
 ===php_error===
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 3
 ===ast===

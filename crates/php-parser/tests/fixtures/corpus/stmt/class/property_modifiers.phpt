@@ -8,8 +8,8 @@ class Test {
     private static $prop;
 }
 ===errors===
-Cannot redeclare property $prop
-Cannot redeclare property $prop
+Cannot redeclare Test::$prop
+Cannot redeclare Test::$prop
 ===php_error===
 PHP Fatal error:  Cannot redeclare Test::$prop in Standard input code on line 4
 ===ast===

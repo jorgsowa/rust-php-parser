@@ -14,7 +14,7 @@ Property with asymmetric visibility Test::$x must have type
 cannot use multiple set-visibility modifiers
 'asymmetric visibility' requires PHP 8.4 or higher
 Property with asymmetric visibility Test::$x must have type
-Cannot redeclare property $x
+Cannot redeclare Test::$x
 ===php_error===
 PHP Parse error:  syntax error, unexpected token ")", expecting amp in Standard input code on line 3
 ===ast===

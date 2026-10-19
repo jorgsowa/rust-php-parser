@@ -10,8 +10,8 @@ class Test {
 }
 ===errors===
 'final properties' requires PHP 8.4 or higher
-Cannot redeclare property $prop
-Cannot redeclare property $prop
+Cannot redeclare Test::$prop
+Cannot redeclare Test::$prop
 ===php_error===
 PHP Fatal error:  Cannot use the final modifier on a property in Standard input code on line 3
 ===ast===

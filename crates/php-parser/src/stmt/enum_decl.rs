@@ -67,6 +67,7 @@ pub(super) fn parse_enum<'arena, 'src>(
     let outer_scope = parser.class_scope.replace(scope);
 
     let mut members = parser.alloc_vec_with_capacity(4);
+    let mut seen_methods = std::collections::HashSet::new();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         if parser.check(TokenKind::Semicolon) {
             parser.advance();
@@ -323,6 +324,12 @@ pub(super) fn parse_enum<'arena, 'src>(
                 false,
             );
             if let ClassMemberKind::Method(method) = member.kind {
+                super::class::report_redeclared_method(
+                    parser,
+                    &mut seen_methods,
+                    &method,
+                    member.span,
+                );
                 members.push(EnumMember {
                     kind: EnumMemberKind::Method(method),
                     span: member.span,

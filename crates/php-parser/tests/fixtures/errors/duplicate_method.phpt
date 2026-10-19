@@ -8,7 +8,7 @@ class A {
     public function f() {}
 }
 ===errors===
-Cannot redeclare method f()
+Cannot redeclare A::f()
 ===php_error===
 PHP Fatal error:  Cannot redeclare A::f() in Standard input code on line 4
 ===ast===

@@ -632,13 +632,29 @@ pub fn parse_class_members<'arena, 'src>(
                 in_trait,
             );
             if let ClassMemberKind::Method(decl) = &member.kind {
-                if let Some(name) = decl.name.as_str() {
-                    let key = name.to_ascii_lowercase();
-                    if !seen_methods.insert(key) {
-                        parser.error(ParseError::Forbidden {
-                            message: format!("Cannot redeclare method {}()", name).into(),
-                            span: member.span,
-                        });
+                report_redeclared_method(parser, &mut seen_methods, decl, member.span);
+                let is_constructor = decl
+                    .name
+                    .as_str()
+                    .is_some_and(|n| n.eq_ignore_ascii_case("__construct"));
+                // Promoted properties in a bodiless constructor are already rejected.
+                if is_constructor && decl.body.is_some() {
+                    // Repeated parameters are reported as parameter redefinitions instead.
+                    let mut params_seen = std::collections::HashSet::new();
+                    for param in decl.params.iter().filter(|p| is_promoted_param(p)) {
+                        let Some(name) = param.name.as_str() else {
+                            continue;
+                        };
+                        if params_seen.insert(name) && !seen_properties.insert(name.to_string()) {
+                            parser.error(ParseError::Forbidden {
+                                message: format!(
+                                    "Cannot redeclare {}${name}",
+                                    parser.class_member_prefix()
+                                )
+                                .into(),
+                                span: param.span,
+                            });
+                        }
                     }
                 }
             }
@@ -676,7 +692,11 @@ pub fn parse_class_members<'arena, 'src>(
                     if let Some(name) = decl.name.as_str() {
                         if !seen_properties.insert(name.to_string()) {
                             parser.error(ParseError::Forbidden {
-                                message: format!("Cannot redeclare property ${}", name).into(),
+                                message: format!(
+                                    "Cannot redeclare {}${name}",
+                                    parser.class_member_prefix()
+                                )
+                                .into(),
                                 span: m.span,
                             });
                         }
@@ -762,6 +782,25 @@ pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[Clas
                 }
             }
             _ => {}
+        }
+    }
+}
+
+/// Report a method named like an earlier one of the same class; method names are
+/// case-insensitive.
+pub(super) fn report_redeclared_method(
+    parser: &mut Parser<'_, '_>,
+    seen_methods: &mut std::collections::HashSet<String>,
+    decl: &MethodDecl<'_, '_>,
+    span: Span,
+) {
+    if let Some(name) = decl.name.as_str() {
+        if !seen_methods.insert(name.to_ascii_lowercase()) {
+            parser.error(ParseError::Forbidden {
+                message: format!("Cannot redeclare {}{name}()", parser.class_member_prefix())
+                    .into(),
+                span,
+            });
         }
     }
 }
@@ -1293,38 +1332,20 @@ pub(super) fn parse_method_member<'arena, 'src>(
         super::check_returns_against_type(parser, b, rt);
     }
 
-    let is_destructor = method_name
+    if let Some(signature) = method_name
         .as_str()
-        .is_some_and(|n| n.eq_ignore_ascii_case("__destruct"));
-    if is_constructor || is_destructor {
-        if let Some(rt) = &return_type {
-            parser.error(ParseError::Forbidden {
-                message: format!("Method {method_label} cannot declare a return type").into(),
-                span: rt.span,
-            });
-        }
-    }
-    // Magic methods are either instance or static methods. PHP emits "Method A::__destruct()
-    // cannot be static" preserving the declared casing (e.g. "__cLoNe" → "__cLoNe()").
-    if let Some(name) = method_name.as_str() {
-        let lower = name.to_ascii_lowercase();
-        let message = match lower.as_str() {
-            "__construct" | "__destruct" | "__clone" | "__get" | "__set" | "__unset"
-            | "__isset" | "__call" | "__tostring" | "__debuginfo" | "__serialize"
-            | "__unserialize" | "__invoke" | "__sleep" | "__wakeup"
-                if mods.is_static =>
-            {
-                Some("cannot be static")
-            }
-            "__callstatic" | "__set_state" if !mods.is_static => Some("must be static"),
-            _ => None,
-        };
-        if let Some(message) = message {
-            parser.error(ParseError::Forbidden {
-                message: format!("Method {name}() {message}").into(),
-                span: Span::new(member_start, parser.previous_end()),
-            });
-        }
+        .and_then(|name| magic_method_signature(&name.to_ascii_lowercase()))
+    {
+        check_magic_method(
+            parser,
+            &signature,
+            &method_label,
+            mods,
+            &params,
+            return_type.as_ref(),
+            member_span,
+            in_interface,
+        );
     }
 
     let span = Span::new(member_start, parser.previous_end());
@@ -1344,6 +1365,224 @@ pub(super) fn parse_method_member<'arena, 'src>(
             method
         }),
         span,
+    }
+}
+
+enum MagicReturn {
+    Any,
+    Forbidden,
+    /// The builtin types a declared return type may contain; `Object` also admits class types.
+    Within(&'static [BuiltinType], &'static str),
+}
+
+/// The signature PHP enforces on a magic method (`zend_check_magic_method_implementation`).
+struct MagicSignature {
+    arg_count: Option<usize>,
+    is_static: bool,
+    must_be_public: bool,
+    /// Builtin type each leading parameter's declared type must include.
+    param_types: &'static [(BuiltinType, &'static str)],
+    return_type: MagicReturn,
+}
+
+fn magic_method_signature(lower_name: &str) -> Option<MagicSignature> {
+    const STRING: (BuiltinType, &str) = (BuiltinType::String, "string");
+    const ARRAY: (BuiltinType, &str) = (BuiltinType::Array, "array");
+    const VOID: MagicReturn = MagicReturn::Within(&[BuiltinType::Void], "void");
+    const RETURN_ARRAY: MagicReturn = MagicReturn::Within(&[BuiltinType::Array], "array");
+    let (arg_count, is_static, must_be_public, param_types, return_type): (
+        _,
+        _,
+        _,
+        &'static [_],
+        _,
+    ) = match lower_name {
+        "__construct" => (None, false, false, &[], MagicReturn::Forbidden),
+        "__destruct" => (Some(0), false, false, &[], MagicReturn::Forbidden),
+        "__clone" => (Some(0), false, false, &[], VOID),
+        "__get" => (Some(1), false, true, &[STRING], MagicReturn::Any),
+        "__set" => (Some(2), false, true, &[STRING], VOID),
+        "__unset" => (Some(1), false, true, &[STRING], VOID),
+        "__isset" => (
+            Some(1),
+            false,
+            true,
+            &[STRING],
+            MagicReturn::Within(
+                &[BuiltinType::Bool, BuiltinType::True, BuiltinType::False],
+                "bool",
+            ),
+        ),
+        "__call" => (Some(2), false, true, &[STRING, ARRAY], MagicReturn::Any),
+        "__callstatic" => (Some(2), true, true, &[STRING, ARRAY], MagicReturn::Any),
+        "__tostring" => (
+            Some(0),
+            false,
+            true,
+            &[],
+            MagicReturn::Within(&[BuiltinType::String], "string"),
+        ),
+        "__debuginfo" => (
+            Some(0),
+            false,
+            true,
+            &[],
+            MagicReturn::Within(&[BuiltinType::Array, BuiltinType::Null], "?array"),
+        ),
+        "__serialize" | "__sleep" => (Some(0), false, true, &[], RETURN_ARRAY),
+        "__unserialize" => (Some(1), false, true, &[ARRAY], VOID),
+        "__set_state" => (
+            Some(1),
+            true,
+            true,
+            &[ARRAY],
+            MagicReturn::Within(&[BuiltinType::Object], "object"),
+        ),
+        "__invoke" => (None, false, true, &[], MagicReturn::Any),
+        "__wakeup" => (Some(0), false, true, &[], VOID),
+        _ => return None,
+    };
+    Some(MagicSignature {
+        arg_count,
+        is_static,
+        must_be_public,
+        param_types,
+        return_type,
+    })
+}
+
+/// Builtin types a declared type admits, and whether it also names a class (or `static`).
+fn type_members(ty: &TypeHint<'_, '_>, builtins: &mut Vec<BuiltinType>) -> bool {
+    match &ty.kind {
+        TypeHintKind::Keyword(
+            BuiltinType::Self_ | BuiltinType::Parent_ | BuiltinType::Static,
+            _,
+        )
+        | TypeHintKind::Named(_)
+        | TypeHintKind::Intersection(_) => true,
+        TypeHintKind::Keyword(BuiltinType::Iterable, _) => {
+            builtins.push(BuiltinType::Array);
+            true
+        }
+        TypeHintKind::Keyword(builtin, _) => {
+            builtins.push(*builtin);
+            false
+        }
+        TypeHintKind::Nullable(inner) => {
+            builtins.push(BuiltinType::Null);
+            type_members(inner, builtins)
+        }
+        TypeHintKind::Union(types) => types
+            .iter()
+            .fold(false, |has_class, t| type_members(t, builtins) | has_class),
+        _ => false,
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn check_magic_method(
+    parser: &mut Parser<'_, '_>,
+    signature: &MagicSignature,
+    method_label: &str,
+    mods: &ClassMemberModifiers,
+    params: &[Param<'_, '_>],
+    return_type: Option<&TypeHint<'_, '_>>,
+    member_span: Span,
+    in_interface: bool,
+) {
+    // PHP leaves a variadic parameter out of the argument count.
+    let fixed_params: Vec<&Param> = params.iter().filter(|p| !p.variadic).collect();
+    if let Some(expected) = signature.arg_count {
+        if fixed_params.len() != expected {
+            let message = match expected {
+                0 => format!("Method {method_label} cannot take arguments"),
+                1 => format!("Method {method_label} must take exactly 1 argument"),
+                n => format!("Method {method_label} must take exactly {n} arguments"),
+            };
+            parser.error(ParseError::Forbidden {
+                message: message.into(),
+                span: member_span,
+            });
+        } else if let Some(param) = fixed_params.iter().find(|p| p.by_ref) {
+            parser.error(ParseError::Forbidden {
+                message: format!("Method {method_label} cannot take arguments by reference").into(),
+                span: param.span,
+            });
+        }
+    }
+
+    if mods.is_static != signature.is_static {
+        let requirement = if signature.is_static {
+            "must be static"
+        } else {
+            "cannot be static"
+        };
+        parser.error(ParseError::Forbidden {
+            message: format!("Method {method_label} {requirement}").into(),
+            span: member_span,
+        });
+    }
+
+    // Interfaces already reject non-public methods.
+    if signature.must_be_public
+        && !in_interface
+        && matches!(
+            mods.visibility,
+            Some(Visibility::Protected | Visibility::Private)
+        )
+    {
+        parser.error(ParseError::ForbiddenWarning {
+            message: format!("The magic method {method_label} must have public visibility").into(),
+            span: member_span,
+        });
+    }
+
+    for (i, ((required, required_name), param)) in
+        signature.param_types.iter().zip(&fixed_params).enumerate()
+    {
+        let Some(ty) = &param.type_hint else {
+            continue;
+        };
+        let mut builtins = Vec::new();
+        type_members(ty, &mut builtins);
+        if !builtins.contains(required) && !builtins.contains(&BuiltinType::Mixed) {
+            parser.error(ParseError::Forbidden {
+                message: format!(
+                    "{method_label}: Parameter #{} (${}) must be of type {required_name} when declared",
+                    i + 1,
+                    param.name
+                )
+                .into(),
+                span: ty.span,
+            });
+        }
+    }
+
+    let Some(rt) = return_type else {
+        return;
+    };
+    match signature.return_type {
+        MagicReturn::Any => {}
+        MagicReturn::Forbidden => parser.error(ParseError::Forbidden {
+            message: format!("Method {method_label} cannot declare a return type").into(),
+            span: rt.span,
+        }),
+        MagicReturn::Within(allowed, allowed_name) => {
+            let mut builtins = Vec::new();
+            let has_class = type_members(rt, &mut builtins);
+            let fits = builtins.contains(&BuiltinType::Never)
+                || builtins.iter().all(|b| allowed.contains(b))
+                    && (!has_class || allowed == [BuiltinType::Object]);
+            if !fits {
+                parser.error(ParseError::Forbidden {
+                    message: format!(
+                        "{method_label}: Return type must be {allowed_name} when declared"
+                    )
+                    .into(),
+                    span: rt.span,
+                });
+            }
+        }
     }
 }
 
