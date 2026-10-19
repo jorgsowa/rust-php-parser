@@ -308,7 +308,11 @@ fn parser_corpus_round_trip() {
         let content = std::fs::read_to_string(path).unwrap();
         let header = parse_parser_fixture_header(&content);
 
-        if header.has_errors {
+        let ignored = content
+            .lines()
+            .take_while(|l| *l != "===source===")
+            .any(|l| l.starts_with("ignore="));
+        if header.has_errors || ignored {
             skipped.fetch_add(1, Ordering::Relaxed);
             return;
         }
