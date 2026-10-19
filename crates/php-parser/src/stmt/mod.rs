@@ -1,6 +1,7 @@
 use php_ast::*;
 use php_lexer::TokenKind;
 
+use crate::attributes::{AttrSite, AttrTarget};
 use crate::diagnostics::ParseError;
 use crate::expr;
 use crate::instrument;
@@ -426,10 +427,11 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
     // A function whose next token is `(` or `&(` is a closure, not a
     // declaration.
     let is_closure_start = match parser.current_kind() {
-        TokenKind::Function => matches!(
-            parser.peek_kind(),
-            Some(TokenKind::LeftParen) | Some(TokenKind::Ampersand)
-        ),
+        TokenKind::Function => match parser.peek_kind() {
+            Some(TokenKind::LeftParen) => true,
+            Some(TokenKind::Ampersand) => parser.peek2_kind() == Some(TokenKind::LeftParen),
+            _ => false,
+        },
         TokenKind::Fn_ => true,
         TokenKind::Static => matches!(
             parser.peek_kind(),
@@ -563,13 +565,15 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let attr_span = parser.current_span();
             parser.require_version(PhpVersion::Php85, "attributes on constants", attr_span);
             let stmt = parse_const_with_attrs(parser, attributes);
-            // Multi-const declarations cannot carry attributes.
             if let StmtKind::Const(ref items) = stmt.kind {
                 if items.len() > 1 {
                     parser.error(ParseError::Forbidden {
-                        message: "cannot use attributes on multi-constant declaration".into(),
+                        message: "Cannot apply attributes to multiple constants at once".into(),
                         span: stmt.span,
                     });
+                }
+                if let Some(first) = items.first() {
+                    parser.check_attributes(&first.attributes, &AttrSite::new(AttrTarget::Const));
                 }
             }
             return stmt;
@@ -1230,6 +1234,10 @@ fn parse_function<'arena, 'src>(
     if let Some(rt) = &return_type {
         check_returns_against_type(parser, body, rt);
     }
+    parser.check_attributes(
+        &attributes,
+        &AttrSite::new(AttrTarget::Function).with_return_type(return_type.as_ref()),
+    );
 
     Stmt {
         kind: StmtKind::Function(parser.alloc(FunctionDecl {
@@ -1651,6 +1659,18 @@ pub fn parse_param_list<'arena, 'src>(
             };
             parser.take_doc_comment_after(param_end, boundary)
         });
+
+        let is_promoted = visibility.is_some()
+            || set_visibility.is_some()
+            || is_readonly
+            || is_final
+            || !hooks.is_empty();
+        let attr_site = if is_promoted {
+            AttrSite::promoted_param()
+        } else {
+            AttrSite::new(AttrTarget::Parameter)
+        };
+        parser.check_attributes(&param_attrs, &attr_site);
 
         params.push({
             let mut param = Param::new(parser.arena, name, Span::new(param_start, param_end));

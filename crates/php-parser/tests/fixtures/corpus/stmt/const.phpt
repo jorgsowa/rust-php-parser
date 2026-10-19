@@ -19,7 +19,7 @@ const WithGroupAttributes = 3;
 const ThisIsInvalid = 4,
     AttributesOnMultipleConstants = 5;
 ===errors===
-cannot use attributes on multi-constant declaration
+Cannot apply attributes to multiple constants at once
 ===php_error===
 PHP Fatal error:  Cannot apply attributes to multiple constants at once in Standard input code on line 16
 ===ast===

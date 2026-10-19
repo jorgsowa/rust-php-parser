@@ -126,6 +126,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `declare` directives are checked like PHP: a value that is not a literal, `strict_types` or `encoding` that is not the first statement, `strict_types` in block mode or with a value other than `0` or `1`, and the warnings for unsupported directives and the ignored `encoding` (`php-rs-parser`).
 - Magic method signatures are checked like PHP: argument count, by-reference arguments, parameter and return types, and the warning for a non-public magic method. Static-modifier and redeclaration messages name the class (`Method A::__get() cannot be static`, `Cannot redeclare A::f()`) (`php-rs-parser`).
 - Duplicate enum methods and a promoted constructor property redeclaring a declared property are reported (`php-rs-parser`).
+- Built-in attributes are checked like PHP: the declaration kind they may target (`#[Attribute]` on a function, `#[Override]` on a class, `#[SensitiveParameter]` on a method, …), repetition, `#[Attribute]`/`#[AllowDynamicProperties]`/`#[Deprecated]` on a class-like they cannot apply to, `#[NoDiscard]` on a constructor or a `void`/`never` function, and `#[DelayedTargetValidation]`. Names are resolved like class names and only attributes that exist at the target version are checked (`php-rs-parser`).
+- `#[Attr] function &f() {}` was parsed as a by-reference closure; it is a function declaration (`php-rs-parser`).
+- Attributes on a `const` with several items report PHP's wording, `Cannot apply attributes to multiple constants at once` (`php-rs-parser`).
 
 ---
 

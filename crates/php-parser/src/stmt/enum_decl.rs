@@ -1,6 +1,7 @@
 use php_ast::*;
 use php_lexer::TokenKind;
 
+use crate::attributes::{AttrSite, AttrTarget, ClassKind};
 use crate::diagnostics::ParseError;
 use crate::expr;
 use crate::parser::Parser;
@@ -64,6 +65,7 @@ pub(super) fn parse_enum<'arena, 'src>(
     parser.expect(TokenKind::LeftBrace);
     parser.check_class_nesting(name.span);
     let scope = parser.class_scope_for(name.as_str(), None, false);
+    parser.check_attributes(&attributes, &AttrSite::class(ClassKind::Enum, &scope.name));
     let outer_scope = parser.class_scope.replace(scope);
 
     let mut members = parser.alloc_vec_with_capacity(4);
@@ -142,6 +144,7 @@ pub(super) fn parse_enum<'arena, 'src>(
             }
             parser.expect(TokenKind::Semicolon);
             let span = Span::new(member_start, parser.previous_end());
+            parser.check_attributes(&member_attrs, &AttrSite::new(AttrTarget::ClassConst));
             members.push(EnumMember {
                 kind: EnumMemberKind::Case(EnumCase {
                     name: case_name,
@@ -240,6 +243,7 @@ pub(super) fn parse_enum<'arena, 'src>(
             };
 
             let first_index = members.len();
+            parser.check_attributes(&member_attrs, &AttrSite::new(AttrTarget::ClassConst));
             let mut attributes = Some(member_attrs);
             loop {
                 let const_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {

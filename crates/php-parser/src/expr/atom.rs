@@ -1,6 +1,7 @@
 use php_ast::*;
 use php_lexer::TokenKind;
 
+use crate::attributes::{AttrSite, AttrTarget, ClassKind};
 use crate::diagnostics::ParseError;
 use crate::instrument;
 use crate::parser::Parser;
@@ -1271,6 +1272,11 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         let brace_start = parser.start_span();
         parser.expect(TokenKind::LeftBrace);
         let scope = parser.class_scope_for(None, extends.as_ref(), false);
+        let kind = ClassKind::Class {
+            is_abstract: false,
+            is_readonly: anon_readonly,
+        };
+        parser.check_attributes(&anon_attributes, &AttrSite::class(kind, &scope.name));
         let members = stmt::parse_class_members(parser, false, false, scope);
         if anon_readonly {
             stmt::check_readonly_class_members(parser, &members);
@@ -1524,6 +1530,10 @@ pub(crate) fn parse_closure<'arena, 'src>(
         stmts: body_stmts,
         span: Span::new(brace_start, end),
     });
+    parser.check_attributes(
+        &attributes,
+        &AttrSite::new(AttrTarget::Function).with_return_type(return_type.as_ref()),
+    );
 
     Expr {
         kind: ExprKind::Closure(parser.alloc(ClosureExpr {
@@ -1622,6 +1632,10 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
     parser.static_vars = saved_static_vars;
     parser.restore_class_keywords(saved_class_keywords);
     let span = Span::new(start, body.span.end);
+    parser.check_attributes(
+        &attributes,
+        &AttrSite::new(AttrTarget::Function).with_return_type(return_type.as_ref()),
+    );
 
     Expr {
         kind: ExprKind::ArrowFunction(parser.alloc(ArrowFunctionExpr {

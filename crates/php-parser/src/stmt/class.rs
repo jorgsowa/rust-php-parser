@@ -2,6 +2,7 @@ use php_ast::fold::Fold;
 use php_ast::*;
 use php_lexer::TokenKind;
 
+use crate::attributes::{AttrSite, AttrTarget, ClassKind};
 use crate::diagnostics::ParseError;
 use crate::expr;
 use crate::instrument;
@@ -122,6 +123,11 @@ pub(super) fn parse_class<'arena, 'src>(
     parser.expect(TokenKind::LeftBrace);
     parser.check_class_nesting(name.span);
     let scope = parser.class_scope_for(name.as_str(), extends.as_ref(), false);
+    let kind = ClassKind::Class {
+        is_abstract: modifiers.is_abstract,
+        is_readonly: modifiers.is_readonly,
+    };
+    parser.check_attributes(&attributes, &AttrSite::class(kind, &scope.name));
     let members = parse_class_members(parser, false, false, scope);
     if modifiers.is_readonly {
         check_readonly_class_members(parser, &members);
@@ -228,20 +234,6 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                     });
                 }
                 _ => break,
-            }
-        }
-
-        if parser.version >= PhpVersion::Php85 {
-            for attr in hook_attrs.iter() {
-                if parser
-                    .resolve_class_name(&attr.name)
-                    .eq_ignore_ascii_case("NoDiscard")
-                {
-                    parser.error(ParseError::Forbidden {
-                        message: "#[\\NoDiscard] is not supported for property hooks".into(),
-                        span: attr.span,
-                    });
-                }
             }
         }
 
@@ -391,6 +383,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
             _ => {}
         }
 
+        parser.check_attributes(&hook_attrs, &AttrSite::hook());
         let hook_span = Span::new(hook_start, parser.previous_end());
         hooks.push(PropertyHook {
             kind,
@@ -1142,6 +1135,7 @@ fn parse_class_const_member<'arena, 'src>(
     }
     // Allocate the type hint into the arena so all items can share a reference
     let shared_type_hint: Option<&'arena _> = const_type.map(|th| parser.alloc(th));
+    parser.check_attributes(&member_attrs, &AttrSite::new(AttrTarget::ClassConst));
     let mut const_iter = const_items.into_iter();
     if let Some((first_name, first_value)) = const_iter.next() {
         members.push(ClassMember {
@@ -1347,6 +1341,17 @@ pub(super) fn parse_method_member<'arena, 'src>(
             in_interface,
         );
     }
+
+    let class_name = parser
+        .class_scope
+        .as_ref()
+        .map_or_else(String::new, |scope| scope.name.clone());
+    parser.check_attributes(
+        &member_attrs,
+        &AttrSite::new(AttrTarget::Method)
+            .with_return_type(return_type.as_ref())
+            .with_method_name(&class_name, method_name.as_str()),
+    );
 
     let span = Span::new(member_start, parser.previous_end());
     ClassMember {
@@ -1779,6 +1784,7 @@ fn parse_property_member<'arena, 'src>(
             report_readonly_default(parser, default.span);
         }
     }
+    parser.check_attributes(&member_attrs, &AttrSite::new(AttrTarget::Property));
     let span = Span::new(member_start, parser.previous_end());
     let first_index = members.len();
     members.push(ClassMember {
@@ -1920,6 +1926,10 @@ pub(super) fn parse_interface<'arena, 'src>(
     parser.expect(TokenKind::LeftBrace);
     parser.check_class_nesting(name.span);
     let scope = parser.class_scope_for(name.as_str(), None, false);
+    parser.check_attributes(
+        &attributes,
+        &AttrSite::class(ClassKind::Interface, &scope.name),
+    );
     let members = parse_class_members(parser, true, false, scope);
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
@@ -1973,6 +1983,7 @@ pub(super) fn parse_trait<'arena, 'src>(
     parser.expect(TokenKind::LeftBrace);
     parser.check_class_nesting(name.span);
     let scope = parser.class_scope_for(name.as_str(), None, true);
+    parser.check_attributes(&attributes, &AttrSite::class(ClassKind::Trait, &scope.name));
     let members = parse_class_members(parser, false, true, scope);
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
