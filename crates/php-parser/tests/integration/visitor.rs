@@ -1338,7 +1338,7 @@ fn fold_owned_trait_use_is_overridable() {
     use php_ast::owned::{fold_owned_trait_use, OwnedFold, TraitUseDecl};
     struct CountTraitUses(usize);
     impl OwnedFold for CountTraitUses {
-        fn fold_trait_use(&mut self, trait_use: &TraitUseDecl) -> TraitUseDecl {
+        fn fold_trait_use(&mut self, trait_use: TraitUseDecl) -> TraitUseDecl {
             self.0 += 1;
             fold_owned_trait_use(self, trait_use)
         }
@@ -1349,7 +1349,7 @@ fn fold_owned_trait_use_is_overridable() {
         enum E { use T3; case X; }",
     );
     let mut folder = CountTraitUses(0);
-    let _ = folder.fold_program(&result.program);
+    let _ = folder.fold_program(result.program);
     assert_eq!(folder.0, 3);
 }
 
@@ -1374,7 +1374,7 @@ fn owned_block_walk_and_fold_are_overridable() {
         }
     }
     impl OwnedFold for CountBlocks {
-        fn fold_block(&mut self, block: &Block) -> Block {
+        fn fold_block(&mut self, block: Block) -> Block {
             self.0 += 1;
             fold_owned_block(self, block)
         }
@@ -1384,7 +1384,7 @@ fn owned_block_walk_and_fold_are_overridable() {
     let _ = visitor.visit_program(&result.program);
     let visited = visitor.0;
     let mut folder = CountBlocks(0);
-    let _ = folder.fold_program(&result.program);
+    let _ = folder.fold_program(result.program);
     assert!(visited > 0);
     assert_eq!(folder.0, visited);
 }

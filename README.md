@@ -134,7 +134,7 @@ For arena-allocated ASTs from `parse_arena()`, use the `Visitor`/`ScopeVisitor` 
 
 ### AST transformation
 
-`OwnedFold` rebuilds the owned AST, letting you transform specific nodes. Override only what you need; all other nodes are rebuilt identically:
+`OwnedFold` rebuilds the owned AST, letting you transform specific nodes. It takes each node by value, so unchanged parts are moved rather than cloned. Override only what you need; all other nodes are rebuilt identically:
 
 ```rust
 use php_ast::owned::{OwnedFold, fold_owned_expr, Expr, ExprKind};
@@ -142,7 +142,7 @@ use php_ast::owned::{OwnedFold, fold_owned_expr, Expr, ExprKind};
 struct NegateInts;
 
 impl OwnedFold for NegateInts {
-    fn fold_expr(&mut self, expr: &Expr) -> Expr {
+    fn fold_expr(&mut self, expr: Expr) -> Expr {
         if let ExprKind::Int(n) = &expr.kind {
             return Expr { kind: ExprKind::Int(-n), span: expr.span };
         }
@@ -151,7 +151,7 @@ impl OwnedFold for NegateInts {
 }
 
 let result = php_rs_parser::parse("<?php $x = 1;");
-let transformed = NegateInts.fold_program(&result.program);
+let transformed = NegateInts.fold_program(result.program);
 ```
 
 For arena-allocated ASTs from `parse_arena()`, use the `Fold<'src>` trait from `php_ast::fold`. It reads from a source arena and writes into a destination arena, leaving the source unchanged.

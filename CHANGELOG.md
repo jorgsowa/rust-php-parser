@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `php_ast::Modifiers` (`visibility`, `set_visibility`, `is_static`, `is_abstract`, `is_final`, `is_readonly`; `Modifiers::new()` and `is_empty()`), shared by methods, properties, parameters, class constants and property hooks (`php-ast`).
 - `new` constructors for the structs below; each takes the fields that identify the node (and the arena when it has vector fields) and leaves the rest empty (`php-ast`).
 - Owned `Name::span()`, `kind()`, `to_string_repr()` and `join_parts()`, `Expr::name_str()` and `Expr::into_kind()`, like their arena counterparts. `Expr` implements `Drop` (so long chains are freed iteratively), which is now documented; take the kind out with `into_kind()` instead of destructuring (`php-ast`).
+- `OwnedFold::fold_stmts` hook, called for the program, every block and every `case` body, so a fold can delete, split or insert statements; the free `fold_owned_stmts` is public (`php-ast`).
 
 ### Changed
 
@@ -36,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breaking:** the structs that are most likely to grow fields are `#[non_exhaustive]`, so they cannot be built with a struct literal or `..base` update outside their crate: `ClassDecl`, `InterfaceDecl`, `TraitDecl`, `EnumDecl`, `EnumCase`, `FunctionDecl`, `PropertyDecl`, `PropertyHook`, `ClassConstDecl`, `TraitUseDecl`, `ClosureExpr`, `ArrowFunctionExpr`, `MatchExpr`, `Arg`, `Attribute`, `IfStmt`, `WhileStmt`, `DoWhileStmt`, `ForStmt`, `ForeachStmt`, `SwitchStmt`, `TryCatchStmt`, `CatchClause`, `DeclareStmt`, `NamespaceDecl` and `UseDecl` (arena and owned). Use `Type::new(..)` and assign the remaining public fields; `Type { field, ..other }` becomes `let mut value = other; value.field = field;` (`php-ast`).
 - **Breaking:** the struct variants of `ParseError`, `LexerError` and the `phpdoc-parser` structs `InlineTag`, `PhpDocText`, `PhpDocTag` and `PhpDoc` are `#[non_exhaustive]`; match `ParseError` fields with `..` (`php-rs-parser`, `php-lexer`, `phpdoc-parser`).
 - **Breaking:** `Visitor`, `ScopeVisitor`, `OwnedVisitor` and `OwnedScopeVisitor` have an associated `type Break`, and every `visit_*` and `walk_*` returns `ControlFlow<Self::Break>` / `ControlFlow<V::Break>`, so a visitor can hand a result out of the walk with `ControlFlow::Break(value)`. Existing visitors add `type Break = ();` (`php-ast`).
+- **Breaking:** `OwnedFold` takes every node by value (`fn fold_expr(&mut self, expr: Expr) -> Expr`) and the free `fold_owned_*` functions move the children they keep instead of cloning them. `OwnedFold::fold_program(&program)` becomes `fold_program(program)` (`php-ast`).
 
 ### Fixed
 

@@ -79,3 +79,48 @@ fn identity_fold_across_corpus() {
         );
     }
 }
+
+struct OwnedIdentity;
+impl php_ast::owned::OwnedFold for OwnedIdentity {}
+
+/// The by-value owned fold must rebuild every fixture's owned AST into identical JSON.
+#[test]
+fn owned_identity_fold_matches_original_json_across_corpus() {
+    use php_ast::owned::OwnedFold;
+
+    std::thread::Builder::new()
+        .stack_size(256 * 1024 * 1024)
+        .spawn(|| {
+            let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures");
+            let mut paths = crate::common::collect_phpt_files(&dir);
+            paths.sort();
+            let mut failures = Vec::new();
+            for path in &paths {
+                let content = std::fs::read_to_string(path).unwrap();
+                if crate::common::is_ignored(&content) {
+                    continue;
+                }
+                let (min_php, source) = crate::common::parse_fixture(&content);
+                let result = match min_php {
+                    Some(ver) => php_rs_parser::parse_with(
+                        source,
+                        &php_rs_parser::ParseOptions::default()
+                            .version(crate::common::php_version(ver)),
+                    ),
+                    None => php_rs_parser::parse(source),
+                };
+                let original = serde_json::to_string(&result.program).unwrap();
+                let folded = OwnedIdentity.fold_program(result.program);
+                if serde_json::to_string(&folded).unwrap() != original {
+                    failures.push(path.display().to_string());
+                }
+            }
+            assert!(
+                failures.is_empty(),
+                "owned identity fold changed: {failures:?}"
+            );
+        })
+        .unwrap()
+        .join()
+        .unwrap();
+}
