@@ -30,7 +30,5 @@ $a = new A()->b();
 $a = new A()::C;
 $a = new A()['x'];
 $a = (new A())::$b;
-$a = new readonly class(1) implements I
-{};
-$a = new class($x, ...$y) extends \B
-{};
+$a = new readonly class(1) implements I {};
+$a = new class($x, ...$y) extends \B {};

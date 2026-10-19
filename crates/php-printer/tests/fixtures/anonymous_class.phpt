@@ -2,5 +2,4 @@
 <?php new class extends Foo {};
 ===print===
 <?php
-new class extends Foo
-{};
+new class extends Foo {};

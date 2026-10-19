@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The printer puts trait `use` first in class, trait and enum bodies and sorts each run of top-level `use` imports (kind, then name ignoring case; a blank line in the source starts a new run). Anonymous classes open their brace on the same line (`php-printer`).
+- The printer puts a blank line before a class member that starts with a comment, keeps a same-line comment after a member on that line, and indents a comment in an empty block (`php-printer`).
 - **Breaking:** removed `BuiltinType::Integer`, `BuiltinType::Double` and `BuiltinType::Boolean`. In type position PHP treats `integer`, `double` and `boolean` as class names, so they now parse as `TypeHintKind::Named` (`php-ast`, `php-rs-parser`).
 - **Breaking:** `PropertyDecl` has new `is_final` and `is_abstract` fields; the PHP 8.4 `final` and `abstract` property modifiers were parsed and then dropped, so the printer lost them too. Both are serialized only when `true` (`php-ast`, `php-rs-parser`, `php-printer`).
 - **Breaking:** function, class and constant references in expressions (call and `new` targets, the class in `Foo::bar()`, `Foo::C` and `instanceof`, constants) are `ExprKind::Name(Name)` instead of `ExprKind::Identifier`, so `visit_name`, `fold_name` and `NameResolver` see them with their qualification. `Identifier` is kept for member names after `->`, `?->` and `::` (`php-ast`, `php-rs-parser`, `php-printer`).

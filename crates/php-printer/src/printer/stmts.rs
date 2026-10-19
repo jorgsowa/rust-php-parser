@@ -2,6 +2,7 @@ use php_ast::ast::*;
 
 use crate::precedence::*;
 
+use super::imports::sorted_use_items;
 use super::{Printer, MAX_DEPTH};
 
 impl<'src> Printer<'src> {
@@ -59,7 +60,7 @@ impl<'src> Printer<'src> {
                     self.newline();
                     self.write_indent();
                 } else {
-                    self.flush_leading_comments(stmt.span.end);
+                    self.print_comments_in_empty_block(stmt.span.end);
                 }
                 self.w("}");
             }
@@ -450,9 +451,19 @@ impl<'src> Printer<'src> {
             self.dedent();
             self.write_indent();
         } else {
-            self.flush_leading_comments(block.span.end);
+            self.print_comments_in_empty_block(block.span.end);
         }
         self.w("}");
+    }
+
+    fn print_comments_in_empty_block(&mut self, block_end: u32) {
+        if self.has_comments_before(block_end) {
+            self.newline();
+            self.indent();
+            self.flush_leading_comments(block_end);
+            self.dedent();
+            self.write_indent();
+        }
     }
 
     /// Prints a control-flow body that may be a block or a single statement;
@@ -495,7 +506,12 @@ impl<'src> Printer<'src> {
 
     fn print_use(&mut self, use_decl: &UseDecl) {
         let mut current_kind = None;
-        for item in use_decl.uses.iter() {
+        let sorted = sorted_use_items(use_decl);
+        let items: &mut dyn Iterator<Item = &UseItem> = match &sorted {
+            Some(sorted) => &mut sorted.iter().copied(),
+            None => &mut use_decl.uses.iter(),
+        };
+        for item in items {
             // Mixed group uses are flattened; start a new statement whenever the item kind changes.
             let kind = item.kind.unwrap_or(use_decl.kind);
             if current_kind == Some(kind) {

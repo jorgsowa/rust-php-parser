@@ -15,6 +15,7 @@ class Foo
 {
     // comment before property
     public $x = 1;
+
     // comment between members
     public function bar()
     {

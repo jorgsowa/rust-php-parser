@@ -1,6 +1,7 @@
 mod decls;
 mod exprs;
 mod helpers;
+mod imports;
 mod stmts;
 mod types;
 
@@ -201,6 +202,12 @@ impl<'src> Printer<'src> {
         newlines.saturating_sub(1).min(self.blank_lines_upper_bound)
     }
 
+    /// Move the comment cursor to the first comment at or after `offset`, but never before `floor`.
+    pub(crate) fn seek_comments(&mut self, floor: usize, offset: u32) {
+        let at = self.comments.partition_point(|c| c.span.start < offset);
+        self.comment_cursor = floor.max(at);
+    }
+
     /// Return the start offset of the first not-yet-emitted comment whose span
     /// starts before `before_offset`, or `None` if there is no such comment.
     pub(crate) fn first_pending_comment_before(&self, before_offset: u32) -> Option<u32> {
@@ -264,6 +271,25 @@ impl<'src> Printer<'src> {
             self.in_html_mode = false;
             self.has_php_content = true;
         }
+    }
+
+    /// End of the comments that follow `after` on the same source line, or `after` if none.
+    pub(crate) fn same_line_comments_end(&self, mut after: u32) -> u32 {
+        let first = self.comments.partition_point(|c| c.span.start < after);
+        for c in &self.comments[first..] {
+            let gap = self
+                .source
+                .as_bytes()
+                .get(after as usize..c.span.start as usize);
+            if !gap.is_some_and(|g| g.iter().all(|b| matches!(b, b' ' | b'\t' | b','))) {
+                break;
+            }
+            if c.kind == php_ast::CommentKind::Doc {
+                break;
+            }
+            after = c.span.end;
+        }
+        after
     }
 
     /// Print pending comments that follow `after` on the same source line, separated from it
@@ -429,8 +455,13 @@ impl<'src> Printer<'src> {
         if indent {
             self.indent();
         }
+        let imports = self.sorted_imports(stmts);
+        let mut group = 0;
+        let mut group_floor = 0;
         let mut prev_was_inline_html = false;
-        for (i, stmt) in stmts.iter().enumerate() {
+        for k in 0..stmts.len() {
+            let i = imports.as_ref().map_or(k, |s| s.order[k]);
+            let stmt = &stmts[i];
             let is_nop = matches!(stmt.kind, php_ast::ast::StmtKind::Nop);
             let is_inline_html = matches!(stmt.kind, php_ast::ast::StmtKind::InlineHtml(_));
 
@@ -439,21 +470,36 @@ impl<'src> Printer<'src> {
                 continue;
             }
 
+            let in_group = imports
+                .as_ref()
+                .and_then(|s| s.groups.get(group))
+                .filter(|g| g.contains(&k));
+            if let Some(g) = in_group {
+                if k == g.start {
+                    group_floor = self.comment_cursor;
+                }
+                let prev_end = i.checked_sub(1).map_or(0, |p| stmts[p].span.end);
+                self.seek_comments(group_floor, self.same_line_comments_end(prev_end));
+            }
+
             // When transitioning out of HTML mode the <?php + newline + indent
             // is emitted by print_stmt_inner, so skip the normal separators here.
-            if i > 0 && !self.in_html_mode {
+            if k > 0 && !self.in_html_mode {
                 let decl_min =
                     if helpers::is_declaration(&stmt.kind) && self.blank_lines_upper_bound > 0 {
                         1
                     } else {
                         0
                     };
-                let blank = if !self.source.is_empty() {
-                    let prev_end = stmts[i - 1].span.end;
+                let blank = if in_group.is_some_and(|g| k > g.start) {
+                    decl_min
+                } else if !self.source.is_empty() {
+                    let prev_end = self.same_line_comments_end(stmts[k - 1].span.end);
+                    let source_stmt = &stmts[k];
                     // Stop at the first pending comment before this statement so that
                     // newlines inside the comment text aren't mistaken for blank lines.
-                    let lead_start =
-                        helpers::stmt_doc_comment_start(stmt).unwrap_or(stmt.span.start);
+                    let lead_start = helpers::stmt_doc_comment_start(source_stmt)
+                        .unwrap_or(source_stmt.span.start);
                     let scan_to = self
                         .first_pending_comment_before(lead_start)
                         .unwrap_or(lead_start);
@@ -475,6 +521,15 @@ impl<'src> Printer<'src> {
                 self.flush_same_line_comments(stmt.span.end);
             }
 
+            if let Some(g) = in_group {
+                if k + 1 == g.end {
+                    self.seek_comments(
+                        group_floor,
+                        self.same_line_comments_end(stmts[g.end - 1].span.end),
+                    );
+                    group += 1;
+                }
+            }
             prev_was_inline_html = is_inline_html;
         }
         if indent {

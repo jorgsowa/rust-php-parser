@@ -14,13 +14,13 @@ class D { const X = 1 ?>
 <?php
 class A
 {
+    use T;
+
     const X = 1;
 
     public $p;
 
     public $q = 1;
-
-    use T;
 }
 
 abstract class B
@@ -59,8 +59,7 @@ class C
         a as b;
     }
 }
-$o = new class
-{
+$o = new class {
     public $p;
 };
 

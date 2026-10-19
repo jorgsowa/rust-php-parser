@@ -435,7 +435,7 @@ impl<'src> Printer<'src> {
             }
             ExprKind::AnonymousClass(class) => {
                 self.print_class_header(class);
-                self.print_class_body(&class.body);
+                self.print_class_body(&class.body, true);
             }
             ExprKind::CallableCreate(cc) => match &cc.kind {
                 CallableCreateKind::Function(_) => self.w("(...)"),

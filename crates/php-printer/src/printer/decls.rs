@@ -1,9 +1,65 @@
 use php_ast::ast::*;
+use php_ast::Span;
 
 use crate::precedence::*;
 
 use super::helpers::*;
 use super::Printer;
+
+trait Member {
+    fn span(&self) -> Span;
+    fn doc_comment_start(&self) -> Option<u32>;
+    fn is_trait_use(&self) -> bool;
+    fn print(&self, printer: &mut Printer);
+}
+
+impl Member for ClassMember<'_, '_> {
+    fn span(&self) -> Span {
+        self.span
+    }
+
+    fn doc_comment_start(&self) -> Option<u32> {
+        class_member_doc_comment(self).map(|c| c.span.start)
+    }
+
+    fn is_trait_use(&self) -> bool {
+        matches!(self.kind, ClassMemberKind::TraitUse(_))
+    }
+
+    fn print(&self, printer: &mut Printer) {
+        printer.print_class_member(self);
+    }
+}
+
+impl Member for EnumMember<'_, '_> {
+    fn span(&self) -> Span {
+        self.span
+    }
+
+    fn doc_comment_start(&self) -> Option<u32> {
+        enum_member_doc_comment(self).map(|c| c.span.start)
+    }
+
+    fn is_trait_use(&self) -> bool {
+        matches!(self.kind, EnumMemberKind::TraitUse(_))
+    }
+
+    fn print(&self, printer: &mut Printer) {
+        printer.print_enum_member(self);
+    }
+}
+
+/// Source indices with trait `use` first, each half in source order; `None` if already so.
+fn trait_uses_first<M: Member>(members: &[M]) -> Option<Vec<usize>> {
+    let first_other = members.iter().position(|m| !m.is_trait_use())?;
+    if !members[first_other..].iter().any(Member::is_trait_use) {
+        return None;
+    }
+    let mut order = Vec::with_capacity(members.len());
+    order.extend((0..members.len()).filter(|&i| members[i].is_trait_use()));
+    order.extend((0..members.len()).filter(|&i| !members[i].is_trait_use()));
+    Some(order)
+}
 
 impl<'src> Printer<'src> {
     pub(crate) fn print_function(&mut self, func: &FunctionDecl) {
@@ -32,7 +88,7 @@ impl<'src> Printer<'src> {
         self.print_doc_comment(class.doc_comment.as_ref());
         self.print_attributes(&class.attributes);
         self.print_class_header(class);
-        self.print_class_body(&class.body);
+        self.print_class_body(&class.body, false);
     }
 
     pub(crate) fn print_anonymous_class(&mut self, class: &ClassDecl, args: &[Arg]) {
@@ -65,7 +121,7 @@ impl<'src> Printer<'src> {
                 self.print_name(name);
             }
         }
-        self.print_class_body(&class.body);
+        self.print_class_body(&class.body, true);
     }
 
     pub(crate) fn print_class_header(&mut self, class: &ClassDecl) {
@@ -98,37 +154,69 @@ impl<'src> Printer<'src> {
         }
     }
 
-    pub(crate) fn print_class_body(&mut self, body: &ClassBody) {
-        if !self.flush_gap_comments_before(body.span.start) {
-            self.newline();
-            self.write_indent();
+    pub(crate) fn print_class_body(&mut self, body: &ClassBody, brace_on_same_line: bool) {
+        self.print_body_open(body.span.start, brace_on_same_line);
+        self.print_members(&body.members, body.span.end);
+        self.w("}");
+    }
+
+    fn print_body_open(&mut self, body_start: u32, brace_on_same_line: bool) {
+        if !self.flush_gap_comments_before(body_start) {
+            if brace_on_same_line {
+                self.w(" ");
+            } else {
+                self.newline();
+                self.write_indent();
+            }
         }
         self.w("{");
-        if !body.members.is_empty() {
-            self.newline();
-            self.indent();
-            for (i, member) in body.members.iter().enumerate() {
-                let doc_start = class_member_doc_comment(member).map(|c| c.span.start);
-                let lead_start = doc_start.unwrap_or(member.span.start);
-                if i > 0 && !self.has_comments_before(lead_start) {
-                    // Always at least one blank line between members; preserve more from source.
-                    let blank = self
-                        .blank_lines_between(body.members[i - 1].span.end, lead_start)
-                        .max(1);
-                    for _ in 0..blank {
-                        self.newline();
-                    }
-                }
-                self.flush_comments_before_node(member.span.start, doc_start);
-                self.write_indent();
-                self.print_class_member(member);
-                self.newline();
-            }
-            self.flush_leading_comments(body.span.end);
-            self.dedent();
-            self.write_indent();
+    }
+
+    /// Prints members one per line, trait `use` first, then the newline before `}`.
+    fn print_members<M: Member>(&mut self, members: &[M], body_end: u32) {
+        if members.is_empty() {
+            return;
         }
-        self.w("}");
+        self.newline();
+        self.indent();
+        let order = trait_uses_first(members);
+        let comment_floor = self.comment_cursor;
+        for k in 0..members.len() {
+            let i = order.as_ref().map_or(k, |o| o[k]);
+            let member = &members[i];
+            let source_prev_end = i.checked_sub(1).map(|p| members[p].span().end);
+            if order.is_some() {
+                let region_start =
+                    source_prev_end.map_or(0, |end| self.same_line_comments_end(end));
+                self.seek_comments(comment_floor, region_start);
+            }
+            let doc_start = member.doc_comment_start();
+            let lead_start = doc_start.unwrap_or(member.span().start);
+            if k > 0 {
+                // Always at least one blank line between members; preserve more from source.
+                let scan_to = self
+                    .first_pending_comment_before(lead_start)
+                    .unwrap_or(lead_start);
+                let blank = self
+                    .blank_lines_between(source_prev_end.unwrap_or(scan_to), scan_to)
+                    .max(1);
+                for _ in 0..blank {
+                    self.newline();
+                }
+            }
+            self.flush_comments_before_node(member.span().start, doc_start);
+            self.write_indent();
+            member.print(self);
+            self.flush_same_line_comments(member.span().end);
+            self.newline();
+        }
+        if order.is_some() {
+            let last_end = members[members.len() - 1].span().end;
+            self.seek_comments(comment_floor, self.same_line_comments_end(last_end));
+        }
+        self.flush_leading_comments(body_end);
+        self.dedent();
+        self.write_indent();
     }
 
     fn print_class_member(&mut self, member: &ClassMember) {
@@ -378,7 +466,7 @@ impl<'src> Printer<'src> {
                 self.print_name(name);
             }
         }
-        self.print_class_body(&iface.body);
+        self.print_class_body(&iface.body, false);
     }
 
     pub(crate) fn print_trait(&mut self, trait_decl: &TraitDecl) {
@@ -386,7 +474,7 @@ impl<'src> Printer<'src> {
         self.print_attributes(&trait_decl.attributes);
         self.w("trait ");
         self.w(trait_decl.name.or_error());
-        self.print_class_body(&trait_decl.body);
+        self.print_class_body(&trait_decl.body, false);
     }
 
     pub(crate) fn print_enum(&mut self, enum_decl: &EnumDecl) {
@@ -407,33 +495,8 @@ impl<'src> Printer<'src> {
                 self.print_name(name);
             }
         }
-        if !self.flush_gap_comments_before(enum_decl.body.span.start) {
-            self.newline();
-            self.write_indent();
-        }
-        self.w("{");
-        if !enum_decl.body.members.is_empty() {
-            self.newline();
-            self.indent();
-            for (i, member) in enum_decl.body.members.iter().enumerate() {
-                let doc_start = enum_member_doc_comment(member).map(|c| c.span.start);
-                let lead_start = doc_start.unwrap_or(member.span.start);
-                if i > 0 && !self.has_comments_before(lead_start) {
-                    let prev_end = enum_decl.body.members[i - 1].span.end;
-                    let blank = self.blank_lines_between(prev_end, lead_start).max(1);
-                    for _ in 0..blank {
-                        self.newline();
-                    }
-                }
-                self.flush_comments_before_node(member.span.start, doc_start);
-                self.write_indent();
-                self.print_enum_member(member);
-                self.newline();
-            }
-            self.dedent();
-            self.flush_leading_comments(enum_decl.body.span.end);
-            self.write_indent();
-        }
+        self.print_body_open(enum_decl.body.span.start, false);
+        self.print_members(&enum_decl.body.members, enum_decl.body.span.end);
         self.w("}");
     }
 
