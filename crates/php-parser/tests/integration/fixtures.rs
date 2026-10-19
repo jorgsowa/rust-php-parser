@@ -43,6 +43,95 @@ fn owned_fixtures() {
     );
 }
 
+#[test]
+fn supported_versions_match_parser() {
+    use crate::common::SUPPORTED;
+    for (major, minor) in SUPPORTED {
+        assert_eq!(
+            php_version((major, minor)).to_string(),
+            format!("{major}.{minor}")
+        );
+    }
+    let latest = php_rs_parser::PhpVersion::default();
+    assert_eq!(
+        php_version(*SUPPORTED.last().unwrap()),
+        latest,
+        "add PHP {latest} to SUPPORTED; every open-ended `>=` fixture range then runs on it, \
+         so review the fixture failures it causes"
+    );
+}
+
+#[test]
+fn malformed_fixtures_are_rejected() {
+    use crate::common::Fixture;
+    let ast = "{}";
+    let cases = [
+        (
+            format!("===config===\nmin_php=8.1\n===source===\n<?php\n===ast===\n{ast}\n"),
+            "unknown config line `min_php=8.1`",
+        ),
+        (
+            format!("===config===\nignore=\n===source===\n<?php\n===ast===\n{ast}\n"),
+            "unknown config line `ignore=`",
+        ),
+        (
+            format!("stray\n===source===\n<?php\n===ast===\n{ast}\n"),
+            "text before the first section: `stray`",
+        ),
+        (
+            format!("===versions===\n8.1\n===source===\n<?php\n===ast===\n{ast}\n"),
+            "unknown section `===versions===` before ===source===",
+        ),
+        (
+            format!("===source===\n<?php\n===ast >=8,4===\n{ast}\n"),
+            "`===ast >=8,4===`: `8,4` is not a supported PHP version",
+        ),
+        (
+            format!("===source===\n<?php\n===ast >=8.9===\n{ast}\n"),
+            "`===ast >=8.9===`: `8.9` is not a supported PHP version",
+        ),
+        (
+            format!("===source===\n<?php\n===ast 8.3-8.1===\n{ast}\n"),
+            "`===ast 8.3-8.1===`: empty version range `8.3-8.1`",
+        ),
+        (
+            format!("===source===\n<?php\n===print===\n{ast}\n"),
+            "unknown section `===print===`",
+        ),
+        (
+            format!("===source===\n<?php\n===ast <=8.3===\n{ast}\n===ast >=8.3===\n{ast}\n"),
+            "===ast <=8.3=== overlaps ===ast >=8.3===",
+        ),
+        (
+            format!("===source===\n<?php\n===errors 8.1===\nx\n===ast >=8.4===\n{ast}\n"),
+            "===errors 8.1=== covers none of the versions the ===ast=== sections name",
+        ),
+        (
+            format!("===source===\n<?php\n===php_error <=8.3===\nx\n===ast===\n{ast}\n"),
+            "===php_error <=8.3=== needs a version-qualified ===ast=== section",
+        ),
+        (
+            format!("===source===\n<?php\n===ast===\n{ast}\n===ast >=8.4===\n{ast}\n"),
+            "===ast=== is never used next to version-qualified ones",
+        ),
+        (
+            format!("===source===\n<?php\n===errors===\nx\n===errors===\ny\n===ast===\n{ast}\n"),
+            "more than one ===errors=== section",
+        ),
+    ];
+    for (content, expected) in cases {
+        assert_eq!(Fixture::parse(&content).unwrap_err(), expected, "{content}");
+    }
+
+    let valid = format!(
+        "===config===\nignore=known bug\n===source===\n<?php\n===errors <=8.3===\nx\n\
+         ===php_error===\ny\n===ast <=8.3===\n{ast}\n===ast >=8.4===\n{ast}\n"
+    );
+    let fixture = Fixture::parse(&valid).unwrap();
+    assert!(fixture.is_ignored());
+    assert_eq!(fixture.targets().len(), crate::common::SUPPORTED.len());
+}
+
 // ---------------------------------------------------------------------------
 // Owned-API compile-time and runtime properties
 // ---------------------------------------------------------------------------
@@ -72,7 +161,7 @@ fn parse_results_can_be_stored_in_hashmap() {
                 .join("tests/fixtures")
                 .join(rel);
             let content = std::fs::read_to_string(&path).unwrap();
-            let fixture = crate::common::Fixture::parse(&content);
+            let fixture = crate::common::Fixture::parse(&content).unwrap();
             let result = match fixture.targets()[0].map(php_version) {
                 Some(v) => php_rs_parser::parse_with(
                     fixture.source(),

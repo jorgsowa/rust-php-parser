@@ -79,7 +79,8 @@ fn non_fatal_errors(fixture: &Fixture) -> Vec<String> {
 fn update_fixture_php_error(path: &std::path::Path, php: Version, actual: &str) {
     let content = std::fs::read_to_string(path)
         .unwrap_or_else(|e| panic!("failed to read {}: {e}", path.display()));
-    let mut fixture = Fixture::parse(&content);
+    let mut fixture = Fixture::parse(&content)
+        .unwrap_or_else(|e| panic!("malformed fixture {}: {e}", path.display()));
     fixture.set_section("php_error", Some(php), actual);
     std::fs::write(path, fixture.render())
         .unwrap_or_else(|e| panic!("failed to write {}: {e}", path.display()));
@@ -110,7 +111,16 @@ fn fixture_files_are_valid_php() {
             .to_string_lossy()
             .to_string();
         let src = std::fs::read_to_string(path).unwrap();
-        let fixture = Fixture::parse(&src);
+        let fixture = match Fixture::parse(&src) {
+            Ok(fixture) => fixture,
+            Err(e) => {
+                failures
+                    .lock()
+                    .unwrap()
+                    .push(format!("malformed fixture {label}: {e}"));
+                return;
+            }
+        };
         let source = fixture.source();
 
         let non_fatal = non_fatal_errors(&fixture);

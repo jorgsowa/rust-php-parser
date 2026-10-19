@@ -42,7 +42,8 @@ fn identity_fold_across_corpus() {
             .to_string_lossy()
             .to_string();
         let content = std::fs::read_to_string(path).unwrap();
-        let fixture = crate::common::Fixture::parse(&content);
+        let fixture = crate::common::Fixture::parse(&content)
+            .unwrap_or_else(|e| panic!("malformed fixture {rel}: {e}"));
         if fixture.is_ignored() {
             continue;
         }
@@ -101,7 +102,8 @@ fn owned_identity_fold_matches_original_json_across_corpus() {
             let mut failures = Vec::new();
             for path in &paths {
                 let content = std::fs::read_to_string(path).unwrap();
-                let fixture = crate::common::Fixture::parse(&content);
+                let fixture = crate::common::Fixture::parse(&content)
+                    .unwrap_or_else(|e| panic!("malformed fixture {}: {e}", path.display()));
                 if fixture.is_ignored() {
                     continue;
                 }

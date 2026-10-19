@@ -108,12 +108,18 @@ PHP message from stderr
 
 A version range on a section marker (`===ast >=8.4===`, `===php_error <=8.3===`, `===errors 8.1-8.2===`;
 also `8.3`) makes the fixture multi-version. The parser targets, and `php -l` checks, exactly the
-versions named by the `===ast===` sections. For a version, the first matching qualified section wins
+versions named by the `===ast===` sections. For a version, the matching qualified section applies,
 and an unqualified section is the fallback. A fixture with no qualified `===ast===` has one default
 parse target and `php -l` runs on every PHP version. `UPDATE_FIXTURES=1` regenerates `errors` and
 `ast` per version, one section per run of identical output. `===php_error===` is recorded by
 `php -l` on the installed PHP only, so other versions' messages are edited by hand. Do not split a
 fixture into `_php83`/`_v82` copies.
+
+Malformed fixtures fail the tests: unknown config keys or sections, ranges naming an unsupported
+version, overlapping ranges for one section, a qualified section covering none of the `===ast===`
+versions, and qualified `errors`/`php_error` sections in a fixture without a qualified `===ast===`.
+Adding a PHP version to `SUPPORTED` in `tests/integration/common.rs` extends every open-ended `>=`
+range to it.
 
 ### Fixture format (printer)
 

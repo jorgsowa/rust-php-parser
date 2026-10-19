@@ -225,7 +225,8 @@ fn parser_corpus_round_trip() {
 
     paths.par_iter().for_each(|path| {
         let content = std::fs::read_to_string(path).unwrap();
-        let fixture = Fixture::parse(&content);
+        let fixture = Fixture::parse(&content)
+            .unwrap_or_else(|e| panic!("malformed fixture {}: {e}", path.display()));
         let targets: Vec<_> = fixture
             .targets()
             .into_iter()

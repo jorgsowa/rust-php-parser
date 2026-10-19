@@ -1,6 +1,6 @@
 pub type Version = (u32, u32);
 
-/// PHP versions the parser can target.
+/// PHP versions the parser can target. A new entry widens every open-ended `>=` fixture range to it.
 #[allow(dead_code)]
 pub const SUPPORTED: [Version; 8] = [
     (7, 4),
@@ -30,31 +30,39 @@ pub struct VersionSpec {
 
 #[allow(dead_code)]
 impl VersionSpec {
-    pub fn parse(s: &str) -> Option<VersionSpec> {
+    pub fn parse(s: &str) -> Result<VersionSpec, String> {
         let s = s.trim();
-        if let Some(v) = s.strip_prefix("<=") {
-            return Some(VersionSpec {
+        let version = |v: &str| {
+            parse_version(v)
+                .filter(|v| SUPPORTED.contains(v))
+                .ok_or_else(|| format!("`{v}` is not a supported PHP version"))
+        };
+        let spec = if let Some(v) = s.strip_prefix("<=") {
+            VersionSpec {
                 lo: None,
-                hi: Some(parse_version(v)?),
-            });
-        }
-        if let Some(v) = s.strip_prefix(">=") {
-            return Some(VersionSpec {
-                lo: Some(parse_version(v)?),
+                hi: Some(version(v)?),
+            }
+        } else if let Some(v) = s.strip_prefix(">=") {
+            VersionSpec {
+                lo: Some(version(v)?),
                 hi: None,
-            });
+            }
+        } else if let Some((a, b)) = s.split_once('-') {
+            VersionSpec {
+                lo: Some(version(a)?),
+                hi: Some(version(b)?),
+            }
+        } else {
+            let v = version(s)?;
+            VersionSpec {
+                lo: Some(v),
+                hi: Some(v),
+            }
+        };
+        if spec.lo.zip(spec.hi).is_some_and(|(lo, hi)| lo > hi) {
+            return Err(format!("empty version range `{s}`"));
         }
-        if let Some((a, b)) = s.split_once('-') {
-            return Some(VersionSpec {
-                lo: Some(parse_version(a)?),
-                hi: Some(parse_version(b)?),
-            });
-        }
-        let v = parse_version(s)?;
-        Some(VersionSpec {
-            lo: Some(v),
-            hi: Some(v),
-        })
+        Ok(spec)
     }
 
     pub fn contains(&self, v: Version) -> bool {
@@ -96,9 +104,8 @@ pub struct Section {
 ///
 /// A fixture with a version-qualified `===ast >=8.4===` section is checked against every
 /// PHP version the `ast` sections name. A section such as `===php_error <=8.3===` applies
-/// only to the versions it names; for a version, the first matching qualified section wins
-/// and an unqualified section is the fallback. Without a qualified `ast` section the fixture
-/// has a single default parse target.
+/// only to the versions it names and an unqualified section is the fallback. Without a
+/// qualified `ast` section the fixture has a single default parse target.
 #[allow(dead_code)]
 #[derive(Debug)]
 pub struct Fixture {
@@ -109,18 +116,21 @@ pub struct Fixture {
 
 #[allow(dead_code)]
 impl Fixture {
-    pub fn parse(content: &str) -> Fixture {
+    /// Parse `content`, rejecting unknown config keys, malformed markers and ambiguous sections.
+    pub fn parse(content: &str) -> Result<Fixture, String> {
         let source_marker = "===source===\n";
-        let source_pos = content.find(source_marker).unwrap_or(content.len());
+        let source_pos = content.find(source_marker).ok_or("missing ===source===")?;
         let header = content[..source_pos].to_string();
-        let rest = &content[source_pos..];
-        let after_source = rest.strip_prefix(source_marker).unwrap_or(rest);
+        check_header(&header)?;
+        let after_source = &content[source_pos + source_marker.len()..];
 
         let mut source_end = after_source.len();
         let mut sections: Vec<Section> = Vec::new();
         let mut offset = 0;
         for line in after_source.split_inclusive('\n') {
-            if let Some((name, spec)) = parse_section_marker(line.trim_end_matches('\n')) {
+            let line_text = line.trim_end_matches('\n');
+            if line_text.len() > 6 && line_text.starts_with("===") && line_text.ends_with("===") {
+                let (name, spec) = parse_section_marker(line_text)?;
                 if sections.is_empty() {
                     source_end = offset;
                 }
@@ -140,11 +150,49 @@ impl Fixture {
                 .truncate(section.body.trim_end_matches('\n').len());
         }
 
-        Fixture {
+        let fixture = Fixture {
             header,
             source_block: after_source[..source_end].to_string(),
             sections,
+        };
+        fixture.check_sections()?;
+        Ok(fixture)
+    }
+
+    fn check_sections(&self) -> Result<(), String> {
+        let versions = self.versions();
+        for name in SECTION_NAMES {
+            let named: Vec<&Section> = self.sections.iter().filter(|s| s.name == name).collect();
+            let unqualified = named.iter().filter(|s| s.spec.is_none()).count();
+            if unqualified > 1 {
+                return Err(format!("more than one ==={name}=== section"));
+            }
+            let qualified: Vec<VersionSpec> = named.iter().filter_map(|s| s.spec).collect();
+            let Some(versions) = &versions else {
+                if let Some(spec) = qualified.first() {
+                    return Err(format!(
+                        "==={name} {spec}=== needs a version-qualified ===ast=== section"
+                    ));
+                }
+                continue;
+            };
+            if name == "ast" && unqualified > 0 {
+                return Err("===ast=== is never used next to version-qualified ones".into());
+            }
+            for (i, a) in qualified.iter().enumerate() {
+                if !versions.iter().any(|v| a.contains(*v)) {
+                    return Err(format!(
+                        "==={name} {a}=== covers none of the versions the ===ast=== sections name"
+                    ));
+                }
+                let overlap =
+                    |b: &&VersionSpec| SUPPORTED.iter().any(|v| a.contains(*v) && b.contains(*v));
+                if let Some(b) = qualified[i + 1..].iter().find(overlap) {
+                    return Err(format!("==={name} {a}=== overlaps ==={name} {b}==="));
+                }
+            }
         }
+        Ok(())
     }
 
     /// The PHP source; the newline before the first section marker is not part of it.
@@ -264,15 +312,48 @@ impl Fixture {
     }
 }
 
-fn parse_section_marker(line: &str) -> Option<(String, Option<VersionSpec>)> {
-    let inner = line.strip_prefix("===")?.strip_suffix("===")?;
+fn parse_section_marker(line: &str) -> Result<(String, Option<VersionSpec>), String> {
+    let inner = &line[3..line.len() - 3];
     let (name, spec) = match inner.split_once(' ') {
-        Some((name, spec)) => (name, Some(VersionSpec::parse(spec)?)),
+        Some((name, spec)) => (
+            name,
+            Some(VersionSpec::parse(spec).map_err(|e| format!("`{line}`: {e}"))?),
+        ),
         None => (inner, None),
     };
-    SECTION_NAMES
-        .contains(&name)
-        .then(|| (name.to_string(), spec))
+    if !SECTION_NAMES.contains(&name) {
+        return Err(format!("unknown section `{line}`"));
+    }
+    Ok((name.to_string(), spec))
+}
+
+/// The header holds at most one `===config===` and one `===description===` section; the only
+/// config key is `ignore=<reason>`.
+fn check_header(header: &str) -> Result<(), String> {
+    let mut current = None;
+    let mut seen = Vec::new();
+    for line in header.lines() {
+        if let Some(name) = line.strip_prefix("===").and_then(|l| l.strip_suffix("===")) {
+            if !["config", "description"].contains(&name) {
+                return Err(format!("unknown section `{line}` before ===source==="));
+            }
+            if seen.contains(&name) {
+                return Err(format!("more than one ==={name}=== section"));
+            }
+            seen.push(name);
+            current = Some(name);
+            continue;
+        }
+        match current {
+            None => return Err(format!("text before the first section: `{line}`")),
+            Some("config") => match line.split_once('=') {
+                Some(("ignore", reason)) if !reason.trim().is_empty() => {}
+                _ => return Err(format!("unknown config line `{line}`")),
+            },
+            Some(_) => {}
+        }
+    }
+    Ok(())
 }
 
 /// Recursively collect all `.phpt` files under `dir`.
@@ -352,7 +433,16 @@ where
             .to_string_lossy()
             .to_string();
         let content = std::fs::read_to_string(path).unwrap();
-        let mut fixture = Fixture::parse(&content);
+        let mut fixture = match Fixture::parse(&content) {
+            Ok(fixture) => fixture,
+            Err(e) => {
+                failures
+                    .lock()
+                    .unwrap()
+                    .push(format!("malformed fixture {rel}: {e}"));
+                return;
+            }
+        };
         if fixture.is_ignored() {
             return;
         }
