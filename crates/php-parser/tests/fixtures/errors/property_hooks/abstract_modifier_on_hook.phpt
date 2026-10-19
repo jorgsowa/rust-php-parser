@@ -42,10 +42,9 @@ PHP Fatal error:  Cannot use the abstract modifier on a property hook in Standar
                       "end": 35
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -90,7 +89,6 @@ PHP Fatal error:  Cannot use the abstract modifier on a property hook in Standar
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],

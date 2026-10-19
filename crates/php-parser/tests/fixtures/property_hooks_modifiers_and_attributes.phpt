@@ -49,11 +49,10 @@ abstract class Foo {
                       "end": 65
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_abstract": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_abstract": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -78,7 +77,6 @@ abstract class Foo {
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -90,7 +88,6 @@ abstract class Foo {
                     {
                       "kind": "Set",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -117,10 +114,9 @@ abstract class Foo {
                       "end": 126
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -165,7 +161,9 @@ abstract class Foo {
                           }
                         ]
                       },
-                      "is_final": true,
+                      "modifiers": {
+                        "is_final": true
+                      },
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -236,7 +234,9 @@ abstract class Foo {
                           }
                         ]
                       },
-                      "is_final": true,
+                      "modifiers": {
+                        "is_final": true
+                      },
                       "by_ref": false,
                       "params": [
                         {
@@ -268,10 +268,6 @@ abstract class Foo {
                           "default": null,
                           "by_ref": false,
                           "variadic": false,
-                          "is_readonly": false,
-                          "is_final": false,
-                          "visibility": null,
-                          "set_visibility": null,
                           "attributes": [],
                           "span": {
                             "start": 180,
@@ -303,10 +299,9 @@ abstract class Foo {
                       "end": 255
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -371,7 +366,6 @@ abstract class Foo {
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [
@@ -460,7 +454,6 @@ abstract class Foo {
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [
                         {
@@ -492,10 +485,6 @@ abstract class Foo {
                           "default": null,
                           "by_ref": false,
                           "variadic": false,
-                          "is_readonly": false,
-                          "is_final": false,
-                          "visibility": null,
-                          "set_visibility": null,
                           "attributes": [],
                           "span": {
                             "start": 348,

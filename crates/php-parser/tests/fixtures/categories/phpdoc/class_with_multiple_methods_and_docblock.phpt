@@ -52,10 +52,9 @@ class Document {
                       "end": 142
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -86,10 +85,9 @@ class Document {
                       "end": 214
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -120,10 +118,9 @@ class Document {
                       "end": 286
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

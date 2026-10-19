@@ -43,10 +43,9 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                       "end": 35
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -67,10 +66,9 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                       "end": 41
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -98,7 +96,6 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],

@@ -72,10 +72,6 @@ PHP Fatal error:  Cannot use "M\Foo\callable" as a type name as it is reserved i
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 35,
@@ -119,10 +115,6 @@ PHP Fatal error:  Cannot use "M\Foo\callable" as a type name as it is reserved i
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 62,
@@ -197,10 +189,6 @@ PHP Fatal error:  Cannot use "M\Foo\callable" as a type name as it is reserved i
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 114,
@@ -236,10 +224,6 @@ PHP Fatal error:  Cannot use "M\Foo\callable" as a type name as it is reserved i
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 136,

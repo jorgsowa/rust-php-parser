@@ -94,10 +94,6 @@ enum Color {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 60,
@@ -133,10 +129,6 @@ enum Color {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 68,
@@ -501,10 +493,9 @@ enum Color {
                       "end": 414
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -579,10 +570,9 @@ enum Color {
                       "end": 468
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -655,10 +645,9 @@ enum Color {
                       "end": 538
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -811,10 +800,6 @@ enum Color {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [
                 {
                   "name": {

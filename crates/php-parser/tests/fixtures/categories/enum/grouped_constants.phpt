@@ -31,8 +31,6 @@ enum E {
                       "end": 46
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1
@@ -86,8 +84,6 @@ enum E {
                       "end": 53
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "ClassConstAccess": {
@@ -161,8 +157,9 @@ enum E {
                       "end": 87
                     }
                   },
-                  "visibility": "Public",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -208,8 +205,9 @@ enum E {
                       "end": 94
                     }
                   },
-                  "visibility": "Public",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {

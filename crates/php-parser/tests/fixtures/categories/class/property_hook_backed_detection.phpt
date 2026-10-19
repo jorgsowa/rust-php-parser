@@ -81,10 +81,9 @@ abstract class A {
                       "end": 52
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -129,7 +128,6 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -156,10 +154,9 @@ abstract class A {
                       "end": 91
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -204,7 +201,6 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -231,10 +227,9 @@ abstract class A {
                       "end": 131
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -279,7 +274,6 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -306,10 +300,9 @@ abstract class A {
                       "end": 174
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -362,7 +355,6 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -389,10 +381,9 @@ abstract class A {
                       "end": 217
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -445,7 +436,6 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -472,10 +462,9 @@ abstract class A {
                       "end": 258
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -532,7 +521,6 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -559,10 +547,9 @@ abstract class A {
                       "end": 299
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -617,7 +604,6 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -644,10 +630,9 @@ abstract class A {
                       "end": 345
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -730,7 +715,6 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -757,10 +741,9 @@ abstract class A {
                       "end": 392
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -786,7 +769,6 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -813,10 +795,9 @@ abstract class A {
                       "end": 429
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -873,7 +854,6 @@ abstract class A {
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -900,10 +880,9 @@ abstract class A {
                       "end": 476
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -997,7 +976,6 @@ abstract class A {
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -1024,10 +1002,9 @@ abstract class A {
                       "end": 527
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -1108,7 +1085,6 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -1135,10 +1111,9 @@ abstract class A {
                       "end": 581
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -1245,7 +1220,6 @@ abstract class A {
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -1272,10 +1246,9 @@ abstract class A {
                       "end": 644
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -1301,7 +1274,6 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -1372,7 +1344,6 @@ abstract class A {
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -1399,10 +1370,9 @@ abstract class A {
                       "end": 703
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -1447,7 +1417,9 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": true,
+                      "modifiers": {
+                        "is_final": true
+                      },
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -1474,10 +1446,9 @@ abstract class A {
                       "end": 748
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -1522,7 +1493,6 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [
@@ -1567,10 +1537,9 @@ abstract class A {
                       "end": 800
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -1630,7 +1599,6 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -1657,10 +1625,10 @@ abstract class A {
                       "end": 881
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "set_visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -1695,7 +1663,6 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -1709,7 +1676,6 @@ abstract class A {
                       "body": {
                         "Block": []
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -1736,10 +1702,10 @@ abstract class A {
                       "end": 934
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "set_visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -1793,7 +1759,6 @@ abstract class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -1820,10 +1785,10 @@ abstract class A {
                       "end": 988
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": "Protected",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "set_visibility": "Protected"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -1907,7 +1872,6 @@ abstract class A {
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -1934,10 +1898,9 @@ abstract class A {
                       "end": 1051
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -1960,10 +1923,9 @@ abstract class A {
                       },
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "hooks": [
                         {
@@ -1979,7 +1941,6 @@ abstract class A {
                               }
                             }
                           },
-                          "is_final": false,
                           "by_ref": false,
                           "params": [],
                           "attributes": [],

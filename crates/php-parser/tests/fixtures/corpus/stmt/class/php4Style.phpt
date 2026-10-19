@@ -43,10 +43,9 @@ PHP Fatal error:  Class A declares abstract method baz() and must therefore be d
                       "end": 29
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -67,10 +66,6 @@ PHP Fatal error:  Class A declares abstract method baz() and must therefore be d
                       "end": 47
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -93,10 +88,10 @@ PHP Fatal error:  Class A declares abstract method baz() and must therefore be d
                       "end": 85
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true,
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

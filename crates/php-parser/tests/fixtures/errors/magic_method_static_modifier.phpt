@@ -48,10 +48,9 @@ PHP Fatal error:  Method C::__get() cannot be static in Standard input code on l
                       "end": 41
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -66,10 +65,6 @@ PHP Fatal error:  Method C::__get() cannot be static in Standard input code on l
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 42,
@@ -97,10 +92,10 @@ PHP Fatal error:  Method C::__get() cannot be static in Standard input code on l
                       "end": 84
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -123,10 +118,6 @@ PHP Fatal error:  Method C::__get() cannot be static in Standard input code on l
                       "end": 115
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -141,10 +132,6 @@ PHP Fatal error:  Method C::__get() cannot be static in Standard input code on l
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 116,
@@ -163,10 +150,6 @@ PHP Fatal error:  Method C::__get() cannot be static in Standard input code on l
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 120,
@@ -194,10 +177,6 @@ PHP Fatal error:  Method C::__get() cannot be static in Standard input code on l
                       "end": 151
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -212,10 +191,6 @@ PHP Fatal error:  Method C::__get() cannot be static in Standard input code on l
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 152,
@@ -270,10 +245,9 @@ PHP Fatal error:  Method C::__get() cannot be static in Standard input code on l
                       "end": 203
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -288,10 +262,6 @@ PHP Fatal error:  Method C::__get() cannot be static in Standard input code on l
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 204,
@@ -310,10 +280,6 @@ PHP Fatal error:  Method C::__get() cannot be static in Standard input code on l
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 208,
@@ -341,10 +307,9 @@ PHP Fatal error:  Method C::__get() cannot be static in Standard input code on l
                       "end": 246
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -359,10 +324,6 @@ PHP Fatal error:  Method C::__get() cannot be static in Standard input code on l
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 247,

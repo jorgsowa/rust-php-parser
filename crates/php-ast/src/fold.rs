@@ -722,10 +722,7 @@ pub fn fold_param<'new, 'src, F: Fold<'src> + ?Sized>(
         default: param.default.as_ref().map(|d| folder.fold_expr(arena, d)),
         by_ref: param.by_ref,
         variadic: param.variadic,
-        is_readonly: param.is_readonly,
-        is_final: param.is_final,
-        visibility: param.visibility,
-        set_visibility: param.set_visibility,
+        modifiers: param.modifiers,
         attributes: fold_attrs(folder, arena, &param.attributes),
         hooks: fold_hooks(folder, arena, &param.hooks),
         doc_comment: param.doc_comment,
@@ -823,7 +820,7 @@ pub fn fold_property_hook<'new, 'src, F: Fold<'src> + ?Sized>(
     PropertyHook {
         kind: hook.kind,
         body,
-        is_final: hook.is_final,
+        modifiers: hook.modifiers,
         by_ref: hook.by_ref,
         params: fold_params(folder, arena, &hook.params),
         attributes: fold_attrs(folder, arena, &hook.attributes),
@@ -1032,10 +1029,7 @@ fn fold_method_decl<'new, 'src, F: Fold<'src> + ?Sized>(
 ) -> MethodDecl<'new, 'src> {
     MethodDecl {
         name: method.name,
-        visibility: method.visibility,
-        is_static: method.is_static,
-        is_abstract: method.is_abstract,
-        is_final: method.is_final,
+        modifiers: method.modifiers,
         by_ref: method.by_ref,
         params: fold_params(folder, arena, &method.params),
         return_type: method
@@ -1057,12 +1051,7 @@ fn fold_property_decl<'new, 'src, F: Fold<'src> + ?Sized>(
 ) -> PropertyDecl<'new, 'src> {
     PropertyDecl {
         name: prop.name,
-        visibility: prop.visibility,
-        set_visibility: prop.set_visibility,
-        is_static: prop.is_static,
-        is_readonly: prop.is_readonly,
-        is_final: prop.is_final,
-        is_abstract: prop.is_abstract,
+        modifiers: prop.modifiers,
         type_hint: prop
             .type_hint
             .as_ref()
@@ -1081,8 +1070,7 @@ fn fold_class_const_decl<'new, 'src, F: Fold<'src> + ?Sized>(
 ) -> ClassConstDecl<'new, 'src> {
     ClassConstDecl {
         name: cc.name,
-        visibility: cc.visibility,
-        is_final: cc.is_final,
+        modifiers: cc.modifiers,
         type_hint: cc
             .type_hint
             .map(|t| &*arena.alloc(folder.fold_type_hint(arena, t))),

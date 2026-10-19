@@ -47,10 +47,10 @@ PHP Fatal error:  Method A::__get() cannot be static in Standard input code on l
                       "end": 49
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -82,10 +82,6 @@ PHP Fatal error:  Method A::__get() cannot be static in Standard input code on l
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 50,
@@ -130,10 +126,6 @@ PHP Fatal error:  Method A::__get() cannot be static in Standard input code on l
                       "end": 84
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -148,10 +140,6 @@ PHP Fatal error:  Method A::__get() cannot be static in Standard input code on l
                       "default": null,
                       "by_ref": true,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 85,
@@ -170,10 +158,6 @@ PHP Fatal error:  Method A::__get() cannot be static in Standard input code on l
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 90,
@@ -192,10 +176,6 @@ PHP Fatal error:  Method A::__get() cannot be static in Standard input code on l
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 94,
@@ -240,10 +220,6 @@ PHP Fatal error:  Method A::__get() cannot be static in Standard input code on l
                       "end": 129
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -258,10 +234,6 @@ PHP Fatal error:  Method A::__get() cannot be static in Standard input code on l
                       "default": null,
                       "by_ref": true,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 130,

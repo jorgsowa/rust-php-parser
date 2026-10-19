@@ -933,10 +933,9 @@ PHP Fatal error:  Type A&B is redundant as it is more restrictive than type A in
                       "end": 241
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {

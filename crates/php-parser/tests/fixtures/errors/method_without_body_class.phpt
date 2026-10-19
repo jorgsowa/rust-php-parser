@@ -41,10 +41,6 @@ PHP Fatal error:  Non-abstract method A::f() must contain body in Standard input
                       "end": 30
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -67,10 +63,10 @@ PHP Fatal error:  Non-abstract method A::f() must contain body in Standard input
                       "end": 62
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -93,10 +89,9 @@ PHP Fatal error:  Non-abstract method A::f() must contain body in Standard input
                       "end": 89
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

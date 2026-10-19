@@ -45,10 +45,9 @@ trait MultiMember {
                       "end": 158
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -79,10 +78,9 @@ trait MultiMember {
                       "end": 227
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -128,10 +126,9 @@ trait MultiMember {
                       "end": 291
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

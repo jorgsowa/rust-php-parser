@@ -41,10 +41,9 @@ abstract class A {
                       "end": 36
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -65,10 +64,9 @@ abstract class A {
                       "end": 51
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -89,10 +87,9 @@ abstract class A {
                       "end": 76
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -115,10 +112,9 @@ abstract class A {
                       "end": 100
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "is_final": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -141,10 +137,9 @@ abstract class A {
                       "end": 127
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -167,10 +162,10 @@ abstract class A {
                       "end": 160
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "is_static": true,
+                    "is_final": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -193,10 +188,6 @@ abstract class A {
                       "end": 180
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

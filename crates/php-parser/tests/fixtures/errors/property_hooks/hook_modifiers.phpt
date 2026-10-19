@@ -61,10 +61,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                       "end": 38
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -82,7 +81,6 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -109,10 +107,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                       "end": 73
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -130,7 +127,6 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -157,10 +153,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                       "end": 111
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -227,7 +222,6 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -254,10 +248,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                       "end": 168
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -292,7 +285,6 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -319,10 +311,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                       "end": 209
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -340,7 +331,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                           }
                         }
                       },
-                      "is_final": true,
+                      "modifiers": {
+                        "is_final": true
+                      },
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -367,10 +360,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                       "end": 251
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -378,7 +370,6 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -405,10 +396,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                       "end": 283
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -416,7 +406,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": true,
+                      "modifiers": {
+                        "is_final": true
+                      },
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -443,10 +435,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                       "end": 321
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -464,7 +455,6 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -491,10 +481,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                       "end": 356
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -512,7 +501,6 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -539,10 +527,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                       "end": 393
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -560,7 +547,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                           }
                         }
                       },
-                      "is_final": true,
+                      "modifiers": {
+                        "is_final": true
+                      },
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -587,10 +576,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                       "end": 433
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -608,7 +596,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                           }
                         }
                       },
-                      "is_final": true,
+                      "modifiers": {
+                        "is_final": true
+                      },
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -622,7 +612,9 @@ PHP Fatal error:  Cannot use the public modifier on a property hook in Standard 
                       "body": {
                         "Block": []
                       },
-                      "is_final": true,
+                      "modifiers": {
+                        "is_final": true
+                      },
                       "by_ref": false,
                       "params": [],
                       "attributes": [],

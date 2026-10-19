@@ -59,10 +59,9 @@ PHP Fatal error:  Cannot declare promoted property outside a constructor in Stan
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": true,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
+                        "modifiers": {
+                          "is_readonly": true
+                        },
                         "attributes": [],
                         "span": {
                           "start": 20,

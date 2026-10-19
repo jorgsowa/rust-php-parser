@@ -42,10 +42,9 @@ PHP Fatal error:  Multiple final modifiers are not allowed in Standard input cod
                       "end": 49
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -77,10 +76,10 @@ PHP Fatal error:  Multiple final modifiers are not allowed in Standard input cod
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": true,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public",
+                        "is_final": true
+                      },
                       "attributes": [],
                       "span": {
                         "start": 59,

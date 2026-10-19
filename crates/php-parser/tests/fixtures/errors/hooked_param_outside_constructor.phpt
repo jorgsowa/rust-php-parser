@@ -30,10 +30,6 @@ PHP Fatal error:  Cannot declare promoted property outside a constructor in Stan
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "hooks": [
                 {
@@ -49,7 +45,6 @@ PHP Fatal error:  Cannot declare promoted property outside a constructor in Stan
                       }
                     }
                   },
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "attributes": [],

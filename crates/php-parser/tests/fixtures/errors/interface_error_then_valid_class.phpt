@@ -29,8 +29,6 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
                       "end": 29
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": "Error",
                     "span": {

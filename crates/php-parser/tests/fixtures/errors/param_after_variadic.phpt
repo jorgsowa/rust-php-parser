@@ -31,10 +31,6 @@ PHP Fatal error:  Only the last parameter can be variadic in Standard input code
               "default": null,
               "by_ref": false,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 17,
@@ -53,10 +49,6 @@ PHP Fatal error:  Only the last parameter can be variadic in Standard input code
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 27,

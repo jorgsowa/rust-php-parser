@@ -67,8 +67,6 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                       "end": 27
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Variable": "x"
@@ -96,10 +94,9 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                       "end": 47
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -148,10 +145,10 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                       "end": 75
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -217,10 +214,9 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                       "end": 108
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -243,10 +239,6 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                       },
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 109,
@@ -274,10 +266,9 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                       "end": 152
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -300,10 +291,9 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                       },
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 153,
@@ -352,8 +342,6 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                       "end": 199
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Variable": "x"
@@ -439,8 +427,6 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                       "end": 250
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "FunctionCall": {
@@ -538,10 +524,6 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
               },
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 283,
@@ -730,10 +712,6 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                         },
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 351,
@@ -806,10 +784,6 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                         },
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 373,

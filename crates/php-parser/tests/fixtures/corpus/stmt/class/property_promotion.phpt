@@ -45,10 +45,9 @@ class Point {
                       "end": 52
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -88,10 +87,9 @@ class Point {
                       },
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 62,
@@ -135,10 +133,9 @@ class Point {
                       },
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Protected",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Protected"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 93,
@@ -182,10 +179,9 @@ class Point {
                       },
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Private",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Private"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 126,
@@ -229,10 +225,10 @@ class Point {
                       },
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": true,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public",
+                        "is_readonly": true
+                      },
                       "attributes": [],
                       "span": {
                         "start": 163,
@@ -251,10 +247,9 @@ class Point {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "hooks": [
                         {
@@ -270,7 +265,6 @@ class Point {
                               }
                             }
                           },
-                          "is_final": false,
                           "by_ref": false,
                           "params": [],
                           "attributes": [],
@@ -305,10 +299,9 @@ class Point {
                       },
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "hooks": [
                         {
@@ -324,7 +317,6 @@ class Point {
                               }
                             }
                           },
-                          "is_final": false,
                           "by_ref": false,
                           "params": [],
                           "attributes": [],
@@ -351,10 +343,9 @@ class Point {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": true,
-                      "visibility": null,
-                      "set_visibility": null,
+                      "modifiers": {
+                        "is_final": true
+                      },
                       "attributes": [],
                       "span": {
                         "start": 274,

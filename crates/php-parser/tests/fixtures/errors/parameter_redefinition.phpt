@@ -58,10 +58,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 17,
@@ -80,10 +76,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 21,
@@ -125,10 +117,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 39,
@@ -147,10 +135,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 43,
@@ -169,10 +153,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
               "default": null,
               "by_ref": true,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 47,
@@ -214,10 +194,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 66,
@@ -236,10 +212,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
               "default": null,
               "by_ref": false,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 70,
@@ -306,10 +278,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
               },
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 91,
@@ -353,10 +321,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
               },
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 103,
@@ -408,10 +372,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 137,
@@ -430,10 +390,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 141,
@@ -498,10 +454,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 164,
@@ -520,10 +472,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 168,
@@ -590,10 +538,9 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "end": 209
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -608,10 +555,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 210,
@@ -630,10 +573,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 214,
@@ -661,10 +600,9 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "end": 252
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -679,10 +617,9 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 253,
@@ -701,10 +638,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 264,
@@ -753,10 +686,9 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "end": 304
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -771,10 +703,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 305,
@@ -793,10 +721,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 309,
@@ -815,10 +739,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 313,
@@ -873,10 +793,10 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "end": 365
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -891,10 +811,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 366,
@@ -913,10 +829,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 370,
@@ -964,10 +876,9 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "end": 404
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -982,10 +893,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 405,
@@ -1004,10 +911,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 409,
@@ -1026,10 +929,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 413,
@@ -1079,10 +978,9 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "end": 448
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -1097,10 +995,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 449,
@@ -1119,10 +1013,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 453,
@@ -1176,10 +1066,9 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                                 "end": 491
                               }
                             },
-                            "visibility": "Public",
-                            "is_static": false,
-                            "is_abstract": false,
-                            "is_final": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "by_ref": false,
                             "params": [
                               {
@@ -1194,10 +1083,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                                 "default": null,
                                 "by_ref": false,
                                 "variadic": false,
-                                "is_readonly": false,
-                                "is_final": false,
-                                "visibility": null,
-                                "set_visibility": null,
                                 "attributes": [],
                                 "span": {
                                   "start": 492,
@@ -1216,10 +1101,6 @@ PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
                                 "default": null,
                                 "by_ref": false,
                                 "variadic": false,
-                                "is_readonly": false,
-                                "is_final": false,
-                                "visibility": null,
-                                "set_visibility": null,
                                 "attributes": [],
                                 "span": {
                                   "start": 496,

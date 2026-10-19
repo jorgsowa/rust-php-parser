@@ -42,10 +42,9 @@ PHP Fatal error:  Static property A::$d cannot be readonly in Standard input cod
                       "end": 37
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -83,10 +82,10 @@ PHP Fatal error:  Static property A::$d cannot be readonly in Standard input cod
                       "end": 64
                     }
                   },
-                  "visibility": "Protected",
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Protected",
+                    "is_static": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -124,10 +123,9 @@ PHP Fatal error:  Static property A::$d cannot be readonly in Standard input cod
                       "end": 87
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Nullable": {
@@ -173,10 +171,11 @@ PHP Fatal error:  Static property A::$d cannot be readonly in Standard input cod
                       "end": 123
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true,
+                    "is_readonly": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Nullable": {

@@ -38,11 +38,10 @@ PHP Fatal error:  Cannot use the abstract modifier on a property in Standard inp
                       "end": 45
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_abstract": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_abstract": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {

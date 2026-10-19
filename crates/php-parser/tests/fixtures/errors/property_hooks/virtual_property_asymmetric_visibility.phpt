@@ -47,10 +47,10 @@ PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric v
                       "end": 50
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "set_visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -75,7 +75,6 @@ PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric v
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -129,10 +128,10 @@ PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric v
                       "end": 102
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "set_visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -167,7 +166,6 @@ PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric v
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -194,10 +192,10 @@ PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric v
                       "end": 149
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": "Protected",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "set_visibility": "Protected"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -224,7 +222,6 @@ PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric v
                       "body": {
                         "Block": []
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -251,10 +248,10 @@ PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric v
                       "end": 195
                     }
                   },
-                  "visibility": "Protected",
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Protected",
+                    "set_visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -289,7 +286,6 @@ PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric v
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -311,7 +307,6 @@ PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric v
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -338,10 +333,9 @@ PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric v
                       "end": 256
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -373,10 +367,10 @@ PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric v
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": "Private",
+                      "modifiers": {
+                        "visibility": "Public",
+                        "set_visibility": "Private"
+                      },
                       "attributes": [],
                       "hooks": [
                         {
@@ -392,7 +386,6 @@ PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric v
                               }
                             }
                           },
-                          "is_final": false,
                           "by_ref": false,
                           "params": [],
                           "attributes": [],
@@ -436,10 +429,9 @@ PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric v
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": "Private",
+                      "modifiers": {
+                        "set_visibility": "Private"
+                      },
                       "attributes": [],
                       "hooks": [
                         {
@@ -447,7 +439,6 @@ PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric v
                           "body": {
                             "Block": []
                           },
-                          "is_final": false,
                           "by_ref": false,
                           "params": [],
                           "attributes": [],

@@ -36,10 +36,10 @@ class A {
                       "end": 44
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_final": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

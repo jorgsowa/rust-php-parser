@@ -527,10 +527,9 @@ PHP Fatal error:  Duplicate declaration of static variable $top in Standard inpu
                       "end": 307
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -602,10 +601,9 @@ PHP Fatal error:  Duplicate declaration of static variable $top in Standard inpu
                       "end": 349
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -681,7 +679,6 @@ PHP Fatal error:  Duplicate declaration of static variable $top in Standard inpu
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],

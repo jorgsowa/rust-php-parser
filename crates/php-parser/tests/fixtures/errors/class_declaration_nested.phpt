@@ -56,10 +56,9 @@ PHP Fatal error:  Class declarations may not be nested in Standard input code on
                       "end": 29
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -113,7 +112,6 @@ PHP Fatal error:  Class declarations may not be nested in Standard input code on
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -140,10 +138,9 @@ PHP Fatal error:  Class declarations may not be nested in Standard input code on
                       "end": 84
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -325,10 +322,9 @@ PHP Fatal error:  Class declarations may not be nested in Standard input code on
                                                       "end": 239
                                                     }
                                                   },
-                                                  "visibility": "Public",
-                                                  "is_static": false,
-                                                  "is_abstract": false,
-                                                  "is_final": false,
+                                                  "modifiers": {
+                                                    "visibility": "Public"
+                                                  },
                                                   "by_ref": false,
                                                   "params": [],
                                                   "return_type": null,
@@ -439,10 +435,9 @@ PHP Fatal error:  Class declarations may not be nested in Standard input code on
                       "end": 306
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

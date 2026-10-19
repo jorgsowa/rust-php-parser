@@ -60,10 +60,9 @@ PHP Fatal error:  Property A::$a cannot have type void in Standard input code on
                       "end": 34
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -101,10 +100,10 @@ PHP Fatal error:  Property A::$a cannot have type void in Standard input code on
                       "end": 62
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -142,10 +141,9 @@ PHP Fatal error:  Property A::$a cannot have type void in Standard input code on
                       "end": 83
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -183,10 +181,9 @@ PHP Fatal error:  Property A::$a cannot have type void in Standard input code on
                       "end": 111
                     }
                   },
-                  "visibility": "Protected",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Protected"
+                  },
                   "type_hint": {
                     "kind": {
                       "Nullable": {
@@ -232,10 +229,9 @@ PHP Fatal error:  Property A::$a cannot have type void in Standard input code on
                       "end": 145
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Union": [
@@ -319,10 +315,9 @@ PHP Fatal error:  Property A::$a cannot have type void in Standard input code on
                       "end": 178
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -354,10 +349,9 @@ PHP Fatal error:  Property A::$a cannot have type void in Standard input code on
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 179,
@@ -393,10 +387,9 @@ PHP Fatal error:  Property A::$a cannot have type void in Standard input code on
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 199,
@@ -444,10 +437,9 @@ PHP Fatal error:  Property A::$a cannot have type void in Standard input code on
                       "end": 248
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -524,10 +516,9 @@ PHP Fatal error:  Property A::$a cannot have type void in Standard input code on
                                       "end": 291
                                     }
                                   },
-                                  "visibility": "Public",
-                                  "set_visibility": null,
-                                  "is_static": false,
-                                  "is_readonly": false,
+                                  "modifiers": {
+                                    "visibility": "Public"
+                                  },
                                   "type_hint": {
                                     "kind": {
                                       "Named": {

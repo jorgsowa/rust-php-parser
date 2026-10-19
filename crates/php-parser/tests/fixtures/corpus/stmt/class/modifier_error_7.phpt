@@ -37,10 +37,10 @@ PHP Fatal error:  Cannot use the final modifier on an abstract method in Standar
                       "end": 41
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": true,
+                  "modifiers": {
+                    "is_abstract": true,
+                    "is_final": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

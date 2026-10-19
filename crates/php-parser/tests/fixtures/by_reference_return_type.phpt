@@ -125,10 +125,6 @@ function &getReference(array &$arr): mixed {
               "default": null,
               "by_ref": true,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 92,

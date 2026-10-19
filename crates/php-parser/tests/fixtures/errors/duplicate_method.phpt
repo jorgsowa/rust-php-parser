@@ -42,10 +42,9 @@ PHP Fatal error:  Cannot redeclare A::f() in Standard input code on line 4
                       "end": 37
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -68,10 +67,9 @@ PHP Fatal error:  Cannot redeclare A::f() in Standard input code on line 4
                       "end": 64
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

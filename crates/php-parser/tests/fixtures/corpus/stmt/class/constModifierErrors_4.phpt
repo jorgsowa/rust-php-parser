@@ -38,8 +38,9 @@ PHP Fatal error:  Multiple access type modifiers are not allowed in Standard inp
                       "end": 41
                     }
                   },
-                  "visibility": "Public",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "value": {
                     "kind": {
                       "Int": 1

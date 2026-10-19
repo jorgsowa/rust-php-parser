@@ -540,10 +540,6 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                                         "default": null,
                                         "by_ref": false,
                                         "variadic": false,
-                                        "is_readonly": false,
-                                        "is_final": false,
-                                        "visibility": null,
-                                        "set_visibility": null,
                                         "attributes": [],
                                         "span": {
                                           "start": 124,
@@ -729,10 +725,6 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                                                           },
                                                           "by_ref": false,
                                                           "variadic": false,
-                                                          "is_readonly": false,
-                                                          "is_final": false,
-                                                          "visibility": null,
-                                                          "set_visibility": null,
                                                           "attributes": [],
                                                           "span": {
                                                             "start": 181,

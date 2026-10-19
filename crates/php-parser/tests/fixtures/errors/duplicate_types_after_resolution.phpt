@@ -585,10 +585,9 @@ PHP Fatal error:  Duplicate type N\F is redundant in Standard input code on line
                                 "end": 300
                               }
                             },
-                            "visibility": "Public",
-                            "is_static": false,
-                            "is_abstract": false,
-                            "is_final": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "by_ref": false,
                             "params": [],
                             "return_type": {
@@ -656,10 +655,9 @@ PHP Fatal error:  Duplicate type N\F is redundant in Standard input code on line
                                 "end": 339
                               }
                             },
-                            "visibility": "Public",
-                            "is_static": false,
-                            "is_abstract": false,
-                            "is_final": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "by_ref": false,
                             "params": [],
                             "return_type": {

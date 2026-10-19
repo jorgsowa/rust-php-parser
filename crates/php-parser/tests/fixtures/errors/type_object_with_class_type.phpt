@@ -412,10 +412,9 @@ PHP Fatal error:  Type A|object contains both object and a class type, which is 
                       "end": 179
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -483,10 +482,9 @@ PHP Fatal error:  Type A|object contains both object and a class type, which is 
                       "end": 219
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -554,10 +552,9 @@ PHP Fatal error:  Type A|object contains both object and a class type, which is 
                       "end": 261
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {

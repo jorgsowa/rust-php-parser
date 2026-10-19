@@ -67,10 +67,9 @@ function __get() {}
                       "end": 47
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -85,10 +84,6 @@ function __get() {}
                       "default": null,
                       "by_ref": true,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 48,
@@ -107,10 +102,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": true,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 53,
@@ -138,10 +129,9 @@ function __get() {}
                       "end": 94
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -164,10 +154,9 @@ function __get() {}
                       "end": 128
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -207,10 +196,9 @@ function __get() {}
                       "end": 165
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -270,10 +258,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 166,
@@ -336,10 +320,6 @@ function __get() {}
                       "end": 218
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -371,10 +351,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 219,
@@ -393,10 +369,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 229,
@@ -441,10 +413,6 @@ function __get() {}
                       "end": 263
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -484,10 +452,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 264,
@@ -532,10 +496,6 @@ function __get() {}
                       "end": 305
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -550,10 +510,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 306,
@@ -598,10 +554,6 @@ function __get() {}
                       "end": 338
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -633,10 +585,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 339,
@@ -672,10 +620,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 350,
@@ -694,10 +638,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": true,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 363,
@@ -725,10 +665,9 @@ function __get() {}
                       "end": 408
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -743,10 +682,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 409,
@@ -790,10 +725,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 413,
@@ -838,10 +769,6 @@ function __get() {}
                       "end": 455
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -856,10 +783,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": true,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 456,
@@ -904,10 +827,6 @@ function __get() {}
                       "end": 501
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -947,10 +866,6 @@ function __get() {}
                       "end": 537
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -990,10 +905,6 @@ function __get() {}
                       "end": 576
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -1053,10 +964,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 577,
@@ -1084,10 +991,9 @@ function __get() {}
                       "end": 625
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -1119,10 +1025,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 626,
@@ -1241,10 +1143,6 @@ function __get() {}
                       "end": 676
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -1259,10 +1157,6 @@ function __get() {}
                       "default": null,
                       "by_ref": true,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 677,
@@ -1298,10 +1192,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 682,
@@ -1346,10 +1236,6 @@ function __get() {}
                       "end": 718
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -1389,10 +1275,6 @@ function __get() {}
                       "end": 752
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -1432,10 +1314,6 @@ function __get() {}
                       "end": 784
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -1450,10 +1328,6 @@ function __get() {}
                       "default": null,
                       "by_ref": true,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 785,
@@ -1525,10 +1399,6 @@ function __get() {}
                       "end": 830
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -1543,10 +1413,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 831,
@@ -1591,10 +1457,6 @@ function __get() {}
                       "end": 869
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -1642,10 +1504,9 @@ function __get() {}
                       "end": 914
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -1660,10 +1521,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 915,
@@ -1708,10 +1565,6 @@ function __get() {}
                       "end": 948
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -1799,10 +1652,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 949,
@@ -1851,10 +1700,6 @@ function __get() {}
                       "end": 1012
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -1894,10 +1739,9 @@ function __get() {}
                       "end": 1055
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -1929,10 +1773,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 1056,
@@ -1999,10 +1839,6 @@ function __get() {}
                       "end": 1103
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -2017,10 +1853,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 1104,
@@ -2039,10 +1871,6 @@ function __get() {}
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 1108,

@@ -42,10 +42,9 @@ PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard 
                       "end": 41
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -77,10 +76,6 @@ PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard 
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 42,
@@ -116,10 +111,6 @@ PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard 
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 50,
@@ -165,10 +156,9 @@ PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard 
                       "end": 97
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

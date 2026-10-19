@@ -279,10 +279,6 @@ PHP Fatal error:  '\self' is an invalid class name in Standard input code on lin
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 93,
@@ -346,10 +342,9 @@ PHP Fatal error:  '\self' is an invalid class name in Standard input code on lin
                       "end": 146
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -387,8 +382,6 @@ PHP Fatal error:  '\self' is an invalid class name in Standard input code on lin
                       "end": 159
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "ClassConstAccess": {
@@ -444,10 +437,6 @@ PHP Fatal error:  '\self' is an invalid class name in Standard input code on lin
                       "end": 186
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -498,10 +487,6 @@ PHP Fatal error:  '\self' is an invalid class name in Standard input code on lin
                       },
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 187,

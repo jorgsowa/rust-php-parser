@@ -28,8 +28,6 @@ min_php=8.1
                       "end": 34
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "UnaryPrefix": {
@@ -68,8 +66,6 @@ min_php=8.1
                       "end": 57
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "UnaryPrefix": {

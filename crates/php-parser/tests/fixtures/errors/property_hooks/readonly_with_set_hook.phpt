@@ -42,10 +42,10 @@ PHP Fatal error:  Hooked properties cannot be readonly in Standard input code on
                       "end": 49
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_readonly": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -129,7 +129,6 @@ PHP Fatal error:  Hooked properties cannot be readonly in Standard input code on
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [
                         {
@@ -161,10 +160,6 @@ PHP Fatal error:  Hooked properties cannot be readonly in Standard input code on
                           "default": null,
                           "by_ref": false,
                           "variadic": false,
-                          "is_readonly": false,
-                          "is_final": false,
-                          "visibility": null,
-                          "set_visibility": null,
                           "attributes": [],
                           "span": {
                             "start": 64,

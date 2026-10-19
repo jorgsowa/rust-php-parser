@@ -171,8 +171,6 @@ enum Suit: string implements HasColor {
                       "end": 155
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 4
@@ -200,10 +198,9 @@ enum Suit: string implements HasColor {
                       "end": 187
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {

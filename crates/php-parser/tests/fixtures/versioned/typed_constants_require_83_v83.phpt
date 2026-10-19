@@ -33,8 +33,9 @@ min_php=8.3
                       "end": 42
                     }
                   },
-                  "visibility": "Public",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {

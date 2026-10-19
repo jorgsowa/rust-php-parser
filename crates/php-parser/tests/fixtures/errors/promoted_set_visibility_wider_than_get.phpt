@@ -40,10 +40,9 @@ PHP Fatal error:  Visibility of property C::$a must not be weaker than set visib
                       "end": 47
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -75,10 +74,10 @@ PHP Fatal error:  Visibility of property C::$a must not be weaker than set visib
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Private",
-                      "set_visibility": "Protected",
+                      "modifiers": {
+                        "visibility": "Private",
+                        "set_visibility": "Protected"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 48,
@@ -114,10 +113,9 @@ PHP Fatal error:  Visibility of property C::$a must not be weaker than set visib
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": "Protected",
+                      "modifiers": {
+                        "set_visibility": "Protected"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 82,

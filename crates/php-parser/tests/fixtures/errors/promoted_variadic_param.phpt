@@ -52,10 +52,6 @@ PHP Fatal error:  Cannot declare variadic promoted property in Standard input co
                       "end": 40
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -87,10 +83,9 @@ PHP Fatal error:  Cannot declare variadic promoted property in Standard input co
                       "default": null,
                       "by_ref": false,
                       "variadic": true,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 41,
@@ -145,10 +140,6 @@ PHP Fatal error:  Cannot declare variadic promoted property in Standard input co
                       "end": 98
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -180,10 +171,10 @@ PHP Fatal error:  Cannot declare variadic promoted property in Standard input co
                       "default": null,
                       "by_ref": false,
                       "variadic": true,
-                      "is_readonly": true,
-                      "is_final": false,
-                      "visibility": "Private",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Private",
+                        "is_readonly": true
+                      },
                       "attributes": [],
                       "span": {
                         "start": 99,
@@ -238,10 +229,6 @@ PHP Fatal error:  Cannot declare variadic promoted property in Standard input co
                       "end": 166
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -273,10 +260,9 @@ PHP Fatal error:  Cannot declare variadic promoted property in Standard input co
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "hooks": [
                         {
@@ -292,7 +278,6 @@ PHP Fatal error:  Cannot declare variadic promoted property in Standard input co
                               }
                             }
                           },
-                          "is_final": false,
                           "by_ref": false,
                           "params": [],
                           "attributes": [],
@@ -319,10 +304,6 @@ PHP Fatal error:  Cannot declare variadic promoted property in Standard input co
                       "default": null,
                       "by_ref": false,
                       "variadic": true,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 204,
@@ -377,10 +358,6 @@ PHP Fatal error:  Cannot declare variadic promoted property in Standard input co
                       "end": 251
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -395,10 +372,9 @@ PHP Fatal error:  Cannot declare variadic promoted property in Standard input co
                       "default": null,
                       "by_ref": false,
                       "variadic": true,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "hooks": [
                         {
@@ -414,7 +390,6 @@ PHP Fatal error:  Cannot declare variadic promoted property in Standard input co
                               }
                             }
                           },
-                          "is_final": false,
                           "by_ref": false,
                           "params": [],
                           "attributes": [],
@@ -477,10 +452,6 @@ PHP Fatal error:  Cannot declare variadic promoted property in Standard input co
                       "end": 320
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -495,10 +466,6 @@ PHP Fatal error:  Cannot declare variadic promoted property in Standard input co
                       "default": null,
                       "by_ref": false,
                       "variadic": true,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 321,

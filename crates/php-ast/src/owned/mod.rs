@@ -43,7 +43,8 @@ use serde::Serialize;
 use crate::ast as arena_ast;
 use crate::ast::{
     AssignOp, BinaryOp, BuiltinType, CastKind, ClassModifiers, CommentKind, IncludeKind,
-    MagicConstKind, NameKind, PropertyHookKind, UnaryPostfixOp, UnaryPrefixOp, UseKind, Visibility,
+    MagicConstKind, Modifiers, NameKind, PropertyHookKind, UnaryPostfixOp, UnaryPrefixOp, UseKind,
+    Visibility,
 };
 use crate::Span;
 
@@ -1446,14 +1447,9 @@ pub struct Param {
     pub by_ref: bool,
     /// Whether variadic (`...`).
     pub variadic: bool,
-    /// Whether a `readonly` promoted property.
-    pub is_readonly: bool,
-    /// Whether a `final` promoted property.
-    pub is_final: bool,
-    /// Promotion visibility.
-    pub visibility: Option<Visibility>,
-    /// Asymmetric set visibility of a promoted property.
-    pub set_visibility: Option<Visibility>,
+    /// Visibility, `static`, `final`, `abstract` and `readonly` modifiers.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Modifiers::is_empty"))]
+    pub modifiers: Modifiers,
     /// Attributes on the parameter.
     pub attributes: Box<[Attribute]>,
     /// Property hooks of a promoted property.
@@ -1478,10 +1474,7 @@ impl Param {
             default: None,
             by_ref: false,
             variadic: false,
-            is_readonly: false,
-            is_final: false,
-            visibility: None,
-            set_visibility: None,
+            modifiers: Modifiers::new(),
             attributes: Box::new([]),
             hooks: Box::new([]),
             doc_comment: None,
@@ -1554,20 +1547,9 @@ pub enum ClassMemberKind {
 pub struct PropertyDecl {
     /// Property name without `$`.
     pub name: Ident,
-    /// Read visibility.
-    pub visibility: Option<Visibility>,
-    /// Asymmetric set visibility.
-    pub set_visibility: Option<Visibility>,
-    /// Whether `static`.
-    pub is_static: bool,
-    /// Whether `readonly`.
-    pub is_readonly: bool,
-    /// Whether `final`.
-    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
-    pub is_final: bool,
-    /// Whether `abstract`.
-    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
-    pub is_abstract: bool,
+    /// Visibility, `static`, `final`, `abstract` and `readonly` modifiers.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Modifiers::is_empty"))]
+    pub modifiers: Modifiers,
     /// Declared type.
     pub type_hint: Option<TypeHint>,
     /// Default value.
@@ -1590,8 +1572,9 @@ pub struct PropertyHook {
     pub kind: PropertyHookKind,
     /// Hook body.
     pub body: PropertyHookBody,
-    /// Whether `final`.
-    pub is_final: bool,
+    /// Visibility, `static`, `final`, `abstract` and `readonly` modifiers.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Modifiers::is_empty"))]
+    pub modifiers: Modifiers,
     /// Whether it returns by reference.
     pub by_ref: bool,
     /// Parameters of a `set` hook.
@@ -1622,14 +1605,9 @@ pub enum PropertyHookBody {
 pub struct MethodDecl {
     /// Method name.
     pub name: Ident,
-    /// Visibility modifier.
-    pub visibility: Option<Visibility>,
-    /// Whether `static`.
-    pub is_static: bool,
-    /// Whether `abstract`.
-    pub is_abstract: bool,
-    /// Whether `final`.
-    pub is_final: bool,
+    /// Visibility, `static`, `final`, `abstract` and `readonly` modifiers.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Modifiers::is_empty"))]
+    pub modifiers: Modifiers,
     /// Whether it returns by reference.
     pub by_ref: bool,
     /// Parameters.
@@ -1651,10 +1629,7 @@ impl MethodDecl {
     pub fn new(name: Ident) -> Self {
         Self {
             name,
-            visibility: None,
-            is_static: false,
-            is_abstract: false,
-            is_final: false,
+            modifiers: Modifiers::new(),
             by_ref: false,
             params: Box::new([]),
             return_type: None,
@@ -1671,10 +1646,9 @@ impl MethodDecl {
 pub struct ClassConstDecl {
     /// Constant name.
     pub name: Ident,
-    /// Visibility modifier.
-    pub visibility: Option<Visibility>,
-    /// Whether `final`.
-    pub is_final: bool,
+    /// Visibility, `static`, `final`, `abstract` and `readonly` modifiers.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Modifiers::is_empty"))]
+    pub modifiers: Modifiers,
     /// Declared type.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub type_hint: Option<Box<TypeHint>>,
@@ -2322,10 +2296,7 @@ fn owned_param(p: &arena_ast::Param<'_, '_>) -> Param {
         default: p.default.as_ref().map(owned_expr),
         by_ref: p.by_ref,
         variadic: p.variadic,
-        is_readonly: p.is_readonly,
-        is_final: p.is_final,
-        visibility: p.visibility,
-        set_visibility: p.set_visibility,
+        modifiers: p.modifiers,
         attributes: owned_attrs(&p.attributes),
         hooks: owned_hooks(&p.hooks),
         doc_comment: p.doc_comment.as_ref().map(owned_comment),
@@ -2354,7 +2325,7 @@ fn owned_hook(h: &arena_ast::PropertyHook<'_, '_>) -> PropertyHook {
             }
             arena_ast::PropertyHookBody::Abstract => PropertyHookBody::Abstract,
         },
-        is_final: h.is_final,
+        modifiers: h.modifiers,
         by_ref: h.by_ref,
         params: owned_params(&h.params),
         attributes: owned_attrs(&h.attributes),
@@ -2579,12 +2550,7 @@ fn owned_class_member(m: &arena_ast::ClassMember<'_, '_>) -> ClassMember {
         kind: match &m.kind {
             arena_ast::ClassMemberKind::Property(p) => ClassMemberKind::Property(PropertyDecl {
                 name: owned_ident(p.name),
-                visibility: p.visibility,
-                set_visibility: p.set_visibility,
-                is_static: p.is_static,
-                is_readonly: p.is_readonly,
-                is_final: p.is_final,
-                is_abstract: p.is_abstract,
+                modifiers: p.modifiers,
                 type_hint: p.type_hint.as_ref().map(owned_type_hint),
                 default: p.default.as_ref().map(owned_expr),
                 attributes: owned_attrs(&p.attributes),
@@ -2593,10 +2559,7 @@ fn owned_class_member(m: &arena_ast::ClassMember<'_, '_>) -> ClassMember {
             }),
             arena_ast::ClassMemberKind::Method(m) => ClassMemberKind::Method(MethodDecl {
                 name: owned_ident(m.name),
-                visibility: m.visibility,
-                is_static: m.is_static,
-                is_abstract: m.is_abstract,
-                is_final: m.is_final,
+                modifiers: m.modifiers,
                 by_ref: m.by_ref,
                 params: owned_params(&m.params),
                 return_type: m.return_type.as_ref().map(owned_type_hint),
@@ -2626,8 +2589,7 @@ fn owned_class_members(members: &[arena_ast::ClassMember<'_, '_>]) -> Box<[Class
 fn owned_class_const(c: &arena_ast::ClassConstDecl<'_, '_>) -> ClassConstDecl {
     ClassConstDecl {
         name: owned_ident(c.name),
-        visibility: c.visibility,
-        is_final: c.is_final,
+        modifiers: c.modifiers,
         type_hint: c.type_hint.map(|th| Box::new(owned_type_hint(th))),
         value: owned_expr(&c.value),
         attributes: owned_attrs(&c.attributes),
@@ -2763,10 +2725,7 @@ fn owned_enum_decl(en: &arena_ast::EnumDecl<'_, '_>) -> EnumDecl {
                         arena_ast::EnumMemberKind::Method(m) => {
                             EnumMemberKind::Method(MethodDecl {
                                 name: owned_ident(m.name),
-                                visibility: m.visibility,
-                                is_static: m.is_static,
-                                is_abstract: m.is_abstract,
-                                is_final: m.is_final,
+                                modifiers: m.modifiers,
                                 by_ref: m.by_ref,
                                 params: owned_params(&m.params),
                                 return_type: m.return_type.as_ref().map(owned_type_hint),
@@ -3334,10 +3293,7 @@ fn av_param<'a>(arena: &'a bumpalo::Bump, p: &Param) -> arena_ast::Param<'a, 'a>
         default: p.default.as_ref().map(|e| av_expr(arena, e)),
         by_ref: p.by_ref,
         variadic: p.variadic,
-        is_readonly: p.is_readonly,
-        is_final: p.is_final,
-        visibility: p.visibility,
-        set_visibility: p.set_visibility,
+        modifiers: p.modifiers,
         attributes: av_attrs(arena, &p.attributes),
         hooks: av_hooks(arena, &p.hooks),
         doc_comment: av_opt_comment(arena, &p.doc_comment),
@@ -3369,7 +3325,7 @@ fn av_hook<'a>(arena: &'a bumpalo::Bump, h: &PropertyHook) -> arena_ast::Propert
             }
             PropertyHookBody::Abstract => arena_ast::PropertyHookBody::Abstract,
         },
-        is_final: h.is_final,
+        modifiers: h.modifiers,
         by_ref: h.by_ref,
         params: av_params(arena, &h.params),
         attributes: av_attrs(arena, &h.attributes),
@@ -3715,12 +3671,7 @@ fn av_class_member<'a>(
             ClassMemberKind::Property(p) => {
                 arena_ast::ClassMemberKind::Property(arena_ast::PropertyDecl {
                     name: av_ident(arena, &p.name),
-                    visibility: p.visibility,
-                    set_visibility: p.set_visibility,
-                    is_static: p.is_static,
-                    is_readonly: p.is_readonly,
-                    is_final: p.is_final,
-                    is_abstract: p.is_abstract,
+                    modifiers: p.modifiers,
                     type_hint: p.type_hint.as_ref().map(|t| av_type_hint(arena, t)),
                     default: p.default.as_ref().map(|e| av_expr(arena, e)),
                     attributes: av_attrs(arena, &p.attributes),
@@ -3731,10 +3682,7 @@ fn av_class_member<'a>(
             ClassMemberKind::Method(m) => {
                 arena_ast::ClassMemberKind::Method(arena_ast::MethodDecl {
                     name: av_ident(arena, &m.name),
-                    visibility: m.visibility,
-                    is_static: m.is_static,
-                    is_abstract: m.is_abstract,
-                    is_final: m.is_final,
+                    modifiers: m.modifiers,
                     by_ref: m.by_ref,
                     params: av_params(arena, &m.params),
                     return_type: m.return_type.as_ref().map(|t| av_type_hint(arena, t)),
@@ -3771,8 +3719,7 @@ fn av_class_const<'a>(
 ) -> arena_ast::ClassConstDecl<'a, 'a> {
     arena_ast::ClassConstDecl {
         name: av_ident(arena, &c.name),
-        visibility: c.visibility,
-        is_final: c.is_final,
+        modifiers: c.modifiers,
         type_hint: c
             .type_hint
             .as_ref()
@@ -3904,10 +3851,7 @@ fn av_enum_decl<'a>(arena: &'a bumpalo::Bump, en: &EnumDecl) -> arena_ast::EnumD
                 EnumMemberKind::Method(m) => {
                     arena_ast::EnumMemberKind::Method(arena_ast::MethodDecl {
                         name: av_ident(arena, &m.name),
-                        visibility: m.visibility,
-                        is_static: m.is_static,
-                        is_abstract: m.is_abstract,
-                        is_final: m.is_final,
+                        modifiers: m.modifiers,
                         by_ref: m.by_ref,
                         params: av_params(arena, &m.params),
                         return_type: m.return_type.as_ref().map(|t| av_type_hint(arena, t)),

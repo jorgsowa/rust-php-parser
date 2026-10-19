@@ -33,10 +33,9 @@ min_php=8.5
                       "end": 43
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -68,10 +67,9 @@ min_php=8.5
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": true,
-                      "visibility": null,
-                      "set_visibility": null,
+                      "modifiers": {
+                        "is_final": true
+                      },
                       "attributes": [],
                       "span": {
                         "start": 44,

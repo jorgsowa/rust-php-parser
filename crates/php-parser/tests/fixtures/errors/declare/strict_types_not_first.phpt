@@ -186,10 +186,6 @@ PHP Fatal error:  strict_types declaration must be the very first statement in t
                       "end": 143
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

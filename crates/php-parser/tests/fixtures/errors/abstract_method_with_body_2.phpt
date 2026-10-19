@@ -35,10 +35,10 @@ PHP Fatal error:  Abstract function Foo::bar() cannot contain body in Standard i
                       "end": 55
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {

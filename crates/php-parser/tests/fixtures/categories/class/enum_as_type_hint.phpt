@@ -37,10 +37,9 @@ function baz(Enum $x): Enum { return $x; }
                       "end": 36
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -78,10 +77,10 @@ function baz(Enum $x): Enum { return $x; }
                       "end": 63
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -119,10 +118,9 @@ function baz(Enum $x): Enum { return $x; }
                       "end": 88
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -154,10 +152,6 @@ function baz(Enum $x): Enum { return $x; }
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 89,
@@ -279,10 +273,6 @@ function baz(Enum $x): Enum { return $x; }
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 142,

@@ -33,10 +33,6 @@ use App\{A, B,};
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 19,
@@ -55,10 +51,6 @@ use App\{A, B,};
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 23,
@@ -184,10 +176,6 @@ use App\{A, B,};
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 57,
@@ -267,10 +255,6 @@ use App\{A, B,};
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 84,

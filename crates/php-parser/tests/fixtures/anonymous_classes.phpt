@@ -377,10 +377,9 @@ $obj = new class($x) extends Base implements Iface {
                                       "end": 266
                                     }
                                   },
-                                  "visibility": "Public",
-                                  "set_visibility": null,
-                                  "is_static": false,
-                                  "is_readonly": false,
+                                  "modifiers": {
+                                    "visibility": "Public"
+                                  },
                                   "type_hint": null,
                                   "default": {
                                     "kind": {
@@ -409,10 +408,9 @@ $obj = new class($x) extends Base implements Iface {
                                       "end": 298
                                     }
                                   },
-                                  "visibility": "Public",
-                                  "is_static": false,
-                                  "is_abstract": false,
-                                  "is_final": false,
+                                  "modifiers": {
+                                    "visibility": "Public"
+                                  },
                                   "by_ref": false,
                                   "params": [],
                                   "return_type": null,
@@ -533,10 +531,9 @@ $obj = new class($x) extends Base implements Iface {
                                       "end": 462
                                     }
                                   },
-                                  "visibility": "Private",
-                                  "set_visibility": null,
-                                  "is_static": false,
-                                  "is_readonly": false,
+                                  "modifiers": {
+                                    "visibility": "Private"
+                                  },
                                   "type_hint": null,
                                   "default": null,
                                   "attributes": []
@@ -557,10 +554,9 @@ $obj = new class($x) extends Base implements Iface {
                                       "end": 495
                                     }
                                   },
-                                  "visibility": "Public",
-                                  "is_static": false,
-                                  "is_abstract": false,
-                                  "is_final": false,
+                                  "modifiers": {
+                                    "visibility": "Public"
+                                  },
                                   "by_ref": false,
                                   "params": [
                                     {
@@ -575,10 +571,6 @@ $obj = new class($x) extends Base implements Iface {
                                       "default": null,
                                       "by_ref": false,
                                       "variadic": false,
-                                      "is_readonly": false,
-                                      "is_final": false,
-                                      "visibility": null,
-                                      "set_visibility": null,
                                       "attributes": [],
                                       "span": {
                                         "start": 496,
@@ -663,10 +655,9 @@ $obj = new class($x) extends Base implements Iface {
                                       "end": 565
                                     }
                                   },
-                                  "visibility": "Public",
-                                  "is_static": false,
-                                  "is_abstract": false,
-                                  "is_final": false,
+                                  "modifiers": {
+                                    "visibility": "Public"
+                                  },
                                   "by_ref": false,
                                   "params": [],
                                   "return_type": null,

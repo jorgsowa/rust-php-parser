@@ -43,10 +43,10 @@ PHP Fatal error:  Abstract function A::f() cannot be declared private in Standar
                       "end": 56
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -69,10 +69,11 @@ PHP Fatal error:  Abstract function A::f() cannot be declared private in Standar
                       "end": 98
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": true,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_static": true,
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

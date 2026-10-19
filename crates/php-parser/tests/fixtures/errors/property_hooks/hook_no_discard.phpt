@@ -104,10 +104,9 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                 "end": 82
                               }
                             },
-                            "visibility": "Public",
-                            "set_visibility": null,
-                            "is_static": false,
-                            "is_readonly": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "type_hint": null,
                             "default": null,
                             "attributes": [],
@@ -115,7 +114,6 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                               {
                                 "kind": "Get",
                                 "body": "Abstract",
-                                "is_final": false,
                                 "by_ref": false,
                                 "params": [],
                                 "attributes": [
@@ -187,10 +185,9 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                 "end": 143
                               }
                             },
-                            "visibility": "Public",
-                            "set_visibility": null,
-                            "is_static": false,
-                            "is_readonly": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "type_hint": null,
                             "default": null,
                             "attributes": [],
@@ -208,7 +205,6 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                     }
                                   }
                                 },
-                                "is_final": false,
                                 "by_ref": false,
                                 "params": [],
                                 "attributes": [
@@ -253,10 +249,9 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                 "end": 193
                               }
                             },
-                            "visibility": "Public",
-                            "set_visibility": null,
-                            "is_static": false,
-                            "is_readonly": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "type_hint": {
                               "kind": {
                                 "Named": {
@@ -283,7 +278,6 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                 "body": {
                                   "Block": []
                                 },
-                                "is_final": false,
                                 "by_ref": false,
                                 "params": [],
                                 "attributes": [
@@ -328,10 +322,9 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                 "end": 231
                               }
                             },
-                            "visibility": "Public",
-                            "set_visibility": null,
-                            "is_static": false,
-                            "is_readonly": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "type_hint": null,
                             "default": null,
                             "attributes": [],
@@ -349,7 +342,6 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                     }
                                   }
                                 },
-                                "is_final": false,
                                 "by_ref": false,
                                 "params": [],
                                 "attributes": [
@@ -411,10 +403,9 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                 "end": 306
                               }
                             },
-                            "visibility": "Public",
-                            "is_static": false,
-                            "is_abstract": false,
-                            "is_final": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "by_ref": false,
                             "params": [
                               {
@@ -429,10 +420,9 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                 "default": null,
                                 "by_ref": false,
                                 "variadic": false,
-                                "is_readonly": false,
-                                "is_final": false,
-                                "visibility": "Public",
-                                "set_visibility": null,
+                                "modifiers": {
+                                  "visibility": "Public"
+                                },
                                 "attributes": [],
                                 "hooks": [
                                   {
@@ -448,7 +438,6 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                         }
                                       }
                                     },
-                                    "is_final": false,
                                     "by_ref": false,
                                     "params": [],
                                     "attributes": [
@@ -544,10 +533,9 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                 "end": 400
                               }
                             },
-                            "visibility": "Public",
-                            "set_visibility": null,
-                            "is_static": false,
-                            "is_readonly": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "type_hint": null,
                             "default": null,
                             "attributes": [],
@@ -565,7 +553,6 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                     }
                                   }
                                 },
-                                "is_final": false,
                                 "by_ref": false,
                                 "params": [],
                                 "attributes": [

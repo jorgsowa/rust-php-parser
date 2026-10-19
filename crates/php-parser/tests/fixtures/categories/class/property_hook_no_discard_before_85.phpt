@@ -37,10 +37,9 @@ class A {
                       "end": 29
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -58,7 +57,6 @@ class A {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [

@@ -62,10 +62,6 @@ PHP Fatal error:  void cannot be used as a parameter type in Standard input code
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 17,
@@ -101,10 +97,6 @@ PHP Fatal error:  void cannot be used as a parameter type in Standard input code
               "default": null,
               "by_ref": false,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 26,
@@ -173,10 +165,6 @@ PHP Fatal error:  void cannot be used as a parameter type in Standard input code
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 57,
@@ -258,10 +246,6 @@ PHP Fatal error:  void cannot be used as a parameter type in Standard input code
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 78,
@@ -328,10 +312,9 @@ PHP Fatal error:  void cannot be used as a parameter type in Standard input code
                       "end": 135
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -363,10 +346,9 @@ PHP Fatal error:  void cannot be used as a parameter type in Standard input code
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 136,
@@ -394,10 +376,9 @@ PHP Fatal error:  void cannot be used as a parameter type in Standard input code
                       "end": 176
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -429,10 +410,6 @@ PHP Fatal error:  void cannot be used as a parameter type in Standard input code
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 177,
@@ -468,10 +445,6 @@ PHP Fatal error:  void cannot be used as a parameter type in Standard input code
                       "default": null,
                       "by_ref": true,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 185,

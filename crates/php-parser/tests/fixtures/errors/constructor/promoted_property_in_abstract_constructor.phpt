@@ -50,10 +50,10 @@ PHP Fatal error:  Cannot declare promoted property in an abstract constructor in
                       "end": 65
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -68,10 +68,9 @@ PHP Fatal error:  Cannot declare promoted property in an abstract constructor in
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 66,
@@ -90,10 +89,6 @@ PHP Fatal error:  Cannot declare promoted property in an abstract constructor in
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 77,
@@ -129,10 +124,10 @@ PHP Fatal error:  Cannot declare promoted property in an abstract constructor in
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": true,
-                      "is_final": false,
-                      "visibility": "Private",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Private",
+                        "is_readonly": true
+                      },
                       "attributes": [],
                       "span": {
                         "start": 81,
@@ -168,10 +163,9 @@ PHP Fatal error:  Cannot declare promoted property in an abstract constructor in
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": "Protected",
+                      "modifiers": {
+                        "set_visibility": "Protected"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 106,
@@ -220,10 +214,9 @@ PHP Fatal error:  Cannot declare promoted property in an abstract constructor in
                       "end": 180
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -238,10 +231,9 @@ PHP Fatal error:  Cannot declare promoted property in an abstract constructor in
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 181,
@@ -289,10 +281,9 @@ PHP Fatal error:  Cannot declare promoted property in an abstract constructor in
                       "end": 238
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -307,10 +298,9 @@ PHP Fatal error:  Cannot declare promoted property in an abstract constructor in
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "hooks": [
                         {
@@ -326,7 +316,6 @@ PHP Fatal error:  Cannot declare promoted property in an abstract constructor in
                               }
                             }
                           },
-                          "is_final": false,
                           "by_ref": false,
                           "params": [],
                           "attributes": [],

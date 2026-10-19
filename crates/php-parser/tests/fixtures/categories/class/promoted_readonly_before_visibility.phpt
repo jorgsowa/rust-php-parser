@@ -40,10 +40,9 @@ class Foo {
                       "end": 49
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -75,10 +74,10 @@ class Foo {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": true,
-                      "is_final": false,
-                      "visibility": "Protected",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Protected",
+                        "is_readonly": true
+                      },
                       "attributes": [],
                       "span": {
                         "start": 59,
@@ -114,10 +113,10 @@ class Foo {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": true,
-                      "is_final": false,
-                      "visibility": "Private",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Private",
+                        "is_readonly": true
+                      },
                       "attributes": [],
                       "span": {
                         "start": 97,
@@ -153,10 +152,10 @@ class Foo {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": true,
-                      "is_final": false,
-                      "visibility": "Private",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Private",
+                        "is_readonly": true
+                      },
                       "attributes": [],
                       "span": {
                         "start": 130,

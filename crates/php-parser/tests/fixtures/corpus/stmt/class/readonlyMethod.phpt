@@ -37,10 +37,6 @@ PHP Fatal error:  Cannot use the readonly modifier on a method in Standard input
                       "end": 37
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

@@ -28,8 +28,6 @@ min_php=8.3
                       "end": 48
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Union": [
@@ -121,8 +119,6 @@ min_php=8.3
                       "end": 75
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Union": [

@@ -30,10 +30,6 @@ function() use($a) : \Foo\Bar {};
                   "default": null,
                   "by_ref": false,
                   "variadic": false,
-                  "is_readonly": false,
-                  "is_final": false,
-                  "visibility": null,
-                  "set_visibility": null,
                   "attributes": [],
                   "span": {
                     "start": 15,
@@ -96,10 +92,6 @@ function() use($a) : \Foo\Bar {};
                   "default": null,
                   "by_ref": false,
                   "variadic": false,
-                  "is_readonly": false,
-                  "is_final": false,
-                  "visibility": null,
-                  "set_visibility": null,
                   "attributes": [],
                   "span": {
                     "start": 37,
@@ -213,10 +205,6 @@ function() use($a) : \Foo\Bar {};
                   "default": null,
                   "by_ref": false,
                   "variadic": false,
-                  "is_readonly": false,
-                  "is_final": false,
-                  "visibility": null,
-                  "set_visibility": null,
                   "attributes": [],
                   "span": {
                     "start": 92,
@@ -286,10 +274,6 @@ function() use($a) : \Foo\Bar {};
                   "default": null,
                   "by_ref": false,
                   "variadic": false,
-                  "is_readonly": false,
-                  "is_final": false,
-                  "visibility": null,
-                  "set_visibility": null,
                   "attributes": [],
                   "span": {
                     "start": 131,

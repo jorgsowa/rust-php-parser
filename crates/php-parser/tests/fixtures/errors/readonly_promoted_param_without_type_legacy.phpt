@@ -42,10 +42,9 @@ PHP Fatal error:  Readonly property Foo::$x must have type in Standard input cod
                       "end": 49
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -60,10 +59,10 @@ PHP Fatal error:  Readonly property Foo::$x must have type in Standard input cod
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": true,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public",
+                        "is_readonly": true
+                      },
                       "attributes": [],
                       "span": {
                         "start": 59,

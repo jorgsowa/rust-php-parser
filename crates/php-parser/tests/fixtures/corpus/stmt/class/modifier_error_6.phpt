@@ -35,10 +35,9 @@ PHP Fatal error:  Multiple final modifiers are not allowed in Standard input cod
                       "end": 38
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "is_final": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

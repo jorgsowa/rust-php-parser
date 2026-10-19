@@ -45,8 +45,6 @@ PHP Fatal error:  Cannot redefine class constant C::A in Standard input code on 
                       "end": 27
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1
@@ -74,8 +72,6 @@ PHP Fatal error:  Cannot redefine class constant C::A in Standard input code on 
                       "end": 44
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 2
@@ -103,8 +99,6 @@ PHP Fatal error:  Cannot redefine class constant C::A in Standard input code on 
                       "end": 51
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 3
@@ -132,8 +126,6 @@ PHP Fatal error:  Cannot redefine class constant C::A in Standard input code on 
                       "end": 68
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 4
@@ -202,8 +194,6 @@ PHP Fatal error:  Cannot redefine class constant C::A in Standard input code on 
                       "end": 108
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1

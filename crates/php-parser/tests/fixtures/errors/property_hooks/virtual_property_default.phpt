@@ -62,10 +62,9 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "end": 33
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -81,7 +80,6 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -135,11 +133,10 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "end": 90
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_abstract": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_abstract": true
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -155,7 +152,6 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -182,10 +178,9 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "end": 117
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -211,7 +206,6 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -238,10 +232,9 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "end": 149
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -259,7 +252,6 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "body": {
                         "Block": []
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -286,10 +278,9 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "end": 179
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -334,7 +325,6 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -361,10 +351,9 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "end": 218
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -410,7 +399,6 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -437,10 +425,9 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "end": 259
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -494,7 +481,6 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -521,10 +507,9 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "end": 298
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -569,7 +554,6 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -596,10 +580,9 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "end": 337
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -644,7 +627,6 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -671,10 +653,9 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "end": 377
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -734,7 +715,6 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -761,10 +741,9 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "end": 424
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -835,7 +814,6 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -862,10 +840,9 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "end": 487
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -906,10 +883,9 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                                 "end": 522
                                               }
                                             },
-                                            "visibility": "Public",
-                                            "set_visibility": null,
-                                            "is_static": false,
-                                            "is_readonly": false,
+                                            "modifiers": {
+                                              "visibility": "Public"
+                                            },
                                             "type_hint": null,
                                             "default": null,
                                             "attributes": []
@@ -930,10 +906,6 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                                                 "end": 534
                                               }
                                             },
-                                            "visibility": null,
-                                            "is_static": false,
-                                            "is_abstract": false,
-                                            "is_final": false,
                                             "by_ref": false,
                                             "params": [],
                                             "return_type": null,
@@ -1001,7 +973,6 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -1028,10 +999,9 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "end": 576
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -1126,7 +1096,6 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -1153,10 +1122,9 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                       "end": 654
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -1218,7 +1186,6 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],

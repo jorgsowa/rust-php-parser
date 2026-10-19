@@ -66,10 +66,9 @@ PHP Fatal error:  Cannot use "parent" when current class scope has no parent in 
                       "end": 36
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -107,10 +106,9 @@ PHP Fatal error:  Cannot use "parent" when current class scope has no parent in 
                       "end": 51
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -167,8 +165,6 @@ PHP Fatal error:  Cannot use "parent" when current class scope has no parent in 
                       "end": 87
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -214,10 +210,6 @@ PHP Fatal error:  Cannot use "parent" when current class scope has no parent in 
                       "end": 131
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -285,10 +277,6 @@ PHP Fatal error:  Cannot use "parent" when current class scope has no parent in 
                       },
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 132,
@@ -371,10 +359,6 @@ PHP Fatal error:  Cannot use "parent" when current class scope has no parent in 
                                                 "end": 242
                                               }
                                             },
-                                            "visibility": null,
-                                            "is_static": false,
-                                            "is_abstract": false,
-                                            "is_final": false,
                                             "by_ref": false,
                                             "params": [],
                                             "return_type": null,
@@ -587,10 +571,9 @@ PHP Fatal error:  Cannot use "parent" when current class scope has no parent in 
                       "end": 297
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -636,7 +619,6 @@ PHP Fatal error:  Cannot use "parent" when current class scope has no parent in 
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -695,10 +677,6 @@ PHP Fatal error:  Cannot use "parent" when current class scope has no parent in 
                       "end": 360
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -779,10 +757,6 @@ PHP Fatal error:  Cannot use "parent" when current class scope has no parent in 
                       "end": 409
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

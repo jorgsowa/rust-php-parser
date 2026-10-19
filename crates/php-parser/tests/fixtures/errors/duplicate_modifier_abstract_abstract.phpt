@@ -35,10 +35,9 @@ PHP Fatal error:  Multiple abstract modifiers are not allowed in Standard input 
                       "end": 44
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

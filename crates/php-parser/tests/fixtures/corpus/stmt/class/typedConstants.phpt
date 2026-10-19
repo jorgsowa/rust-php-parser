@@ -39,8 +39,6 @@ class Test {
                       "end": 34
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -86,8 +84,9 @@ class Test {
                       "end": 66
                     }
                   },
-                  "visibility": "Private",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -133,8 +132,9 @@ class Test {
                       "end": 75
                     }
                   },
-                  "visibility": "Private",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -180,8 +180,6 @@ class Test {
                       "end": 104
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -227,8 +225,6 @@ class Test {
                       "end": 137
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Union": [

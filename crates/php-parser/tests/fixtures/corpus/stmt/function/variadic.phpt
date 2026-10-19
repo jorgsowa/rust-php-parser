@@ -47,10 +47,6 @@ class Constructor {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 21,
@@ -69,10 +65,6 @@ class Constructor {
               "default": null,
               "by_ref": false,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 25,
@@ -114,10 +106,6 @@ class Constructor {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 51,
@@ -136,10 +124,6 @@ class Constructor {
               "default": null,
               "by_ref": true,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 55,
@@ -181,10 +165,6 @@ class Constructor {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 82,
@@ -220,10 +200,6 @@ class Constructor {
               "default": null,
               "by_ref": false,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 86,
@@ -265,10 +241,6 @@ class Constructor {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 117,
@@ -304,10 +276,6 @@ class Constructor {
               "default": null,
               "by_ref": true,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 121,
@@ -349,10 +317,6 @@ class Constructor {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 153,
@@ -396,10 +360,6 @@ class Constructor {
               "default": null,
               "by_ref": false,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 157,
@@ -441,10 +401,6 @@ class Constructor {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 189,
@@ -488,10 +444,6 @@ class Constructor {
               "default": null,
               "by_ref": true,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 193,
@@ -533,10 +485,6 @@ class Constructor {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 226,
@@ -600,10 +548,6 @@ class Constructor {
               "default": null,
               "by_ref": false,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 230,
@@ -645,10 +589,6 @@ class Constructor {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 268,
@@ -712,10 +652,6 @@ class Constructor {
               "default": null,
               "by_ref": true,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 272,
@@ -757,10 +693,6 @@ class Constructor {
               "default": null,
               "by_ref": false,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [
                 {
                   "name": {
@@ -820,10 +752,6 @@ class Constructor {
               "default": null,
               "by_ref": true,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [
                 {
                   "name": {
@@ -900,10 +828,6 @@ class Constructor {
               "default": null,
               "by_ref": false,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [
                 {
                   "name": {
@@ -980,10 +904,6 @@ class Constructor {
               "default": null,
               "by_ref": true,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [
                 {
                   "name": {
@@ -1048,10 +968,9 @@ class Constructor {
                       "end": 487
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -1066,10 +985,6 @@ class Constructor {
                       "default": null,
                       "by_ref": false,
                       "variadic": true,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 488,
@@ -1097,10 +1012,9 @@ class Constructor {
                       "end": 526
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -1115,10 +1029,6 @@ class Constructor {
                       "default": null,
                       "by_ref": true,
                       "variadic": true,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 527,
@@ -1146,10 +1056,9 @@ class Constructor {
                       "end": 566
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -1181,10 +1090,6 @@ class Constructor {
                       "default": null,
                       "by_ref": false,
                       "variadic": true,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 567,
@@ -1212,10 +1117,9 @@ class Constructor {
                       "end": 610
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -1247,10 +1151,6 @@ class Constructor {
                       "default": null,
                       "by_ref": true,
                       "variadic": true,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 611,
@@ -1305,10 +1205,9 @@ class Constructor {
                       "end": 681
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -1340,10 +1239,6 @@ class Constructor {
                       "default": null,
                       "by_ref": false,
                       "variadic": true,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [
                         {
                           "name": {

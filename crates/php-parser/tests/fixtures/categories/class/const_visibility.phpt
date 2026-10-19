@@ -31,8 +31,9 @@
                       "end": 32
                     }
                   },
-                  "visibility": "Public",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -60,8 +61,9 @@
                       "end": 55
                     }
                   },
-                  "visibility": "Protected",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected"
+                  },
                   "value": {
                     "kind": {
                       "Int": 2
@@ -89,8 +91,9 @@
                       "end": 76
                     }
                   },
-                  "visibility": "Private",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "value": {
                     "kind": {
                       "Int": 3

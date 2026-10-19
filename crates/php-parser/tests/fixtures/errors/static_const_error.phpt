@@ -37,8 +37,6 @@ PHP Fatal error:  Cannot use the static modifier on a class constant in Standard
                       "end": 30
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1

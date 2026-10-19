@@ -34,8 +34,6 @@ PHP Fatal error:  Traits cannot have constants in Standard input code on line 3
                       "end": 27
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1

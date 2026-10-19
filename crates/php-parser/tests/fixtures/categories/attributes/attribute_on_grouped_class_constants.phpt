@@ -36,8 +36,9 @@ interface I { #[A] const X = 1, Y = 2; }
                       "end": 49
                     }
                   },
-                  "visibility": "Public",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -129,8 +130,9 @@ interface I { #[A] const X = 1, Y = 2; }
                       "end": 56
                     }
                   },
-                  "visibility": "Public",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "value": {
                     "kind": {
                       "Int": 2
@@ -243,8 +245,6 @@ interface I { #[A] const X = 1, Y = 2; }
                       "end": 90
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1
@@ -290,8 +290,6 @@ interface I { #[A] const X = 1, Y = 2; }
                       "end": 97
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 2

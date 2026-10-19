@@ -126,8 +126,6 @@ enum Status: string implements Loggable, Serializable {
                       "end": 140
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "ClassConstAccess": {
@@ -183,10 +181,9 @@ enum Status: string implements Loggable, Serializable {
                       "end": 183
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -263,10 +260,9 @@ enum Status: string implements Loggable, Serializable {
                       "end": 260
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {

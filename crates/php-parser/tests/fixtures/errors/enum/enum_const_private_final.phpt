@@ -32,8 +32,10 @@ PHP Fatal error:  Private constant Status::PRIV cannot be final as it is not vis
                       "end": 44
                     }
                   },
-                  "visibility": "Private",
-                  "is_final": true,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_final": true
+                  },
                   "value": {
                     "kind": {
                       "Int": 1

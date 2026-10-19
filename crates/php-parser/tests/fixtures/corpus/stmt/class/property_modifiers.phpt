@@ -43,11 +43,10 @@ PHP Fatal error:  Cannot redeclare Test::$prop in Standard input code on line 4
                       "end": 41
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_final": true
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -68,10 +67,9 @@ PHP Fatal error:  Cannot redeclare Test::$prop in Standard input code on line 4
                       "end": 65
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": true,
+                  "modifiers": {
+                    "is_readonly": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -109,10 +107,10 @@ PHP Fatal error:  Cannot redeclare Test::$prop in Standard input code on line 4
                       "end": 91
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_static": true
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []

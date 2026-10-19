@@ -76,10 +76,9 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
                       "end": 94
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {

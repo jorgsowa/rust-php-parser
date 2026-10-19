@@ -40,10 +40,9 @@ function test((A&B)|(X&Y) $a): (A&B)|(X&Y) {}
                       "end": 48
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Union": [
@@ -165,10 +164,10 @@ function test((A&B)|(X&Y) $a): (A&B)|(X&Y) {}
                       "end": 84
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_readonly": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Union": [
@@ -385,10 +384,6 @@ function test((A&B)|(X&Y) $a): (A&B)|(X&Y) {}
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 103,

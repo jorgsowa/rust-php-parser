@@ -31,10 +31,10 @@
                       "end": 51
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "set_visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Nullable": {
@@ -106,10 +106,10 @@
                       "end": 59
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "set_visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Nullable": {

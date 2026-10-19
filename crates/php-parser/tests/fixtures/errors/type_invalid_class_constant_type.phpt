@@ -57,8 +57,6 @@ PHP Fatal error:  Class constant A::A cannot have type void in Standard input co
                       "end": 32
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -104,8 +102,6 @@ PHP Fatal error:  Class constant A::A cannot have type void in Standard input co
                       "end": 39
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -151,8 +147,6 @@ PHP Fatal error:  Class constant A::A cannot have type void in Standard input co
                       "end": 66
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Nullable": {
@@ -204,8 +198,6 @@ PHP Fatal error:  Class constant A::A cannot have type void in Standard input co
                       "end": 99
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Union": [
@@ -300,8 +292,6 @@ PHP Fatal error:  Class constant A::A cannot have type void in Standard input co
                       "end": 138
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -369,8 +359,6 @@ PHP Fatal error:  Class constant A::A cannot have type void in Standard input co
                       "end": 175
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -455,8 +443,6 @@ PHP Fatal error:  Class constant A::A cannot have type void in Standard input co
                                       "end": 216
                                     }
                                   },
-                                  "visibility": null,
-                                  "is_final": false,
                                   "type_hint": {
                                     "kind": {
                                       "Named": {

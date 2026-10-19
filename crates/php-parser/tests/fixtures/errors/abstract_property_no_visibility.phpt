@@ -37,11 +37,9 @@ PHP Fatal error:  Only hooked properties may be declared abstract in Standard in
                       "end": 38
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_abstract": true,
+                  "modifiers": {
+                    "is_abstract": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {

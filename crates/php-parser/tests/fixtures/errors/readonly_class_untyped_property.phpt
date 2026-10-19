@@ -43,10 +43,9 @@ PHP Fatal error:  Readonly property C::$a must have type in Standard input code 
                       "end": 38
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -67,10 +66,9 @@ PHP Fatal error:  Readonly property C::$a must have type in Standard input code 
                       "end": 57
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -108,10 +106,9 @@ PHP Fatal error:  Readonly property C::$a must have type in Standard input code 
                       "end": 90
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -126,10 +123,9 @@ PHP Fatal error:  Readonly property C::$a must have type in Standard input code 
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 91,
@@ -165,10 +161,9 @@ PHP Fatal error:  Readonly property C::$a must have type in Standard input code 
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 102,
@@ -187,10 +182,6 @@ PHP Fatal error:  Readonly property C::$a must have type in Standard input code 
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 117,
@@ -257,10 +248,9 @@ PHP Fatal error:  Readonly property C::$a must have type in Standard input code 
                                       "end": 161
                                     }
                                   },
-                                  "visibility": "Public",
-                                  "set_visibility": null,
-                                  "is_static": false,
-                                  "is_readonly": false,
+                                  "modifiers": {
+                                    "visibility": "Public"
+                                  },
                                   "type_hint": null,
                                   "default": null,
                                   "attributes": []

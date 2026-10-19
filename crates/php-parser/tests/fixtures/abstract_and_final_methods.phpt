@@ -37,10 +37,10 @@ abstract class Base {
                       "end": 68
                     }
                   },
-                  "visibility": "Protected",
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected",
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -80,10 +80,10 @@ abstract class Base {
                       "end": 113
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_final": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {

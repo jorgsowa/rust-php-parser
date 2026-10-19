@@ -121,10 +121,6 @@ PHP Fatal error:  Cannot use "self" when no class scope is active in Standard in
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 63,
@@ -161,10 +157,6 @@ PHP Fatal error:  Cannot use "self" when no class scope is active in Standard in
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 83,
@@ -201,10 +193,6 @@ PHP Fatal error:  Cannot use "self" when no class scope is active in Standard in
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 95,

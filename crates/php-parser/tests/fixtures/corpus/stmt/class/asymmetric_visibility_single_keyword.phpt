@@ -44,10 +44,9 @@ class Foo {
                       "end": 48
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "set_visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -85,10 +84,9 @@ class Foo {
                       "end": 79
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": "Protected",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "set_visibility": "Protected"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -134,10 +132,9 @@ class Foo {
                       "end": 114
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": "Public",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "set_visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -175,10 +172,9 @@ class Foo {
                       "end": 148
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -210,10 +206,9 @@ class Foo {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": "Private",
+                      "modifiers": {
+                        "set_visibility": "Private"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 158,
@@ -249,10 +244,9 @@ class Foo {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": "Protected",
+                      "modifiers": {
+                        "set_visibility": "Protected"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 193,

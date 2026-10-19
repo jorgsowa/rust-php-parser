@@ -878,10 +878,6 @@ PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $val
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 343,
@@ -900,10 +896,6 @@ PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $val
               "default": null,
               "by_ref": true,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 353,
@@ -922,10 +914,6 @@ PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $val
               "default": null,
               "by_ref": false,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 361,
@@ -964,10 +952,6 @@ PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $val
                   "default": null,
                   "by_ref": false,
                   "variadic": false,
-                  "is_readonly": false,
-                  "is_final": false,
-                  "visibility": null,
-                  "set_visibility": null,
                   "attributes": [],
                   "span": {
                     "start": 381,
@@ -1081,10 +1065,9 @@ PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $val
                       "end": 474
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -1099,10 +1082,9 @@ PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $val
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 475,

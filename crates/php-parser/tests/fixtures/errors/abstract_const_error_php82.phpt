@@ -37,8 +37,6 @@ PHP Fatal error:  Cannot use 'abstract' as constant modifier in Standard input c
                       "end": 32
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1

@@ -38,10 +38,10 @@ class User {
                       "end": 57
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": "Protected",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "set_visibility": "Protected"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -79,10 +79,10 @@ class User {
                       "end": 91
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "set_visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -120,10 +120,10 @@ class User {
                       "end": 133
                     }
                   },
-                  "visibility": "Protected",
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Protected",
+                    "set_visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {

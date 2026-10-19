@@ -35,10 +35,9 @@ PHP Fatal error:  Method A::__clone() cannot be static in Standard input code on
                       "end": 39
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

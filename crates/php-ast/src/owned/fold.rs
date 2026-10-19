@@ -594,10 +594,7 @@ pub fn fold_owned_param<F: OwnedFold + ?Sized>(folder: &mut F, p: &Param) -> Par
         default: p.default.as_ref().map(|e| folder.fold_expr(e)),
         by_ref: p.by_ref,
         variadic: p.variadic,
-        is_readonly: p.is_readonly,
-        is_final: p.is_final,
-        visibility: p.visibility,
-        set_visibility: p.set_visibility,
+        modifiers: p.modifiers,
         attributes: fold_owned_attrs(folder, &p.attributes),
         hooks: fold_owned_hooks(folder, &p.hooks),
         doc_comment: p.doc_comment.clone(),
@@ -642,12 +639,7 @@ pub fn fold_owned_class_member<F: OwnedFold + ?Sized>(
         kind: match &member.kind {
             ClassMemberKind::Property(p) => ClassMemberKind::Property(PropertyDecl {
                 name: p.name.clone(),
-                visibility: p.visibility,
-                set_visibility: p.set_visibility,
-                is_static: p.is_static,
-                is_readonly: p.is_readonly,
-                is_final: p.is_final,
-                is_abstract: p.is_abstract,
+                modifiers: p.modifiers,
                 type_hint: p.type_hint.as_ref().map(|t| folder.fold_type_hint(t)),
                 default: p.default.as_ref().map(|e| folder.fold_expr(e)),
                 attributes: fold_owned_attrs(folder, &p.attributes),
@@ -656,10 +648,7 @@ pub fn fold_owned_class_member<F: OwnedFold + ?Sized>(
             }),
             ClassMemberKind::Method(m) => ClassMemberKind::Method(MethodDecl {
                 name: m.name.clone(),
-                visibility: m.visibility,
-                is_static: m.is_static,
-                is_abstract: m.is_abstract,
-                is_final: m.is_final,
+                modifiers: m.modifiers,
                 by_ref: m.by_ref,
                 params: fold_owned_params(folder, &m.params),
                 return_type: m.return_type.as_ref().map(|t| folder.fold_type_hint(t)),
@@ -691,10 +680,7 @@ pub fn fold_owned_enum_member<F: OwnedFold + ?Sized>(
             }),
             EnumMemberKind::Method(m) => EnumMemberKind::Method(MethodDecl {
                 name: m.name.clone(),
-                visibility: m.visibility,
-                is_static: m.is_static,
-                is_abstract: m.is_abstract,
-                is_final: m.is_final,
+                modifiers: m.modifiers,
                 by_ref: m.by_ref,
                 params: fold_owned_params(folder, &m.params),
                 return_type: m.return_type.as_ref().map(|t| folder.fold_type_hint(t)),
@@ -725,7 +711,7 @@ pub fn fold_owned_property_hook<F: OwnedFold + ?Sized>(
             PropertyHookBody::Expression(e) => PropertyHookBody::Expression(folder.fold_expr(e)),
             PropertyHookBody::Abstract => PropertyHookBody::Abstract,
         },
-        is_final: hook.is_final,
+        modifiers: hook.modifiers,
         by_ref: hook.by_ref,
         params: fold_owned_params(folder, &hook.params),
         attributes: fold_owned_attrs(folder, &hook.attributes),
@@ -799,8 +785,7 @@ fn fold_owned_class_const<F: OwnedFold + ?Sized>(
 ) -> ClassConstDecl {
     ClassConstDecl {
         name: c.name.clone(),
-        visibility: c.visibility,
-        is_final: c.is_final,
+        modifiers: c.modifiers,
         type_hint: c
             .type_hint
             .as_ref()

@@ -256,10 +256,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "end": 197
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -291,10 +290,6 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 198,
@@ -330,10 +325,6 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 216,
@@ -416,10 +407,10 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "end": 346
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": true,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_readonly": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -457,10 +448,10 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "end": 387
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_static": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -506,10 +497,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "end": 426
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -541,10 +531,6 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 427,
@@ -629,10 +615,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "end": 532
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -664,10 +649,6 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 533,
@@ -703,10 +684,6 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 551,
@@ -2084,10 +2061,10 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "end": 1600
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -2119,10 +2096,6 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": true,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 1601,
@@ -2336,8 +2309,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "end": 1798
                     }
                   },
-                  "visibility": "Private",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "value": {
                     "kind": {
                       "Int": 100
@@ -2365,8 +2339,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "end": 1838
                     }
                   },
-                  "visibility": "Private",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "value": {
                     "kind": {
                       "Int": 60
@@ -2394,10 +2369,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "end": 1872
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -2429,10 +2403,6 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 1873,
@@ -2468,10 +2438,6 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 1891,
@@ -3045,10 +3011,9 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "end": 2308
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -3080,10 +3045,6 @@ class RateLimitMiddleware implements MiddlewareInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 2309,

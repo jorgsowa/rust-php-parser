@@ -50,10 +50,6 @@
                                   "default": null,
                                   "by_ref": false,
                                   "variadic": false,
-                                  "is_readonly": false,
-                                  "is_final": false,
-                                  "visibility": null,
-                                  "set_visibility": null,
                                   "attributes": [],
                                   "span": {
                                     "start": 24,
@@ -134,10 +130,6 @@
                                   "default": null,
                                   "by_ref": false,
                                   "variadic": false,
-                                  "is_readonly": false,
-                                  "is_final": false,
-                                  "visibility": null,
-                                  "set_visibility": null,
                                   "attributes": [],
                                   "span": {
                                     "start": 54,

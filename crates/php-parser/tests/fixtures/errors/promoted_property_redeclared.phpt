@@ -50,10 +50,9 @@ PHP Fatal error:  Cannot redeclare A::$a in Standard input code on line 5
                       "end": 29
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -74,10 +73,9 @@ PHP Fatal error:  Cannot redeclare A::$a in Standard input code on line 5
                       "end": 44
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -98,10 +96,9 @@ PHP Fatal error:  Cannot redeclare A::$a in Standard input code on line 5
                       "end": 77
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -116,10 +113,9 @@ PHP Fatal error:  Cannot redeclare A::$a in Standard input code on line 5
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 78,
@@ -138,10 +134,9 @@ PHP Fatal error:  Cannot redeclare A::$a in Standard input code on line 5
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Private",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Private"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 89,
@@ -177,10 +172,10 @@ PHP Fatal error:  Cannot redeclare A::$a in Standard input code on line 5
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": true,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public",
+                        "is_readonly": true
+                      },
                       "attributes": [],
                       "span": {
                         "start": 101,
@@ -208,10 +203,9 @@ PHP Fatal error:  Cannot redeclare A::$a in Standard input code on line 5
                       "end": 141
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -252,10 +246,9 @@ PHP Fatal error:  Cannot redeclare A::$a in Standard input code on line 5
                       "end": 186
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -270,10 +263,9 @@ PHP Fatal error:  Cannot redeclare A::$a in Standard input code on line 5
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Protected",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Protected"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 187,
@@ -292,10 +284,9 @@ PHP Fatal error:  Cannot redeclare A::$a in Standard input code on line 5
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Protected",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Protected"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 201,
@@ -323,10 +314,9 @@ PHP Fatal error:  Cannot redeclare A::$a in Standard input code on line 5
                       "end": 231
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []

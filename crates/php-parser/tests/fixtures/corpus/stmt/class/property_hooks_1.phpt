@@ -55,10 +55,9 @@ PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be com
                       "end": 35
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -86,7 +85,6 @@ PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be com
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -120,7 +118,6 @@ PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be com
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -147,10 +144,9 @@ PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be com
                       "end": 118
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -168,7 +164,6 @@ PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be com
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -190,7 +185,6 @@ PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be com
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -217,11 +211,9 @@ PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be com
                       "end": 188
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_abstract": true,
+                  "modifiers": {
+                    "is_abstract": true
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -229,7 +221,6 @@ PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be com
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": true,
                       "params": [],
                       "attributes": [],
@@ -241,7 +232,6 @@ PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be com
                     {
                       "kind": "Set",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -268,10 +258,9 @@ PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be com
                       "end": 241
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -299,7 +288,9 @@ PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be com
                           }
                         ]
                       },
-                      "is_final": true,
+                      "modifiers": {
+                        "is_final": true
+                      },
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -313,7 +304,6 @@ PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be com
                       "body": {
                         "Block": []
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [
                         {
@@ -345,10 +335,6 @@ PHP Fatal error:  Type of parameter $value of hook Test::$prop4::set must be com
                           "default": null,
                           "by_ref": false,
                           "variadic": false,
-                          "is_readonly": false,
-                          "is_final": false,
-                          "visibility": null,
-                          "set_visibility": null,
                           "attributes": [],
                           "span": {
                             "start": 289,

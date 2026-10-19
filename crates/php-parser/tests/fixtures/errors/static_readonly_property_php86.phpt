@@ -41,10 +41,11 @@ PHP Fatal error:  Static property Foo::$x cannot be readonly in Standard input c
                       "end": 51
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true,
+                    "is_readonly": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {

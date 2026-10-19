@@ -33,8 +33,6 @@ PHP Fatal error:  Cannot use 'static' as constant modifier in Standard input cod
                       "end": 34
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1

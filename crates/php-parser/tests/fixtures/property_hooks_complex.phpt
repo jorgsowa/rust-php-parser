@@ -46,10 +46,9 @@ class Foo {
                       "end": 41
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -142,7 +141,6 @@ class Foo {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -203,7 +201,6 @@ class Foo {
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [
                         {
@@ -235,10 +232,6 @@ class Foo {
                           "default": null,
                           "by_ref": false,
                           "variadic": false,
-                          "is_readonly": false,
-                          "is_final": false,
-                          "visibility": null,
-                          "set_visibility": null,
                           "attributes": [],
                           "span": {
                             "start": 96,
@@ -270,10 +263,9 @@ class Foo {
                       "end": 161
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -337,7 +329,6 @@ class Foo {
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -465,7 +456,6 @@ class Foo {
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -492,10 +482,9 @@ class Foo {
                       "end": 272
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -559,7 +548,6 @@ class Foo {
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": true,
                       "params": [],
                       "attributes": [],

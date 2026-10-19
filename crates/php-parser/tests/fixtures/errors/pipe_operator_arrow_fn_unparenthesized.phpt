@@ -55,10 +55,6 @@ PHP Fatal error:  Arrow functions on the right hand side of |> must be parenthes
                               "default": null,
                               "by_ref": false,
                               "variadic": false,
-                              "is_readonly": false,
-                              "is_final": false,
-                              "visibility": null,
-                              "set_visibility": null,
                               "attributes": [],
                               "span": {
                                 "start": 24,

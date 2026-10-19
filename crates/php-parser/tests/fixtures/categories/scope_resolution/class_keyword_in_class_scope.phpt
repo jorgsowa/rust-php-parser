@@ -63,10 +63,9 @@ function f() {
                       "end": 46
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -104,8 +103,6 @@ function f() {
                       "end": 59
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "ClassConstAccess": {
@@ -161,10 +158,6 @@ function f() {
                       "end": 91
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -196,10 +189,6 @@ function f() {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 92,
@@ -462,10 +451,6 @@ function f() {
                       "end": 221
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -497,10 +482,6 @@ function f() {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 222,
@@ -586,10 +567,6 @@ function f() {
                       "end": 277
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -722,10 +699,6 @@ function f() {
                                         "end": 386
                                       }
                                     },
-                                    "visibility": null,
-                                    "is_static": false,
-                                    "is_abstract": false,
-                                    "is_final": false,
                                     "by_ref": false,
                                     "params": [],
                                     "return_type": {

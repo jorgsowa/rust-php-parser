@@ -38,10 +38,9 @@ PHP Fatal error:  Interfaces may only include hooked properties in Standard inpu
                       "end": 37
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {

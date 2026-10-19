@@ -28,8 +28,9 @@ min_php=8.3
                       "end": 44
                     }
                   },
-                  "visibility": "Public",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -75,8 +76,6 @@ min_php=8.3
                       "end": 76
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Union": [

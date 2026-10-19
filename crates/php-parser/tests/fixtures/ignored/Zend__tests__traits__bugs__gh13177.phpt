@@ -65,10 +65,10 @@ class Foo5 extends Foo3 {
                       "end": 57
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_final": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -311,10 +311,10 @@ class Foo5 extends Foo3 {
                       "end": 298
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_final": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -718,10 +718,9 @@ class Foo5 extends Foo3 {
                       "end": 553
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

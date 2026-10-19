@@ -38,8 +38,9 @@ PHP Parse error:  syntax error, unexpected identifier "NAME", expecting "=" in S
                       "end": 42
                     }
                   },
-                  "visibility": "Public",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {

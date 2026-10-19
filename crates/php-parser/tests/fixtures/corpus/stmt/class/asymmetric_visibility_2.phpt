@@ -45,10 +45,9 @@ PHP Fatal error:  Multiple access type modifiers are not allowed in Standard inp
                       "end": 51
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "set_visibility": "Private"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -69,10 +68,9 @@ PHP Fatal error:  Multiple access type modifiers are not allowed in Standard inp
                       "end": 84
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": "Public",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "set_visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []

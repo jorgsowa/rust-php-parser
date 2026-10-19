@@ -39,8 +39,9 @@ class Config {
                       "end": 45
                     }
                   },
-                  "visibility": "Public",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "value": {
                     "kind": {
                       "String": "1.0"
@@ -68,8 +69,9 @@ class Config {
                       "end": 78
                     }
                   },
-                  "visibility": "Private",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "value": {
                     "kind": {
                       "Bool": false
@@ -97,10 +99,10 @@ class Config {
                       "end": 116
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -146,10 +148,10 @@ class Config {
                       "end": 158
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {

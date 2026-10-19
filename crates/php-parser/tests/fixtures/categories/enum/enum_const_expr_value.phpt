@@ -64,8 +64,6 @@ min_php=8.1
                       "end": 60
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "ClassConstAccess": {
@@ -121,8 +119,6 @@ min_php=8.1
                       "end": 86
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Binary": {

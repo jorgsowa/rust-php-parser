@@ -49,10 +49,6 @@ function byref(&$ref): void {
               "default": null,
               "by_ref": false,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 24,
@@ -129,10 +125,6 @@ function byref(&$ref): void {
               "default": null,
               "by_ref": true,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 76,

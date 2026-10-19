@@ -107,10 +107,6 @@ function bar((A&B)|(C&D) $y): (E&F)|null {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 19,
@@ -344,10 +340,6 @@ function bar((A&B)|(C&D) $y): (E&F)|null {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 72,

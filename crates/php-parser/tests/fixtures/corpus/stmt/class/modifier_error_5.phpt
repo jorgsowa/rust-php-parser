@@ -35,10 +35,9 @@ PHP Fatal error:  Multiple static modifiers are not allowed in Standard input co
                       "end": 32
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []

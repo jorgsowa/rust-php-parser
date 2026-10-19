@@ -611,10 +611,6 @@ PHP Fatal error:  Cannot re-assign $this in Standard input code on line 2
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 230,
@@ -650,10 +646,6 @@ PHP Fatal error:  Cannot re-assign $this in Standard input code on line 2
               "default": null,
               "by_ref": true,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 234,
@@ -759,10 +751,6 @@ PHP Fatal error:  Cannot re-assign $this in Standard input code on line 2
                   "default": null,
                   "by_ref": false,
                   "variadic": false,
-                  "is_readonly": false,
-                  "is_final": false,
-                  "visibility": null,
-                  "set_visibility": null,
                   "attributes": [],
                   "span": {
                     "start": 292,
@@ -876,10 +864,9 @@ PHP Fatal error:  Cannot re-assign $this in Standard input code on line 2
                       "end": 375
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -894,10 +881,9 @@ PHP Fatal error:  Cannot re-assign $this in Standard input code on line 2
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 376,

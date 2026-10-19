@@ -70,10 +70,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "end": 36
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -113,10 +109,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "end": 65
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -131,10 +123,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 66,
@@ -153,10 +141,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 70,
@@ -201,10 +185,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "end": 104
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -219,10 +199,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 105,
@@ -275,10 +251,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "end": 141
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -293,10 +265,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 142,
@@ -369,10 +337,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "end": 182
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -412,10 +376,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "end": 224
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -483,10 +443,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "end": 269
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -534,10 +490,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "end": 309
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -569,10 +521,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 310,
@@ -617,10 +565,9 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "end": 360
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -652,10 +599,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 361,
@@ -708,10 +651,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "end": 403
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -751,10 +690,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "end": 438
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -821,10 +756,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "end": 487
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -891,10 +822,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "end": 536
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -962,10 +889,9 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "end": 585
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -997,10 +923,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 586,
@@ -1045,10 +967,6 @@ PHP Fatal error:  A::__clone(): Return type must be void when declared in Standa
                       "end": 633
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {

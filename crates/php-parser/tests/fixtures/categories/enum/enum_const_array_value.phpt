@@ -28,8 +28,6 @@ min_php=8.1
                       "end": 30
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Array": []
@@ -57,8 +55,6 @@ min_php=8.1
                       "end": 47
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Array": [
@@ -141,8 +137,6 @@ min_php=8.1
                       "end": 72
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Array": [

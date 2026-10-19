@@ -28,8 +28,6 @@ min_php=8.3
                       "end": 39
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Nullable": {
@@ -81,8 +79,6 @@ min_php=8.3
                       "end": 64
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Nullable": {

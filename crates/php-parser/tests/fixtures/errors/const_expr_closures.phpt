@@ -144,8 +144,6 @@ PHP Fatal error:  Closures in constant expressions must be static in Standard in
                       "end": 95
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Closure": {
@@ -181,10 +179,9 @@ PHP Fatal error:  Closures in constant expressions must be static in Standard in
                       "end": 127
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {

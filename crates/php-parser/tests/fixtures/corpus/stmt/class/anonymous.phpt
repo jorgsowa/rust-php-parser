@@ -49,10 +49,9 @@ class A {
                                 "end": 43
                               }
                             },
-                            "visibility": "Public",
-                            "is_static": false,
-                            "is_abstract": false,
-                            "is_final": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "by_ref": false,
                             "params": [],
                             "return_type": null,
@@ -184,10 +183,9 @@ class A {
                                 "end": 121
                               }
                             },
-                            "visibility": "Public",
-                            "set_visibility": null,
-                            "is_static": false,
-                            "is_readonly": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "type_hint": null,
                             "default": null,
                             "attributes": []
@@ -358,10 +356,9 @@ class A {
                       "end": 205
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -402,8 +399,6 @@ class A {
                                                 "end": 273
                                               }
                                             },
-                                            "visibility": null,
-                                            "is_final": false,
                                             "value": {
                                               "kind": {
                                                 "String": "B"

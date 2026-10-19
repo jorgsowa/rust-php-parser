@@ -73,10 +73,6 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 17,
@@ -131,10 +127,6 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
               },
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 26,
@@ -651,10 +643,6 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
                       "end": 264
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

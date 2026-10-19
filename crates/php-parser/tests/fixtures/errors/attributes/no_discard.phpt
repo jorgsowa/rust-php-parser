@@ -359,10 +359,9 @@ PHP Fatal error:  A void function does not return a value, but #[\NoDiscard] req
                       "end": 217
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -403,10 +402,9 @@ PHP Fatal error:  A void function does not return a value, but #[\NoDiscard] req
                       "end": 268
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -447,10 +445,9 @@ PHP Fatal error:  A void function does not return a value, but #[\NoDiscard] req
                       "end": 308
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -508,10 +505,9 @@ PHP Fatal error:  A void function does not return a value, but #[\NoDiscard] req
                       "end": 354
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -587,10 +583,9 @@ PHP Fatal error:  A void function does not return a value, but #[\NoDiscard] req
                       "end": 409
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -693,10 +688,9 @@ PHP Fatal error:  A void function does not return a value, but #[\NoDiscard] req
                       "end": 487
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

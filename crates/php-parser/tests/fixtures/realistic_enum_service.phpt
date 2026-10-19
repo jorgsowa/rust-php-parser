@@ -211,10 +211,9 @@ class TaskService
                       "end": 156
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -500,10 +499,10 @@ class TaskService
                       "end": 456
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -535,10 +534,6 @@ class TaskService
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 457,
@@ -686,10 +681,10 @@ class TaskService
                       "end": 605
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_static": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -735,10 +730,10 @@ class TaskService
                       "end": 645
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -770,10 +765,6 @@ class TaskService
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 646,
@@ -809,10 +800,6 @@ class TaskService
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 661,
@@ -1010,10 +997,6 @@ class TaskService
                                         "default": null,
                                         "by_ref": false,
                                         "variadic": false,
-                                        "is_readonly": false,
-                                        "is_final": false,
-                                        "visibility": null,
-                                        "set_visibility": null,
                                         "attributes": [],
                                         "span": {
                                           "start": 781,
@@ -1049,10 +1032,6 @@ class TaskService
                                         "default": null,
                                         "by_ref": false,
                                         "variadic": false,
-                                        "is_readonly": false,
-                                        "is_final": false,
-                                        "visibility": null,
-                                        "set_visibility": null,
                                         "attributes": [],
                                         "span": {
                                           "start": 792,

@@ -136,10 +136,9 @@ PHP Fatal error:  'goto' to undefined label 'outer' in Standard input code on li
                       "end": 103
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

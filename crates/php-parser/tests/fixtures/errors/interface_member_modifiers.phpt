@@ -56,8 +56,9 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                       "end": 41
                     }
                   },
-                  "visibility": "Protected",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected"
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -85,8 +86,9 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                       "end": 66
                     }
                   },
-                  "visibility": "Private",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -114,8 +116,9 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                       "end": 73
                     }
                   },
-                  "visibility": "Private",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "value": {
                     "kind": {
                       "Int": 2
@@ -143,8 +146,10 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                       "end": 106
                     }
                   },
-                  "visibility": "Protected",
-                  "is_final": true,
+                  "modifiers": {
+                    "visibility": "Protected",
+                    "is_final": true
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -172,10 +177,9 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                       "end": 136
                     }
                   },
-                  "visibility": "Protected",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -198,10 +202,10 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                       "end": 169
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -224,10 +228,9 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                       "end": 193
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "is_final": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -250,10 +253,9 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                       "end": 220
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -276,10 +278,6 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                       "end": 238
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -302,11 +300,10 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                       "end": 266
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_abstract": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_abstract": true
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -314,7 +311,6 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -341,10 +337,9 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                       "end": 292
                     }
                   },
-                  "visibility": "Protected",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Protected"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -352,7 +347,6 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -379,10 +373,9 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                       "end": 316
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -390,7 +383,6 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                     {
                       "kind": "Set",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -417,11 +409,9 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                       "end": 338
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "is_final": true
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -429,7 +419,6 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],

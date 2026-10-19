@@ -28,8 +28,9 @@ min_php=8.1
                       "end": 36
                     }
                   },
-                  "visibility": "Public",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "value": {
                     "kind": {
                       "Int": 1
@@ -57,8 +58,9 @@ min_php=8.1
                       "end": 62
                     }
                   },
-                  "visibility": "Protected",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected"
+                  },
                   "value": {
                     "kind": {
                       "Int": 2
@@ -86,8 +88,9 @@ min_php=8.1
                       "end": 86
                     }
                   },
-                  "visibility": "Private",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "value": {
                     "kind": {
                       "Int": 3

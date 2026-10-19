@@ -385,10 +385,12 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
 
         parser.check_attributes(&hook_attrs, &AttrSite::hook());
         let hook_span = Span::new(hook_start, parser.previous_end());
+        let mut hook_modifiers = Modifiers::new();
+        hook_modifiers.is_final = is_final;
         hooks.push(PropertyHook {
             kind,
             body,
-            is_final,
+            modifiers: hook_modifiers,
             by_ref,
             params,
             attributes: hook_attrs,
@@ -522,7 +524,7 @@ pub(super) fn check_hook_bodies(
             "Abstract property hook cannot have body"
         } else if has_body {
             continue;
-        } else if hook.is_final {
+        } else if hook.modifiers.is_final {
             "Property hook cannot be both abstract and final"
         } else if is_private && !in_interface {
             "Property hook cannot be both abstract and private"
@@ -534,15 +536,6 @@ pub(super) fn check_hook_bodies(
             span: hook.span,
         });
     }
-}
-
-pub(super) struct ClassMemberModifiers {
-    pub(super) visibility: Option<Visibility>,
-    pub(super) set_visibility: Option<Visibility>,
-    pub(super) is_static: bool,
-    pub(super) is_abstract: bool,
-    pub(super) is_final: bool,
-    pub(super) is_readonly: bool,
 }
 
 pub fn parse_class_members<'arena, 'src>(
@@ -728,8 +721,8 @@ pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[Clas
     for member in members {
         match &member.kind {
             // An explicitly readonly property was already checked where it was declared.
-            ClassMemberKind::Property(p) if !p.is_readonly => {
-                if p.is_static {
+            ClassMemberKind::Property(p) if !p.modifiers.is_readonly => {
+                if p.modifiers.is_static {
                     parser.error(ParseError::Forbidden {
                         message: "static properties cannot be readonly".into(),
                         span: member.span,
@@ -757,7 +750,7 @@ pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[Clas
                     .is_some_and(|n| n.eq_ignore_ascii_case("__construct")) =>
             {
                 for param in m.params.iter() {
-                    if !is_promoted_param(param) || param.is_readonly {
+                    if !is_promoted_param(param) || param.modifiers.is_readonly {
                         continue;
                     }
                     if param.type_hint.is_none() {
@@ -799,9 +792,9 @@ pub(super) fn report_redeclared_method(
 }
 
 fn is_promoted_param(param: &Param<'_, '_>) -> bool {
-    param.visibility.is_some()
-        || param.set_visibility.is_some()
-        || param.is_readonly
+    param.modifiers.visibility.is_some()
+        || param.modifiers.set_visibility.is_some()
+        || param.modifiers.is_readonly
         || !param.hooks.is_empty()
 }
 
@@ -881,7 +874,7 @@ fn parse_trait_use_member<'arena, 'src>(
 fn parse_class_member_modifiers<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     member_start: u32,
-) -> ClassMemberModifiers {
+) -> Modifiers {
     let mut visibility = None;
     let mut set_visibility = None;
     let mut asym_vis_span: Option<Span> = None;
@@ -1039,14 +1032,25 @@ fn parse_class_member_modifiers<'arena, 'src>(
         }
     }
 
-    ClassMemberModifiers {
-        visibility,
-        set_visibility,
-        is_static,
-        is_abstract,
-        is_final,
-        is_readonly,
-    }
+    let mut modifiers = Modifiers::new();
+    modifiers.visibility = visibility;
+    modifiers.set_visibility = set_visibility;
+    modifiers.is_static = is_static;
+    modifiers.is_abstract = is_abstract;
+    modifiers.is_final = is_final;
+    modifiers.is_readonly = is_readonly;
+    modifiers
+}
+
+fn const_modifiers(mods: &Modifiers) -> Modifiers {
+    const_modifiers_of(mods.visibility, mods.is_final)
+}
+
+pub(super) fn const_modifiers_of(visibility: Option<Visibility>, is_final: bool) -> Modifiers {
+    let mut modifiers = Modifiers::new();
+    modifiers.visibility = visibility;
+    modifiers.is_final = is_final;
+    modifiers
 }
 
 fn parse_class_const_member<'arena, 'src>(
@@ -1054,7 +1058,7 @@ fn parse_class_const_member<'arena, 'src>(
     members: &mut ArenaVec<'arena, ClassMember<'arena, 'src>>,
     member_attrs: ArenaVec<'arena, Attribute<'arena, 'src>>,
     member_start: u32,
-    mods: &ClassMemberModifiers,
+    mods: &Modifiers,
     in_interface: bool,
 ) {
     if mods.is_static {
@@ -1141,8 +1145,7 @@ fn parse_class_const_member<'arena, 'src>(
         members.push(ClassMember {
             kind: ClassMemberKind::ClassConst(ClassConstDecl {
                 name: first_name,
-                visibility: mods.visibility,
-                is_final: mods.is_final,
+                modifiers: const_modifiers(mods),
                 type_hint: shared_type_hint,
                 value: first_value,
                 attributes: member_attrs,
@@ -1158,8 +1161,7 @@ fn parse_class_const_member<'arena, 'src>(
             members.push(ClassMember {
                 kind: ClassMemberKind::ClassConst(ClassConstDecl {
                     name: rest_name,
-                    visibility: mods.visibility,
-                    is_final: mods.is_final,
+                    modifiers: const_modifiers(mods),
                     type_hint: shared_type_hint,
                     value: rest_value,
                     attributes,
@@ -1175,7 +1177,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     member_attrs: ArenaVec<'arena, Attribute<'arena, 'src>>,
     member_start: u32,
-    mods: &ClassMemberModifiers,
+    mods: &Modifiers,
     in_interface: bool,
     in_trait: bool,
 ) -> ClassMember<'arena, 'src> {
@@ -1365,10 +1367,10 @@ pub(super) fn parse_method_member<'arena, 'src>(
     ClassMember {
         kind: ClassMemberKind::Method({
             let mut method = MethodDecl::new(parser.arena, method_name);
-            method.visibility = mods.visibility;
-            method.is_static = mods.is_static;
-            method.is_abstract = mods.is_abstract;
-            method.is_final = mods.is_final;
+            method.modifiers.visibility = mods.visibility;
+            method.modifiers.is_static = mods.is_static;
+            method.modifiers.is_abstract = mods.is_abstract;
+            method.modifiers.is_final = mods.is_final;
             method.by_ref = by_ref;
             method.params = params;
             method.return_type = return_type;
@@ -1485,7 +1487,7 @@ fn check_magic_method(
     parser: &mut Parser<'_, '_>,
     signature: &MagicSignature,
     method_label: &str,
-    mods: &ClassMemberModifiers,
+    mods: &Modifiers,
     params: &[Param<'_, '_>],
     return_type: Option<&TypeHint<'_, '_>>,
     member_span: Span,
@@ -1591,7 +1593,7 @@ fn parse_property_member<'arena, 'src>(
     members: &mut ArenaVec<'arena, ClassMember<'arena, 'src>>,
     member_attrs: ArenaVec<'arena, Attribute<'arena, 'src>>,
     member_start: u32,
-    mods: &ClassMemberModifiers,
+    mods: &Modifiers,
     type_hint: Option<TypeHint<'arena, 'src>>,
     in_interface: bool,
 ) {
@@ -1771,12 +1773,7 @@ fn parse_property_member<'arena, 'src>(
     members.push(ClassMember {
         kind: ClassMemberKind::Property(PropertyDecl {
             name: prop_name,
-            visibility: mods.visibility,
-            set_visibility: mods.set_visibility,
-            is_static: mods.is_static,
-            is_readonly: mods.is_readonly,
-            is_final: mods.is_final,
-            is_abstract: mods.is_abstract,
+            modifiers: *mods,
             type_hint,
             default,
             attributes: member_attrs,
@@ -1830,12 +1827,7 @@ fn parse_property_member<'arena, 'src>(
             members.push(ClassMember {
                 kind: ClassMemberKind::Property(PropertyDecl {
                     name: pname,
-                    visibility: mods.visibility,
-                    set_visibility: mods.set_visibility,
-                    is_static: mods.is_static,
-                    is_readonly: mods.is_readonly,
-                    is_final: mods.is_final,
-                    is_abstract: mods.is_abstract,
+                    modifiers: *mods,
                     type_hint: ptype_hint,
                     default: pdefault,
                     attributes: pattributes,

@@ -35,10 +35,9 @@ class MyClass {
                       "end": 38
                     }
                   },
-                  "visibility": "Protected",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Protected"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []

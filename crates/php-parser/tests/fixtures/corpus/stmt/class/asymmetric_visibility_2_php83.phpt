@@ -48,10 +48,9 @@ PHP Parse error:  syntax error, unexpected token ")", expecting amp in Standard 
                       "end": 51
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "set_visibility": "Private"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -72,10 +71,9 @@ PHP Parse error:  syntax error, unexpected token ")", expecting amp in Standard 
                       "end": 84
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": "Public",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "set_visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []

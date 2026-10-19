@@ -39,8 +39,6 @@ class Foo {
                       "end": 30
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1
@@ -68,8 +66,9 @@ class Foo {
                       "end": 54
                     }
                   },
-                  "visibility": "Public",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "value": {
                     "kind": {
                       "Int": 2
@@ -97,8 +96,9 @@ class Foo {
                       "end": 81
                     }
                   },
-                  "visibility": "Protected",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected"
+                  },
                   "value": {
                     "kind": {
                       "Int": 3
@@ -126,8 +126,9 @@ class Foo {
                       "end": 106
                     }
                   },
-                  "visibility": "Private",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "value": {
                     "kind": {
                       "Int": 4
@@ -155,8 +156,9 @@ class Foo {
                       "end": 129
                     }
                   },
-                  "visibility": null,
-                  "is_final": true,
+                  "modifiers": {
+                    "is_final": true
+                  },
                   "value": {
                     "kind": {
                       "Int": 5

@@ -1397,10 +1397,6 @@ function f($argv, $HTTP_RAW_POST_DATA) { global $GLOBALS, $_GET; static $GLOBALS
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 476,
@@ -1419,10 +1415,6 @@ function f($argv, $HTTP_RAW_POST_DATA) { global $GLOBALS, $_GET; static $GLOBALS
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 483,

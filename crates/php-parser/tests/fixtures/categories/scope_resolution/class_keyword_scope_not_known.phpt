@@ -316,10 +316,6 @@ $h = function () {
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 97,
@@ -465,10 +461,6 @@ $h = function () {
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 151,
@@ -586,10 +578,6 @@ $h = function () {
               },
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 186,
@@ -636,10 +624,6 @@ $h = function () {
               },
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 200,
@@ -694,10 +678,6 @@ $h = function () {
               },
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 215,
@@ -999,10 +979,9 @@ $h = function () {
                       "end": 380
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -1040,8 +1019,6 @@ $h = function () {
                       "end": 393
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "ClassConstAccess": {
@@ -1097,10 +1074,6 @@ $h = function () {
                       "end": 425
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -1214,8 +1187,6 @@ $h = function () {
                       "end": 495
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "ClassConstAccess": {
@@ -1271,10 +1242,9 @@ $h = function () {
                       "end": 522
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -1331,10 +1301,6 @@ $h = function () {
                       "end": 550
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -1385,10 +1351,6 @@ $h = function () {
                       },
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 551,
@@ -1545,10 +1507,9 @@ $h = function () {
                                         "end": 681
                                       }
                                     },
-                                    "visibility": "Public",
-                                    "set_visibility": null,
-                                    "is_static": false,
-                                    "is_readonly": false,
+                                    "modifiers": {
+                                      "visibility": "Public"
+                                    },
                                     "type_hint": {
                                       "kind": {
                                         "Named": {
@@ -1586,8 +1547,6 @@ $h = function () {
                                         "end": 698
                                       }
                                     },
-                                    "visibility": null,
-                                    "is_final": false,
                                     "value": {
                                       "kind": {
                                         "ClassConstAccess": {

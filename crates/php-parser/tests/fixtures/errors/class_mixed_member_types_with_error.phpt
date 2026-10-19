@@ -44,10 +44,9 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
                       "end": 35
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -93,8 +92,9 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
                       "end": 61
                     }
                   },
-                  "visibility": "Public",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "value": {
                     "kind": {
                       "Int": 2
@@ -122,10 +122,9 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
                       "end": 101
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -171,10 +170,9 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
                       "end": 136
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {

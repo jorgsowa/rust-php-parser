@@ -52,10 +52,9 @@ class A {
                       "end": 42
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -70,10 +69,6 @@ class A {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 43,
@@ -101,10 +96,9 @@ class A {
                       "end": 78
                     }
                   },
-                  "visibility": "Protected",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -119,10 +113,6 @@ class A {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 79,
@@ -141,10 +131,6 @@ class A {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 83,
@@ -172,10 +158,9 @@ class A {
                       "end": 118
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -190,10 +175,6 @@ class A {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 119,
@@ -221,10 +202,9 @@ class A {
                       "end": 156
                     }
                   },
-                  "visibility": "Protected",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -239,10 +219,6 @@ class A {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 157,
@@ -270,10 +246,9 @@ class A {
                       "end": 191
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -288,10 +263,6 @@ class A {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 192,
@@ -310,10 +281,6 @@ class A {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 196,
@@ -341,10 +308,10 @@ class A {
                       "end": 245
                     }
                   },
-                  "visibility": "Protected",
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected",
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -359,10 +326,6 @@ class A {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 246,
@@ -381,10 +344,6 @@ class A {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 250,
@@ -412,10 +371,9 @@ class A {
                       "end": 288
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -455,10 +413,9 @@ class A {
                       "end": 334
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -481,10 +438,9 @@ class A {
                       "end": 372
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -524,10 +480,9 @@ class A {
                       "end": 419
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -559,10 +514,6 @@ class A {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 420,
@@ -590,10 +541,10 @@ class A {
                       "end": 472
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -625,10 +576,6 @@ class A {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 473,
@@ -656,10 +603,9 @@ class A {
                       "end": 515
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -682,10 +628,9 @@ class A {
                       "end": 549
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -708,10 +653,9 @@ class A {
                       "end": 584
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -734,10 +678,9 @@ class A {
                       "end": 622
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -760,10 +703,9 @@ class A {
                       "end": 659
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -786,10 +728,9 @@ class A {
                       "end": 693
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

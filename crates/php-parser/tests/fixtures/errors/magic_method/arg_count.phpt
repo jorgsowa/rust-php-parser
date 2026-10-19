@@ -70,10 +70,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 39
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -88,10 +84,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 40,
@@ -119,10 +111,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 67
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -137,10 +125,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 68,
@@ -159,10 +143,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 72,
@@ -190,10 +170,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 97
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -216,10 +192,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 121
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -234,10 +206,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 122,
@@ -265,10 +233,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 149
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -283,10 +247,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 150,
@@ -305,10 +265,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 154,
@@ -336,10 +292,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 181
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -362,10 +314,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 206
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -380,10 +328,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 207,
@@ -411,10 +355,9 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 246
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -429,10 +372,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 247,
@@ -451,10 +390,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 251,
@@ -473,10 +408,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 255,
@@ -504,10 +435,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 285
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -530,10 +457,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       },
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 286,
@@ -561,10 +484,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 321
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -579,10 +498,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 322,
@@ -610,10 +525,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 353
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -628,10 +539,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 354,
@@ -659,10 +566,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 387
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -685,10 +588,9 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 424
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -711,10 +613,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 450
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -729,10 +627,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 451,
@@ -760,10 +654,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 479
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -778,10 +668,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 480,
@@ -836,10 +722,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "end": 517
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -854,10 +736,6 @@ PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input
                       "default": null,
                       "by_ref": false,
                       "variadic": true,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 518,

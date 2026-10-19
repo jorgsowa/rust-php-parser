@@ -77,10 +77,6 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
               },
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 19,
@@ -164,10 +160,6 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
               },
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 35,
@@ -214,10 +206,9 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "end": 91
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -266,8 +257,6 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "end": 123
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "New": {
@@ -315,10 +304,9 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "end": 167
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -361,10 +349,6 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       },
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 168,
@@ -606,10 +590,6 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                         },
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 298,
@@ -702,10 +682,6 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                         },
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 326,

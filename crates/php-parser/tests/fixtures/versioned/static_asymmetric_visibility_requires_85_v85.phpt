@@ -33,10 +33,11 @@ min_php=8.5
                       "end": 56
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": "Private",
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "set_visibility": "Private",
+                    "is_static": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {

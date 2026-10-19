@@ -38,10 +38,10 @@ class D {
                       "end": 46
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "set_visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -79,10 +79,9 @@ class D {
                       "end": 73
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": "Protected",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "set_visibility": "Protected"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -120,10 +119,9 @@ class D {
                       "end": 106
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -155,10 +153,10 @@ class D {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": "Private",
+                      "modifiers": {
+                        "visibility": "Public",
+                        "set_visibility": "Private"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 107,
@@ -250,10 +248,9 @@ class D {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Private",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Private"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 135,

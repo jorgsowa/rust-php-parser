@@ -33,8 +33,6 @@ PHP Fatal error:  Cannot use 'readonly' as constant modifier in Standard input c
                       "end": 36
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1

@@ -43,10 +43,9 @@ PHP Parse error:  syntax error, unexpected integer "123", expecting identifier i
                       "end": 35
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -110,7 +109,6 @@ PHP Parse error:  syntax error, unexpected integer "123", expecting identifier i
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],

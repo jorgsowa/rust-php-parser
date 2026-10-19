@@ -38,11 +38,10 @@ class C {
                       "end": 39
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_final": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -88,11 +87,10 @@ class C {
                       "end": 74
                     }
                   },
-                  "visibility": "Protected",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "visibility": "Protected",
+                    "is_final": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -138,11 +136,10 @@ class C {
                       "end": 107
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_final": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {

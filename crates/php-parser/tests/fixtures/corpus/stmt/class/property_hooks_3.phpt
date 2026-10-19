@@ -42,10 +42,9 @@ PHP Fatal error:  get hook of property Test::$prop must not have a parameter lis
                       "end": 35
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -63,7 +62,6 @@ PHP Fatal error:  get hook of property Test::$prop must not have a parameter lis
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],

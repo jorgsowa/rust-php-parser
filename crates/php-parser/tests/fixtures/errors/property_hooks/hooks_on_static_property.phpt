@@ -40,10 +40,10 @@ PHP Fatal error:  Cannot declare hooks for static property in Standard input cod
                       "end": 40
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -78,7 +78,6 @@ PHP Fatal error:  Cannot declare hooks for static property in Standard input cod
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],

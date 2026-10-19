@@ -56,8 +56,6 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "end": 27
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Array": [
@@ -124,10 +122,10 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "end": 61
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -176,10 +174,9 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "end": 86
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -200,10 +197,9 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "end": 90
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -252,8 +248,6 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "end": 113
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Cast": [
@@ -292,10 +286,9 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "end": 142
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -413,8 +406,6 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "end": 207
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Cast": [
@@ -474,8 +465,6 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "end": 250
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "New": {

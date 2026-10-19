@@ -62,10 +62,10 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                       "end": 42
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_readonly": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -111,10 +111,10 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                       "end": 74
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_readonly": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -152,10 +152,10 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                       "end": 78
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_readonly": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -201,10 +201,9 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                       "end": 115
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -244,10 +243,10 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                       },
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": true,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public",
+                        "is_readonly": true
+                      },
                       "attributes": [],
                       "span": {
                         "start": 125,
@@ -266,10 +265,9 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": true,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
+                      "modifiers": {
+                        "is_readonly": true
+                      },
                       "attributes": [],
                       "span": {
                         "start": 161,
@@ -305,10 +303,10 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": true,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public",
+                        "is_readonly": true
+                      },
                       "attributes": [],
                       "hooks": [
                         {
@@ -324,7 +322,6 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                               }
                             }
                           },
-                          "is_final": false,
                           "by_ref": false,
                           "params": [],
                           "attributes": [],
@@ -387,10 +384,9 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                       "end": 267
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -436,10 +432,10 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                       "end": 297
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -477,10 +473,9 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                       "end": 316
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -515,7 +510,6 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -542,10 +536,10 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                       "end": 353
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_readonly": true
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -566,10 +560,9 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                       "end": 386
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -601,10 +594,9 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "hooks": [
                         {
@@ -620,7 +612,6 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                               }
                             }
                           },
-                          "is_final": false,
                           "by_ref": false,
                           "params": [],
                           "attributes": [],
@@ -647,10 +638,10 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": true,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public",
+                        "is_readonly": true
+                      },
                       "attributes": [],
                       "span": {
                         "start": 416,
@@ -717,10 +708,9 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                                       "end": 480
                                     }
                                   },
-                                  "visibility": "Public",
-                                  "set_visibility": null,
-                                  "is_static": false,
-                                  "is_readonly": false,
+                                  "modifiers": {
+                                    "visibility": "Public"
+                                  },
                                   "type_hint": {
                                     "kind": {
                                       "Named": {

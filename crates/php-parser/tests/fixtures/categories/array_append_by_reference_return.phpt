@@ -152,10 +152,9 @@ $h = fn&() => $a[];
                       "end": 99
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": true,
                   "params": [],
                   "return_type": null,
@@ -226,10 +225,9 @@ $h = fn&() => $a[];
                       "end": 138
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -287,7 +285,6 @@ $h = fn&() => $a[];
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": true,
                       "params": [],
                       "attributes": [],

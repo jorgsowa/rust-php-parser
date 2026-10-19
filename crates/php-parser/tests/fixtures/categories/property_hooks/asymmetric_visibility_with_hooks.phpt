@@ -39,10 +39,10 @@ class Foo {
                       "end": 51
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "set_visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -106,7 +106,6 @@ class Foo {
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -177,7 +176,6 @@ class Foo {
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [
                         {
@@ -209,10 +207,6 @@ class Foo {
                           "default": null,
                           "by_ref": false,
                           "variadic": false,
-                          "is_readonly": false,
-                          "is_final": false,
-                          "visibility": null,
-                          "set_visibility": null,
                           "attributes": [],
                           "span": {
                             "start": 102,

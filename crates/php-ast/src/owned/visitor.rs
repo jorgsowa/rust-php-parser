@@ -1375,10 +1375,11 @@ mod tests {
         let method = ClassMember {
             kind: ClassMemberKind::Method(MethodDecl {
                 name: crate::owned::Ident::new("bar", Span::DUMMY),
-                visibility: Some(crate::ast::Visibility::Public),
-                is_static: false,
-                is_abstract: false,
-                is_final: false,
+                modifiers: {
+                    let mut modifiers = crate::ast::Modifiers::new();
+                    modifiers.visibility = Some(crate::ast::Visibility::Public);
+                    modifiers
+                },
                 by_ref: false,
                 params: Box::from([]),
                 return_type: None,

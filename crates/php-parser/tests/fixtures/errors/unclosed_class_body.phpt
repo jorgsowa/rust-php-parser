@@ -35,10 +35,9 @@ PHP Parse error:  Unclosed '{' in Standard input code on line 1
                       "end": 37
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

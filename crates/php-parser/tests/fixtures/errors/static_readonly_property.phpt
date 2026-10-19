@@ -41,10 +41,11 @@ PHP Fatal error:  Readonly property Foo::$x cannot have default value in Standar
                       "end": 51
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true,
+                    "is_readonly": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {

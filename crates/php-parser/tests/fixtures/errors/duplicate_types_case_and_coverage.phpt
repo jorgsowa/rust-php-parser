@@ -494,10 +494,6 @@ PHP Fatal error:  Duplicate type FOO is redundant in Standard input code on line
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 157,
@@ -541,10 +537,6 @@ PHP Fatal error:  Duplicate type FOO is redundant in Standard input code on line
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 172,

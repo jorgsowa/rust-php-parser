@@ -43,10 +43,9 @@ PHP Parse error:  syntax error, unexpected identifier "publi", expecting "functi
                       "end": 35
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -67,10 +66,6 @@ PHP Parse error:  syntax error, unexpected identifier "publi", expecting "functi
                       "end": 51
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -108,10 +103,9 @@ PHP Parse error:  syntax error, unexpected identifier "publi", expecting "functi
                       "end": 68
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []

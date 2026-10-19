@@ -37,10 +37,11 @@ PHP Fatal error:  Visibility of property Foo::$count must not be weaker than set
                       "end": 55
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": "Public",
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "set_visibility": "Public",
+                    "is_static": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {

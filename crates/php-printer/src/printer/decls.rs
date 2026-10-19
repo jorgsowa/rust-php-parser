@@ -144,17 +144,17 @@ impl<'src> Printer<'src> {
     pub(crate) fn print_method(&mut self, method: &MethodDecl) {
         self.print_doc_comment(method.doc_comment.as_ref());
         self.print_attributes(&method.attributes);
-        if method.is_abstract {
+        if method.modifiers.is_abstract {
             self.w("abstract ");
         }
-        if method.is_final {
+        if method.modifiers.is_final {
             self.w("final ");
         }
-        if let Some(vis) = &method.visibility {
+        if let Some(vis) = &method.modifiers.visibility {
             self.w(visibility_str(*vis));
             self.w(" ");
         }
-        if method.is_static {
+        if method.modifiers.is_static {
             self.w("static ");
         }
         self.w("function ");
@@ -183,24 +183,24 @@ impl<'src> Printer<'src> {
     fn print_property(&mut self, prop: &PropertyDecl) {
         self.print_doc_comment(prop.doc_comment.as_ref());
         self.print_attributes(&prop.attributes);
-        if prop.is_abstract {
+        if prop.modifiers.is_abstract {
             self.w("abstract ");
         }
-        if prop.is_final {
+        if prop.modifiers.is_final {
             self.w("final ");
         }
-        if let Some(vis) = &prop.visibility {
+        if let Some(vis) = &prop.modifiers.visibility {
             self.w(visibility_str(*vis));
             self.w(" ");
         }
-        if let Some(set_vis) = &prop.set_visibility {
+        if let Some(set_vis) = &prop.modifiers.set_visibility {
             self.w(visibility_str(*set_vis));
             self.w("(set) ");
         }
-        if prop.is_static {
+        if prop.modifiers.is_static {
             self.w("static ");
         }
-        if prop.is_readonly {
+        if prop.modifiers.is_readonly {
             self.w("readonly ");
         }
         if let Some(th) = &prop.type_hint {
@@ -228,7 +228,7 @@ impl<'src> Printer<'src> {
         for hook in hooks.iter() {
             self.write_indent();
             self.print_attributes(&hook.attributes);
-            if hook.is_final {
+            if hook.modifiers.is_final {
                 self.w("final ");
             }
             if hook.by_ref {
@@ -269,10 +269,10 @@ impl<'src> Printer<'src> {
     fn print_class_const(&mut self, cc: &ClassConstDecl) {
         self.print_doc_comment(cc.doc_comment.as_ref());
         self.print_attributes(&cc.attributes);
-        if cc.is_final {
+        if cc.modifiers.is_final {
             self.w("final ");
         }
-        if let Some(vis) = &cc.visibility {
+        if let Some(vis) = &cc.modifiers.visibility {
             self.w(visibility_str(*vis));
             self.w(" ");
         }
@@ -486,18 +486,18 @@ impl<'src> Printer<'src> {
             self.w(" ");
         }
         self.print_attributes_inline(&param.attributes);
-        if let Some(vis) = &param.visibility {
+        if let Some(vis) = &param.modifiers.visibility {
             self.w(visibility_str(*vis));
             self.w(" ");
         }
-        if let Some(set_vis) = &param.set_visibility {
+        if let Some(set_vis) = &param.modifiers.set_visibility {
             self.w(visibility_str(*set_vis));
             self.w("(set) ");
         }
-        if param.is_readonly {
+        if param.modifiers.is_readonly {
             self.w("readonly ");
         }
-        if param.is_final {
+        if param.modifiers.is_final {
             self.w("final ");
         }
         if let Some(th) = &param.type_hint {

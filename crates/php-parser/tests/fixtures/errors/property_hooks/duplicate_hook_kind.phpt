@@ -43,10 +43,9 @@ PHP Fatal error:  Cannot redeclare property hook "get" in Standard input code on
                       "end": 35
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -91,7 +90,6 @@ PHP Fatal error:  Cannot redeclare property hook "get" in Standard input code on
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -123,7 +121,6 @@ PHP Fatal error:  Cannot redeclare property hook "get" in Standard input code on
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],

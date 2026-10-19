@@ -281,8 +281,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                 members.push(EnumMember {
                     kind: EnumMemberKind::ClassConst(ClassConstDecl {
                         name: const_name,
-                        visibility,
-                        is_final,
+                        modifiers: super::class::const_modifiers_of(visibility, is_final),
                         type_hint: const_type,
                         value,
                         attributes,
@@ -311,14 +310,12 @@ pub(super) fn parse_enum<'arena, 'src>(
                 });
             }
 
-            let mods = super::class::ClassMemberModifiers {
-                visibility,
-                set_visibility: None,
-                is_static,
-                is_abstract,
-                is_final,
-                is_readonly,
-            };
+            let mut mods = php_ast::Modifiers::new();
+            mods.visibility = visibility;
+            mods.is_static = is_static;
+            mods.is_abstract = is_abstract;
+            mods.is_final = is_final;
+            mods.is_readonly = is_readonly;
             let member = super::class::parse_method_member(
                 parser,
                 member_attrs,

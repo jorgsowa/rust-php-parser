@@ -68,10 +68,6 @@ $b->notOverridden_callYourPrivates();
                       "end": 45
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -169,10 +165,6 @@ $b->notOverridden_callYourPrivates();
                       "end": 162
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -270,10 +262,9 @@ $b->notOverridden_callYourPrivates();
                       "end": 270
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -345,10 +336,10 @@ $b->notOverridden_callYourPrivates();
                       "end": 355
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_final": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -456,10 +447,6 @@ $b->notOverridden_callYourPrivates();
                       "end": 452
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -557,10 +544,9 @@ $b->notOverridden_callYourPrivates();
                       "end": 560
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -632,10 +618,10 @@ $b->notOverridden_callYourPrivates();
                       "end": 645
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_final": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

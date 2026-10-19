@@ -95,10 +95,9 @@ PHP Fatal error:  Property N\A::$a cannot have type X\Y|N\B|callable|null in Sta
                       "end": 69
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Union": [

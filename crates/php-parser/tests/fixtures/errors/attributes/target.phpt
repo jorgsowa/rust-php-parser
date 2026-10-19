@@ -538,10 +538,9 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
                       "end": 331
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [
@@ -580,8 +579,6 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
                       "end": 357
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1
@@ -627,10 +624,9 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
                       "end": 397
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -645,10 +641,6 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [
                         {
                           "name": {
@@ -685,10 +677,6 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [
                         {
                           "name": {
@@ -752,10 +740,9 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
                       "end": 462
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [
@@ -794,8 +781,6 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
                       "end": 487
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 2
@@ -841,10 +826,9 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
                       "end": 506
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -862,7 +846,6 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [

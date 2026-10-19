@@ -35,10 +35,9 @@ PHP Fatal error:  A void method must not return a value in Standard input code o
                       "end": 36
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -96,10 +95,9 @@ PHP Fatal error:  A void method must not return a value in Standard input code o
                       "end": 81
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": true,
                   "params": [
                     {
@@ -114,10 +112,6 @@ PHP Fatal error:  A void method must not return a value in Standard input code o
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 82,

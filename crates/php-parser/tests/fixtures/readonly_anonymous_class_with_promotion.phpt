@@ -51,10 +51,9 @@ $obj = new readonly class(1, 2) {
                                       "end": 71
                                     }
                                   },
-                                  "visibility": "Public",
-                                  "is_static": false,
-                                  "is_abstract": false,
-                                  "is_final": false,
+                                  "modifiers": {
+                                    "visibility": "Public"
+                                  },
                                   "by_ref": false,
                                   "params": [
                                     {
@@ -86,10 +85,9 @@ $obj = new readonly class(1, 2) {
                                       "default": null,
                                       "by_ref": false,
                                       "variadic": false,
-                                      "is_readonly": false,
-                                      "is_final": false,
-                                      "visibility": "Public",
-                                      "set_visibility": null,
+                                      "modifiers": {
+                                        "visibility": "Public"
+                                      },
                                       "attributes": [],
                                       "span": {
                                         "start": 81,
@@ -125,10 +123,9 @@ $obj = new readonly class(1, 2) {
                                       "default": null,
                                       "by_ref": false,
                                       "variadic": false,
-                                      "is_readonly": false,
-                                      "is_final": false,
-                                      "visibility": "Public",
-                                      "set_visibility": null,
+                                      "modifiers": {
+                                        "visibility": "Public"
+                                      },
                                       "attributes": [],
                                       "span": {
                                         "start": 104,

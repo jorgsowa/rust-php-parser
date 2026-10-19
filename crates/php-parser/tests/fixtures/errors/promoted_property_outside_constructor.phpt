@@ -47,10 +47,9 @@ PHP Fatal error:  Cannot declare promoted property outside a constructor in Stan
                       "end": 43
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -82,10 +81,9 @@ PHP Fatal error:  Cannot declare promoted property outside a constructor in Stan
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 44,
@@ -152,10 +150,9 @@ PHP Fatal error:  Cannot declare promoted property outside a constructor in Stan
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": "Public",
-              "set_visibility": null,
+              "modifiers": {
+                "visibility": "Public"
+              },
               "attributes": [],
               "span": {
                 "start": 75,
@@ -224,10 +221,9 @@ PHP Fatal error:  Cannot declare promoted property outside a constructor in Stan
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": "Public",
-                        "set_visibility": null,
+                        "modifiers": {
+                          "visibility": "Public"
+                        },
                         "attributes": [],
                         "span": {
                           "start": 108,

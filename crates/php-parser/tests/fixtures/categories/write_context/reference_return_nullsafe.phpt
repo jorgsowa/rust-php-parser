@@ -46,10 +46,6 @@ PHP Fatal error:  Cannot take reference of a nullsafe chain in Standard input co
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 18,
@@ -91,10 +87,6 @@ PHP Fatal error:  Cannot take reference of a nullsafe chain in Standard input co
                                 "default": null,
                                 "by_ref": false,
                                 "variadic": false,
-                                "is_readonly": false,
-                                "is_final": false,
-                                "visibility": null,
-                                "set_visibility": null,
                                 "attributes": [],
                                 "span": {
                                   "start": 43,
@@ -196,10 +188,6 @@ PHP Fatal error:  Cannot take reference of a nullsafe chain in Standard input co
                                 "default": null,
                                 "by_ref": false,
                                 "variadic": false,
-                                "is_readonly": false,
-                                "is_final": false,
-                                "visibility": null,
-                                "set_visibility": null,
                                 "attributes": [],
                                 "span": {
                                   "start": 79,
@@ -463,10 +451,9 @@ PHP Fatal error:  Cannot take reference of a nullsafe chain in Standard input co
                       "end": 193
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": true,
                   "params": [
                     {
@@ -481,10 +468,6 @@ PHP Fatal error:  Cannot take reference of a nullsafe chain in Standard input co
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 194,
@@ -550,10 +533,9 @@ PHP Fatal error:  Cannot take reference of a nullsafe chain in Standard input co
                       "end": 232
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -600,7 +582,6 @@ PHP Fatal error:  Cannot take reference of a nullsafe chain in Standard input co
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": true,
                       "params": [],
                       "attributes": [],
@@ -659,10 +640,6 @@ PHP Fatal error:  Cannot take reference of a nullsafe chain in Standard input co
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 275,

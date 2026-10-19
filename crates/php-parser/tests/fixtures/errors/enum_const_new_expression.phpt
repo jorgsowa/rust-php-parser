@@ -72,8 +72,6 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "end": 47
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "New": {

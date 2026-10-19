@@ -56,10 +56,10 @@ PHP Fatal error:  Multiple access type modifiers are not allowed in Standard inp
                       "end": 49
                     }
                   },
-                  "visibility": "Protected",
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Protected",
+                    "set_visibility": "Private"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -80,10 +80,10 @@ PHP Fatal error:  Multiple access type modifiers are not allowed in Standard inp
                       "end": 77
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": "Public",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "set_visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -104,10 +104,9 @@ PHP Fatal error:  Multiple access type modifiers are not allowed in Standard inp
                       "end": 100
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": "Protected",
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "set_visibility": "Protected"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -128,10 +127,9 @@ PHP Fatal error:  Multiple access type modifiers are not allowed in Standard inp
                       "end": 134
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -146,10 +144,10 @@ PHP Fatal error:  Multiple access type modifiers are not allowed in Standard inp
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Protected",
-                      "set_visibility": "Private",
+                      "modifiers": {
+                        "visibility": "Protected",
+                        "set_visibility": "Private"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 144,
@@ -168,10 +166,10 @@ PHP Fatal error:  Multiple access type modifiers are not allowed in Standard inp
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Private",
-                      "set_visibility": "Public",
+                      "modifiers": {
+                        "visibility": "Private",
+                        "set_visibility": "Public"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 179,
@@ -190,10 +188,9 @@ PHP Fatal error:  Multiple access type modifiers are not allowed in Standard inp
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": "Protected",
+                      "modifiers": {
+                        "set_visibility": "Protected"
+                      },
                       "attributes": [],
                       "span": {
                         "start": 211,

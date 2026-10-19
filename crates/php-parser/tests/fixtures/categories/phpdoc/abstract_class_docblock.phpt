@@ -40,10 +40,10 @@ abstract class GenericBase {
                       "end": 119
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

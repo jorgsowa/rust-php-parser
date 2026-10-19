@@ -354,10 +354,9 @@ PHP Fatal error:  Attribute "Attribute" must not be repeated in Standard input c
                       "end": 330
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -372,10 +371,6 @@ PHP Fatal error:  Attribute "Attribute" must not be repeated in Standard input c
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [
                         {
                           "name": {
@@ -495,10 +490,6 @@ PHP Fatal error:  Attribute "Attribute" must not be repeated in Standard input c
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [
                 {
                   "name": {

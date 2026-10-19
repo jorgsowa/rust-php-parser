@@ -28,8 +28,6 @@ min_php=8.1
                       "end": 55
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1

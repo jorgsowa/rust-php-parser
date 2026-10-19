@@ -31,8 +31,6 @@
                       "end": 39
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1

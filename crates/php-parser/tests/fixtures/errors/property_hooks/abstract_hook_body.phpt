@@ -56,10 +56,9 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                       "end": 33
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -69,7 +68,6 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                       "body": {
                         "Block": []
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -96,10 +94,9 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                       "end": 58
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -107,7 +104,6 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -129,7 +125,6 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                           }
                         }
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -156,10 +151,9 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                       "end": 91
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -167,7 +161,9 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": true,
+                      "modifiers": {
+                        "is_final": true
+                      },
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -221,10 +217,9 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                       "end": 141
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -232,7 +227,6 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -259,11 +253,10 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                       "end": 173
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_abstract": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_abstract": true
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -273,7 +266,6 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                       "body": {
                         "Block": []
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -287,7 +279,6 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                       "body": {
                         "Block": []
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -314,11 +305,10 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                       "end": 214
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_abstract": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_abstract": true
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -326,7 +316,9 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": true,
+                      "modifiers": {
+                        "is_final": true
+                      },
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -340,7 +332,6 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                       "body": {
                         "Block": []
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -367,11 +358,10 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                       "end": 260
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_abstract": true,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_abstract": true
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -379,7 +369,6 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -433,10 +422,9 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                       "end": 313
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -451,16 +439,14 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": "Public",
-                      "set_visibility": null,
+                      "modifiers": {
+                        "visibility": "Public"
+                      },
                       "attributes": [],
                       "hooks": [
                         {
                           "kind": "Set",
                           "body": "Abstract",
-                          "is_final": false,
                           "by_ref": false,
                           "params": [],
                           "attributes": [],
@@ -516,11 +502,10 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                       "end": 372
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_abstract": true,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_abstract": true
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": [],
@@ -528,7 +513,6 @@ PHP Fatal error:  Abstract property hook cannot have body in Standard input code
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],

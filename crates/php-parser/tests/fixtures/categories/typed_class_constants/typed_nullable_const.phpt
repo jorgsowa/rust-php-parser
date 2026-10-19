@@ -33,8 +33,6 @@ min_php=8.3
                       "end": 31
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "type_hint": {
                     "kind": {
                       "Nullable": {

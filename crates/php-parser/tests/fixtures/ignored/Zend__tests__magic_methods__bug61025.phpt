@@ -46,10 +46,9 @@ echo $b->__invoke();
                       "end": 48
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

@@ -63,10 +63,9 @@ PHP Fatal error:  'break' not in the 'loop' or 'switch' context in Standard inpu
                                                   "end": 44
                                                 }
                                               },
-                                              "visibility": "Public",
-                                              "set_visibility": null,
-                                              "is_static": false,
-                                              "is_readonly": false,
+                                              "modifiers": {
+                                                "visibility": "Public"
+                                              },
                                               "type_hint": null,
                                               "default": null,
                                               "attributes": [],
@@ -86,7 +85,6 @@ PHP Fatal error:  'break' not in the 'loop' or 'switch' context in Standard inpu
                                                       }
                                                     ]
                                                   },
-                                                  "is_final": false,
                                                   "by_ref": false,
                                                   "params": [],
                                                   "attributes": [],

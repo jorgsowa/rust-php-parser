@@ -40,8 +40,6 @@ PHP Fatal error:  Cannot use the abstract modifier on a class constant in Standa
                       "end": 36
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1

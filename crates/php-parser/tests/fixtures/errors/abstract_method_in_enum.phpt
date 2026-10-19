@@ -32,10 +32,10 @@ PHP Fatal error:  Enum method Status::label() must not be abstract in Standard i
                       "end": 50
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {

@@ -92,10 +92,6 @@ PHP Parse error:  syntax error, unexpected variable "$x", expecting "|" in Stand
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 44,
@@ -205,10 +201,9 @@ PHP Parse error:  syntax error, unexpected variable "$x", expecting "|" in Stand
                       "end": 174
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "type_hint": {
                     "kind": {
                       "Intersection": [
@@ -274,10 +269,9 @@ PHP Parse error:  syntax error, unexpected variable "$x", expecting "|" in Stand
                       "end": 203
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -337,10 +331,6 @@ PHP Parse error:  syntax error, unexpected variable "$x", expecting "|" in Stand
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 213,

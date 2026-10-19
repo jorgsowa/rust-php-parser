@@ -39,10 +39,6 @@ PHP Fatal error:  Variadic parameter cannot have a default value in Standard inp
               },
               "by_ref": false,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 19,

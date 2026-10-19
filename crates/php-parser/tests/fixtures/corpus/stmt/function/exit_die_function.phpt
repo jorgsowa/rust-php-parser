@@ -88,10 +88,6 @@ PHP Parse error:  syntax error, unexpected token "exit", expecting "(" in Standa
               },
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 21,
@@ -203,10 +199,6 @@ PHP Parse error:  syntax error, unexpected token "exit", expecting "(" in Standa
               },
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 69,

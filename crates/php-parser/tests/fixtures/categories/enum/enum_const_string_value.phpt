@@ -28,8 +28,6 @@ min_php=8.1
                       "end": 32
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "String": "status_"

@@ -37,10 +37,9 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" or "c
                       "end": 48
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -72,10 +71,6 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" or "c
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 49,
@@ -120,10 +115,9 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" or "c
                       "end": 107
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -155,10 +149,6 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" or "c
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 108,

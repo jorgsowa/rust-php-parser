@@ -44,10 +44,6 @@ PHP Fatal error:  Method A::__get() cannot take arguments by reference in Standa
                       "end": 34
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -62,10 +58,6 @@ PHP Fatal error:  Method A::__get() cannot take arguments by reference in Standa
                       "default": null,
                       "by_ref": true,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 35,
@@ -93,10 +85,6 @@ PHP Fatal error:  Method A::__get() cannot take arguments by reference in Standa
                       "end": 61
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -111,10 +99,6 @@ PHP Fatal error:  Method A::__get() cannot take arguments by reference in Standa
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 62,
@@ -133,10 +117,6 @@ PHP Fatal error:  Method A::__get() cannot take arguments by reference in Standa
                       "default": null,
                       "by_ref": true,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 66,
@@ -164,10 +144,6 @@ PHP Fatal error:  Method A::__get() cannot take arguments by reference in Standa
                       "end": 93
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -199,10 +175,6 @@ PHP Fatal error:  Method A::__get() cannot take arguments by reference in Standa
                       "default": null,
                       "by_ref": true,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 94,
@@ -238,10 +210,6 @@ PHP Fatal error:  Method A::__get() cannot take arguments by reference in Standa
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 106,
@@ -269,10 +237,9 @@ PHP Fatal error:  Method A::__get() cannot take arguments by reference in Standa
                       "end": 150
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -304,10 +271,6 @@ PHP Fatal error:  Method A::__get() cannot take arguments by reference in Standa
                       "default": null,
                       "by_ref": true,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 151,

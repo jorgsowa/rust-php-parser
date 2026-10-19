@@ -28,8 +28,6 @@ min_php=8.1
                       "end": 29
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Float": 3.14
@@ -57,8 +55,6 @@ min_php=8.1
                       "end": 47
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Float": 6.28

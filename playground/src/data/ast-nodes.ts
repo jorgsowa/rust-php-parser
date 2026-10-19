@@ -1355,15 +1355,13 @@ export const astNodes: AstNode[] = [
     keywordInExample: 'const',
     fieldHighlights: {
       name: ['VERSION', 'DEFAULT_VAL'],
-      visibility: ['protected'],
-      is_final: ['final'],
+      modifiers: ['protected', 'final'],
       type_hint: ['int'],
       value: ['1', '0']
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Constant name' },
-      { name: 'visibility', type: 'Option<Visibility>', description: 'Visibility', optional: true },
-      { name: 'is_final', type: 'bool', description: 'Is final' },
+      { name: 'modifiers', type: 'Modifiers', description: 'Visibility and final', optional: true },
       { name: 'type_hint', type: 'Option<TypeHint>', description: 'Type hint', optional: true },
       { name: 'value', type: 'Expr', description: 'Constant value' },
       { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' },
@@ -1396,10 +1394,7 @@ export const astNodes: AstNode[] = [
     phpExample: `class User {\n  public function &getValue(): string { return $this->value; }\n  abstract protected function validate();\n  final public static function create(int $id): self { return new User(); }\n}`,
     fieldHighlights: {
       name: ['getValue', 'validate', 'create'],
-      visibility: ['public', 'protected'],
-      is_abstract: ['abstract'],
-      is_static: ['static'],
-      is_final: ['final'],
+      modifiers: ['public', 'protected', 'abstract', 'static', 'final'],
       by_ref: ['&'],
       params: ['int $id'],
       return_type: ['string', 'self'],
@@ -1407,10 +1402,7 @@ export const astNodes: AstNode[] = [
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Method name' },
-      { name: 'visibility', type: 'Option<Visibility>', description: 'Visibility', optional: true },
-      { name: 'is_static', type: 'bool', description: 'Is static' },
-      { name: 'is_abstract', type: 'bool', description: 'Is abstract' },
-      { name: 'is_final', type: 'bool', description: 'Is final' },
+      { name: 'modifiers', type: 'Modifiers', description: 'Visibility, static, abstract and final', optional: true },
       { name: 'by_ref', type: 'bool', description: 'Returns by reference (&method)' },
       { name: 'params', type: 'Vec<Param>', description: 'Parameters' },
       { name: 'return_type', type: 'Option<TypeHint>', description: 'Return type', optional: true },
@@ -1431,10 +1423,7 @@ export const astNodes: AstNode[] = [
       default: ['0', 'null'],
       by_ref: ['&'],
       variadic: ['...'],
-      visibility: ['protected', 'public'],
-      set_visibility: ['private(set)'],
-      is_readonly: ['readonly'],
-      is_final: ['final'],
+      modifiers: ['protected', 'public', 'private(set)', 'readonly', 'final'],
       attributes: ['#[Trim]'],
       hooks: ['get => $this->_email;', 'set(mixed $v) { $this->_email = $v; }']
     },
@@ -1444,10 +1433,7 @@ export const astNodes: AstNode[] = [
       { name: 'default', type: 'Option<Expr>', description: 'Default value', optional: true },
       { name: 'by_ref', type: 'bool', description: 'Passed by reference' },
       { name: 'variadic', type: 'bool', description: 'Variadic (...$args)' },
-      { name: 'visibility', type: 'Option<Visibility>', description: 'Constructor promotion visibility', optional: true },
-      { name: 'set_visibility', type: 'Option<Visibility>', description: 'Asymmetric set visibility (PHP 8.4+)', optional: true },
-      { name: 'is_readonly', type: 'bool', description: 'Readonly promoted property (PHP 8.1+)' },
-      { name: 'is_final', type: 'bool', description: 'Final promoted property (PHP 8.4+)' },
+      { name: 'modifiers', type: 'Modifiers', description: 'Visibility, set_visibility, readonly and final of a promoted property', optional: true },
       { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' },
       { name: 'hooks', type: 'Vec<PropertyHook>', description: 'Property hooks on promoted parameter (PHP 8.4+)' }
     ]
@@ -1459,20 +1445,14 @@ export const astNodes: AstNode[] = [
     description: 'Class property',
     phpExample: `class User {\n  public string $name = "John";\n  public static int $counter = 0;\n  protected readonly bool $verified;\n  public private(set) string $email;\n}`,
     fieldHighlights: {
-      visibility: ['public', 'protected'],
-      is_static: ['static'],
+      modifiers: ['public', 'protected', 'static', 'readonly', 'private(set)'],
       type_hint: ['string', 'int', 'bool'],
       name: ['$name', '$counter', '$verified', '$email'],
       default: ['"John"', '0'],
-      is_readonly: ['readonly'],
-      set_visibility: ['private(set)']
     },
     fields: [
       { name: 'name', type: 'Ident', description: 'Property name' },
-      { name: 'visibility', type: 'Option<Visibility>', description: 'public/protected/private', optional: true },
-      { name: 'set_visibility', type: 'Option<Visibility>', description: 'Asymmetric set visibility (PHP 8.4+)', optional: true },
-      { name: 'is_static', type: 'bool', description: 'Is static' },
-      { name: 'is_readonly', type: 'bool', description: 'Is readonly' },
+      { name: 'modifiers', type: 'Modifiers', description: 'Visibility, set_visibility, static, readonly, final and abstract', optional: true },
       { name: 'type_hint', type: 'Option<TypeHint>', description: 'Type hint', optional: true },
       { name: 'default', type: 'Option<Expr>', description: 'Default value', optional: true },
       { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' },
@@ -1489,7 +1469,7 @@ export const astNodes: AstNode[] = [
     phpVersion: '8.4+',
     fieldHighlights: {
       kind: ['get', 'set'],
-      is_final: ['final'],
+      modifiers: ['final'],
       by_ref: ['&'],
       params: ['string $newValue'],
       body: ['$this->_value', '{ $this->_value = $newValue; }']
@@ -1497,7 +1477,7 @@ export const astNodes: AstNode[] = [
     fields: [
       { name: 'kind', type: 'PropertyHookKind', description: 'Get or Set' },
       { name: 'body', type: 'PropertyHookBody', description: 'Hook implementation (Block, Expression, or Abstract)' },
-      { name: 'is_final', type: 'bool', description: 'Is final' },
+      { name: 'modifiers', type: 'Modifiers', description: 'Final', optional: true },
       { name: 'by_ref', type: 'bool', description: 'Returns by reference (get only)' },
       { name: 'params', type: 'Vec<Param>', description: 'Parameters (set only)' },
       { name: 'attributes', type: 'Vec<Attribute>', description: 'PHP attributes (#[...])' }

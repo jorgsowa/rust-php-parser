@@ -75,8 +75,6 @@ class A extends B implements C, D {
                       "end": 54
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "String": "B"
@@ -104,8 +102,6 @@ class A extends B implements C, D {
                       "end": 63
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "String": "D"
@@ -133,10 +129,9 @@ class A extends B implements C, D {
                       "end": 85
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -165,10 +160,9 @@ class A extends B implements C, D {
                       "end": 95
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -197,10 +191,9 @@ class A extends B implements C, D {
                       "end": 119
                     }
                   },
-                  "visibility": "Protected",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Protected"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -221,10 +214,9 @@ class A extends B implements C, D {
                       "end": 135
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -245,10 +237,9 @@ class A extends B implements C, D {
                       "end": 159
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -271,10 +262,10 @@ class A extends B implements C, D {
                       "end": 193
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -289,10 +280,6 @@ class A extends B implements C, D {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 194,
@@ -320,10 +307,10 @@ class A extends B implements C, D {
                       "end": 228
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_final": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -363,10 +350,9 @@ class A extends B implements C, D {
                       "end": 262
                     }
                   },
-                  "visibility": "Protected",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -389,10 +375,9 @@ class A extends B implements C, D {
                       "end": 290
                     }
                   },
-                  "visibility": "Private",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

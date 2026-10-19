@@ -222,10 +222,6 @@ namespace {
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 97,
@@ -814,10 +810,6 @@ namespace {
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 345,
@@ -861,10 +853,6 @@ namespace {
                         "default": null,
                         "by_ref": false,
                         "variadic": false,
-                        "is_readonly": false,
-                        "is_final": false,
-                        "visibility": null,
-                        "set_visibility": null,
                         "attributes": [],
                         "span": {
                           "start": 358,
@@ -1038,8 +1026,6 @@ namespace {
                                 "end": 491
                               }
                             },
-                            "visibility": null,
-                            "is_final": false,
                             "type_hint": {
                               "kind": {
                                 "Union": [
@@ -1129,8 +1115,6 @@ namespace {
                                 "end": 521
                               }
                             },
-                            "visibility": null,
-                            "is_final": false,
                             "type_hint": {
                               "kind": {
                                 "Nullable": {
@@ -1182,10 +1166,9 @@ namespace {
                                 "end": 556
                               }
                             },
-                            "visibility": "Public",
-                            "set_visibility": null,
-                            "is_static": false,
-                            "is_readonly": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "type_hint": {
                               "kind": {
                                 "Nullable": {
@@ -1231,10 +1214,9 @@ namespace {
                                 "end": 583
                               }
                             },
-                            "visibility": "Public",
-                            "is_static": false,
-                            "is_abstract": false,
-                            "is_final": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "by_ref": false,
                             "params": [],
                             "return_type": {
@@ -1302,10 +1284,9 @@ namespace {
                                 "end": 622
                               }
                             },
-                            "visibility": "Public",
-                            "is_static": false,
-                            "is_abstract": false,
-                            "is_final": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "by_ref": false,
                             "params": [],
                             "return_type": {
@@ -1447,10 +1428,9 @@ namespace {
                                 "end": 679
                               }
                             },
-                            "visibility": "Public",
-                            "is_static": false,
-                            "is_abstract": false,
-                            "is_final": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "by_ref": false,
                             "params": [],
                             "return_type": {
@@ -1518,10 +1498,9 @@ namespace {
                                 "end": 723
                               }
                             },
-                            "visibility": "Public",
-                            "is_static": false,
-                            "is_abstract": false,
-                            "is_final": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "by_ref": false,
                             "params": [],
                             "return_type": null,
@@ -1732,10 +1711,9 @@ namespace {
                                 "end": 849
                               }
                             },
-                            "visibility": "Public",
-                            "is_static": false,
-                            "is_abstract": false,
-                            "is_final": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "by_ref": false,
                             "params": [],
                             "return_type": {
@@ -1824,10 +1802,9 @@ namespace {
                                 "end": 912
                               }
                             },
-                            "visibility": "Public",
-                            "is_static": false,
-                            "is_abstract": false,
-                            "is_final": false,
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
                             "by_ref": false,
                             "params": [],
                             "return_type": {

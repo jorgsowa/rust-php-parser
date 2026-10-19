@@ -28,8 +28,6 @@ min_php=8.1
                       "end": 33
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Bool": true
@@ -57,8 +55,6 @@ min_php=8.1
                       "end": 56
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Bool": false
@@ -86,8 +82,6 @@ min_php=8.1
                       "end": 79
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": "Null",
                     "span": {

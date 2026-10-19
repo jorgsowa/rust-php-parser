@@ -330,8 +330,6 @@ PHP Fatal error:  Dynamic class names are not allowed in compile-time class cons
                       "end": 148
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "ClassConstAccess": {
@@ -387,10 +385,9 @@ PHP Fatal error:  Dynamic class names are not allowed in compile-time class cons
                       "end": 179
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": {
                     "kind": {
@@ -447,10 +444,9 @@ PHP Fatal error:  Dynamic class names are not allowed in compile-time class cons
                       "end": 216
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -501,10 +497,6 @@ PHP Fatal error:  Dynamic class names are not allowed in compile-time class cons
                       },
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 217,

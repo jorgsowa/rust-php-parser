@@ -40,10 +40,6 @@ PHP Fatal error:  Method A::__destruct() cannot declare a return type in Standar
                       "end": 39
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -83,10 +79,6 @@ PHP Fatal error:  Method A::__destruct() cannot declare a return type in Standar
                       "end": 75
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": {

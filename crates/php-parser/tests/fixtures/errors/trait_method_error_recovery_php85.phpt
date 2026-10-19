@@ -35,10 +35,9 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
                       "end": 49
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -70,10 +69,6 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 50,
@@ -138,10 +133,9 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
                       "end": 122
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -173,10 +167,6 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 123,

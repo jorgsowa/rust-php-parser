@@ -34,10 +34,10 @@ class Foo {
                       "end": 65
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_readonly": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Intersection": [

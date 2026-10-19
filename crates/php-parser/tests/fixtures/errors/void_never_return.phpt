@@ -156,10 +156,9 @@ PHP Fatal error:  A void function must not return a value in Standard input code
                       "end": 102
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {

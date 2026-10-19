@@ -28,8 +28,10 @@ min_php=8.1
                       "end": 46
                     }
                   },
-                  "visibility": "Protected",
-                  "is_final": true,
+                  "modifiers": {
+                    "visibility": "Protected",
+                    "is_final": true
+                  },
                   "value": {
                     "kind": {
                       "Int": 1

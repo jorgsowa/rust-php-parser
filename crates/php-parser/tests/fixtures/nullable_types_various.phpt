@@ -54,10 +54,6 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 23,
@@ -101,10 +97,6 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 38,
@@ -148,10 +140,6 @@ function process(?string $name, ?int $count, ?array $items): ?bool {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 51,

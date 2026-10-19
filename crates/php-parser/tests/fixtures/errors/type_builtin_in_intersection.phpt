@@ -813,10 +813,6 @@ PHP Fatal error:  Type int cannot be part of an intersection type in Standard in
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 273,
@@ -863,10 +859,9 @@ PHP Fatal error:  Type int cannot be part of an intersection type in Standard in
                       "end": 318
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -954,10 +949,9 @@ PHP Fatal error:  Type int cannot be part of an intersection type in Standard in
                       "end": 367
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -1025,10 +1019,9 @@ PHP Fatal error:  Type int cannot be part of an intersection type in Standard in
                       "end": 402
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -1123,10 +1116,9 @@ PHP Fatal error:  Type int cannot be part of an intersection type in Standard in
                       "end": 451
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

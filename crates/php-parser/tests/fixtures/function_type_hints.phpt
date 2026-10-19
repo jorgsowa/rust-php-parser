@@ -54,10 +54,6 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 23,
@@ -121,10 +117,6 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 32,
@@ -188,10 +180,6 @@ function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 47,

@@ -458,10 +458,6 @@ class C { function m() { (void) f(); } }
                       "end": 156
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

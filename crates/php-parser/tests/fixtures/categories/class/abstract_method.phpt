@@ -31,10 +31,10 @@
                       "end": 58
                     }
                   },
-                  "visibility": "Protected",
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected",
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -66,10 +66,6 @@
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 59,

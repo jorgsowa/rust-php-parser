@@ -605,8 +605,7 @@ fn fold_class_member_override_is_dispatched() {
     let member = ClassMember {
         kind: ClassMemberKind::ClassConst(ClassConstDecl {
             name: Ident::new("FOO", Span::DUMMY),
-            visibility: None,
-            is_final: false,
+            modifiers: Modifiers::new(),
             type_hint: None,
             value: Expr {
                 kind: ExprKind::Int(1),
@@ -735,7 +734,7 @@ fn fold_property_hook_override_block_body() {
     let hook = PropertyHook {
         kind: PropertyHookKind::Get,
         body: PropertyHookBody::Block(block),
-        is_final: false,
+        modifiers: Modifiers::new(),
         by_ref: false,
         params: ArenaVec::new_in(&arena),
         attributes: ArenaVec::new_in(&arena),
@@ -773,7 +772,7 @@ fn fold_property_hook_override_expression_body() {
             kind: ExprKind::Int(0),
             span: Span::DUMMY,
         }),
-        is_final: false,
+        modifiers: Modifiers::new(),
         by_ref: false,
         params: ArenaVec::new_in(&arena),
         attributes: ArenaVec::new_in(&arena),
@@ -1093,14 +1092,25 @@ fn constructors_leave_optional_fields_empty() {
     let param = Param::new(&arena, Ident::new("x", Span::DUMMY), Span::new(1, 3));
     assert_eq!(param.name.as_str(), Some("x"));
     assert_eq!(param.span, Span::new(1, 3));
-    assert!(param.type_hint.is_none() && param.default.is_none() && param.visibility.is_none());
-    assert!(!param.by_ref && !param.variadic && !param.is_readonly && !param.is_final);
+    assert!(
+        param.type_hint.is_none()
+            && param.default.is_none()
+            && param.modifiers.visibility.is_none()
+    );
+    assert!(
+        !param.by_ref
+            && !param.variadic
+            && !param.modifiers.is_readonly
+            && !param.modifiers.is_final
+    );
     assert!(param.attributes.is_empty() && param.hooks.is_empty());
 
     let method = MethodDecl::new(&arena, Ident::new("run", Span::DUMMY));
     assert_eq!(method.name.as_str(), Some("run"));
     assert!(method.params.is_empty() && method.body.is_none() && method.return_type.is_none());
-    assert!(!method.is_static && !method.is_abstract && !method.is_final);
+    assert!(
+        !method.modifiers.is_static && !method.modifiers.is_abstract && !method.modifiers.is_final
+    );
 
     let owned =
         php_ast::owned::Param::new(php_ast::owned::Ident::new("y", Span::DUMMY), Span::DUMMY);

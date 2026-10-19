@@ -364,10 +364,6 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
                               "default": null,
                               "by_ref": false,
                               "variadic": false,
-                              "is_readonly": false,
-                              "is_final": false,
-                              "visibility": null,
-                              "set_visibility": null,
                               "attributes": [],
                               "span": {
                                 "start": 105,

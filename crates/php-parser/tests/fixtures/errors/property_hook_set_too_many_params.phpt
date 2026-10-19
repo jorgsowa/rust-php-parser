@@ -42,10 +42,9 @@ PHP Fatal error:  set hook of property Foo::$x must accept exactly one parameter
                       "end": 35
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -72,7 +71,6 @@ PHP Fatal error:  set hook of property Foo::$x must accept exactly one parameter
                       "body": {
                         "Block": []
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [
                         {
@@ -104,10 +102,6 @@ PHP Fatal error:  set hook of property Foo::$x must accept exactly one parameter
                           "default": null,
                           "by_ref": false,
                           "variadic": false,
-                          "is_readonly": false,
-                          "is_final": false,
-                          "visibility": null,
-                          "set_visibility": null,
                           "attributes": [],
                           "span": {
                             "start": 50,
@@ -143,10 +137,6 @@ PHP Fatal error:  set hook of property Foo::$x must accept exactly one parameter
                           "default": null,
                           "by_ref": false,
                           "variadic": false,
-                          "is_readonly": false,
-                          "is_final": false,
-                          "visibility": null,
-                          "set_visibility": null,
                           "attributes": [],
                           "span": {
                             "start": 58,

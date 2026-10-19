@@ -280,10 +280,9 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 207
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -315,10 +314,6 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 208,
@@ -371,10 +366,9 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 252
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -414,10 +408,9 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 287
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -449,10 +442,6 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 288,
@@ -497,10 +486,9 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 333
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -532,10 +520,6 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 334,
@@ -607,10 +591,10 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 418
                     }
                   },
-                  "visibility": "Protected",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": true,
+                  "modifiers": {
+                    "visibility": "Protected",
+                    "is_readonly": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -648,10 +632,9 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 452
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -683,10 +666,6 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 453,
@@ -771,10 +750,10 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 540
                     }
                   },
-                  "visibility": "Protected",
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected",
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -814,10 +793,10 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 591
                     }
                   },
-                  "visibility": "Protected",
-                  "is_static": false,
-                  "is_abstract": true,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected",
+                    "is_abstract": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -849,10 +828,6 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 592,
@@ -897,10 +872,10 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 645
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_final": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -1203,8 +1178,9 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 918
                     }
                   },
-                  "visibility": "Public",
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "value": {
                     "kind": {
                       "Int": 25
@@ -1232,10 +1208,10 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 959
                     }
                   },
-                  "visibility": "Private",
-                  "set_visibility": null,
-                  "is_static": true,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Private",
+                    "is_static": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -1281,10 +1257,9 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 998
                     }
                   },
-                  "visibility": "Protected",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -1342,10 +1317,9 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 1076
                     }
                   },
-                  "visibility": "Protected",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -1377,10 +1351,6 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 1077,
@@ -1630,10 +1600,9 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 1275
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -1665,10 +1634,6 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 1276,
@@ -2003,10 +1968,9 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 1497
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {
@@ -2281,10 +2245,6 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                               "default": null,
                                               "by_ref": false,
                                               "variadic": false,
-                                              "is_readonly": false,
-                                              "is_final": false,
-                                              "visibility": null,
-                                              "set_visibility": null,
                                               "attributes": [],
                                               "span": {
                                                 "start": 1643,
@@ -2406,10 +2366,9 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 1726
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -2441,10 +2400,6 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 1727,
@@ -2705,10 +2660,6 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                                     "default": null,
                                                     "by_ref": false,
                                                     "variadic": false,
-                                                    "is_readonly": false,
-                                                    "is_final": false,
-                                                    "visibility": null,
-                                                    "set_visibility": null,
                                                     "attributes": [],
                                                     "span": {
                                                       "start": 1904,
@@ -2915,10 +2866,9 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 2080
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -2950,10 +2900,6 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 2081,
@@ -3324,10 +3270,9 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 2397
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -3359,10 +3304,6 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 2398,
@@ -3720,10 +3661,10 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                       "end": 2661
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": {

@@ -46,14 +46,9 @@ pub struct Param<'arena, 'src> {
     pub by_ref: bool,
     /// `true` for a variadic parameter (`...$x`).
     pub variadic: bool,
-    /// `true` for a `readonly` promoted property.
-    pub is_readonly: bool,
-    /// `true` for a `final` promoted property.
-    pub is_final: bool,
-    /// Visibility of a promoted constructor property.
-    pub visibility: Option<Visibility>,
-    /// Asymmetric write visibility, e.g. `private(set)` (PHP 8.4+).
-    pub set_visibility: Option<Visibility>,
+    /// Visibility, `static`, `final`, `abstract` and `readonly` modifiers.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Modifiers::is_empty"))]
+    pub modifiers: Modifiers,
     /// `#[...]` attributes applied to this node.
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     /// Property hooks on a promoted property (PHP 8.4+).
@@ -81,15 +76,59 @@ impl<'arena, 'src> Param<'arena, 'src> {
             default: None,
             by_ref: false,
             variadic: false,
-            is_readonly: false,
-            is_final: false,
-            visibility: None,
-            set_visibility: None,
+            modifiers: Modifiers::new(),
             attributes: ArenaVec::new_in(arena),
             hooks: ArenaVec::new_in(arena),
             doc_comment: None,
             span,
         }
+    }
+}
+
+/// The modifiers of a member or promoted parameter. Which flags are valid depends on the node
+/// that carries them.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
+pub struct Modifiers {
+    /// Declared visibility, if any.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
+    pub visibility: Option<Visibility>,
+    /// Asymmetric write visibility, e.g. `private(set)` (PHP 8.4+).
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
+    pub set_visibility: Option<Visibility>,
+    /// `true` for `static`.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
+    pub is_static: bool,
+    /// `true` for `abstract`.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
+    pub is_abstract: bool,
+    /// `true` for `final`.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
+    pub is_final: bool,
+    /// `true` for `readonly`.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
+    pub is_readonly: bool,
+}
+
+impl Modifiers {
+    /// No modifiers. The fields are public, so set the ones that apply by assignment;
+    /// `Modifiers` is `#[non_exhaustive]` and cannot be built with a struct literal outside
+    /// this crate.
+    pub const fn new() -> Self {
+        Self {
+            visibility: None,
+            set_visibility: None,
+            is_static: false,
+            is_abstract: false,
+            is_final: false,
+            is_readonly: false,
+        }
+    }
+
+    /// Whether no modifier is set.
+    pub fn is_empty(&self) -> bool {
+        *self == Self::new()
     }
 }
 
@@ -183,20 +222,9 @@ pub enum ClassMemberKind<'arena, 'src> {
 pub struct PropertyDecl<'arena, 'src> {
     /// Property name without `$`.
     pub name: Ident<'src>,
-    /// Declared visibility, if any.
-    pub visibility: Option<Visibility>,
-    /// Asymmetric write visibility, e.g. `private(set)` (PHP 8.4+).
-    pub set_visibility: Option<Visibility>,
-    /// `true` for `static`.
-    pub is_static: bool,
-    /// `true` for `readonly`.
-    pub is_readonly: bool,
-    /// `true` for `final` (PHP 8.4+).
-    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
-    pub is_final: bool,
-    /// `true` for `abstract`; only valid with hooks (PHP 8.4+).
-    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
-    pub is_abstract: bool,
+    /// Visibility, `static`, `final`, `abstract` and `readonly` modifiers.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Modifiers::is_empty"))]
+    pub modifiers: Modifiers,
     /// Declared type, if any.
     pub type_hint: Option<TypeHint<'arena, 'src>>,
     /// Default value expression.
@@ -243,8 +271,9 @@ pub struct PropertyHook<'arena, 'src> {
     pub kind: PropertyHookKind,
     /// Hook body.
     pub body: PropertyHookBody<'arena, 'src>,
-    /// `true` for a `final` hook.
-    pub is_final: bool,
+    /// Visibility, `static`, `final`, `abstract` and `readonly` modifiers.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Modifiers::is_empty"))]
+    pub modifiers: Modifiers,
     /// `true` for `&get`.
     pub by_ref: bool,
     /// Explicit parameters, e.g. `set(string $v)`.
@@ -262,14 +291,9 @@ pub struct PropertyHook<'arena, 'src> {
 pub struct MethodDecl<'arena, 'src> {
     /// Method name.
     pub name: Ident<'src>,
-    /// Declared visibility, if any.
-    pub visibility: Option<Visibility>,
-    /// `true` for `static`.
-    pub is_static: bool,
-    /// `true` for `abstract`.
-    pub is_abstract: bool,
-    /// `true` for `final`.
-    pub is_final: bool,
+    /// Visibility, `static`, `final`, `abstract` and `readonly` modifiers.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Modifiers::is_empty"))]
+    pub modifiers: Modifiers,
     /// `true` when by reference (`&`).
     pub by_ref: bool,
     /// Declared parameters.
@@ -292,10 +316,7 @@ impl<'arena, 'src> MethodDecl<'arena, 'src> {
     pub fn new(arena: &'arena bumpalo::Bump, name: Ident<'src>) -> Self {
         Self {
             name,
-            visibility: None,
-            is_static: false,
-            is_abstract: false,
-            is_final: false,
+            modifiers: Modifiers::new(),
             by_ref: false,
             params: ArenaVec::new_in(arena),
             return_type: None,
@@ -312,10 +333,9 @@ impl<'arena, 'src> MethodDecl<'arena, 'src> {
 pub struct ClassConstDecl<'arena, 'src> {
     /// Constant name.
     pub name: Ident<'src>,
-    /// Declared visibility, if any.
-    pub visibility: Option<Visibility>,
-    /// `true` for `final`.
-    pub is_final: bool,
+    /// Visibility, `static`, `final`, `abstract` and `readonly` modifiers.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Modifiers::is_empty"))]
+    pub modifiers: Modifiers,
     /// Typed class constant type (PHP 8.3+).
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub type_hint: Option<&'arena TypeHint<'arena, 'src>>,

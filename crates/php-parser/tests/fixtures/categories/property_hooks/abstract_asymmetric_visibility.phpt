@@ -39,11 +39,11 @@ abstract class Foo {
                       "end": 70
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": "Private",
-                  "is_static": false,
-                  "is_readonly": false,
-                  "is_abstract": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "set_visibility": "Private",
+                    "is_abstract": true
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -68,7 +68,6 @@ abstract class Foo {
                     {
                       "kind": "Get",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],
@@ -80,7 +79,6 @@ abstract class Foo {
                     {
                       "kind": "Set",
                       "body": "Abstract",
-                      "is_final": false,
                       "by_ref": false,
                       "params": [],
                       "attributes": [],

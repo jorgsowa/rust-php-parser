@@ -38,10 +38,10 @@ PHP Fatal error:  Readonly property Foo::$bar must have type in Standard input c
                       "end": 42
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": true,
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_readonly": true
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []

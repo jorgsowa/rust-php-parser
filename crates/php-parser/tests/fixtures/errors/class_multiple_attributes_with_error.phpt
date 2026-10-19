@@ -46,10 +46,9 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
                       "end": 85
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,
@@ -90,10 +89,9 @@ PHP Parse error:  syntax error, unexpected token "@", expecting "function" in St
                       "end": 142
                     }
                   },
-                  "visibility": "Public",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "by_ref": false,
                   "params": [],
                   "return_type": null,

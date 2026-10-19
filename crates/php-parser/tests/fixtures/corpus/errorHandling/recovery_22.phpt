@@ -77,10 +77,6 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 20,
@@ -157,10 +153,6 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 54,
@@ -190,10 +182,6 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 66,
@@ -247,10 +235,6 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
               "default": null,
               "by_ref": false,
               "variadic": true,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 101,
@@ -304,10 +288,6 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
               "default": null,
               "by_ref": true,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 134,
@@ -378,10 +358,6 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
               "default": null,
               "by_ref": false,
               "variadic": false,
-              "is_readonly": false,
-              "is_final": false,
-              "visibility": null,
-              "set_visibility": null,
               "attributes": [],
               "span": {
                 "start": 165,
@@ -418,10 +394,6 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
                               "end": 199
                             }
                           },
-                          "visibility": null,
-                          "is_static": false,
-                          "is_abstract": false,
-                          "is_final": false,
                           "by_ref": false,
                           "params": [
                             {
@@ -447,10 +419,6 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
                               "default": null,
                               "by_ref": false,
                               "variadic": false,
-                              "is_readonly": false,
-                              "is_final": false,
-                              "visibility": null,
-                              "set_visibility": null,
                               "attributes": [],
                               "span": {
                                 "start": 200,
@@ -508,10 +476,6 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable in Stan
                           "default": null,
                           "by_ref": false,
                           "variadic": false,
-                          "is_readonly": false,
-                          "is_final": false,
-                          "visibility": null,
-                          "set_visibility": null,
                           "attributes": [],
                           "span": {
                             "start": 217,

@@ -36,10 +36,9 @@ PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input 
                       "end": 36
                     }
                   },
-                  "visibility": null,
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": true,
+                  "modifiers": {
+                    "is_readonly": true
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []

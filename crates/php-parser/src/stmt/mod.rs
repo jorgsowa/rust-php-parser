@@ -1678,10 +1678,10 @@ pub fn parse_param_list<'arena, 'src>(
             param.default = default;
             param.by_ref = by_ref;
             param.variadic = variadic;
-            param.is_readonly = is_readonly;
-            param.is_final = is_final;
-            param.visibility = visibility;
-            param.set_visibility = set_visibility;
+            param.modifiers.is_readonly = is_readonly;
+            param.modifiers.is_final = is_final;
+            param.modifiers.visibility = visibility;
+            param.modifiers.set_visibility = set_visibility;
             param.attributes = param_attrs;
             param.hooks = hooks;
             param.doc_comment = doc_comment;

@@ -799,8 +799,6 @@ class C {
                       "end": 320
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1
@@ -828,8 +826,6 @@ class C {
                       "end": 337
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Ternary": {
@@ -913,8 +909,6 @@ class C {
                       "end": 369
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Ternary": {

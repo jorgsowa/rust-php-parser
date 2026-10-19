@@ -60,10 +60,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "end": 34
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -95,10 +91,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 35,
@@ -126,10 +118,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "end": 64
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -169,10 +157,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 65,
@@ -208,10 +192,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 74,
@@ -239,10 +219,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "end": 108
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -274,10 +250,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 109,
@@ -305,10 +277,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "end": 140
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -368,10 +336,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 141,
@@ -399,10 +363,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "end": 175
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -434,10 +394,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 176,
@@ -473,10 +429,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 184,
@@ -504,10 +456,9 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "end": 227
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -539,10 +490,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 228,
@@ -578,10 +525,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 239,
@@ -609,10 +552,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "end": 279
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -644,10 +583,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 280,
@@ -675,10 +610,9 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "end": 327
                     }
                   },
-                  "visibility": null,
-                  "is_static": true,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "is_static": true
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -710,10 +644,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 328,
@@ -768,10 +698,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "end": 370
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -803,10 +729,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 371,
@@ -834,10 +756,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "end": 403
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -869,10 +787,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 404,
@@ -936,10 +850,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 415,
@@ -967,10 +877,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "end": 453
                     }
                   },
-                  "visibility": null,
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
                   "by_ref": false,
                   "params": [
                     {
@@ -1002,10 +908,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 454,
@@ -1024,10 +926,6 @@ PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when decl
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 467,

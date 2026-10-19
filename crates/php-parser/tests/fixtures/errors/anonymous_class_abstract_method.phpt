@@ -52,10 +52,9 @@ PHP Fatal error:  Anonymous class method f() must not be abstract in Standard in
                                       "end": 46
                                     }
                                   },
-                                  "visibility": null,
-                                  "is_static": false,
-                                  "is_abstract": true,
-                                  "is_final": false,
+                                  "modifiers": {
+                                    "is_abstract": true
+                                  },
                                   "by_ref": false,
                                   "params": [],
                                   "return_type": null,
@@ -78,10 +77,11 @@ PHP Fatal error:  Anonymous class method f() must not be abstract in Standard in
                                       "end": 90
                                     }
                                   },
-                                  "visibility": "Protected",
-                                  "is_static": true,
-                                  "is_abstract": true,
-                                  "is_final": false,
+                                  "modifiers": {
+                                    "visibility": "Protected",
+                                    "is_static": true,
+                                    "is_abstract": true
+                                  },
                                   "by_ref": false,
                                   "params": [],
                                   "return_type": null,

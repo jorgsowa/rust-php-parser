@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `walk_trait_adaptation` and `walk_owned_trait_adaptation` (`php-ast`).
 - `php_ast::owned` re-exports `walk_owned_block` and `fold_owned_block` like the other walk and fold functions (`php-ast`).
 - `Fold::fold_stmts` hook, called for the program, every block and every `case` body, so a fold can delete, split or insert statements; the free `fold_stmts` is public (`php-ast`).
+- `php_ast::Modifiers` (`visibility`, `set_visibility`, `is_static`, `is_abstract`, `is_final`, `is_readonly`; `Modifiers::new()` and `is_empty()`), shared by methods, properties, parameters, class constants and property hooks (`php-ast`).
 
 ### Changed
 
@@ -29,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breaking:** `Fold::fold_closure_use_var` takes the arena like every other fold method (`php-ast`).
 - **Breaking:** `FoldOwned` is renamed `OwnedFold`, matching `OwnedVisitor` (`php-ast`).
 - **Breaking:** `Arg` (arena and owned) has a `kind: ArgKind` (`Value`, `Spread`, `ByRef`, `Placeholder`, `SpreadPlaceholder`) instead of `value: Option<Expr>` + `unpack` + `by_ref`, and `ArrayElement` has a `kind: ArrayElementKind` (`Value`, `Spread`, `ByRef`) instead of `value` + `unpack` + `by_ref`, so impossible combinations cannot be built. `Arg::value()` / `value_mut()` / `is_spread()` / `is_placeholder()` and `ArrayElement::value()` / `value_mut()` / `is_spread()` / `is_by_ref()` read them; the JSON shape changes accordingly (`php-ast`, `php-rs-parser`, `php-printer`).
+- **Breaking:** `MethodDecl`, `PropertyDecl`, `Param`, `ClassConstDecl` and `PropertyHook` (arena and owned) carry a `modifiers: Modifiers` instead of separate `visibility`, `set_visibility`, `is_static`, `is_abstract`, `is_final` and `is_readonly` fields (`MethodDecl.visibility` becomes `MethodDecl.modifiers.visibility`). It is serialized as `"modifiers"`, with only the set flags, and left out when empty (`php-ast`, `php-rs-parser`, `php-printer`).
 
 ### Fixed
 

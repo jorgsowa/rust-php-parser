@@ -42,10 +42,9 @@ PHP Fatal error:  get hook of property Foo::$x must not have a parameter list in
                       "end": 35
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": {
                     "kind": {
                       "Named": {
@@ -90,7 +89,6 @@ PHP Fatal error:  get hook of property Foo::$x must not have a parameter list in
                           }
                         ]
                       },
-                      "is_final": false,
                       "by_ref": false,
                       "params": [
                         {
@@ -122,10 +120,6 @@ PHP Fatal error:  get hook of property Foo::$x must not have a parameter list in
                           "default": null,
                           "by_ref": false,
                           "variadic": false,
-                          "is_readonly": false,
-                          "is_final": false,
-                          "visibility": null,
-                          "set_visibility": null,
                           "attributes": [],
                           "span": {
                             "start": 50,

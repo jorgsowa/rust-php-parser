@@ -445,8 +445,6 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fu
                       "end": 223
                     }
                   },
-                  "visibility": null,
-                  "is_final": false,
                   "value": {
                     "kind": {
                       "Int": 1
@@ -474,10 +472,9 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fu
                       "end": 243
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []
@@ -498,10 +495,9 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fu
                       "end": 247
                     }
                   },
-                  "visibility": "Public",
-                  "set_visibility": null,
-                  "is_static": false,
-                  "is_readonly": false,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
                   "type_hint": null,
                   "default": null,
                   "attributes": []

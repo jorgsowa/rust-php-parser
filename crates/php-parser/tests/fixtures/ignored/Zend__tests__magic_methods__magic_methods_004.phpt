@@ -41,10 +41,9 @@ class foo {
                       "end": 49
                     }
                   },
-                  "visibility": "Protected",
-                  "is_static": false,
-                  "is_abstract": false,
-                  "is_final": false,
+                  "modifiers": {
+                    "visibility": "Protected"
+                  },
                   "by_ref": false,
                   "params": [
                     {
@@ -59,10 +58,6 @@ class foo {
                       "default": null,
                       "by_ref": false,
                       "variadic": false,
-                      "is_readonly": false,
-                      "is_final": false,
-                      "visibility": null,
-                      "set_visibility": null,
                       "attributes": [],
                       "span": {
                         "start": 50,
