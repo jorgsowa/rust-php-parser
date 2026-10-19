@@ -1311,9 +1311,9 @@ fn owned_scope_visitor_visits_names_and_blocks_with_scope() {
 
 #[test]
 fn fold_owned_trait_use_is_overridable() {
-    use php_ast::owned::{fold_owned_trait_use, FoldOwned, TraitUseDecl};
+    use php_ast::owned::{fold_owned_trait_use, OwnedFold, TraitUseDecl};
     struct CountTraitUses(usize);
-    impl FoldOwned for CountTraitUses {
+    impl OwnedFold for CountTraitUses {
         fn fold_trait_use(&mut self, trait_use: &TraitUseDecl) -> TraitUseDecl {
             self.0 += 1;
             fold_owned_trait_use(self, trait_use)
@@ -1340,7 +1340,7 @@ fn name_str_new_in_copies_into_the_arena() {
 
 #[test]
 fn owned_block_walk_and_fold_are_overridable() {
-    use php_ast::owned::{fold_owned_block, walk_owned_block, Block, FoldOwned, OwnedVisitor};
+    use php_ast::owned::{fold_owned_block, walk_owned_block, Block, OwnedFold, OwnedVisitor};
     struct CountBlocks(usize);
     impl OwnedVisitor for CountBlocks {
         fn visit_block(&mut self, block: &Block) -> ControlFlow<()> {
@@ -1348,7 +1348,7 @@ fn owned_block_walk_and_fold_are_overridable() {
             walk_owned_block(self, block)
         }
     }
-    impl FoldOwned for CountBlocks {
+    impl OwnedFold for CountBlocks {
         fn fold_block(&mut self, block: &Block) -> Block {
             self.0 += 1;
             fold_owned_block(self, block)

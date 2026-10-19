@@ -1,6 +1,6 @@
 # php-ast
 
-AST node definitions for PHP 7.4–8.5, with arena (`Visitor`, `ScopeVisitor`, `Fold`) and owned (`OwnedVisitor`, `OwnedScopeVisitor`, `FoldOwned`) traversal traits and a `NameResolver`.
+AST node definitions for PHP 7.4–8.5, with arena (`Visitor`, `ScopeVisitor`, `Fold`) and owned (`OwnedVisitor`, `OwnedScopeVisitor`, `OwnedFold`) traversal traits and a `NameResolver`.
 
 Use it together with [`php-rs-parser`](https://crates.io/crates/php-rs-parser), which produces these trees.
 

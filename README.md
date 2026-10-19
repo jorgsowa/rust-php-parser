@@ -133,14 +133,14 @@ For arena-allocated ASTs from `parse_arena()`, use the `Visitor`/`ScopeVisitor` 
 
 ### AST transformation
 
-`FoldOwned` rebuilds the owned AST, letting you transform specific nodes. Override only what you need; all other nodes are rebuilt identically:
+`OwnedFold` rebuilds the owned AST, letting you transform specific nodes. Override only what you need; all other nodes are rebuilt identically:
 
 ```rust
-use php_ast::owned::{FoldOwned, fold_owned_expr, Expr, ExprKind};
+use php_ast::owned::{OwnedFold, fold_owned_expr, Expr, ExprKind};
 
 struct NegateInts;
 
-impl FoldOwned for NegateInts {
+impl OwnedFold for NegateInts {
     fn fold_expr(&mut self, expr: &Expr) -> Expr {
         if let ExprKind::Int(n) = &expr.kind {
             return Expr { kind: ExprKind::Int(-n), span: expr.span };
@@ -263,7 +263,7 @@ The crates follow [Semantic Versioning](https://semver.org/) for their Rust API.
 | Crate | crates.io | Purpose |
 |-------|-----------|---------|
 | **php-lexer** | [![crates.io](https://img.shields.io/crates/v/php-lexer)](https://crates.io/crates/php-lexer) | Hand-written tokenizer with handling for strings, heredoc/nowdoc, and inline HTML |
-| **php-ast** | [![crates.io](https://img.shields.io/crates/v/php-ast)](https://crates.io/crates/php-ast) | AST type definitions; arena `Visitor`/`ScopeVisitor`/`Fold` traits; owned `OwnedVisitor`/`OwnedScopeVisitor`/`FoldOwned` traits |
+| **php-ast** | [![crates.io](https://img.shields.io/crates/v/php-ast)](https://crates.io/crates/php-ast) | AST type definitions; arena `Visitor`/`ScopeVisitor`/`Fold` traits; owned `OwnedVisitor`/`OwnedScopeVisitor`/`OwnedFold` traits |
 | **php-rs-parser** | [![crates.io](https://img.shields.io/crates/v/php-rs-parser)](https://crates.io/crates/php-rs-parser) | Pratt-based recursive descent parser with panic-mode error recovery, source map |
 | **phpdoc-parser** | [![crates.io](https://img.shields.io/crates/v/phpdoc-parser)](https://crates.io/crates/phpdoc-parser) | Standalone structural PHPDoc block parser — tag-agnostic, tag bodies exposed as raw text |
 | **php-printer** | [![crates.io](https://img.shields.io/crates/v/php-printer)](https://crates.io/crates/php-printer) | Pretty printer — converts AST back to PHP source; supports both arena and owned AST |

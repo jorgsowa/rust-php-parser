@@ -1,7 +1,7 @@
-//! Owned AST transformation via the [`FoldOwned`] trait.
+//! Owned AST transformation via the [`OwnedFold`] trait.
 //!
-//! [`FoldOwned`] is the transformation counterpart of [`super::visitor::OwnedVisitor`].
-//! Where `OwnedVisitor` reads nodes in place, `FoldOwned` rebuilds them — reading
+//! [`OwnedFold`] is the transformation counterpart of [`super::visitor::OwnedVisitor`].
+//! Where `OwnedVisitor` reads nodes in place, `OwnedFold` rebuilds them — reading
 //! from an input node (borrowed) and returning a new owned value. Override only the
 //! node types you want to change; all others are rebuilt identically by the default
 //! implementations (equivalent to `Clone`).
@@ -9,12 +9,12 @@
 //! # Example
 //!
 //! ```
-//! use php_ast::owned::fold::{FoldOwned, fold_owned_expr};
+//! use php_ast::owned::fold::{OwnedFold, fold_owned_expr};
 //! use php_ast::owned::{Expr, ExprKind};
 //!
 //! struct NegateInts;
 //!
-//! impl FoldOwned for NegateInts {
+//! impl OwnedFold for NegateInts {
 //!     fn fold_expr(&mut self, expr: &Expr) -> Expr {
 //!         if let ExprKind::Int(n) = &expr.kind {
 //!             return Expr { kind: ExprKind::Int(-n), span: expr.span };
@@ -27,7 +27,7 @@
 use super::*;
 
 // =============================================================================
-// FoldOwned trait
+// OwnedFold trait
 // =============================================================================
 
 /// Trait for transforming owned PHP AST nodes.
@@ -35,7 +35,7 @@ use super::*;
 /// All methods have identity-fold default implementations that call the
 /// corresponding free `fold_owned_*` function. Override only the node types
 /// you want to change; the rest recurse automatically.
-pub trait FoldOwned {
+pub trait OwnedFold {
     /// Transforms a program node; recurses by default.
     fn fold_program(&mut self, program: &Program) -> Program {
         fold_owned_program(self, program)
@@ -127,7 +127,7 @@ pub trait FoldOwned {
 // =============================================================================
 
 /// Folds a program, recursing into its children.
-pub fn fold_owned_program<F: FoldOwned + ?Sized>(folder: &mut F, program: &Program) -> Program {
+pub fn fold_owned_program<F: OwnedFold + ?Sized>(folder: &mut F, program: &Program) -> Program {
     Program {
         stmts: program.stmts.iter().map(|s| folder.fold_stmt(s)).collect(),
         span: program.span,
@@ -135,7 +135,7 @@ pub fn fold_owned_program<F: FoldOwned + ?Sized>(folder: &mut F, program: &Progr
 }
 
 /// Folds a statement, recursing into its children.
-pub fn fold_owned_stmt<F: FoldOwned + ?Sized>(folder: &mut F, stmt: &Stmt) -> Stmt {
+pub fn fold_owned_stmt<F: OwnedFold + ?Sized>(folder: &mut F, stmt: &Stmt) -> Stmt {
     Stmt {
         kind: fold_owned_stmt_kind(folder, &stmt.kind),
         span: stmt.span,
@@ -143,45 +143,45 @@ pub fn fold_owned_stmt<F: FoldOwned + ?Sized>(folder: &mut F, stmt: &Stmt) -> St
     }
 }
 
-fn fold_owned_stmts<F: FoldOwned + ?Sized>(folder: &mut F, stmts: &[Stmt]) -> Box<[Stmt]> {
+fn fold_owned_stmts<F: OwnedFold + ?Sized>(folder: &mut F, stmts: &[Stmt]) -> Box<[Stmt]> {
     stmts.iter().map(|s| folder.fold_stmt(s)).collect()
 }
 
 /// Folds a block, recursing into its children.
-pub fn fold_owned_block<F: FoldOwned + ?Sized>(folder: &mut F, block: &Block) -> Block {
+pub fn fold_owned_block<F: OwnedFold + ?Sized>(folder: &mut F, block: &Block) -> Block {
     Block {
         stmts: fold_owned_stmts(folder, &block.stmts),
         span: block.span,
     }
 }
 
-fn fold_owned_exprs<F: FoldOwned + ?Sized>(folder: &mut F, exprs: &[Expr]) -> Box<[Expr]> {
+fn fold_owned_exprs<F: OwnedFold + ?Sized>(folder: &mut F, exprs: &[Expr]) -> Box<[Expr]> {
     exprs.iter().map(|e| folder.fold_expr(e)).collect()
 }
 
-fn fold_owned_args<F: FoldOwned + ?Sized>(folder: &mut F, args: &[Arg]) -> Box<[Arg]> {
+fn fold_owned_args<F: OwnedFold + ?Sized>(folder: &mut F, args: &[Arg]) -> Box<[Arg]> {
     args.iter().map(|a| folder.fold_arg(a)).collect()
 }
 
-fn fold_owned_attrs<F: FoldOwned + ?Sized>(
+fn fold_owned_attrs<F: OwnedFold + ?Sized>(
     folder: &mut F,
     attrs: &[Attribute],
 ) -> Box<[Attribute]> {
     attrs.iter().map(|a| folder.fold_attribute(a)).collect()
 }
 
-fn fold_owned_params<F: FoldOwned + ?Sized>(folder: &mut F, params: &[Param]) -> Box<[Param]> {
+fn fold_owned_params<F: OwnedFold + ?Sized>(folder: &mut F, params: &[Param]) -> Box<[Param]> {
     params.iter().map(|p| folder.fold_param(p)).collect()
 }
 
-fn fold_owned_hooks<F: FoldOwned + ?Sized>(
+fn fold_owned_hooks<F: OwnedFold + ?Sized>(
     folder: &mut F,
     hooks: &[PropertyHook],
 ) -> Box<[PropertyHook]> {
     hooks.iter().map(|h| folder.fold_property_hook(h)).collect()
 }
 
-fn fold_owned_members<F: FoldOwned + ?Sized>(
+fn fold_owned_members<F: OwnedFold + ?Sized>(
     folder: &mut F,
     members: &[ClassMember],
 ) -> Box<[ClassMember]> {
@@ -191,7 +191,7 @@ fn fold_owned_members<F: FoldOwned + ?Sized>(
         .collect()
 }
 
-fn fold_owned_string_parts<F: FoldOwned + ?Sized>(
+fn fold_owned_string_parts<F: OwnedFold + ?Sized>(
     folder: &mut F,
     parts: &[StringPart],
 ) -> Box<[StringPart]> {
@@ -204,7 +204,7 @@ fn fold_owned_string_parts<F: FoldOwned + ?Sized>(
         .collect()
 }
 
-fn fold_owned_stmt_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &StmtKind) -> StmtKind {
+fn fold_owned_stmt_kind<F: OwnedFold + ?Sized>(folder: &mut F, k: &StmtKind) -> StmtKind {
     match k {
         StmtKind::Expression(e) => StmtKind::Expression(Box::new(folder.fold_expr(e))),
         StmtKind::Echo(exprs) => StmtKind::Echo(fold_owned_exprs(folder, exprs)),
@@ -364,14 +364,14 @@ fn fold_owned_stmt_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &StmtKind) -> 
 }
 
 /// Folds an expression, recursing into its children.
-pub fn fold_owned_expr<F: FoldOwned + ?Sized>(folder: &mut F, expr: &Expr) -> Expr {
+pub fn fold_owned_expr<F: OwnedFold + ?Sized>(folder: &mut F, expr: &Expr) -> Expr {
     Expr {
         kind: fold_owned_expr_kind(folder, &expr.kind),
         span: expr.span,
     }
 }
 
-fn fold_owned_expr_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &ExprKind) -> ExprKind {
+fn fold_owned_expr_kind<F: OwnedFold + ?Sized>(folder: &mut F, k: &ExprKind) -> ExprKind {
     match k {
         ExprKind::Int(v) => ExprKind::Int(*v),
         ExprKind::Float(v) => ExprKind::Float(*v),
@@ -583,7 +583,7 @@ fn fold_owned_expr_kind<F: FoldOwned + ?Sized>(folder: &mut F, k: &ExprKind) -> 
 }
 
 /// Folds a param, recursing into its children.
-pub fn fold_owned_param<F: FoldOwned + ?Sized>(folder: &mut F, p: &Param) -> Param {
+pub fn fold_owned_param<F: OwnedFold + ?Sized>(folder: &mut F, p: &Param) -> Param {
     Param {
         name: p.name.clone(),
         type_hint: p.type_hint.as_ref().map(|t| folder.fold_type_hint(t)),
@@ -602,7 +602,7 @@ pub fn fold_owned_param<F: FoldOwned + ?Sized>(folder: &mut F, p: &Param) -> Par
 }
 
 /// Folds an argument, recursing into its children.
-pub fn fold_owned_arg<F: FoldOwned + ?Sized>(folder: &mut F, arg: &Arg) -> Arg {
+pub fn fold_owned_arg<F: OwnedFold + ?Sized>(folder: &mut F, arg: &Arg) -> Arg {
     Arg {
         name: arg.name.as_ref().map(|n| folder.fold_name(n)),
         value: arg.value.as_ref().map(|v| folder.fold_expr(v)),
@@ -613,7 +613,7 @@ pub fn fold_owned_arg<F: FoldOwned + ?Sized>(folder: &mut F, arg: &Arg) -> Arg {
 }
 
 /// Folds a closure use var, recursing into its children.
-pub fn fold_owned_closure_use_var<F: FoldOwned + ?Sized>(
+pub fn fold_owned_closure_use_var<F: OwnedFold + ?Sized>(
     _folder: &mut F,
     var: &ClosureUseVar,
 ) -> ClosureUseVar {
@@ -621,12 +621,12 @@ pub fn fold_owned_closure_use_var<F: FoldOwned + ?Sized>(
 }
 
 /// Folds a name, recursing into its children.
-pub fn fold_owned_name<F: FoldOwned + ?Sized>(_folder: &mut F, name: &Name) -> Name {
+pub fn fold_owned_name<F: OwnedFold + ?Sized>(_folder: &mut F, name: &Name) -> Name {
     name.clone()
 }
 
 /// Folds a class member, recursing into its children.
-pub fn fold_owned_class_member<F: FoldOwned + ?Sized>(
+pub fn fold_owned_class_member<F: OwnedFold + ?Sized>(
     folder: &mut F,
     member: &ClassMember,
 ) -> ClassMember {
@@ -669,7 +669,7 @@ pub fn fold_owned_class_member<F: FoldOwned + ?Sized>(
 }
 
 /// Folds an enum member, recursing into its children.
-pub fn fold_owned_enum_member<F: FoldOwned + ?Sized>(
+pub fn fold_owned_enum_member<F: OwnedFold + ?Sized>(
     folder: &mut F,
     member: &EnumMember,
 ) -> EnumMember {
@@ -704,7 +704,7 @@ pub fn fold_owned_enum_member<F: FoldOwned + ?Sized>(
 }
 
 /// Folds a property hook, recursing into its children.
-pub fn fold_owned_property_hook<F: FoldOwned + ?Sized>(
+pub fn fold_owned_property_hook<F: OwnedFold + ?Sized>(
     folder: &mut F,
     hook: &PropertyHook,
 ) -> PropertyHook {
@@ -726,7 +726,7 @@ pub fn fold_owned_property_hook<F: FoldOwned + ?Sized>(
 }
 
 /// Folds a type hint, recursing into its children.
-pub fn fold_owned_type_hint<F: FoldOwned + ?Sized>(
+pub fn fold_owned_type_hint<F: OwnedFold + ?Sized>(
     folder: &mut F,
     type_hint: &TypeHint,
 ) -> TypeHint {
@@ -749,7 +749,7 @@ pub fn fold_owned_type_hint<F: FoldOwned + ?Sized>(
 }
 
 /// Folds an attribute, recursing into its children.
-pub fn fold_owned_attribute<F: FoldOwned + ?Sized>(
+pub fn fold_owned_attribute<F: OwnedFold + ?Sized>(
     folder: &mut F,
     attribute: &Attribute,
 ) -> Attribute {
@@ -761,7 +761,7 @@ pub fn fold_owned_attribute<F: FoldOwned + ?Sized>(
 }
 
 /// Folds a catch clause, recursing into its children.
-pub fn fold_owned_catch_clause<F: FoldOwned + ?Sized>(
+pub fn fold_owned_catch_clause<F: OwnedFold + ?Sized>(
     folder: &mut F,
     catch: &CatchClause,
 ) -> CatchClause {
@@ -774,7 +774,7 @@ pub fn fold_owned_catch_clause<F: FoldOwned + ?Sized>(
 }
 
 /// Folds a match arm, recursing into its children.
-pub fn fold_owned_match_arm<F: FoldOwned + ?Sized>(folder: &mut F, arm: &MatchArm) -> MatchArm {
+pub fn fold_owned_match_arm<F: OwnedFold + ?Sized>(folder: &mut F, arm: &MatchArm) -> MatchArm {
     MatchArm {
         conditions: arm
             .conditions
@@ -785,7 +785,7 @@ pub fn fold_owned_match_arm<F: FoldOwned + ?Sized>(folder: &mut F, arm: &MatchAr
     }
 }
 
-fn fold_owned_class_const<F: FoldOwned + ?Sized>(
+fn fold_owned_class_const<F: OwnedFold + ?Sized>(
     folder: &mut F,
     c: &ClassConstDecl,
 ) -> ClassConstDecl {
@@ -804,7 +804,7 @@ fn fold_owned_class_const<F: FoldOwned + ?Sized>(
 }
 
 /// Folds a `use Trait;` declaration inside a class or enum body.
-pub fn fold_owned_trait_use<F: FoldOwned + ?Sized>(
+pub fn fold_owned_trait_use<F: OwnedFold + ?Sized>(
     folder: &mut F,
     t: &TraitUseDecl,
 ) -> TraitUseDecl {
@@ -821,7 +821,7 @@ pub fn fold_owned_trait_use<F: FoldOwned + ?Sized>(
 }
 
 /// Folds a trait `insteadof`/`as` adaptation.
-pub fn fold_owned_trait_adaptation<F: FoldOwned + ?Sized>(
+pub fn fold_owned_trait_adaptation<F: OwnedFold + ?Sized>(
     folder: &mut F,
     a: &TraitAdaptation,
 ) -> TraitAdaptation {
@@ -854,7 +854,7 @@ pub fn fold_owned_trait_adaptation<F: FoldOwned + ?Sized>(
     }
 }
 
-fn fold_owned_class_decl<F: FoldOwned + ?Sized>(folder: &mut F, cls: &ClassDecl) -> ClassDecl {
+fn fold_owned_class_decl<F: OwnedFold + ?Sized>(folder: &mut F, cls: &ClassDecl) -> ClassDecl {
     ClassDecl {
         name: cls.name.clone(),
         modifiers: cls.modifiers.clone(),
@@ -869,7 +869,7 @@ fn fold_owned_class_decl<F: FoldOwned + ?Sized>(folder: &mut F, cls: &ClassDecl)
     }
 }
 
-fn fold_owned_interface_decl<F: FoldOwned + ?Sized>(
+fn fold_owned_interface_decl<F: OwnedFold + ?Sized>(
     folder: &mut F,
     iface: &InterfaceDecl,
 ) -> InterfaceDecl {
@@ -885,7 +885,7 @@ fn fold_owned_interface_decl<F: FoldOwned + ?Sized>(
     }
 }
 
-fn fold_owned_trait_decl<F: FoldOwned + ?Sized>(folder: &mut F, tr: &TraitDecl) -> TraitDecl {
+fn fold_owned_trait_decl<F: OwnedFold + ?Sized>(folder: &mut F, tr: &TraitDecl) -> TraitDecl {
     TraitDecl {
         name: tr.name.clone(),
         body: ClassBody {
@@ -897,7 +897,7 @@ fn fold_owned_trait_decl<F: FoldOwned + ?Sized>(folder: &mut F, tr: &TraitDecl) 
     }
 }
 
-fn fold_owned_enum_decl<F: FoldOwned + ?Sized>(folder: &mut F, en: &EnumDecl) -> EnumDecl {
+fn fold_owned_enum_decl<F: OwnedFold + ?Sized>(folder: &mut F, en: &EnumDecl) -> EnumDecl {
     EnumDecl {
         name: en.name.clone(),
         scalar_type: en.scalar_type.as_ref().map(|n| folder.fold_name(n)),
@@ -979,7 +979,7 @@ mod tests {
     fn identity_fold_roundtrip() {
         let p = program([expr_stmt(assign(dummy_var("x"), dummy_var("y")))]);
         struct Identity;
-        impl FoldOwned for Identity {}
+        impl OwnedFold for Identity {}
         let folded = Identity.fold_program(&p);
         assert_eq!(
             serde_json::to_string(&folded).unwrap(),
@@ -992,7 +992,7 @@ mod tests {
     fn negate_ints() {
         let p = program([expr_stmt(assign(dummy_var("x"), dummy_int(42)))]);
         struct NegateInts;
-        impl FoldOwned for NegateInts {
+        impl OwnedFold for NegateInts {
             fn fold_expr(&mut self, expr: &Expr) -> Expr {
                 if let ExprKind::Int(n) = &expr.kind {
                     return Expr {
@@ -1022,7 +1022,7 @@ mod tests {
         // $x = $x;
         let p = program([expr_stmt(assign(dummy_var("x"), dummy_var("x")))]);
         struct Rename;
-        impl FoldOwned for Rename {
+        impl OwnedFold for Rename {
             fn fold_expr(&mut self, expr: &Expr) -> Expr {
                 if let ExprKind::Variable(name) = &expr.kind {
                     if name.as_ref() == "x" {
@@ -1070,7 +1070,7 @@ mod tests {
         let p = program([expr_stmt(closure)]);
 
         struct Rename;
-        impl FoldOwned for Rename {
+        impl OwnedFold for Rename {
             fn fold_closure_use_var(&mut self, var: &ClosureUseVar) -> ClosureUseVar {
                 ClosureUseVar {
                     name: if var.name == "x" {

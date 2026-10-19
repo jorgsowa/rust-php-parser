@@ -26,7 +26,7 @@ cargo test          # all tests should pass
 
 | Crate | Package name | Purpose |
 |-------|--------------|---------|
-| `crates/php-ast` | `php-ast` | AST node types; arena `Visitor`/`ScopeVisitor`/`Fold` traits; owned `OwnedVisitor`/`OwnedScopeVisitor`/`FoldOwned` traits |
+| `crates/php-ast` | `php-ast` | AST node types; arena `Visitor`/`ScopeVisitor`/`Fold` traits; owned `OwnedVisitor`/`OwnedScopeVisitor`/`OwnedFold` traits |
 | `crates/php-lexer` | `php-lexer` | Lazy tokenizer with peeking slots (arena-allocated) |
 | `crates/php-parser` | `php-rs-parser` | Recursive-descent parser, source map, semantic analysis helpers |
 | `crates/phpdoc-parser` | `phpdoc-parser` | Standalone structural PHPDoc block parser |
@@ -194,7 +194,7 @@ All visitor traits use `ControlFlow<()>` returns:
 
 For AST transformation, use one of the two `Fold` traits:
 - **`Fold<'src>`** (`crates/php-ast/src/fold.rs`) — arena-to-arena transformation; takes a source arena and a destination arena. Override only the nodes you want to transform; others are copied identically.
-- **`FoldOwned`** (`crates/php-ast/src/owned/fold.rs`) — owned-to-owned transformation; no lifetimes. Use with the result of `php_rs_parser::parse()`.
+- **`OwnedFold`** (`crates/php-ast/src/owned/fold.rs`) — owned-to-owned transformation; no lifetimes. Use with the result of `php_rs_parser::parse()`.
 
 ---
 

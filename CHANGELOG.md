@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breaking:** the printer-only spans (`else_kw_span`, `finally_kw_span`, `brace_span`, `adaptations_brace_span`) are `#[doc(hidden)]` and outside semver; `Lexer::is_verbatim_string` is `#[doc(hidden)]` and the `Lexer::errors` field is the `errors()` accessor; `ArenaVec::into_iter` returns `php_ast::ast::IntoIter` instead of the bumpalo iterator; the `instrument` module is documented as outside semver (`php-ast`, `php-lexer`, `php-rs-parser`).
 - **Breaking:** removed the `php_rs_parser::phpdoc` re-export. Depend on `phpdoc-parser` directly; the `serde` feature of `php-rs-parser` no longer enables `phpdoc-parser/serde` (`php-rs-parser`).
 - **Breaking:** `Fold::fold_closure_use_var` takes the arena like every other fold method (`php-ast`).
+- **Breaking:** `FoldOwned` is renamed `OwnedFold`, matching `OwnedVisitor` (`php-ast`).
 
 ### Fixed
 

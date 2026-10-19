@@ -25,7 +25,7 @@ pub use fold::{
     fold_owned_class_member, fold_owned_closure_use_var, fold_owned_enum_member, fold_owned_expr,
     fold_owned_match_arm, fold_owned_name, fold_owned_param, fold_owned_program,
     fold_owned_property_hook, fold_owned_stmt, fold_owned_trait_adaptation, fold_owned_trait_use,
-    fold_owned_type_hint, FoldOwned,
+    fold_owned_type_hint, OwnedFold,
 };
 pub use visitor::{
     walk_owned_arg, walk_owned_attribute, walk_owned_block, walk_owned_catch_clause,
