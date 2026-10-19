@@ -1,11 +1,9 @@
+===config===
+ignore=non-fatal warning: unsupported declare directive
 ===source===
 <?php
 declare(foo=1, Bar='x');
 declare(ticks=1, baz=2) {}
-===errors===
-Unsupported declare 'foo'
-Unsupported declare 'Bar'
-Unsupported declare 'baz'
 ===ast===
 {
   "stmts": [

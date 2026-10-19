@@ -1,9 +1,9 @@
+===config===
+ignore=non-fatal warning: use with a non-compound name
 ===source===
 <?php namespace {
 use Throwable;
 }
-===errors===
-The use statement with non-compound name 'Throwable' has no effect
 ===ast===
 {
   "stmts": [

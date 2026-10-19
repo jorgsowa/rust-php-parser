@@ -92,6 +92,8 @@ cargo fmt --check
 ===config===          (optional)
 min_php=8.1           skip php -l on older PHP; sets the parse target version
 max_php=8.3           skip php -l on newer PHP
+ignore=reason         known bug: skipped by the parser tests (php -l still checks it); the
+                      fixture holds the expected output once fixed
 
 ===source===          (required)
 <?php ...

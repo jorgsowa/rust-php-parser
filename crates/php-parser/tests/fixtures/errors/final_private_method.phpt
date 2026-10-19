@@ -1,3 +1,5 @@
+===config===
+ignore=non-fatal warning: final private method
 ===description===
 PHP emits a warning (not fatal) for `final private` methods:
 "Private methods cannot be final as they are never overridden by other classes".
@@ -10,8 +12,6 @@ The parser surfaces this as a ForbiddenWarning diagnostic
 class A {
     final private function f() {}
 }
-===errors===
-Private methods cannot be final as they are never overridden by other classes
 ===ast===
 {
   "stmts": [

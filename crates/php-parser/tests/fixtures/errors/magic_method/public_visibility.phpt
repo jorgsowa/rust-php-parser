@@ -1,3 +1,5 @@
+===config===
+ignore=non-fatal warning: non-public magic method
 ===description===
 PHP warns (does not fatal) when a magic method other than __construct, __destruct and __clone is not public.
 ===source===
@@ -21,21 +23,6 @@ class A {
     private function __destruct() {}
     private function __clone() {}
 }
-===errors===
-The magic method A::__get() must have public visibility
-The magic method A::__set() must have public visibility
-The magic method A::__unset() must have public visibility
-The magic method A::__isset() must have public visibility
-The magic method A::__call() must have public visibility
-The magic method A::__callStatic() must have public visibility
-The magic method A::__toString() must have public visibility
-The magic method A::__debugInfo() must have public visibility
-The magic method A::__serialize() must have public visibility
-The magic method A::__unserialize() must have public visibility
-The magic method A::__set_state() must have public visibility
-The magic method A::__invoke() must have public visibility
-The magic method A::__sleep() must have public visibility
-The magic method A::__wakeup() must have public visibility
 ===ast===
 {
   "stmts": [

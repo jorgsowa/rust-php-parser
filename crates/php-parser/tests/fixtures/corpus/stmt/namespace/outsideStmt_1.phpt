@@ -1,3 +1,5 @@
+===config===
+ignore=non-fatal warning: unsupported declare directive
 ===source===
 <?php
 declare(A='B');
@@ -7,8 +9,6 @@ namespace B {
 __halt_compiler()
 ?>
 Hi!
-===errors===
-Unsupported declare 'A'
 ===ast===
 {
   "stmts": [

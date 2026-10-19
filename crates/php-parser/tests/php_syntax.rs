@@ -125,6 +125,23 @@ fn parse_php_error(content: &str) -> Option<String> {
     })
 }
 
+/// Errors `php -l` does not report: a fixture that lists errors must record a `php -l` failure.
+fn non_fatal_errors(content: &str) -> Vec<String> {
+    if content.contains("===php_error===\n") {
+        return Vec::new();
+    }
+    let Some(p) = content.find("===errors===\n") else {
+        return Vec::new();
+    };
+    let after = &content[p + "===errors===\n".len()..];
+    let end = after.find("\n===").unwrap_or(after.len());
+    after[..end]
+        .lines()
+        .filter(|l| !l.is_empty() && !l.contains(" requires PHP "))
+        .map(str::to_string)
+        .collect()
+}
+
 fn update_fixture_php_error(path: &str, actual: &str) {
     let content =
         std::fs::read_to_string(path).unwrap_or_else(|e| panic!("failed to read {path}: {e}"));
@@ -148,6 +165,10 @@ fn update_fixture_php_error(path: &str, actual: &str) {
 #[test]
 fn fixture_files_are_valid_php() {
     let Some(php) = php_version() else {
+        assert!(
+            std::env::var_os("CI").is_none(),
+            "`php` not found on PATH in CI"
+        );
         eprintln!("skipping: `php` not found on PATH");
         return;
     };
@@ -169,6 +190,14 @@ fn fixture_files_are_valid_php() {
         let (min_php, source) = parse_fixture(&src);
         let max_php = parse_max_php(&src);
         let php_error = parse_php_error(&src);
+
+        let non_fatal = non_fatal_errors(&src);
+        if !non_fatal.is_empty() {
+            failures.lock().unwrap().push(format!(
+                "{label}: parser reports errors `php -l` does not:\n  {}",
+                non_fatal.join("\n  ")
+            ));
+        }
 
         if let Some(min) = min_php {
             if php < min {

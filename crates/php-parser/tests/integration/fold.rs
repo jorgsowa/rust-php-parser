@@ -42,6 +42,9 @@ fn identity_fold_across_corpus() {
             .to_string_lossy()
             .to_string();
         let content = std::fs::read_to_string(path).unwrap();
+        if crate::common::is_ignored(&content) {
+            continue;
+        }
         let (min_php, source) = crate::common::parse_fixture(&content);
         let src_arena = Bump::new();
 

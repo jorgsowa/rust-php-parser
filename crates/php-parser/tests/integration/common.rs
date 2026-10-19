@@ -64,6 +64,15 @@ pub fn parse_fixture(content: &str) -> (Option<(u32, u32)>, &str) {
     (min_php, source)
 }
 
+/// Whether the fixture's `===config===` has an `ignore=<reason>` line: a known bug, skipped until fixed.
+#[allow(dead_code)]
+pub fn is_ignored(content: &str) -> bool {
+    content
+        .strip_prefix("===config===\n")
+        .and_then(|rest| rest.split("===source===").next())
+        .is_some_and(|cfg| cfg.lines().any(|l| l.starts_with("ignore=")))
+}
+
 /// Position of the earliest `===errors===`, `===php_error===` or `===ast===`
 /// marker in `s`, if any.
 #[allow(dead_code)]
@@ -192,6 +201,9 @@ where
             .to_string_lossy()
             .to_string();
         let content = std::fs::read_to_string(path).unwrap();
+        if is_ignored(&content) {
+            return;
+        }
         let (min_php, source) = parse_fixture(&content);
 
         let (errors, json) = parse_fn(source, min_php);

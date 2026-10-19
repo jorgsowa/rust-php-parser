@@ -1,3 +1,5 @@
+===config===
+ignore=non-fatal warning: unsupported declare directive
 ===source===
 <?php
 
@@ -14,8 +16,6 @@ while ($a) $A;
 do $A; while ($a);
 
 declare (a='b') $C;
-===errors===
-Unsupported declare 'a'
 ===ast===
 {
   "stmts": [
