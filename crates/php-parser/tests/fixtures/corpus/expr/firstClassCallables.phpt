@@ -4,16 +4,14 @@ foo(...);
 $this->foo(...);
 A::foo(...);
 
-// `$this?->foo(...)` is rejected at compile time.
 $this?->foo(...);
 
 #[Foo(...)]
 function foo() {}
 ===errors===
-Cannot combine nullsafe operator with Closure creation
 Cannot create Closure as attribute argument
 ===php_error===
-PHP Fatal error:  Cannot create Closure as attribute argument in Standard input code on line 10
+PHP Fatal error:  Cannot create Closure as attribute argument in Standard input code on line 9
 ===ast===
 {
   "stmts": [
@@ -156,8 +154,8 @@ PHP Fatal error:  Cannot create Closure as attribute argument in Standard input 
                       "Variable": "this"
                     },
                     "span": {
-                      "start": 98,
-                      "end": 103
+                      "start": 47,
+                      "end": 52
                     }
                   },
                   "method": {
@@ -165,8 +163,8 @@ PHP Fatal error:  Cannot create Closure as attribute argument in Standard input 
                       "Identifier": "foo"
                     },
                     "span": {
-                      "start": 106,
-                      "end": 109
+                      "start": 55,
+                      "end": 58
                     }
                   }
                 }
@@ -174,14 +172,14 @@ PHP Fatal error:  Cannot create Closure as attribute argument in Standard input 
             }
           },
           "span": {
-            "start": 98,
-            "end": 114
+            "start": 47,
+            "end": 63
           }
         }
       },
       "span": {
-        "start": 98,
-        "end": 115
+        "start": 47,
+        "end": 64
       }
     },
     {
@@ -190,8 +188,8 @@ PHP Fatal error:  Cannot create Closure as attribute argument in Standard input 
           "name": {
             "name": "foo",
             "span": {
-              "start": 138,
-              "end": 141
+              "start": 87,
+              "end": 90
             }
           },
           "params": [],
@@ -206,27 +204,27 @@ PHP Fatal error:  Cannot create Closure as attribute argument in Standard input 
                 ],
                 "kind": "Unqualified",
                 "span": {
-                  "start": 119,
-                  "end": 122
+                  "start": 68,
+                  "end": 71
                 }
               },
               "args": [],
               "span": {
-                "start": 119,
-                "end": 127
+                "start": 68,
+                "end": 76
               }
             }
           ]
         }
       },
       "span": {
-        "start": 129,
-        "end": 146
+        "start": 78,
+        "end": 95
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 146
+    "end": 95
   }
 }

@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `$this?->foo(...)` was rejected with "Cannot combine nullsafe operator with Closure creation"; PHP accepts it, as it compiles `$this?->` as `$this->` (`php-rs-parser`).
 - "Cannot specify default value for virtual hooked property" was reported for classes with a parent; PHP checks it at inheritance there, so only classes without `extends` get the error (`php-rs-parser`).
 - `#[\DelayedTargetValidation]` still reported `#[\Attribute]`, `#[\AllowDynamicProperties]` and `#[\Deprecated]` class-kind errors and `#[\NoDiscard]` on property hooks; it now suppresses them (`php-rs-parser`).
 - `?>` ending a class member (constant, property, trait `use` and its adaptations, abstract or interface method, enum case, property hook) was rejected; it ends the member like `;`, and the `<?php` that reopens the body goes with it (`php-rs-parser`).

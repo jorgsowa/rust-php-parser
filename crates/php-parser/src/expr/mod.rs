@@ -314,9 +314,28 @@ fn literal_is_string(expr: &Expr<'_, '_>) -> Option<bool> {
 /// short-circuit chain, it runs through property, method, index and static
 /// member links, but not through a class constant or a plain call.
 fn has_nullsafe_link(kind: &ExprKind<'_, '_>) -> bool {
+    nullsafe_link(kind, false)
+}
+
+/// PHP compiles `$this?->x` as `$this->x`, as `$this` is never null.
+fn is_this(kind: &ExprKind<'_, '_>) -> bool {
+    match kind {
+        ExprKind::Variable(n) => n.as_str() == "this",
+        ExprKind::Parenthesized(inner) => is_this(&inner.kind),
+        _ => false,
+    }
+}
+
+fn nullsafe_link(kind: &ExprKind<'_, '_>, this_is_exempt: bool) -> bool {
     let mut cur = kind;
     loop {
         cur = match cur {
+            ExprKind::NullsafePropertyAccess(a) if this_is_exempt && is_this(&a.object.kind) => {
+                return false;
+            }
+            ExprKind::NullsafeMethodCall(c) if this_is_exempt && is_this(&c.object.kind) => {
+                return false;
+            }
             ExprKind::NullsafePropertyAccess(_) | ExprKind::NullsafeMethodCall(_) => return true,
             ExprKind::PropertyAccess(a) => &a.object.kind,
             ExprKind::MethodCall(c) => &c.object.kind,
@@ -1258,7 +1277,8 @@ fn parse_expr_rest<'arena, 'src>(
                     match parse_arg_list_or_callable(parser) {
                         ArgListResult::CallableMarker => {
                             let span = Span::new(lhs.span.start, parser.previous_end());
-                            if is_nullsafe || has_nullsafe_link(&lhs.kind) {
+                            let nullsafe_lhs = nullsafe_link(&lhs.kind, true);
+                            if (is_nullsafe && !is_this(&lhs.kind)) || nullsafe_lhs {
                                 parser.error(ParseError::Forbidden {
                                     message:
                                         "Cannot combine nullsafe operator with Closure creation"
