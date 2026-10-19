@@ -144,15 +144,17 @@ fn string_literal_is_reallocated_into_new_arena() {
     );
 }
 
-/// `fold_closure_use_var` takes no arena — `ClosureUseVar` is `'src`-only.
-/// Verify the trait can be implemented without an arena parameter and that
-/// custom impls can intercept use-var capture lists.
+/// Custom impls can intercept use-var capture lists.
 #[test]
-fn custom_fold_closure_use_var_no_arena_param() {
+fn custom_fold_closure_use_var() {
     // PHP: function() use (&$x) {}
     struct DropByRef;
     impl<'src> Fold<'src> for DropByRef {
-        fn fold_closure_use_var(&mut self, var: &ClosureUseVar<'src>) -> ClosureUseVar<'src> {
+        fn fold_closure_use_var(
+            &mut self,
+            _arena: &Bump,
+            var: &ClosureUseVar<'src>,
+        ) -> ClosureUseVar<'src> {
             ClosureUseVar {
                 by_ref: false,
                 ..*var
@@ -1125,4 +1127,59 @@ fn arena_vec_into_iter_is_double_ended_and_exact_size() {
     assert_eq!(it.next_back(), Some(3));
     assert_eq!(it.next(), Some(0));
     assert_eq!(it.collect::<Vec<_>>(), vec![1, 2]);
+}
+
+#[test]
+fn fold_stmts_override_can_delete_and_split_statements() {
+    // PHP: ; ; (bare semicolons) — dropped from the program, doubled inside a block
+    struct DropNops;
+    impl<'src> Fold<'src> for DropNops {
+        fn fold_stmts<'new>(
+            &mut self,
+            arena: &'new Bump,
+            stmts: &[Stmt<'_, 'src>],
+        ) -> ArenaVec<'new, Stmt<'new, 'src>> {
+            let mut out = ArenaVec::new_in(arena);
+            for stmt in stmts {
+                if !matches!(stmt.kind, StmtKind::Nop) {
+                    out.push(self.fold_stmt(arena, stmt));
+                }
+            }
+            out
+        }
+    }
+
+    let arena = Bump::new();
+    let out = Bump::new();
+    let nop = || Stmt {
+        kind: StmtKind::Nop,
+        span: Span::DUMMY,
+        doc_comment: None,
+    };
+    let mut inner = ArenaVec::new_in(&arena);
+    inner.push(nop());
+    let block = arena.alloc(Block {
+        stmts: inner,
+        span: Span::DUMMY,
+    });
+    let mut stmts = ArenaVec::new_in(&arena);
+    stmts.push(nop());
+    stmts.push(Stmt {
+        kind: StmtKind::Block(block),
+        span: Span::DUMMY,
+        doc_comment: None,
+    });
+    let program = Program {
+        stmts,
+        span: Span::DUMMY,
+    };
+    let folded = DropNops.fold_program(&out, &program);
+    assert_eq!(folded.stmts.len(), 1);
+    let StmtKind::Block(block) = &folded.stmts[0].kind else {
+        panic!("expected Block")
+    };
+    assert!(
+        block.stmts.is_empty(),
+        "block statements go through the hook too"
+    );
 }

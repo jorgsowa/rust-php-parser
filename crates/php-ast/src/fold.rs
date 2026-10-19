@@ -94,6 +94,16 @@ pub trait Fold<'src> {
         fold_stmt(self, arena, stmt)
     }
 
+    /// Folds a statement list (program, block and `case` bodies). Override to delete, split or
+    /// insert statements.
+    fn fold_stmts<'new>(
+        &mut self,
+        arena: &'new Bump,
+        stmts: &[Stmt<'_, 'src>],
+    ) -> ArenaVec<'new, Stmt<'new, 'src>> {
+        fold_stmts(self, arena, stmts)
+    }
+
     /// Folds a block of statements.
     fn fold_block<'new>(
         &mut self,
@@ -186,7 +196,11 @@ pub trait Fold<'src> {
     }
 
     /// Folds a closure `use` variable.
-    fn fold_closure_use_var(&mut self, var: &ClosureUseVar<'src>) -> ClosureUseVar<'src> {
+    fn fold_closure_use_var(
+        &mut self,
+        _arena: &Bump,
+        var: &ClosureUseVar<'src>,
+    ) -> ClosureUseVar<'src> {
         var.clone()
     }
 
@@ -225,7 +239,7 @@ pub fn fold_program<'new, 'src, F: Fold<'src> + ?Sized>(
     program: &Program<'_, 'src>,
 ) -> Program<'new, 'src> {
     Program {
-        stmts: fold_stmts(folder, arena, &program.stmts),
+        stmts: folder.fold_stmts(arena, &program.stmts),
         span: program.span,
     }
 }
@@ -317,7 +331,7 @@ pub fn fold_stmt<'new, 'src, F: Fold<'src> + ?Sized>(
             for case in sw.body.cases.iter() {
                 cases.push(SwitchCase {
                     value: case.value.as_ref().map(|v| folder.fold_expr(arena, v)),
-                    body: fold_stmts(folder, arena, &case.body),
+                    body: folder.fold_stmts(arena, &case.body),
                     span: case.span,
                 });
             }
@@ -602,7 +616,7 @@ pub fn fold_expr<'new, 'src, F: Fold<'src> + ?Sized>(
         ExprKind::Closure(closure) => {
             let mut use_vars = ArenaVec::with_capacity_in(closure.use_vars.len(), arena);
             for var in closure.use_vars.iter() {
-                use_vars.push(folder.fold_closure_use_var(var));
+                use_vars.push(folder.fold_closure_use_var(arena, var));
             }
             let new_closure = arena.alloc(ClosureExpr {
                 is_static: closure.is_static,
@@ -1172,7 +1186,8 @@ fn fold_enum_decl<'new, 'src, F: Fold<'src> + ?Sized>(
 // Private helpers — collection folding
 // =============================================================================
 
-fn fold_stmts<'new, 'src, F: Fold<'src> + ?Sized>(
+/// Folds each statement of a list in order.
+pub fn fold_stmts<'new, 'src, F: Fold<'src> + ?Sized>(
     folder: &mut F,
     arena: &'new Bump,
     stmts: &[Stmt<'_, 'src>],
@@ -1191,7 +1206,7 @@ pub fn fold_block<'new, 'src, F: Fold<'src> + ?Sized>(
     block: &Block<'_, 'src>,
 ) -> Block<'new, 'src> {
     Block {
-        stmts: fold_stmts(folder, arena, &block.stmts),
+        stmts: folder.fold_stmts(arena, &block.stmts),
         span: block.span,
     }
 }
