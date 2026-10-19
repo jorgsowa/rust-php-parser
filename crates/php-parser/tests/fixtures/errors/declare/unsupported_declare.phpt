@@ -1,5 +1,5 @@
-===config===
-ignore=non-fatal warning: unsupported declare directive
+===description===
+PHP only warns about unsupported declare directives, so the parser reports nothing.
 ===source===
 <?php
 declare(foo=1, Bar='x');

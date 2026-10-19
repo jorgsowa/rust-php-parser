@@ -1,5 +1,5 @@
 ===config===
-ignore=PHP skips compile errors inside assert(false && ...); non-fatal warning: unsupported declare directive
+ignore=PHP skips compile errors inside assert(false && ...)
 min_php=8.5
 ===source===
 <?php

@@ -2454,12 +2454,6 @@ fn check_declare_directive(
             None
         }
     } else {
-        if !name.eq_ignore_ascii_case("ticks") {
-            parser.error(ParseError::ForbiddenWarning {
-                message: format!("Unsupported declare '{name}'").into(),
-                span,
-            });
-        }
         None
     };
     if let Some(message) = message {

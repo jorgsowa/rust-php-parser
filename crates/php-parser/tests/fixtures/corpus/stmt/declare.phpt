@@ -1,5 +1,3 @@
-===config===
-ignore=non-fatal warning: unsupported declare directive
 ===source===
 <?php
 
