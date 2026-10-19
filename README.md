@@ -52,7 +52,7 @@ let pos = result.source_map.offset_to_line_col(6);
 
 ### Version-aware parsing
 
-The parser targets PHP 8.5 by default. Use `parse_with()` and `ParseOptions` to target an earlier version:
+The parser targets PHP 8.6 by default. Use `parse_with()` and `ParseOptions` to target an earlier version:
 
 ```rust
 use php_rs_parser::{parse_with, ParseOptions, PhpVersion};

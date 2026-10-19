@@ -38,7 +38,7 @@ pub fn parse(source: &str, version: Option<String>) -> Result<JsValue, JsError> 
     let php_version = version
         .as_deref()
         .and_then(php_version_from_str)
-        .unwrap_or(php_rs_parser::PhpVersion::Php85);
+        .unwrap_or(php_rs_parser::PhpVersion::Php86);
 
     let arena = bumpalo::Bump::new();
     let result = php_rs_parser::parse_arena_with(
