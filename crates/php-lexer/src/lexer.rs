@@ -236,6 +236,18 @@ fn skip_nested_squoted(bytes: &[u8], mut p: usize) -> usize {
     p
 }
 
+/// Whether `rest` starts with `<?=`, or with `<?php` followed by whitespace or
+/// the end of input; PHP reads `<?php` glued to anything else as inline HTML.
+fn starts_with_open_tag(rest: &[u8]) -> bool {
+    rest.starts_with(b"<?=")
+        || rest.len() >= 5
+            && rest.starts_with(b"<?")
+            && rest[2..5].eq_ignore_ascii_case(b"php")
+            && rest
+                .get(5)
+                .is_none_or(|b| matches!(b, b' ' | b'\t' | b'\n' | b'\r'))
+}
+
 impl<'src> Lexer<'src> {
     /// Creates a lexer for `source`, starting in inline-HTML mode.
     ///
@@ -254,14 +266,7 @@ impl<'src> Lexer<'src> {
         };
 
         // Determine initial mode: if remaining source starts with `<?php` (case-insensitive) or `<?=`, start in PHP mode
-        let remaining = &source[pos..];
-        let rem_bytes = remaining.as_bytes();
-        let mode = if (rem_bytes.len() >= 5
-            && rem_bytes[0] == b'<'
-            && rem_bytes[1] == b'?'
-            && rem_bytes[2..5].eq_ignore_ascii_case(b"php"))
-            || remaining.starts_with("<?=")
-        {
+        let mode = if starts_with_open_tag(&source.as_bytes()[pos..]) {
             LexerMode::Php
         } else {
             LexerMode::InlineHtml
@@ -422,13 +427,7 @@ impl<'src> Lexer<'src> {
                 None => break None,
                 Some(offset) => {
                     let p = search + offset;
-                    let rest = &bytes[p..];
-                    if (rest.len() >= 5
-                        && rest[0] == b'<'
-                        && rest[1] == b'?'
-                        && rest[2..5].eq_ignore_ascii_case(b"php"))
-                        || rest.starts_with(b"<?=")
-                    {
+                    if starts_with_open_tag(&bytes[p..]) {
                         break Some(p - self.pos);
                     }
                     search = p + 1;
@@ -874,18 +873,9 @@ impl<'src> Lexer<'src> {
             self.pos = start + 2;
             return self.tok(TokenKind::BangEquals, start);
         }
-        if self.check_at(1, b'?') {
-            let bytes = self.source.as_bytes();
-            if bytes.len() >= self.pos + 5
-                && bytes[self.pos + 2..self.pos + 5].eq_ignore_ascii_case(b"php")
-            {
-                self.pos = start + 5;
-                return self.tok(TokenKind::OpenTag, start);
-            }
-            if self.source[self.pos..].starts_with("<?=") {
-                self.pos = start + 3;
-                return self.tok(TokenKind::OpenTag, start);
-            }
+        if starts_with_open_tag(&self.source.as_bytes()[start..]) {
+            self.pos = start + if self.check_at(2, b'=') { 3 } else { 5 };
+            return self.tok(TokenKind::OpenTag, start);
         }
         self.pos = start + 1;
         self.tok(TokenKind::LessThan, start)

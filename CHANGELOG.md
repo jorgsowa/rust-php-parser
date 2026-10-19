@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `<?php` directly followed by a character other than whitespace (``<?php`ls`;``) opened PHP code; PHP reads it as inline HTML (`php-lexer`).
 - `"$a[k"` (and the heredoc and backtick forms) silently dropped the unclosed subscript; the parser now reports "unclosed '[' in string interpolation" and keeps the text (`php-rs-parser`).
 - `return` with a value in a `void` closure, a `return` in a `never` closure and any `fn(): void => expr` were accepted; PHP rejects them like it does for functions and methods (`php-rs-parser`).
 - `final private $x` (also static, readonly, hooked, in traits and anonymous classes) was accepted; PHP rejects it with "Property cannot be both final and private" (`php-rs-parser`).

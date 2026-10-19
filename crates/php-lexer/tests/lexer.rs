@@ -126,6 +126,20 @@ mod open_tag_and_html {
     }
 
     #[test]
+    fn test_open_tag_needs_whitespace_or_eof() {
+        for src in ["<?php`ls`;", "<?php$x;", "a<?php$x;"] {
+            assert_eq!(
+                collect_kinds(src),
+                vec![TokenKind::InlineHtml, TokenKind::Eof],
+                "{src}"
+            );
+        }
+        for src in ["<?php", "<?php\n", "<?php\t1;", "a<?php\r\n1;"] {
+            assert!(collect_kinds(src).contains(&TokenKind::OpenTag), "{src}");
+        }
+    }
+
+    #[test]
     fn test_open_tag_uppercase_mid_file() {
         // <?PHP appearing after inline HTML must also be recognised
         let tokens = collect_kinds("<html><?PHP echo 1;");
