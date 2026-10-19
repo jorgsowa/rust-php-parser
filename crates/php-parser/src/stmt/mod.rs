@@ -2435,10 +2435,6 @@ fn check_declare_directive(
         if !is_literal {
             Some("Encoding must be a literal".to_string())
         } else {
-            parser.error(ParseError::ForbiddenWarning {
-                message: "declare(encoding=...) ignored because Zend multibyte feature is turned off by settings".into(),
-                span,
-            });
             // Unlike `strict_types`, an empty statement before it is not allowed.
             (!first_stmt || parser.top_level_nop_seen).then(|| {
                 "Encoding declaration pragma must be the very first statement in the script"

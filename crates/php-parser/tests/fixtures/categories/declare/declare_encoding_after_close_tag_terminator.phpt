@@ -1,8 +1,6 @@
 ===source===
 <?php declare(ticks=1) ?>
 <?php declare(encoding='UTF-8');
-===errors===
-declare(encoding=...) ignored because Zend multibyte feature is turned off by settings
 ===ast===
 {
   "stmts": [
