@@ -1237,3 +1237,38 @@ fn fold_preserves_arg_and_array_element_kinds() {
     assert!(!elements[2].is_spread() && !elements[2].is_by_ref());
     assert!(matches!(elements[2].value().kind, ExprKind::Variable(_)));
 }
+
+#[test]
+fn modifiers_is_empty_until_a_flag_is_set() {
+    let mut modifiers = Modifiers::new();
+    assert!(modifiers.is_empty());
+    assert_eq!(modifiers, Modifiers::default());
+    modifiers.is_final = true;
+    assert!(!modifiers.is_empty());
+    let mut with_visibility = Modifiers::new();
+    with_visibility.set_visibility = Some(Visibility::Private);
+    assert!(!with_visibility.is_empty());
+}
+
+#[test]
+fn fold_preserves_modifiers() {
+    // PHP: final protected static function f() {}
+    let arena = Bump::new();
+    let out = Bump::new();
+    let mut method = MethodDecl::new(&arena, Ident::new("f", Span::DUMMY));
+    method.modifiers.visibility = Some(Visibility::Protected);
+    method.modifiers.is_static = true;
+    method.modifiers.is_final = true;
+    let member = ClassMember {
+        kind: ClassMemberKind::Method(method),
+        span: Span::DUMMY,
+    };
+    let folded = Identity.fold_class_member(&out, &member);
+    let ClassMemberKind::Method(method) = folded.kind else {
+        panic!("expected Method")
+    };
+    assert_eq!(method.modifiers.visibility, Some(Visibility::Protected));
+    assert!(
+        method.modifiers.is_static && method.modifiers.is_final && !method.modifiers.is_abstract
+    );
+}
