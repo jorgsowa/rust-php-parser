@@ -249,7 +249,7 @@ The arena-form `Visitor`, `ScopeVisitor`, and `Fold<'src>` traits operate direct
 
 - **Semantic AST:** equivalent spellings (`array()`/`[]`, `exit`/`die`, `(integer)`/`(int)`) share one node; formatting is dropped.
 - **Always an AST:** errors come with a complete tree.
-- **Errors match `php -l`:** an error iff `php -l` rejects the input; ini-dependent diagnostics and cross-declaration analysis are out of scope.
+- **Errors match `php -l`:** only fatal, compile and syntax errors, an error iff `php -l` rejects the input; warnings, ini-dependent diagnostics and cross-declaration analysis are out of scope.
 - **Version-checked:** too-new syntax is parsed and reported as `VersionTooLow`.
 - **Normalized printing:** the printer doesn't preserve formatting.
 
