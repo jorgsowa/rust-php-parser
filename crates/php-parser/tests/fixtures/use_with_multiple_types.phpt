@@ -1,5 +1,3 @@
-===config===
-ignore=non-fatal warning: use with a non-compound name
 ===source===
 <?php use function A\foo; use const SOME_CONST; use B\C;
 ===ast===

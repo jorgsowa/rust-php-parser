@@ -4,7 +4,6 @@
 expected identifier, found 'static'
 expected ';', found 'static'
 Cannot use 'static' as a standalone expression
-The use statement with non-compound name 'C' has no effect
 ===php_error===
 PHP Parse error:  syntax error, unexpected token "static", expecting identifier in Standard input code on line 1
 ===ast===

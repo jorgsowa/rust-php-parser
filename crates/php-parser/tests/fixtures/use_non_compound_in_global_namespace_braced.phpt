@@ -1,5 +1,3 @@
-===config===
-ignore=non-fatal warning: use with a non-compound name
 ===source===
 <?php namespace {
 use Throwable;

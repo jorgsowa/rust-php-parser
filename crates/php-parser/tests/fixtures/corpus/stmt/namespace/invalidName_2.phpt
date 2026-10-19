@@ -3,7 +3,6 @@
 ===errors===
 expected identifier, found 'parent'
 expected ';', found 'parent'
-The use statement with non-compound name 'B' has no effect
 ===php_error===
 PHP Fatal error:  Cannot use B as PARENT because 'PARENT' is a special class name in Standard input code on line 1
 ===ast===

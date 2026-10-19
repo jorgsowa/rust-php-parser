@@ -2340,14 +2340,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
         }
 
-        // Pass 3: `use` statement diagnostics — non-compound name warnings and
-        // duplicate alias detection (per UseKind scope, per top-level / per
+        // Pass 3: duplicate `use` alias detection (per UseKind scope, per top-level / per
         // braced namespace body).
-        self.validate_use_scope(stmts, None);
+        self.validate_use_scope(stmts, true);
         for stmt in stmts {
             if let StmtKind::Namespace(decl) = stmt.kind {
                 if let php_ast::NamespaceBody::Braced(inner) = decl.body {
-                    self.validate_use_scope(&inner.stmts, decl.name.as_ref());
+                    self.validate_use_scope(&inner.stmts, false);
                 }
             }
         }
@@ -2356,21 +2355,18 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     fn validate_use_scope(
         &mut self,
         stmts: &[Stmt<'arena, 'src>],
-        namespace: Option<&php_ast::Name<'arena, 'src>>,
+        top_level: bool,
     ) {
         use std::collections::HashSet;
         // Intra-statement duplicates (incl. group-use) are caught at parse time
-        // in `parse_use_items`; this pass closes the cross-statement gap and
-        // emits non-compound-name warnings.
+        // in `parse_use_items`; this pass closes the cross-statement gap.
         let mut seen: HashSet<(u8, &'src str)> = HashSet::new();
-        let mut current_namespace: Option<&php_ast::Name<'arena, 'src>> = namespace;
 
         for stmt in stmts {
             // For top-level calls, track when we enter an unbraced namespace.
-            if namespace.is_none() {
+            if top_level {
                 if let StmtKind::Namespace(decl) = stmt.kind {
                     if matches!(decl.body, php_ast::NamespaceBody::Simple) {
-                        current_namespace = decl.name.as_ref();
                         // Each unbraced `namespace X;` opens a fresh import scope;
                         // names imported in a previous namespace do not collide
                         // with the same import here.
@@ -2397,22 +2393,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     .alias
                     .and_then(|a| a.as_str())
                     .unwrap_or_else(|| parts.last().copied().unwrap_or(""));
-                // Warn only if it's a non-compound name and we're in global scope.
-                // Global scope = namespace is None (passed from top-level call).
-                if item.alias.is_none()
-                    && parts.len() == 1
-                    && namespace.is_none()
-                    && current_namespace.is_none()
-                {
-                    self.error(ParseError::ForbiddenWarning {
-                        message: format!(
-                            "The use statement with non-compound name '{}' has no effect",
-                            effective_alias
-                        )
-                        .into(),
-                        span: item.span,
-                    });
-                }
                 if !effective_alias.is_empty()
                     && seen.contains(&(kind_tag, effective_alias))
                     && added_this_stmt.insert((kind_tag, effective_alias))

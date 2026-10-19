@@ -15,8 +15,6 @@ use function foo\bar as baz;
 use const foo\BAR;
 use const foo\BAR as BAZ;
 ===errors===
-The use statement with non-compound name 'J' has no effect
-The use statement with non-compound name 'A' has no effect
 Cannot use A as B because the name is already in use
 ===php_error===
 PHP Warning:  The use statement with non-compound name 'J' has no effect in Standard input code on line 5
