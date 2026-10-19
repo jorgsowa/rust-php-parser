@@ -6,9 +6,6 @@ class C {
     }
 }
 ===errors===
-expected ';', found '?>'
-expected identifier, found '?>'
-expected '::' or 'as', found '?>'
 expected identifier, found '<?php'
 expected '::' or 'as', found '<?php'
 expected '::' or 'as', found identifier
@@ -82,7 +79,7 @@ PHP Parse error:  Cannot use "<?=" as an identifier in Standard input code on li
                       },
                       "span": {
                         "start": 36,
-                        "end": 42
+                        "end": 44
                       }
                     }
                   ]

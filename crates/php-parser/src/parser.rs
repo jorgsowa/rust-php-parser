@@ -489,6 +489,23 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         self.check(TokenKind::Semicolon) || self.check(TokenKind::CloseTag)
     }
 
+    /// Like `expect(TokenKind::Semicolon)` for the end of a class member, where `?>` also ends
+    /// it and takes the `<?php` that reopens the body along.
+    pub fn expect_member_end(&mut self) -> Option<Token> {
+        if !self.check(TokenKind::CloseTag) {
+            return self.expect(TokenKind::Semicolon);
+        }
+        let close = self.advance();
+        // PHP drops one newline after `?>`; any other inline HTML is not a class member.
+        if self.check(TokenKind::InlineHtml) && matches!(self.current_text(), "\n" | "\r\n") {
+            self.advance();
+        }
+        if self.check(TokenKind::OpenTag) && self.current_text() != "<?=" {
+            self.advance();
+        }
+        Some(close)
+    }
+
     /// Like `expect(TokenKind::Semicolon)`, but a `?>` also ends the statement (not consumed).
     pub fn expect_statement_end(&mut self) -> Option<Token> {
         if self.check(TokenKind::CloseTag) {

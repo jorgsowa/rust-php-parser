@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `?>` ending a class member (constant, property, trait `use` and its adaptations, abstract or interface method, enum case, property hook) was rejected; it ends the member like `;`, and the `<?php` that reopens the body goes with it (`php-rs-parser`).
 - `?>` right after a bare `break`, `continue`, `return` or `yield` was rejected with "expected expression"; it ends the statement like `;` (`php-rs-parser`).
 - Class names in a namespace named like a builtin type (`int\X`, `string\Y`, `self\Z`) were rejected in type positions (`php-rs-parser`).
 - `abstract readonly class` (and `readonly abstract class`) was rejected below PHP 8.4; it is valid since PHP 8.2 (`php-rs-parser`).

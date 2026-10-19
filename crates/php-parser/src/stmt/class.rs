@@ -351,10 +351,10 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
             }))
         } else if parser.eat(TokenKind::FatArrow).is_some() {
             let e = expr::parse_expr(parser);
-            parser.expect(TokenKind::Semicolon);
+            parser.expect_member_end();
             PropertyHookBody::Expression(e)
         } else {
-            parser.expect(TokenKind::Semicolon);
+            parser.expect_member_end();
             PropertyHookBody::Abstract
         };
         parser.function_depth -= 1;
@@ -852,7 +852,7 @@ pub(super) fn parse_trait_use_decl<'arena, 'src>(
         let adaptations = super::trait_use::parse_trait_adaptations(parser);
         (adaptations, Some(brace))
     } else {
-        parser.expect(TokenKind::Semicolon);
+        parser.expect_member_end();
         (parser.alloc_vec(), None)
     };
     {
@@ -1130,7 +1130,7 @@ fn parse_class_const_member<'arena, 'src>(
             break;
         }
     }
-    parser.expect(TokenKind::Semicolon);
+    parser.expect_member_end();
     let span = Span::new(member_start, parser.previous_end());
     if let (true, Some(Visibility::Protected | Visibility::Private), Some((name, _))) =
         (in_interface, mods.visibility, const_items.first())
@@ -1268,7 +1268,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
             span: Span::new(brace_start, block_end),
         }))
     } else {
-        terminated_without_body = parser.expect(TokenKind::Semicolon).is_some();
+        terminated_without_body = parser.expect_member_end().is_some();
         None
     };
 
@@ -1849,10 +1849,10 @@ fn parse_property_member<'arena, 'src>(
             }
         }
         if !parser.check(TokenKind::RightBrace) {
-            parser.expect(TokenKind::Semicolon);
+            parser.expect_member_end();
         }
     } else {
-        parser.expect(TokenKind::Semicolon);
+        parser.expect_member_end();
     }
 }
 

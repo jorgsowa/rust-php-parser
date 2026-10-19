@@ -142,7 +142,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                     span,
                 });
             }
-            parser.expect(TokenKind::Semicolon);
+            parser.expect_member_end();
             let span = Span::new(member_start, parser.previous_end());
             parser.check_attributes(&member_attrs, &AttrSite::new(AttrTarget::ClassConst));
             members.push(EnumMember {
@@ -294,7 +294,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                     break;
                 }
             }
-            parser.expect(TokenKind::Semicolon);
+            parser.expect_member_end();
             let span = Span::new(member_start, parser.previous_end());
             for member in &mut members[first_index..] {
                 member.span = span;

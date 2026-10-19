@@ -60,7 +60,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
                 for name in insteadof.iter() {
                     super::validate_class_ref(parser, name, "trait");
                 }
-                parser.expect(TokenKind::Semicolon);
+                parser.expect_member_end();
                 let span = Span::new(start, parser.previous_end());
                 adaptations.push(TraitAdaptation {
                     kind: TraitAdaptationKind::Precedence {
@@ -73,7 +73,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
             } else if parser.eat(TokenKind::As).is_some() {
                 // Alias: TraitName::method as [visibility] [newName];
                 let (new_modifier, is_final, new_name) = parse_alias_rhs(parser);
-                parser.expect(TokenKind::Semicolon);
+                parser.expect_member_end();
                 let span = Span::new(start, parser.previous_end());
                 adaptations.push(TraitAdaptation {
                     kind: TraitAdaptationKind::Alias {
@@ -98,7 +98,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
             // Unqualified alias: `method as [visibility] [newName];`
             // first_name already is the method Name — use it directly.
             let (new_modifier, is_final, new_name) = parse_alias_rhs(parser);
-            parser.expect(TokenKind::Semicolon);
+            parser.expect_member_end();
             let span = Span::new(start, parser.previous_end());
             adaptations.push(TraitAdaptation {
                 kind: TraitAdaptationKind::Alias {
