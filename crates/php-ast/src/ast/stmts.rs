@@ -209,8 +209,9 @@ pub struct IfStmt<'arena, 'src> {
     pub elseif_branches: ArenaVec<'arena, ElseIfBranch<'arena, 'src>>,
     /// `else` statement, if any.
     pub else_branch: Option<&'arena Stmt<'arena, 'src>>,
-    /// The `else` keyword; `None` when there is no else branch. Not serialized.
+    /// The `else` keyword; `None` when there is no else branch. Printer layout detail, outside semver; not serialized.
     #[cfg_attr(feature = "serde", serde(skip))]
+    #[doc(hidden)]
     pub else_kw_span: Option<Span>,
     /// `true` when written in alternative syntax (`: ... endX;`).
     #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
@@ -336,8 +337,9 @@ pub struct TryCatchStmt<'arena, 'src> {
     pub catches: ArenaVec<'arena, CatchClause<'arena, 'src>>,
     /// `finally` block, if any.
     pub finally: Option<&'arena Block<'arena, 'src>>,
-    /// The `finally` keyword; `None` when there is no finally clause. Not serialized.
+    /// The `finally` keyword; `None` when there is no finally clause. Printer layout detail, outside semver; not serialized.
     #[cfg_attr(feature = "serde", serde(skip))]
+    #[doc(hidden)]
     pub finally_kw_span: Option<Span>,
 }
 

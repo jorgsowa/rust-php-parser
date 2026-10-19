@@ -19,7 +19,6 @@ features = ["serde"]
 [dependencies]
 php-ast = { workspace = true }
 php-lexer = { workspace = true }
-phpdoc-parser = { workspace = true }
 thiserror = { workspace = true }
 bumpalo = { workspace = true }
 memchr = { workspace = true }
@@ -30,6 +29,7 @@ php-printer = { path = "../php-printer" }
 # Self dev-dependency so tests, benches and examples see the `serde` feature.
 php-rs-parser = { path = ".", features = ["serde"] }
 serde = { workspace = true }
+phpdoc-parser = { workspace = true }
 serde_json = { workspace = true }
 criterion = { workspace = true }
 walkdir = { workspace = true }
@@ -43,8 +43,8 @@ pprof = { workspace = true }
 
 [features]
 default = []
-# `Serialize` impls for the AST (forwards to `php-ast` and `phpdoc-parser`).
-serde = ["php-ast/serde", "phpdoc-parser/serde"]
+# `Serialize` impls for the AST (forwards to `php-ast`).
+serde = ["php-ast/serde"]
 # Enable lightweight instrumentation for profiling array parsing and expression parsing
 instrument = []
 

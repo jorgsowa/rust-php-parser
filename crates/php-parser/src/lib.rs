@@ -91,7 +91,7 @@ pub(crate) mod attributes;
 /// Parse errors and warnings.
 pub mod diagnostics;
 pub(crate) mod expr;
-/// Parser instrumentation counters, available with the `instrument` feature.
+/// Parser instrumentation counters, available with the `instrument` feature. Not covered by semver.
 #[cfg(feature = "instrument")]
 pub mod instrument;
 #[cfg(not(feature = "instrument"))]
@@ -100,7 +100,6 @@ pub(crate) mod parser;
 /// The arena allocator used by [`parse_arena`] and [`ParserContext`],
 /// re-exported so callers use the same version as the AST types.
 pub use bumpalo;
-pub use phpdoc_parser as phpdoc;
 pub(crate) mod precedence;
 /// Byte offset to line/column mapping.
 pub mod source_map;

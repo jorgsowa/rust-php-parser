@@ -116,8 +116,7 @@ pub struct Lexer<'src> {
     /// Index into `non_verbatim_strings` of the last lookup; strings are
     /// usually queried in source order, which makes lookups O(1).
     verbatim_cursor: usize,
-    /// Errors collected so far.
-    pub errors: Vec<LexerError>,
+    errors: Vec<LexerError>,
 }
 
 #[inline(always)]
@@ -328,11 +327,23 @@ impl<'src> Lexer<'src> {
         })
     }
 
+    /// Errors collected so far.
+    pub fn errors(&self) -> &[LexerError] {
+        &self.errors
+    }
+
+    /// Consumes the lexer, returning the errors collected so far.
+    pub fn into_errors(self) -> Vec<LexerError> {
+        self.errors
+    }
+
     /// Whether the single- or double-quoted string token starting at `start`
     /// contains no escape sequence and, for a double-quoted string, no `$`, so
     /// its contents between the quotes can be used verbatim without decoding.
     ///
     /// Only meaningful for string tokens this lexer has already produced.
+    /// Public for the parser crate; outside semver.
+    #[doc(hidden)]
     pub fn is_verbatim_string(&mut self, start: u32) -> bool {
         let list = &self.non_verbatim_strings;
         let mut i = self.verbatim_cursor;

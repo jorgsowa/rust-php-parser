@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breaking:** `ForeachStmt` (arena and owned) has a new `by_ref` field for `foreach ($a as &$v)`; the `&` was parsed and dropped, so the printer wrote a by-value loop. It is serialized only when `true` (`php-ast`, `php-rs-parser`, `php-printer`).
 - **Breaking:** removed `ParseError::ForbiddenWarning`, `Severity` and `ParseError::severity()`. Every diagnostic is an error, matching what `php -l` rejects; the parser no longer reports PHP warnings: a `use` with a non-compound name, a `final private` method, a non-public magic method and an unsupported `declare` directive (`php-rs-parser`).
 - **Breaking:** the hidden `NameStr::__src` / `__arena` constructors are now the documented `NameStr::from_source` / `from_arena`, and `__into_src_str` / `__into_arena_str` are no longer public (`php-ast`).
+- **Breaking:** the printer-only spans (`else_kw_span`, `finally_kw_span`, `brace_span`, `adaptations_brace_span`) are `#[doc(hidden)]` and outside semver; `Lexer::is_verbatim_string` is `#[doc(hidden)]` and the `Lexer::errors` field is the `errors()` accessor; `ArenaVec::into_iter` returns `php_ast::ast::IntoIter` instead of the bumpalo iterator; the `instrument` module is documented as outside semver (`php-ast`, `php-lexer`, `php-rs-parser`).
+- **Breaking:** removed the `php_rs_parser::phpdoc` re-export. Depend on `phpdoc-parser` directly; the `serde` feature of `php-rs-parser` no longer enables `phpdoc-parser/serde` (`php-rs-parser`).
 
 ### Fixed
 

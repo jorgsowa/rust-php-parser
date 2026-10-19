@@ -28,7 +28,7 @@ cargo test          # all tests should pass
 |-------|--------------|---------|
 | `crates/php-ast` | `php-ast` | AST node types; arena `Visitor`/`ScopeVisitor`/`Fold` traits; owned `OwnedVisitor`/`OwnedScopeVisitor`/`FoldOwned` traits |
 | `crates/php-lexer` | `php-lexer` | Lazy tokenizer with peeking slots (arena-allocated) |
-| `crates/php-parser` | `php-rs-parser` | Recursive-descent parser, source map, semantic analysis helpers; re-exports `phpdoc-parser` as `php_rs_parser::phpdoc` |
+| `crates/php-parser` | `php-rs-parser` | Recursive-descent parser, source map, semantic analysis helpers |
 | `crates/phpdoc-parser` | `phpdoc-parser` | Standalone structural PHPDoc block parser |
 | `crates/php-printer` | `php-printer` | Pretty printer (AST → PHP source); supports both arena and owned AST |
 | `crates/php-wasm` | `php-wasm` | WebAssembly bindings exposing the parser and printer to JavaScript |

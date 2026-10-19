@@ -724,8 +724,9 @@ pub struct MatchExpr<'arena, 'src> {
     pub subject: &'arena Expr<'arena, 'src>,
     /// Match arms in order.
     pub arms: ArenaVec<'arena, MatchArm<'arena, 'src>>,
-    /// The `{` in `match (...) {`. Not serialized.
+    /// The `{` in `match (...) {`. Printer layout detail, outside semver; not serialized.
     #[cfg_attr(feature = "serde", serde(skip))]
+    #[doc(hidden)]
     pub brace_span: Span,
 }
 

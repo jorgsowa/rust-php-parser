@@ -42,12 +42,38 @@ impl<'arena, T> ArenaVec<'arena, T> {
     }
 }
 
+/// The owning iterator returned by [`ArenaVec::into_iter`].
+pub struct IntoIter<'arena, T>(bumpalo::collections::vec::IntoIter<'arena, T>);
+
+impl<'arena, T> Iterator for IntoIter<'arena, T> {
+    type Item = T;
+    #[inline]
+    fn next(&mut self) -> Option<T> {
+        self.0.next()
+    }
+    #[inline]
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.0.size_hint()
+    }
+}
+
+impl<'arena, T> DoubleEndedIterator for IntoIter<'arena, T> {
+    #[inline]
+    fn next_back(&mut self) -> Option<T> {
+        self.0.next_back()
+    }
+}
+
+impl<'arena, T> ExactSizeIterator for IntoIter<'arena, T> {}
+
+impl<'arena, T> std::iter::FusedIterator for IntoIter<'arena, T> {}
+
 impl<'arena, T> IntoIterator for ArenaVec<'arena, T> {
     type Item = T;
-    type IntoIter = bumpalo::collections::vec::IntoIter<'arena, T>;
+    type IntoIter = IntoIter<'arena, T>;
     #[inline]
-    fn into_iter(self) -> Self::IntoIter {
-        self.0.into_iter()
+    fn into_iter(self) -> IntoIter<'arena, T> {
+        IntoIter(self.0.into_iter())
     }
 }
 

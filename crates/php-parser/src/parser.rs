@@ -580,7 +580,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     }
 
     pub fn errors_truncated(&self) -> bool {
-        self.errors_dropped || self.errors.len() + self.lexer.errors.len() > MAX_ERRORS
+        self.errors_dropped || self.errors.len() + self.lexer.errors().len() > MAX_ERRORS
     }
 
     /// Retract "empty array element" and `list()` errors emitted within `within`.
@@ -604,7 +604,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     pub fn into_errors(self) -> Vec<ParseError> {
         let mut errors: Vec<ParseError> = self
             .lexer
-            .errors
+            .into_errors()
             .into_iter()
             .map(lex_error_to_parse_error)
             .collect();

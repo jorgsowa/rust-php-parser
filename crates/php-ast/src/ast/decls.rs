@@ -337,8 +337,9 @@ pub struct TraitUseDecl<'arena, 'src> {
     /// `insteadof` and `as` rules from the adaptation block.
     pub adaptations: ArenaVec<'arena, TraitAdaptation<'arena, 'src>>,
     /// The `{` that opens the adaptations block; `None` when there are no
-    /// adaptations. Not serialized.
+    /// adaptations. Printer layout detail, outside semver; not serialized.
     #[cfg_attr(feature = "serde", serde(skip))]
+    #[doc(hidden)]
     pub adaptations_brace_span: Option<Span>,
     /// Preceding `/** */` doc-block, if any.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]

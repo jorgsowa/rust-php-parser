@@ -552,16 +552,16 @@ fn source_over_4_gib_is_refused() {
 
     let mut lexer = Lexer::new(source);
     assert_eq!(lexer.next_token().kind, TokenKind::Eof);
-    assert_eq!(lexer.errors.len(), 1);
+    assert_eq!(lexer.errors().len(), 1);
     assert_eq!(
-        lexer.errors[0].kind,
+        lexer.errors()[0].kind,
         php_lexer::LexerErrorKind::FileTooLarge
     );
 
     let mut lexer = Lexer::new_at(source, 1);
     assert_eq!(lexer.next_token().kind, TokenKind::Eof);
     assert_eq!(
-        lexer.errors[0].kind,
+        lexer.errors()[0].kind,
         php_lexer::LexerErrorKind::FileTooLarge
     );
 
@@ -651,4 +651,12 @@ fn token_description_matches_display() {
         assert_eq!(kind.description(), kind.to_string());
     }
     assert_eq!(TokenKind::LeftBrace.description(), "'{'");
+}
+
+#[test]
+fn into_errors_returns_collected_errors() {
+    let mut lexer = Lexer::new("<?php /* unterminated");
+    while lexer.next_token().kind != TokenKind::Eof {}
+    let borrowed = lexer.errors().len();
+    assert_eq!(lexer.into_errors().len(), borrowed);
 }

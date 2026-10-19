@@ -1112,3 +1112,17 @@ fn constructors_leave_optional_fields_empty() {
         php_ast::owned::MethodDecl::new(php_ast::owned::Ident::new("go", Span::DUMMY));
     assert!(owned_method.params.is_empty() && owned_method.body.is_none());
 }
+
+#[test]
+fn arena_vec_into_iter_is_double_ended_and_exact_size() {
+    let arena = Bump::new();
+    let mut v = ArenaVec::new_in(&arena);
+    for i in 0..4 {
+        v.push(i);
+    }
+    let mut it = v.into_iter();
+    assert_eq!(it.len(), 4);
+    assert_eq!(it.next_back(), Some(3));
+    assert_eq!(it.next(), Some(0));
+    assert_eq!(it.collect::<Vec<_>>(), vec![1, 2]);
+}

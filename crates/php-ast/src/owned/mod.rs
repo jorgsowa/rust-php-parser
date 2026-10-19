@@ -419,8 +419,9 @@ pub struct IfStmt {
     pub elseif_branches: Box<[ElseIfBranch]>,
     /// The `else` statement, if any.
     pub else_branch: Option<Box<Stmt>>,
-    /// The `else` keyword. Not serialized.
+    /// The `else` keyword. Printer layout detail, outside semver; not serialized.
     #[cfg_attr(feature = "serde", serde(skip))]
+    #[doc(hidden)]
     pub else_kw_span: Option<Span>,
     /// Whether the `if: ... endif;` syntax is used.
     #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
@@ -546,8 +547,9 @@ pub struct TryCatchStmt {
     pub catches: Box<[CatchClause]>,
     /// The `finally` block, if any.
     pub finally: Option<Box<Block>>,
-    /// The `finally` keyword. Not serialized.
+    /// The `finally` keyword. Printer layout detail, outside semver; not serialized.
     #[cfg_attr(feature = "serde", serde(skip))]
+    #[doc(hidden)]
     pub finally_kw_span: Option<Span>,
 }
 
@@ -1246,8 +1248,9 @@ pub struct MatchExpr {
     pub subject: Box<Expr>,
     /// Match arms.
     pub arms: Box<[MatchArm]>,
-    /// The opening `{`. Not serialized.
+    /// The opening `{`. Printer layout detail, outside semver; not serialized.
     #[cfg_attr(feature = "serde", serde(skip))]
+    #[doc(hidden)]
     pub brace_span: Span,
 }
 
@@ -1613,8 +1616,9 @@ pub struct TraitUseDecl {
     pub traits: Box<[Name]>,
     /// Rules in the `{ ... }` block.
     pub adaptations: Box<[TraitAdaptation]>,
-    /// The opening `{` of the adaptations block. Not serialized.
+    /// The opening `{` of the adaptations block. Printer layout detail, outside semver; not serialized.
     #[cfg_attr(feature = "serde", serde(skip))]
+    #[doc(hidden)]
     pub adaptations_brace_span: Option<Span>,
     /// Preceding doc comment.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]

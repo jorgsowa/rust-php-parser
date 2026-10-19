@@ -180,10 +180,10 @@ let output = PrettyPrinter::new()
 
 ### PHPDoc parser
 
-The `phpdoc_parser` crate (re-exported as `php_rs_parser::phpdoc`) parses `/** */` doc-block comments into a structured AST. It is tag-agnostic — tag bodies are exposed as raw text so callers can apply their own type parsers.
+The `phpdoc-parser` crate parses `/** */` doc-block comments into a structured AST. It is tag-agnostic — tag bodies are exposed as raw text so callers can apply their own type parsers.
 
 ```rust
-use php_rs_parser::phpdoc::{parse, find_tag, find_tags, body_text, text_content, inline_tags};
+use phpdoc_parser::{parse, find_tag, find_tags, body_text, text_content, inline_tags};
 
 let doc = parse("/** @param int $x The value\n * @return bool */");
 
@@ -218,7 +218,7 @@ Doc-block comments are stored in a `doc_comment` field on the AST node they prec
 
 A doc-block with no following statement before the enclosing `}` or EOF stays in `ParseResult::comments`.
 
-Use `php_rs_parser::phpdoc::parse(comment.text)` to parse the raw text into a structured AST.
+Use `phpdoc_parser::parse(comment.text)` to parse the raw text into a structured AST.
 
 ### Arena API
 
@@ -264,7 +264,7 @@ The crates follow [Semantic Versioning](https://semver.org/) for their Rust API.
 |-------|-----------|---------|
 | **php-lexer** | [![crates.io](https://img.shields.io/crates/v/php-lexer)](https://crates.io/crates/php-lexer) | Hand-written tokenizer with handling for strings, heredoc/nowdoc, and inline HTML |
 | **php-ast** | [![crates.io](https://img.shields.io/crates/v/php-ast)](https://crates.io/crates/php-ast) | AST type definitions; arena `Visitor`/`ScopeVisitor`/`Fold` traits; owned `OwnedVisitor`/`OwnedScopeVisitor`/`FoldOwned` traits |
-| **php-rs-parser** | [![crates.io](https://img.shields.io/crates/v/php-rs-parser)](https://crates.io/crates/php-rs-parser) | Pratt-based recursive descent parser with panic-mode error recovery, source map; re-exports `phpdoc-parser` as `php_rs_parser::phpdoc` |
+| **php-rs-parser** | [![crates.io](https://img.shields.io/crates/v/php-rs-parser)](https://crates.io/crates/php-rs-parser) | Pratt-based recursive descent parser with panic-mode error recovery, source map |
 | **phpdoc-parser** | [![crates.io](https://img.shields.io/crates/v/phpdoc-parser)](https://crates.io/crates/phpdoc-parser) | Standalone structural PHPDoc block parser — tag-agnostic, tag bodies exposed as raw text |
 | **php-printer** | [![crates.io](https://img.shields.io/crates/v/php-printer)](https://crates.io/crates/php-printer) | Pretty printer — converts AST back to PHP source; supports both arena and owned AST |
 

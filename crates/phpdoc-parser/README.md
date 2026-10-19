@@ -11,7 +11,7 @@ for param in find_tags(&doc, "param") {
 }
 ```
 
-Also re-exported as `php_rs_parser::phpdoc`. Part of the [rust-php-parser](https://github.com/jorgsowa/rust-php-parser) workspace. API reference: [docs.rs/phpdoc-parser](https://docs.rs/phpdoc-parser).
+Part of the [rust-php-parser](https://github.com/jorgsowa/rust-php-parser) workspace. API reference: [docs.rs/phpdoc-parser](https://docs.rs/phpdoc-parser).
 
 ## License
 
