@@ -213,6 +213,8 @@ fn check_dereferencable(parser: &mut Parser<'_, '_>, lhs: &Expr<'_, '_>, op: Tok
         | ExprKind::ArrowFunction(_)
         | ExprKind::Int(_)
         | ExprKind::Float(_)
+        | ExprKind::Heredoc { .. }
+        | ExprKind::Nowdoc { .. }
         | ExprKind::ShellExec(_)
         | ExprKind::Isset(_)
         | ExprKind::Empty(_)

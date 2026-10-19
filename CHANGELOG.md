@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Dereferencing a heredoc or nowdoc (`<<<X ... X->b`, `X[0]`, `X::C`, `X()`) was accepted; PHP rejects it, and the parser now reports "Cannot dereference this expression" (`php-rs-parser`).
 - Writes through `(clone $a)` and `f(...)` (`(clone $a)->b = 1`, `(clone $a)[0]++`, `unset((clone $a)->b)`, `&(clone $a)[0]`) were accepted; PHP rejects them with "Cannot use result of built-in function in write context" (`php-rs-parser`).
 - A name with a `__halt_compiler` segment (`\__halt_compiler()`, `Foo\__halt_compiler`, `namespace\__halt_compiler`, in `use`, `namespace`, types and `new`) was read as the `__halt_compiler();` statement and swallowed the rest of the file (`php-rs-parser`).
 - `$this?->foo(...)` was rejected with "Cannot combine nullsafe operator with Closure creation"; PHP accepts it, as it compiles `$this?->` as `$this->` (`php-rs-parser`).
