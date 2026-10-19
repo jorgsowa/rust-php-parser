@@ -212,12 +212,10 @@ See [`crates/php-parser/src/diagnostics.rs`](crates/php-parser/src/diagnostics.r
 | `ExpectedAfter { expected, after, span }` | A required token was absent after a named construct. |
 | `UnclosedDelimiter { delimiter, opened_at, span }` | A `(`, `[`, or `{` was opened and never closed. |
 | `Forbidden { message, span }` | A syntactically valid but semantically illegal construct (e.g. wrong modifiers, invalid destructuring target). Equivalent to a PHP fatal error. |
-| `ForbiddenWarning { message, span }` | A construct that PHP only warns about (e.g. `final private` method). `severity()` returns `Severity::Warning`; does not prevent a successful parse result. |
 | `VersionTooLow { feature, required, used, span }` | Syntax that requires a newer PHP version than the parse target. |
 
 Quick rules:
 - Prefer `Forbidden` for one-declaration, one-parameter-list, or one-modifier-set checks — anything decidable from the local parse context.
-- Use `ForbiddenWarning` for constructs that PHP itself only warns about.
 - Emit `VersionTooLow` when the source uses a feature below its minimum PHP version.
 - Use the `error_node!` recovery mechanism for statement-level errors — it inserts a `StmtKind::Error` node so the tree stays structurally complete.
 

@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breaking:** `TraitAdaptationKind::Alias` (arena and owned) has a new `is_final` field for the PHP 8.3 `foo as final bar;` alias, which was rejected; it is serialized only when `true` (`php-ast`, `php-rs-parser`, `php-printer`).
 - **Breaking:** removed `TokenKind::From`. `from` is lexed as an identifier; the parser recognizes it only after `yield` (`php-lexer`).
 - **Breaking:** `ForeachStmt` (arena and owned) has a new `by_ref` field for `foreach ($a as &$v)`; the `&` was parsed and dropped, so the printer wrote a by-value loop. It is serialized only when `true` (`php-ast`, `php-rs-parser`, `php-printer`).
+- **Breaking:** removed `ParseError::ForbiddenWarning`, `Severity` and `ParseError::severity()`. Every diagnostic is an error, matching what `php -l` rejects; the parser no longer reports PHP warnings: a `use` with a non-compound name, a `final private` method, a non-public magic method and an unsupported `declare` directive (`php-rs-parser`).
 
 ### Fixed
 

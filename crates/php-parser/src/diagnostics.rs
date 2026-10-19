@@ -3,18 +3,6 @@ use php_ast::Span;
 use std::borrow::Cow;
 use thiserror::Error;
 
-/// Diagnostic severity. Mirrors `php -l`'s split between fatal errors and
-/// warnings (e.g. `final private method` is a PHP warning, not a fatal).
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-#[non_exhaustive]
-pub enum Severity {
-    /// Fatal in PHP.
-    #[default]
-    Error,
-    /// Non-fatal in PHP.
-    Warning,
-}
-
 /// A parse error or diagnostic emitted during parsing.
 ///
 /// The parser recovers from all errors and always produces a complete AST,
@@ -96,16 +84,6 @@ pub enum ParseError {
         span: Span,
     },
 
-    /// A construct PHP only warns about (e.g. `final private` method). Treated
-    /// as a non-fatal diagnostic; `severity()` returns [`Severity::Warning`].
-    #[error("{message}")]
-    ForbiddenWarning {
-        /// Error message.
-        message: Cow<'static, str>,
-        /// Source range of the error.
-        span: Span,
-    },
-
     /// Statements, expressions or string interpolations are nested deeper than
     /// the parser's recursion budget. The innermost construct is replaced by an
     /// error node so that parsing stays within a bounded stack.
@@ -153,19 +131,9 @@ impl ParseError {
             | ParseError::ExpectedAfter { span, .. }
             | ParseError::UnclosedDelimiter { span, .. }
             | ParseError::Forbidden { span, .. }
-            | ParseError::ForbiddenWarning { span, .. }
             | ParseError::NestingTooDeep { span }
             | ParseError::SourceTooLarge { span, .. }
             | ParseError::VersionTooLow { span, .. } => *span,
-        }
-    }
-
-    /// Returns the diagnostic severity. Currently only [`ParseError::ForbiddenWarning`]
-    /// is at warning level; every other variant is an error.
-    pub fn severity(&self) -> Severity {
-        match self {
-            ParseError::ForbiddenWarning { .. } => Severity::Warning,
-            _ => Severity::Error,
         }
     }
 }
