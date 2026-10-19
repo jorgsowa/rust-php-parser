@@ -217,16 +217,17 @@ PHP Fatal error:  Cannot re-assign $this in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "this"
-                        },
-                        "span": {
-                          "start": 60,
-                          "end": 65
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "this"
+                          },
+                          "span": {
+                            "start": 60,
+                            "end": 65
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 60,
                         "end": 65
@@ -234,37 +235,46 @@ PHP Fatal error:  Cannot re-assign $this in Standard input code on line 2
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "b"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "b"
+                                    },
+                                    "span": {
+                                      "start": 68,
+                                      "end": 70
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 68,
                                   "end": 70
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 68,
-                                "end": 70
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Parenthesized": {
+                                  "Value": {
                                     "kind": {
-                                      "Variable": "this"
+                                      "Parenthesized": {
+                                        "kind": {
+                                          "Variable": "this"
+                                        },
+                                        "span": {
+                                          "start": 73,
+                                          "end": 78
+                                        }
+                                      }
                                     },
                                     "span": {
-                                      "start": 73,
-                                      "end": 78
+                                      "start": 72,
+                                      "end": 79
                                     }
                                   }
                                 },
@@ -272,21 +282,15 @@ PHP Fatal error:  Cannot re-assign $this in Standard input code on line 2
                                   "start": 72,
                                   "end": 79
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 72,
-                                "end": 79
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 67,
-                          "end": 80
+                            ]
+                          },
+                          "span": {
+                            "start": 67,
+                            "end": 80
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 67,
                         "end": 80
@@ -332,14 +336,15 @@ PHP Fatal error:  Cannot re-assign $this in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 93,
-                          "end": 94
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 93,
+                            "end": 94
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 93,
                         "end": 94
@@ -347,16 +352,17 @@ PHP Fatal error:  Cannot re-assign $this in Standard input code on line 2
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 95,
-                          "end": 97
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 95,
+                            "end": 97
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 95,
                         "end": 97
@@ -364,17 +370,17 @@ PHP Fatal error:  Cannot re-assign $this in Standard input code on line 2
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "this"
-                        },
-                        "span": {
-                          "start": 100,
-                          "end": 105
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "this"
+                          },
+                          "span": {
+                            "start": 100,
+                            "end": 105
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 99,
                         "end": 105
@@ -436,16 +442,17 @@ PHP Fatal error:  Cannot re-assign $this in Standard input code on line 2
               "Array": [
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "this"
-                    },
-                    "span": {
-                      "start": 138,
-                      "end": 143
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "this"
+                      },
+                      "span": {
+                        "start": 138,
+                        "end": 143
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 138,
                     "end": 143

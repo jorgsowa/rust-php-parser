@@ -33,16 +33,17 @@ echo "Value: $массив[ключ]";
                           "end": 33
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "String": "значение"
-                        },
-                        "span": {
-                          "start": 37,
-                          "end": 55
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "String": "значение"
+                          },
+                          "span": {
+                            "start": 37,
+                            "end": 55
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 23,
                         "end": 55

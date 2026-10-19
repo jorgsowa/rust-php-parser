@@ -42,16 +42,17 @@ $z = [
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 53,
-                          "end": 54
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 53,
+                            "end": 54
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 53,
                         "end": 54
@@ -59,16 +60,17 @@ $z = [
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 100,
-                          "end": 101
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 100,
+                            "end": 101
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 100,
                         "end": 101
@@ -76,16 +78,17 @@ $z = [
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 3
-                        },
-                        "span": {
-                          "start": 130,
-                          "end": 131
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 3
+                          },
+                          "span": {
+                            "start": 130,
+                            "end": 131
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 130,
                         "end": 131
@@ -93,16 +96,17 @@ $z = [
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 4
-                        },
-                        "span": {
-                          "start": 181,
-                          "end": 182
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 4
+                          },
+                          "span": {
+                            "start": 181,
+                            "end": 182
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 181,
                         "end": 182
@@ -156,16 +160,17 @@ $z = [
                           "end": 205
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "String": "value1"
-                        },
-                        "span": {
-                          "start": 233,
-                          "end": 241
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "String": "value1"
+                          },
+                          "span": {
+                            "start": 233,
+                            "end": 241
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 199,
                         "end": 241
@@ -181,16 +186,17 @@ $z = [
                           "end": 253
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "String": "value2"
-                        },
-                        "span": {
-                          "start": 257,
-                          "end": 265
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "String": "value2"
+                          },
+                          "span": {
+                            "start": 257,
+                            "end": 265
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 247,
                         "end": 265
@@ -236,16 +242,17 @@ $z = [
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 327,
-                          "end": 328
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 327,
+                            "end": 328
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 327,
                         "end": 328
@@ -253,16 +260,17 @@ $z = [
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 344,
-                          "end": 345
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 344,
+                            "end": 345
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 344,
                         "end": 345

@@ -274,28 +274,28 @@ PHP Fatal error:  Cannot use [] for reading in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "ArrayAccess": {
-                            "array": {
-                              "kind": {
-                                "Variable": "a"
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "ArrayAccess": {
+                              "array": {
+                                "kind": {
+                                  "Variable": "a"
+                                },
+                                "span": {
+                                  "start": 88,
+                                  "end": 90
+                                }
                               },
-                              "span": {
-                                "start": 88,
-                                "end": 90
-                              }
-                            },
-                            "index": null
+                              "index": null
+                            }
+                          },
+                          "span": {
+                            "start": 88,
+                            "end": 92
                           }
-                        },
-                        "span": {
-                          "start": 88,
-                          "end": 92
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 87,
                         "end": 92
@@ -347,46 +347,47 @@ PHP Fatal error:  Cannot use [] for reading in Standard input code on line 2
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Array": [
-                        {
-                          "key": null,
-                          "value": {
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Array": [
+                          {
+                            "key": null,
                             "kind": {
-                              "ArrayAccess": {
-                                "array": {
-                                  "kind": {
-                                    "Variable": "a"
-                                  },
-                                  "span": {
-                                    "start": 98,
-                                    "end": 100
+                              "Value": {
+                                "kind": {
+                                  "ArrayAccess": {
+                                    "array": {
+                                      "kind": {
+                                        "Variable": "a"
+                                      },
+                                      "span": {
+                                        "start": 98,
+                                        "end": 100
+                                      }
+                                    },
+                                    "index": null
                                   }
                                 },
-                                "index": null
+                                "span": {
+                                  "start": 98,
+                                  "end": 102
+                                }
                               }
                             },
                             "span": {
                               "start": 98,
                               "end": 102
                             }
-                          },
-                          "unpack": false,
-                          "span": {
-                            "start": 98,
-                            "end": 102
                           }
-                        }
-                      ]
-                    },
-                    "span": {
-                      "start": 97,
-                      "end": 103
+                        ]
+                      },
+                      "span": {
+                        "start": 97,
+                        "end": 103
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 97,
                     "end": 103

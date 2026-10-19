@@ -32,16 +32,17 @@ echo $val;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 15,
-                          "end": 16
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 15,
+                            "end": 16
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 15,
                         "end": 16
@@ -49,16 +50,17 @@ echo $val;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 18,
-                          "end": 19
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 18,
+                            "end": 19
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 18,
                         "end": 19
@@ -66,16 +68,17 @@ echo $val;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 3
-                        },
-                        "span": {
-                          "start": 21,
-                          "end": 22
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 3
+                          },
+                          "span": {
+                            "start": 21,
+                            "end": 22
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 21,
                         "end": 22
@@ -83,16 +86,17 @@ echo $val;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 4
-                        },
-                        "span": {
-                          "start": 24,
-                          "end": 25
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 4
+                          },
+                          "span": {
+                            "start": 24,
+                            "end": 25
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 24,
                         "end": 25
@@ -100,16 +104,17 @@ echo $val;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 5
-                        },
-                        "span": {
-                          "start": 27,
-                          "end": 28
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 5
+                          },
+                          "span": {
+                            "start": 27,
+                            "end": 28
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 27,
                         "end": 28
@@ -296,16 +301,17 @@ echo $val;
                           "end": 106
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 110,
-                          "end": 111
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 110,
+                            "end": 111
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 103,
                         "end": 111
@@ -321,16 +327,17 @@ echo $val;
                           "end": 116
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 120,
-                          "end": 121
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 120,
+                            "end": 121
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 113,
                         "end": 121

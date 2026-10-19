@@ -36,17 +36,17 @@ isset($a, $b, );
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 11,
-                      "end": 13
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 13
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 11,
                     "end": 13
@@ -54,17 +54,17 @@ isset($a, $b, );
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 15,
-                      "end": 17
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 15,
+                        "end": 17
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 15,
                     "end": 17
@@ -110,17 +110,17 @@ isset($a, $b, );
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 32,
-                      "end": 34
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 32,
+                        "end": 34
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 32,
                     "end": 34
@@ -128,17 +128,17 @@ isset($a, $b, );
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 36,
-                      "end": 38
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 36,
+                        "end": 38
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 36,
                     "end": 38
@@ -193,17 +193,17 @@ isset($a, $b, );
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 52,
-                      "end": 54
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 52,
+                        "end": 54
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 52,
                     "end": 54
@@ -211,17 +211,17 @@ isset($a, $b, );
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 56,
-                      "end": 58
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 56,
+                        "end": 58
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 56,
                     "end": 58
@@ -267,17 +267,17 @@ isset($a, $b, );
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 71,
-                      "end": 73
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 71,
+                        "end": 73
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 71,
                     "end": 73
@@ -285,17 +285,17 @@ isset($a, $b, );
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 75,
-                      "end": 77
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 75,
+                        "end": 77
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 75,
                     "end": 77

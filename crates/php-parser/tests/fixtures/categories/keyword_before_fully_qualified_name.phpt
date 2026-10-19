@@ -40,17 +40,17 @@ $a = clone \foo();
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "MagicConst": "Dir"
-                          },
-                          "span": {
-                            "start": 23,
-                            "end": 30
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "MagicConst": "Dir"
+                            },
+                            "span": {
+                              "start": 23,
+                              "end": 30
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 23,
                           "end": 30

@@ -28,16 +28,17 @@ PHP Fatal error:  Cannot use empty array elements in arrays in Standard input co
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 12,
-                          "end": 13
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 12,
+                            "end": 13
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 12,
                         "end": 13
@@ -45,14 +46,15 @@ PHP Fatal error:  Cannot use empty array elements in arrays in Standard input co
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 15,
-                          "end": 16
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 15,
+                            "end": 16
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 15,
                         "end": 16
@@ -60,16 +62,17 @@ PHP Fatal error:  Cannot use empty array elements in arrays in Standard input co
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 3
-                        },
-                        "span": {
-                          "start": 17,
-                          "end": 18
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 3
+                          },
+                          "span": {
+                            "start": 17,
+                            "end": 18
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 17,
                         "end": 18

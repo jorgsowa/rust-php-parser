@@ -250,16 +250,17 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
                           "end": 128
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "foo"
-                        },
-                        "span": {
-                          "start": 132,
-                          "end": 136
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "foo"
+                          },
+                          "span": {
+                            "start": 132,
+                            "end": 136
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 123,
                         "end": 136
@@ -275,16 +276,17 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
                           "end": 143
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "bar"
-                        },
-                        "span": {
-                          "start": 147,
-                          "end": 151
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "bar"
+                          },
+                          "span": {
+                            "start": 147,
+                            "end": 151
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 138,
                         "end": 151
@@ -372,17 +374,17 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 181,
-                      "end": 183
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 181,
+                        "end": 183
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 181,
                     "end": 183
@@ -390,17 +392,17 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "array"
-                    },
-                    "span": {
-                      "start": 185,
-                      "end": 191
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "array"
+                      },
+                      "span": {
+                        "start": 185,
+                        "end": 191
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 185,
                     "end": 191
@@ -408,17 +410,17 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "extraParameter"
-                    },
-                    "span": {
-                      "start": 193,
-                      "end": 208
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "extraParameter"
+                      },
+                      "span": {
+                        "start": 193,
+                        "end": 208
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 193,
                     "end": 208
@@ -426,17 +428,17 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "trailingComma"
-                    },
-                    "span": {
-                      "start": 210,
-                      "end": 224
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "trailingComma"
+                      },
+                      "span": {
+                        "start": 210,
+                        "end": 224
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 210,
                     "end": 224
@@ -491,17 +493,17 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
                       "end": 241
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 243,
-                      "end": 245
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 243,
+                        "end": 245
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 235,
                     "end": 245
@@ -518,68 +520,70 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
                       "end": 261
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Array": [
-                        {
-                          "key": {
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Array": [
+                          {
+                            "key": {
+                              "kind": {
+                                "String": "foo"
+                              },
+                              "span": {
+                                "start": 265,
+                                "end": 270
+                              }
+                            },
                             "kind": {
-                              "String": "foo"
+                              "Value": {
+                                "kind": {
+                                  "Variable": "foo"
+                                },
+                                "span": {
+                                  "start": 274,
+                                  "end": 278
+                                }
+                              }
                             },
                             "span": {
                               "start": 265,
-                              "end": 270
-                            }
-                          },
-                          "value": {
-                            "kind": {
-                              "Variable": "foo"
-                            },
-                            "span": {
-                              "start": 274,
                               "end": 278
                             }
                           },
-                          "unpack": false,
-                          "span": {
-                            "start": 265,
-                            "end": 278
-                          }
-                        },
-                        {
-                          "key": {
+                          {
+                            "key": {
+                              "kind": {
+                                "String": "bar"
+                              },
+                              "span": {
+                                "start": 280,
+                                "end": 285
+                              }
+                            },
                             "kind": {
-                              "String": "bar"
+                              "Value": {
+                                "kind": {
+                                  "Variable": "bar"
+                                },
+                                "span": {
+                                  "start": 289,
+                                  "end": 293
+                                }
+                              }
                             },
                             "span": {
                               "start": 280,
-                              "end": 285
-                            }
-                          },
-                          "value": {
-                            "kind": {
-                              "Variable": "bar"
-                            },
-                            "span": {
-                              "start": 289,
                               "end": 293
                             }
-                          },
-                          "unpack": false,
-                          "span": {
-                            "start": 280,
-                            "end": 293
                           }
-                        }
-                      ]
-                    },
-                    "span": {
-                      "start": 263,
-                      "end": 295
+                        ]
+                      },
+                      "span": {
+                        "start": 263,
+                        "end": 295
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 247,
                     "end": 295
@@ -625,17 +629,17 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 304,
-                      "end": 306
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 304,
+                        "end": 306
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 304,
                     "end": 306
@@ -652,68 +656,70 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
                       "end": 322
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Array": [
-                        {
-                          "key": {
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Array": [
+                          {
+                            "key": {
+                              "kind": {
+                                "String": "foo"
+                              },
+                              "span": {
+                                "start": 326,
+                                "end": 331
+                              }
+                            },
                             "kind": {
-                              "String": "foo"
+                              "Value": {
+                                "kind": {
+                                  "Variable": "foo"
+                                },
+                                "span": {
+                                  "start": 335,
+                                  "end": 339
+                                }
+                              }
                             },
                             "span": {
                               "start": 326,
-                              "end": 331
-                            }
-                          },
-                          "value": {
-                            "kind": {
-                              "Variable": "foo"
-                            },
-                            "span": {
-                              "start": 335,
                               "end": 339
                             }
                           },
-                          "unpack": false,
-                          "span": {
-                            "start": 326,
-                            "end": 339
-                          }
-                        },
-                        {
-                          "key": {
+                          {
+                            "key": {
+                              "kind": {
+                                "String": "bar"
+                              },
+                              "span": {
+                                "start": 341,
+                                "end": 346
+                              }
+                            },
                             "kind": {
-                              "String": "bar"
+                              "Value": {
+                                "kind": {
+                                  "Variable": "bar"
+                                },
+                                "span": {
+                                  "start": 350,
+                                  "end": 354
+                                }
+                              }
                             },
                             "span": {
                               "start": 341,
-                              "end": 346
-                            }
-                          },
-                          "value": {
-                            "kind": {
-                              "Variable": "bar"
-                            },
-                            "span": {
-                              "start": 350,
                               "end": 354
                             }
-                          },
-                          "unpack": false,
-                          "span": {
-                            "start": 341,
-                            "end": 354
                           }
-                        }
-                      ]
-                    },
-                    "span": {
-                      "start": 324,
-                      "end": 356
+                        ]
+                      },
+                      "span": {
+                        "start": 324,
+                        "end": 356
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 308,
                     "end": 356
@@ -768,17 +774,17 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
                       "end": 371
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 373,
-                      "end": 375
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 373,
+                        "end": 375
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 365,
                     "end": 375
@@ -833,17 +839,17 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
                       "end": 390
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 392,
-                      "end": 394
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 392,
+                        "end": 394
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 384,
                     "end": 394
@@ -851,68 +857,70 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Array": [
-                        {
-                          "key": {
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Array": [
+                          {
+                            "key": {
+                              "kind": {
+                                "String": "foo"
+                              },
+                              "span": {
+                                "start": 398,
+                                "end": 403
+                              }
+                            },
                             "kind": {
-                              "String": "foo"
+                              "Value": {
+                                "kind": {
+                                  "Variable": "foo"
+                                },
+                                "span": {
+                                  "start": 407,
+                                  "end": 411
+                                }
+                              }
                             },
                             "span": {
                               "start": 398,
-                              "end": 403
-                            }
-                          },
-                          "value": {
-                            "kind": {
-                              "Variable": "foo"
-                            },
-                            "span": {
-                              "start": 407,
                               "end": 411
                             }
                           },
-                          "unpack": false,
-                          "span": {
-                            "start": 398,
-                            "end": 411
-                          }
-                        },
-                        {
-                          "key": {
+                          {
+                            "key": {
+                              "kind": {
+                                "String": "bar"
+                              },
+                              "span": {
+                                "start": 413,
+                                "end": 418
+                              }
+                            },
                             "kind": {
-                              "String": "bar"
+                              "Value": {
+                                "kind": {
+                                  "Variable": "bar"
+                                },
+                                "span": {
+                                  "start": 422,
+                                  "end": 426
+                                }
+                              }
                             },
                             "span": {
                               "start": 413,
-                              "end": 418
-                            }
-                          },
-                          "value": {
-                            "kind": {
-                              "Variable": "bar"
-                            },
-                            "span": {
-                              "start": 422,
                               "end": 426
                             }
-                          },
-                          "unpack": false,
-                          "span": {
-                            "start": 413,
-                            "end": 426
                           }
-                        }
-                      ]
-                    },
-                    "span": {
-                      "start": 396,
-                      "end": 428
+                        ]
+                      },
+                      "span": {
+                        "start": 396,
+                        "end": 428
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 396,
                     "end": 428
@@ -958,119 +966,123 @@ PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Stand
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Array": [
-                        {
-                          "key": {
+                  "kind": {
+                    "Spread": {
+                      "kind": {
+                        "Array": [
+                          {
+                            "key": {
+                              "kind": {
+                                "String": "object"
+                              },
+                              "span": {
+                                "start": 441,
+                                "end": 449
+                              }
+                            },
                             "kind": {
-                              "String": "object"
+                              "Value": {
+                                "kind": {
+                                  "Variable": "x"
+                                },
+                                "span": {
+                                  "start": 453,
+                                  "end": 455
+                                }
+                              }
                             },
                             "span": {
                               "start": 441,
-                              "end": 449
-                            }
-                          },
-                          "value": {
-                            "kind": {
-                              "Variable": "x"
-                            },
-                            "span": {
-                              "start": 453,
                               "end": 455
                             }
                           },
-                          "unpack": false,
-                          "span": {
-                            "start": 441,
-                            "end": 455
-                          }
-                        },
-                        {
-                          "key": {
+                          {
+                            "key": {
+                              "kind": {
+                                "String": "withProperties"
+                              },
+                              "span": {
+                                "start": 457,
+                                "end": 473
+                              }
+                            },
                             "kind": {
-                              "String": "withProperties"
+                              "Value": {
+                                "kind": {
+                                  "Array": [
+                                    {
+                                      "key": {
+                                        "kind": {
+                                          "String": "foo"
+                                        },
+                                        "span": {
+                                          "start": 479,
+                                          "end": 484
+                                        }
+                                      },
+                                      "kind": {
+                                        "Value": {
+                                          "kind": {
+                                            "Variable": "foo"
+                                          },
+                                          "span": {
+                                            "start": 488,
+                                            "end": 492
+                                          }
+                                        }
+                                      },
+                                      "span": {
+                                        "start": 479,
+                                        "end": 492
+                                      }
+                                    },
+                                    {
+                                      "key": {
+                                        "kind": {
+                                          "String": "bar"
+                                        },
+                                        "span": {
+                                          "start": 494,
+                                          "end": 499
+                                        }
+                                      },
+                                      "kind": {
+                                        "Value": {
+                                          "kind": {
+                                            "Variable": "bar"
+                                          },
+                                          "span": {
+                                            "start": 503,
+                                            "end": 507
+                                          }
+                                        }
+                                      },
+                                      "span": {
+                                        "start": 494,
+                                        "end": 507
+                                      }
+                                    }
+                                  ]
+                                },
+                                "span": {
+                                  "start": 477,
+                                  "end": 509
+                                }
+                              }
                             },
                             "span": {
                               "start": 457,
-                              "end": 473
-                            }
-                          },
-                          "value": {
-                            "kind": {
-                              "Array": [
-                                {
-                                  "key": {
-                                    "kind": {
-                                      "String": "foo"
-                                    },
-                                    "span": {
-                                      "start": 479,
-                                      "end": 484
-                                    }
-                                  },
-                                  "value": {
-                                    "kind": {
-                                      "Variable": "foo"
-                                    },
-                                    "span": {
-                                      "start": 488,
-                                      "end": 492
-                                    }
-                                  },
-                                  "unpack": false,
-                                  "span": {
-                                    "start": 479,
-                                    "end": 492
-                                  }
-                                },
-                                {
-                                  "key": {
-                                    "kind": {
-                                      "String": "bar"
-                                    },
-                                    "span": {
-                                      "start": 494,
-                                      "end": 499
-                                    }
-                                  },
-                                  "value": {
-                                    "kind": {
-                                      "Variable": "bar"
-                                    },
-                                    "span": {
-                                      "start": 503,
-                                      "end": 507
-                                    }
-                                  },
-                                  "unpack": false,
-                                  "span": {
-                                    "start": 494,
-                                    "end": 507
-                                  }
-                                }
-                              ]
-                            },
-                            "span": {
-                              "start": 477,
                               "end": 509
                             }
-                          },
-                          "unpack": false,
-                          "span": {
-                            "start": 457,
-                            "end": 509
                           }
-                        }
-                      ]
-                    },
-                    "span": {
-                      "start": 440,
-                      "end": 510
+                        ]
+                      },
+                      "span": {
+                        "start": 440,
+                        "end": 510
+                      }
                     }
                   },
-                  "unpack": true,
-                  "by_ref": false,
                   "span": {
                     "start": 437,
                     "end": 510

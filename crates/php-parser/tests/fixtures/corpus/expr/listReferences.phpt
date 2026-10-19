@@ -18,17 +18,17 @@ list('k' => &$v) = $x;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "v"
-                        },
-                        "span": {
-                          "start": 13,
-                          "end": 15
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "v"
+                          },
+                          "span": {
+                            "start": 13,
+                            "end": 15
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 12,
                         "end": 15
@@ -82,17 +82,17 @@ list('k' => &$v) = $x;
                           "end": 31
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "v"
-                        },
-                        "span": {
-                          "start": 36,
-                          "end": 38
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "v"
+                          },
+                          "span": {
+                            "start": 36,
+                            "end": 38
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 28,
                         "end": 38
@@ -138,17 +138,17 @@ list('k' => &$v) = $x;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "v"
-                        },
-                        "span": {
-                          "start": 48,
-                          "end": 50
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "v"
+                          },
+                          "span": {
+                            "start": 48,
+                            "end": 50
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 47,
                         "end": 50
@@ -202,17 +202,17 @@ list('k' => &$v) = $x;
                           "end": 62
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "v"
-                        },
-                        "span": {
-                          "start": 67,
-                          "end": 69
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "v"
+                          },
+                          "span": {
+                            "start": 67,
+                            "end": 69
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 59,
                         "end": 69

@@ -38,17 +38,17 @@
                       "end": 14
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 16,
-                      "end": 18
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 16,
+                        "end": 18
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 10,
                     "end": 18

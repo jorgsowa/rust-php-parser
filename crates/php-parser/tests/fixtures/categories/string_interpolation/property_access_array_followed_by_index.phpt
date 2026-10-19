@@ -66,16 +66,17 @@ echo "{$obj->items[0]}";
                       "Array": [
                         {
                           "key": null,
-                          "value": {
-                            "kind": {
-                              "String": "a"
-                            },
-                            "span": {
-                              "start": 45,
-                              "end": 48
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "String": "a"
+                              },
+                              "span": {
+                                "start": 45,
+                                "end": 48
+                              }
                             }
                           },
-                          "unpack": false,
                           "span": {
                             "start": 45,
                             "end": 48
@@ -83,16 +84,17 @@ echo "{$obj->items[0]}";
                         },
                         {
                           "key": null,
-                          "value": {
-                            "kind": {
-                              "String": "b"
-                            },
-                            "span": {
-                              "start": 50,
-                              "end": 53
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "String": "b"
+                              },
+                              "span": {
+                                "start": 50,
+                                "end": 53
+                              }
                             }
                           },
-                          "unpack": false,
                           "span": {
                             "start": 50,
                             "end": 53

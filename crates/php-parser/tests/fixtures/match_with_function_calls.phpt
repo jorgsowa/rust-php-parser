@@ -176,17 +176,17 @@ $label = match (getStatus()) {
                                   "args": [
                                     {
                                       "name": null,
-                                      "value": {
-                                        "kind": {
-                                          "String": "Unknown"
-                                        },
-                                        "span": {
-                                          "start": 135,
-                                          "end": 144
+                                      "kind": {
+                                        "Value": {
+                                          "kind": {
+                                            "String": "Unknown"
+                                          },
+                                          "span": {
+                                            "start": 135,
+                                            "end": 144
+                                          }
                                         }
                                       },
-                                      "unpack": false,
-                                      "by_ref": false,
                                       "span": {
                                         "start": 135,
                                         "end": 144

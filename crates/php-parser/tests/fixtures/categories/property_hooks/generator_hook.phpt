@@ -100,35 +100,36 @@ class A {
                                         "Array": [
                                           {
                                             "key": null,
-                                            "value": {
-                                              "kind": {
-                                                "PropertyAccess": {
-                                                  "object": {
-                                                    "kind": {
-                                                      "Variable": "this"
+                                            "kind": {
+                                              "Value": {
+                                                "kind": {
+                                                  "PropertyAccess": {
+                                                    "object": {
+                                                      "kind": {
+                                                        "Variable": "this"
+                                                      },
+                                                      "span": {
+                                                        "start": 100,
+                                                        "end": 105
+                                                      }
                                                     },
-                                                    "span": {
-                                                      "start": 100,
-                                                      "end": 105
-                                                    }
-                                                  },
-                                                  "property": {
-                                                    "kind": {
-                                                      "Identifier": "backed"
-                                                    },
-                                                    "span": {
-                                                      "start": 107,
-                                                      "end": 113
+                                                    "property": {
+                                                      "kind": {
+                                                        "Identifier": "backed"
+                                                      },
+                                                      "span": {
+                                                        "start": 107,
+                                                        "end": 113
+                                                      }
                                                     }
                                                   }
+                                                },
+                                                "span": {
+                                                  "start": 100,
+                                                  "end": 113
                                                 }
-                                              },
-                                              "span": {
-                                                "start": 100,
-                                                "end": 113
                                               }
                                             },
-                                            "unpack": false,
                                             "span": {
                                               "start": 100,
                                               "end": 113

@@ -13,16 +13,17 @@
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 11,
-                          "end": 13
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 11,
+                            "end": 13
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 11,
                         "end": 13
@@ -30,51 +31,54 @@
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "b"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "b"
+                                    },
+                                    "span": {
+                                      "start": 20,
+                                      "end": 22
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 20,
                                   "end": 22
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 20,
-                                "end": 22
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "c"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "c"
+                                    },
+                                    "span": {
+                                      "start": 24,
+                                      "end": 26
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 24,
                                   "end": 26
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 24,
-                                "end": 26
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 15,
-                          "end": 27
+                            ]
+                          },
+                          "span": {
+                            "start": 15,
+                            "end": 27
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 15,
                         "end": 27

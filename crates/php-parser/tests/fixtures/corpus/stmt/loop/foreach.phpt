@@ -206,16 +206,17 @@ endforeach;
               "Array": [
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 153,
-                      "end": 155
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 153,
+                        "end": 155
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 153,
                     "end": 155
@@ -223,16 +224,17 @@ endforeach;
                 },
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 157,
-                      "end": 159
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 157,
+                        "end": 159
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 157,
                     "end": 159
@@ -287,16 +289,17 @@ endforeach;
               "Array": [
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 191,
-                      "end": 193
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 191,
+                        "end": 193
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 191,
                     "end": 193
@@ -304,14 +307,15 @@ endforeach;
                 },
                 {
                   "key": null,
-                  "value": {
-                    "kind": "Omit",
-                    "span": {
-                      "start": 195,
-                      "end": 196
+                  "kind": {
+                    "Value": {
+                      "kind": "Omit",
+                      "span": {
+                        "start": 195,
+                        "end": 196
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 195,
                     "end": 196
@@ -319,16 +323,17 @@ endforeach;
                 },
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "c"
-                    },
-                    "span": {
-                      "start": 197,
-                      "end": 199
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 197,
+                        "end": 199
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 197,
                     "end": 199

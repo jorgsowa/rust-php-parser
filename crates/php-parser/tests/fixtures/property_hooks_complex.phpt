@@ -98,36 +98,36 @@ class Foo {
                               "args": [
                                 {
                                   "name": null,
-                                  "value": {
-                                    "kind": {
-                                      "PropertyAccess": {
-                                        "object": {
-                                          "kind": {
-                                            "Variable": "this"
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "PropertyAccess": {
+                                          "object": {
+                                            "kind": {
+                                              "Variable": "this"
+                                            },
+                                            "span": {
+                                              "start": 70,
+                                              "end": 75
+                                            }
                                           },
-                                          "span": {
-                                            "start": 70,
-                                            "end": 75
-                                          }
-                                        },
-                                        "property": {
-                                          "kind": {
-                                            "Identifier": "name"
-                                          },
-                                          "span": {
-                                            "start": 77,
-                                            "end": 81
+                                          "property": {
+                                            "kind": {
+                                              "Identifier": "name"
+                                            },
+                                            "span": {
+                                              "start": 77,
+                                              "end": 81
+                                            }
                                           }
                                         }
+                                      },
+                                      "span": {
+                                        "start": 70,
+                                        "end": 81
                                       }
-                                    },
-                                    "span": {
-                                      "start": 70,
-                                      "end": 81
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 70,
                                     "end": 81
@@ -178,17 +178,17 @@ class Foo {
                               "args": [
                                 {
                                   "name": null,
-                                  "value": {
-                                    "kind": {
-                                      "Variable": "value"
-                                    },
-                                    "span": {
-                                      "start": 125,
-                                      "end": 131
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "Variable": "value"
+                                      },
+                                      "span": {
+                                        "start": 125,
+                                        "end": 131
+                                      }
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 125,
                                     "end": 131
@@ -408,17 +408,17 @@ class Foo {
                                           "args": [
                                             {
                                               "name": null,
-                                              "value": {
-                                                "kind": {
-                                                  "Int": 0
-                                                },
-                                                "span": {
-                                                  "start": 234,
-                                                  "end": 235
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "Int": 0
+                                                  },
+                                                  "span": {
+                                                    "start": 234,
+                                                    "end": 235
+                                                  }
                                                 }
                                               },
-                                              "unpack": false,
-                                              "by_ref": false,
                                               "span": {
                                                 "start": 234,
                                                 "end": 235
@@ -426,17 +426,17 @@ class Foo {
                                             },
                                             {
                                               "name": null,
-                                              "value": {
-                                                "kind": {
-                                                  "Variable": "value"
-                                                },
-                                                "span": {
-                                                  "start": 237,
-                                                  "end": 243
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "Variable": "value"
+                                                  },
+                                                  "span": {
+                                                    "start": 237,
+                                                    "end": 243
+                                                  }
                                                 }
                                               },
-                                              "unpack": false,
-                                              "by_ref": false,
                                               "span": {
                                                 "start": 237,
                                                 "end": 243

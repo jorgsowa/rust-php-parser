@@ -171,17 +171,17 @@ DIE($a, $b);
                       "end": 72
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Int": 42
-                    },
-                    "span": {
-                      "start": 74,
-                      "end": 76
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 42
+                      },
+                      "span": {
+                        "start": 74,
+                        "end": 76
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 66,
                     "end": 76
@@ -227,17 +227,17 @@ DIE($a, $b);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "args"
-                    },
-                    "span": {
-                      "start": 87,
-                      "end": 92
+                  "kind": {
+                    "Spread": {
+                      "kind": {
+                        "Variable": "args"
+                      },
+                      "span": {
+                        "start": 87,
+                        "end": 92
+                      }
                     }
                   },
-                  "unpack": true,
-                  "by_ref": false,
                   "span": {
                     "start": 84,
                     "end": 92
@@ -283,17 +283,17 @@ DIE($a, $b);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 100,
-                      "end": 102
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 100,
+                        "end": 102
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 100,
                     "end": 102
@@ -301,17 +301,17 @@ DIE($a, $b);
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 104,
-                      "end": 106
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 104,
+                        "end": 106
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 104,
                     "end": 106
@@ -357,17 +357,17 @@ DIE($a, $b);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 115,
-                      "end": 117
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 115,
+                        "end": 117
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 115,
                     "end": 117
@@ -451,17 +451,17 @@ DIE($a, $b);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 135,
-                      "end": 137
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 135,
+                        "end": 137
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 135,
                     "end": 137
@@ -469,17 +469,17 @@ DIE($a, $b);
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 139,
-                      "end": 141
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 139,
+                        "end": 141
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 139,
                     "end": 141

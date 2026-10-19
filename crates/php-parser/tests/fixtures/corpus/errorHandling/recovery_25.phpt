@@ -32,16 +32,17 @@ PHP Parse error:  syntax error, unexpected identifier "thing", expecting "]" in 
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "String": "a "
-                        },
-                        "span": {
-                          "start": 12,
-                          "end": 16
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "String": "a "
+                          },
+                          "span": {
+                            "start": 12,
+                            "end": 16
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 12,
                         "end": 16

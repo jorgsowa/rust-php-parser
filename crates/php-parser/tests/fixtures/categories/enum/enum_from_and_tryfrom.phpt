@@ -38,17 +38,17 @@
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 19,
-                      "end": 20
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 19,
+                        "end": 20
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 19,
                     "end": 20
@@ -103,17 +103,17 @@
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 99
-                    },
-                    "span": {
-                      "start": 39,
-                      "end": 41
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 99
+                      },
+                      "span": {
+                        "start": 39,
+                        "end": 41
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 39,
                     "end": 41

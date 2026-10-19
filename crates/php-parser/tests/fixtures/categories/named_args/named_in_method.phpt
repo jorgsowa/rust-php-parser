@@ -38,17 +38,17 @@
                       "end": 22
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "String": "val"
-                    },
-                    "span": {
-                      "start": 24,
-                      "end": 29
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "String": "val"
+                      },
+                      "span": {
+                        "start": 24,
+                        "end": 29
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 19,
                     "end": 29

@@ -28,16 +28,17 @@ PHP Parse error:  Unclosed '[' in Standard input code on line 1
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 12,
-                          "end": 13
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 12,
+                            "end": 13
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 12,
                         "end": 13
@@ -45,16 +46,17 @@ PHP Parse error:  Unclosed '[' in Standard input code on line 1
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 15,
-                          "end": 16
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 15,
+                            "end": 16
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 15,
                         "end": 16

@@ -49,17 +49,17 @@ PHP Parse error:  syntax error, unexpected token "?", expecting ")" in Standard 
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 1
-                          },
-                          "span": {
-                            "start": 16,
-                            "end": 17
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 16,
+                              "end": 17
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 16,
                           "end": 17
@@ -67,9 +67,7 @@ PHP Parse error:  syntax error, unexpected token "?", expecting ")" in Standard 
                       },
                       {
                         "name": null,
-                        "value": null,
-                        "unpack": false,
-                        "by_ref": false,
+                        "kind": "Placeholder",
                         "span": {
                           "start": 19,
                           "end": 20
@@ -77,17 +75,17 @@ PHP Parse error:  syntax error, unexpected token "?", expecting ")" in Standard 
                       },
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 3
-                          },
-                          "span": {
-                            "start": 22,
-                            "end": 23
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 3
+                            },
+                            "span": {
+                              "start": 22,
+                              "end": 23
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 22,
                           "end": 23

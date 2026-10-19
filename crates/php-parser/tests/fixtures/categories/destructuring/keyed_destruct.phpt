@@ -21,16 +21,17 @@
                           "end": 13
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "name"
-                        },
-                        "span": {
-                          "start": 17,
-                          "end": 22
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "name"
+                          },
+                          "span": {
+                            "start": 17,
+                            "end": 22
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 7,
                         "end": 22
@@ -46,16 +47,17 @@
                           "end": 29
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "age"
-                        },
-                        "span": {
-                          "start": 33,
-                          "end": 37
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "age"
+                          },
+                          "span": {
+                            "start": 33,
+                            "end": 37
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 24,
                         "end": 37

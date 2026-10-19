@@ -40,17 +40,17 @@ min_php=8.5
                       "end": 18
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 20,
-                      "end": 22
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 20,
+                        "end": 22
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 12,
                     "end": 22

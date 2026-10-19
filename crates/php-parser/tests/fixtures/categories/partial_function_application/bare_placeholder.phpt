@@ -44,9 +44,7 @@ min_php=8.6
                     "args": [
                       {
                         "name": null,
-                        "value": null,
-                        "unpack": false,
-                        "by_ref": false,
+                        "kind": "Placeholder",
                         "span": {
                           "start": 16,
                           "end": 17

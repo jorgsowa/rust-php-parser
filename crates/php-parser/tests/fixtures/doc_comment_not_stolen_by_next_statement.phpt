@@ -42,55 +42,55 @@ baz();
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "ArrowFunction": {
-                        "is_static": false,
-                        "by_ref": false,
-                        "params": [
-                          {
-                            "name": {
-                              "name": "x",
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "ArrowFunction": {
+                          "is_static": false,
+                          "by_ref": false,
+                          "params": [
+                            {
+                              "name": {
+                                "name": "x",
+                                "span": {
+                                  "start": 32,
+                                  "end": 34
+                                }
+                              },
+                              "type_hint": null,
+                              "default": null,
+                              "by_ref": false,
+                              "variadic": false,
+                              "is_readonly": false,
+                              "is_final": false,
+                              "visibility": null,
+                              "set_visibility": null,
+                              "attributes": [],
                               "span": {
                                 "start": 32,
                                 "end": 34
                               }
-                            },
-                            "type_hint": null,
-                            "default": null,
-                            "by_ref": false,
-                            "variadic": false,
-                            "is_readonly": false,
-                            "is_final": false,
-                            "visibility": null,
-                            "set_visibility": null,
-                            "attributes": [],
-                            "span": {
-                              "start": 32,
-                              "end": 34
                             }
-                          }
-                        ],
-                        "return_type": null,
-                        "body": {
-                          "kind": {
-                            "Variable": "x"
+                          ],
+                          "return_type": null,
+                          "body": {
+                            "kind": {
+                              "Variable": "x"
+                            },
+                            "span": {
+                              "start": 39,
+                              "end": 41
+                            }
                           },
-                          "span": {
-                            "start": 39,
-                            "end": 41
-                          }
-                        },
-                        "attributes": []
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 29,
+                        "end": 41
                       }
-                    },
-                    "span": {
-                      "start": 29,
-                      "end": 41
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 29,
                     "end": 41
@@ -98,17 +98,17 @@ baz();
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "other"
-                    },
-                    "span": {
-                      "start": 43,
-                      "end": 49
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "other"
+                      },
+                      "span": {
+                        "start": 43,
+                        "end": 49
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 43,
                     "end": 49

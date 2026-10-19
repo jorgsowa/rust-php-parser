@@ -45,55 +45,56 @@ min_php=8.5
                                 "end": 30
                               }
                             },
-                            "value": {
-                              "kind": {
-                                "FunctionCall": {
-                                  "name": {
-                                    "kind": {
-                                      "Name": {
-                                        "parts": [
-                                          "strtolower"
-                                        ],
-                                        "kind": "Unqualified",
-                                        "span": {
-                                          "start": 34,
-                                          "end": 44
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "FunctionCall": {
+                                    "name": {
+                                      "kind": {
+                                        "Name": {
+                                          "parts": [
+                                            "strtolower"
+                                          ],
+                                          "kind": "Unqualified",
+                                          "span": {
+                                            "start": 34,
+                                            "end": 44
+                                          }
                                         }
+                                      },
+                                      "span": {
+                                        "start": 34,
+                                        "end": 44
                                       }
                                     },
-                                    "span": {
-                                      "start": 34,
-                                      "end": 44
-                                    }
-                                  },
-                                  "args": [
-                                    {
-                                      "name": null,
-                                      "value": {
+                                    "args": [
+                                      {
+                                        "name": null,
                                         "kind": {
-                                          "String": "A"
+                                          "Value": {
+                                            "kind": {
+                                              "String": "A"
+                                            },
+                                            "span": {
+                                              "start": 45,
+                                              "end": 48
+                                            }
+                                          }
                                         },
                                         "span": {
                                           "start": 45,
                                           "end": 48
                                         }
-                                      },
-                                      "unpack": false,
-                                      "by_ref": false,
-                                      "span": {
-                                        "start": 45,
-                                        "end": 48
                                       }
-                                    }
-                                  ]
+                                    ]
+                                  }
+                                },
+                                "span": {
+                                  "start": 34,
+                                  "end": 49
                                 }
-                              },
-                              "span": {
-                                "start": 34,
-                                "end": 49
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 24,
                               "end": 49

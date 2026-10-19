@@ -95,17 +95,17 @@ $b = #[A13] static fn() => 0;
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 0
-                    },
-                    "span": {
-                      "start": 35,
-                      "end": 36
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 0
+                      },
+                      "span": {
+                        "start": 35,
+                        "end": 36
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 35,
                     "end": 36
@@ -140,17 +140,17 @@ $b = #[A13] static fn() => 0;
                       "end": 47
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 49,
-                      "end": 50
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 49,
+                        "end": 50
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 46,
                     "end": 50

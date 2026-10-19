@@ -30,16 +30,17 @@ PHP Parse error:  Unclosed '(' in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 17,
-                          "end": 18
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 17,
+                            "end": 18
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 17,
                         "end": 18
@@ -47,16 +48,17 @@ PHP Parse error:  Unclosed '(' in Standard input code on line 2
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 20,
-                          "end": 21
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 20,
+                            "end": 21
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 20,
                         "end": 21
@@ -64,14 +66,15 @@ PHP Parse error:  Unclosed '(' in Standard input code on line 2
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Error",
-                        "span": {
-                          "start": 22,
-                          "end": 22
+                      "kind": {
+                        "Value": {
+                          "kind": "Error",
+                          "span": {
+                            "start": 22,
+                            "end": 22
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 22,
                         "end": 22

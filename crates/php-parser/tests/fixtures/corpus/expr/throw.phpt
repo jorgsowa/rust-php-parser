@@ -31,25 +31,25 @@ $a ?? throw new Exception;
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Throw": {
-                        "kind": {
-                          "Variable": "x"
-                        },
-                        "span": {
-                          "start": 17,
-                          "end": 19
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Throw": {
+                          "kind": {
+                            "Variable": "x"
+                          },
+                          "span": {
+                            "start": 17,
+                            "end": 19
+                          }
                         }
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 19
                       }
-                    },
-                    "span": {
-                      "start": 11,
-                      "end": 19
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 11,
                     "end": 19

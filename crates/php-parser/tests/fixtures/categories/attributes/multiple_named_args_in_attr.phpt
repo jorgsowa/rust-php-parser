@@ -46,17 +46,17 @@
                       "end": 24
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 26,
-                      "end": 27
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 26,
+                        "end": 27
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 21,
                     "end": 27
@@ -73,17 +73,17 @@
                       "end": 32
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Int": 100
-                    },
-                    "span": {
-                      "start": 34,
-                      "end": 37
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 100
+                      },
+                      "span": {
+                        "start": 34,
+                        "end": 37
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 29,
                     "end": 37

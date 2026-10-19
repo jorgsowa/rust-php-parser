@@ -251,14 +251,55 @@ impl Serialize for TypeHintKind {
 pub struct Arg {
     /// Name of a named argument.
     pub name: Option<Name>,
-    /// `None` is a PHP 8.6 partial-application placeholder (`?`, or `...` when `unpack` is set).
-    pub value: Option<Expr>,
-    /// Whether the argument is spread with `...`.
-    pub unpack: bool,
-    /// Whether the argument is prefixed with `&`.
-    pub by_ref: bool,
+    /// What the argument passes.
+    pub kind: ArgKind,
     /// Source span.
     pub span: Span,
+}
+
+/// The form of a call argument.
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
+pub enum ArgKind {
+    /// A plain value: `f($x)`, or `f(name: $x)` when the argument has a name.
+    Value(Expr),
+    /// A spread: `f(...$args)`.
+    Spread(Expr),
+    /// Call-time pass-by-reference: `f(&$x)`, a fatal error since PHP 5.4.
+    ByRef(Expr),
+    /// The PHP 8.6 partial-application placeholder `?`.
+    Placeholder,
+    /// The PHP 8.6 partial-application placeholder `...`.
+    SpreadPlaceholder,
+}
+
+impl Arg {
+    /// The argument expression; `None` for a placeholder.
+    pub fn value(&self) -> Option<&Expr> {
+        match &self.kind {
+            ArgKind::Value(e) | ArgKind::Spread(e) | ArgKind::ByRef(e) => Some(e),
+            ArgKind::Placeholder | ArgKind::SpreadPlaceholder => None,
+        }
+    }
+
+    /// Mutable access to the argument expression; `None` for a placeholder.
+    pub fn value_mut(&mut self) -> Option<&mut Expr> {
+        match &mut self.kind {
+            ArgKind::Value(e) | ArgKind::Spread(e) | ArgKind::ByRef(e) => Some(e),
+            ArgKind::Placeholder | ArgKind::SpreadPlaceholder => None,
+        }
+    }
+
+    /// Whether the argument is a `...` spread (not the `...` placeholder).
+    pub fn is_spread(&self) -> bool {
+        matches!(self.kind, ArgKind::Spread(_))
+    }
+
+    /// Whether the argument is a PHP 8.6 `?` or `...` placeholder.
+    pub fn is_placeholder(&self) -> bool {
+        matches!(self.kind, ArgKind::Placeholder | ArgKind::SpreadPlaceholder)
+    }
 }
 
 /// A `#[...]` attribute.
@@ -1103,15 +1144,53 @@ pub struct FunctionCallExpr {
 pub struct ArrayElement {
     /// Key expression, if any.
     pub key: Option<Expr>,
-    /// Element value.
-    pub value: Expr,
-    /// Whether the element is spread with `...`.
-    pub unpack: bool,
-    /// Whether the value is taken by reference.
-    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
-    pub by_ref: bool,
+    /// The element's value and how it is taken.
+    pub kind: ArrayElementKind,
     /// Source span.
     pub span: Span,
+}
+
+/// How an array element takes its value.
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
+pub enum ArrayElementKind {
+    /// A plain value: `$x`.
+    Value(Expr),
+    /// A spread: `...$x`.
+    Spread(Expr),
+    /// A reference: `&$x`.
+    ByRef(Expr),
+}
+
+impl ArrayElement {
+    /// The element's value expression.
+    pub fn value(&self) -> &Expr {
+        match &self.kind {
+            ArrayElementKind::Value(e)
+            | ArrayElementKind::Spread(e)
+            | ArrayElementKind::ByRef(e) => e,
+        }
+    }
+
+    /// Mutable access to the element's value expression.
+    pub fn value_mut(&mut self) -> &mut Expr {
+        match &mut self.kind {
+            ArrayElementKind::Value(e)
+            | ArrayElementKind::Spread(e)
+            | ArrayElementKind::ByRef(e) => e,
+        }
+    }
+
+    /// Whether the element is a `...` spread.
+    pub fn is_spread(&self) -> bool {
+        matches!(self.kind, ArrayElementKind::Spread(_))
+    }
+
+    /// Whether the element is taken by reference (`&$x`).
+    pub fn is_by_ref(&self) -> bool {
+        matches!(self.kind, ArrayElementKind::ByRef(_))
+    }
 }
 
 /// An array offset access.
@@ -1851,9 +1930,13 @@ fn owned_type_hint_kind(k: &arena_ast::TypeHintKind<'_, '_>) -> TypeHintKind {
 fn owned_arg(arg: &arena_ast::Arg<'_, '_>) -> Arg {
     Arg {
         name: arg.name.as_ref().map(owned_name),
-        value: arg.value.as_ref().map(owned_expr),
-        unpack: arg.unpack,
-        by_ref: arg.by_ref,
+        kind: match &arg.kind {
+            arena_ast::ArgKind::Value(e) => ArgKind::Value(owned_expr(e)),
+            arena_ast::ArgKind::Spread(e) => ArgKind::Spread(owned_expr(e)),
+            arena_ast::ArgKind::ByRef(e) => ArgKind::ByRef(owned_expr(e)),
+            arena_ast::ArgKind::Placeholder => ArgKind::Placeholder,
+            arena_ast::ArgKind::SpreadPlaceholder => ArgKind::SpreadPlaceholder,
+        },
         span: arg.span,
     }
 }
@@ -2000,9 +2083,17 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
                 .iter()
                 .map(|e| ArrayElement {
                     key: e.key.as_ref().map(owned_expr),
-                    value: owned_expr(&e.value),
-                    unpack: e.unpack,
-                    by_ref: e.by_ref,
+                    kind: match &e.kind {
+                        arena_ast::ArrayElementKind::Value(v) => {
+                            ArrayElementKind::Value(owned_expr(v))
+                        }
+                        arena_ast::ArrayElementKind::Spread(v) => {
+                            ArrayElementKind::Spread(owned_expr(v))
+                        }
+                        arena_ast::ArrayElementKind::ByRef(v) => {
+                            ArrayElementKind::ByRef(owned_expr(v))
+                        }
+                    },
                     span: e.span,
                 })
                 .collect::<Vec<_>>()
@@ -2805,9 +2896,13 @@ fn av_type_hint_kind<'a>(
 fn av_arg<'a>(arena: &'a bumpalo::Bump, arg: &Arg) -> arena_ast::Arg<'a, 'a> {
     arena_ast::Arg {
         name: arg.name.as_ref().map(|n| av_name(arena, n)),
-        value: arg.value.as_ref().map(|v| av_expr(arena, v)),
-        unpack: arg.unpack,
-        by_ref: arg.by_ref,
+        kind: match &arg.kind {
+            ArgKind::Value(e) => arena_ast::ArgKind::Value(av_expr(arena, e)),
+            ArgKind::Spread(e) => arena_ast::ArgKind::Spread(av_expr(arena, e)),
+            ArgKind::ByRef(e) => arena_ast::ArgKind::ByRef(av_expr(arena, e)),
+            ArgKind::Placeholder => arena_ast::ArgKind::Placeholder,
+            ArgKind::SpreadPlaceholder => arena_ast::ArgKind::SpreadPlaceholder,
+        },
         span: arg.span,
     }
 }
@@ -2968,9 +3063,17 @@ fn av_leaf_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
             for e in elems.iter() {
                 v.push(arena_ast::ArrayElement {
                     key: e.key.as_ref().map(|k| av_expr(arena, k)),
-                    value: av_expr(arena, &e.value),
-                    unpack: e.unpack,
-                    by_ref: e.by_ref,
+                    kind: match &e.kind {
+                        ArrayElementKind::Value(v) => {
+                            arena_ast::ArrayElementKind::Value(av_expr(arena, v))
+                        }
+                        ArrayElementKind::Spread(v) => {
+                            arena_ast::ArrayElementKind::Spread(av_expr(arena, v))
+                        }
+                        ArrayElementKind::ByRef(v) => {
+                            arena_ast::ArrayElementKind::ByRef(av_expr(arena, v))
+                        }
+                    },
                     span: e.span,
                 });
             }

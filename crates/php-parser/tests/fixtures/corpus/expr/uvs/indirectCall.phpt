@@ -45,17 +45,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "String": "var_dump"
-                          },
-                          "span": {
-                            "start": 10,
-                            "end": 20
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "String": "var_dump"
+                            },
+                            "span": {
+                              "start": 10,
+                              "end": 20
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 10,
                           "end": 20
@@ -72,17 +72,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 22,
-                      "end": 23
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 22,
+                        "end": 23
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 22,
                     "end": 23
@@ -134,17 +134,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                           "args": [
                             {
                               "name": null,
-                              "value": {
-                                "kind": {
-                                  "String": "id"
-                                },
-                                "span": {
-                                  "start": 29,
-                                  "end": 33
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "String": "id"
+                                  },
+                                  "span": {
+                                    "start": 29,
+                                    "end": 33
+                                  }
                                 }
                               },
-                              "unpack": false,
-                              "by_ref": false,
                               "span": {
                                 "start": 29,
                                 "end": 33
@@ -161,17 +161,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "String": "var_dump"
-                          },
-                          "span": {
-                            "start": 35,
-                            "end": 45
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "String": "var_dump"
+                            },
+                            "span": {
+                              "start": 35,
+                              "end": 45
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 35,
                           "end": 45
@@ -188,17 +188,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 2
-                    },
-                    "span": {
-                      "start": 47,
-                      "end": 48
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 2
+                      },
+                      "span": {
+                        "start": 47,
+                        "end": 48
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 47,
                     "end": 48
@@ -269,17 +269,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "String": "var_dump"
-                          },
-                          "span": {
-                            "start": 58,
-                            "end": 68
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "String": "var_dump"
+                            },
+                            "span": {
+                              "start": 58,
+                              "end": 68
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 58,
                           "end": 68
@@ -296,17 +296,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 4
-                    },
-                    "span": {
-                      "start": 70,
-                      "end": 71
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 4
+                      },
+                      "span": {
+                        "start": 70,
+                        "end": 71
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 70,
                     "end": 71
@@ -364,52 +364,54 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                                       "args": [
                                         {
                                           "name": null,
-                                          "value": {
-                                            "kind": {
-                                              "Array": [
-                                                {
-                                                  "key": null,
-                                                  "value": {
+                                          "kind": {
+                                            "Value": {
+                                              "kind": {
+                                                "Array": [
+                                                  {
+                                                    "key": null,
                                                     "kind": {
-                                                      "String": "udef"
+                                                      "Value": {
+                                                        "kind": {
+                                                          "String": "udef"
+                                                        },
+                                                        "span": {
+                                                          "start": 78,
+                                                          "end": 84
+                                                        }
+                                                      }
                                                     },
                                                     "span": {
                                                       "start": 78,
                                                       "end": 84
                                                     }
                                                   },
-                                                  "unpack": false,
-                                                  "span": {
-                                                    "start": 78,
-                                                    "end": 84
-                                                  }
-                                                },
-                                                {
-                                                  "key": null,
-                                                  "value": {
+                                                  {
+                                                    "key": null,
                                                     "kind": {
-                                                      "String": "id"
+                                                      "Value": {
+                                                        "kind": {
+                                                          "String": "id"
+                                                        },
+                                                        "span": {
+                                                          "start": 86,
+                                                          "end": 90
+                                                        }
+                                                      }
                                                     },
                                                     "span": {
                                                       "start": 86,
                                                       "end": 90
                                                     }
-                                                  },
-                                                  "unpack": false,
-                                                  "span": {
-                                                    "start": 86,
-                                                    "end": 90
                                                   }
-                                                }
-                                              ]
-                                            },
-                                            "span": {
-                                              "start": 77,
-                                              "end": 91
+                                                ]
+                                              },
+                                              "span": {
+                                                "start": 77,
+                                                "end": 91
+                                              }
                                             }
                                           },
-                                          "unpack": false,
-                                          "by_ref": false,
                                           "span": {
                                             "start": 77,
                                             "end": 91
@@ -450,17 +452,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "String": "var_dump"
-                          },
-                          "span": {
-                            "start": 98,
-                            "end": 108
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "String": "var_dump"
+                            },
+                            "span": {
+                              "start": 98,
+                              "end": 108
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 98,
                           "end": 108
@@ -477,17 +479,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 5
-                    },
-                    "span": {
-                      "start": 110,
-                      "end": 111
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 5
+                      },
+                      "span": {
+                        "start": 110,
+                        "end": 111
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 110,
                     "end": 111
@@ -587,17 +589,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                           "args": [
                             {
                               "name": null,
-                              "value": {
-                                "kind": {
-                                  "String": "id"
-                                },
-                                "span": {
-                                  "start": 144,
-                                  "end": 148
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "String": "id"
+                                  },
+                                  "span": {
+                                    "start": 144,
+                                    "end": 148
+                                  }
                                 }
                               },
-                              "unpack": false,
-                              "by_ref": false,
                               "span": {
                                 "start": 144,
                                 "end": 148
@@ -614,17 +616,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "String": "var_dump"
-                          },
-                          "span": {
-                            "start": 150,
-                            "end": 160
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "String": "var_dump"
+                            },
+                            "span": {
+                              "start": 150,
+                              "end": 160
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 150,
                           "end": 160
@@ -641,17 +643,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 8
-                    },
-                    "span": {
-                      "start": 162,
-                      "end": 163
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 8
+                      },
+                      "span": {
+                        "start": 162,
+                        "end": 163
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 162,
                     "end": 163
@@ -842,17 +844,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "String": "var_dump"
-                          },
-                          "span": {
-                            "start": 234,
-                            "end": 244
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "String": "var_dump"
+                            },
+                            "span": {
+                              "start": 234,
+                              "end": 244
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 234,
                           "end": 244
@@ -869,17 +871,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 9
-                    },
-                    "span": {
-                      "start": 246,
-                      "end": 247
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 9
+                      },
+                      "span": {
+                        "start": 246,
+                        "end": 247
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 246,
                     "end": 247
@@ -921,16 +923,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                                           "Array": [
                                             {
                                               "key": null,
-                                              "value": {
-                                                "kind": {
-                                                  "Variable": "obj"
-                                                },
-                                                "span": {
-                                                  "start": 251,
-                                                  "end": 255
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "Variable": "obj"
+                                                  },
+                                                  "span": {
+                                                    "start": 251,
+                                                    "end": 255
+                                                  }
                                                 }
                                               },
-                                              "unpack": false,
                                               "span": {
                                                 "start": 251,
                                                 "end": 255
@@ -938,16 +941,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                                             },
                                             {
                                               "key": null,
-                                              "value": {
-                                                "kind": {
-                                                  "String": "id"
-                                                },
-                                                "span": {
-                                                  "start": 257,
-                                                  "end": 261
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "String": "id"
+                                                  },
+                                                  "span": {
+                                                    "start": 257,
+                                                    "end": 261
+                                                  }
                                                 }
                                               },
-                                              "unpack": false,
                                               "span": {
                                                 "start": 257,
                                                 "end": 261
@@ -971,17 +975,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                                 "args": [
                                   {
                                     "name": null,
-                                    "value": {
-                                      "kind": {
-                                        "String": "id"
-                                      },
-                                      "span": {
-                                        "start": 265,
-                                        "end": 269
+                                    "kind": {
+                                      "Value": {
+                                        "kind": {
+                                          "String": "id"
+                                        },
+                                        "span": {
+                                          "start": 265,
+                                          "end": 269
+                                        }
                                       }
                                     },
-                                    "unpack": false,
-                                    "by_ref": false,
                                     "span": {
                                       "start": 265,
                                       "end": 269
@@ -998,17 +1002,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                           "args": [
                             {
                               "name": null,
-                              "value": {
-                                "kind": {
-                                  "Variable": "id"
-                                },
-                                "span": {
-                                  "start": 271,
-                                  "end": 274
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "Variable": "id"
+                                  },
+                                  "span": {
+                                    "start": 271,
+                                    "end": 274
+                                  }
                                 }
                               },
-                              "unpack": false,
-                              "by_ref": false,
                               "span": {
                                 "start": 271,
                                 "end": 274
@@ -1025,17 +1029,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "String": "var_dump"
-                          },
-                          "span": {
-                            "start": 276,
-                            "end": 286
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "String": "var_dump"
+                            },
+                            "span": {
+                              "start": 276,
+                              "end": 286
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 276,
                           "end": 286
@@ -1052,17 +1056,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 10
-                    },
-                    "span": {
-                      "start": 288,
-                      "end": 290
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 10
+                      },
+                      "span": {
+                        "start": 288,
+                        "end": 290
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 288,
                     "end": 290
@@ -1116,17 +1120,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                           "args": [
                             {
                               "name": null,
-                              "value": {
-                                "kind": {
-                                  "String": "id"
-                                },
-                                "span": {
-                                  "start": 300,
-                                  "end": 304
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "String": "id"
+                                  },
+                                  "span": {
+                                    "start": 300,
+                                    "end": 304
+                                  }
                                 }
                               },
-                              "unpack": false,
-                              "by_ref": false,
                               "span": {
                                 "start": 300,
                                 "end": 304
@@ -1143,17 +1147,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "String": "var_dump"
-                          },
-                          "span": {
-                            "start": 306,
-                            "end": 316
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "String": "var_dump"
+                            },
+                            "span": {
+                              "start": 306,
+                              "end": 316
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 306,
                           "end": 316
@@ -1170,17 +1174,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 12
-                    },
-                    "span": {
-                      "start": 318,
-                      "end": 320
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 12
+                      },
+                      "span": {
+                        "start": 318,
+                        "end": 320
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 318,
                     "end": 320
@@ -1259,17 +1263,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "String": "var_dump"
-                          },
-                          "span": {
-                            "start": 337,
-                            "end": 347
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "String": "var_dump"
+                            },
+                            "span": {
+                              "start": 337,
+                              "end": 347
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 337,
                           "end": 347
@@ -1286,17 +1290,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 13
-                    },
-                    "span": {
-                      "start": 349,
-                      "end": 351
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 13
+                      },
+                      "span": {
+                        "start": 349,
+                        "end": 351
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 349,
                     "end": 351
@@ -1336,17 +1340,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "String": "var_dump"
-                          },
-                          "span": {
-                            "start": 360,
-                            "end": 370
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "String": "var_dump"
+                            },
+                            "span": {
+                              "start": 360,
+                              "end": 370
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 360,
                           "end": 370
@@ -1363,17 +1367,17 @@ id(['udef', 'id'])[1]()('var_dump')(5);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 14
-                    },
-                    "span": {
-                      "start": 372,
-                      "end": 374
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 14
+                      },
+                      "span": {
+                        "start": 372,
+                        "end": 374
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 372,
                     "end": 374

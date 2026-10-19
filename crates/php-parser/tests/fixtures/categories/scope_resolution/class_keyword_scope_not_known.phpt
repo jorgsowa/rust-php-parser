@@ -724,44 +724,45 @@ $h = function () {
                                 "Array": [
                                   {
                                     "key": null,
-                                    "value": {
-                                      "kind": {
-                                        "ClassConstAccess": {
-                                          "class": {
-                                            "kind": {
-                                              "Name": {
-                                                "parts": [
-                                                  "self"
-                                                ],
-                                                "kind": "Unqualified",
-                                                "span": {
-                                                  "start": 274,
-                                                  "end": 278
+                                    "kind": {
+                                      "Value": {
+                                        "kind": {
+                                          "ClassConstAccess": {
+                                            "class": {
+                                              "kind": {
+                                                "Name": {
+                                                  "parts": [
+                                                    "self"
+                                                  ],
+                                                  "kind": "Unqualified",
+                                                  "span": {
+                                                    "start": 274,
+                                                    "end": 278
+                                                  }
                                                 }
+                                              },
+                                              "span": {
+                                                "start": 274,
+                                                "end": 278
                                               }
                                             },
-                                            "span": {
-                                              "start": 274,
-                                              "end": 278
-                                            }
-                                          },
-                                          "member": {
-                                            "kind": {
-                                              "Identifier": "X"
-                                            },
-                                            "span": {
-                                              "start": 280,
-                                              "end": 281
+                                            "member": {
+                                              "kind": {
+                                                "Identifier": "X"
+                                              },
+                                              "span": {
+                                                "start": 280,
+                                                "end": 281
+                                              }
                                             }
                                           }
+                                        },
+                                        "span": {
+                                          "start": 274,
+                                          "end": 281
                                         }
-                                      },
-                                      "span": {
-                                        "start": 274,
-                                        "end": 281
                                       }
                                     },
-                                    "unpack": false,
                                     "span": {
                                       "start": 274,
                                       "end": 281
@@ -769,36 +770,37 @@ $h = function () {
                                   },
                                   {
                                     "key": null,
-                                    "value": {
-                                      "kind": {
-                                        "New": {
-                                          "class": {
-                                            "kind": {
-                                              "Name": {
-                                                "parts": [
-                                                  "static"
-                                                ],
-                                                "kind": "Unqualified",
-                                                "span": {
-                                                  "start": 287,
-                                                  "end": 293
+                                    "kind": {
+                                      "Value": {
+                                        "kind": {
+                                          "New": {
+                                            "class": {
+                                              "kind": {
+                                                "Name": {
+                                                  "parts": [
+                                                    "static"
+                                                  ],
+                                                  "kind": "Unqualified",
+                                                  "span": {
+                                                    "start": 287,
+                                                    "end": 293
+                                                  }
                                                 }
+                                              },
+                                              "span": {
+                                                "start": 287,
+                                                "end": 293
                                               }
                                             },
-                                            "span": {
-                                              "start": 287,
-                                              "end": 293
-                                            }
-                                          },
-                                          "args": []
+                                            "args": []
+                                          }
+                                        },
+                                        "span": {
+                                          "start": 283,
+                                          "end": 293
                                         }
-                                      },
-                                      "span": {
-                                        "start": 283,
-                                        "end": 293
                                       }
                                     },
-                                    "unpack": false,
                                     "span": {
                                       "start": 283,
                                       "end": 293
@@ -806,44 +808,45 @@ $h = function () {
                                   },
                                   {
                                     "key": null,
-                                    "value": {
-                                      "kind": {
-                                        "ClassConstAccess": {
-                                          "class": {
-                                            "kind": {
-                                              "Name": {
-                                                "parts": [
-                                                  "parent"
-                                                ],
-                                                "kind": "Unqualified",
-                                                "span": {
-                                                  "start": 295,
-                                                  "end": 301
+                                    "kind": {
+                                      "Value": {
+                                        "kind": {
+                                          "ClassConstAccess": {
+                                            "class": {
+                                              "kind": {
+                                                "Name": {
+                                                  "parts": [
+                                                    "parent"
+                                                  ],
+                                                  "kind": "Unqualified",
+                                                  "span": {
+                                                    "start": 295,
+                                                    "end": 301
+                                                  }
                                                 }
+                                              },
+                                              "span": {
+                                                "start": 295,
+                                                "end": 301
                                               }
                                             },
-                                            "span": {
-                                              "start": 295,
-                                              "end": 301
-                                            }
-                                          },
-                                          "member": {
-                                            "kind": {
-                                              "Identifier": "class"
-                                            },
-                                            "span": {
-                                              "start": 303,
-                                              "end": 308
+                                            "member": {
+                                              "kind": {
+                                                "Identifier": "class"
+                                              },
+                                              "span": {
+                                                "start": 303,
+                                                "end": 308
+                                              }
                                             }
                                           }
+                                        },
+                                        "span": {
+                                          "start": 295,
+                                          "end": 308
                                         }
-                                      },
-                                      "span": {
-                                        "start": 295,
-                                        "end": 308
                                       }
                                     },
-                                    "unpack": false,
                                     "span": {
                                       "start": 295,
                                       "end": 308
@@ -917,45 +920,45 @@ $h = function () {
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "ClassConstAccess": {
-                        "class": {
-                          "kind": {
-                            "Name": {
-                              "parts": [
-                                "self"
-                              ],
-                              "kind": "Unqualified",
-                              "span": {
-                                "start": 324,
-                                "end": 328
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "ClassConstAccess": {
+                          "class": {
+                            "kind": {
+                              "Name": {
+                                "parts": [
+                                  "self"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 324,
+                                  "end": 328
+                                }
                               }
+                            },
+                            "span": {
+                              "start": 324,
+                              "end": 328
                             }
                           },
-                          "span": {
-                            "start": 324,
-                            "end": 328
-                          }
-                        },
-                        "member": {
-                          "kind": {
-                            "Identifier": "X"
-                          },
-                          "span": {
-                            "start": 330,
-                            "end": 331
+                          "member": {
+                            "kind": {
+                              "Identifier": "X"
+                            },
+                            "span": {
+                              "start": 330,
+                              "end": 331
+                            }
                           }
                         }
+                      },
+                      "span": {
+                        "start": 324,
+                        "end": 331
                       }
-                    },
-                    "span": {
-                      "start": 324,
-                      "end": 331
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 324,
                     "end": 331

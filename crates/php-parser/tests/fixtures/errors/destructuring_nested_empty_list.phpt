@@ -38,16 +38,17 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": []
-                        },
-                        "span": {
-                          "start": 7,
-                          "end": 9
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": []
+                          },
+                          "span": {
+                            "start": 7,
+                            "end": 9
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 7,
                         "end": 9
@@ -93,16 +94,17 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "x"
-                        },
-                        "span": {
-                          "start": 18,
-                          "end": 20
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "x"
+                          },
+                          "span": {
+                            "start": 18,
+                            "end": 20
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 18,
                         "end": 20
@@ -110,16 +112,17 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 2
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": []
-                        },
-                        "span": {
-                          "start": 22,
-                          "end": 24
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": []
+                          },
+                          "span": {
+                            "start": 22,
+                            "end": 24
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 22,
                         "end": 24
@@ -165,16 +168,17 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "x"
-                        },
-                        "span": {
-                          "start": 33,
-                          "end": 35
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "x"
+                          },
+                          "span": {
+                            "start": 33,
+                            "end": 35
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 33,
                         "end": 35
@@ -182,32 +186,34 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 2
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
-                                "kind": "Omit",
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
+                                "kind": {
+                                  "Value": {
+                                    "kind": "Omit",
+                                    "span": {
+                                      "start": 38,
+                                      "end": 39
+                                    }
+                                  }
+                                },
                                 "span": {
                                   "start": 38,
                                   "end": 39
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 38,
-                                "end": 39
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 37,
-                          "end": 40
+                            ]
+                          },
+                          "span": {
+                            "start": 37,
+                            "end": 40
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 37,
                         "end": 40
@@ -261,16 +267,17 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 2
                           "end": 52
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Array": []
-                        },
-                        "span": {
-                          "start": 56,
-                          "end": 58
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": []
+                          },
+                          "span": {
+                            "start": 56,
+                            "end": 58
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 49,
                         "end": 58
@@ -316,34 +323,36 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Array": []
+                                  "Value": {
+                                    "kind": {
+                                      "Array": []
+                                    },
+                                    "span": {
+                                      "start": 68,
+                                      "end": 70
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 68,
                                   "end": 70
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 68,
-                                "end": 70
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 67,
-                          "end": 71
+                            ]
+                          },
+                          "span": {
+                            "start": 67,
+                            "end": 71
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 67,
                         "end": 71
@@ -389,16 +398,17 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "x"
-                        },
-                        "span": {
-                          "start": 84,
-                          "end": 86
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "x"
+                          },
+                          "span": {
+                            "start": 84,
+                            "end": 86
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 84,
                         "end": 86
@@ -406,16 +416,17 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 2
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": []
-                        },
-                        "span": {
-                          "start": 88,
-                          "end": 94
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": []
+                          },
+                          "span": {
+                            "start": 88,
+                            "end": 94
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 88,
                         "end": 94
@@ -461,32 +472,34 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
-                                "kind": "Omit",
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
+                                "kind": {
+                                  "Value": {
+                                    "kind": "Omit",
+                                    "span": {
+                                      "start": 112,
+                                      "end": 113
+                                    }
+                                  }
+                                },
                                 "span": {
                                   "start": 112,
                                   "end": 113
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 112,
-                                "end": 113
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 107,
-                          "end": 114
+                            ]
+                          },
+                          "span": {
+                            "start": 107,
+                            "end": 114
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 107,
                         "end": 114
@@ -578,14 +591,15 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 2
               "Array": [
                 {
                   "key": null,
-                  "value": {
-                    "kind": "Omit",
-                    "span": {
-                      "start": 160,
-                      "end": 161
+                  "kind": {
+                    "Value": {
+                      "kind": "Omit",
+                      "span": {
+                        "start": 160,
+                        "end": 161
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 160,
                     "end": 161
@@ -678,16 +692,17 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 2
               "Array": [
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 215,
-                      "end": 217
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 215,
+                        "end": 217
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 215,
                     "end": 217
@@ -695,16 +710,17 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 2
                 },
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Array": []
-                    },
-                    "span": {
-                      "start": 219,
-                      "end": 221
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Array": []
+                      },
+                      "span": {
+                        "start": 219,
+                        "end": 221
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 219,
                     "end": 221

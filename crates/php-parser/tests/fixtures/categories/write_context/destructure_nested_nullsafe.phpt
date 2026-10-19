@@ -17,16 +17,17 @@ PHP Fatal error:  Assignments can only happen to writable values in Standard inp
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "x"
-                        },
-                        "span": {
-                          "start": 7,
-                          "end": 9
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "x"
+                          },
+                          "span": {
+                            "start": 7,
+                            "end": 9
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 7,
                         "end": 9
@@ -34,31 +35,39 @@ PHP Fatal error:  Assignments can only happen to writable values in Standard inp
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "NullsafePropertyAccess": {
-                                    "object": {
-                                      "kind": {
-                                        "Variable": "a"
-                                      },
-                                      "span": {
-                                        "start": 12,
-                                        "end": 14
+                                  "Value": {
+                                    "kind": {
+                                      "NullsafePropertyAccess": {
+                                        "object": {
+                                          "kind": {
+                                            "Variable": "a"
+                                          },
+                                          "span": {
+                                            "start": 12,
+                                            "end": 14
+                                          }
+                                        },
+                                        "property": {
+                                          "kind": {
+                                            "Identifier": "b"
+                                          },
+                                          "span": {
+                                            "start": 17,
+                                            "end": 18
+                                          }
+                                        }
                                       }
                                     },
-                                    "property": {
-                                      "kind": {
-                                        "Identifier": "b"
-                                      },
-                                      "span": {
-                                        "start": 17,
-                                        "end": 18
-                                      }
+                                    "span": {
+                                      "start": 12,
+                                      "end": 18
                                     }
                                   }
                                 },
@@ -66,21 +75,15 @@ PHP Fatal error:  Assignments can only happen to writable values in Standard inp
                                   "start": 12,
                                   "end": 18
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 12,
-                                "end": 18
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 11,
-                          "end": 19
+                            ]
+                          },
+                          "span": {
+                            "start": 11,
+                            "end": 19
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 11,
                         "end": 19

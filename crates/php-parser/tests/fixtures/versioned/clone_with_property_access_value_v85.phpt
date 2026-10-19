@@ -45,35 +45,36 @@ min_php=8.5
                                 "end": 30
                               }
                             },
-                            "value": {
-                              "kind": {
-                                "PropertyAccess": {
-                                  "object": {
-                                    "kind": {
-                                      "Variable": "other"
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "PropertyAccess": {
+                                    "object": {
+                                      "kind": {
+                                        "Variable": "other"
+                                      },
+                                      "span": {
+                                        "start": 34,
+                                        "end": 40
+                                      }
                                     },
-                                    "span": {
-                                      "start": 34,
-                                      "end": 40
-                                    }
-                                  },
-                                  "property": {
-                                    "kind": {
-                                      "Identifier": "prop"
-                                    },
-                                    "span": {
-                                      "start": 42,
-                                      "end": 46
+                                    "property": {
+                                      "kind": {
+                                        "Identifier": "prop"
+                                      },
+                                      "span": {
+                                        "start": 42,
+                                        "end": 46
+                                      }
                                     }
                                   }
+                                },
+                                "span": {
+                                  "start": 34,
+                                  "end": 46
                                 }
-                              },
-                              "span": {
-                                "start": 34,
-                                "end": 46
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 24,
                               "end": 46

@@ -160,16 +160,17 @@ empty(array(1, 2, 3));
                 "Array": [
                   {
                     "key": null,
-                    "value": {
-                      "kind": {
-                        "Int": 1
-                      },
-                      "span": {
-                        "start": 74,
-                        "end": 75
+                    "kind": {
+                      "Value": {
+                        "kind": {
+                          "Int": 1
+                        },
+                        "span": {
+                          "start": 74,
+                          "end": 75
+                        }
                       }
                     },
-                    "unpack": false,
                     "span": {
                       "start": 74,
                       "end": 75
@@ -177,16 +178,17 @@ empty(array(1, 2, 3));
                   },
                   {
                     "key": null,
-                    "value": {
-                      "kind": {
-                        "Int": 2
-                      },
-                      "span": {
-                        "start": 77,
-                        "end": 78
+                    "kind": {
+                      "Value": {
+                        "kind": {
+                          "Int": 2
+                        },
+                        "span": {
+                          "start": 77,
+                          "end": 78
+                        }
                       }
                     },
-                    "unpack": false,
                     "span": {
                       "start": 77,
                       "end": 78
@@ -194,16 +196,17 @@ empty(array(1, 2, 3));
                   },
                   {
                     "key": null,
-                    "value": {
-                      "kind": {
-                        "Int": 3
-                      },
-                      "span": {
-                        "start": 80,
-                        "end": 81
+                    "kind": {
+                      "Value": {
+                        "kind": {
+                          "Int": 3
+                        },
+                        "span": {
+                          "start": 80,
+                          "end": 81
+                        }
                       }
                     },
-                    "unpack": false,
                     "span": {
                       "start": 80,
                       "end": 81

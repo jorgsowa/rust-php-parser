@@ -32,17 +32,17 @@ Foo::bar(1);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 19,
-                      "end": 20
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 19,
+                        "end": 20
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 19,
                     "end": 20
@@ -88,17 +88,17 @@ Foo::bar(1);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 37,
-                      "end": 38
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 37,
+                        "end": 38
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 37,
                     "end": 38
@@ -153,17 +153,17 @@ Foo::bar(1);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 50,
-                      "end": 51
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 50,
+                        "end": 51
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 50,
                     "end": 51

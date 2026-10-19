@@ -33,26 +33,26 @@ Foo
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Name": {
-                        "parts": [
-                          "__HALT_COMPILER_OFFSET__"
-                        ],
-                        "kind": "Unqualified",
-                        "span": {
-                          "start": 16,
-                          "end": 40
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Name": {
+                          "parts": [
+                            "__HALT_COMPILER_OFFSET__"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 16,
+                            "end": 40
+                          }
                         }
+                      },
+                      "span": {
+                        "start": 16,
+                        "end": 40
                       }
-                    },
-                    "span": {
-                      "start": 16,
-                      "end": 40
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 16,
                     "end": 40

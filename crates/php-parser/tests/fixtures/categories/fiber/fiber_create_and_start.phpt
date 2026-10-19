@@ -44,108 +44,108 @@ min_php=8.1
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Closure": {
-                              "is_static": false,
-                              "by_ref": false,
-                              "params": [],
-                              "use_vars": [],
-                              "return_type": {
-                                "kind": {
-                                  "Named": {
-                                    "parts": [
-                                      "void"
-                                    ],
-                                    "kind": "Unqualified",
-                                    "span": {
-                                      "start": 37,
-                                      "end": 41
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Closure": {
+                                "is_static": false,
+                                "by_ref": false,
+                                "params": [],
+                                "use_vars": [],
+                                "return_type": {
+                                  "kind": {
+                                    "Named": {
+                                      "parts": [
+                                        "void"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 37,
+                                        "end": 41
+                                      }
                                     }
+                                  },
+                                  "span": {
+                                    "start": 37,
+                                    "end": 41
                                   }
                                 },
-                                "span": {
-                                  "start": 37,
-                                  "end": 41
-                                }
-                              },
-                              "body": [
-                                {
-                                  "kind": {
-                                    "Expression": {
-                                      "kind": {
-                                        "StaticMethodCall": {
-                                          "class": {
-                                            "kind": {
-                                              "Name": {
-                                                "parts": [
-                                                  "Fiber"
-                                                ],
-                                                "kind": "Unqualified",
-                                                "span": {
-                                                  "start": 44,
-                                                  "end": 49
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "Expression": {
+                                        "kind": {
+                                          "StaticMethodCall": {
+                                            "class": {
+                                              "kind": {
+                                                "Name": {
+                                                  "parts": [
+                                                    "Fiber"
+                                                  ],
+                                                  "kind": "Unqualified",
+                                                  "span": {
+                                                    "start": 44,
+                                                    "end": 49
+                                                  }
                                                 }
+                                              },
+                                              "span": {
+                                                "start": 44,
+                                                "end": 49
                                               }
                                             },
-                                            "span": {
-                                              "start": 44,
-                                              "end": 49
-                                            }
-                                          },
-                                          "method": {
-                                            "kind": {
-                                              "Identifier": "suspend"
+                                            "method": {
+                                              "kind": {
+                                                "Identifier": "suspend"
+                                              },
+                                              "span": {
+                                                "start": 51,
+                                                "end": 58
+                                              }
                                             },
-                                            "span": {
-                                              "start": 51,
-                                              "end": 58
-                                            }
-                                          },
-                                          "args": [
-                                            {
-                                              "name": null,
-                                              "value": {
+                                            "args": [
+                                              {
+                                                "name": null,
                                                 "kind": {
-                                                  "String": "hello"
+                                                  "Value": {
+                                                    "kind": {
+                                                      "String": "hello"
+                                                    },
+                                                    "span": {
+                                                      "start": 59,
+                                                      "end": 66
+                                                    }
+                                                  }
                                                 },
                                                 "span": {
                                                   "start": 59,
                                                   "end": 66
                                                 }
-                                              },
-                                              "unpack": false,
-                                              "by_ref": false,
-                                              "span": {
-                                                "start": 59,
-                                                "end": 66
                                               }
-                                            }
-                                          ]
+                                            ]
+                                          }
+                                        },
+                                        "span": {
+                                          "start": 44,
+                                          "end": 67
                                         }
-                                      },
-                                      "span": {
-                                        "start": 44,
-                                        "end": 67
                                       }
+                                    },
+                                    "span": {
+                                      "start": 44,
+                                      "end": 68
                                     }
-                                  },
-                                  "span": {
-                                    "start": 44,
-                                    "end": 68
                                   }
-                                }
-                              ],
-                              "attributes": []
+                                ],
+                                "attributes": []
+                              }
+                            },
+                            "span": {
+                              "start": 25,
+                              "end": 70
                             }
-                          },
-                          "span": {
-                            "start": 25,
-                            "end": 70
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 25,
                           "end": 70

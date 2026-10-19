@@ -35,15 +35,15 @@ PHP Parse error:  syntax error, unexpected token ")" in Standard input code on l
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": "Error",
-                    "span": {
-                      "start": 11,
-                      "end": 17
+                  "kind": {
+                    "Value": {
+                      "kind": "Error",
+                      "span": {
+                        "start": 11,
+                        "end": 17
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 11,
                     "end": 17

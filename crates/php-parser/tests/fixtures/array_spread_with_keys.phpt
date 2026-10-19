@@ -26,16 +26,17 @@ $combined = ['a' => 1, ...$other, 'b' => 2];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 18,
-                          "end": 19
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 18,
+                            "end": 19
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 18,
                         "end": 19
@@ -43,16 +44,17 @@ $combined = ['a' => 1, ...$other, 'b' => 2];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 21,
-                          "end": 22
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 21,
+                            "end": 22
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 21,
                         "end": 22
@@ -60,16 +62,17 @@ $combined = ['a' => 1, ...$other, 'b' => 2];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 3
-                        },
-                        "span": {
-                          "start": 24,
-                          "end": 25
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 3
+                          },
+                          "span": {
+                            "start": 24,
+                            "end": 25
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 24,
                         "end": 25
@@ -115,16 +118,17 @@ $combined = ['a' => 1, ...$other, 'b' => 2];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "numbers"
-                        },
-                        "span": {
-                          "start": 44,
-                          "end": 52
+                      "kind": {
+                        "Spread": {
+                          "kind": {
+                            "Variable": "numbers"
+                          },
+                          "span": {
+                            "start": 44,
+                            "end": 52
+                          }
                         }
                       },
-                      "unpack": true,
                       "span": {
                         "start": 41,
                         "end": 52
@@ -132,16 +136,17 @@ $combined = ['a' => 1, ...$other, 'b' => 2];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 4
-                        },
-                        "span": {
-                          "start": 54,
-                          "end": 55
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 4
+                          },
+                          "span": {
+                            "start": 54,
+                            "end": 55
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 54,
                         "end": 55
@@ -149,16 +154,17 @@ $combined = ['a' => 1, ...$other, 'b' => 2];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 5
-                        },
-                        "span": {
-                          "start": 57,
-                          "end": 58
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 5
+                          },
+                          "span": {
+                            "start": 57,
+                            "end": 58
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 57,
                         "end": 58
@@ -212,16 +218,17 @@ $combined = ['a' => 1, ...$other, 'b' => 2];
                           "end": 77
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 81,
-                          "end": 82
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 81,
+                            "end": 82
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 74,
                         "end": 82
@@ -229,16 +236,17 @@ $combined = ['a' => 1, ...$other, 'b' => 2];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "other"
-                        },
-                        "span": {
-                          "start": 87,
-                          "end": 93
+                      "kind": {
+                        "Spread": {
+                          "kind": {
+                            "Variable": "other"
+                          },
+                          "span": {
+                            "start": 87,
+                            "end": 93
+                          }
                         }
                       },
-                      "unpack": true,
                       "span": {
                         "start": 84,
                         "end": 93
@@ -254,16 +262,17 @@ $combined = ['a' => 1, ...$other, 'b' => 2];
                           "end": 98
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 102,
-                          "end": 103
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 102,
+                            "end": 103
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 95,
                         "end": 103

@@ -34,16 +34,17 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                           "end": 10
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 14,
-                          "end": 16
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 14,
+                            "end": 16
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 7,
                         "end": 16
@@ -89,16 +90,17 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 26,
-                          "end": 28
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 26,
+                            "end": 28
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 26,
                         "end": 28
@@ -106,14 +108,15 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 30,
-                          "end": 31
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 30,
+                            "end": 31
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 30,
                         "end": 31
@@ -159,14 +162,15 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 40,
-                          "end": 41
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 40,
+                            "end": 41
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 40,
                         "end": 41
@@ -174,16 +178,17 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 42,
-                          "end": 44
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 42,
+                            "end": 44
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 42,
                         "end": 44
@@ -229,14 +234,15 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 53,
-                          "end": 54
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 53,
+                            "end": 54
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 53,
                         "end": 54
@@ -244,14 +250,15 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 55,
-                          "end": 56
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 55,
+                            "end": 56
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 55,
                         "end": 56
@@ -259,16 +266,17 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 57,
-                          "end": 59
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 57,
+                            "end": 59
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 57,
                         "end": 59
@@ -276,14 +284,15 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 61,
-                          "end": 62
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 61,
+                            "end": 62
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 61,
                         "end": 62
@@ -291,16 +300,17 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 63,
-                          "end": 65
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 63,
+                            "end": 65
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 63,
                         "end": 65
@@ -346,14 +356,15 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 78,
-                          "end": 79
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 78,
+                            "end": 79
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 78,
                         "end": 79
@@ -361,16 +372,17 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 80,
-                          "end": 82
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 80,
+                            "end": 82
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 80,
                         "end": 82
@@ -424,51 +436,54 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                           "end": 94
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "a"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "a"
+                                    },
+                                    "span": {
+                                      "start": 99,
+                                      "end": 101
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 99,
                                   "end": 101
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 99,
-                                "end": 101
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "b"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "b"
+                                    },
+                                    "span": {
+                                      "start": 103,
+                                      "end": 105
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 103,
                                   "end": 105
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 103,
-                                "end": 105
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 98,
-                          "end": 106
+                            ]
+                          },
+                          "span": {
+                            "start": 98,
+                            "end": 106
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 91,
                         "end": 106
@@ -484,42 +499,44 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                           "end": 111
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": {
+                                  "kind": {
+                                    "String": "x"
+                                  },
+                                  "span": {
+                                    "start": 116,
+                                    "end": 119
+                                  }
+                                },
                                 "kind": {
-                                  "String": "x"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "c"
+                                    },
+                                    "span": {
+                                      "start": 123,
+                                      "end": 125
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 116,
-                                  "end": 119
-                                }
-                              },
-                              "value": {
-                                "kind": {
-                                  "Variable": "c"
-                                },
-                                "span": {
-                                  "start": 123,
                                   "end": 125
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 116,
-                                "end": 125
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 115,
-                          "end": 126
+                            ]
+                          },
+                          "span": {
+                            "start": 115,
+                            "end": 126
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 108,
                         "end": 126
@@ -565,49 +582,52 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
-                                "kind": "Omit",
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
+                                "kind": {
+                                  "Value": {
+                                    "kind": "Omit",
+                                    "span": {
+                                      "start": 136,
+                                      "end": 137
+                                    }
+                                  }
+                                },
                                 "span": {
                                   "start": 136,
                                   "end": 137
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 136,
-                                "end": 137
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "a"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "a"
+                                    },
+                                    "span": {
+                                      "start": 138,
+                                      "end": 140
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 138,
                                   "end": 140
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 138,
-                                "end": 140
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 135,
-                          "end": 141
+                            ]
+                          },
+                          "span": {
+                            "start": 135,
+                            "end": 141
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 135,
                         "end": 141
@@ -615,42 +635,44 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": {
+                                  "kind": {
+                                    "String": "k"
+                                  },
+                                  "span": {
+                                    "start": 144,
+                                    "end": 147
+                                  }
+                                },
                                 "kind": {
-                                  "String": "k"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "b"
+                                    },
+                                    "span": {
+                                      "start": 151,
+                                      "end": 153
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 144,
-                                  "end": 147
-                                }
-                              },
-                              "value": {
-                                "kind": {
-                                  "Variable": "b"
-                                },
-                                "span": {
-                                  "start": 151,
                                   "end": 153
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 144,
-                                "end": 153
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 143,
-                          "end": 154
+                            ]
+                          },
+                          "span": {
+                            "start": 143,
+                            "end": 154
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 143,
                         "end": 154
@@ -704,16 +726,17 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                           "end": 164
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 168,
-                          "end": 170
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 168,
+                            "end": 170
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 163,
                         "end": 170
@@ -729,16 +752,17 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                           "end": 175
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 179,
-                          "end": 181
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 179,
+                            "end": 181
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 172,
                         "end": 181
@@ -792,17 +816,17 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                           "end": 193
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 198,
-                          "end": 200
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 198,
+                            "end": 200
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 190,
                         "end": 200
@@ -818,35 +842,36 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                           "end": 205
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "b"
+                                  "ByRef": {
+                                    "kind": {
+                                      "Variable": "b"
+                                    },
+                                    "span": {
+                                      "start": 211,
+                                      "end": 213
+                                    }
+                                  }
                                 },
                                 "span": {
-                                  "start": 211,
+                                  "start": 210,
                                   "end": 213
                                 }
-                              },
-                              "unpack": false,
-                              "by_ref": true,
-                              "span": {
-                                "start": 210,
-                                "end": 213
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 209,
-                          "end": 214
+                            ]
+                          },
+                          "span": {
+                            "start": 209,
+                            "end": 214
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 202,
                         "end": 214
@@ -908,16 +933,17 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                       "end": 241
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 245,
-                      "end": 247
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 245,
+                        "end": 247
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 238,
                     "end": 247
@@ -933,66 +959,70 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                       "end": 252
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Array": [
-                        {
-                          "key": null,
-                          "value": {
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Array": [
+                          {
+                            "key": null,
                             "kind": {
-                              "Variable": "b"
+                              "Value": {
+                                "kind": {
+                                  "Variable": "b"
+                                },
+                                "span": {
+                                  "start": 257,
+                                  "end": 259
+                                }
+                              }
                             },
                             "span": {
                               "start": 257,
                               "end": 259
                             }
                           },
-                          "unpack": false,
-                          "span": {
-                            "start": 257,
-                            "end": 259
-                          }
-                        },
-                        {
-                          "key": null,
-                          "value": {
-                            "kind": "Omit",
+                          {
+                            "key": null,
+                            "kind": {
+                              "Value": {
+                                "kind": "Omit",
+                                "span": {
+                                  "start": 261,
+                                  "end": 262
+                                }
+                              }
+                            },
                             "span": {
                               "start": 261,
                               "end": 262
                             }
                           },
-                          "unpack": false,
-                          "span": {
-                            "start": 261,
-                            "end": 262
-                          }
-                        },
-                        {
-                          "key": null,
-                          "value": {
+                          {
+                            "key": null,
                             "kind": {
-                              "Variable": "c"
+                              "Value": {
+                                "kind": {
+                                  "Variable": "c"
+                                },
+                                "span": {
+                                  "start": 263,
+                                  "end": 265
+                                }
+                              }
                             },
                             "span": {
                               "start": 263,
                               "end": 265
                             }
-                          },
-                          "unpack": false,
-                          "span": {
-                            "start": 263,
-                            "end": 265
                           }
-                        }
-                      ]
-                    },
-                    "span": {
-                      "start": 256,
-                      "end": 266
+                        ]
+                      },
+                      "span": {
+                        "start": 256,
+                        "end": 266
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 249,
                     "end": 266
@@ -1047,14 +1077,15 @@ $z = [[1, 'k' => 2], 'j' => [3]];
               "Array": [
                 {
                   "key": null,
-                  "value": {
-                    "kind": "Omit",
-                    "span": {
-                      "start": 294,
-                      "end": 295
+                  "kind": {
+                    "Value": {
+                      "kind": "Omit",
+                      "span": {
+                        "start": 294,
+                        "end": 295
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 294,
                     "end": 295
@@ -1062,16 +1093,17 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                 },
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 296,
-                      "end": 298
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 296,
+                        "end": 298
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 296,
                     "end": 298
@@ -1120,16 +1152,17 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 310,
-                          "end": 311
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 310,
+                            "end": 311
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 310,
                         "end": 311
@@ -1145,16 +1178,17 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                           "end": 316
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 320,
-                          "end": 321
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 320,
+                            "end": 321
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 313,
                         "end": 321
@@ -1200,59 +1234,62 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Int": 1
+                                  "Value": {
+                                    "kind": {
+                                      "Int": 1
+                                    },
+                                    "span": {
+                                      "start": 331,
+                                      "end": 332
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 331,
                                   "end": 332
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 331,
-                                "end": 332
-                              }
-                            },
-                            {
-                              "key": {
+                              {
+                                "key": {
+                                  "kind": {
+                                    "String": "k"
+                                  },
+                                  "span": {
+                                    "start": 334,
+                                    "end": 337
+                                  }
+                                },
                                 "kind": {
-                                  "String": "k"
+                                  "Value": {
+                                    "kind": {
+                                      "Int": 2
+                                    },
+                                    "span": {
+                                      "start": 341,
+                                      "end": 342
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 334,
-                                  "end": 337
-                                }
-                              },
-                              "value": {
-                                "kind": {
-                                  "Int": 2
-                                },
-                                "span": {
-                                  "start": 341,
                                   "end": 342
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 334,
-                                "end": 342
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 330,
-                          "end": 343
+                            ]
+                          },
+                          "span": {
+                            "start": 330,
+                            "end": 343
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 330,
                         "end": 343
@@ -1268,34 +1305,36 @@ $z = [[1, 'k' => 2], 'j' => [3]];
                           "end": 348
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Int": 3
+                                  "Value": {
+                                    "kind": {
+                                      "Int": 3
+                                    },
+                                    "span": {
+                                      "start": 353,
+                                      "end": 354
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 353,
                                   "end": 354
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 353,
-                                "end": 354
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 352,
-                          "end": 355
+                            ]
+                          },
+                          "span": {
+                            "start": 352,
+                            "end": 355
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 345,
                         "end": 355

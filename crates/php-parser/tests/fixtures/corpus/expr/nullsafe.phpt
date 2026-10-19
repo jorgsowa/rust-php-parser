@@ -71,17 +71,17 @@ new $a?->b;
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "c"
-                    },
-                    "span": {
-                      "start": 22,
-                      "end": 24
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 22,
+                        "end": 24
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 22,
                     "end": 24

@@ -151,45 +151,45 @@ $arr = [Enum::class, Enum::FOO];
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "ClassConstAccess": {
-                        "class": {
-                          "kind": {
-                            "Name": {
-                              "parts": [
-                                "Enum"
-                              ],
-                              "kind": "Unqualified",
-                              "span": {
-                                "start": 51,
-                                "end": 55
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "ClassConstAccess": {
+                          "class": {
+                            "kind": {
+                              "Name": {
+                                "parts": [
+                                  "Enum"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 51,
+                                  "end": 55
+                                }
                               }
+                            },
+                            "span": {
+                              "start": 51,
+                              "end": 55
                             }
                           },
-                          "span": {
-                            "start": 51,
-                            "end": 55
-                          }
-                        },
-                        "member": {
-                          "kind": {
-                            "Identifier": "class"
-                          },
-                          "span": {
-                            "start": 57,
-                            "end": 62
+                          "member": {
+                            "kind": {
+                              "Identifier": "class"
+                            },
+                            "span": {
+                              "start": 57,
+                              "end": 62
+                            }
                           }
                         }
+                      },
+                      "span": {
+                        "start": 51,
+                        "end": 62
                       }
-                    },
-                    "span": {
-                      "start": 51,
-                      "end": 62
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 51,
                     "end": 62
@@ -587,44 +587,45 @@ $arr = [Enum::class, Enum::FOO];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "ClassConstAccess": {
-                            "class": {
-                              "kind": {
-                                "Name": {
-                                  "parts": [
-                                    "Enum"
-                                  ],
-                                  "kind": "Unqualified",
-                                  "span": {
-                                    "start": 194,
-                                    "end": 198
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "ClassConstAccess": {
+                              "class": {
+                                "kind": {
+                                  "Name": {
+                                    "parts": [
+                                      "Enum"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 194,
+                                      "end": 198
+                                    }
                                   }
+                                },
+                                "span": {
+                                  "start": 194,
+                                  "end": 198
                                 }
                               },
-                              "span": {
-                                "start": 194,
-                                "end": 198
-                              }
-                            },
-                            "member": {
-                              "kind": {
-                                "Identifier": "class"
-                              },
-                              "span": {
-                                "start": 200,
-                                "end": 205
+                              "member": {
+                                "kind": {
+                                  "Identifier": "class"
+                                },
+                                "span": {
+                                  "start": 200,
+                                  "end": 205
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 194,
+                            "end": 205
                           }
-                        },
-                        "span": {
-                          "start": 194,
-                          "end": 205
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 194,
                         "end": 205
@@ -632,44 +633,45 @@ $arr = [Enum::class, Enum::FOO];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "ClassConstAccess": {
-                            "class": {
-                              "kind": {
-                                "Name": {
-                                  "parts": [
-                                    "Enum"
-                                  ],
-                                  "kind": "Unqualified",
-                                  "span": {
-                                    "start": 207,
-                                    "end": 211
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "ClassConstAccess": {
+                              "class": {
+                                "kind": {
+                                  "Name": {
+                                    "parts": [
+                                      "Enum"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 207,
+                                      "end": 211
+                                    }
                                   }
+                                },
+                                "span": {
+                                  "start": 207,
+                                  "end": 211
                                 }
                               },
-                              "span": {
-                                "start": 207,
-                                "end": 211
-                              }
-                            },
-                            "member": {
-                              "kind": {
-                                "Identifier": "FOO"
-                              },
-                              "span": {
-                                "start": 213,
-                                "end": 216
+                              "member": {
+                                "kind": {
+                                  "Identifier": "FOO"
+                                },
+                                "span": {
+                                  "start": 213,
+                                  "end": 216
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 207,
+                            "end": 216
                           }
-                        },
-                        "span": {
-                          "start": 207,
-                          "end": 216
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 207,
                         "end": 216

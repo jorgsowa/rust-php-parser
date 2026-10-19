@@ -158,16 +158,17 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                       "Array": [
                         {
                           "key": null,
-                          "value": {
-                            "kind": {
-                              "Int": 1
-                            },
-                            "span": {
-                              "start": 79,
-                              "end": 80
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "Int": 1
+                              },
+                              "span": {
+                                "start": 79,
+                                "end": 80
+                              }
                             }
                           },
-                          "unpack": false,
                           "span": {
                             "start": 79,
                             "end": 80
@@ -175,16 +176,17 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                         },
                         {
                           "key": null,
-                          "value": {
-                            "kind": {
-                              "Variable": "x"
-                            },
-                            "span": {
-                              "start": 82,
-                              "end": 84
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "Variable": "x"
+                              },
+                              "span": {
+                                "start": 82,
+                                "end": 84
+                              }
                             }
                           },
-                          "unpack": false,
                           "span": {
                             "start": 82,
                             "end": 84
@@ -565,17 +567,17 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 267,
-                      "end": 269
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 267,
+                        "end": 269
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 267,
                     "end": 269
@@ -637,37 +639,37 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                       "end": 310
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "FunctionCall": {
-                        "name": {
-                          "kind": {
-                            "Name": {
-                              "parts": [
-                                "f"
-                              ],
-                              "kind": "Unqualified",
-                              "span": {
-                                "start": 312,
-                                "end": 313
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "FunctionCall": {
+                          "name": {
+                            "kind": {
+                              "Name": {
+                                "parts": [
+                                  "f"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 312,
+                                  "end": 313
+                                }
                               }
+                            },
+                            "span": {
+                              "start": 312,
+                              "end": 313
                             }
                           },
-                          "span": {
-                            "start": 312,
-                            "end": 313
-                          }
-                        },
-                        "args": []
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 312,
+                        "end": 315
                       }
-                    },
-                    "span": {
-                      "start": 312,
-                      "end": 315
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 306,
                     "end": 315

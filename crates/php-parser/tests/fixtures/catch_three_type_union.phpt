@@ -118,17 +118,17 @@ try {
                           "args": [
                             {
                               "name": null,
-                              "value": {
-                                "kind": {
-                                  "Variable": "e"
-                                },
-                                "span": {
-                                  "start": 57,
-                                  "end": 59
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "Variable": "e"
+                                  },
+                                  "span": {
+                                    "start": 57,
+                                    "end": 59
+                                  }
                                 }
                               },
-                              "unpack": false,
-                              "by_ref": false,
                               "span": {
                                 "start": 57,
                                 "end": 59

@@ -190,17 +190,17 @@ class C {
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "value"
-                                          },
-                                          "span": {
-                                            "start": 118,
-                                            "end": 124
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "value"
+                                            },
+                                            "span": {
+                                              "start": 118,
+                                              "end": 124
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 118,
                                           "end": 124

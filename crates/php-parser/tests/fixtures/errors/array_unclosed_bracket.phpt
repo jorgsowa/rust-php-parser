@@ -27,16 +27,17 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "]" in Standard 
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 12,
-                          "end": 13
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 12,
+                            "end": 13
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 12,
                         "end": 13
@@ -44,16 +45,17 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "]" in Standard 
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 15,
-                          "end": 16
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 15,
+                            "end": 16
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 15,
                         "end": 16
@@ -61,16 +63,17 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "]" in Standard 
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 3
-                        },
-                        "span": {
-                          "start": 18,
-                          "end": 19
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 3
+                          },
+                          "span": {
+                            "start": 18,
+                            "end": 19
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 18,
                         "end": 19

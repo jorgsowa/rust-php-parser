@@ -445,45 +445,45 @@ PHP Fatal error:  Cannot use "parent" when current class scope has no parent in 
                               "args": [
                                 {
                                   "name": null,
-                                  "value": {
-                                    "kind": {
-                                      "ClassConstAccess": {
-                                        "class": {
-                                          "kind": {
-                                            "Name": {
-                                              "parts": [
-                                                "parent"
-                                              ],
-                                              "kind": "Unqualified",
-                                              "span": {
-                                                "start": 207,
-                                                "end": 213
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "ClassConstAccess": {
+                                          "class": {
+                                            "kind": {
+                                              "Name": {
+                                                "parts": [
+                                                  "parent"
+                                                ],
+                                                "kind": "Unqualified",
+                                                "span": {
+                                                  "start": 207,
+                                                  "end": 213
+                                                }
                                               }
+                                            },
+                                            "span": {
+                                              "start": 207,
+                                              "end": 213
                                             }
                                           },
-                                          "span": {
-                                            "start": 207,
-                                            "end": 213
-                                          }
-                                        },
-                                        "member": {
-                                          "kind": {
-                                            "Identifier": "X"
-                                          },
-                                          "span": {
-                                            "start": 215,
-                                            "end": 216
+                                          "member": {
+                                            "kind": {
+                                              "Identifier": "X"
+                                            },
+                                            "span": {
+                                              "start": 215,
+                                              "end": 216
+                                            }
                                           }
                                         }
+                                      },
+                                      "span": {
+                                        "start": 207,
+                                        "end": 216
                                       }
-                                    },
-                                    "span": {
-                                      "start": 207,
-                                      "end": 216
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 207,
                                     "end": 216
@@ -519,45 +519,45 @@ PHP Fatal error:  Cannot use "parent" when current class scope has no parent in 
                       "args": [
                         {
                           "name": null,
-                          "value": {
-                            "kind": {
-                              "ClassConstAccess": {
-                                "class": {
-                                  "kind": {
-                                    "Name": {
-                                      "parts": [
-                                        "parent"
-                                      ],
-                                      "kind": "Unqualified",
-                                      "span": {
-                                        "start": 101,
-                                        "end": 107
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "ClassConstAccess": {
+                                  "class": {
+                                    "kind": {
+                                      "Name": {
+                                        "parts": [
+                                          "parent"
+                                        ],
+                                        "kind": "Unqualified",
+                                        "span": {
+                                          "start": 101,
+                                          "end": 107
+                                        }
                                       }
+                                    },
+                                    "span": {
+                                      "start": 101,
+                                      "end": 107
                                     }
                                   },
-                                  "span": {
-                                    "start": 101,
-                                    "end": 107
-                                  }
-                                },
-                                "member": {
-                                  "kind": {
-                                    "Identifier": "class"
-                                  },
-                                  "span": {
-                                    "start": 109,
-                                    "end": 114
+                                  "member": {
+                                    "kind": {
+                                      "Identifier": "class"
+                                    },
+                                    "span": {
+                                      "start": 109,
+                                      "end": 114
+                                    }
                                   }
                                 }
+                              },
+                              "span": {
+                                "start": 101,
+                                "end": 114
                               }
-                            },
-                            "span": {
-                              "start": 101,
-                              "end": 114
                             }
                           },
-                          "unpack": false,
-                          "by_ref": false,
                           "span": {
                             "start": 101,
                             "end": 114

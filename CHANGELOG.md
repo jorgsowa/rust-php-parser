@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breaking:** removed the `php_rs_parser::phpdoc` re-export. Depend on `phpdoc-parser` directly; the `serde` feature of `php-rs-parser` no longer enables `phpdoc-parser/serde` (`php-rs-parser`).
 - **Breaking:** `Fold::fold_closure_use_var` takes the arena like every other fold method (`php-ast`).
 - **Breaking:** `FoldOwned` is renamed `OwnedFold`, matching `OwnedVisitor` (`php-ast`).
+- **Breaking:** `Arg` (arena and owned) has a `kind: ArgKind` (`Value`, `Spread`, `ByRef`, `Placeholder`, `SpreadPlaceholder`) instead of `value: Option<Expr>` + `unpack` + `by_ref`, and `ArrayElement` has a `kind: ArrayElementKind` (`Value`, `Spread`, `ByRef`) instead of `value` + `unpack` + `by_ref`, so impossible combinations cannot be built. `Arg::value()` / `value_mut()` / `is_spread()` / `is_placeholder()` and `ArrayElement::value()` / `value_mut()` / `is_spread()` / `is_by_ref()` read them; the JSON shape changes accordingly (`php-ast`, `php-rs-parser`, `php-printer`).
 
 ### Fixed
 

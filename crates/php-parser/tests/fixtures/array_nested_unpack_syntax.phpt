@@ -10,69 +10,73 @@
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Array": [
-                      {
-                        "key": null,
-                        "value": {
+                "kind": {
+                  "Spread": {
+                    "kind": {
+                      "Array": [
+                        {
+                          "key": null,
                           "kind": {
-                            "Array": [
-                              {
-                                "key": null,
-                                "value": {
-                                  "kind": {
-                                    "Int": 1
+                            "Spread": {
+                              "kind": {
+                                "Array": [
+                                  {
+                                    "key": null,
+                                    "kind": {
+                                      "Value": {
+                                        "kind": {
+                                          "Int": 1
+                                        },
+                                        "span": {
+                                          "start": 15,
+                                          "end": 16
+                                        }
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 15,
+                                      "end": 16
+                                    }
                                   },
-                                  "span": {
-                                    "start": 15,
-                                    "end": 16
+                                  {
+                                    "key": null,
+                                    "kind": {
+                                      "Value": {
+                                        "kind": {
+                                          "Int": 2
+                                        },
+                                        "span": {
+                                          "start": 18,
+                                          "end": 19
+                                        }
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 18,
+                                      "end": 19
+                                    }
                                   }
-                                },
-                                "unpack": false,
-                                "span": {
-                                  "start": 15,
-                                  "end": 16
-                                }
+                                ]
                               },
-                              {
-                                "key": null,
-                                "value": {
-                                  "kind": {
-                                    "Int": 2
-                                  },
-                                  "span": {
-                                    "start": 18,
-                                    "end": 19
-                                  }
-                                },
-                                "unpack": false,
-                                "span": {
-                                  "start": 18,
-                                  "end": 19
-                                }
+                              "span": {
+                                "start": 14,
+                                "end": 20
                               }
-                            ]
+                            }
                           },
                           "span": {
-                            "start": 14,
+                            "start": 11,
                             "end": 20
                           }
-                        },
-                        "unpack": true,
-                        "span": {
-                          "start": 11,
-                          "end": 20
                         }
-                      }
-                    ]
-                  },
-                  "span": {
-                    "start": 10,
-                    "end": 21
+                      ]
+                    },
+                    "span": {
+                      "start": 10,
+                      "end": 21
+                    }
                   }
                 },
-                "unpack": true,
                 "span": {
                   "start": 7,
                   "end": 21
@@ -80,16 +84,17 @@
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Int": 3
-                  },
-                  "span": {
-                    "start": 23,
-                    "end": 24
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 3
+                    },
+                    "span": {
+                      "start": 23,
+                      "end": 24
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 23,
                   "end": 24

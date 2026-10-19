@@ -27,37 +27,37 @@ PHP Fatal error:  Can't use function return value in write context in Standard i
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "FunctionCall": {
-                            "name": {
-                              "kind": {
-                                "Name": {
-                                  "parts": [
-                                    "f"
-                                  ],
-                                  "kind": "Unqualified",
-                                  "span": {
-                                    "start": 13,
-                                    "end": 14
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "FunctionCall": {
+                              "name": {
+                                "kind": {
+                                  "Name": {
+                                    "parts": [
+                                      "f"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 13,
+                                      "end": 14
+                                    }
                                   }
+                                },
+                                "span": {
+                                  "start": 13,
+                                  "end": 14
                                 }
                               },
-                              "span": {
-                                "start": 13,
-                                "end": 14
-                              }
-                            },
-                            "args": []
+                              "args": []
+                            }
+                          },
+                          "span": {
+                            "start": 13,
+                            "end": 16
                           }
-                        },
-                        "span": {
-                          "start": 13,
-                          "end": 16
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 12,
                         "end": 16

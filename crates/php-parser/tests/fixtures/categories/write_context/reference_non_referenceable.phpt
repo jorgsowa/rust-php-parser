@@ -202,17 +202,17 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "->" or "?->" or
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 45,
-                          "end": 47
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 45,
+                            "end": 47
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 44,
                         "end": 47
@@ -231,16 +231,17 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "->" or "?->" or
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 52,
-                          "end": 53
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 52,
+                            "end": 53
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 52,
                         "end": 53
@@ -276,16 +277,17 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "->" or "?->" or
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 57,
-                          "end": 59
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 57,
+                            "end": 59
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 57,
                         "end": 59
@@ -293,35 +295,36 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "->" or "?->" or
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "b"
+                                  "ByRef": {
+                                    "kind": {
+                                      "Variable": "b"
+                                    },
+                                    "span": {
+                                      "start": 63,
+                                      "end": 65
+                                    }
+                                  }
                                 },
                                 "span": {
-                                  "start": 63,
+                                  "start": 62,
                                   "end": 65
                                 }
-                              },
-                              "unpack": false,
-                              "by_ref": true,
-                              "span": {
-                                "start": 62,
-                                "end": 65
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 61,
-                          "end": 66
+                            ]
+                          },
+                          "span": {
+                            "start": 61,
+                            "end": 66
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 61,
                         "end": 66
@@ -340,16 +343,17 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "->" or "?->" or
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 71,
-                          "end": 72
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 71,
+                            "end": 72
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 71,
                         "end": 72
@@ -385,17 +389,17 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "->" or "?->" or
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 81,
-                          "end": 83
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 81,
+                            "end": 83
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 80,
                         "end": 83
@@ -450,17 +454,17 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "->" or "?->" or
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 94,
-                          "end": 96
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 94,
+                            "end": 96
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 93,
                         "end": 96
@@ -526,17 +530,17 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "->" or "?->" or
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 109,
-                          "end": 111
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 109,
+                            "end": 111
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 108,
                         "end": 111

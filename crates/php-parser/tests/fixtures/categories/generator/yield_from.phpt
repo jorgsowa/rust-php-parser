@@ -26,16 +26,17 @@
                           "Array": [
                             {
                               "key": null,
-                              "value": {
-                                "kind": {
-                                  "Int": 1
-                                },
-                                "span": {
-                                  "start": 35,
-                                  "end": 36
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "Int": 1
+                                  },
+                                  "span": {
+                                    "start": 35,
+                                    "end": 36
+                                  }
                                 }
                               },
-                              "unpack": false,
                               "span": {
                                 "start": 35,
                                 "end": 36
@@ -43,16 +44,17 @@
                             },
                             {
                               "key": null,
-                              "value": {
-                                "kind": {
-                                  "Int": 2
-                                },
-                                "span": {
-                                  "start": 38,
-                                  "end": 39
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "Int": 2
+                                  },
+                                  "span": {
+                                    "start": 38,
+                                    "end": 39
+                                  }
                                 }
                               },
-                              "unpack": false,
                               "span": {
                                 "start": 38,
                                 "end": 39
@@ -60,16 +62,17 @@
                             },
                             {
                               "key": null,
-                              "value": {
-                                "kind": {
-                                  "Int": 3
-                                },
-                                "span": {
-                                  "start": 41,
-                                  "end": 42
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "Int": 3
+                                  },
+                                  "span": {
+                                    "start": 41,
+                                    "end": 42
+                                  }
                                 }
                               },
-                              "unpack": false,
                               "span": {
                                 "start": 41,
                                 "end": 42

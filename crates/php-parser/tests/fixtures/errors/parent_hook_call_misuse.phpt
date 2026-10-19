@@ -171,17 +171,17 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
                                 "args": [
                                   {
                                     "name": null,
-                                    "value": {
-                                      "kind": {
-                                        "Int": 1
-                                      },
-                                      "span": {
-                                        "start": 67,
-                                        "end": 68
+                                    "kind": {
+                                      "Value": {
+                                        "kind": {
+                                          "Int": 1
+                                        },
+                                        "span": {
+                                          "start": 67,
+                                          "end": 68
+                                        }
                                       }
                                     },
-                                    "unpack": false,
-                                    "by_ref": false,
                                     "span": {
                                       "start": 67,
                                       "end": 68
@@ -573,17 +573,17 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
                                                 "args": [
                                                   {
                                                     "name": null,
-                                                    "value": {
-                                                      "kind": {
-                                                        "Variable": "value"
-                                                      },
-                                                      "span": {
-                                                        "start": 282,
-                                                        "end": 288
+                                                    "kind": {
+                                                      "Value": {
+                                                        "kind": {
+                                                          "Variable": "value"
+                                                        },
+                                                        "span": {
+                                                          "start": 282,
+                                                          "end": 288
+                                                        }
                                                       }
                                                     },
-                                                    "unpack": false,
-                                                    "by_ref": false,
                                                     "span": {
                                                       "start": 282,
                                                       "end": 288

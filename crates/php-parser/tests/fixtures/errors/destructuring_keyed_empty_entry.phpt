@@ -42,16 +42,17 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                           "end": 10
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 14,
-                          "end": 16
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 14,
+                            "end": 16
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 7,
                         "end": 16
@@ -59,14 +60,15 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 18,
-                          "end": 19
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 18,
+                            "end": 19
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 18,
                         "end": 19
@@ -82,16 +84,17 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                           "end": 23
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 27,
-                          "end": 29
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 27,
+                            "end": 29
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 20,
                         "end": 29
@@ -137,14 +140,15 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 38,
-                          "end": 39
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 38,
+                            "end": 39
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 38,
                         "end": 39
@@ -160,16 +164,17 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                           "end": 43
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 47,
-                          "end": 49
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 47,
+                            "end": 49
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 40,
                         "end": 49
@@ -215,14 +220,15 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 58,
-                          "end": 59
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 58,
+                            "end": 59
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 58,
                         "end": 59
@@ -230,14 +236,15 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 60,
-                          "end": 61
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 60,
+                            "end": 61
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 60,
                         "end": 61
@@ -253,16 +260,17 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                           "end": 65
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 69,
-                          "end": 71
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 69,
+                            "end": 71
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 62,
                         "end": 71
@@ -316,16 +324,17 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                           "end": 83
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 87,
-                          "end": 89
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 87,
+                            "end": 89
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 80,
                         "end": 89
@@ -333,14 +342,15 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 91,
-                          "end": 92
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 91,
+                            "end": 92
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 91,
                         "end": 92
@@ -394,16 +404,17 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                           "end": 108
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 112,
-                          "end": 114
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 112,
+                            "end": 114
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 105,
                         "end": 114
@@ -411,14 +422,15 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 116,
-                          "end": 117
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 116,
+                            "end": 117
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 116,
                         "end": 117
@@ -434,16 +446,17 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                           "end": 121
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 125,
-                          "end": 127
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 125,
+                            "end": 127
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 118,
                         "end": 127
@@ -489,14 +502,15 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 140,
-                          "end": 141
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 140,
+                            "end": 141
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 140,
                         "end": 141
@@ -512,16 +526,17 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                           "end": 145
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 149,
-                          "end": 151
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 149,
+                            "end": 151
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 142,
                         "end": 151
@@ -567,16 +582,17 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 160,
-                          "end": 162
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 160,
+                            "end": 162
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 160,
                         "end": 162
@@ -584,82 +600,86 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": {
+                                  "kind": {
+                                    "String": "k"
+                                  },
+                                  "span": {
+                                    "start": 165,
+                                    "end": 168
+                                  }
+                                },
                                 "kind": {
-                                  "String": "k"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "b"
+                                    },
+                                    "span": {
+                                      "start": 172,
+                                      "end": 174
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 165,
-                                  "end": 168
-                                }
-                              },
-                              "value": {
-                                "kind": {
-                                  "Variable": "b"
-                                },
-                                "span": {
-                                  "start": 172,
                                   "end": 174
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 165,
-                                "end": 174
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
-                                "kind": "Omit",
+                              {
+                                "key": null,
+                                "kind": {
+                                  "Value": {
+                                    "kind": "Omit",
+                                    "span": {
+                                      "start": 176,
+                                      "end": 177
+                                    }
+                                  }
+                                },
                                 "span": {
                                   "start": 176,
                                   "end": 177
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 176,
-                                "end": 177
-                              }
-                            },
-                            {
-                              "key": {
+                              {
+                                "key": {
+                                  "kind": {
+                                    "String": "j"
+                                  },
+                                  "span": {
+                                    "start": 178,
+                                    "end": 181
+                                  }
+                                },
                                 "kind": {
-                                  "String": "j"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "c"
+                                    },
+                                    "span": {
+                                      "start": 185,
+                                      "end": 187
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 178,
-                                  "end": 181
-                                }
-                              },
-                              "value": {
-                                "kind": {
-                                  "Variable": "c"
-                                },
-                                "span": {
-                                  "start": 185,
                                   "end": 187
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 178,
-                                "end": 187
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 164,
-                          "end": 188
+                            ]
+                          },
+                          "span": {
+                            "start": 164,
+                            "end": 188
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 164,
                         "end": 188
@@ -721,16 +741,17 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                       "end": 215
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 219,
-                      "end": 221
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 219,
+                        "end": 221
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 212,
                     "end": 221
@@ -738,14 +759,15 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                 },
                 {
                   "key": null,
-                  "value": {
-                    "kind": "Omit",
-                    "span": {
-                      "start": 223,
-                      "end": 224
+                  "kind": {
+                    "Value": {
+                      "kind": "Omit",
+                      "span": {
+                        "start": 223,
+                        "end": 224
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 223,
                     "end": 224
@@ -761,16 +783,17 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                       "end": 228
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 232,
-                      "end": 234
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 232,
+                        "end": 234
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 225,
                     "end": 234
@@ -817,14 +840,15 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
               "Array": [
                 {
                   "key": null,
-                  "value": {
-                    "kind": "Omit",
-                    "span": {
-                      "start": 256,
-                      "end": 257
+                  "kind": {
+                    "Value": {
+                      "kind": "Omit",
+                      "span": {
+                        "start": 256,
+                        "end": 257
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 256,
                     "end": 257
@@ -840,16 +864,17 @@ PHP Fatal error:  Cannot use empty array entries in keyed array assignment in St
                       "end": 261
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 265,
-                      "end": 267
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 265,
+                        "end": 267
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 258,
                     "end": 267

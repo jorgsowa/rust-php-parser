@@ -1178,17 +1178,17 @@ class TaskService
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "title"
-                                          },
-                                          "span": {
-                                            "start": 858,
-                                            "end": 864
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "title"
+                                            },
+                                            "span": {
+                                              "start": 858,
+                                              "end": 864
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 858,
                                           "end": 864
@@ -1196,17 +1196,17 @@ class TaskService
                                       },
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "id"
-                                          },
-                                          "span": {
-                                            "start": 866,
-                                            "end": 869
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "id"
+                                            },
+                                            "span": {
+                                              "start": 866,
+                                              "end": 869
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 866,
                                           "end": 869
@@ -1248,16 +1248,17 @@ class TaskService
                                     "end": 905
                                   }
                                 },
-                                "value": {
-                                  "kind": {
-                                    "Variable": "id"
-                                  },
-                                  "span": {
-                                    "start": 909,
-                                    "end": 912
+                                "kind": {
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "id"
+                                    },
+                                    "span": {
+                                      "start": 909,
+                                      "end": 912
+                                    }
                                   }
                                 },
-                                "unpack": false,
                                 "span": {
                                   "start": 901,
                                   "end": 912
@@ -1273,16 +1274,17 @@ class TaskService
                                     "end": 933
                                   }
                                 },
-                                "value": {
-                                  "kind": {
-                                    "Variable": "formatted"
-                                  },
-                                  "span": {
-                                    "start": 937,
-                                    "end": 947
+                                "kind": {
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "formatted"
+                                    },
+                                    "span": {
+                                      "start": 937,
+                                      "end": 947
+                                    }
                                   }
                                 },
-                                "unpack": false,
                                 "span": {
                                   "start": 926,
                                   "end": 947
@@ -1298,36 +1300,37 @@ class TaskService
                                     "end": 971
                                   }
                                 },
-                                "value": {
-                                  "kind": {
-                                    "MethodCall": {
-                                      "object": {
-                                        "kind": {
-                                          "Variable": "priority"
+                                "kind": {
+                                  "Value": {
+                                    "kind": {
+                                      "MethodCall": {
+                                        "object": {
+                                          "kind": {
+                                            "Variable": "priority"
+                                          },
+                                          "span": {
+                                            "start": 975,
+                                            "end": 984
+                                          }
                                         },
-                                        "span": {
-                                          "start": 975,
-                                          "end": 984
-                                        }
-                                      },
-                                      "method": {
-                                        "kind": {
-                                          "Identifier": "label"
+                                        "method": {
+                                          "kind": {
+                                            "Identifier": "label"
+                                          },
+                                          "span": {
+                                            "start": 986,
+                                            "end": 991
+                                          }
                                         },
-                                        "span": {
-                                          "start": 986,
-                                          "end": 991
-                                        }
-                                      },
-                                      "args": []
+                                        "args": []
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 975,
+                                      "end": 993
                                     }
-                                  },
-                                  "span": {
-                                    "start": 975,
-                                    "end": 993
                                   }
                                 },
-                                "unpack": false,
                                 "span": {
                                   "start": 961,
                                   "end": 993
@@ -1343,132 +1346,133 @@ class TaskService
                                     "end": 1018
                                   }
                                 },
-                                "value": {
-                                  "kind": {
-                                    "Binary": {
-                                      "left": {
-                                        "kind": {
-                                          "Binary": {
-                                            "left": {
-                                              "kind": {
-                                                "Variable": "priority"
-                                              },
-                                              "span": {
-                                                "start": 1022,
-                                                "end": 1031
-                                              }
-                                            },
-                                            "op": "Identical",
-                                            "right": {
-                                              "kind": {
-                                                "ClassConstAccess": {
-                                                  "class": {
-                                                    "kind": {
-                                                      "Name": {
-                                                        "parts": [
-                                                          "Priority"
-                                                        ],
-                                                        "kind": "Unqualified",
-                                                        "span": {
-                                                          "start": 1036,
-                                                          "end": 1044
-                                                        }
-                                                      }
-                                                    },
-                                                    "span": {
-                                                      "start": 1036,
-                                                      "end": 1044
-                                                    }
-                                                  },
-                                                  "member": {
-                                                    "kind": {
-                                                      "Identifier": "Critical"
-                                                    },
-                                                    "span": {
-                                                      "start": 1046,
-                                                      "end": 1054
-                                                    }
-                                                  }
+                                "kind": {
+                                  "Value": {
+                                    "kind": {
+                                      "Binary": {
+                                        "left": {
+                                          "kind": {
+                                            "Binary": {
+                                              "left": {
+                                                "kind": {
+                                                  "Variable": "priority"
+                                                },
+                                                "span": {
+                                                  "start": 1022,
+                                                  "end": 1031
                                                 }
                                               },
-                                              "span": {
-                                                "start": 1036,
-                                                "end": 1054
-                                              }
-                                            }
-                                          }
-                                        },
-                                        "span": {
-                                          "start": 1022,
-                                          "end": 1054
-                                        }
-                                      },
-                                      "op": "BooleanOr",
-                                      "right": {
-                                        "kind": {
-                                          "Binary": {
-                                            "left": {
-                                              "kind": {
-                                                "Variable": "priority"
-                                              },
-                                              "span": {
-                                                "start": 1058,
-                                                "end": 1067
-                                              }
-                                            },
-                                            "op": "Identical",
-                                            "right": {
-                                              "kind": {
-                                                "ClassConstAccess": {
-                                                  "class": {
-                                                    "kind": {
-                                                      "Name": {
-                                                        "parts": [
-                                                          "Priority"
-                                                        ],
-                                                        "kind": "Unqualified",
-                                                        "span": {
-                                                          "start": 1072,
-                                                          "end": 1080
+                                              "op": "Identical",
+                                              "right": {
+                                                "kind": {
+                                                  "ClassConstAccess": {
+                                                    "class": {
+                                                      "kind": {
+                                                        "Name": {
+                                                          "parts": [
+                                                            "Priority"
+                                                          ],
+                                                          "kind": "Unqualified",
+                                                          "span": {
+                                                            "start": 1036,
+                                                            "end": 1044
+                                                          }
                                                         }
+                                                      },
+                                                      "span": {
+                                                        "start": 1036,
+                                                        "end": 1044
                                                       }
                                                     },
-                                                    "span": {
-                                                      "start": 1072,
-                                                      "end": 1080
-                                                    }
-                                                  },
-                                                  "member": {
-                                                    "kind": {
-                                                      "Identifier": "High"
-                                                    },
-                                                    "span": {
-                                                      "start": 1082,
-                                                      "end": 1086
+                                                    "member": {
+                                                      "kind": {
+                                                        "Identifier": "Critical"
+                                                      },
+                                                      "span": {
+                                                        "start": 1046,
+                                                        "end": 1054
+                                                      }
                                                     }
                                                   }
+                                                },
+                                                "span": {
+                                                  "start": 1036,
+                                                  "end": 1054
                                                 }
-                                              },
-                                              "span": {
-                                                "start": 1072,
-                                                "end": 1086
                                               }
                                             }
+                                          },
+                                          "span": {
+                                            "start": 1022,
+                                            "end": 1054
                                           }
                                         },
-                                        "span": {
-                                          "start": 1058,
-                                          "end": 1086
+                                        "op": "BooleanOr",
+                                        "right": {
+                                          "kind": {
+                                            "Binary": {
+                                              "left": {
+                                                "kind": {
+                                                  "Variable": "priority"
+                                                },
+                                                "span": {
+                                                  "start": 1058,
+                                                  "end": 1067
+                                                }
+                                              },
+                                              "op": "Identical",
+                                              "right": {
+                                                "kind": {
+                                                  "ClassConstAccess": {
+                                                    "class": {
+                                                      "kind": {
+                                                        "Name": {
+                                                          "parts": [
+                                                            "Priority"
+                                                          ],
+                                                          "kind": "Unqualified",
+                                                          "span": {
+                                                            "start": 1072,
+                                                            "end": 1080
+                                                          }
+                                                        }
+                                                      },
+                                                      "span": {
+                                                        "start": 1072,
+                                                        "end": 1080
+                                                      }
+                                                    },
+                                                    "member": {
+                                                      "kind": {
+                                                        "Identifier": "High"
+                                                      },
+                                                      "span": {
+                                                        "start": 1082,
+                                                        "end": 1086
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "span": {
+                                                  "start": 1072,
+                                                  "end": 1086
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 1058,
+                                            "end": 1086
+                                          }
                                         }
                                       }
+                                    },
+                                    "span": {
+                                      "start": 1022,
+                                      "end": 1086
                                     }
-                                  },
-                                  "span": {
-                                    "start": 1022,
-                                    "end": 1086
                                   }
                                 },
-                                "unpack": false,
                                 "span": {
                                   "start": 1007,
                                   "end": 1086

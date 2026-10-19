@@ -32,24 +32,24 @@ foo(<<<EOS
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Heredoc": {
-                        "label": "EOS",
-                        "parts": [
-                          {
-                            "Literal": "hello"
-                          }
-                        ]
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Heredoc": {
+                          "label": "EOS",
+                          "parts": [
+                            {
+                              "Literal": "hello"
+                            }
+                          ]
+                        }
+                      },
+                      "span": {
+                        "start": 10,
+                        "end": 28
                       }
-                    },
-                    "span": {
-                      "start": 10,
-                      "end": 28
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 10,
                     "end": 28

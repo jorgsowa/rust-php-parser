@@ -17,16 +17,17 @@ PHP Fatal error:  Assignments can only happen to writable values in Standard inp
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 7,
-                          "end": 9
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 7,
+                            "end": 9
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 7,
                         "end": 9
@@ -34,14 +35,15 @@ PHP Fatal error:  Assignments can only happen to writable values in Standard inp
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Null",
-                        "span": {
-                          "start": 11,
-                          "end": 15
+                      "kind": {
+                        "Value": {
+                          "kind": "Null",
+                          "span": {
+                            "start": 11,
+                            "end": 15
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 11,
                         "end": 15
@@ -49,16 +51,17 @@ PHP Fatal error:  Assignments can only happen to writable values in Standard inp
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "c"
-                        },
-                        "span": {
-                          "start": 17,
-                          "end": 19
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "c"
+                          },
+                          "span": {
+                            "start": 17,
+                            "end": 19
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 17,
                         "end": 19

@@ -36,23 +36,24 @@ $arr = [
                           "end": 24
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Heredoc": {
-                            "label": "EOT",
-                            "parts": [
-                              {
-                                "Literal": "value"
-                              }
-                            ]
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Heredoc": {
+                              "label": "EOT",
+                              "parts": [
+                                {
+                                  "Literal": "value"
+                                }
+                              ]
+                            }
+                          },
+                          "span": {
+                            "start": 28,
+                            "end": 52
                           }
-                        },
-                        "span": {
-                          "start": 28,
-                          "end": 52
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 19,
                         "end": 52

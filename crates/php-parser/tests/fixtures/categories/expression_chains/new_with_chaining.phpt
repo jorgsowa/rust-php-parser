@@ -37,17 +37,17 @@
                               "args": [
                                 {
                                   "name": null,
-                                  "value": {
-                                    "kind": {
-                                      "Int": 1
-                                    },
-                                    "span": {
-                                      "start": 15,
-                                      "end": 16
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "Int": 1
+                                      },
+                                      "span": {
+                                        "start": 15,
+                                        "end": 16
+                                      }
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 15,
                                     "end": 16
@@ -55,17 +55,17 @@
                                 },
                                 {
                                   "name": null,
-                                  "value": {
-                                    "kind": {
-                                      "Int": 2
-                                    },
-                                    "span": {
-                                      "start": 18,
-                                      "end": 19
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "Int": 2
+                                      },
+                                      "span": {
+                                        "start": 18,
+                                        "end": 19
+                                      }
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 18,
                                     "end": 19

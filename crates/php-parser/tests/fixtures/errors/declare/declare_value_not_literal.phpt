@@ -383,16 +383,17 @@ PHP Fatal error:  declare(ticks) value must be a literal in Standard input code 
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 258,
-                          "end": 259
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 258,
+                            "end": 259
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 258,
                         "end": 259

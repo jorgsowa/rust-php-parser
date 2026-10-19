@@ -33,16 +33,17 @@ PHP Parse error:  syntax error, unexpected token "=>", expecting "]" in Standard
                           "end": 14
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "String": "value"
-                        },
-                        "span": {
-                          "start": 15,
-                          "end": 22
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "String": "value"
+                          },
+                          "span": {
+                            "start": 15,
+                            "end": 22
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 12,
                         "end": 22

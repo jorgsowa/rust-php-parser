@@ -334,37 +334,37 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "New": {
-                        "class": {
-                          "kind": {
-                            "Name": {
-                              "parts": [
-                                "Foo"
-                              ],
-                              "kind": "Unqualified",
-                              "span": {
-                                "start": 93,
-                                "end": 96
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "New": {
+                          "class": {
+                            "kind": {
+                              "Name": {
+                                "parts": [
+                                  "Foo"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 93,
+                                  "end": 96
+                                }
                               }
+                            },
+                            "span": {
+                              "start": 93,
+                              "end": 96
                             }
                           },
-                          "span": {
-                            "start": 93,
-                            "end": 96
-                          }
-                        },
-                        "args": []
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 89,
+                        "end": 96
                       }
-                    },
-                    "span": {
-                      "start": 89,
-                      "end": 96
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 89,
                     "end": 96

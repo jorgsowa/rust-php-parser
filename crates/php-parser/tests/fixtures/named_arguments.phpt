@@ -38,17 +38,17 @@
                       "end": 29
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "str"
-                    },
-                    "span": {
-                      "start": 31,
-                      "end": 35
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "str"
+                      },
+                      "span": {
+                        "start": 31,
+                        "end": 35
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 23,
                     "end": 35
@@ -65,26 +65,26 @@
                       "end": 42
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Name": {
-                        "parts": [
-                          "ENT_QUOTES"
-                        ],
-                        "kind": "Unqualified",
-                        "span": {
-                          "start": 44,
-                          "end": 54
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Name": {
+                          "parts": [
+                            "ENT_QUOTES"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 44,
+                            "end": 54
+                          }
                         }
+                      },
+                      "span": {
+                        "start": 44,
+                        "end": 54
                       }
-                    },
-                    "span": {
-                      "start": 44,
-                      "end": 54
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 37,
                     "end": 54
@@ -101,17 +101,17 @@
                       "end": 64
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "String": "UTF-8"
-                    },
-                    "span": {
-                      "start": 66,
-                      "end": 73
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "String": "UTF-8"
+                      },
+                      "span": {
+                        "start": 66,
+                        "end": 73
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 56,
                     "end": 73

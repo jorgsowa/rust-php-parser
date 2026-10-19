@@ -3159,7 +3159,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
                         if let Some(key) = &el.key {
                             let _ = self.visit_expr(key);
                         }
-                        self.write(&el.value);
+                        self.write(el.value());
                     }
                 }
                 ExprKind::Parenthesized(inner) => self.write(inner),
@@ -3221,7 +3221,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
                         if let Some(key) = &el.key {
                             self.const_eval(key);
                         }
-                        self.const_eval(&el.value);
+                        self.const_eval(el.value());
                     }
                 }
                 _ => {
@@ -3244,7 +3244,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         }
 
         fn args(&mut self, args: &[Arg<'_, '_>]) {
-            for value in args.iter().filter_map(|a| a.value.as_ref()) {
+            for value in args.iter().filter_map(|a| a.value()) {
                 match value.kind {
                     ExprKind::ArrayAccess(_) | ExprKind::PropertyAccess(_) => self.write(value),
                     _ => {
@@ -3978,7 +3978,7 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
         }
 
         fn visit_attribute(&mut self, attribute: &Attribute<'a, 's>) -> ControlFlow<()> {
-            for value in attribute.args.iter().filter_map(|a| a.value.as_ref()) {
+            for value in attribute.args.iter().filter_map(|a| a.value()) {
                 self.const_expr(value);
             }
             ControlFlow::Continue(())

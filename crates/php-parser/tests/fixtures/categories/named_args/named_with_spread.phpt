@@ -29,17 +29,17 @@
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "extra"
-                    },
-                    "span": {
-                      "start": 13,
-                      "end": 19
+                  "kind": {
+                    "Spread": {
+                      "kind": {
+                        "Variable": "extra"
+                      },
+                      "span": {
+                        "start": 13,
+                        "end": 19
+                      }
                     }
                   },
-                  "unpack": true,
-                  "by_ref": false,
                   "span": {
                     "start": 10,
                     "end": 19
@@ -56,17 +56,17 @@
                       "end": 25
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "String": "test"
-                    },
-                    "span": {
-                      "start": 27,
-                      "end": 33
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "String": "test"
+                      },
+                      "span": {
+                        "start": 27,
+                        "end": 33
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 21,
                     "end": 33

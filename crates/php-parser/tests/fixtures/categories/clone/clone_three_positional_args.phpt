@@ -31,17 +31,17 @@ min_php=8.5
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 12,
-                      "end": 14
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 12,
+                        "end": 14
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 12,
                     "end": 14
@@ -49,17 +49,17 @@ min_php=8.5
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "y"
-                    },
-                    "span": {
-                      "start": 16,
-                      "end": 18
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "y"
+                      },
+                      "span": {
+                        "start": 16,
+                        "end": 18
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 16,
                     "end": 18
@@ -67,17 +67,17 @@ min_php=8.5
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "z"
-                    },
-                    "span": {
-                      "start": 20,
-                      "end": 22
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "z"
+                      },
+                      "span": {
+                        "start": 20,
+                        "end": 22
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 20,
                     "end": 22

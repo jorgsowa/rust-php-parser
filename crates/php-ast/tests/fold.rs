@@ -570,12 +570,10 @@ fn fold_arg_override_clears_named_arg() {
             value: "key",
             span: Span::DUMMY,
         }),
-        value: Some(Expr {
+        kind: ArgKind::Value(Expr {
             kind: ExprKind::Int(1),
             span: Span::DUMMY,
         }),
-        unpack: false,
-        by_ref: false,
         span: Span::DUMMY,
     };
     let folded = StripArgNames.fold_arg(&out, &arg);
@@ -583,7 +581,7 @@ fn fold_arg_override_clears_named_arg() {
         folded.name.is_none(),
         "fold_arg override must remove the arg name"
     );
-    assert!(matches!(folded.value.unwrap().kind, ExprKind::Int(1)));
+    assert!(matches!(folded.value().unwrap().kind, ExprKind::Int(1)));
 }
 
 #[test]
@@ -987,12 +985,10 @@ fn fold_name_override_is_dispatched() {
             value: "key",
             span: Span::DUMMY,
         }),
-        value: Some(Expr {
+        kind: ArgKind::Value(Expr {
             kind: ExprKind::Int(1),
             span: Span::DUMMY,
         }),
-        unpack: false,
-        by_ref: false,
         span: Span::DUMMY,
     };
     let mut folder = CountNames { count: 0 };
@@ -1182,4 +1178,52 @@ fn fold_stmts_override_can_delete_and_split_statements() {
         block.stmts.is_empty(),
         "block statements go through the hook too"
     );
+}
+
+#[test]
+fn fold_preserves_arg_and_array_element_kinds() {
+    // PHP: f(...$a, &$b, ?, ...); [...$a, &$b]
+    let arena = Bump::new();
+    let out = Bump::new();
+    let var = |name: &'static str| Expr {
+        kind: ExprKind::Variable(NameStr::from_source(name)),
+        span: Span::DUMMY,
+    };
+    let arg = |kind| Arg {
+        name: None,
+        kind,
+        span: Span::DUMMY,
+    };
+    let mut args = ArenaVec::new_in(&arena);
+    args.push(arg(ArgKind::Spread(var("a"))));
+    args.push(arg(ArgKind::ByRef(var("b"))));
+    args.push(arg(ArgKind::Placeholder));
+    args.push(arg(ArgKind::SpreadPlaceholder));
+    let folded: Vec<_> = args.iter().map(|a| Identity.fold_arg(&out, a)).collect();
+    assert!(matches!(folded[0].kind, ArgKind::Spread(_)) && folded[0].is_spread());
+    assert!(matches!(folded[1].kind, ArgKind::ByRef(_)) && !folded[1].is_spread());
+    assert!(matches!(folded[2].kind, ArgKind::Placeholder) && folded[2].is_placeholder());
+    assert!(matches!(folded[3].kind, ArgKind::SpreadPlaceholder) && folded[3].value().is_none());
+
+    let element = |kind| ArrayElement {
+        key: None,
+        kind,
+        span: Span::DUMMY,
+    };
+    let mut elements = ArenaVec::new_in(&arena);
+    elements.push(element(ArrayElementKind::Spread(var("a"))));
+    elements.push(element(ArrayElementKind::ByRef(var("b"))));
+    elements.push(element(ArrayElementKind::Value(var("c"))));
+    let array = Expr {
+        kind: ExprKind::Array(elements),
+        span: Span::DUMMY,
+    };
+    let folded = Identity.fold_expr(&out, &array);
+    let ExprKind::Array(elements) = folded.kind else {
+        panic!("expected Array")
+    };
+    assert!(elements[0].is_spread() && !elements[0].is_by_ref());
+    assert!(elements[1].is_by_ref() && !elements[1].is_spread());
+    assert!(!elements[2].is_spread() && !elements[2].is_by_ref());
+    assert!(matches!(elements[2].value().kind, ExprKind::Variable(_)));
 }

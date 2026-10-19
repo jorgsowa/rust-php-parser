@@ -31,17 +31,17 @@ min_php=8.5
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "args"
-                    },
-                    "span": {
-                      "start": 15,
-                      "end": 20
+                  "kind": {
+                    "Spread": {
+                      "kind": {
+                        "Variable": "args"
+                      },
+                      "span": {
+                        "start": 15,
+                        "end": 20
+                      }
                     }
                   },
-                  "unpack": true,
-                  "by_ref": false,
                   "span": {
                     "start": 12,
                     "end": 20

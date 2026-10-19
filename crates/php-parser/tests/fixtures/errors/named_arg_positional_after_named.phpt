@@ -42,17 +42,17 @@ PHP Fatal error:  Cannot use positional argument after named argument in Standar
                       "end": 12
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 14,
-                      "end": 15
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 14,
+                        "end": 15
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 11,
                     "end": 15
@@ -60,17 +60,17 @@ PHP Fatal error:  Cannot use positional argument after named argument in Standar
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 2
-                    },
-                    "span": {
-                      "start": 17,
-                      "end": 18
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 2
+                      },
+                      "span": {
+                        "start": 17,
+                        "end": 18
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 17,
                     "end": 18

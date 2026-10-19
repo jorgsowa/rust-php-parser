@@ -38,16 +38,17 @@ array('a', &$b, 'c' => 'd', 'e' => &$f);
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "String": "a"
-                  },
-                  "span": {
-                    "start": 22,
-                    "end": 25
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "String": "a"
+                    },
+                    "span": {
+                      "start": 22,
+                      "end": 25
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 22,
                   "end": 25
@@ -73,16 +74,17 @@ array('a', &$b, 'c' => 'd', 'e' => &$f);
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "String": "a"
-                  },
-                  "span": {
-                    "start": 34,
-                    "end": 37
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "String": "a"
+                    },
+                    "span": {
+                      "start": 34,
+                      "end": 37
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 34,
                   "end": 37
@@ -108,16 +110,17 @@ array('a', &$b, 'c' => 'd', 'e' => &$f);
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "String": "a"
-                  },
-                  "span": {
-                    "start": 48,
-                    "end": 51
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "String": "a"
+                    },
+                    "span": {
+                      "start": 48,
+                      "end": 51
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 48,
                   "end": 51
@@ -125,16 +128,17 @@ array('a', &$b, 'c' => 'd', 'e' => &$f);
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "String": "b"
-                  },
-                  "span": {
-                    "start": 53,
-                    "end": 56
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "String": "b"
+                    },
+                    "span": {
+                      "start": 53,
+                      "end": 56
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 53,
                   "end": 56
@@ -160,16 +164,17 @@ array('a', &$b, 'c' => 'd', 'e' => &$f);
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "String": "a"
-                  },
-                  "span": {
-                    "start": 65,
-                    "end": 68
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "String": "a"
+                    },
+                    "span": {
+                      "start": 65,
+                      "end": 68
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 65,
                   "end": 68
@@ -177,17 +182,17 @@ array('a', &$b, 'c' => 'd', 'e' => &$f);
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Variable": "b"
-                  },
-                  "span": {
-                    "start": 71,
-                    "end": 73
+                "kind": {
+                  "ByRef": {
+                    "kind": {
+                      "Variable": "b"
+                    },
+                    "span": {
+                      "start": 71,
+                      "end": 73
+                    }
                   }
                 },
-                "unpack": false,
-                "by_ref": true,
                 "span": {
                   "start": 70,
                   "end": 73
@@ -203,16 +208,17 @@ array('a', &$b, 'c' => 'd', 'e' => &$f);
                     "end": 78
                   }
                 },
-                "value": {
-                  "kind": {
-                    "String": "d"
-                  },
-                  "span": {
-                    "start": 82,
-                    "end": 85
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "String": "d"
+                    },
+                    "span": {
+                      "start": 82,
+                      "end": 85
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 75,
                   "end": 85
@@ -228,17 +234,17 @@ array('a', &$b, 'c' => 'd', 'e' => &$f);
                     "end": 90
                   }
                 },
-                "value": {
-                  "kind": {
-                    "Variable": "f"
-                  },
-                  "span": {
-                    "start": 95,
-                    "end": 97
+                "kind": {
+                  "ByRef": {
+                    "kind": {
+                      "Variable": "f"
+                    },
+                    "span": {
+                      "start": 95,
+                      "end": 97
+                    }
                   }
                 },
-                "unpack": false,
-                "by_ref": true,
                 "span": {
                   "start": 87,
                   "end": 97
@@ -281,16 +287,17 @@ array('a', &$b, 'c' => 'd', 'e' => &$f);
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Int": 1
-                  },
-                  "span": {
-                    "start": 128,
-                    "end": 129
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 128,
+                      "end": 129
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 128,
                   "end": 129
@@ -298,16 +305,17 @@ array('a', &$b, 'c' => 'd', 'e' => &$f);
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Int": 2
-                  },
-                  "span": {
-                    "start": 131,
-                    "end": 132
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 2
+                    },
+                    "span": {
+                      "start": 131,
+                      "end": 132
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 131,
                   "end": 132
@@ -315,16 +323,17 @@ array('a', &$b, 'c' => 'd', 'e' => &$f);
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Int": 3
-                  },
-                  "span": {
-                    "start": 134,
-                    "end": 135
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 3
+                    },
+                    "span": {
+                      "start": 134,
+                      "end": 135
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 134,
                   "end": 135
@@ -358,16 +367,17 @@ array('a', &$b, 'c' => 'd', 'e' => &$f);
                     "end": 142
                   }
                 },
-                "value": {
-                  "kind": {
-                    "String": "b"
-                  },
-                  "span": {
-                    "start": 146,
-                    "end": 149
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "String": "b"
+                    },
+                    "span": {
+                      "start": 146,
+                      "end": 149
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 139,
                   "end": 149

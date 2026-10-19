@@ -518,9 +518,17 @@ pub fn fold_expr<'new, 'src, F: Fold<'src> + ?Sized>(
             for elem in elements.iter() {
                 new_elements.push(ArrayElement {
                     key: elem.key.as_ref().map(|k| folder.fold_expr(arena, k)),
-                    value: folder.fold_expr(arena, &elem.value),
-                    unpack: elem.unpack,
-                    by_ref: elem.by_ref,
+                    kind: match &elem.kind {
+                        ArrayElementKind::Value(e) => {
+                            ArrayElementKind::Value(folder.fold_expr(arena, e))
+                        }
+                        ArrayElementKind::Spread(e) => {
+                            ArrayElementKind::Spread(folder.fold_expr(arena, e))
+                        }
+                        ArrayElementKind::ByRef(e) => {
+                            ArrayElementKind::ByRef(folder.fold_expr(arena, e))
+                        }
+                    },
                     span: elem.span,
                 });
             }
@@ -733,9 +741,13 @@ pub fn fold_arg<'new, 'src, F: Fold<'src> + ?Sized>(
 ) -> Arg<'new, 'src> {
     Arg {
         name: arg.name.as_ref().map(|n| folder.fold_name(arena, n)),
-        value: arg.value.as_ref().map(|v| folder.fold_expr(arena, v)),
-        unpack: arg.unpack,
-        by_ref: arg.by_ref,
+        kind: match &arg.kind {
+            ArgKind::Value(e) => ArgKind::Value(folder.fold_expr(arena, e)),
+            ArgKind::Spread(e) => ArgKind::Spread(folder.fold_expr(arena, e)),
+            ArgKind::ByRef(e) => ArgKind::ByRef(folder.fold_expr(arena, e)),
+            ArgKind::Placeholder => ArgKind::Placeholder,
+            ArgKind::SpreadPlaceholder => ArgKind::SpreadPlaceholder,
+        },
         span: arg.span,
     }
 }

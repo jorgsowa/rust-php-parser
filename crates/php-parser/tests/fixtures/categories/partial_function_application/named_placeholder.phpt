@@ -53,9 +53,7 @@ min_php=8.6
                             "end": 17
                           }
                         },
-                        "value": null,
-                        "unpack": false,
-                        "by_ref": false,
+                        "kind": "Placeholder",
                         "span": {
                           "start": 16,
                           "end": 20
@@ -72,9 +70,7 @@ min_php=8.6
                             "end": 23
                           }
                         },
-                        "value": null,
-                        "unpack": false,
-                        "by_ref": false,
+                        "kind": "Placeholder",
                         "span": {
                           "start": 22,
                           "end": 26

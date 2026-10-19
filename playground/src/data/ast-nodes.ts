@@ -1583,15 +1583,11 @@ export const astNodes: AstNode[] = [
     phpExample: `foo($a, $b, name: $c, &$ref, ...$spread);\nbar(1, ?, name: ?, ...); // PHP 8.6 partial application placeholders`,
     fieldHighlights: {
       name: ['name'],
-      value: ['$a', '$b', '$c', '$ref', '$spread'],
-      by_ref: ['&'],
-      unpack: ['...']
+      kind: ['$a', '$b', '$c', '&$ref', '...$spread']
     },
     fields: [
       { name: 'name', type: 'Option<Name>', description: 'Named argument name', optional: true },
-      { name: 'value', type: 'Option<Expr>', description: 'Argument value — None is a PHP 8.6 partial-application placeholder (? or bare ... when unpack is set)', optional: true },
-      { name: 'unpack', type: 'bool', description: 'Is spread argument (...), or the PHP 8.6 rest placeholder when value is None' },
-      { name: 'by_ref', type: 'bool', description: 'Passed by reference (&)' }
+      { name: 'kind', type: 'ArgKind', description: 'Value(Expr), Spread(Expr) for ..., ByRef(Expr) for &, or the PHP 8.6 partial-application placeholders Placeholder (?) and SpreadPlaceholder (...)' }
     ]
   },
   {
@@ -1602,15 +1598,11 @@ export const astNodes: AstNode[] = [
     phpExample: `[$val, $key => $val2, &$ref, ...$spread];`,
     fieldHighlights: {
       key: ['$key'],
-      value: ['$val', '$val2', '$ref', '$spread'],
-      by_ref: ['&'],
-      unpack: ['...']
+      kind: ['$val', '$val2', '&$ref', '...$spread']
     },
     fields: [
       { name: 'key', type: 'Option<Expr>', description: 'Array key', optional: true },
-      { name: 'value', type: 'Expr', description: 'Array value' },
-      { name: 'unpack', type: 'bool', description: 'Spread element (...)' },
-      { name: 'by_ref', type: 'bool', description: 'By reference' }
+      { name: 'kind', type: 'ArrayElementKind', description: 'Value(Expr), Spread(Expr) for ..., or ByRef(Expr) for &' }
     ]
   },
   {

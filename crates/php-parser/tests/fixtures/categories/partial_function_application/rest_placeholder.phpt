@@ -44,17 +44,17 @@ min_php=8.6
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 1
-                          },
-                          "span": {
-                            "start": 16,
-                            "end": 17
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 16,
+                              "end": 17
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 16,
                           "end": 17
@@ -62,9 +62,7 @@ min_php=8.6
                       },
                       {
                         "name": null,
-                        "value": null,
-                        "unpack": true,
-                        "by_ref": false,
+                        "kind": "SpreadPlaceholder",
                         "span": {
                           "start": 19,
                           "end": 22

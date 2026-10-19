@@ -163,36 +163,36 @@ f($a?->b)->c(...);
                         "args": [
                           {
                             "name": null,
-                            "value": {
-                              "kind": {
-                                "NullsafePropertyAccess": {
-                                  "object": {
-                                    "kind": {
-                                      "Variable": "a"
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "NullsafePropertyAccess": {
+                                    "object": {
+                                      "kind": {
+                                        "Variable": "a"
+                                      },
+                                      "span": {
+                                        "start": 40,
+                                        "end": 42
+                                      }
                                     },
-                                    "span": {
-                                      "start": 40,
-                                      "end": 42
-                                    }
-                                  },
-                                  "property": {
-                                    "kind": {
-                                      "Identifier": "b"
-                                    },
-                                    "span": {
-                                      "start": 45,
-                                      "end": 46
+                                    "property": {
+                                      "kind": {
+                                        "Identifier": "b"
+                                      },
+                                      "span": {
+                                        "start": 45,
+                                        "end": 46
+                                      }
                                     }
                                   }
+                                },
+                                "span": {
+                                  "start": 40,
+                                  "end": 46
                                 }
-                              },
-                              "span": {
-                                "start": 40,
-                                "end": 46
                               }
                             },
-                            "unpack": false,
-                            "by_ref": false,
                             "span": {
                               "start": 40,
                               "end": 46

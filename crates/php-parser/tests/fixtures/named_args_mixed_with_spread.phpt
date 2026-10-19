@@ -42,17 +42,17 @@ PHP Fatal error:  Cannot use argument unpacking after named arguments in Standar
                       "end": 12
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 14,
-                      "end": 15
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 14,
+                        "end": 15
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 11,
                     "end": 15
@@ -60,43 +60,44 @@ PHP Fatal error:  Cannot use argument unpacking after named arguments in Standar
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Array": [
-                        {
-                          "key": {
+                  "kind": {
+                    "Spread": {
+                      "kind": {
+                        "Array": [
+                          {
+                            "key": {
+                              "kind": {
+                                "String": "b"
+                              },
+                              "span": {
+                                "start": 21,
+                                "end": 24
+                              }
+                            },
                             "kind": {
-                              "String": "b"
+                              "Value": {
+                                "kind": {
+                                  "Int": 2
+                                },
+                                "span": {
+                                  "start": 28,
+                                  "end": 29
+                                }
+                              }
                             },
                             "span": {
                               "start": 21,
-                              "end": 24
-                            }
-                          },
-                          "value": {
-                            "kind": {
-                              "Int": 2
-                            },
-                            "span": {
-                              "start": 28,
                               "end": 29
                             }
-                          },
-                          "unpack": false,
-                          "span": {
-                            "start": 21,
-                            "end": 29
                           }
-                        }
-                      ]
-                    },
-                    "span": {
-                      "start": 20,
-                      "end": 30
+                        ]
+                      },
+                      "span": {
+                        "start": 20,
+                        "end": 30
+                      }
                     }
                   },
-                  "unpack": true,
-                  "by_ref": false,
                   "span": {
                     "start": 17,
                     "end": 30

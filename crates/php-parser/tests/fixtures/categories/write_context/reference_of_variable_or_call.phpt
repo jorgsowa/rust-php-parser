@@ -287,17 +287,17 @@ $a = &$b[0]->c;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 63,
-                          "end": 65
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 63,
+                            "end": 65
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 62,
                         "end": 65
@@ -363,17 +363,17 @@ $a = &$b[0]->c;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 76,
-                          "end": 78
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 76,
+                            "end": 78
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 75,
                         "end": 78
@@ -439,17 +439,17 @@ $a = &$b[0]->c;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 93,
-                          "end": 95
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 93,
+                            "end": 95
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 92,
                         "end": 95
@@ -523,35 +523,36 @@ $a = &$b[0]->c;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "a"
+                                  "ByRef": {
+                                    "kind": {
+                                      "Variable": "a"
+                                    },
+                                    "span": {
+                                      "start": 109,
+                                      "end": 111
+                                    }
+                                  }
                                 },
                                 "span": {
-                                  "start": 109,
+                                  "start": 108,
                                   "end": 111
                                 }
-                              },
-                              "unpack": false,
-                              "by_ref": true,
-                              "span": {
-                                "start": 108,
-                                "end": 111
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 107,
-                          "end": 112
+                            ]
+                          },
+                          "span": {
+                            "start": 107,
+                            "end": 112
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 107,
                         "end": 112

@@ -134,17 +134,17 @@ $obj = new class($x) extends Base implements Iface {
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 1
-                          },
-                          "span": {
-                            "start": 96,
-                            "end": 97
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 96,
+                              "end": 97
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 96,
                           "end": 97
@@ -152,17 +152,17 @@ $obj = new class($x) extends Base implements Iface {
                       },
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 2
-                          },
-                          "span": {
-                            "start": 99,
-                            "end": 100
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 2
+                            },
+                            "span": {
+                              "start": 99,
+                              "end": 100
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 99,
                           "end": 100
@@ -728,17 +728,17 @@ $obj = new class($x) extends Base implements Iface {
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Variable": "x"
-                          },
-                          "span": {
-                            "start": 410,
-                            "end": 412
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Variable": "x"
+                            },
+                            "span": {
+                              "start": 410,
+                              "end": 412
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 410,
                           "end": 412

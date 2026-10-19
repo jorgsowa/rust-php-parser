@@ -534,16 +534,17 @@ list($x) = $y;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "x"
-                        },
-                        "span": {
-                          "start": 340,
-                          "end": 342
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "x"
+                          },
+                          "span": {
+                            "start": 340,
+                            "end": 342
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 340,
                         "end": 342
@@ -589,16 +590,17 @@ list($x) = $y;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "x"
-                        },
-                        "span": {
-                          "start": 351,
-                          "end": 353
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "x"
+                          },
+                          "span": {
+                            "start": 351,
+                            "end": 353
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 351,
                         "end": 353

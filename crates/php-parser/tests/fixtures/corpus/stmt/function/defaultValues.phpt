@@ -298,16 +298,17 @@ function a(
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "String": "foo"
-                        },
-                        "span": {
-                          "start": 134,
-                          "end": 139
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "String": "foo"
+                          },
+                          "span": {
+                            "start": 134,
+                            "end": 139
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 134,
                         "end": 139
@@ -346,16 +347,17 @@ function a(
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "String": "foo"
-                        },
-                        "span": {
-                          "start": 152,
-                          "end": 157
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "String": "foo"
+                          },
+                          "span": {
+                            "start": 152,
+                            "end": 157
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 152,
                         "end": 157
@@ -371,16 +373,17 @@ function a(
                           "end": 164
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "String": "baz"
-                        },
-                        "span": {
-                          "start": 168,
-                          "end": 173
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "String": "baz"
+                          },
+                          "span": {
+                            "start": 168,
+                            "end": 173
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 159,
                         "end": 173

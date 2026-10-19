@@ -251,17 +251,17 @@ greet('PHP');
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 1
-                          },
-                          "span": {
-                            "start": 131,
-                            "end": 132
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 131,
+                              "end": 132
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 131,
                           "end": 132
@@ -269,17 +269,17 @@ greet('PHP');
                       },
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 2
-                          },
-                          "span": {
-                            "start": 134,
-                            "end": 135
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 2
+                            },
+                            "span": {
+                              "start": 134,
+                              "end": 135
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 134,
                           "end": 135
@@ -369,17 +369,17 @@ greet('PHP');
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "String": "PHP"
-                    },
-                    "span": {
-                      "start": 153,
-                      "end": 158
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "String": "PHP"
+                      },
+                      "span": {
+                        "start": 153,
+                        "end": 158
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 153,
                     "end": 158

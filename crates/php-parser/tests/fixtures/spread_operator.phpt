@@ -31,17 +31,17 @@ $merged = [...$a, ...$b, 1, 2];
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "args"
-                    },
-                    "span": {
-                      "start": 14,
-                      "end": 19
+                  "kind": {
+                    "Spread": {
+                      "kind": {
+                        "Variable": "args"
+                      },
+                      "span": {
+                        "start": 14,
+                        "end": 19
+                      }
                     }
                   },
-                  "unpack": true,
-                  "by_ref": false,
                   "span": {
                     "start": 11,
                     "end": 19
@@ -81,16 +81,17 @@ $merged = [...$a, ...$b, 1, 2];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 36,
-                          "end": 38
+                      "kind": {
+                        "Spread": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 36,
+                            "end": 38
+                          }
                         }
                       },
-                      "unpack": true,
                       "span": {
                         "start": 33,
                         "end": 38
@@ -98,16 +99,17 @@ $merged = [...$a, ...$b, 1, 2];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 43,
-                          "end": 45
+                      "kind": {
+                        "Spread": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 43,
+                            "end": 45
+                          }
                         }
                       },
-                      "unpack": true,
                       "span": {
                         "start": 40,
                         "end": 45
@@ -115,16 +117,17 @@ $merged = [...$a, ...$b, 1, 2];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 47,
-                          "end": 48
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 47,
+                            "end": 48
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 47,
                         "end": 48
@@ -132,16 +135,17 @@ $merged = [...$a, ...$b, 1, 2];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 50,
-                          "end": 51
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 50,
+                            "end": 51
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 50,
                         "end": 51

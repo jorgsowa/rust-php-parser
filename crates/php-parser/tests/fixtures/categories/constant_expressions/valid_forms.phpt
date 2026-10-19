@@ -887,16 +887,17 @@ function f($a = new Foo(new Bar)) {
                       "Array": [
                         {
                           "key": null,
-                          "value": {
-                            "kind": {
-                              "Int": 1
-                            },
-                            "span": {
-                              "start": 277,
-                              "end": 278
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "Int": 1
+                              },
+                              "span": {
+                                "start": 277,
+                                "end": 278
+                              }
                             }
                           },
-                          "unpack": false,
                           "span": {
                             "start": 277,
                             "end": 278
@@ -1006,25 +1007,26 @@ function f($a = new Foo(new Bar)) {
                 "Array": [
                   {
                     "key": null,
-                    "value": {
-                      "kind": {
-                        "Name": {
-                          "parts": [
-                            "B"
-                          ],
-                          "kind": "Unqualified",
-                          "span": {
-                            "start": 316,
-                            "end": 317
+                    "kind": {
+                      "Spread": {
+                        "kind": {
+                          "Name": {
+                            "parts": [
+                              "B"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 316,
+                              "end": 317
+                            }
                           }
+                        },
+                        "span": {
+                          "start": 316,
+                          "end": 317
                         }
-                      },
-                      "span": {
-                        "start": 316,
-                        "end": 317
                       }
                     },
-                    "unpack": true,
                     "span": {
                       "start": 313,
                       "end": 317
@@ -1032,16 +1034,17 @@ function f($a = new Foo(new Bar)) {
                   },
                   {
                     "key": null,
-                    "value": {
-                      "kind": {
-                        "Int": 1
-                      },
-                      "span": {
-                        "start": 319,
-                        "end": 320
+                    "kind": {
+                      "Value": {
+                        "kind": {
+                          "Int": 1
+                        },
+                        "span": {
+                          "start": 319,
+                          "end": 320
+                        }
                       }
                     },
-                    "unpack": false,
                     "span": {
                       "start": 319,
                       "end": 320
@@ -1519,17 +1522,17 @@ function f($a = new Foo(new Bar)) {
                   "args": [
                     {
                       "name": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 502,
-                          "end": 503
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 502,
+                            "end": 503
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": false,
                       "span": {
                         "start": 502,
                         "end": 503
@@ -1546,17 +1549,17 @@ function f($a = new Foo(new Bar)) {
                           "end": 506
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 508,
-                          "end": 509
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 508,
+                            "end": 509
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": false,
                       "span": {
                         "start": 505,
                         "end": 509
@@ -2740,37 +2743,37 @@ function f($a = new Foo(new Bar)) {
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "New": {
-                              "class": {
-                                "kind": {
-                                  "Name": {
-                                    "parts": [
-                                      "Bar"
-                                    ],
-                                    "kind": "Unqualified",
-                                    "span": {
-                                      "start": 1139,
-                                      "end": 1142
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "New": {
+                                "class": {
+                                  "kind": {
+                                    "Name": {
+                                      "parts": [
+                                        "Bar"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 1139,
+                                        "end": 1142
+                                      }
                                     }
+                                  },
+                                  "span": {
+                                    "start": 1139,
+                                    "end": 1142
                                   }
                                 },
-                                "span": {
-                                  "start": 1139,
-                                  "end": 1142
-                                }
-                              },
-                              "args": []
+                                "args": []
+                              }
+                            },
+                            "span": {
+                              "start": 1135,
+                              "end": 1142
                             }
-                          },
-                          "span": {
-                            "start": 1135,
-                            "end": 1142
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 1135,
                           "end": 1142
@@ -2932,37 +2935,37 @@ function f($a = new Foo(new Bar)) {
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "New": {
-                        "class": {
-                          "kind": {
-                            "Name": {
-                              "parts": [
-                                "Foo"
-                              ],
-                              "kind": "Unqualified",
-                              "span": {
-                                "start": 1071,
-                                "end": 1074
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "New": {
+                          "class": {
+                            "kind": {
+                              "Name": {
+                                "parts": [
+                                  "Foo"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 1071,
+                                  "end": 1074
+                                }
                               }
+                            },
+                            "span": {
+                              "start": 1071,
+                              "end": 1074
                             }
                           },
-                          "span": {
-                            "start": 1071,
-                            "end": 1074
-                          }
-                        },
-                        "args": []
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 1067,
+                        "end": 1074
                       }
-                    },
-                    "span": {
-                      "start": 1067,
-                      "end": 1074
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 1067,
                     "end": 1074
@@ -2970,25 +2973,25 @@ function f($a = new Foo(new Bar)) {
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Closure": {
-                        "is_static": true,
-                        "by_ref": false,
-                        "params": [],
-                        "use_vars": [],
-                        "return_type": null,
-                        "body": [],
-                        "attributes": []
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Closure": {
+                          "is_static": true,
+                          "by_ref": false,
+                          "params": [],
+                          "use_vars": [],
+                          "return_type": null,
+                          "body": [],
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 1076,
+                        "end": 1097
                       }
-                    },
-                    "span": {
-                      "start": 1076,
-                      "end": 1097
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 1076,
                     "end": 1097
@@ -3005,52 +3008,54 @@ function f($a = new Foo(new Bar)) {
                       "end": 1100
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Array": [
-                        {
-                          "key": null,
-                          "value": {
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Array": [
+                          {
+                            "key": null,
                             "kind": {
-                              "Int": 1
+                              "Value": {
+                                "kind": {
+                                  "Int": 1
+                                },
+                                "span": {
+                                  "start": 1103,
+                                  "end": 1104
+                                }
+                              }
                             },
                             "span": {
                               "start": 1103,
                               "end": 1104
                             }
                           },
-                          "unpack": false,
-                          "span": {
-                            "start": 1103,
-                            "end": 1104
-                          }
-                        },
-                        {
-                          "key": null,
-                          "value": {
+                          {
+                            "key": null,
                             "kind": {
-                              "Int": 2
+                              "Value": {
+                                "kind": {
+                                  "Int": 2
+                                },
+                                "span": {
+                                  "start": 1106,
+                                  "end": 1107
+                                }
+                              }
                             },
                             "span": {
                               "start": 1106,
                               "end": 1107
                             }
-                          },
-                          "unpack": false,
-                          "span": {
-                            "start": 1106,
-                            "end": 1107
                           }
-                        }
-                      ]
-                    },
-                    "span": {
-                      "start": 1102,
-                      "end": 1108
+                        ]
+                      },
+                      "span": {
+                        "start": 1102,
+                        "end": 1108
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 1099,
                     "end": 1108

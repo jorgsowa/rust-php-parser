@@ -31,74 +31,75 @@
                           "end": 17
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "ArrowFunction": {
-                            "is_static": false,
-                            "by_ref": false,
-                            "params": [
-                              {
-                                "name": {
-                                  "name": "x",
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "ArrowFunction": {
+                              "is_static": false,
+                              "by_ref": false,
+                              "params": [
+                                {
+                                  "name": {
+                                    "name": "x",
+                                    "span": {
+                                      "start": 24,
+                                      "end": 26
+                                    }
+                                  },
+                                  "type_hint": null,
+                                  "default": null,
+                                  "by_ref": false,
+                                  "variadic": false,
+                                  "is_readonly": false,
+                                  "is_final": false,
+                                  "visibility": null,
+                                  "set_visibility": null,
+                                  "attributes": [],
                                   "span": {
                                     "start": 24,
                                     "end": 26
                                   }
-                                },
-                                "type_hint": null,
-                                "default": null,
-                                "by_ref": false,
-                                "variadic": false,
-                                "is_readonly": false,
-                                "is_final": false,
-                                "visibility": null,
-                                "set_visibility": null,
-                                "attributes": [],
-                                "span": {
-                                  "start": 24,
-                                  "end": 26
                                 }
-                              }
-                            ],
-                            "return_type": null,
-                            "body": {
-                              "kind": {
-                                "Binary": {
-                                  "left": {
-                                    "kind": {
-                                      "Variable": "x"
+                              ],
+                              "return_type": null,
+                              "body": {
+                                "kind": {
+                                  "Binary": {
+                                    "left": {
+                                      "kind": {
+                                        "Variable": "x"
+                                      },
+                                      "span": {
+                                        "start": 31,
+                                        "end": 33
+                                      }
                                     },
-                                    "span": {
-                                      "start": 31,
-                                      "end": 33
-                                    }
-                                  },
-                                  "op": "Mul",
-                                  "right": {
-                                    "kind": {
-                                      "Int": 2
-                                    },
-                                    "span": {
-                                      "start": 36,
-                                      "end": 37
+                                    "op": "Mul",
+                                    "right": {
+                                      "kind": {
+                                        "Int": 2
+                                      },
+                                      "span": {
+                                        "start": 36,
+                                        "end": 37
+                                      }
                                     }
                                   }
+                                },
+                                "span": {
+                                  "start": 31,
+                                  "end": 37
                                 }
                               },
-                              "span": {
-                                "start": 31,
-                                "end": 37
-                              }
-                            },
-                            "attributes": []
+                              "attributes": []
+                            }
+                          },
+                          "span": {
+                            "start": 21,
+                            "end": 37
                           }
-                        },
-                        "span": {
-                          "start": 21,
-                          "end": 37
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 12,
                         "end": 37
@@ -114,74 +115,75 @@
                           "end": 47
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "ArrowFunction": {
-                            "is_static": false,
-                            "by_ref": false,
-                            "params": [
-                              {
-                                "name": {
-                                  "name": "x",
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "ArrowFunction": {
+                              "is_static": false,
+                              "by_ref": false,
+                              "params": [
+                                {
+                                  "name": {
+                                    "name": "x",
+                                    "span": {
+                                      "start": 54,
+                                      "end": 56
+                                    }
+                                  },
+                                  "type_hint": null,
+                                  "default": null,
+                                  "by_ref": false,
+                                  "variadic": false,
+                                  "is_readonly": false,
+                                  "is_final": false,
+                                  "visibility": null,
+                                  "set_visibility": null,
+                                  "attributes": [],
                                   "span": {
                                     "start": 54,
                                     "end": 56
                                   }
-                                },
-                                "type_hint": null,
-                                "default": null,
-                                "by_ref": false,
-                                "variadic": false,
-                                "is_readonly": false,
-                                "is_final": false,
-                                "visibility": null,
-                                "set_visibility": null,
-                                "attributes": [],
-                                "span": {
-                                  "start": 54,
-                                  "end": 56
                                 }
-                              }
-                            ],
-                            "return_type": null,
-                            "body": {
-                              "kind": {
-                                "Binary": {
-                                  "left": {
-                                    "kind": {
-                                      "Variable": "x"
+                              ],
+                              "return_type": null,
+                              "body": {
+                                "kind": {
+                                  "Binary": {
+                                    "left": {
+                                      "kind": {
+                                        "Variable": "x"
+                                      },
+                                      "span": {
+                                        "start": 61,
+                                        "end": 63
+                                      }
                                     },
-                                    "span": {
-                                      "start": 61,
-                                      "end": 63
-                                    }
-                                  },
-                                  "op": "Greater",
-                                  "right": {
-                                    "kind": {
-                                      "Int": 0
-                                    },
-                                    "span": {
-                                      "start": 66,
-                                      "end": 67
+                                    "op": "Greater",
+                                    "right": {
+                                      "kind": {
+                                        "Int": 0
+                                      },
+                                      "span": {
+                                        "start": 66,
+                                        "end": 67
+                                      }
                                     }
                                   }
+                                },
+                                "span": {
+                                  "start": 61,
+                                  "end": 67
                                 }
                               },
-                              "span": {
-                                "start": 61,
-                                "end": 67
-                              }
-                            },
-                            "attributes": []
+                              "attributes": []
+                            }
+                          },
+                          "span": {
+                            "start": 51,
+                            "end": 67
                           }
-                        },
-                        "span": {
-                          "start": 51,
-                          "end": 67
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 39,
                         "end": 67

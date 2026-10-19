@@ -63,36 +63,37 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       "Array": [
                         {
                           "key": null,
-                          "value": {
-                            "kind": {
-                              "New": {
-                                "class": {
-                                  "kind": {
-                                    "Name": {
-                                      "parts": [
-                                        "Foo"
-                                      ],
-                                      "kind": "Unqualified",
-                                      "span": {
-                                        "start": 35,
-                                        "end": 38
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "New": {
+                                  "class": {
+                                    "kind": {
+                                      "Name": {
+                                        "parts": [
+                                          "Foo"
+                                        ],
+                                        "kind": "Unqualified",
+                                        "span": {
+                                          "start": 35,
+                                          "end": 38
+                                        }
                                       }
+                                    },
+                                    "span": {
+                                      "start": 35,
+                                      "end": 38
                                     }
                                   },
-                                  "span": {
-                                    "start": 35,
-                                    "end": 38
-                                  }
-                                },
-                                "args": []
+                                  "args": []
+                                }
+                              },
+                              "span": {
+                                "start": 31,
+                                "end": 38
                               }
-                            },
-                            "span": {
-                              "start": 31,
-                              "end": 38
                             }
                           },
-                          "unpack": false,
                           "span": {
                             "start": 31,
                             "end": 38

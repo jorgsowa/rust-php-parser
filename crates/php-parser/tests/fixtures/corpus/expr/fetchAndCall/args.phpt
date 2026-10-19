@@ -76,17 +76,17 @@ PHP Parse error:  syntax error, unexpected token "&" in Standard input code on l
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 14,
-                      "end": 16
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 14,
+                        "end": 16
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 14,
                     "end": 16
@@ -132,17 +132,17 @@ PHP Parse error:  syntax error, unexpected token "&" in Standard input code on l
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 21,
-                      "end": 23
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 21,
+                        "end": 23
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 21,
                     "end": 23
@@ -150,17 +150,17 @@ PHP Parse error:  syntax error, unexpected token "&" in Standard input code on l
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 25,
-                      "end": 27
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 25,
+                        "end": 27
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 25,
                     "end": 27
@@ -206,17 +206,17 @@ PHP Parse error:  syntax error, unexpected token "&" in Standard input code on l
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 33,
-                      "end": 35
+                  "kind": {
+                    "ByRef": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 33,
+                        "end": 35
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": true,
                   "span": {
                     "start": 32,
                     "end": 35
@@ -262,17 +262,17 @@ PHP Parse error:  syntax error, unexpected token "&" in Standard input code on l
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 40,
-                      "end": 42
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 40,
+                        "end": 42
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 40,
                     "end": 42
@@ -280,17 +280,17 @@ PHP Parse error:  syntax error, unexpected token "&" in Standard input code on l
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 47,
-                      "end": 49
+                  "kind": {
+                    "Spread": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 47,
+                        "end": 49
+                      }
                     }
                   },
-                  "unpack": true,
-                  "by_ref": false,
                   "span": {
                     "start": 44,
                     "end": 49

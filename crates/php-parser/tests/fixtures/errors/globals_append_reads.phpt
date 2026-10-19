@@ -81,28 +81,28 @@ PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "ArrayAccess": {
-                        "array": {
-                          "kind": {
-                            "Variable": "GLOBALS"
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "ArrayAccess": {
+                          "array": {
+                            "kind": {
+                              "Variable": "GLOBALS"
+                            },
+                            "span": {
+                              "start": 8,
+                              "end": 16
+                            }
                           },
-                          "span": {
-                            "start": 8,
-                            "end": 16
-                          }
-                        },
-                        "index": null
+                          "index": null
+                        }
+                      },
+                      "span": {
+                        "start": 8,
+                        "end": 18
                       }
-                    },
-                    "span": {
-                      "start": 8,
-                      "end": 18
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 8,
                     "end": 18
@@ -110,28 +110,28 @@ PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "ArrayAccess": {
-                        "array": {
-                          "kind": {
-                            "Variable": "GLOBALS"
+                  "kind": {
+                    "Spread": {
+                      "kind": {
+                        "ArrayAccess": {
+                          "array": {
+                            "kind": {
+                              "Variable": "GLOBALS"
+                            },
+                            "span": {
+                              "start": 23,
+                              "end": 31
+                            }
                           },
-                          "span": {
-                            "start": 23,
-                            "end": 31
-                          }
-                        },
-                        "index": null
+                          "index": null
+                        }
+                      },
+                      "span": {
+                        "start": 23,
+                        "end": 33
                       }
-                    },
-                    "span": {
-                      "start": 23,
-                      "end": 33
                     }
                   },
-                  "unpack": true,
-                  "by_ref": false,
                   "span": {
                     "start": 20,
                     "end": 33
@@ -186,28 +186,28 @@ PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
                       "end": 43
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "ArrayAccess": {
-                        "array": {
-                          "kind": {
-                            "Variable": "GLOBALS"
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "ArrayAccess": {
+                          "array": {
+                            "kind": {
+                              "Variable": "GLOBALS"
+                            },
+                            "span": {
+                              "start": 45,
+                              "end": 53
+                            }
                           },
-                          "span": {
-                            "start": 45,
-                            "end": 53
-                          }
-                        },
-                        "index": null
+                          "index": null
+                        }
+                      },
+                      "span": {
+                        "start": 45,
+                        "end": 55
                       }
-                    },
-                    "span": {
-                      "start": 45,
-                      "end": 55
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 42,
                     "end": 55
@@ -253,28 +253,28 @@ PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "ArrayAccess": {
-                        "array": {
-                          "kind": {
-                            "Variable": "GLOBALS"
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "ArrayAccess": {
+                          "array": {
+                            "kind": {
+                              "Variable": "GLOBALS"
+                            },
+                            "span": {
+                              "start": 64,
+                              "end": 72
+                            }
                           },
-                          "span": {
-                            "start": 64,
-                            "end": 72
-                          }
-                        },
-                        "index": null
+                          "index": null
+                        }
+                      },
+                      "span": {
+                        "start": 64,
+                        "end": 74
                       }
-                    },
-                    "span": {
-                      "start": 64,
-                      "end": 74
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 64,
                     "end": 74
@@ -956,66 +956,67 @@ PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "FunctionCall": {
-                            "name": {
-                              "kind": {
-                                "Name": {
-                                  "parts": [
-                                    "f"
-                                  ],
-                                  "kind": "Unqualified",
-                                  "span": {
-                                    "start": 353,
-                                    "end": 354
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "FunctionCall": {
+                              "name": {
+                                "kind": {
+                                  "Name": {
+                                    "parts": [
+                                      "f"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 353,
+                                      "end": 354
+                                    }
                                   }
+                                },
+                                "span": {
+                                  "start": 353,
+                                  "end": 354
                                 }
                               },
-                              "span": {
-                                "start": 353,
-                                "end": 354
-                              }
-                            },
-                            "args": [
-                              {
-                                "name": null,
-                                "value": {
+                              "args": [
+                                {
+                                  "name": null,
                                   "kind": {
-                                    "ArrayAccess": {
-                                      "array": {
-                                        "kind": {
-                                          "Variable": "GLOBALS"
-                                        },
-                                        "span": {
-                                          "start": 355,
-                                          "end": 363
+                                    "Value": {
+                                      "kind": {
+                                        "ArrayAccess": {
+                                          "array": {
+                                            "kind": {
+                                              "Variable": "GLOBALS"
+                                            },
+                                            "span": {
+                                              "start": 355,
+                                              "end": 363
+                                            }
+                                          },
+                                          "index": null
                                         }
                                       },
-                                      "index": null
+                                      "span": {
+                                        "start": 355,
+                                        "end": 365
+                                      }
                                     }
                                   },
                                   "span": {
                                     "start": 355,
                                     "end": 365
                                   }
-                                },
-                                "unpack": false,
-                                "by_ref": false,
-                                "span": {
-                                  "start": 355,
-                                  "end": 365
                                 }
-                              }
-                            ]
+                              ]
+                            }
+                          },
+                          "span": {
+                            "start": 353,
+                            "end": 366
                           }
-                        },
-                        "span": {
-                          "start": 353,
-                          "end": 366
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 353,
                         "end": 366
@@ -1023,47 +1024,48 @@ PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Assign": {
-                            "target": {
-                              "kind": {
-                                "Variable": "x"
-                              },
-                              "span": {
-                                "start": 368,
-                                "end": 370
-                              }
-                            },
-                            "op": "Assign",
-                            "value": {
-                              "kind": {
-                                "ArrayAccess": {
-                                  "array": {
-                                    "kind": {
-                                      "Variable": "GLOBALS"
-                                    },
-                                    "span": {
-                                      "start": 373,
-                                      "end": 381
-                                    }
-                                  },
-                                  "index": null
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Assign": {
+                              "target": {
+                                "kind": {
+                                  "Variable": "x"
+                                },
+                                "span": {
+                                  "start": 368,
+                                  "end": 370
                                 }
                               },
-                              "span": {
-                                "start": 373,
-                                "end": 383
+                              "op": "Assign",
+                              "value": {
+                                "kind": {
+                                  "ArrayAccess": {
+                                    "array": {
+                                      "kind": {
+                                        "Variable": "GLOBALS"
+                                      },
+                                      "span": {
+                                        "start": 373,
+                                        "end": 381
+                                      }
+                                    },
+                                    "index": null
+                                  }
+                                },
+                                "span": {
+                                  "start": 373,
+                                  "end": 383
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 368,
+                            "end": 383
                           }
-                        },
-                        "span": {
-                          "start": 368,
-                          "end": 383
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 368,
                         "end": 383
@@ -1071,42 +1073,43 @@ PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "ArrowFunction": {
-                            "is_static": false,
-                            "by_ref": false,
-                            "params": [],
-                            "return_type": null,
-                            "body": {
-                              "kind": {
-                                "ArrayAccess": {
-                                  "array": {
-                                    "kind": {
-                                      "Variable": "GLOBALS"
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "ArrowFunction": {
+                              "is_static": false,
+                              "by_ref": false,
+                              "params": [],
+                              "return_type": null,
+                              "body": {
+                                "kind": {
+                                  "ArrayAccess": {
+                                    "array": {
+                                      "kind": {
+                                        "Variable": "GLOBALS"
+                                      },
+                                      "span": {
+                                        "start": 393,
+                                        "end": 401
+                                      }
                                     },
-                                    "span": {
-                                      "start": 393,
-                                      "end": 401
-                                    }
-                                  },
-                                  "index": null
+                                    "index": null
+                                  }
+                                },
+                                "span": {
+                                  "start": 393,
+                                  "end": 403
                                 }
                               },
-                              "span": {
-                                "start": 393,
-                                "end": 403
-                              }
-                            },
-                            "attributes": []
+                              "attributes": []
+                            }
+                          },
+                          "span": {
+                            "start": 385,
+                            "end": 403
                           }
-                        },
-                        "span": {
-                          "start": 385,
-                          "end": 403
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 385,
                         "end": 403
@@ -1152,27 +1155,28 @@ PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "ArrayAccess": {
-                            "array": {
-                              "kind": {
-                                "Variable": "GLOBALS"
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "ArrayAccess": {
+                              "array": {
+                                "kind": {
+                                  "Variable": "GLOBALS"
+                                },
+                                "span": {
+                                  "start": 412,
+                                  "end": 420
+                                }
                               },
-                              "span": {
-                                "start": 412,
-                                "end": 420
-                              }
-                            },
-                            "index": null
+                              "index": null
+                            }
+                          },
+                          "span": {
+                            "start": 412,
+                            "end": 422
                           }
-                        },
-                        "span": {
-                          "start": 412,
-                          "end": 422
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 412,
                         "end": 422
@@ -1188,28 +1192,28 @@ PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
                           "end": 427
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "ArrayAccess": {
-                            "array": {
-                              "kind": {
-                                "Variable": "GLOBALS"
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "ArrayAccess": {
+                              "array": {
+                                "kind": {
+                                  "Variable": "GLOBALS"
+                                },
+                                "span": {
+                                  "start": 432,
+                                  "end": 440
+                                }
                               },
-                              "span": {
-                                "start": 432,
-                                "end": 440
-                              }
-                            },
-                            "index": null
+                              "index": null
+                            }
+                          },
+                          "span": {
+                            "start": 432,
+                            "end": 442
                           }
-                        },
-                        "span": {
-                          "start": 432,
-                          "end": 442
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 424,
                         "end": 442
@@ -1236,16 +1240,17 @@ PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
                           "end": 454
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 458,
-                          "end": 459
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 458,
+                            "end": 459
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 444,
                         "end": 459
@@ -1253,27 +1258,28 @@ PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "ArrayAccess": {
-                            "array": {
-                              "kind": {
-                                "Variable": "GLOBALS"
+                      "kind": {
+                        "Spread": {
+                          "kind": {
+                            "ArrayAccess": {
+                              "array": {
+                                "kind": {
+                                  "Variable": "GLOBALS"
+                                },
+                                "span": {
+                                  "start": 464,
+                                  "end": 472
+                                }
                               },
-                              "span": {
-                                "start": 464,
-                                "end": 472
-                              }
-                            },
-                            "index": null
+                              "index": null
+                            }
+                          },
+                          "span": {
+                            "start": 464,
+                            "end": 474
                           }
-                        },
-                        "span": {
-                          "start": 464,
-                          "end": 474
                         }
                       },
-                      "unpack": true,
                       "span": {
                         "start": 461,
                         "end": 474
@@ -1319,61 +1325,69 @@ PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "PropertyAccess": {
-                                    "object": {
-                                      "kind": {
-                                        "ArrayAccess": {
-                                          "array": {
-                                            "kind": {
-                                              "ArrayAccess": {
-                                                "array": {
-                                                  "kind": {
-                                                    "Variable": "GLOBALS"
-                                                  },
-                                                  "span": {
-                                                    "start": 484,
-                                                    "end": 492
+                                  "Value": {
+                                    "kind": {
+                                      "PropertyAccess": {
+                                        "object": {
+                                          "kind": {
+                                            "ArrayAccess": {
+                                              "array": {
+                                                "kind": {
+                                                  "ArrayAccess": {
+                                                    "array": {
+                                                      "kind": {
+                                                        "Variable": "GLOBALS"
+                                                      },
+                                                      "span": {
+                                                        "start": 484,
+                                                        "end": 492
+                                                      }
+                                                    },
+                                                    "index": null
                                                   }
                                                 },
-                                                "index": null
+                                                "span": {
+                                                  "start": 484,
+                                                  "end": 494
+                                                }
+                                              },
+                                              "index": {
+                                                "kind": {
+                                                  "String": "a"
+                                                },
+                                                "span": {
+                                                  "start": 495,
+                                                  "end": 498
+                                                }
                                               }
-                                            },
-                                            "span": {
-                                              "start": 484,
-                                              "end": 494
                                             }
                                           },
-                                          "index": {
-                                            "kind": {
-                                              "String": "a"
-                                            },
-                                            "span": {
-                                              "start": 495,
-                                              "end": 498
-                                            }
+                                          "span": {
+                                            "start": 484,
+                                            "end": 499
+                                          }
+                                        },
+                                        "property": {
+                                          "kind": {
+                                            "Identifier": "b"
+                                          },
+                                          "span": {
+                                            "start": 501,
+                                            "end": 502
                                           }
                                         }
-                                      },
-                                      "span": {
-                                        "start": 484,
-                                        "end": 499
                                       }
                                     },
-                                    "property": {
-                                      "kind": {
-                                        "Identifier": "b"
-                                      },
-                                      "span": {
-                                        "start": 501,
-                                        "end": 502
-                                      }
+                                    "span": {
+                                      "start": 484,
+                                      "end": 502
                                     }
                                   }
                                 },
@@ -1381,21 +1395,15 @@ PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
                                   "start": 484,
                                   "end": 502
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 484,
-                                "end": 502
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 483,
-                          "end": 503
+                            ]
+                          },
+                          "span": {
+                            "start": 483,
+                            "end": 503
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 483,
                         "end": 503
@@ -1403,55 +1411,56 @@ PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Binary": {
-                            "left": {
-                              "kind": {
-                                "Int": 1
-                              },
-                              "span": {
-                                "start": 505,
-                                "end": 506
-                              }
-                            },
-                            "op": "Add",
-                            "right": {
-                              "kind": {
-                                "ArrayAccess": {
-                                  "array": {
-                                    "kind": {
-                                      "Parenthesized": {
-                                        "kind": {
-                                          "Variable": "GLOBALS"
-                                        },
-                                        "span": {
-                                          "start": 510,
-                                          "end": 518
-                                        }
-                                      }
-                                    },
-                                    "span": {
-                                      "start": 509,
-                                      "end": 519
-                                    }
-                                  },
-                                  "index": null
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Binary": {
+                              "left": {
+                                "kind": {
+                                  "Int": 1
+                                },
+                                "span": {
+                                  "start": 505,
+                                  "end": 506
                                 }
                               },
-                              "span": {
-                                "start": 509,
-                                "end": 521
+                              "op": "Add",
+                              "right": {
+                                "kind": {
+                                  "ArrayAccess": {
+                                    "array": {
+                                      "kind": {
+                                        "Parenthesized": {
+                                          "kind": {
+                                            "Variable": "GLOBALS"
+                                          },
+                                          "span": {
+                                            "start": 510,
+                                            "end": 518
+                                          }
+                                        }
+                                      },
+                                      "span": {
+                                        "start": 509,
+                                        "end": 519
+                                      }
+                                    },
+                                    "index": null
+                                  }
+                                },
+                                "span": {
+                                  "start": 509,
+                                  "end": 521
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 505,
+                            "end": 521
                           }
-                        },
-                        "span": {
-                          "start": 505,
-                          "end": 521
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 505,
                         "end": 521
@@ -1459,46 +1468,47 @@ PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "ClassConstAccess": {
-                            "class": {
-                              "kind": {
-                                "ArrayAccess": {
-                                  "array": {
-                                    "kind": {
-                                      "Variable": "GLOBALS"
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "ClassConstAccess": {
+                              "class": {
+                                "kind": {
+                                  "ArrayAccess": {
+                                    "array": {
+                                      "kind": {
+                                        "Variable": "GLOBALS"
+                                      },
+                                      "span": {
+                                        "start": 523,
+                                        "end": 531
+                                      }
                                     },
-                                    "span": {
-                                      "start": 523,
-                                      "end": 531
-                                    }
-                                  },
-                                  "index": null
+                                    "index": null
+                                  }
+                                },
+                                "span": {
+                                  "start": 523,
+                                  "end": 533
                                 }
                               },
-                              "span": {
-                                "start": 523,
-                                "end": 533
-                              }
-                            },
-                            "member": {
-                              "kind": {
-                                "Identifier": "A"
-                              },
-                              "span": {
-                                "start": 535,
-                                "end": 536
+                              "member": {
+                                "kind": {
+                                  "Identifier": "A"
+                                },
+                                "span": {
+                                  "start": 535,
+                                  "end": 536
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 523,
+                            "end": 536
                           }
-                        },
-                        "span": {
-                          "start": 523,
-                          "end": 536
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 523,
                         "end": 536

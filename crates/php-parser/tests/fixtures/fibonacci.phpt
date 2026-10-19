@@ -144,37 +144,37 @@ echo $result;
                             "args": [
                               {
                                 "name": null,
-                                "value": {
-                                  "kind": {
-                                    "Binary": {
-                                      "left": {
-                                        "kind": {
-                                          "Variable": "n"
+                                "kind": {
+                                  "Value": {
+                                    "kind": {
+                                      "Binary": {
+                                        "left": {
+                                          "kind": {
+                                            "Variable": "n"
+                                          },
+                                          "span": {
+                                            "start": 84,
+                                            "end": 86
+                                          }
                                         },
-                                        "span": {
-                                          "start": 84,
-                                          "end": 86
-                                        }
-                                      },
-                                      "op": "Sub",
-                                      "right": {
-                                        "kind": {
-                                          "Int": 1
-                                        },
-                                        "span": {
-                                          "start": 89,
-                                          "end": 90
+                                        "op": "Sub",
+                                        "right": {
+                                          "kind": {
+                                            "Int": 1
+                                          },
+                                          "span": {
+                                            "start": 89,
+                                            "end": 90
+                                          }
                                         }
                                       }
+                                    },
+                                    "span": {
+                                      "start": 84,
+                                      "end": 90
                                     }
-                                  },
-                                  "span": {
-                                    "start": 84,
-                                    "end": 90
                                   }
                                 },
-                                "unpack": false,
-                                "by_ref": false,
                                 "span": {
                                   "start": 84,
                                   "end": 90
@@ -213,37 +213,37 @@ echo $result;
                             "args": [
                               {
                                 "name": null,
-                                "value": {
-                                  "kind": {
-                                    "Binary": {
-                                      "left": {
-                                        "kind": {
-                                          "Variable": "n"
+                                "kind": {
+                                  "Value": {
+                                    "kind": {
+                                      "Binary": {
+                                        "left": {
+                                          "kind": {
+                                            "Variable": "n"
+                                          },
+                                          "span": {
+                                            "start": 98,
+                                            "end": 100
+                                          }
                                         },
-                                        "span": {
-                                          "start": 98,
-                                          "end": 100
-                                        }
-                                      },
-                                      "op": "Sub",
-                                      "right": {
-                                        "kind": {
-                                          "Int": 2
-                                        },
-                                        "span": {
-                                          "start": 103,
-                                          "end": 104
+                                        "op": "Sub",
+                                        "right": {
+                                          "kind": {
+                                            "Int": 2
+                                          },
+                                          "span": {
+                                            "start": 103,
+                                            "end": 104
+                                          }
                                         }
                                       }
+                                    },
+                                    "span": {
+                                      "start": 98,
+                                      "end": 104
                                     }
-                                  },
-                                  "span": {
-                                    "start": 98,
-                                    "end": 104
                                   }
                                 },
-                                "unpack": false,
-                                "by_ref": false,
                                 "span": {
                                   "start": 98,
                                   "end": 104
@@ -320,17 +320,17 @@ echo $result;
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 10
-                          },
-                          "span": {
-                            "start": 124,
-                            "end": 126
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 10
+                            },
+                            "span": {
+                              "start": 124,
+                              "end": 126
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 124,
                           "end": 126

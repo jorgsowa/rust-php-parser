@@ -30,17 +30,17 @@ foo(1, 2);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 10,
-                      "end": 11
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 10,
+                        "end": 11
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 10,
                     "end": 11
@@ -48,17 +48,17 @@ foo(1, 2);
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 2
-                    },
-                    "span": {
-                      "start": 13,
-                      "end": 14
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 2
+                      },
+                      "span": {
+                        "start": 13,
+                        "end": 14
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 13,
                     "end": 14

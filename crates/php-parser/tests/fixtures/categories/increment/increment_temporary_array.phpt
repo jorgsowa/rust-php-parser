@@ -21,16 +21,17 @@ PHP Fatal error:  Cannot use temporary expression in write context in Standard i
                         "Array": [
                           {
                             "key": null,
-                            "value": {
-                              "kind": {
-                                "Int": 1
-                              },
-                              "span": {
-                                "start": 9,
-                                "end": 10
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "Int": 1
+                                },
+                                "span": {
+                                  "start": 9,
+                                  "end": 10
+                                }
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 9,
                               "end": 10

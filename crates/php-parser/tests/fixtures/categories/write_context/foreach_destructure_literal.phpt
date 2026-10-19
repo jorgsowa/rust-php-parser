@@ -25,16 +25,17 @@ PHP Fatal error:  Assignments can only happen to writable values in Standard inp
               "Array": [
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 22,
-                      "end": 24
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 22,
+                        "end": 24
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 22,
                     "end": 24
@@ -42,16 +43,17 @@ PHP Fatal error:  Assignments can only happen to writable values in Standard inp
                 },
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 26,
-                      "end": 27
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 26,
+                        "end": 27
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 26,
                     "end": 27

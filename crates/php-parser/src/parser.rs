@@ -2059,13 +2059,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     match crate::expr::parse_arg_list_or_callable(self) {
                         crate::expr::ArgListResult::Args(args) => {
                             for arg in args.iter() {
-                                if arg.unpack {
+                                if arg.is_spread() {
                                     self.error(ParseError::Forbidden {
                                         message: "Cannot use unpacking in attribute argument list"
                                             .into(),
                                         span: arg.span,
                                     });
-                                } else if let Some(value) = &arg.value {
+                                } else if let Some(value) = arg.value() {
                                     crate::expr::check_const_expr(self, value, true);
                                 }
                             }

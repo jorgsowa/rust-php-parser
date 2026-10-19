@@ -114,37 +114,37 @@ function g() {}
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "New": {
-                        "class": {
-                          "kind": {
-                            "Name": {
-                              "parts": [
-                                "Foo"
-                              ],
-                              "kind": "Unqualified",
-                              "span": {
-                                "start": 45,
-                                "end": 48
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "New": {
+                          "class": {
+                            "kind": {
+                              "Name": {
+                                "parts": [
+                                  "Foo"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 45,
+                                  "end": 48
+                                }
                               }
+                            },
+                            "span": {
+                              "start": 45,
+                              "end": 48
                             }
                           },
-                          "span": {
-                            "start": 45,
-                            "end": 48
-                          }
-                        },
-                        "args": []
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 41,
+                        "end": 48
                       }
-                    },
-                    "span": {
-                      "start": 41,
-                      "end": 48
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 41,
                     "end": 48

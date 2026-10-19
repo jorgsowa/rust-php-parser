@@ -41,24 +41,24 @@ EOT
                       "end": 13
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Heredoc": {
-                        "label": "EOT",
-                        "parts": [
-                          {
-                            "Literal": "hello"
-                          }
-                        ]
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Heredoc": {
+                          "label": "EOT",
+                          "parts": [
+                            {
+                              "Literal": "hello"
+                            }
+                          ]
+                        }
+                      },
+                      "span": {
+                        "start": 15,
+                        "end": 31
                       }
-                    },
-                    "span": {
-                      "start": 15,
-                      "end": 31
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 10,
                     "end": 31

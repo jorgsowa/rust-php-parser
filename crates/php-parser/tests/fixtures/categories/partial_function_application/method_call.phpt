@@ -44,9 +44,7 @@ min_php=8.6
                     "args": [
                       {
                         "name": null,
-                        "value": null,
-                        "unpack": false,
-                        "by_ref": false,
+                        "kind": "Placeholder",
                         "span": {
                           "start": 25,
                           "end": 26
@@ -54,17 +52,17 @@ min_php=8.6
                       },
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 2
-                          },
-                          "span": {
-                            "start": 28,
-                            "end": 29
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 2
+                            },
+                            "span": {
+                              "start": 28,
+                              "end": 29
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 28,
                           "end": 29

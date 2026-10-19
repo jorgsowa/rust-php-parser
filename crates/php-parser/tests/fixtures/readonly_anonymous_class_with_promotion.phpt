@@ -158,17 +158,17 @@ $obj = new readonly class(1, 2) {
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 1
-                          },
-                          "span": {
-                            "start": 32,
-                            "end": 33
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 32,
+                              "end": 33
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 32,
                           "end": 33
@@ -176,17 +176,17 @@ $obj = new readonly class(1, 2) {
                       },
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 2
-                          },
-                          "span": {
-                            "start": 35,
-                            "end": 36
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 2
+                            },
+                            "span": {
+                              "start": 35,
+                              "end": 36
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 35,
                           "end": 36

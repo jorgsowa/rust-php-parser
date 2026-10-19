@@ -374,16 +374,17 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                       "Array": [
                         {
                           "key": null,
-                          "value": {
-                            "kind": {
-                              "Int": 1
-                            },
-                            "span": {
-                              "start": 141,
-                              "end": 142
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "Int": 1
+                              },
+                              "span": {
+                                "start": 141,
+                                "end": 142
+                              }
                             }
                           },
-                          "unpack": false,
                           "span": {
                             "start": 141,
                             "end": 142
@@ -391,16 +392,17 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                         },
                         {
                           "key": null,
-                          "value": {
-                            "kind": {
-                              "Variable": "x"
-                            },
-                            "span": {
-                              "start": 144,
-                              "end": 146
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "Variable": "x"
+                              },
+                              "span": {
+                                "start": 144,
+                                "end": 146
+                              }
                             }
                           },
-                          "unpack": false,
                           "span": {
                             "start": 144,
                             "end": 146

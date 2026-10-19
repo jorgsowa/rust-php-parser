@@ -16,17 +16,17 @@ list(&$x, &$y) = $pair;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 8,
-                          "end": 10
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 8,
+                            "end": 10
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 7,
                         "end": 10
@@ -34,17 +34,17 @@ list(&$x, &$y) = $pair;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 13,
-                          "end": 15
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 13,
+                            "end": 15
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 12,
                         "end": 15
@@ -90,17 +90,17 @@ list(&$x, &$y) = $pair;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "x"
-                        },
-                        "span": {
-                          "start": 31,
-                          "end": 33
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "x"
+                          },
+                          "span": {
+                            "start": 31,
+                            "end": 33
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 30,
                         "end": 33
@@ -108,17 +108,17 @@ list(&$x, &$y) = $pair;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "y"
-                        },
-                        "span": {
-                          "start": 36,
-                          "end": 38
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "y"
+                          },
+                          "span": {
+                            "start": 36,
+                            "end": 38
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 35,
                         "end": 38
@@ -164,17 +164,17 @@ list(&$x, &$y) = $pair;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "first"
-                        },
-                        "span": {
-                          "start": 51,
-                          "end": 57
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "first"
+                          },
+                          "span": {
+                            "start": 51,
+                            "end": 57
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 50,
                         "end": 57
@@ -182,16 +182,17 @@ list(&$x, &$y) = $pair;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "second"
-                        },
-                        "span": {
-                          "start": 59,
-                          "end": 66
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "second"
+                          },
+                          "span": {
+                            "start": 59,
+                            "end": 66
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 59,
                         "end": 66

@@ -10,16 +10,17 @@
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Int": 1
-                  },
-                  "span": {
-                    "start": 12,
-                    "end": 13
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 12,
+                      "end": 13
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 12,
                   "end": 13
@@ -27,16 +28,17 @@
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Int": 2
-                  },
-                  "span": {
-                    "start": 15,
-                    "end": 16
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 2
+                    },
+                    "span": {
+                      "start": 15,
+                      "end": 16
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 15,
                   "end": 16
@@ -44,16 +46,17 @@
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Int": 3
-                  },
-                  "span": {
-                    "start": 18,
-                    "end": 19
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 3
+                    },
+                    "span": {
+                      "start": 18,
+                      "end": 19
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 18,
                   "end": 19
@@ -87,16 +90,17 @@
                     "end": 31
                   }
                 },
-                "value": {
-                  "kind": {
-                    "Int": 1
-                  },
-                  "span": {
-                    "start": 35,
-                    "end": 36
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 35,
+                      "end": 36
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 28,
                   "end": 36
@@ -112,16 +116,17 @@
                     "end": 41
                   }
                 },
-                "value": {
-                  "kind": {
-                    "Int": 2
-                  },
-                  "span": {
-                    "start": 45,
-                    "end": 46
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 2
+                    },
+                    "span": {
+                      "start": 45,
+                      "end": 46
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 38,
                   "end": 46

@@ -80,25 +80,25 @@ assert(!$f->{'---'});
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "VariableVariable": {
-                        "kind": {
-                          "String": "---"
-                        },
-                        "span": {
-                          "start": 35,
-                          "end": 40
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "VariableVariable": {
+                          "kind": {
+                            "String": "---"
+                          },
+                          "span": {
+                            "start": 35,
+                            "end": 40
+                          }
                         }
+                      },
+                      "span": {
+                        "start": 33,
+                        "end": 41
                       }
-                    },
-                    "span": {
-                      "start": 33,
-                      "end": 41
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 33,
                     "end": 41
@@ -144,36 +144,36 @@ assert(!$f->{'---'});
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "UnaryPrefix": {
-                        "op": "BooleanNot",
-                        "operand": {
-                          "kind": {
-                            "VariableVariable": {
-                              "kind": {
-                                "String": "---"
-                              },
-                              "span": {
-                                "start": 54,
-                                "end": 59
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "UnaryPrefix": {
+                          "op": "BooleanNot",
+                          "operand": {
+                            "kind": {
+                              "VariableVariable": {
+                                "kind": {
+                                  "String": "---"
+                                },
+                                "span": {
+                                  "start": 54,
+                                  "end": 59
+                                }
                               }
+                            },
+                            "span": {
+                              "start": 52,
+                              "end": 60
                             }
-                          },
-                          "span": {
-                            "start": 52,
-                            "end": 60
                           }
                         }
+                      },
+                      "span": {
+                        "start": 51,
+                        "end": 60
                       }
-                    },
-                    "span": {
-                      "start": 51,
-                      "end": 60
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 51,
                     "end": 60
@@ -276,36 +276,36 @@ assert(!$f->{'---'});
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "PropertyAccess": {
-                        "object": {
-                          "kind": {
-                            "Variable": "f"
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "PropertyAccess": {
+                          "object": {
+                            "kind": {
+                              "Variable": "f"
+                            },
+                            "span": {
+                              "start": 88,
+                              "end": 90
+                            }
                           },
-                          "span": {
-                            "start": 88,
-                            "end": 90
-                          }
-                        },
-                        "property": {
-                          "kind": {
-                            "String": "---"
-                          },
-                          "span": {
-                            "start": 93,
-                            "end": 98
+                          "property": {
+                            "kind": {
+                              "String": "---"
+                            },
+                            "span": {
+                              "start": 93,
+                              "end": 98
+                            }
                           }
                         }
+                      },
+                      "span": {
+                        "start": 88,
+                        "end": 98
                       }
-                    },
-                    "span": {
-                      "start": 88,
-                      "end": 98
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 88,
                     "end": 98
@@ -351,47 +351,47 @@ assert(!$f->{'---'});
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "UnaryPrefix": {
-                        "op": "BooleanNot",
-                        "operand": {
-                          "kind": {
-                            "PropertyAccess": {
-                              "object": {
-                                "kind": {
-                                  "Variable": "f"
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "UnaryPrefix": {
+                          "op": "BooleanNot",
+                          "operand": {
+                            "kind": {
+                              "PropertyAccess": {
+                                "object": {
+                                  "kind": {
+                                    "Variable": "f"
+                                  },
+                                  "span": {
+                                    "start": 110,
+                                    "end": 112
+                                  }
                                 },
-                                "span": {
-                                  "start": 110,
-                                  "end": 112
-                                }
-                              },
-                              "property": {
-                                "kind": {
-                                  "String": "---"
-                                },
-                                "span": {
-                                  "start": 115,
-                                  "end": 120
+                                "property": {
+                                  "kind": {
+                                    "String": "---"
+                                  },
+                                  "span": {
+                                    "start": 115,
+                                    "end": 120
+                                  }
                                 }
                               }
+                            },
+                            "span": {
+                              "start": 110,
+                              "end": 120
                             }
-                          },
-                          "span": {
-                            "start": 110,
-                            "end": 120
                           }
                         }
+                      },
+                      "span": {
+                        "start": 109,
+                        "end": 120
                       }
-                    },
-                    "span": {
-                      "start": 109,
-                      "end": 120
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 109,
                     "end": 120

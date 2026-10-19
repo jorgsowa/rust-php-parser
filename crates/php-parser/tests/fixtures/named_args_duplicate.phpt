@@ -38,17 +38,17 @@
                       "end": 12
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 14,
-                      "end": 15
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 14,
+                        "end": 15
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 11,
                     "end": 15
@@ -65,17 +65,17 @@
                       "end": 18
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Int": 2
-                    },
-                    "span": {
-                      "start": 20,
-                      "end": 21
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 2
+                      },
+                      "span": {
+                        "start": 20,
+                        "end": 21
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 17,
                     "end": 21

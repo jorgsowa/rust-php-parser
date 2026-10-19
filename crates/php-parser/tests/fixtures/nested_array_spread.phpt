@@ -25,51 +25,54 @@ $flat = [...$arrays[0], ...$arrays[1], 5];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Int": 1
+                                  "Value": {
+                                    "kind": {
+                                      "Int": 1
+                                    },
+                                    "span": {
+                                      "start": 18,
+                                      "end": 19
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 18,
                                   "end": 19
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 18,
-                                "end": 19
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Int": 2
+                                  "Value": {
+                                    "kind": {
+                                      "Int": 2
+                                    },
+                                    "span": {
+                                      "start": 21,
+                                      "end": 22
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 21,
                                   "end": 22
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 21,
-                                "end": 22
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 17,
-                          "end": 23
+                            ]
+                          },
+                          "span": {
+                            "start": 17,
+                            "end": 23
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 17,
                         "end": 23
@@ -77,51 +80,54 @@ $flat = [...$arrays[0], ...$arrays[1], 5];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Int": 3
+                                  "Value": {
+                                    "kind": {
+                                      "Int": 3
+                                    },
+                                    "span": {
+                                      "start": 26,
+                                      "end": 27
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 26,
                                   "end": 27
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 26,
-                                "end": 27
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Int": 4
+                                  "Value": {
+                                    "kind": {
+                                      "Int": 4
+                                    },
+                                    "span": {
+                                      "start": 29,
+                                      "end": 30
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 29,
                                   "end": 30
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 29,
-                                "end": 30
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 25,
-                          "end": 31
+                            ]
+                          },
+                          "span": {
+                            "start": 25,
+                            "end": 31
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 25,
                         "end": 31
@@ -167,35 +173,36 @@ $flat = [...$arrays[0], ...$arrays[1], 5];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "ArrayAccess": {
-                            "array": {
-                              "kind": {
-                                "Variable": "arrays"
+                      "kind": {
+                        "Spread": {
+                          "kind": {
+                            "ArrayAccess": {
+                              "array": {
+                                "kind": {
+                                  "Variable": "arrays"
+                                },
+                                "span": {
+                                  "start": 46,
+                                  "end": 53
+                                }
                               },
-                              "span": {
-                                "start": 46,
-                                "end": 53
-                              }
-                            },
-                            "index": {
-                              "kind": {
-                                "Int": 0
-                              },
-                              "span": {
-                                "start": 54,
-                                "end": 55
+                              "index": {
+                                "kind": {
+                                  "Int": 0
+                                },
+                                "span": {
+                                  "start": 54,
+                                  "end": 55
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 46,
+                            "end": 56
                           }
-                        },
-                        "span": {
-                          "start": 46,
-                          "end": 56
                         }
                       },
-                      "unpack": true,
                       "span": {
                         "start": 43,
                         "end": 56
@@ -203,35 +210,36 @@ $flat = [...$arrays[0], ...$arrays[1], 5];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "ArrayAccess": {
-                            "array": {
-                              "kind": {
-                                "Variable": "arrays"
+                      "kind": {
+                        "Spread": {
+                          "kind": {
+                            "ArrayAccess": {
+                              "array": {
+                                "kind": {
+                                  "Variable": "arrays"
+                                },
+                                "span": {
+                                  "start": 61,
+                                  "end": 68
+                                }
                               },
-                              "span": {
-                                "start": 61,
-                                "end": 68
-                              }
-                            },
-                            "index": {
-                              "kind": {
-                                "Int": 1
-                              },
-                              "span": {
-                                "start": 69,
-                                "end": 70
+                              "index": {
+                                "kind": {
+                                  "Int": 1
+                                },
+                                "span": {
+                                  "start": 69,
+                                  "end": 70
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 61,
+                            "end": 71
                           }
-                        },
-                        "span": {
-                          "start": 61,
-                          "end": 71
                         }
                       },
-                      "unpack": true,
                       "span": {
                         "start": 58,
                         "end": 71
@@ -239,16 +247,17 @@ $flat = [...$arrays[0], ...$arrays[1], 5];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 5
-                        },
-                        "span": {
-                          "start": 73,
-                          "end": 74
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 5
+                          },
+                          "span": {
+                            "start": 73,
+                            "end": 74
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 73,
                         "end": 74

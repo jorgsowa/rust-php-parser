@@ -315,17 +315,17 @@ PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $val
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "GLOBALS"
-                        },
-                        "span": {
-                          "start": 114,
-                          "end": 122
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "GLOBALS"
+                          },
+                          "span": {
+                            "start": 114,
+                            "end": 122
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 113,
                         "end": 122
@@ -341,17 +341,17 @@ PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $val
                           "end": 127
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "GLOBALS"
-                        },
-                        "span": {
-                          "start": 132,
-                          "end": 140
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "GLOBALS"
+                          },
+                          "span": {
+                            "start": 132,
+                            "end": 140
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 124,
                         "end": 140
@@ -387,16 +387,17 @@ PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $val
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 144,
-                          "end": 146
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 144,
+                            "end": 146
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 144,
                         "end": 146
@@ -404,34 +405,36 @@ PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $val
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "GLOBALS"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "GLOBALS"
+                                    },
+                                    "span": {
+                                      "start": 149,
+                                      "end": 157
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 149,
                                   "end": 157
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 149,
-                                "end": 157
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 148,
-                          "end": 158
+                            ]
+                          },
+                          "span": {
+                            "start": 148,
+                            "end": 158
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 148,
                         "end": 158
@@ -795,27 +798,28 @@ PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $val
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "ArrayAccess": {
-                            "array": {
-                              "kind": {
-                                "Variable": "GLOBALS"
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "ArrayAccess": {
+                              "array": {
+                                "kind": {
+                                  "Variable": "GLOBALS"
+                                },
+                                "span": {
+                                  "start": 314,
+                                  "end": 322
+                                }
                               },
-                              "span": {
-                                "start": 314,
-                                "end": 322
-                              }
-                            },
-                            "index": null
+                              "index": null
+                            }
+                          },
+                          "span": {
+                            "start": 314,
+                            "end": 324
                           }
-                        },
-                        "span": {
-                          "start": 314,
-                          "end": 324
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 314,
                         "end": 324

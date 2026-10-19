@@ -32,24 +32,24 @@ EOT
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Heredoc": {
-                        "label": "EOT",
-                        "parts": [
-                          {
-                            "Literal": "hello"
-                          }
-                        ]
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Heredoc": {
+                          "label": "EOT",
+                          "parts": [
+                            {
+                              "Literal": "hello"
+                            }
+                          ]
+                        }
+                      },
+                      "span": {
+                        "start": 10,
+                        "end": 26
                       }
-                    },
-                    "span": {
-                      "start": 10,
-                      "end": 26
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 10,
                     "end": 26

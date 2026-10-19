@@ -530,17 +530,17 @@ abstract class Complete {
                               "args": [
                                 {
                                   "name": null,
-                                  "value": {
-                                    "kind": {
-                                      "String": "default"
-                                    },
-                                    "span": {
-                                      "start": 418,
-                                      "end": 427
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "String": "default"
+                                      },
+                                      "span": {
+                                        "start": 418,
+                                        "end": 427
+                                      }
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 418,
                                     "end": 427

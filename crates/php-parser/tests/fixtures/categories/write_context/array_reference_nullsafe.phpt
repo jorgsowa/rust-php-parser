@@ -35,36 +35,36 @@ PHP Fatal error:  Can't use nullsafe operator in write context in Standard input
                           "end": 15
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "NullsafePropertyAccess": {
-                            "object": {
-                              "kind": {
-                                "Variable": "a"
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "NullsafePropertyAccess": {
+                              "object": {
+                                "kind": {
+                                  "Variable": "a"
+                                },
+                                "span": {
+                                  "start": 20,
+                                  "end": 22
+                                }
                               },
-                              "span": {
-                                "start": 20,
-                                "end": 22
-                              }
-                            },
-                            "property": {
-                              "kind": {
-                                "Identifier": "b"
-                              },
-                              "span": {
-                                "start": 25,
-                                "end": 26
+                              "property": {
+                                "kind": {
+                                  "Identifier": "b"
+                                },
+                                "span": {
+                                  "start": 25,
+                                  "end": 26
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 20,
+                            "end": 26
                           }
-                        },
-                        "span": {
-                          "start": 20,
-                          "end": 26
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 12,
                         "end": 26

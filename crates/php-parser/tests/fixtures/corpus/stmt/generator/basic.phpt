@@ -622,29 +622,29 @@ function gen() {
                       "args": [
                         {
                           "name": null,
-                          "value": {
-                            "kind": {
-                              "Yield": {
-                                "key": null,
-                                "value": {
-                                  "kind": {
-                                    "Variable": "foo"
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "Yield": {
+                                  "key": null,
+                                  "value": {
+                                    "kind": {
+                                      "Variable": "foo"
+                                    },
+                                    "span": {
+                                      "start": 504,
+                                      "end": 508
+                                    }
                                   },
-                                  "span": {
-                                    "start": 504,
-                                    "end": 508
-                                  }
-                                },
-                                "is_from": false
+                                  "is_from": false
+                                }
+                              },
+                              "span": {
+                                "start": 498,
+                                "end": 508
                               }
-                            },
-                            "span": {
-                              "start": 498,
-                              "end": 508
                             }
                           },
-                          "unpack": false,
-                          "by_ref": false,
                           "span": {
                             "start": 498,
                             "end": 508
@@ -690,29 +690,29 @@ function gen() {
                       "args": [
                         {
                           "name": null,
-                          "value": {
-                            "kind": {
-                              "Yield": {
-                                "key": null,
-                                "value": {
-                                  "kind": {
-                                    "Variable": "foo"
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "Yield": {
+                                  "key": null,
+                                  "value": {
+                                    "kind": {
+                                      "Variable": "foo"
+                                    },
+                                    "span": {
+                                      "start": 532,
+                                      "end": 536
+                                    }
                                   },
-                                  "span": {
-                                    "start": 532,
-                                    "end": 536
-                                  }
-                                },
-                                "is_from": false
+                                  "is_from": false
+                                }
+                              },
+                              "span": {
+                                "start": 526,
+                                "end": 536
                               }
-                            },
-                            "span": {
-                              "start": 526,
-                              "end": 536
                             }
                           },
-                          "unpack": false,
-                          "by_ref": false,
                           "span": {
                             "start": 526,
                             "end": 536
@@ -758,29 +758,29 @@ function gen() {
                       "args": [
                         {
                           "name": null,
-                          "value": {
-                            "kind": {
-                              "Yield": {
-                                "key": null,
-                                "value": {
-                                  "kind": {
-                                    "Variable": "foo"
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "Yield": {
+                                  "key": null,
+                                  "value": {
+                                    "kind": {
+                                      "Variable": "foo"
+                                    },
+                                    "span": {
+                                      "start": 557,
+                                      "end": 561
+                                    }
                                   },
-                                  "span": {
-                                    "start": 557,
-                                    "end": 561
-                                  }
-                                },
-                                "is_from": false
+                                  "is_from": false
+                                }
+                              },
+                              "span": {
+                                "start": 551,
+                                "end": 561
                               }
-                            },
-                            "span": {
-                              "start": 551,
-                              "end": 561
                             }
                           },
-                          "unpack": false,
-                          "by_ref": false,
                           "span": {
                             "start": 551,
                             "end": 561

@@ -25,16 +25,17 @@ isset("str"->a);
                                   "Array": [
                                     {
                                       "key": null,
-                                      "value": {
-                                        "kind": {
-                                          "Int": 0
-                                        },
-                                        "span": {
-                                          "start": 15,
-                                          "end": 16
+                                      "kind": {
+                                        "Value": {
+                                          "kind": {
+                                            "Int": 0
+                                          },
+                                          "span": {
+                                            "start": 15,
+                                            "end": 16
+                                          }
                                         }
                                       },
-                                      "unpack": false,
                                       "span": {
                                         "start": 15,
                                         "end": 16
@@ -42,16 +43,17 @@ isset("str"->a);
                                     },
                                     {
                                       "key": null,
-                                      "value": {
-                                        "kind": {
-                                          "Int": 1
-                                        },
-                                        "span": {
-                                          "start": 18,
-                                          "end": 19
+                                      "kind": {
+                                        "Value": {
+                                          "kind": {
+                                            "Int": 1
+                                          },
+                                          "span": {
+                                            "start": 18,
+                                            "end": 19
+                                          }
                                         }
                                       },
-                                      "unpack": false,
                                       "span": {
                                         "start": 18,
                                         "end": 19
@@ -137,16 +139,17 @@ isset("str"->a);
                                 "end": 42
                               }
                             },
-                            "value": {
-                              "kind": {
-                                "String": "b"
-                              },
-                              "span": {
-                                "start": 46,
-                                "end": 49
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "String": "b"
+                                },
+                                "span": {
+                                  "start": 46,
+                                  "end": 49
+                                }
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 39,
                               "end": 49

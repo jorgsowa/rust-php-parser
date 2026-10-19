@@ -156,12 +156,12 @@ pub(crate) fn check_special_variable_write(
     let message = match &target.kind {
         ExprKind::Array(elems) if kind == WriteKind::Assign => {
             for el in elems.iter() {
-                let mut value = &el.value;
+                let mut value = el.value();
                 while let ExprKind::Parenthesized(inner) = &value.kind {
                     value = inner;
                 }
                 // A by-reference element was checked as an array literal.
-                if !el.by_ref || is_variable_named(value, "this") {
+                if !el.is_by_ref() || is_variable_named(value, "this") {
                     check_special_variable_write(parser, value, kind);
                 }
             }
@@ -339,7 +339,7 @@ fn is_valid_destructure_element(kind: &ExprKind<'_, '_>) -> bool {
         ExprKind::Omit => true,
         ExprKind::Array(elems) => elems
             .iter()
-            .all(|el| !el.unpack && is_valid_destructure_element(&el.value.kind)),
+            .all(|el| !el.is_spread() && is_valid_destructure_element(&el.value().kind)),
         // PHP rejects `($a) = …` but accepts `[($a)] = …`.
         ExprKind::Parenthesized(inner) => is_valid_destructure_element(&inner.kind),
         _ => {
@@ -403,7 +403,7 @@ fn has_reference_element(kind: &ExprKind<'_, '_>) -> bool {
     };
     elems
         .iter()
-        .any(|el| el.by_ref || has_reference_element(&el.value.kind))
+        .any(|el| el.is_by_ref() || has_reference_element(&el.value().kind))
 }
 
 const INVALID_CONST_EXPR: &str = "Constant expression contains invalid operations";
@@ -519,13 +519,13 @@ impl ConstExprChecker {
             }
             ExprKind::Array(elements) => {
                 for el in elements.iter() {
-                    if el.by_ref {
+                    if el.is_by_ref() {
                         return Err(Forbidden(INVALID_CONST_EXPR, el.span));
                     }
                     if let Some(key) = &el.key {
                         self.check(key)?;
                     }
-                    self.check(&el.value)?;
+                    self.check(el.value())?;
                 }
                 Ok(())
             }
@@ -616,13 +616,13 @@ impl ConstExprChecker {
                     }
                 }
                 for arg in new.args.iter() {
-                    if arg.unpack {
+                    if arg.is_spread() {
                         return Err(Forbidden(
                             "Argument unpacking in constant expressions is not supported",
                             arg.span,
                         ));
                     }
-                    if let Some(value) = &arg.value {
+                    if let Some(value) = arg.value() {
                         self.check(value)?;
                     }
                 }
@@ -788,9 +788,9 @@ fn foldable(expr: &Expr<'_, '_>, constants: bool) -> bool {
             operand(t.condition) && t.then_expr.is_none_or(operand) && operand(t.else_expr)
         }
         ExprKind::NullCoalesce(n) => operand(n.left) && operand(n.right),
-        ExprKind::Array(elements) => elements
-            .iter()
-            .all(|el| !el.by_ref && el.key.as_ref().is_none_or(operand) && operand(&el.value)),
+        ExprKind::Array(elements) => elements.iter().all(|el| {
+            !el.is_by_ref() && el.key.as_ref().is_none_or(operand) && operand(el.value())
+        }),
         ExprKind::ArrayAccess(a) => operand(a.array) && a.index.is_some_and(operand),
         _ => false,
     }
@@ -803,7 +803,7 @@ pub(crate) fn check_list_entries(parser: &mut Parser<'_, '_>, target: &Expr<'_, 
     };
     if elems
         .iter()
-        .all(|el| matches!(el.value.kind, ExprKind::Omit))
+        .all(|el| matches!(el.value().kind, ExprKind::Omit))
     {
         parser.error(ParseError::Forbidden {
             message: "Cannot use empty list".into(),
@@ -814,10 +814,10 @@ pub(crate) fn check_list_entries(parser: &mut Parser<'_, '_>, target: &Expr<'_, 
     // PHP takes the list's style from its first non-empty entry and stops at the first mismatch.
     let is_keyed = elems
         .iter()
-        .find(|el| !matches!(el.value.kind, ExprKind::Omit))
+        .find(|el| !matches!(el.value().kind, ExprKind::Omit))
         .is_some_and(|el| el.key.is_some());
     for el in elems.iter() {
-        if matches!(el.value.kind, ExprKind::Omit) {
+        if matches!(el.value().kind, ExprKind::Omit) {
             if is_keyed {
                 parser.error(ParseError::Forbidden {
                     message: "Cannot use empty array entries in keyed array assignment".into(),
@@ -827,7 +827,7 @@ pub(crate) fn check_list_entries(parser: &mut Parser<'_, '_>, target: &Expr<'_, 
             }
             continue;
         }
-        if el.unpack {
+        if el.is_spread() {
             return;
         }
         if el.key.is_some() != is_keyed {
@@ -837,7 +837,7 @@ pub(crate) fn check_list_entries(parser: &mut Parser<'_, '_>, target: &Expr<'_, 
             });
             return;
         }
-        check_list_entries(parser, &el.value);
+        check_list_entries(parser, el.value());
     }
 }
 
@@ -876,13 +876,13 @@ fn check_mixed_list_short_syntax<'arena, 'src>(
                 return;
             }
             for el in elems.iter() {
-                walk(parser, &el.value, outer_is_list);
+                walk(parser, el.value(), outer_is_list);
             }
         }
     }
     if let ExprKind::Array(elems) = &lhs.kind {
         for el in elems.iter() {
-            walk(parser, &el.value, outer_is_list);
+            walk(parser, el.value(), outer_is_list);
         }
     }
 }
@@ -989,15 +989,15 @@ fn parse_assign_continuation<'arena, 'src>(
         // rejects e.g. `[null, $b] = …` and `list(1 + 1) = …` with
         // "Assignments can only happen to writable values".
         for el in elems.iter() {
-            if el.unpack {
+            if el.is_spread() {
                 parser.error(ParseError::Forbidden {
                     message: "Spread operator is not supported in assignments".into(),
                     span: el.span,
                 });
-            } else if !is_valid_destructure_element(&el.value.kind) {
+            } else if !is_valid_destructure_element(&el.value().kind) {
                 parser.error(ParseError::Forbidden {
                     message: "Assignments can only happen to writable values".into(),
-                    span: el.value.span,
+                    span: el.value().span,
                 });
             }
         }

@@ -123,17 +123,17 @@ function f() {
                   "args": [
                     {
                       "name": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 52,
-                          "end": 53
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 52,
+                            "end": 53
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": false,
                       "span": {
                         "start": 52,
                         "end": 53
@@ -141,17 +141,17 @@ function f() {
                     },
                     {
                       "name": null,
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 55,
-                          "end": 56
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 55,
+                            "end": 56
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": false,
                       "span": {
                         "start": 55,
                         "end": 56

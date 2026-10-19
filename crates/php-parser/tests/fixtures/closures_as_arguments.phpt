@@ -44,17 +44,17 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Variable": "items"
-                          },
-                          "span": {
-                            "start": 31,
-                            "end": 37
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Variable": "items"
+                            },
+                            "span": {
+                              "start": 31,
+                              "end": 37
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 31,
                           "end": 37
@@ -62,75 +62,75 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                       },
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "ArrowFunction": {
-                              "is_static": false,
-                              "by_ref": false,
-                              "params": [
-                                {
-                                  "name": {
-                                    "name": "x",
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "ArrowFunction": {
+                                "is_static": false,
+                                "by_ref": false,
+                                "params": [
+                                  {
+                                    "name": {
+                                      "name": "x",
+                                      "span": {
+                                        "start": 42,
+                                        "end": 44
+                                      }
+                                    },
+                                    "type_hint": null,
+                                    "default": null,
+                                    "by_ref": false,
+                                    "variadic": false,
+                                    "is_readonly": false,
+                                    "is_final": false,
+                                    "visibility": null,
+                                    "set_visibility": null,
+                                    "attributes": [],
                                     "span": {
                                       "start": 42,
                                       "end": 44
                                     }
-                                  },
-                                  "type_hint": null,
-                                  "default": null,
-                                  "by_ref": false,
-                                  "variadic": false,
-                                  "is_readonly": false,
-                                  "is_final": false,
-                                  "visibility": null,
-                                  "set_visibility": null,
-                                  "attributes": [],
-                                  "span": {
-                                    "start": 42,
-                                    "end": 44
                                   }
-                                }
-                              ],
-                              "return_type": null,
-                              "body": {
-                                "kind": {
-                                  "Binary": {
-                                    "left": {
-                                      "kind": {
-                                        "Variable": "x"
+                                ],
+                                "return_type": null,
+                                "body": {
+                                  "kind": {
+                                    "Binary": {
+                                      "left": {
+                                        "kind": {
+                                          "Variable": "x"
+                                        },
+                                        "span": {
+                                          "start": 49,
+                                          "end": 51
+                                        }
                                       },
-                                      "span": {
-                                        "start": 49,
-                                        "end": 51
-                                      }
-                                    },
-                                    "op": "Greater",
-                                    "right": {
-                                      "kind": {
-                                        "Int": 0
-                                      },
-                                      "span": {
-                                        "start": 54,
-                                        "end": 55
+                                      "op": "Greater",
+                                      "right": {
+                                        "kind": {
+                                          "Int": 0
+                                        },
+                                        "span": {
+                                          "start": 54,
+                                          "end": 55
+                                        }
                                       }
                                     }
+                                  },
+                                  "span": {
+                                    "start": 49,
+                                    "end": 55
                                   }
                                 },
-                                "span": {
-                                  "start": 49,
-                                  "end": 55
-                                }
-                              },
-                              "attributes": []
+                                "attributes": []
+                              }
+                            },
+                            "span": {
+                              "start": 39,
+                              "end": 55
                             }
-                          },
-                          "span": {
-                            "start": 39,
-                            "end": 55
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 39,
                           "end": 55
@@ -196,86 +196,86 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Closure": {
-                              "is_static": false,
-                              "by_ref": false,
-                              "params": [
-                                {
-                                  "name": {
-                                    "name": "x",
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Closure": {
+                                "is_static": false,
+                                "by_ref": false,
+                                "params": [
+                                  {
+                                    "name": {
+                                      "name": "x",
+                                      "span": {
+                                        "start": 87,
+                                        "end": 89
+                                      }
+                                    },
+                                    "type_hint": null,
+                                    "default": null,
+                                    "by_ref": false,
+                                    "variadic": false,
+                                    "is_readonly": false,
+                                    "is_final": false,
+                                    "visibility": null,
+                                    "set_visibility": null,
+                                    "attributes": [],
                                     "span": {
                                       "start": 87,
                                       "end": 89
                                     }
-                                  },
-                                  "type_hint": null,
-                                  "default": null,
-                                  "by_ref": false,
-                                  "variadic": false,
-                                  "is_readonly": false,
-                                  "is_final": false,
-                                  "visibility": null,
-                                  "set_visibility": null,
-                                  "attributes": [],
-                                  "span": {
-                                    "start": 87,
-                                    "end": 89
                                   }
-                                }
-                              ],
-                              "use_vars": [],
-                              "return_type": null,
-                              "body": [
-                                {
-                                  "kind": {
-                                    "Return": {
-                                      "kind": {
-                                        "Binary": {
-                                          "left": {
-                                            "kind": {
-                                              "Variable": "x"
+                                ],
+                                "use_vars": [],
+                                "return_type": null,
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "Return": {
+                                        "kind": {
+                                          "Binary": {
+                                            "left": {
+                                              "kind": {
+                                                "Variable": "x"
+                                              },
+                                              "span": {
+                                                "start": 100,
+                                                "end": 102
+                                              }
                                             },
-                                            "span": {
-                                              "start": 100,
-                                              "end": 102
-                                            }
-                                          },
-                                          "op": "Mul",
-                                          "right": {
-                                            "kind": {
-                                              "Int": 2
-                                            },
-                                            "span": {
-                                              "start": 105,
-                                              "end": 106
+                                            "op": "Mul",
+                                            "right": {
+                                              "kind": {
+                                                "Int": 2
+                                              },
+                                              "span": {
+                                                "start": 105,
+                                                "end": 106
+                                              }
                                             }
                                           }
+                                        },
+                                        "span": {
+                                          "start": 100,
+                                          "end": 106
                                         }
-                                      },
-                                      "span": {
-                                        "start": 100,
-                                        "end": 106
                                       }
+                                    },
+                                    "span": {
+                                      "start": 93,
+                                      "end": 107
                                     }
-                                  },
-                                  "span": {
-                                    "start": 93,
-                                    "end": 107
                                   }
-                                }
-                              ],
-                              "attributes": []
+                                ],
+                                "attributes": []
+                              }
+                            },
+                            "span": {
+                              "start": 78,
+                              "end": 109
                             }
-                          },
-                          "span": {
-                            "start": 78,
-                            "end": 109
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 78,
                           "end": 109
@@ -283,17 +283,17 @@ $mapped = array_map(function($x) { return $x * 2; }, $items);
                       },
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Variable": "items"
-                          },
-                          "span": {
-                            "start": 111,
-                            "end": 117
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Variable": "items"
+                            },
+                            "span": {
+                              "start": 111,
+                              "end": 117
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 111,
                           "end": 117

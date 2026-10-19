@@ -1533,69 +1533,70 @@ namespace {
                                       "Array": [
                                         {
                                           "key": null,
-                                          "value": {
-                                            "kind": {
-                                              "Closure": {
-                                                "is_static": false,
-                                                "by_ref": false,
-                                                "params": [],
-                                                "use_vars": [],
-                                                "return_type": {
-                                                  "kind": {
-                                                    "Union": [
-                                                      {
-                                                        "kind": {
-                                                          "Named": {
-                                                            "parts": [
-                                                              "K"
-                                                            ],
-                                                            "kind": "Unqualified",
-                                                            "span": {
-                                                              "start": 761,
-                                                              "end": 762
+                                          "kind": {
+                                            "Value": {
+                                              "kind": {
+                                                "Closure": {
+                                                  "is_static": false,
+                                                  "by_ref": false,
+                                                  "params": [],
+                                                  "use_vars": [],
+                                                  "return_type": {
+                                                    "kind": {
+                                                      "Union": [
+                                                        {
+                                                          "kind": {
+                                                            "Named": {
+                                                              "parts": [
+                                                                "K"
+                                                              ],
+                                                              "kind": "Unqualified",
+                                                              "span": {
+                                                                "start": 761,
+                                                                "end": 762
+                                                              }
                                                             }
+                                                          },
+                                                          "span": {
+                                                            "start": 761,
+                                                            "end": 762
                                                           }
                                                         },
-                                                        "span": {
-                                                          "start": 761,
-                                                          "end": 762
-                                                        }
-                                                      },
-                                                      {
-                                                        "kind": {
-                                                          "Named": {
-                                                            "parts": [
-                                                              "self"
-                                                            ],
-                                                            "kind": "Unqualified",
-                                                            "span": {
-                                                              "start": 763,
-                                                              "end": 767
+                                                        {
+                                                          "kind": {
+                                                            "Named": {
+                                                              "parts": [
+                                                                "self"
+                                                              ],
+                                                              "kind": "Unqualified",
+                                                              "span": {
+                                                                "start": 763,
+                                                                "end": 767
+                                                              }
                                                             }
+                                                          },
+                                                          "span": {
+                                                            "start": 763,
+                                                            "end": 767
                                                           }
-                                                        },
-                                                        "span": {
-                                                          "start": 763,
-                                                          "end": 767
                                                         }
-                                                      }
-                                                    ]
+                                                      ]
+                                                    },
+                                                    "span": {
+                                                      "start": 761,
+                                                      "end": 767
+                                                    }
                                                   },
-                                                  "span": {
-                                                    "start": 761,
-                                                    "end": 767
-                                                  }
-                                                },
-                                                "body": [],
-                                                "attributes": []
+                                                  "body": [],
+                                                  "attributes": []
+                                                }
+                                              },
+                                              "span": {
+                                                "start": 748,
+                                                "end": 770
                                               }
-                                            },
-                                            "span": {
-                                              "start": 748,
-                                              "end": 770
                                             }
                                           },
-                                          "unpack": false,
                                           "span": {
                                             "start": 748,
                                             "end": 770
@@ -1603,76 +1604,77 @@ namespace {
                                         },
                                         {
                                           "key": null,
-                                          "value": {
-                                            "kind": {
-                                              "ArrowFunction": {
-                                                "is_static": false,
-                                                "by_ref": false,
-                                                "params": [],
-                                                "return_type": {
-                                                  "kind": {
-                                                    "Union": [
-                                                      {
-                                                        "kind": {
-                                                          "Named": {
-                                                            "parts": [
-                                                              "P"
-                                                            ],
-                                                            "kind": "Unqualified",
-                                                            "span": {
-                                                              "start": 778,
-                                                              "end": 779
+                                          "kind": {
+                                            "Value": {
+                                              "kind": {
+                                                "ArrowFunction": {
+                                                  "is_static": false,
+                                                  "by_ref": false,
+                                                  "params": [],
+                                                  "return_type": {
+                                                    "kind": {
+                                                      "Union": [
+                                                        {
+                                                          "kind": {
+                                                            "Named": {
+                                                              "parts": [
+                                                                "P"
+                                                              ],
+                                                              "kind": "Unqualified",
+                                                              "span": {
+                                                                "start": 778,
+                                                                "end": 779
+                                                              }
                                                             }
+                                                          },
+                                                          "span": {
+                                                            "start": 778,
+                                                            "end": 779
                                                           }
                                                         },
-                                                        "span": {
-                                                          "start": 778,
-                                                          "end": 779
-                                                        }
-                                                      },
-                                                      {
-                                                        "kind": {
-                                                          "Named": {
-                                                            "parts": [
-                                                              "parent"
-                                                            ],
-                                                            "kind": "Unqualified",
-                                                            "span": {
-                                                              "start": 780,
-                                                              "end": 786
+                                                        {
+                                                          "kind": {
+                                                            "Named": {
+                                                              "parts": [
+                                                                "parent"
+                                                              ],
+                                                              "kind": "Unqualified",
+                                                              "span": {
+                                                                "start": 780,
+                                                                "end": 786
+                                                              }
                                                             }
+                                                          },
+                                                          "span": {
+                                                            "start": 780,
+                                                            "end": 786
                                                           }
-                                                        },
-                                                        "span": {
-                                                          "start": 780,
-                                                          "end": 786
                                                         }
-                                                      }
-                                                    ]
+                                                      ]
+                                                    },
+                                                    "span": {
+                                                      "start": 778,
+                                                      "end": 786
+                                                    }
                                                   },
-                                                  "span": {
-                                                    "start": 778,
-                                                    "end": 786
-                                                  }
-                                                },
-                                                "body": {
-                                                  "kind": {
-                                                    "Int": 1
+                                                  "body": {
+                                                    "kind": {
+                                                      "Int": 1
+                                                    },
+                                                    "span": {
+                                                      "start": 790,
+                                                      "end": 791
+                                                    }
                                                   },
-                                                  "span": {
-                                                    "start": 790,
-                                                    "end": 791
-                                                  }
-                                                },
-                                                "attributes": []
+                                                  "attributes": []
+                                                }
+                                              },
+                                              "span": {
+                                                "start": 772,
+                                                "end": 791
                                               }
-                                            },
-                                            "span": {
-                                              "start": 772,
-                                              "end": 791
                                             }
                                           },
-                                          "unpack": false,
                                           "span": {
                                             "start": 772,
                                             "end": 791

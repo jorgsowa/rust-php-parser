@@ -109,17 +109,17 @@ A::{"b" . $c}(1);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 31,
-                      "end": 32
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 31,
+                        "end": 32
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 31,
                     "end": 32

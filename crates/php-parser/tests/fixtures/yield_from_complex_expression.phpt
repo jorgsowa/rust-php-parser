@@ -48,75 +48,75 @@ function gen() {
                             "args": [
                               {
                                 "name": null,
-                                "value": {
-                                  "kind": {
-                                    "ArrowFunction": {
-                                      "is_static": false,
-                                      "by_ref": false,
-                                      "params": [
-                                        {
-                                          "name": {
-                                            "name": "x",
+                                "kind": {
+                                  "Value": {
+                                    "kind": {
+                                      "ArrowFunction": {
+                                        "is_static": false,
+                                        "by_ref": false,
+                                        "params": [
+                                          {
+                                            "name": {
+                                              "name": "x",
+                                              "span": {
+                                                "start": 51,
+                                                "end": 53
+                                              }
+                                            },
+                                            "type_hint": null,
+                                            "default": null,
+                                            "by_ref": false,
+                                            "variadic": false,
+                                            "is_readonly": false,
+                                            "is_final": false,
+                                            "visibility": null,
+                                            "set_visibility": null,
+                                            "attributes": [],
                                             "span": {
                                               "start": 51,
                                               "end": 53
                                             }
-                                          },
-                                          "type_hint": null,
-                                          "default": null,
-                                          "by_ref": false,
-                                          "variadic": false,
-                                          "is_readonly": false,
-                                          "is_final": false,
-                                          "visibility": null,
-                                          "set_visibility": null,
-                                          "attributes": [],
-                                          "span": {
-                                            "start": 51,
-                                            "end": 53
                                           }
-                                        }
-                                      ],
-                                      "return_type": null,
-                                      "body": {
-                                        "kind": {
-                                          "Binary": {
-                                            "left": {
-                                              "kind": {
-                                                "Variable": "x"
+                                        ],
+                                        "return_type": null,
+                                        "body": {
+                                          "kind": {
+                                            "Binary": {
+                                              "left": {
+                                                "kind": {
+                                                  "Variable": "x"
+                                                },
+                                                "span": {
+                                                  "start": 58,
+                                                  "end": 60
+                                                }
                                               },
-                                              "span": {
-                                                "start": 58,
-                                                "end": 60
-                                              }
-                                            },
-                                            "op": "Mul",
-                                            "right": {
-                                              "kind": {
-                                                "Int": 2
-                                              },
-                                              "span": {
-                                                "start": 63,
-                                                "end": 64
+                                              "op": "Mul",
+                                              "right": {
+                                                "kind": {
+                                                  "Int": 2
+                                                },
+                                                "span": {
+                                                  "start": 63,
+                                                  "end": 64
+                                                }
                                               }
                                             }
+                                          },
+                                          "span": {
+                                            "start": 58,
+                                            "end": 64
                                           }
                                         },
-                                        "span": {
-                                          "start": 58,
-                                          "end": 64
-                                        }
-                                      },
-                                      "attributes": []
+                                        "attributes": []
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 48,
+                                      "end": 64
                                     }
-                                  },
-                                  "span": {
-                                    "start": 48,
-                                    "end": 64
                                   }
                                 },
-                                "unpack": false,
-                                "by_ref": false,
                                 "span": {
                                   "start": 48,
                                   "end": 64
@@ -124,69 +124,72 @@ function gen() {
                               },
                               {
                                 "name": null,
-                                "value": {
-                                  "kind": {
-                                    "Array": [
-                                      {
-                                        "key": null,
-                                        "value": {
+                                "kind": {
+                                  "Value": {
+                                    "kind": {
+                                      "Array": [
+                                        {
+                                          "key": null,
                                           "kind": {
-                                            "Int": 1
+                                            "Value": {
+                                              "kind": {
+                                                "Int": 1
+                                              },
+                                              "span": {
+                                                "start": 67,
+                                                "end": 68
+                                              }
+                                            }
                                           },
                                           "span": {
                                             "start": 67,
                                             "end": 68
                                           }
                                         },
-                                        "unpack": false,
-                                        "span": {
-                                          "start": 67,
-                                          "end": 68
-                                        }
-                                      },
-                                      {
-                                        "key": null,
-                                        "value": {
+                                        {
+                                          "key": null,
                                           "kind": {
-                                            "Int": 2
+                                            "Value": {
+                                              "kind": {
+                                                "Int": 2
+                                              },
+                                              "span": {
+                                                "start": 70,
+                                                "end": 71
+                                              }
+                                            }
                                           },
                                           "span": {
                                             "start": 70,
                                             "end": 71
                                           }
                                         },
-                                        "unpack": false,
-                                        "span": {
-                                          "start": 70,
-                                          "end": 71
-                                        }
-                                      },
-                                      {
-                                        "key": null,
-                                        "value": {
+                                        {
+                                          "key": null,
                                           "kind": {
-                                            "Int": 3
+                                            "Value": {
+                                              "kind": {
+                                                "Int": 3
+                                              },
+                                              "span": {
+                                                "start": 73,
+                                                "end": 74
+                                              }
+                                            }
                                           },
                                           "span": {
                                             "start": 73,
                                             "end": 74
                                           }
-                                        },
-                                        "unpack": false,
-                                        "span": {
-                                          "start": 73,
-                                          "end": 74
                                         }
-                                      }
-                                    ]
-                                  },
-                                  "span": {
-                                    "start": 66,
-                                    "end": 75
+                                      ]
+                                    },
+                                    "span": {
+                                      "start": 66,
+                                      "end": 75
+                                    }
                                   }
                                 },
-                                "unpack": false,
-                                "by_ref": false,
                                 "span": {
                                   "start": 66,
                                   "end": 75

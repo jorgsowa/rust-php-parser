@@ -15,16 +15,17 @@ list($x, , $z) = $array;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 11,
-                          "end": 13
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 11,
+                            "end": 13
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 11,
                         "end": 13
@@ -32,16 +33,17 @@ list($x, , $z) = $array;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 15,
-                          "end": 17
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 15,
+                            "end": 17
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 15,
                         "end": 17
@@ -49,16 +51,17 @@ list($x, , $z) = $array;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "c"
-                        },
-                        "span": {
-                          "start": 19,
-                          "end": 21
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "c"
+                          },
+                          "span": {
+                            "start": 19,
+                            "end": 21
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 19,
                         "end": 21
@@ -124,16 +127,17 @@ list($x, , $z) = $array;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "x"
-                        },
-                        "span": {
-                          "start": 43,
-                          "end": 45
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "x"
+                          },
+                          "span": {
+                            "start": 43,
+                            "end": 45
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 43,
                         "end": 45
@@ -141,14 +145,15 @@ list($x, , $z) = $array;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 47,
-                          "end": 48
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 47,
+                            "end": 48
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 47,
                         "end": 48
@@ -156,16 +161,17 @@ list($x, , $z) = $array;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "z"
-                        },
-                        "span": {
-                          "start": 49,
-                          "end": 51
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "z"
+                          },
+                          "span": {
+                            "start": 49,
+                            "end": 51
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 49,
                         "end": 51

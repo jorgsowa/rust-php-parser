@@ -29,37 +29,37 @@
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "New": {
-                        "class": {
-                          "kind": {
-                            "Name": {
-                              "parts": [
-                                "Bar"
-                              ],
-                              "kind": "Unqualified",
-                              "span": {
-                                "start": 18,
-                                "end": 21
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "New": {
+                          "class": {
+                            "kind": {
+                              "Name": {
+                                "parts": [
+                                  "Bar"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 18,
+                                  "end": 21
+                                }
                               }
+                            },
+                            "span": {
+                              "start": 18,
+                              "end": 21
                             }
                           },
-                          "span": {
-                            "start": 18,
-                            "end": 21
-                          }
-                        },
-                        "args": []
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 14,
+                        "end": 23
                       }
-                    },
-                    "span": {
-                      "start": 14,
-                      "end": 23
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 14,
                     "end": 23

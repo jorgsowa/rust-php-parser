@@ -30,16 +30,17 @@ function combined() {
                           "Array": [
                             {
                               "key": null,
-                              "value": {
-                                "kind": {
-                                  "Int": 1
-                                },
-                                "span": {
-                                  "start": 44,
-                                  "end": 45
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "Int": 1
+                                  },
+                                  "span": {
+                                    "start": 44,
+                                    "end": 45
+                                  }
                                 }
                               },
-                              "unpack": false,
                               "span": {
                                 "start": 44,
                                 "end": 45
@@ -47,16 +48,17 @@ function combined() {
                             },
                             {
                               "key": null,
-                              "value": {
-                                "kind": {
-                                  "Int": 2
-                                },
-                                "span": {
-                                  "start": 47,
-                                  "end": 48
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "Int": 2
+                                  },
+                                  "span": {
+                                    "start": 47,
+                                    "end": 48
+                                  }
                                 }
                               },
-                              "unpack": false,
                               "span": {
                                 "start": 47,
                                 "end": 48
@@ -64,16 +66,17 @@ function combined() {
                             },
                             {
                               "key": null,
-                              "value": {
-                                "kind": {
-                                  "Int": 3
-                                },
-                                "span": {
-                                  "start": 50,
-                                  "end": 51
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "Int": 3
+                                  },
+                                  "span": {
+                                    "start": 50,
+                                    "end": 51
+                                  }
                                 }
                               },
-                              "unpack": false,
                               "span": {
                                 "start": 50,
                                 "end": 51

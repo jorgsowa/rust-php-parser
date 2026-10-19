@@ -930,35 +930,36 @@ abstract class A {
                                         "Array": [
                                           {
                                             "key": null,
-                                            "value": {
-                                              "kind": {
-                                                "PropertyAccess": {
-                                                  "object": {
-                                                    "kind": {
-                                                      "Variable": "this"
+                                            "kind": {
+                                              "Value": {
+                                                "kind": {
+                                                  "PropertyAccess": {
+                                                    "object": {
+                                                      "kind": {
+                                                        "Variable": "this"
+                                                      },
+                                                      "span": {
+                                                        "start": 490,
+                                                        "end": 495
+                                                      }
                                                     },
-                                                    "span": {
-                                                      "start": 490,
-                                                      "end": 495
-                                                    }
-                                                  },
-                                                  "property": {
-                                                    "kind": {
-                                                      "Identifier": "k"
-                                                    },
-                                                    "span": {
-                                                      "start": 497,
-                                                      "end": 498
+                                                    "property": {
+                                                      "kind": {
+                                                        "Identifier": "k"
+                                                      },
+                                                      "span": {
+                                                        "start": 497,
+                                                        "end": 498
+                                                      }
                                                     }
                                                   }
+                                                },
+                                                "span": {
+                                                  "start": 490,
+                                                  "end": 498
                                                 }
-                                              },
-                                              "span": {
-                                                "start": 490,
-                                                "end": 498
                                               }
                                             },
-                                            "unpack": false,
                                             "span": {
                                               "start": 490,
                                               "end": 498

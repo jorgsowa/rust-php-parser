@@ -17,16 +17,17 @@ f(list("k" => $a) = $b);
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 11,
-                          "end": 13
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 11,
+                            "end": 13
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 11,
                         "end": 13
@@ -34,34 +35,36 @@ f(list("k" => $a) = $b);
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "b"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "b"
+                                    },
+                                    "span": {
+                                      "start": 20,
+                                      "end": 22
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 20,
                                   "end": 22
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 20,
-                                "end": 22
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 15,
-                          "end": 23
+                            ]
+                          },
+                          "span": {
+                            "start": 15,
+                            "end": 23
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 15,
                         "end": 23
@@ -120,16 +123,17 @@ f(list("k" => $a) = $b);
                         "Array": [
                           {
                             "key": null,
-                            "value": {
-                              "kind": {
-                                "Variable": "a"
-                              },
-                              "span": {
-                                "start": 41,
-                                "end": 43
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "Variable": "a"
+                                },
+                                "span": {
+                                  "start": 41,
+                                  "end": 43
+                                }
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 41,
                               "end": 43
@@ -198,16 +202,17 @@ f(list("k" => $a) = $b);
               "Array": [
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 77,
-                      "end": 79
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 77,
+                        "end": 79
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 77,
                     "end": 79
@@ -215,16 +220,17 @@ f(list("k" => $a) = $b);
                 },
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "c"
-                    },
-                    "span": {
-                      "start": 81,
-                      "end": 83
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 81,
+                        "end": 83
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 81,
                     "end": 83
@@ -279,63 +285,64 @@ f(list("k" => $a) = $b);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Assign": {
-                        "target": {
-                          "kind": {
-                            "Array": [
-                              {
-                                "key": {
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Assign": {
+                          "target": {
+                            "kind": {
+                              "Array": [
+                                {
+                                  "key": {
+                                    "kind": {
+                                      "String": "k"
+                                    },
+                                    "span": {
+                                      "start": 96,
+                                      "end": 99
+                                    }
+                                  },
                                   "kind": {
-                                    "String": "k"
+                                    "Value": {
+                                      "kind": {
+                                        "Variable": "a"
+                                      },
+                                      "span": {
+                                        "start": 103,
+                                        "end": 105
+                                      }
+                                    }
                                   },
                                   "span": {
                                     "start": 96,
-                                    "end": 99
-                                  }
-                                },
-                                "value": {
-                                  "kind": {
-                                    "Variable": "a"
-                                  },
-                                  "span": {
-                                    "start": 103,
                                     "end": 105
                                   }
-                                },
-                                "unpack": false,
-                                "span": {
-                                  "start": 96,
-                                  "end": 105
                                 }
-                              }
-                            ]
+                              ]
+                            },
+                            "span": {
+                              "start": 91,
+                              "end": 106
+                            }
                           },
-                          "span": {
-                            "start": 91,
-                            "end": 106
-                          }
-                        },
-                        "op": "Assign",
-                        "value": {
-                          "kind": {
-                            "Variable": "b"
-                          },
-                          "span": {
-                            "start": 109,
-                            "end": 111
+                          "op": "Assign",
+                          "value": {
+                            "kind": {
+                              "Variable": "b"
+                            },
+                            "span": {
+                              "start": 109,
+                              "end": 111
+                            }
                           }
                         }
+                      },
+                      "span": {
+                        "start": 91,
+                        "end": 111
                       }
-                    },
-                    "span": {
-                      "start": 91,
-                      "end": 111
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 91,
                     "end": 111

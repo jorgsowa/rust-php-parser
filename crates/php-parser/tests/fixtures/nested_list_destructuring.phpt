@@ -19,16 +19,17 @@ PHP Fatal error:  Cannot mix [] and list() in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 11,
-                          "end": 13
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 11,
+                            "end": 13
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 11,
                         "end": 13
@@ -36,69 +37,73 @@ PHP Fatal error:  Cannot mix [] and list() in Standard input code on line 2
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Array": [
-                                    {
-                                      "key": null,
-                                      "value": {
-                                        "kind": {
-                                          "Variable": "b"
+                                  "Value": {
+                                    "kind": {
+                                      "Array": [
+                                        {
+                                          "key": null,
+                                          "kind": {
+                                            "Value": {
+                                              "kind": {
+                                                "Variable": "b"
+                                              },
+                                              "span": {
+                                                "start": 17,
+                                                "end": 19
+                                              }
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 17,
+                                            "end": 19
+                                          }
                                         },
-                                        "span": {
-                                          "start": 17,
-                                          "end": 19
+                                        {
+                                          "key": null,
+                                          "kind": {
+                                            "Value": {
+                                              "kind": {
+                                                "Variable": "c"
+                                              },
+                                              "span": {
+                                                "start": 21,
+                                                "end": 23
+                                              }
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 21,
+                                            "end": 23
+                                          }
                                         }
-                                      },
-                                      "unpack": false,
-                                      "span": {
-                                        "start": 17,
-                                        "end": 19
-                                      }
+                                      ]
                                     },
-                                    {
-                                      "key": null,
-                                      "value": {
-                                        "kind": {
-                                          "Variable": "c"
-                                        },
-                                        "span": {
-                                          "start": 21,
-                                          "end": 23
-                                        }
-                                      },
-                                      "unpack": false,
-                                      "span": {
-                                        "start": 21,
-                                        "end": 23
-                                      }
+                                    "span": {
+                                      "start": 16,
+                                      "end": 24
                                     }
-                                  ]
+                                  }
                                 },
                                 "span": {
                                   "start": 16,
                                   "end": 24
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 16,
-                                "end": 24
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 15,
-                          "end": 25
+                            ]
+                          },
+                          "span": {
+                            "start": 15,
+                            "end": 25
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 15,
                         "end": 25
@@ -117,86 +122,91 @@ PHP Fatal error:  Cannot mix [] and list() in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Int": 1
+                                  "Value": {
+                                    "kind": {
+                                      "Int": 1
+                                    },
+                                    "span": {
+                                      "start": 31,
+                                      "end": 32
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 31,
                                   "end": 32
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 31,
-                                "end": 32
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Array": [
-                                    {
-                                      "key": null,
-                                      "value": {
-                                        "kind": {
-                                          "Int": 2
+                                  "Value": {
+                                    "kind": {
+                                      "Array": [
+                                        {
+                                          "key": null,
+                                          "kind": {
+                                            "Value": {
+                                              "kind": {
+                                                "Int": 2
+                                              },
+                                              "span": {
+                                                "start": 35,
+                                                "end": 36
+                                              }
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 35,
+                                            "end": 36
+                                          }
                                         },
-                                        "span": {
-                                          "start": 35,
-                                          "end": 36
+                                        {
+                                          "key": null,
+                                          "kind": {
+                                            "Value": {
+                                              "kind": {
+                                                "Int": 3
+                                              },
+                                              "span": {
+                                                "start": 38,
+                                                "end": 39
+                                              }
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 38,
+                                            "end": 39
+                                          }
                                         }
-                                      },
-                                      "unpack": false,
-                                      "span": {
-                                        "start": 35,
-                                        "end": 36
-                                      }
+                                      ]
                                     },
-                                    {
-                                      "key": null,
-                                      "value": {
-                                        "kind": {
-                                          "Int": 3
-                                        },
-                                        "span": {
-                                          "start": 38,
-                                          "end": 39
-                                        }
-                                      },
-                                      "unpack": false,
-                                      "span": {
-                                        "start": 38,
-                                        "end": 39
-                                      }
+                                    "span": {
+                                      "start": 34,
+                                      "end": 40
                                     }
-                                  ]
+                                  }
                                 },
                                 "span": {
                                   "start": 34,
                                   "end": 40
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 34,
-                                "end": 40
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 30,
-                          "end": 41
+                            ]
+                          },
+                          "span": {
+                            "start": 30,
+                            "end": 41
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 30,
                         "end": 41
@@ -232,16 +242,17 @@ PHP Fatal error:  Cannot mix [] and list() in Standard input code on line 2
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "x"
-                        },
-                        "span": {
-                          "start": 45,
-                          "end": 47
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "x"
+                          },
+                          "span": {
+                            "start": 45,
+                            "end": 47
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 45,
                         "end": 47
@@ -249,51 +260,54 @@ PHP Fatal error:  Cannot mix [] and list() in Standard input code on line 2
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "y"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "y"
+                                    },
+                                    "span": {
+                                      "start": 50,
+                                      "end": 52
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 50,
                                   "end": 52
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 50,
-                                "end": 52
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "z"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "z"
+                                    },
+                                    "span": {
+                                      "start": 54,
+                                      "end": 56
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 54,
                                   "end": 56
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 54,
-                                "end": 56
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 49,
-                          "end": 57
+                            ]
+                          },
+                          "span": {
+                            "start": 49,
+                            "end": 57
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 49,
                         "end": 57

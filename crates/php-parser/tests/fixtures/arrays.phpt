@@ -68,16 +68,17 @@ $trailing = [1, 2, 3,];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 31,
-                          "end": 32
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 31,
+                            "end": 32
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 31,
                         "end": 32
@@ -85,16 +86,17 @@ $trailing = [1, 2, 3,];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 34,
-                          "end": 35
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 34,
+                            "end": 35
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 34,
                         "end": 35
@@ -102,16 +104,17 @@ $trailing = [1, 2, 3,];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 3
-                        },
-                        "span": {
-                          "start": 37,
-                          "end": 38
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 3
+                          },
+                          "span": {
+                            "start": 37,
+                            "end": 38
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 37,
                         "end": 38
@@ -165,16 +168,17 @@ $trailing = [1, 2, 3,];
                           "end": 55
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "String": "PHP"
-                        },
-                        "span": {
-                          "start": 59,
-                          "end": 64
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "String": "PHP"
+                          },
+                          "span": {
+                            "start": 59,
+                            "end": 64
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 49,
                         "end": 64
@@ -190,16 +194,17 @@ $trailing = [1, 2, 3,];
                           "end": 75
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Int": 8
-                        },
-                        "span": {
-                          "start": 79,
-                          "end": 80
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 8
+                          },
+                          "span": {
+                            "start": 79,
+                            "end": 80
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 66,
                         "end": 80
@@ -245,51 +250,54 @@ $trailing = [1, 2, 3,];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Int": 1
+                                  "Value": {
+                                    "kind": {
+                                      "Int": 1
+                                    },
+                                    "span": {
+                                      "start": 95,
+                                      "end": 96
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 95,
                                   "end": 96
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 95,
-                                "end": 96
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Int": 2
+                                  "Value": {
+                                    "kind": {
+                                      "Int": 2
+                                    },
+                                    "span": {
+                                      "start": 98,
+                                      "end": 99
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 98,
                                   "end": 99
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 98,
-                                "end": 99
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 94,
-                          "end": 100
+                            ]
+                          },
+                          "span": {
+                            "start": 94,
+                            "end": 100
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 94,
                         "end": 100
@@ -297,51 +305,54 @@ $trailing = [1, 2, 3,];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Int": 3
+                                  "Value": {
+                                    "kind": {
+                                      "Int": 3
+                                    },
+                                    "span": {
+                                      "start": 103,
+                                      "end": 104
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 103,
                                   "end": 104
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 103,
-                                "end": 104
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Int": 4
+                                  "Value": {
+                                    "kind": {
+                                      "Int": 4
+                                    },
+                                    "span": {
+                                      "start": 106,
+                                      "end": 107
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 106,
                                   "end": 107
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 106,
-                                "end": 107
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 102,
-                          "end": 108
+                            ]
+                          },
+                          "span": {
+                            "start": 102,
+                            "end": 108
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 102,
                         "end": 108
@@ -574,16 +585,17 @@ $trailing = [1, 2, 3,];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 191,
-                          "end": 192
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 191,
+                            "end": 192
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 191,
                         "end": 192
@@ -591,16 +603,17 @@ $trailing = [1, 2, 3,];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 194,
-                          "end": 195
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 194,
+                            "end": 195
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 194,
                         "end": 195
@@ -608,16 +621,17 @@ $trailing = [1, 2, 3,];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 3
-                        },
-                        "span": {
-                          "start": 197,
-                          "end": 198
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 3
+                          },
+                          "span": {
+                            "start": 197,
+                            "end": 198
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 197,
                         "end": 198

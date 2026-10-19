@@ -44,17 +44,17 @@ min_php=8.6
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 1
-                          },
-                          "span": {
-                            "start": 18,
-                            "end": 19
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 18,
+                              "end": 19
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 18,
                           "end": 19
@@ -71,17 +71,17 @@ min_php=8.6
                             "end": 22
                           }
                         },
-                        "value": {
-                          "kind": {
-                            "Int": 5
-                          },
-                          "span": {
-                            "start": 24,
-                            "end": 25
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 5
+                            },
+                            "span": {
+                              "start": 24,
+                              "end": 25
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 21,
                           "end": 25
@@ -89,9 +89,7 @@ min_php=8.6
                       },
                       {
                         "name": null,
-                        "value": null,
-                        "unpack": true,
-                        "by_ref": false,
+                        "kind": "SpreadPlaceholder",
                         "span": {
                           "start": 27,
                           "end": 30

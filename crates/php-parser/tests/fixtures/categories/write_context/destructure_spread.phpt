@@ -17,16 +17,17 @@ PHP Fatal error:  Spread operator is not supported in assignments in Standard in
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 7,
-                          "end": 9
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 7,
+                            "end": 9
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 7,
                         "end": 9
@@ -34,16 +35,17 @@ PHP Fatal error:  Spread operator is not supported in assignments in Standard in
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 14,
-                          "end": 16
+                      "kind": {
+                        "Spread": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 14,
+                            "end": 16
+                          }
                         }
                       },
-                      "unpack": true,
                       "span": {
                         "start": 11,
                         "end": 16

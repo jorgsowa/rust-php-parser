@@ -47,17 +47,17 @@ class Foo {}
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 53,
-                      "end": 54
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 53,
+                        "end": 54
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 53,
                     "end": 54
@@ -65,17 +65,17 @@ class Foo {}
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 2
-                    },
-                    "span": {
-                      "start": 58,
-                      "end": 59
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 2
+                      },
+                      "span": {
+                        "start": 58,
+                        "end": 59
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 58,
                     "end": 59
@@ -144,17 +144,17 @@ class Foo {}
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 1
-                          },
-                          "span": {
-                            "start": 121,
-                            "end": 122
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 121,
+                              "end": 122
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 121,
                           "end": 122
@@ -309,17 +309,17 @@ class Foo {}
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 322,
-                      "end": 323
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 322,
+                        "end": 323
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 322,
                     "end": 323

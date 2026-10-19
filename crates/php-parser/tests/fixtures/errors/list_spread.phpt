@@ -18,14 +18,15 @@ PHP Fatal error:  Spread operator is not supported in assignments in Standard in
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": "Error",
-                  "span": {
-                    "start": 11,
-                    "end": 14
+                "kind": {
+                  "Value": {
+                    "kind": "Error",
+                    "span": {
+                      "start": 11,
+                      "end": 14
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 11,
                   "end": 14

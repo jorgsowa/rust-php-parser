@@ -680,16 +680,17 @@ $a--;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 278,
-                          "end": 280
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 278,
+                            "end": 280
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 278,
                         "end": 280
@@ -735,16 +736,17 @@ $a--;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 293,
-                          "end": 295
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 293,
+                            "end": 295
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 293,
                         "end": 295
@@ -752,14 +754,15 @@ $a--;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 297,
-                          "end": 298
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 297,
+                            "end": 298
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 297,
                         "end": 298
@@ -767,16 +770,17 @@ $a--;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 299,
-                          "end": 301
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 299,
+                            "end": 301
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 299,
                         "end": 301
@@ -822,16 +826,17 @@ $a--;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 314,
-                          "end": 316
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 314,
+                            "end": 316
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 314,
                         "end": 316
@@ -839,49 +844,52 @@ $a--;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
-                                "kind": "Omit",
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
+                                "kind": {
+                                  "Value": {
+                                    "kind": "Omit",
+                                    "span": {
+                                      "start": 323,
+                                      "end": 324
+                                    }
+                                  }
+                                },
                                 "span": {
                                   "start": 323,
                                   "end": 324
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 323,
-                                "end": 324
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "c"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "c"
+                                    },
+                                    "span": {
+                                      "start": 325,
+                                      "end": 327
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 325,
                                   "end": 327
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 325,
-                                "end": 327
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 318,
-                          "end": 328
+                            ]
+                          },
+                          "span": {
+                            "start": 318,
+                            "end": 328
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 318,
                         "end": 328
@@ -889,16 +897,17 @@ $a--;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "d"
-                        },
-                        "span": {
-                          "start": 330,
-                          "end": 332
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "d"
+                          },
+                          "span": {
+                            "start": 330,
+                            "end": 332
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 330,
                         "end": 332

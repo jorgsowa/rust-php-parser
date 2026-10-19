@@ -29,17 +29,17 @@
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "String": "Something went wrong"
-                    },
-                    "span": {
-                      "start": 26,
-                      "end": 48
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "String": "Something went wrong"
+                      },
+                      "span": {
+                        "start": 26,
+                        "end": 48
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 26,
                     "end": 48

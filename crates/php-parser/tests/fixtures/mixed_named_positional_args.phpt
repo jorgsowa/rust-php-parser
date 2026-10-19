@@ -29,17 +29,17 @@
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 10,
-                      "end": 11
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 10,
+                        "end": 11
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 10,
                     "end": 11
@@ -47,17 +47,17 @@
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "String": "bar"
-                    },
-                    "span": {
-                      "start": 13,
-                      "end": 18
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "String": "bar"
+                      },
+                      "span": {
+                        "start": 13,
+                        "end": 18
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 13,
                     "end": 18
@@ -74,17 +74,17 @@
                       "end": 24
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "val"
-                    },
-                    "span": {
-                      "start": 26,
-                      "end": 30
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "val"
+                      },
+                      "span": {
+                        "start": 26,
+                        "end": 30
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 20,
                     "end": 30
@@ -101,17 +101,17 @@
                       "end": 37
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Int": 5
-                    },
-                    "span": {
-                      "start": 39,
-                      "end": 40
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 5
+                      },
+                      "span": {
+                        "start": 39,
+                        "end": 40
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 32,
                     "end": 40

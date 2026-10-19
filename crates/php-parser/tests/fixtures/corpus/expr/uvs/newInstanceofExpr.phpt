@@ -108,17 +108,17 @@ $obj instanceof ('Foo' . $bar);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "arg"
-                    },
-                    "span": {
-                      "start": 46,
-                      "end": 50
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "arg"
+                      },
+                      "span": {
+                        "start": 46,
+                        "end": 50
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 46,
                     "end": 50

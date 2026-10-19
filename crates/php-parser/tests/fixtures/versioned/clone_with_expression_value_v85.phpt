@@ -45,36 +45,37 @@ min_php=8.5
                                 "end": 30
                               }
                             },
-                            "value": {
-                              "kind": {
-                                "Binary": {
-                                  "left": {
-                                    "kind": {
-                                      "Int": 1
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "Binary": {
+                                    "left": {
+                                      "kind": {
+                                        "Int": 1
+                                      },
+                                      "span": {
+                                        "start": 34,
+                                        "end": 35
+                                      }
                                     },
-                                    "span": {
-                                      "start": 34,
-                                      "end": 35
-                                    }
-                                  },
-                                  "op": "Add",
-                                  "right": {
-                                    "kind": {
-                                      "Int": 2
-                                    },
-                                    "span": {
-                                      "start": 38,
-                                      "end": 39
+                                    "op": "Add",
+                                    "right": {
+                                      "kind": {
+                                        "Int": 2
+                                      },
+                                      "span": {
+                                        "start": 38,
+                                        "end": 39
+                                      }
                                     }
                                   }
+                                },
+                                "span": {
+                                  "start": 34,
+                                  "end": 39
                                 }
-                              },
-                              "span": {
-                                "start": 34,
-                                "end": 39
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 24,
                               "end": 39

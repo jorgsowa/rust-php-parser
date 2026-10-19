@@ -129,74 +129,74 @@ class C { function m() { (void) f(); } }
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Closure": {
-                        "is_static": false,
-                        "by_ref": false,
-                        "params": [],
-                        "use_vars": [],
-                        "return_type": null,
-                        "body": [
-                          {
-                            "kind": {
-                              "Expression": {
-                                "kind": {
-                                  "Cast": [
-                                    "Void",
-                                    {
-                                      "kind": {
-                                        "FunctionCall": {
-                                          "name": {
-                                            "kind": {
-                                              "Name": {
-                                                "parts": [
-                                                  "f"
-                                                ],
-                                                "kind": "Unqualified",
-                                                "span": {
-                                                  "start": 63,
-                                                  "end": 64
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Closure": {
+                          "is_static": false,
+                          "by_ref": false,
+                          "params": [],
+                          "use_vars": [],
+                          "return_type": null,
+                          "body": [
+                            {
+                              "kind": {
+                                "Expression": {
+                                  "kind": {
+                                    "Cast": [
+                                      "Void",
+                                      {
+                                        "kind": {
+                                          "FunctionCall": {
+                                            "name": {
+                                              "kind": {
+                                                "Name": {
+                                                  "parts": [
+                                                    "f"
+                                                  ],
+                                                  "kind": "Unqualified",
+                                                  "span": {
+                                                    "start": 63,
+                                                    "end": 64
+                                                  }
                                                 }
+                                              },
+                                              "span": {
+                                                "start": 63,
+                                                "end": 64
                                               }
                                             },
-                                            "span": {
-                                              "start": 63,
-                                              "end": 64
-                                            }
-                                          },
-                                          "args": []
+                                            "args": []
+                                          }
+                                        },
+                                        "span": {
+                                          "start": 63,
+                                          "end": 66
                                         }
-                                      },
-                                      "span": {
-                                        "start": 63,
-                                        "end": 66
                                       }
-                                    }
-                                  ]
-                                },
-                                "span": {
-                                  "start": 56,
-                                  "end": 66
+                                    ]
+                                  },
+                                  "span": {
+                                    "start": 56,
+                                    "end": 66
+                                  }
                                 }
+                              },
+                              "span": {
+                                "start": 56,
+                                "end": 67
                               }
-                            },
-                            "span": {
-                              "start": 56,
-                              "end": 67
                             }
-                          }
-                        ],
-                        "attributes": []
+                          ],
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 42,
+                        "end": 69
                       }
-                    },
-                    "span": {
-                      "start": 42,
-                      "end": 69
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 42,
                     "end": 69

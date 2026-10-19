@@ -91,17 +91,17 @@ PHP Fatal error:  Arrow functions on the right hand side of |> must be parenthes
                                 "args": [
                                   {
                                     "name": null,
-                                    "value": {
-                                      "kind": {
-                                        "Variable": "s"
-                                      },
-                                      "span": {
-                                        "start": 36,
-                                        "end": 38
+                                    "kind": {
+                                      "Value": {
+                                        "kind": {
+                                          "Variable": "s"
+                                        },
+                                        "span": {
+                                          "start": 36,
+                                          "end": 38
+                                        }
                                       }
                                     },
-                                    "unpack": false,
-                                    "by_ref": false,
                                     "span": {
                                       "start": 36,
                                       "end": 38

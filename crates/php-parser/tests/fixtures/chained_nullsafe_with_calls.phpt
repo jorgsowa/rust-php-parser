@@ -162,17 +162,17 @@ $z = $a?->items[0]?->name;
                           "args": [
                             {
                               "name": null,
-                              "value": {
-                                "kind": {
-                                  "Int": 1
-                                },
-                                "span": {
-                                  "start": 51,
-                                  "end": 52
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "Int": 1
+                                  },
+                                  "span": {
+                                    "start": 51,
+                                    "end": 52
+                                  }
                                 }
                               },
-                              "unpack": false,
-                              "by_ref": false,
                               "span": {
                                 "start": 51,
                                 "end": 52
@@ -180,17 +180,17 @@ $z = $a?->items[0]?->name;
                             },
                             {
                               "name": null,
-                              "value": {
-                                "kind": {
-                                  "Int": 2
-                                },
-                                "span": {
-                                  "start": 54,
-                                  "end": 55
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "Int": 2
+                                  },
+                                  "span": {
+                                    "start": 54,
+                                    "end": 55
+                                  }
                                 }
                               },
-                              "unpack": false,
-                              "by_ref": false,
                               "span": {
                                 "start": 54,
                                 "end": 55

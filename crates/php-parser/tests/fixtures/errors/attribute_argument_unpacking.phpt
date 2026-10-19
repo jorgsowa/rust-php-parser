@@ -41,17 +41,17 @@ PHP Fatal error:  Cannot use unpacking in attribute argument list in Standard in
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 16,
-                      "end": 18
+                  "kind": {
+                    "Spread": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 16,
+                        "end": 18
+                      }
                     }
                   },
-                  "unpack": true,
-                  "by_ref": false,
                   "span": {
                     "start": 13,
                     "end": 18
@@ -104,17 +104,17 @@ PHP Fatal error:  Cannot use unpacking in attribute argument list in Standard in
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 44,
-                      "end": 45
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 44,
+                        "end": 45
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 44,
                     "end": 45
@@ -122,35 +122,36 @@ PHP Fatal error:  Cannot use unpacking in attribute argument list in Standard in
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Array": [
-                        {
-                          "key": null,
-                          "value": {
+                  "kind": {
+                    "Spread": {
+                      "kind": {
+                        "Array": [
+                          {
+                            "key": null,
                             "kind": {
-                              "Int": 2
+                              "Value": {
+                                "kind": {
+                                  "Int": 2
+                                },
+                                "span": {
+                                  "start": 51,
+                                  "end": 52
+                                }
+                              }
                             },
                             "span": {
                               "start": 51,
                               "end": 52
                             }
-                          },
-                          "unpack": false,
-                          "span": {
-                            "start": 51,
-                            "end": 52
                           }
-                        }
-                      ]
-                    },
-                    "span": {
-                      "start": 50,
-                      "end": 53
+                        ]
+                      },
+                      "span": {
+                        "start": 50,
+                        "end": 53
+                      }
                     }
                   },
-                  "unpack": true,
-                  "by_ref": false,
                   "span": {
                     "start": 47,
                     "end": 53

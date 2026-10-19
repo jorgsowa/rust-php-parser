@@ -473,17 +473,17 @@ class UserController extends BaseController implements JsonResponder
                                                   "args": [
                                                     {
                                                       "name": null,
-                                                      "value": {
-                                                        "kind": {
-                                                          "Variable": "id"
-                                                        },
-                                                        "span": {
-                                                          "start": 391,
-                                                          "end": 394
+                                                      "kind": {
+                                                        "Value": {
+                                                          "kind": {
+                                                            "Variable": "id"
+                                                          },
+                                                          "span": {
+                                                            "start": 391,
+                                                            "end": 394
+                                                          }
                                                         }
                                                       },
-                                                      "unpack": false,
-                                                      "by_ref": false,
                                                       "span": {
                                                         "start": 391,
                                                         "end": 394
@@ -523,17 +523,17 @@ class UserController extends BaseController implements JsonResponder
                                                       "args": [
                                                         {
                                                           "name": null,
-                                                          "value": {
-                                                            "kind": {
-                                                              "String": "User not found"
-                                                            },
-                                                            "span": {
-                                                              "start": 427,
-                                                              "end": 443
+                                                          "kind": {
+                                                            "Value": {
+                                                              "kind": {
+                                                                "String": "User not found"
+                                                              },
+                                                              "span": {
+                                                                "start": 427,
+                                                                "end": 443
+                                                              }
                                                             }
                                                           },
-                                                          "unpack": false,
-                                                          "by_ref": false,
                                                           "span": {
                                                             "start": 427,
                                                             "end": 443
@@ -737,35 +737,36 @@ class UserController extends BaseController implements JsonResponder
                                                   "end": 664
                                                 }
                                               },
-                                              "value": {
-                                                "kind": {
-                                                  "PropertyAccess": {
-                                                    "object": {
-                                                      "kind": {
-                                                        "Variable": "user"
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "PropertyAccess": {
+                                                      "object": {
+                                                        "kind": {
+                                                          "Variable": "user"
+                                                        },
+                                                        "span": {
+                                                          "start": 668,
+                                                          "end": 673
+                                                        }
                                                       },
-                                                      "span": {
-                                                        "start": 668,
-                                                        "end": 673
-                                                      }
-                                                    },
-                                                    "property": {
-                                                      "kind": {
-                                                        "Identifier": "name"
-                                                      },
-                                                      "span": {
-                                                        "start": 675,
-                                                        "end": 679
+                                                      "property": {
+                                                        "kind": {
+                                                          "Identifier": "name"
+                                                        },
+                                                        "span": {
+                                                          "start": 675,
+                                                          "end": 679
+                                                        }
                                                       }
                                                     }
+                                                  },
+                                                  "span": {
+                                                    "start": 668,
+                                                    "end": 679
                                                   }
-                                                },
-                                                "span": {
-                                                  "start": 668,
-                                                  "end": 679
                                                 }
                                               },
-                                              "unpack": false,
                                               "span": {
                                                 "start": 658,
                                                 "end": 679
@@ -781,35 +782,36 @@ class UserController extends BaseController implements JsonResponder
                                                   "end": 704
                                                 }
                                               },
-                                              "value": {
-                                                "kind": {
-                                                  "NullsafePropertyAccess": {
-                                                    "object": {
-                                                      "kind": {
-                                                        "Variable": "user"
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "NullsafePropertyAccess": {
+                                                      "object": {
+                                                        "kind": {
+                                                          "Variable": "user"
+                                                        },
+                                                        "span": {
+                                                          "start": 708,
+                                                          "end": 713
+                                                        }
                                                       },
-                                                      "span": {
-                                                        "start": 708,
-                                                        "end": 713
-                                                      }
-                                                    },
-                                                    "property": {
-                                                      "kind": {
-                                                        "Identifier": "email"
-                                                      },
-                                                      "span": {
-                                                        "start": 716,
-                                                        "end": 721
+                                                      "property": {
+                                                        "kind": {
+                                                          "Identifier": "email"
+                                                        },
+                                                        "span": {
+                                                          "start": 716,
+                                                          "end": 721
+                                                        }
                                                       }
                                                     }
+                                                  },
+                                                  "span": {
+                                                    "start": 708,
+                                                    "end": 721
                                                   }
-                                                },
-                                                "span": {
-                                                  "start": 708,
-                                                  "end": 721
                                                 }
                                               },
-                                              "unpack": false,
                                               "span": {
                                                 "start": 697,
                                                 "end": 721
@@ -825,16 +827,17 @@ class UserController extends BaseController implements JsonResponder
                                                   "end": 745
                                                 }
                                               },
-                                              "value": {
-                                                "kind": {
-                                                  "Variable": "role"
-                                                },
-                                                "span": {
-                                                  "start": 749,
-                                                  "end": 754
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "Variable": "role"
+                                                  },
+                                                  "span": {
+                                                    "start": 749,
+                                                    "end": 754
+                                                  }
                                                 }
                                               },
-                                              "unpack": false,
                                               "span": {
                                                 "start": 739,
                                                 "end": 754
@@ -915,36 +918,37 @@ class UserController extends BaseController implements JsonResponder
                                                 "end": 865
                                               }
                                             },
-                                            "value": {
-                                              "kind": {
-                                                "MethodCall": {
-                                                  "object": {
-                                                    "kind": {
-                                                      "Variable": "e"
+                                            "kind": {
+                                              "Value": {
+                                                "kind": {
+                                                  "MethodCall": {
+                                                    "object": {
+                                                      "kind": {
+                                                        "Variable": "e"
+                                                      },
+                                                      "span": {
+                                                        "start": 869,
+                                                        "end": 871
+                                                      }
                                                     },
-                                                    "span": {
-                                                      "start": 869,
-                                                      "end": 871
-                                                    }
-                                                  },
-                                                  "method": {
-                                                    "kind": {
-                                                      "Identifier": "getMessage"
+                                                    "method": {
+                                                      "kind": {
+                                                        "Identifier": "getMessage"
+                                                      },
+                                                      "span": {
+                                                        "start": 873,
+                                                        "end": 883
+                                                      }
                                                     },
-                                                    "span": {
-                                                      "start": 873,
-                                                      "end": 883
-                                                    }
-                                                  },
-                                                  "args": []
+                                                    "args": []
+                                                  }
+                                                },
+                                                "span": {
+                                                  "start": 869,
+                                                  "end": 885
                                                 }
-                                              },
-                                              "span": {
-                                                "start": 869,
-                                                "end": 885
                                               }
                                             },
-                                            "unpack": false,
                                             "span": {
                                               "start": 858,
                                               "end": 885
@@ -1016,17 +1020,17 @@ class UserController extends BaseController implements JsonResponder
                                       "args": [
                                         {
                                           "name": null,
-                                          "value": {
-                                            "kind": {
-                                              "Variable": "id"
-                                            },
-                                            "span": {
-                                              "start": 943,
-                                              "end": 946
+                                          "kind": {
+                                            "Value": {
+                                              "kind": {
+                                                "Variable": "id"
+                                              },
+                                              "span": {
+                                                "start": 943,
+                                                "end": 946
+                                              }
                                             }
                                           },
-                                          "unpack": false,
-                                          "by_ref": false,
                                           "span": {
                                             "start": 943,
                                             "end": 946
@@ -1203,75 +1207,75 @@ class UserController extends BaseController implements JsonResponder
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "ArrowFunction": {
-                                              "is_static": false,
-                                              "by_ref": false,
-                                              "params": [
-                                                {
-                                                  "name": {
-                                                    "name": "u",
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "ArrowFunction": {
+                                                "is_static": false,
+                                                "by_ref": false,
+                                                "params": [
+                                                  {
+                                                    "name": {
+                                                      "name": "u",
+                                                      "span": {
+                                                        "start": 1066,
+                                                        "end": 1068
+                                                      }
+                                                    },
+                                                    "type_hint": null,
+                                                    "default": null,
+                                                    "by_ref": false,
+                                                    "variadic": false,
+                                                    "is_readonly": false,
+                                                    "is_final": false,
+                                                    "visibility": null,
+                                                    "set_visibility": null,
+                                                    "attributes": [],
                                                     "span": {
                                                       "start": 1066,
                                                       "end": 1068
                                                     }
-                                                  },
-                                                  "type_hint": null,
-                                                  "default": null,
-                                                  "by_ref": false,
-                                                  "variadic": false,
-                                                  "is_readonly": false,
-                                                  "is_final": false,
-                                                  "visibility": null,
-                                                  "set_visibility": null,
-                                                  "attributes": [],
-                                                  "span": {
-                                                    "start": 1066,
-                                                    "end": 1068
                                                   }
-                                                }
-                                              ],
-                                              "return_type": null,
-                                              "body": {
-                                                "kind": {
-                                                  "MethodCall": {
-                                                    "object": {
-                                                      "kind": {
-                                                        "Variable": "u"
+                                                ],
+                                                "return_type": null,
+                                                "body": {
+                                                  "kind": {
+                                                    "MethodCall": {
+                                                      "object": {
+                                                        "kind": {
+                                                          "Variable": "u"
+                                                        },
+                                                        "span": {
+                                                          "start": 1073,
+                                                          "end": 1075
+                                                        }
                                                       },
-                                                      "span": {
-                                                        "start": 1073,
-                                                        "end": 1075
-                                                      }
-                                                    },
-                                                    "method": {
-                                                      "kind": {
-                                                        "Identifier": "getName"
+                                                      "method": {
+                                                        "kind": {
+                                                          "Identifier": "getName"
+                                                        },
+                                                        "span": {
+                                                          "start": 1077,
+                                                          "end": 1084
+                                                        }
                                                       },
-                                                      "span": {
-                                                        "start": 1077,
-                                                        "end": 1084
-                                                      }
-                                                    },
-                                                    "args": []
+                                                      "args": []
+                                                    }
+                                                  },
+                                                  "span": {
+                                                    "start": 1073,
+                                                    "end": 1086
                                                   }
                                                 },
-                                                "span": {
-                                                  "start": 1073,
-                                                  "end": 1086
-                                                }
-                                              },
-                                              "attributes": []
+                                                "attributes": []
+                                              }
+                                            },
+                                            "span": {
+                                              "start": 1063,
+                                              "end": 1086
                                             }
-                                          },
-                                          "span": {
-                                            "start": 1063,
-                                            "end": 1086
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 1063,
                                           "end": 1086
@@ -1279,17 +1283,17 @@ class UserController extends BaseController implements JsonResponder
                                       },
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "users"
-                                          },
-                                          "span": {
-                                            "start": 1088,
-                                            "end": 1094
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "users"
+                                            },
+                                            "span": {
+                                              "start": 1088,
+                                              "end": 1094
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 1088,
                                           "end": 1094
@@ -1355,17 +1359,17 @@ class UserController extends BaseController implements JsonResponder
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "names"
-                                          },
-                                          "span": {
-                                            "start": 1130,
-                                            "end": 1136
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "names"
+                                            },
+                                            "span": {
+                                              "start": 1130,
+                                              "end": 1136
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 1130,
                                           "end": 1136
@@ -1373,140 +1377,140 @@ class UserController extends BaseController implements JsonResponder
                                       },
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Closure": {
-                                              "is_static": false,
-                                              "by_ref": false,
-                                              "params": [
-                                                {
-                                                  "name": {
-                                                    "name": "name",
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Closure": {
+                                                "is_static": false,
+                                                "by_ref": false,
+                                                "params": [
+                                                  {
+                                                    "name": {
+                                                      "name": "name",
+                                                      "span": {
+                                                        "start": 1147,
+                                                        "end": 1152
+                                                      }
+                                                    },
+                                                    "type_hint": null,
+                                                    "default": null,
+                                                    "by_ref": false,
+                                                    "variadic": false,
+                                                    "is_readonly": false,
+                                                    "is_final": false,
+                                                    "visibility": null,
+                                                    "set_visibility": null,
+                                                    "attributes": [],
                                                     "span": {
                                                       "start": 1147,
                                                       "end": 1152
                                                     }
-                                                  },
-                                                  "type_hint": null,
-                                                  "default": null,
-                                                  "by_ref": false,
-                                                  "variadic": false,
-                                                  "is_readonly": false,
-                                                  "is_final": false,
-                                                  "visibility": null,
-                                                  "set_visibility": null,
-                                                  "attributes": [],
-                                                  "span": {
-                                                    "start": 1147,
-                                                    "end": 1152
                                                   }
-                                                }
-                                              ],
-                                              "use_vars": [
-                                                {
-                                                  "name": {
-                                                    "name": "users",
+                                                ],
+                                                "use_vars": [
+                                                  {
+                                                    "name": {
+                                                      "name": "users",
+                                                      "span": {
+                                                        "start": 1159,
+                                                        "end": 1165
+                                                      }
+                                                    },
+                                                    "by_ref": false,
                                                     "span": {
                                                       "start": 1159,
                                                       "end": 1165
                                                     }
-                                                  },
-                                                  "by_ref": false,
-                                                  "span": {
-                                                    "start": 1159,
-                                                    "end": 1165
                                                   }
-                                                }
-                                              ],
-                                              "return_type": null,
-                                              "body": [
-                                                {
-                                                  "kind": {
-                                                    "Return": {
-                                                      "kind": {
-                                                        "Binary": {
-                                                          "left": {
-                                                            "kind": {
-                                                              "FunctionCall": {
-                                                                "name": {
-                                                                  "kind": {
-                                                                    "Name": {
-                                                                      "parts": [
-                                                                        "strlen"
-                                                                      ],
-                                                                      "kind": "Unqualified",
-                                                                      "span": {
-                                                                        "start": 1188,
-                                                                        "end": 1194
+                                                ],
+                                                "return_type": null,
+                                                "body": [
+                                                  {
+                                                    "kind": {
+                                                      "Return": {
+                                                        "kind": {
+                                                          "Binary": {
+                                                            "left": {
+                                                              "kind": {
+                                                                "FunctionCall": {
+                                                                  "name": {
+                                                                    "kind": {
+                                                                      "Name": {
+                                                                        "parts": [
+                                                                          "strlen"
+                                                                        ],
+                                                                        "kind": "Unqualified",
+                                                                        "span": {
+                                                                          "start": 1188,
+                                                                          "end": 1194
+                                                                        }
                                                                       }
+                                                                    },
+                                                                    "span": {
+                                                                      "start": 1188,
+                                                                      "end": 1194
                                                                     }
                                                                   },
-                                                                  "span": {
-                                                                    "start": 1188,
-                                                                    "end": 1194
-                                                                  }
-                                                                },
-                                                                "args": [
-                                                                  {
-                                                                    "name": null,
-                                                                    "value": {
+                                                                  "args": [
+                                                                    {
+                                                                      "name": null,
                                                                       "kind": {
-                                                                        "Variable": "name"
+                                                                        "Value": {
+                                                                          "kind": {
+                                                                            "Variable": "name"
+                                                                          },
+                                                                          "span": {
+                                                                            "start": 1195,
+                                                                            "end": 1200
+                                                                          }
+                                                                        }
                                                                       },
                                                                       "span": {
                                                                         "start": 1195,
                                                                         "end": 1200
                                                                       }
-                                                                    },
-                                                                    "unpack": false,
-                                                                    "by_ref": false,
-                                                                    "span": {
-                                                                      "start": 1195,
-                                                                      "end": 1200
                                                                     }
-                                                                  }
-                                                                ]
+                                                                  ]
+                                                                }
+                                                              },
+                                                              "span": {
+                                                                "start": 1188,
+                                                                "end": 1201
                                                               }
                                                             },
-                                                            "span": {
-                                                              "start": 1188,
-                                                              "end": 1201
-                                                            }
-                                                          },
-                                                          "op": "Greater",
-                                                          "right": {
-                                                            "kind": {
-                                                              "Int": 0
-                                                            },
-                                                            "span": {
-                                                              "start": 1204,
-                                                              "end": 1205
+                                                            "op": "Greater",
+                                                            "right": {
+                                                              "kind": {
+                                                                "Int": 0
+                                                              },
+                                                              "span": {
+                                                                "start": 1204,
+                                                                "end": 1205
+                                                              }
                                                             }
                                                           }
+                                                        },
+                                                        "span": {
+                                                          "start": 1188,
+                                                          "end": 1205
                                                         }
-                                                      },
-                                                      "span": {
-                                                        "start": 1188,
-                                                        "end": 1205
                                                       }
+                                                    },
+                                                    "span": {
+                                                      "start": 1181,
+                                                      "end": 1206
                                                     }
-                                                  },
-                                                  "span": {
-                                                    "start": 1181,
-                                                    "end": 1206
                                                   }
-                                                }
-                                              ],
-                                              "attributes": []
+                                                ],
+                                                "attributes": []
+                                              }
+                                            },
+                                            "span": {
+                                              "start": 1138,
+                                              "end": 1216
                                             }
-                                          },
-                                          "span": {
-                                            "start": 1138,
-                                            "end": 1216
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 1138,
                                           "end": 1216

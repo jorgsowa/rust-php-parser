@@ -577,15 +577,53 @@ pub struct FunctionCallExpr<'arena, 'src> {
 pub struct ArrayElement<'arena, 'src> {
     /// Key expression, if any.
     pub key: Option<Expr<'arena, 'src>>,
-    /// Element value.
-    pub value: Expr<'arena, 'src>,
-    /// `true` for a spread element (`...$x`).
-    pub unpack: bool,
-    /// `true` for a reference element (`&$x`).
-    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
-    pub by_ref: bool,
+    /// The element's value and how it is taken.
+    pub kind: ArrayElementKind<'arena, 'src>,
     /// Source range of this node.
     pub span: Span,
+}
+
+/// How an array element takes its value.
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
+pub enum ArrayElementKind<'arena, 'src> {
+    /// A plain value: `$x`.
+    Value(Expr<'arena, 'src>),
+    /// A spread: `...$x`.
+    Spread(Expr<'arena, 'src>),
+    /// A reference: `&$x`.
+    ByRef(Expr<'arena, 'src>),
+}
+
+impl<'arena, 'src> ArrayElement<'arena, 'src> {
+    /// The element's value expression.
+    pub fn value(&self) -> &Expr<'arena, 'src> {
+        match &self.kind {
+            ArrayElementKind::Value(e)
+            | ArrayElementKind::Spread(e)
+            | ArrayElementKind::ByRef(e) => e,
+        }
+    }
+
+    /// Mutable access to the element's value expression.
+    pub fn value_mut(&mut self) -> &mut Expr<'arena, 'src> {
+        match &mut self.kind {
+            ArrayElementKind::Value(e)
+            | ArrayElementKind::Spread(e)
+            | ArrayElementKind::ByRef(e) => e,
+        }
+    }
+
+    /// Whether the element is a `...` spread.
+    pub fn is_spread(&self) -> bool {
+        matches!(self.kind, ArrayElementKind::Spread(_))
+    }
+
+    /// Whether the element is taken by reference (`&$x`).
+    pub fn is_by_ref(&self) -> bool {
+        matches!(self.kind, ArrayElementKind::ByRef(_))
+    }
 }
 
 /// An array index access: `$a[i]`.

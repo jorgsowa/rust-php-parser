@@ -24,16 +24,17 @@ PHP Fatal error:  Cannot use list as key element in Standard input code on line 
               "Array": [
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 22,
-                      "end": 24
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 22,
+                        "end": 24
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 22,
                     "end": 24

@@ -903,18 +903,13 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                                 kind: ExprKind::Exit(None),
                                 span,
                             }
-                        } else if args.len() == 1
-                            && args[0].name.is_none()
-                            && !args[0].unpack
-                            && args[0].value.is_some()
-                        {
+                        } else if args.len() == 1 && is_plain_arg(&args[0]) {
                             // exit(expr)
-                            let value = args
-                                .into_iter()
-                                .next()
-                                .expect("args.len() == 1 checked above")
-                                .value
-                                .expect("value.is_some() checked above");
+                            let value = into_plain_value(
+                                args.into_iter()
+                                    .next()
+                                    .expect("args.len() == 1 checked above"),
+                            );
                             Expr {
                                 kind: ExprKind::Exit(Some(parser.alloc(value))),
                                 span,
@@ -989,25 +984,16 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     }
                     ArgListResult::Args(args) => {
                         let span = Span::new(token.span.start, parser.previous_end());
-                        let is_simple = args.len() == 1
-                            && args[0].name.is_none()
-                            && !args[0].unpack
-                            && args[0].value.is_some();
-                        let is_clone_with = args.len() == 2
-                            && args[0].name.is_none()
-                            && !args[0].unpack
-                            && args[0].value.is_some()
-                            && args[1].name.is_none()
-                            && !args[1].unpack
-                            && args[1].value.is_some();
+                        let is_simple = args.len() == 1 && is_plain_arg(&args[0]);
+                        let is_clone_with =
+                            args.len() == 2 && is_plain_arg(&args[0]) && is_plain_arg(&args[1]);
                         if is_simple {
                             // clone($obj) — parenthesised single-argument form
-                            let object = args
-                                .into_iter()
-                                .next()
-                                .expect("is_simple: args.len() == 1 checked above")
-                                .value
-                                .expect("is_simple: value.is_some() checked above");
+                            let object = into_plain_value(
+                                args.into_iter()
+                                    .next()
+                                    .expect("is_simple: args.len() == 1 checked above"),
+                            );
                             Expr {
                                 kind: ExprKind::Clone(parser.alloc(object)),
                                 span,
@@ -1020,16 +1006,14 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                                 token.span,
                             );
                             let mut iter = args.into_iter();
-                            let object = iter
-                                .next()
-                                .expect("is_clone_with: args.len() == 2 checked above")
-                                .value
-                                .expect("is_clone_with: value.is_some() checked above");
-                            let overrides = iter
-                                .next()
-                                .expect("is_clone_with: args.len() == 2 checked above")
-                                .value
-                                .expect("is_clone_with: value.is_some() checked above");
+                            let object = into_plain_value(
+                                iter.next()
+                                    .expect("is_clone_with: args.len() == 2 checked above"),
+                            );
+                            let overrides = into_plain_value(
+                                iter.next()
+                                    .expect("is_clone_with: args.len() == 2 checked above"),
+                            );
                             Expr {
                                 kind: ExprKind::CloneWith(
                                     parser.alloc(object),
@@ -1852,7 +1836,7 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
             let arg = parse_arg(parser);
             // The PHP 8.6 rest placeholder (bare `...`) is always last and is
             // explicitly allowed after named arguments, e.g. `stuff(a: 1, ...)`.
-            let is_rest_placeholder = arg.unpack && arg.value.is_none();
+            let is_rest_placeholder = matches!(arg.kind, ArgKind::SpreadPlaceholder);
 
             if arg.name.is_some() {
                 seen_named = true;
@@ -1878,7 +1862,7 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
 /// `new` always constructs immediately, so PHP forbids partial function application there.
 fn reject_pfa_placeholders_in_new(parser: &mut Parser<'_, '_>, args: &[Arg]) {
     for arg in args {
-        if arg.value.is_none() {
+        if arg.is_placeholder() {
             parser.error(ParseError::Forbidden {
                 message: "Cannot use partial function application in new expression".into(),
                 span: arg.span,
@@ -1954,9 +1938,7 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
         );
         return Arg {
             name,
-            value: None,
-            unpack,
-            by_ref: false,
+            kind: ArgKind::SpreadPlaceholder,
             span: Span::new(start, parser.previous_end()),
         };
     }
@@ -1972,9 +1954,7 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
         );
         return Arg {
             name,
-            value: None,
-            unpack: false,
-            by_ref: false,
+            kind: ArgKind::Placeholder,
             span: Span::new(start, parser.previous_end()),
         };
     }
@@ -1992,12 +1972,26 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
     let value = parse_expr(parser);
     let span = Span::new(start, value.span.end);
 
-    Arg {
-        name,
-        value: Some(value),
-        unpack,
-        by_ref,
-        span,
+    // `...&$x` is already reported above; the spread wins.
+    let kind = if unpack {
+        ArgKind::Spread(value)
+    } else if by_ref {
+        ArgKind::ByRef(value)
+    } else {
+        ArgKind::Value(value)
+    };
+    Arg { name, kind, span }
+}
+
+/// An unnamed, unspread argument (a by-ref one has already been reported).
+fn is_plain_arg(arg: &Arg) -> bool {
+    arg.name.is_none() && matches!(arg.kind, ArgKind::Value(_) | ArgKind::ByRef(_))
+}
+
+fn into_plain_value<'arena, 'src>(arg: Arg<'arena, 'src>) -> Expr<'arena, 'src> {
+    match arg.kind {
+        ArgKind::Value(e) | ArgKind::ByRef(e) => e,
+        _ => unreachable!("checked by is_plain_arg"),
     }
 }
 
@@ -2068,12 +2062,10 @@ fn parse_array_literal<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Ex
                 });
                 elements.push(ArrayElement {
                     key: None,
-                    value: Expr {
+                    kind: ArrayElementKind::Value(Expr {
                         kind: ExprKind::Omit,
                         span,
-                    },
-                    unpack: false,
-                    by_ref: false,
+                    }),
                     span,
                 });
             } else {
@@ -2164,9 +2156,7 @@ fn parse_array_element<'arena, 'src>(
         let elem_span = Span::new(elem_start, value.span.end);
         ArrayElement {
             key: Some(first_expr),
-            value,
-            unpack: false,
-            by_ref,
+            kind: element_kind(value, false, by_ref),
             span: elem_span,
         }
     } else {
@@ -2181,9 +2171,7 @@ fn parse_array_element<'arena, 'src>(
         let elem_span = Span::new(elem_start, first_expr.span.end);
         ArrayElement {
             key: None,
-            value: first_expr,
-            unpack,
-            by_ref: by_ref_value,
+            kind: element_kind(first_expr, unpack, by_ref_value),
             span: elem_span,
         }
     }
@@ -2206,12 +2194,10 @@ fn parse_list_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'
                 let span = parser.current_span();
                 elements.push(ArrayElement {
                     key: None,
-                    value: Expr {
+                    kind: ArrayElementKind::Value(Expr {
                         kind: ExprKind::Omit,
                         span,
-                    },
-                    unpack: false,
-                    by_ref: false,
+                    }),
                     span,
                 });
             } else {
@@ -2239,6 +2225,20 @@ fn parse_list_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'
     }
 }
 
+fn element_kind<'arena, 'src>(
+    value: Expr<'arena, 'src>,
+    unpack: bool,
+    by_ref: bool,
+) -> ArrayElementKind<'arena, 'src> {
+    if unpack {
+        ArrayElementKind::Spread(value)
+    } else if by_ref {
+        ArrayElementKind::ByRef(value)
+    } else {
+        ArrayElementKind::Value(value)
+    }
+}
+
 /// Parse a single element in a list() or short list destructuring.
 /// Handles: `$var`, `&$var`, `'key' => $var`, `'key' => &$var`, `list($a, $b)`, etc.
 fn parse_list_element<'arena, 'src>(
@@ -2252,9 +2252,7 @@ fn parse_list_element<'arena, 'src>(
         let elem_span = Span::new(elem_start, value.span.end);
         return ArrayElement {
             key: None,
-            value,
-            unpack: false,
-            by_ref: true,
+            kind: element_kind(value, false, true),
             span: elem_span,
         };
     }
@@ -2268,18 +2266,14 @@ fn parse_list_element<'arena, 'src>(
         let elem_span = Span::new(elem_start, value.span.end);
         ArrayElement {
             key: Some(first),
-            value,
-            unpack: false,
-            by_ref,
+            kind: element_kind(value, false, by_ref),
             span: elem_span,
         }
     } else {
         let elem_span = Span::new(elem_start, first.span.end);
         ArrayElement {
             key: None,
-            value: first,
-            unpack: false,
-            by_ref: false,
+            kind: element_kind(first, false, false),
             span: elem_span,
         }
     }

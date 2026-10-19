@@ -264,25 +264,25 @@ PHP Fatal error:  Closures in constant expressions must be static in Standard in
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Closure": {
-                        "is_static": false,
-                        "by_ref": false,
-                        "params": [],
-                        "use_vars": [],
-                        "return_type": null,
-                        "body": [],
-                        "attributes": []
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Closure": {
+                          "is_static": false,
+                          "by_ref": false,
+                          "params": [],
+                          "use_vars": [],
+                          "return_type": null,
+                          "body": [],
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 172,
+                        "end": 186
                       }
-                    },
-                    "span": {
-                      "start": 172,
-                      "end": 186
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 172,
                     "end": 186

@@ -31,25 +31,25 @@
                   "args": [
                     {
                       "name": null,
-                      "value": {
-                        "kind": {
-                          "ErrorSuppress": {
-                            "kind": {
-                              "Variable": "nested"
-                            },
-                            "span": {
-                              "start": 26,
-                              "end": 33
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "ErrorSuppress": {
+                              "kind": {
+                                "Variable": "nested"
+                              },
+                              "span": {
+                                "start": 26,
+                                "end": 33
+                              }
                             }
+                          },
+                          "span": {
+                            "start": 25,
+                            "end": 33
                           }
-                        },
-                        "span": {
-                          "start": 25,
-                          "end": 33
                         }
                       },
-                      "unpack": false,
-                      "by_ref": false,
                       "span": {
                         "start": 25,
                         "end": 33

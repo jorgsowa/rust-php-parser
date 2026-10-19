@@ -918,17 +918,17 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                 "Array": [
                   {
                     "key": null,
-                    "value": {
-                      "kind": {
-                        "Variable": "a"
-                      },
-                      "span": {
-                        "start": 337,
-                        "end": 339
+                    "kind": {
+                      "ByRef": {
+                        "kind": {
+                          "Variable": "a"
+                        },
+                        "span": {
+                          "start": 337,
+                          "end": 339
+                        }
                       }
                     },
-                    "unpack": false,
-                    "by_ref": true,
                     "span": {
                       "start": 336,
                       "end": 339
@@ -978,16 +978,17 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
                         "end": 355
                       }
                     },
-                    "value": {
-                      "kind": {
-                        "Int": 1
-                      },
-                      "span": {
-                        "start": 359,
-                        "end": 360
+                    "kind": {
+                      "Value": {
+                        "kind": {
+                          "Int": 1
+                        },
+                        "span": {
+                          "start": 359,
+                          "end": 360
+                        }
                       }
                     },
-                    "unpack": false,
                     "span": {
                       "start": 353,
                       "end": 360

@@ -548,32 +548,32 @@ class Foo5 extends Foo3 {
                                 "args": [
                                   {
                                     "name": null,
-                                    "value": {
-                                      "kind": {
-                                        "InterpolatedString": [
-                                          {
-                                            "Literal": "Foo"
-                                          },
-                                          {
-                                            "Expr": {
-                                              "kind": {
-                                                "Variable": "i"
-                                              },
-                                              "span": {
-                                                "start": 440,
-                                                "end": 442
+                                    "kind": {
+                                      "Value": {
+                                        "kind": {
+                                          "InterpolatedString": [
+                                            {
+                                              "Literal": "Foo"
+                                            },
+                                            {
+                                              "Expr": {
+                                                "kind": {
+                                                  "Variable": "i"
+                                                },
+                                                "span": {
+                                                  "start": 440,
+                                                  "end": 442
+                                                }
                                               }
                                             }
-                                          }
-                                        ]
-                                      },
-                                      "span": {
-                                        "start": 436,
-                                        "end": 443
+                                          ]
+                                        },
+                                        "span": {
+                                          "start": 436,
+                                          "end": 443
+                                        }
                                       }
                                     },
-                                    "unpack": false,
-                                    "by_ref": false,
                                     "span": {
                                       "start": 436,
                                       "end": 443
@@ -627,17 +627,17 @@ class Foo5 extends Foo3 {
                             "args": [
                               {
                                 "name": null,
-                                "value": {
-                                  "kind": {
-                                    "String": "__construct"
-                                  },
-                                  "span": {
-                                    "start": 470,
-                                    "end": 483
+                                "kind": {
+                                  "Value": {
+                                    "kind": {
+                                      "String": "__construct"
+                                    },
+                                    "span": {
+                                      "start": 470,
+                                      "end": 483
+                                    }
                                   }
                                 },
-                                "unpack": false,
-                                "by_ref": false,
                                 "span": {
                                   "start": 470,
                                   "end": 483

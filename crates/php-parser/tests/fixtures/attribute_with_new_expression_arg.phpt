@@ -32,65 +32,65 @@
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "New": {
-                        "class": {
-                          "kind": {
-                            "Name": {
-                              "parts": [
-                                "Config"
-                              ],
-                              "kind": "Unqualified",
-                              "span": {
-                                "start": 17,
-                                "end": 23
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "New": {
+                          "class": {
+                            "kind": {
+                              "Name": {
+                                "parts": [
+                                  "Config"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 17,
+                                  "end": 23
+                                }
                               }
+                            },
+                            "span": {
+                              "start": 17,
+                              "end": 23
                             }
                           },
-                          "span": {
-                            "start": 17,
-                            "end": 23
-                          }
-                        },
-                        "args": [
-                          {
-                            "name": {
-                              "parts": [
-                                "debug"
-                              ],
-                              "kind": "Unqualified",
-                              "span": {
-                                "start": 24,
-                                "end": 29
-                              }
-                            },
-                            "value": {
+                          "args": [
+                            {
+                              "name": {
+                                "parts": [
+                                  "debug"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 24,
+                                  "end": 29
+                                }
+                              },
                               "kind": {
-                                "Bool": false
+                                "Value": {
+                                  "kind": {
+                                    "Bool": false
+                                  },
+                                  "span": {
+                                    "start": 31,
+                                    "end": 36
+                                  }
+                                }
                               },
                               "span": {
-                                "start": 31,
+                                "start": 24,
                                 "end": 36
                               }
-                            },
-                            "unpack": false,
-                            "by_ref": false,
-                            "span": {
-                              "start": 24,
-                              "end": 36
                             }
-                          }
-                        ]
+                          ]
+                        }
+                      },
+                      "span": {
+                        "start": 13,
+                        "end": 37
                       }
-                    },
-                    "span": {
-                      "start": 13,
-                      "end": 37
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 13,
                     "end": 37

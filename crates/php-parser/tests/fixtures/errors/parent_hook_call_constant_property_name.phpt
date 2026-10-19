@@ -228,17 +228,17 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
                               "args": [
                                 {
                                   "name": null,
-                                  "value": {
-                                    "kind": {
-                                      "Int": 1
-                                    },
-                                    "span": {
-                                      "start": 94,
-                                      "end": 95
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "Int": 1
+                                      },
+                                      "span": {
+                                        "start": 94,
+                                        "end": 95
+                                      }
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 94,
                                     "end": 95
@@ -598,17 +598,17 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "value"
-                                          },
-                                          "span": {
-                                            "start": 276,
-                                            "end": 282
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "value"
+                                            },
+                                            "span": {
+                                              "start": 276,
+                                              "end": 282
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 276,
                                           "end": 282
@@ -710,17 +710,17 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "value"
-                                          },
-                                          "span": {
-                                            "start": 323,
-                                            "end": 329
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "value"
+                                            },
+                                            "span": {
+                                              "start": 323,
+                                              "end": 329
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 323,
                                           "end": 329
@@ -822,17 +822,17 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "value"
-                                          },
-                                          "span": {
-                                            "start": 366,
-                                            "end": 372
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "value"
+                                            },
+                                            "span": {
+                                              "start": 366,
+                                              "end": 372
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 366,
                                           "end": 372
@@ -922,17 +922,17 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "value"
-                                          },
-                                          "span": {
-                                            "start": 409,
-                                            "end": 415
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "value"
+                                            },
+                                            "span": {
+                                              "start": 409,
+                                              "end": 415
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 409,
                                           "end": 415
@@ -1014,17 +1014,17 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "value"
-                                          },
-                                          "span": {
-                                            "start": 451,
-                                            "end": 457
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "value"
+                                            },
+                                            "span": {
+                                              "start": 451,
+                                              "end": 457
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 451,
                                           "end": 457
@@ -1106,17 +1106,17 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "value"
-                                          },
-                                          "span": {
-                                            "start": 492,
-                                            "end": 498
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "value"
+                                            },
+                                            "span": {
+                                              "start": 492,
+                                              "end": 498
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 492,
                                           "end": 498
@@ -1198,17 +1198,17 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "value"
-                                          },
-                                          "span": {
-                                            "start": 533,
-                                            "end": 539
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "value"
+                                            },
+                                            "span": {
+                                              "start": 533,
+                                              "end": 539
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 533,
                                           "end": 539
@@ -1290,17 +1290,17 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "value"
-                                          },
-                                          "span": {
-                                            "start": 575,
-                                            "end": 581
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "value"
+                                            },
+                                            "span": {
+                                              "start": 575,
+                                              "end": 581
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 575,
                                           "end": 581
@@ -1382,17 +1382,17 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "value"
-                                          },
-                                          "span": {
-                                            "start": 617,
-                                            "end": 623
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "value"
+                                            },
+                                            "span": {
+                                              "start": 617,
+                                              "end": 623
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 617,
                                           "end": 623
@@ -1474,17 +1474,17 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "value"
-                                          },
-                                          "span": {
-                                            "start": 674,
-                                            "end": 680
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "value"
+                                            },
+                                            "span": {
+                                              "start": 674,
+                                              "end": 680
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 674,
                                           "end": 680
@@ -1569,17 +1569,17 @@ PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard 
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "value"
-                                          },
-                                          "span": {
-                                            "start": 746,
-                                            "end": 752
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "value"
+                                            },
+                                            "span": {
+                                              "start": 746,
+                                              "end": 752
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 746,
                                           "end": 752

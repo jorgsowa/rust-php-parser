@@ -17,16 +17,17 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 7,
-                          "end": 9
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 7,
+                            "end": 9
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 7,
                         "end": 9
@@ -34,14 +35,15 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 11,
-                          "end": 12
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 11,
+                            "end": 12
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 11,
                         "end": 12
@@ -49,14 +51,15 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 13,
-                          "end": 14
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 13,
+                            "end": 14
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 13,
                         "end": 14

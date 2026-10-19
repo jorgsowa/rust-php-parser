@@ -36,35 +36,36 @@ PHP Parse error:  syntax error, unexpected token ")", expecting "=" in Standard 
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Array": [
-                        {
-                          "key": null,
-                          "value": {
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Array": [
+                          {
+                            "key": null,
                             "kind": {
-                              "Variable": "a"
+                              "Value": {
+                                "kind": {
+                                  "Variable": "a"
+                                },
+                                "span": {
+                                  "start": 20,
+                                  "end": 22
+                                }
+                              }
                             },
                             "span": {
                               "start": 20,
                               "end": 22
                             }
-                          },
-                          "unpack": false,
-                          "span": {
-                            "start": 20,
-                            "end": 22
                           }
-                        }
-                      ]
-                    },
-                    "span": {
-                      "start": 15,
-                      "end": 23
+                        ]
+                      },
+                      "span": {
+                        "start": 15,
+                        "end": 23
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 15,
                     "end": 23
@@ -104,16 +105,17 @@ PHP Parse error:  syntax error, unexpected token ")", expecting "=" in Standard 
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 36,
-                          "end": 38
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 36,
+                            "end": 38
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 36,
                         "end": 38
@@ -121,16 +123,17 @@ PHP Parse error:  syntax error, unexpected token ")", expecting "=" in Standard 
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 40,
-                          "end": 42
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 40,
+                            "end": 42
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 40,
                         "end": 42

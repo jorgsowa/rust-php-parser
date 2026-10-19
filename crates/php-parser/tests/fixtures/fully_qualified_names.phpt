@@ -45,17 +45,17 @@ $x = \strlen('hello');
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "String": "error"
-                          },
-                          "span": {
-                            "start": 26,
-                            "end": 33
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "String": "error"
+                            },
+                            "span": {
+                              "start": 26,
+                              "end": 33
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 26,
                           "end": 33
@@ -119,17 +119,17 @@ $x = \strlen('hello');
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "String": "msg"
-                    },
-                    "span": {
-                      "start": 62,
-                      "end": 67
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "String": "msg"
+                      },
+                      "span": {
+                        "start": 62,
+                        "end": 67
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 62,
                     "end": 67
@@ -188,17 +188,17 @@ $x = \strlen('hello');
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "String": "hello"
-                          },
-                          "span": {
-                            "start": 83,
-                            "end": 90
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "String": "hello"
+                            },
+                            "span": {
+                              "start": 83,
+                              "end": 90
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 83,
                           "end": 90

@@ -15,16 +15,17 @@
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 7,
-                          "end": 9
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 7,
+                            "end": 9
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 7,
                         "end": 9
@@ -32,16 +33,17 @@
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 11,
-                          "end": 13
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 11,
+                            "end": 13
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 11,
                         "end": 13
@@ -87,16 +89,17 @@
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "first"
-                        },
-                        "span": {
-                          "start": 25,
-                          "end": 31
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "first"
+                          },
+                          "span": {
+                            "start": 25,
+                            "end": 31
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 25,
                         "end": 31
@@ -104,14 +107,15 @@
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 33,
-                          "end": 34
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 33,
+                            "end": 34
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 33,
                         "end": 34
@@ -119,16 +123,17 @@
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "third"
-                        },
-                        "span": {
-                          "start": 35,
-                          "end": 41
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "third"
+                          },
+                          "span": {
+                            "start": 35,
+                            "end": 41
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 35,
                         "end": 41

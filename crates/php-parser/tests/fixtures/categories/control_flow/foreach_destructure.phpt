@@ -21,16 +21,17 @@
               "Array": [
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "key"
-                    },
-                    "span": {
-                      "start": 24,
-                      "end": 28
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "key"
+                      },
+                      "span": {
+                        "start": 24,
+                        "end": 28
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 24,
                     "end": 28
@@ -38,16 +39,17 @@
                 },
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "value"
-                    },
-                    "span": {
-                      "start": 30,
-                      "end": 36
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "value"
+                      },
+                      "span": {
+                        "start": 30,
+                        "end": 36
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 30,
                     "end": 36

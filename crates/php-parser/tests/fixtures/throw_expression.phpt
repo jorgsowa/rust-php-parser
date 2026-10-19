@@ -61,17 +61,17 @@ $result = match ($status) {
                               "args": [
                                 {
                                   "name": null,
-                                  "value": {
-                                    "kind": {
-                                      "String": "Missing value"
-                                    },
-                                    "span": {
-                                      "start": 56,
-                                      "end": 71
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "String": "Missing value"
+                                      },
+                                      "span": {
+                                        "start": 56,
+                                        "end": 71
+                                      }
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 56,
                                     "end": 71
@@ -193,17 +193,17 @@ $result = match ($status) {
                                   "args": [
                                     {
                                       "name": null,
-                                      "value": {
-                                        "kind": {
-                                          "String": "Unexpected status"
-                                        },
-                                        "span": {
-                                          "start": 161,
-                                          "end": 180
+                                      "kind": {
+                                        "Value": {
+                                          "kind": {
+                                            "String": "Unexpected status"
+                                          },
+                                          "span": {
+                                            "start": 161,
+                                            "end": 180
+                                          }
                                         }
                                       },
-                                      "unpack": false,
-                                      "by_ref": false,
                                       "span": {
                                         "start": 161,
                                         "end": 180

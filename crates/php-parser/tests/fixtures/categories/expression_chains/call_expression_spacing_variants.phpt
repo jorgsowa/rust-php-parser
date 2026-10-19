@@ -58,17 +58,17 @@ foo()->bar(1);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 49,
-                      "end": 50
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 49,
+                        "end": 50
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 49,
                     "end": 50
@@ -114,17 +114,17 @@ foo()->bar(1);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 104,
-                      "end": 105
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 104,
+                        "end": 105
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 104,
                     "end": 105
@@ -132,17 +132,17 @@ foo()->bar(1);
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 2
-                    },
-                    "span": {
-                      "start": 108,
-                      "end": 109
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 2
+                      },
+                      "span": {
+                        "start": 108,
+                        "end": 109
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 108,
                     "end": 109
@@ -197,17 +197,17 @@ foo()->bar(1);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 4
-                    },
-                    "span": {
-                      "start": 163,
-                      "end": 164
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 4
+                      },
+                      "span": {
+                        "start": 163,
+                        "end": 164
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 163,
                     "end": 164
@@ -262,17 +262,17 @@ foo()->bar(1);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 4
-                    },
-                    "span": {
-                      "start": 231,
-                      "end": 232
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 4
+                      },
+                      "span": {
+                        "start": 231,
+                        "end": 232
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 231,
                     "end": 232
@@ -318,17 +318,17 @@ foo()->bar(1);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 274,
-                      "end": 275
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 274,
+                        "end": 275
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 274,
                     "end": 275
@@ -374,17 +374,17 @@ foo()->bar(1);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 336,
-                      "end": 337
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 336,
+                        "end": 337
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 336,
                     "end": 337
@@ -430,17 +430,17 @@ foo()->bar(1);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 389,
-                      "end": 390
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 389,
+                        "end": 390
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 389,
                     "end": 390
@@ -578,17 +578,17 @@ foo()->bar(1);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 521,
-                      "end": 522
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 521,
+                        "end": 522
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 521,
                     "end": 522

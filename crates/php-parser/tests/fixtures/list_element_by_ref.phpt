@@ -13,17 +13,17 @@
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 12,
-                          "end": 14
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 12,
+                            "end": 14
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 11,
                         "end": 14
@@ -31,16 +31,17 @@
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 16,
-                          "end": 18
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 16,
+                            "end": 18
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 16,
                         "end": 18

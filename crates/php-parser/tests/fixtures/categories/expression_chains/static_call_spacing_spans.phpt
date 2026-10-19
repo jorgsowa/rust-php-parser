@@ -37,17 +37,17 @@ $obj?->prop;
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 78,
-                      "end": 79
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 78,
+                        "end": 79
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 78,
                     "end": 79
@@ -55,17 +55,17 @@ $obj?->prop;
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 2
-                    },
-                    "span": {
-                      "start": 81,
-                      "end": 82
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 2
+                      },
+                      "span": {
+                        "start": 81,
+                        "end": 82
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 81,
                     "end": 82
@@ -120,17 +120,17 @@ $obj?->prop;
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 4
-                    },
-                    "span": {
-                      "start": 138,
-                      "end": 139
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 4
+                      },
+                      "span": {
+                        "start": 138,
+                        "end": 139
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 138,
                     "end": 139

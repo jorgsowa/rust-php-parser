@@ -103,17 +103,17 @@ use App\{A, B,};
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 35,
-                      "end": 36
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 35,
+                        "end": 36
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 35,
                     "end": 36
@@ -121,17 +121,17 @@ use App\{A, B,};
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 2
-                    },
-                    "span": {
-                      "start": 38,
-                      "end": 39
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 2
+                      },
+                      "span": {
+                        "start": 38,
+                        "end": 39
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 38,
                     "end": 39
@@ -319,16 +319,17 @@ use App\{A, B,};
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 97,
-                          "end": 99
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 97,
+                            "end": 99
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 97,
                         "end": 99
@@ -336,16 +337,17 @@ use App\{A, B,};
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 101,
-                          "end": 103
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 101,
+                            "end": 103
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 101,
                         "end": 103

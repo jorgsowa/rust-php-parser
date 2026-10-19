@@ -17,16 +17,17 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 1
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": []
-                        },
-                        "span": {
-                          "start": 11,
-                          "end": 17
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": []
+                          },
+                          "span": {
+                            "start": 11,
+                            "end": 17
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 11,
                         "end": 17

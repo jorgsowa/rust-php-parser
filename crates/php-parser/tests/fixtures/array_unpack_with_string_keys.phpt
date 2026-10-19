@@ -31,16 +31,17 @@
                           "end": 15
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 19,
-                          "end": 20
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 19,
+                            "end": 20
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 12,
                         "end": 20
@@ -86,16 +87,17 @@
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 32,
-                          "end": 34
+                      "kind": {
+                        "Spread": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 32,
+                            "end": 34
+                          }
                         }
                       },
-                      "unpack": true,
                       "span": {
                         "start": 29,
                         "end": 34

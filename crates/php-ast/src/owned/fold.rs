@@ -433,9 +433,13 @@ fn fold_owned_expr_kind<F: OwnedFold + ?Sized>(folder: &mut F, k: &ExprKind) -> 
                 .iter()
                 .map(|e| ArrayElement {
                     key: e.key.as_ref().map(|k| folder.fold_expr(k)),
-                    value: folder.fold_expr(&e.value),
-                    unpack: e.unpack,
-                    by_ref: e.by_ref,
+                    kind: match &e.kind {
+                        ArrayElementKind::Value(v) => ArrayElementKind::Value(folder.fold_expr(v)),
+                        ArrayElementKind::Spread(v) => {
+                            ArrayElementKind::Spread(folder.fold_expr(v))
+                        }
+                        ArrayElementKind::ByRef(v) => ArrayElementKind::ByRef(folder.fold_expr(v)),
+                    },
                     span: e.span,
                 })
                 .collect(),
@@ -605,9 +609,13 @@ pub fn fold_owned_param<F: OwnedFold + ?Sized>(folder: &mut F, p: &Param) -> Par
 pub fn fold_owned_arg<F: OwnedFold + ?Sized>(folder: &mut F, arg: &Arg) -> Arg {
     Arg {
         name: arg.name.as_ref().map(|n| folder.fold_name(n)),
-        value: arg.value.as_ref().map(|v| folder.fold_expr(v)),
-        unpack: arg.unpack,
-        by_ref: arg.by_ref,
+        kind: match &arg.kind {
+            ArgKind::Value(e) => ArgKind::Value(folder.fold_expr(e)),
+            ArgKind::Spread(e) => ArgKind::Spread(folder.fold_expr(e)),
+            ArgKind::ByRef(e) => ArgKind::ByRef(folder.fold_expr(e)),
+            ArgKind::Placeholder => ArgKind::Placeholder,
+            ArgKind::SpreadPlaceholder => ArgKind::SpreadPlaceholder,
+        },
         span: arg.span,
     }
 }

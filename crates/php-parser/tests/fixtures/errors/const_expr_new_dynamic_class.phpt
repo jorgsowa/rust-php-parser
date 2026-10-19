@@ -274,17 +274,17 @@ PHP Fatal error:  "static" is not allowed in compile-time constants in Standard 
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Variable": "x"
-                          },
-                          "span": {
-                            "start": 124,
-                            "end": 126
+                        "kind": {
+                          "Spread": {
+                            "kind": {
+                              "Variable": "x"
+                            },
+                            "span": {
+                              "start": 124,
+                              "end": 126
+                            }
                           }
                         },
-                        "unpack": true,
-                        "by_ref": false,
                         "span": {
                           "start": 121,
                           "end": 126
@@ -366,17 +366,17 @@ PHP Fatal error:  "static" is not allowed in compile-time constants in Standard 
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Variable": "x"
-                          },
-                          "span": {
-                            "start": 156,
-                            "end": 158
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Variable": "x"
+                            },
+                            "span": {
+                              "start": 156,
+                              "end": 158
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 156,
                           "end": 158
@@ -467,37 +467,37 @@ PHP Fatal error:  "static" is not allowed in compile-time constants in Standard 
                             "end": 189
                           }
                         },
-                        "value": {
-                          "kind": {
-                            "FunctionCall": {
-                              "name": {
-                                "kind": {
-                                  "Name": {
-                                    "parts": [
-                                      "f"
-                                    ],
-                                    "kind": "Unqualified",
-                                    "span": {
-                                      "start": 191,
-                                      "end": 192
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "FunctionCall": {
+                                "name": {
+                                  "kind": {
+                                    "Name": {
+                                      "parts": [
+                                        "f"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 191,
+                                        "end": 192
+                                      }
                                     }
+                                  },
+                                  "span": {
+                                    "start": 191,
+                                    "end": 192
                                   }
                                 },
-                                "span": {
-                                  "start": 191,
-                                  "end": 192
-                                }
-                              },
-                              "args": []
+                                "args": []
+                              }
+                            },
+                            "span": {
+                              "start": 191,
+                              "end": 194
                             }
-                          },
-                          "span": {
-                            "start": 191,
-                            "end": 194
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 188,
                           "end": 194

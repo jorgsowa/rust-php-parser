@@ -980,57 +980,57 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Binary": {
-                                              "left": {
-                                                "kind": {
-                                                  "String": "SELECT COUNT(*) FROM "
-                                                },
-                                                "span": {
-                                                  "start": 694,
-                                                  "end": 717
-                                                }
-                                              },
-                                              "op": "Concat",
-                                              "right": {
-                                                "kind": {
-                                                  "MethodCall": {
-                                                    "object": {
-                                                      "kind": {
-                                                        "Variable": "this"
-                                                      },
-                                                      "span": {
-                                                        "start": 720,
-                                                        "end": 725
-                                                      }
-                                                    },
-                                                    "method": {
-                                                      "kind": {
-                                                        "Identifier": "tableName"
-                                                      },
-                                                      "span": {
-                                                        "start": 727,
-                                                        "end": 736
-                                                      }
-                                                    },
-                                                    "args": []
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Binary": {
+                                                "left": {
+                                                  "kind": {
+                                                    "String": "SELECT COUNT(*) FROM "
+                                                  },
+                                                  "span": {
+                                                    "start": 694,
+                                                    "end": 717
                                                   }
                                                 },
-                                                "span": {
-                                                  "start": 720,
-                                                  "end": 738
+                                                "op": "Concat",
+                                                "right": {
+                                                  "kind": {
+                                                    "MethodCall": {
+                                                      "object": {
+                                                        "kind": {
+                                                          "Variable": "this"
+                                                        },
+                                                        "span": {
+                                                          "start": 720,
+                                                          "end": 725
+                                                        }
+                                                      },
+                                                      "method": {
+                                                        "kind": {
+                                                          "Identifier": "tableName"
+                                                        },
+                                                        "span": {
+                                                          "start": 727,
+                                                          "end": 736
+                                                        }
+                                                      },
+                                                      "args": []
+                                                    }
+                                                  },
+                                                  "span": {
+                                                    "start": 720,
+                                                    "end": 738
+                                                  }
                                                 }
                                               }
+                                            },
+                                            "span": {
+                                              "start": 694,
+                                              "end": 738
                                             }
-                                          },
-                                          "span": {
-                                            "start": 694,
-                                            "end": 738
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 694,
                                           "end": 738
@@ -1442,47 +1442,47 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                       "end": 1140
                                     }
                                   },
-                                  "value": {
-                                    "kind": {
-                                      "Cast": [
-                                        "Int",
-                                        {
-                                          "kind": {
-                                            "ArrayAccess": {
-                                              "array": {
-                                                "kind": {
-                                                  "Variable": "row"
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "Cast": [
+                                          "Int",
+                                          {
+                                            "kind": {
+                                              "ArrayAccess": {
+                                                "array": {
+                                                  "kind": {
+                                                    "Variable": "row"
+                                                  },
+                                                  "span": {
+                                                    "start": 1147,
+                                                    "end": 1151
+                                                  }
                                                 },
-                                                "span": {
-                                                  "start": 1147,
-                                                  "end": 1151
-                                                }
-                                              },
-                                              "index": {
-                                                "kind": {
-                                                  "String": "id"
-                                                },
-                                                "span": {
-                                                  "start": 1152,
-                                                  "end": 1156
+                                                "index": {
+                                                  "kind": {
+                                                    "String": "id"
+                                                  },
+                                                  "span": {
+                                                    "start": 1152,
+                                                    "end": 1156
+                                                  }
                                                 }
                                               }
+                                            },
+                                            "span": {
+                                              "start": 1147,
+                                              "end": 1157
                                             }
-                                          },
-                                          "span": {
-                                            "start": 1147,
-                                            "end": 1157
                                           }
-                                        }
-                                      ]
-                                    },
-                                    "span": {
-                                      "start": 1142,
-                                      "end": 1157
+                                        ]
+                                      },
+                                      "span": {
+                                        "start": 1142,
+                                        "end": 1157
+                                      }
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 1138,
                                     "end": 1157
@@ -1499,36 +1499,36 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                       "end": 1175
                                     }
                                   },
-                                  "value": {
-                                    "kind": {
-                                      "ArrayAccess": {
-                                        "array": {
-                                          "kind": {
-                                            "Variable": "row"
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "ArrayAccess": {
+                                          "array": {
+                                            "kind": {
+                                              "Variable": "row"
+                                            },
+                                            "span": {
+                                              "start": 1177,
+                                              "end": 1181
+                                            }
                                           },
-                                          "span": {
-                                            "start": 1177,
-                                            "end": 1181
-                                          }
-                                        },
-                                        "index": {
-                                          "kind": {
-                                            "String": "name"
-                                          },
-                                          "span": {
-                                            "start": 1182,
-                                            "end": 1188
+                                          "index": {
+                                            "kind": {
+                                              "String": "name"
+                                            },
+                                            "span": {
+                                              "start": 1182,
+                                              "end": 1188
+                                            }
                                           }
                                         }
+                                      },
+                                      "span": {
+                                        "start": 1177,
+                                        "end": 1189
                                       }
-                                    },
-                                    "span": {
-                                      "start": 1177,
-                                      "end": 1189
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 1171,
                                     "end": 1189
@@ -1545,53 +1545,53 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                       "end": 1208
                                     }
                                   },
-                                  "value": {
-                                    "kind": {
-                                      "NullCoalesce": {
-                                        "left": {
-                                          "kind": {
-                                            "ArrayAccess": {
-                                              "array": {
-                                                "kind": {
-                                                  "Variable": "row"
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "NullCoalesce": {
+                                          "left": {
+                                            "kind": {
+                                              "ArrayAccess": {
+                                                "array": {
+                                                  "kind": {
+                                                    "Variable": "row"
+                                                  },
+                                                  "span": {
+                                                    "start": 1210,
+                                                    "end": 1214
+                                                  }
                                                 },
-                                                "span": {
-                                                  "start": 1210,
-                                                  "end": 1214
-                                                }
-                                              },
-                                              "index": {
-                                                "kind": {
-                                                  "String": "email"
-                                                },
-                                                "span": {
-                                                  "start": 1215,
-                                                  "end": 1222
+                                                "index": {
+                                                  "kind": {
+                                                    "String": "email"
+                                                  },
+                                                  "span": {
+                                                    "start": 1215,
+                                                    "end": 1222
+                                                  }
                                                 }
                                               }
+                                            },
+                                            "span": {
+                                              "start": 1210,
+                                              "end": 1223
                                             }
                                           },
-                                          "span": {
-                                            "start": 1210,
-                                            "end": 1223
-                                          }
-                                        },
-                                        "right": {
-                                          "kind": "Null",
-                                          "span": {
-                                            "start": 1227,
-                                            "end": 1231
+                                          "right": {
+                                            "kind": "Null",
+                                            "span": {
+                                              "start": 1227,
+                                              "end": 1231
+                                            }
                                           }
                                         }
+                                      },
+                                      "span": {
+                                        "start": 1210,
+                                        "end": 1231
                                       }
-                                    },
-                                    "span": {
-                                      "start": 1210,
-                                      "end": 1231
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 1203,
                                     "end": 1231
@@ -1817,17 +1817,17 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "String": "SELECT * FROM users WHERE id = ?"
-                                          },
-                                          "span": {
-                                            "start": 1360,
-                                            "end": 1394
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "String": "SELECT * FROM users WHERE id = ?"
+                                            },
+                                            "span": {
+                                              "start": 1360,
+                                              "end": 1394
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 1360,
                                           "end": 1394
@@ -1921,36 +1921,36 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "ArrayAccess": {
-                                              "array": {
-                                                "kind": {
-                                                  "Variable": "rows"
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "ArrayAccess": {
+                                                "array": {
+                                                  "kind": {
+                                                    "Variable": "rows"
+                                                  },
+                                                  "span": {
+                                                    "start": 1445,
+                                                    "end": 1450
+                                                  }
                                                 },
-                                                "span": {
-                                                  "start": 1445,
-                                                  "end": 1450
-                                                }
-                                              },
-                                              "index": {
-                                                "kind": {
-                                                  "Int": 0
-                                                },
-                                                "span": {
-                                                  "start": 1451,
-                                                  "end": 1452
+                                                "index": {
+                                                  "kind": {
+                                                    "Int": 0
+                                                  },
+                                                  "span": {
+                                                    "start": 1451,
+                                                    "end": 1452
+                                                  }
                                                 }
                                               }
+                                            },
+                                            "span": {
+                                              "start": 1445,
+                                              "end": 1453
                                             }
-                                          },
-                                          "span": {
-                                            "start": 1445,
-                                            "end": 1453
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 1445,
                                           "end": 1453
@@ -2142,57 +2142,57 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Binary": {
-                                              "left": {
-                                                "kind": {
-                                                  "String": "SELECT * FROM "
-                                                },
-                                                "span": {
-                                                  "start": 1575,
-                                                  "end": 1591
-                                                }
-                                              },
-                                              "op": "Concat",
-                                              "right": {
-                                                "kind": {
-                                                  "MethodCall": {
-                                                    "object": {
-                                                      "kind": {
-                                                        "Variable": "this"
-                                                      },
-                                                      "span": {
-                                                        "start": 1594,
-                                                        "end": 1599
-                                                      }
-                                                    },
-                                                    "method": {
-                                                      "kind": {
-                                                        "Identifier": "tableName"
-                                                      },
-                                                      "span": {
-                                                        "start": 1601,
-                                                        "end": 1610
-                                                      }
-                                                    },
-                                                    "args": []
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Binary": {
+                                                "left": {
+                                                  "kind": {
+                                                    "String": "SELECT * FROM "
+                                                  },
+                                                  "span": {
+                                                    "start": 1575,
+                                                    "end": 1591
                                                   }
                                                 },
-                                                "span": {
-                                                  "start": 1594,
-                                                  "end": 1612
+                                                "op": "Concat",
+                                                "right": {
+                                                  "kind": {
+                                                    "MethodCall": {
+                                                      "object": {
+                                                        "kind": {
+                                                          "Variable": "this"
+                                                        },
+                                                        "span": {
+                                                          "start": 1594,
+                                                          "end": 1599
+                                                        }
+                                                      },
+                                                      "method": {
+                                                        "kind": {
+                                                          "Identifier": "tableName"
+                                                        },
+                                                        "span": {
+                                                          "start": 1601,
+                                                          "end": 1610
+                                                        }
+                                                      },
+                                                      "args": []
+                                                    }
+                                                  },
+                                                  "span": {
+                                                    "start": 1594,
+                                                    "end": 1612
+                                                  }
                                                 }
                                               }
+                                            },
+                                            "span": {
+                                              "start": 1575,
+                                              "end": 1612
                                             }
-                                          },
-                                          "span": {
-                                            "start": 1575,
-                                            "end": 1612
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 1575,
                                           "end": 1612
@@ -2245,111 +2245,111 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                               "args": [
                                 {
                                   "name": null,
-                                  "value": {
-                                    "kind": {
-                                      "ArrowFunction": {
-                                        "is_static": false,
-                                        "by_ref": false,
-                                        "params": [
-                                          {
-                                            "name": {
-                                              "name": "row",
-                                              "span": {
-                                                "start": 1649,
-                                                "end": 1653
-                                              }
-                                            },
-                                            "type_hint": {
-                                              "kind": {
-                                                "Named": {
-                                                  "parts": [
-                                                    "array"
-                                                  ],
-                                                  "kind": "Unqualified",
-                                                  "span": {
-                                                    "start": 1643,
-                                                    "end": 1648
-                                                  }
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "ArrowFunction": {
+                                          "is_static": false,
+                                          "by_ref": false,
+                                          "params": [
+                                            {
+                                              "name": {
+                                                "name": "row",
+                                                "span": {
+                                                  "start": 1649,
+                                                  "end": 1653
                                                 }
                                               },
+                                              "type_hint": {
+                                                "kind": {
+                                                  "Named": {
+                                                    "parts": [
+                                                      "array"
+                                                    ],
+                                                    "kind": "Unqualified",
+                                                    "span": {
+                                                      "start": 1643,
+                                                      "end": 1648
+                                                    }
+                                                  }
+                                                },
+                                                "span": {
+                                                  "start": 1643,
+                                                  "end": 1648
+                                                }
+                                              },
+                                              "default": null,
+                                              "by_ref": false,
+                                              "variadic": false,
+                                              "is_readonly": false,
+                                              "is_final": false,
+                                              "visibility": null,
+                                              "set_visibility": null,
+                                              "attributes": [],
                                               "span": {
                                                 "start": 1643,
-                                                "end": 1648
+                                                "end": 1653
                                               }
-                                            },
-                                            "default": null,
-                                            "by_ref": false,
-                                            "variadic": false,
-                                            "is_readonly": false,
-                                            "is_final": false,
-                                            "visibility": null,
-                                            "set_visibility": null,
-                                            "attributes": [],
-                                            "span": {
-                                              "start": 1643,
-                                              "end": 1653
                                             }
-                                          }
-                                        ],
-                                        "return_type": null,
-                                        "body": {
-                                          "kind": {
-                                            "MethodCall": {
-                                              "object": {
-                                                "kind": {
-                                                  "Variable": "this"
+                                          ],
+                                          "return_type": null,
+                                          "body": {
+                                            "kind": {
+                                              "MethodCall": {
+                                                "object": {
+                                                  "kind": {
+                                                    "Variable": "this"
+                                                  },
+                                                  "span": {
+                                                    "start": 1658,
+                                                    "end": 1663
+                                                  }
                                                 },
-                                                "span": {
-                                                  "start": 1658,
-                                                  "end": 1663
-                                                }
-                                              },
-                                              "method": {
-                                                "kind": {
-                                                  "Identifier": "hydrate"
+                                                "method": {
+                                                  "kind": {
+                                                    "Identifier": "hydrate"
+                                                  },
+                                                  "span": {
+                                                    "start": 1665,
+                                                    "end": 1672
+                                                  }
                                                 },
-                                                "span": {
-                                                  "start": 1665,
-                                                  "end": 1672
-                                                }
-                                              },
-                                              "args": [
-                                                {
-                                                  "name": null,
-                                                  "value": {
+                                                "args": [
+                                                  {
+                                                    "name": null,
                                                     "kind": {
-                                                      "Variable": "row"
+                                                      "Value": {
+                                                        "kind": {
+                                                          "Variable": "row"
+                                                        },
+                                                        "span": {
+                                                          "start": 1673,
+                                                          "end": 1677
+                                                        }
+                                                      }
                                                     },
                                                     "span": {
                                                       "start": 1673,
                                                       "end": 1677
                                                     }
-                                                  },
-                                                  "unpack": false,
-                                                  "by_ref": false,
-                                                  "span": {
-                                                    "start": 1673,
-                                                    "end": 1677
                                                   }
-                                                }
-                                              ]
+                                                ]
+                                              }
+                                            },
+                                            "span": {
+                                              "start": 1658,
+                                              "end": 1678
                                             }
                                           },
-                                          "span": {
-                                            "start": 1658,
-                                            "end": 1678
-                                          }
-                                        },
-                                        "attributes": []
+                                          "attributes": []
+                                        }
+                                      },
+                                      "span": {
+                                        "start": 1640,
+                                        "end": 1678
                                       }
-                                    },
-                                    "span": {
-                                      "start": 1640,
-                                      "end": 1678
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 1640,
                                     "end": 1678
@@ -2357,17 +2357,17 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                 },
                                 {
                                   "name": null,
-                                  "value": {
-                                    "kind": {
-                                      "Variable": "rows"
-                                    },
-                                    "span": {
-                                      "start": 1680,
-                                      "end": 1685
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "Variable": "rows"
+                                      },
+                                      "span": {
+                                        "start": 1680,
+                                        "end": 1685
+                                      }
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 1680,
                                     "end": 1685
@@ -2518,17 +2518,17 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "email"
-                                          },
-                                          "span": {
-                                            "start": 1785,
-                                            "end": 1791
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "email"
+                                            },
+                                            "span": {
+                                              "start": 1785,
+                                              "end": 1791
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 1785,
                                           "end": 1791
@@ -2651,17 +2651,17 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "users"
-                                          },
-                                          "span": {
-                                            "start": 1875,
-                                            "end": 1881
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "users"
+                                            },
+                                            "span": {
+                                              "start": 1875,
+                                              "end": 1881
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 1875,
                                           "end": 1881
@@ -2669,154 +2669,154 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                       },
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Closure": {
-                                              "is_static": false,
-                                              "by_ref": false,
-                                              "params": [
-                                                {
-                                                  "name": {
-                                                    "name": "u",
-                                                    "span": {
-                                                      "start": 1909,
-                                                      "end": 1911
-                                                    }
-                                                  },
-                                                  "type_hint": {
-                                                    "kind": {
-                                                      "Named": {
-                                                        "parts": [
-                                                          "User"
-                                                        ],
-                                                        "kind": "Unqualified",
-                                                        "span": {
-                                                          "start": 1904,
-                                                          "end": 1908
-                                                        }
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Closure": {
+                                                "is_static": false,
+                                                "by_ref": false,
+                                                "params": [
+                                                  {
+                                                    "name": {
+                                                      "name": "u",
+                                                      "span": {
+                                                        "start": 1909,
+                                                        "end": 1911
                                                       }
                                                     },
-                                                    "span": {
-                                                      "start": 1904,
-                                                      "end": 1908
-                                                    }
-                                                  },
-                                                  "default": null,
-                                                  "by_ref": false,
-                                                  "variadic": false,
-                                                  "is_readonly": false,
-                                                  "is_final": false,
-                                                  "visibility": null,
-                                                  "set_visibility": null,
-                                                  "attributes": [],
-                                                  "span": {
-                                                    "start": 1904,
-                                                    "end": 1911
-                                                  }
-                                                }
-                                              ],
-                                              "use_vars": [
-                                                {
-                                                  "name": {
-                                                    "name": "sanitized",
-                                                    "span": {
-                                                      "start": 1918,
-                                                      "end": 1928
-                                                    }
-                                                  },
-                                                  "by_ref": false,
-                                                  "span": {
-                                                    "start": 1918,
-                                                    "end": 1928
-                                                  }
-                                                }
-                                              ],
-                                              "return_type": {
-                                                "kind": {
-                                                  "Named": {
-                                                    "parts": [
-                                                      "bool"
-                                                    ],
-                                                    "kind": "Unqualified",
-                                                    "span": {
-                                                      "start": 1931,
-                                                      "end": 1935
-                                                    }
-                                                  }
-                                                },
-                                                "span": {
-                                                  "start": 1931,
-                                                  "end": 1935
-                                                }
-                                              },
-                                              "body": [
-                                                {
-                                                  "kind": {
-                                                    "Return": {
+                                                    "type_hint": {
                                                       "kind": {
-                                                        "Binary": {
-                                                          "left": {
-                                                            "kind": {
-                                                              "PropertyAccess": {
-                                                                "object": {
-                                                                  "kind": {
-                                                                    "Variable": "u"
-                                                                  },
-                                                                  "span": {
-                                                                    "start": 1961,
-                                                                    "end": 1963
-                                                                  }
-                                                                },
-                                                                "property": {
-                                                                  "kind": {
-                                                                    "Identifier": "email"
-                                                                  },
-                                                                  "span": {
-                                                                    "start": 1965,
-                                                                    "end": 1970
-                                                                  }
-                                                                }
-                                                              }
-                                                            },
-                                                            "span": {
-                                                              "start": 1961,
-                                                              "end": 1970
-                                                            }
-                                                          },
-                                                          "op": "Identical",
-                                                          "right": {
-                                                            "kind": {
-                                                              "Variable": "sanitized"
-                                                            },
-                                                            "span": {
-                                                              "start": 1975,
-                                                              "end": 1985
-                                                            }
+                                                        "Named": {
+                                                          "parts": [
+                                                            "User"
+                                                          ],
+                                                          "kind": "Unqualified",
+                                                          "span": {
+                                                            "start": 1904,
+                                                            "end": 1908
                                                           }
                                                         }
                                                       },
                                                       "span": {
-                                                        "start": 1961,
-                                                        "end": 1985
+                                                        "start": 1904,
+                                                        "end": 1908
+                                                      }
+                                                    },
+                                                    "default": null,
+                                                    "by_ref": false,
+                                                    "variadic": false,
+                                                    "is_readonly": false,
+                                                    "is_final": false,
+                                                    "visibility": null,
+                                                    "set_visibility": null,
+                                                    "attributes": [],
+                                                    "span": {
+                                                      "start": 1904,
+                                                      "end": 1911
+                                                    }
+                                                  }
+                                                ],
+                                                "use_vars": [
+                                                  {
+                                                    "name": {
+                                                      "name": "sanitized",
+                                                      "span": {
+                                                        "start": 1918,
+                                                        "end": 1928
+                                                      }
+                                                    },
+                                                    "by_ref": false,
+                                                    "span": {
+                                                      "start": 1918,
+                                                      "end": 1928
+                                                    }
+                                                  }
+                                                ],
+                                                "return_type": {
+                                                  "kind": {
+                                                    "Named": {
+                                                      "parts": [
+                                                        "bool"
+                                                      ],
+                                                      "kind": "Unqualified",
+                                                      "span": {
+                                                        "start": 1931,
+                                                        "end": 1935
                                                       }
                                                     }
                                                   },
                                                   "span": {
-                                                    "start": 1954,
-                                                    "end": 1986
+                                                    "start": 1931,
+                                                    "end": 1935
                                                   }
-                                                }
-                                              ],
-                                              "attributes": []
+                                                },
+                                                "body": [
+                                                  {
+                                                    "kind": {
+                                                      "Return": {
+                                                        "kind": {
+                                                          "Binary": {
+                                                            "left": {
+                                                              "kind": {
+                                                                "PropertyAccess": {
+                                                                  "object": {
+                                                                    "kind": {
+                                                                      "Variable": "u"
+                                                                    },
+                                                                    "span": {
+                                                                      "start": 1961,
+                                                                      "end": 1963
+                                                                    }
+                                                                  },
+                                                                  "property": {
+                                                                    "kind": {
+                                                                      "Identifier": "email"
+                                                                    },
+                                                                    "span": {
+                                                                      "start": 1965,
+                                                                      "end": 1970
+                                                                    }
+                                                                  }
+                                                                }
+                                                              },
+                                                              "span": {
+                                                                "start": 1961,
+                                                                "end": 1970
+                                                              }
+                                                            },
+                                                            "op": "Identical",
+                                                            "right": {
+                                                              "kind": {
+                                                                "Variable": "sanitized"
+                                                              },
+                                                              "span": {
+                                                                "start": 1975,
+                                                                "end": 1985
+                                                              }
+                                                            }
+                                                          }
+                                                        },
+                                                        "span": {
+                                                          "start": 1961,
+                                                          "end": 1985
+                                                        }
+                                                      }
+                                                    },
+                                                    "span": {
+                                                      "start": 1954,
+                                                      "end": 1986
+                                                    }
+                                                  }
+                                                ],
+                                                "attributes": []
+                                              }
+                                            },
+                                            "span": {
+                                              "start": 1895,
+                                              "end": 2000
                                             }
-                                          },
-                                          "span": {
-                                            "start": 1895,
-                                            "end": 2000
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 1895,
                                           "end": 2000
@@ -3029,17 +3029,17 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                       "args": [
                                         {
                                           "name": null,
-                                          "value": {
-                                            "kind": {
-                                              "String": "INSERT INTO users VALUES (?)"
-                                            },
-                                            "span": {
-                                              "start": 2148,
-                                              "end": 2178
+                                          "kind": {
+                                            "Value": {
+                                              "kind": {
+                                                "String": "INSERT INTO users VALUES (?)"
+                                              },
+                                              "span": {
+                                                "start": 2148,
+                                                "end": 2178
+                                              }
                                             }
                                           },
-                                          "unpack": false,
-                                          "by_ref": false,
                                           "span": {
                                             "start": 2148,
                                             "end": 2178
@@ -3085,56 +3085,56 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                       "args": [
                                         {
                                           "name": null,
-                                          "value": {
-                                            "kind": {
-                                              "Binary": {
-                                                "left": {
-                                                  "kind": {
-                                                    "String": "User saved: "
-                                                  },
-                                                  "span": {
-                                                    "start": 2204,
-                                                    "end": 2218
-                                                  }
-                                                },
-                                                "op": "Concat",
-                                                "right": {
-                                                  "kind": {
-                                                    "PropertyAccess": {
-                                                      "object": {
-                                                        "kind": {
-                                                          "Variable": "user"
-                                                        },
-                                                        "span": {
-                                                          "start": 2221,
-                                                          "end": 2226
-                                                        }
-                                                      },
-                                                      "property": {
-                                                        "kind": {
-                                                          "Identifier": "name"
-                                                        },
-                                                        "span": {
-                                                          "start": 2228,
-                                                          "end": 2232
-                                                        }
-                                                      }
+                                          "kind": {
+                                            "Value": {
+                                              "kind": {
+                                                "Binary": {
+                                                  "left": {
+                                                    "kind": {
+                                                      "String": "User saved: "
+                                                    },
+                                                    "span": {
+                                                      "start": 2204,
+                                                      "end": 2218
                                                     }
                                                   },
-                                                  "span": {
-                                                    "start": 2221,
-                                                    "end": 2232
+                                                  "op": "Concat",
+                                                  "right": {
+                                                    "kind": {
+                                                      "PropertyAccess": {
+                                                        "object": {
+                                                          "kind": {
+                                                            "Variable": "user"
+                                                          },
+                                                          "span": {
+                                                            "start": 2221,
+                                                            "end": 2226
+                                                          }
+                                                        },
+                                                        "property": {
+                                                          "kind": {
+                                                            "Identifier": "name"
+                                                          },
+                                                          "span": {
+                                                            "start": 2228,
+                                                            "end": 2232
+                                                          }
+                                                        }
+                                                      }
+                                                    },
+                                                    "span": {
+                                                      "start": 2221,
+                                                      "end": 2232
+                                                    }
                                                   }
                                                 }
+                                              },
+                                              "span": {
+                                                "start": 2204,
+                                                "end": 2232
                                               }
-                                            },
-                                            "span": {
-                                              "start": 2204,
-                                              "end": 2232
                                             }
                                           },
-                                          "unpack": false,
-                                          "by_ref": false,
                                           "span": {
                                             "start": 2204,
                                             "end": 2232
@@ -3203,57 +3203,57 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                           "args": [
                                             {
                                               "name": null,
-                                              "value": {
-                                                "kind": {
-                                                  "Binary": {
-                                                    "left": {
-                                                      "kind": {
-                                                        "String": "Save failed: "
-                                                      },
-                                                      "span": {
-                                                        "start": 2295,
-                                                        "end": 2310
-                                                      }
-                                                    },
-                                                    "op": "Concat",
-                                                    "right": {
-                                                      "kind": {
-                                                        "MethodCall": {
-                                                          "object": {
-                                                            "kind": {
-                                                              "Variable": "e"
-                                                            },
-                                                            "span": {
-                                                              "start": 2313,
-                                                              "end": 2315
-                                                            }
-                                                          },
-                                                          "method": {
-                                                            "kind": {
-                                                              "Identifier": "getMessage"
-                                                            },
-                                                            "span": {
-                                                              "start": 2317,
-                                                              "end": 2327
-                                                            }
-                                                          },
-                                                          "args": []
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "Binary": {
+                                                      "left": {
+                                                        "kind": {
+                                                          "String": "Save failed: "
+                                                        },
+                                                        "span": {
+                                                          "start": 2295,
+                                                          "end": 2310
                                                         }
                                                       },
-                                                      "span": {
-                                                        "start": 2313,
-                                                        "end": 2329
+                                                      "op": "Concat",
+                                                      "right": {
+                                                        "kind": {
+                                                          "MethodCall": {
+                                                            "object": {
+                                                              "kind": {
+                                                                "Variable": "e"
+                                                              },
+                                                              "span": {
+                                                                "start": 2313,
+                                                                "end": 2315
+                                                              }
+                                                            },
+                                                            "method": {
+                                                              "kind": {
+                                                                "Identifier": "getMessage"
+                                                              },
+                                                              "span": {
+                                                                "start": 2317,
+                                                                "end": 2327
+                                                              }
+                                                            },
+                                                            "args": []
+                                                          }
+                                                        },
+                                                        "span": {
+                                                          "start": 2313,
+                                                          "end": 2329
+                                                        }
                                                       }
                                                     }
+                                                  },
+                                                  "span": {
+                                                    "start": 2295,
+                                                    "end": 2329
                                                   }
-                                                },
-                                                "span": {
-                                                  "start": 2295,
-                                                  "end": 2329
                                                 }
                                               },
-                                              "unpack": false,
-                                              "by_ref": false,
                                               "span": {
                                                 "start": 2295,
                                                 "end": 2329
@@ -3431,17 +3431,17 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                           "args": [
                                             {
                                               "name": null,
-                                              "value": {
-                                                "kind": {
-                                                  "Variable": "id"
-                                                },
-                                                "span": {
-                                                  "start": 2447,
-                                                  "end": 2450
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "Variable": "id"
+                                                  },
+                                                  "span": {
+                                                    "start": 2447,
+                                                    "end": 2450
+                                                  }
                                                 }
                                               },
-                                              "unpack": false,
-                                              "by_ref": false,
                                               "span": {
                                                 "start": 2447,
                                                 "end": 2450
@@ -3481,17 +3481,17 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                                               "args": [
                                                 {
                                                   "name": null,
-                                                  "value": {
-                                                    "kind": {
-                                                      "String": "User not found"
-                                                    },
-                                                    "span": {
-                                                      "start": 2483,
-                                                      "end": 2499
+                                                  "kind": {
+                                                    "Value": {
+                                                      "kind": {
+                                                        "String": "User not found"
+                                                      },
+                                                      "span": {
+                                                        "start": 2483,
+                                                        "end": 2499
+                                                      }
                                                     }
                                                   },
-                                                  "unpack": false,
-                                                  "by_ref": false,
                                                   "span": {
                                                     "start": 2483,
                                                     "end": 2499
@@ -3576,17 +3576,17 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                               "args": [
                                 {
                                   "name": null,
-                                  "value": {
-                                    "kind": {
-                                      "String": "DELETE FROM users WHERE id = ?"
-                                    },
-                                    "span": {
-                                      "start": 2527,
-                                      "end": 2559
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "String": "DELETE FROM users WHERE id = ?"
+                                      },
+                                      "span": {
+                                        "start": 2527,
+                                        "end": 2559
+                                      }
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 2527,
                                     "end": 2559
@@ -3632,56 +3632,56 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
                               "args": [
                                 {
                                   "name": null,
-                                  "value": {
-                                    "kind": {
-                                      "Binary": {
-                                        "left": {
-                                          "kind": {
-                                            "String": "User deleted: "
-                                          },
-                                          "span": {
-                                            "start": 2581,
-                                            "end": 2597
-                                          }
-                                        },
-                                        "op": "Concat",
-                                        "right": {
-                                          "kind": {
-                                            "PropertyAccess": {
-                                              "object": {
-                                                "kind": {
-                                                  "Variable": "user"
-                                                },
-                                                "span": {
-                                                  "start": 2600,
-                                                  "end": 2605
-                                                }
-                                              },
-                                              "property": {
-                                                "kind": {
-                                                  "Identifier": "name"
-                                                },
-                                                "span": {
-                                                  "start": 2607,
-                                                  "end": 2611
-                                                }
-                                              }
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "Binary": {
+                                          "left": {
+                                            "kind": {
+                                              "String": "User deleted: "
+                                            },
+                                            "span": {
+                                              "start": 2581,
+                                              "end": 2597
                                             }
                                           },
-                                          "span": {
-                                            "start": 2600,
-                                            "end": 2611
+                                          "op": "Concat",
+                                          "right": {
+                                            "kind": {
+                                              "PropertyAccess": {
+                                                "object": {
+                                                  "kind": {
+                                                    "Variable": "user"
+                                                  },
+                                                  "span": {
+                                                    "start": 2600,
+                                                    "end": 2605
+                                                  }
+                                                },
+                                                "property": {
+                                                  "kind": {
+                                                    "Identifier": "name"
+                                                  },
+                                                  "span": {
+                                                    "start": 2607,
+                                                    "end": 2611
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "span": {
+                                              "start": 2600,
+                                              "end": 2611
+                                            }
                                           }
                                         }
+                                      },
+                                      "span": {
+                                        "start": 2581,
+                                        "end": 2611
                                       }
-                                    },
-                                    "span": {
-                                      "start": 2581,
-                                      "end": 2611
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 2581,
                                     "end": 2611

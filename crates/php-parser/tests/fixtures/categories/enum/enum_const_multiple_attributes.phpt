@@ -71,17 +71,17 @@ min_php=8.1
                       "args": [
                         {
                           "name": null,
-                          "value": {
-                            "kind": {
-                              "String": "value"
-                            },
-                            "span": {
-                              "start": 37,
-                              "end": 44
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "String": "value"
+                              },
+                              "span": {
+                                "start": 37,
+                                "end": 44
+                              }
                             }
                           },
-                          "unpack": false,
-                          "by_ref": false,
                           "span": {
                             "start": 37,
                             "end": 44

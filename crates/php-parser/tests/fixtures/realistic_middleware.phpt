@@ -895,17 +895,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                                       "args": [
                                                         {
                                                           "name": null,
-                                                          "value": {
-                                                            "kind": {
-                                                              "Variable": "request"
-                                                            },
-                                                            "span": {
-                                                              "start": 743,
-                                                              "end": 751
+                                                          "kind": {
+                                                            "Value": {
+                                                              "kind": {
+                                                                "Variable": "request"
+                                                              },
+                                                              "span": {
+                                                                "start": 743,
+                                                                "end": 751
+                                                              }
                                                             }
                                                           },
-                                                          "unpack": false,
-                                                          "by_ref": false,
                                                           "span": {
                                                             "start": 743,
                                                             "end": 751
@@ -997,17 +997,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                           "args": [
                                             {
                                               "name": null,
-                                              "value": {
-                                                "kind": {
-                                                  "String": "Authorization"
-                                                },
-                                                "span": {
-                                                  "start": 816,
-                                                  "end": 831
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "String": "Authorization"
+                                                  },
+                                                  "span": {
+                                                    "start": 816,
+                                                    "end": 831
+                                                  }
                                                 }
                                               },
-                                              "unpack": false,
-                                              "by_ref": false,
                                               "span": {
                                                 "start": 816,
                                                 "end": 831
@@ -1089,17 +1089,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "String": "Bearer "
-                                          },
-                                          "span": {
-                                            "start": 869,
-                                            "end": 878
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "String": "Bearer "
+                                            },
+                                            "span": {
+                                              "start": 869,
+                                              "end": 878
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 869,
                                           "end": 878
@@ -1107,17 +1107,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "String": ""
-                                          },
-                                          "span": {
-                                            "start": 880,
-                                            "end": 882
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "String": ""
+                                            },
+                                            "span": {
+                                              "start": 880,
+                                              "end": 882
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 880,
                                           "end": 882
@@ -1125,17 +1125,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       },
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "token"
-                                          },
-                                          "span": {
-                                            "start": 884,
-                                            "end": 890
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "token"
+                                            },
+                                            "span": {
+                                              "start": 884,
+                                              "end": 890
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 884,
                                           "end": 890
@@ -1211,17 +1211,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                           "args": [
                                             {
                                               "name": null,
-                                              "value": {
-                                                "kind": {
-                                                  "Int": 401
-                                                },
-                                                "span": {
-                                                  "start": 955,
-                                                  "end": 958
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "Int": 401
+                                                  },
+                                                  "span": {
+                                                    "start": 955,
+                                                    "end": 958
+                                                  }
                                                 }
                                               },
-                                              "unpack": false,
-                                              "by_ref": false,
                                               "span": {
                                                 "start": 955,
                                                 "end": 958
@@ -1229,43 +1229,44 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             },
                                             {
                                               "name": null,
-                                              "value": {
-                                                "kind": {
-                                                  "Array": [
-                                                    {
-                                                      "key": {
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "Array": [
+                                                      {
+                                                        "key": {
+                                                          "kind": {
+                                                            "String": "error"
+                                                          },
+                                                          "span": {
+                                                            "start": 961,
+                                                            "end": 968
+                                                          }
+                                                        },
                                                         "kind": {
-                                                          "String": "error"
+                                                          "Value": {
+                                                            "kind": {
+                                                              "String": "Missing token"
+                                                            },
+                                                            "span": {
+                                                              "start": 972,
+                                                              "end": 987
+                                                            }
+                                                          }
                                                         },
                                                         "span": {
                                                           "start": 961,
-                                                          "end": 968
-                                                        }
-                                                      },
-                                                      "value": {
-                                                        "kind": {
-                                                          "String": "Missing token"
-                                                        },
-                                                        "span": {
-                                                          "start": 972,
                                                           "end": 987
                                                         }
-                                                      },
-                                                      "unpack": false,
-                                                      "span": {
-                                                        "start": 961,
-                                                        "end": 987
                                                       }
-                                                    }
-                                                  ]
-                                                },
-                                                "span": {
-                                                  "start": 960,
-                                                  "end": 988
+                                                    ]
+                                                  },
+                                                  "span": {
+                                                    "start": 960,
+                                                    "end": 988
+                                                  }
                                                 }
                                               },
-                                              "unpack": false,
-                                              "by_ref": false,
                                               "span": {
                                                 "start": 960,
                                                 "end": 988
@@ -1363,17 +1364,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             "args": [
                                               {
                                                 "name": null,
-                                                "value": {
-                                                  "kind": {
-                                                    "Variable": "token"
-                                                  },
-                                                  "span": {
-                                                    "start": 1065,
-                                                    "end": 1071
+                                                "kind": {
+                                                  "Value": {
+                                                    "kind": {
+                                                      "Variable": "token"
+                                                    },
+                                                    "span": {
+                                                      "start": 1065,
+                                                      "end": 1071
+                                                    }
                                                   }
                                                 },
-                                                "unpack": false,
-                                                "by_ref": false,
                                                 "span": {
                                                   "start": 1065,
                                                   "end": 1071
@@ -1426,17 +1427,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       "args": [
                                         {
                                           "name": null,
-                                          "value": {
-                                            "kind": {
-                                              "String": "user_id"
-                                            },
-                                            "span": {
-                                              "start": 1109,
-                                              "end": 1118
+                                          "kind": {
+                                            "Value": {
+                                              "kind": {
+                                                "String": "user_id"
+                                              },
+                                              "span": {
+                                                "start": 1109,
+                                                "end": 1118
+                                              }
                                             }
                                           },
-                                          "unpack": false,
-                                          "by_ref": false,
                                           "span": {
                                             "start": 1109,
                                             "end": 1118
@@ -1444,47 +1445,47 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         },
                                         {
                                           "name": null,
-                                          "value": {
-                                            "kind": {
-                                              "Cast": [
-                                                "Int",
-                                                {
-                                                  "kind": {
-                                                    "ArrayAccess": {
-                                                      "array": {
-                                                        "kind": {
-                                                          "Variable": "claims"
+                                          "kind": {
+                                            "Value": {
+                                              "kind": {
+                                                "Cast": [
+                                                  "Int",
+                                                  {
+                                                    "kind": {
+                                                      "ArrayAccess": {
+                                                        "array": {
+                                                          "kind": {
+                                                            "Variable": "claims"
+                                                          },
+                                                          "span": {
+                                                            "start": 1125,
+                                                            "end": 1132
+                                                          }
                                                         },
-                                                        "span": {
-                                                          "start": 1125,
-                                                          "end": 1132
-                                                        }
-                                                      },
-                                                      "index": {
-                                                        "kind": {
-                                                          "String": "sub"
-                                                        },
-                                                        "span": {
-                                                          "start": 1133,
-                                                          "end": 1138
+                                                        "index": {
+                                                          "kind": {
+                                                            "String": "sub"
+                                                          },
+                                                          "span": {
+                                                            "start": 1133,
+                                                            "end": 1138
+                                                          }
                                                         }
                                                       }
+                                                    },
+                                                    "span": {
+                                                      "start": 1125,
+                                                      "end": 1139
                                                     }
-                                                  },
-                                                  "span": {
-                                                    "start": 1125,
-                                                    "end": 1139
                                                   }
-                                                }
-                                              ]
-                                            },
-                                            "span": {
-                                              "start": 1120,
-                                              "end": 1139
+                                                ]
+                                              },
+                                              "span": {
+                                                "start": 1120,
+                                                "end": 1139
+                                              }
                                             }
                                           },
-                                          "unpack": false,
-                                          "by_ref": false,
                                           "span": {
                                             "start": 1120,
                                             "end": 1139
@@ -1530,17 +1531,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                       "args": [
                                         {
                                           "name": null,
-                                          "value": {
-                                            "kind": {
-                                              "String": "roles"
-                                            },
-                                            "span": {
-                                              "start": 1177,
-                                              "end": 1184
+                                          "kind": {
+                                            "Value": {
+                                              "kind": {
+                                                "String": "roles"
+                                              },
+                                              "span": {
+                                                "start": 1177,
+                                                "end": 1184
+                                              }
                                             }
                                           },
-                                          "unpack": false,
-                                          "by_ref": false,
                                           "span": {
                                             "start": 1177,
                                             "end": 1184
@@ -1548,55 +1549,55 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         },
                                         {
                                           "name": null,
-                                          "value": {
-                                            "kind": {
-                                              "NullCoalesce": {
-                                                "left": {
-                                                  "kind": {
-                                                    "ArrayAccess": {
-                                                      "array": {
-                                                        "kind": {
-                                                          "Variable": "claims"
+                                          "kind": {
+                                            "Value": {
+                                              "kind": {
+                                                "NullCoalesce": {
+                                                  "left": {
+                                                    "kind": {
+                                                      "ArrayAccess": {
+                                                        "array": {
+                                                          "kind": {
+                                                            "Variable": "claims"
+                                                          },
+                                                          "span": {
+                                                            "start": 1186,
+                                                            "end": 1193
+                                                          }
                                                         },
-                                                        "span": {
-                                                          "start": 1186,
-                                                          "end": 1193
-                                                        }
-                                                      },
-                                                      "index": {
-                                                        "kind": {
-                                                          "String": "roles"
-                                                        },
-                                                        "span": {
-                                                          "start": 1194,
-                                                          "end": 1201
+                                                        "index": {
+                                                          "kind": {
+                                                            "String": "roles"
+                                                          },
+                                                          "span": {
+                                                            "start": 1194,
+                                                            "end": 1201
+                                                          }
                                                         }
                                                       }
+                                                    },
+                                                    "span": {
+                                                      "start": 1186,
+                                                      "end": 1202
                                                     }
                                                   },
-                                                  "span": {
-                                                    "start": 1186,
-                                                    "end": 1202
-                                                  }
-                                                },
-                                                "right": {
-                                                  "kind": {
-                                                    "Array": []
-                                                  },
-                                                  "span": {
-                                                    "start": 1206,
-                                                    "end": 1208
+                                                  "right": {
+                                                    "kind": {
+                                                      "Array": []
+                                                    },
+                                                    "span": {
+                                                      "start": 1206,
+                                                      "end": 1208
+                                                    }
                                                   }
                                                 }
+                                              },
+                                              "span": {
+                                                "start": 1186,
+                                                "end": 1208
                                               }
-                                            },
-                                            "span": {
-                                              "start": 1186,
-                                              "end": 1208
                                             }
                                           },
-                                          "unpack": false,
-                                          "by_ref": false,
                                           "span": {
                                             "start": 1186,
                                             "end": 1208
@@ -1665,17 +1666,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                           "args": [
                                             {
                                               "name": null,
-                                              "value": {
-                                                "kind": {
-                                                  "Int": 401
-                                                },
-                                                "span": {
-                                                  "start": 1292,
-                                                  "end": 1295
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "Int": 401
+                                                  },
+                                                  "span": {
+                                                    "start": 1292,
+                                                    "end": 1295
+                                                  }
                                                 }
                                               },
-                                              "unpack": false,
-                                              "by_ref": false,
                                               "span": {
                                                 "start": 1292,
                                                 "end": 1295
@@ -1683,63 +1684,64 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             },
                                             {
                                               "name": null,
-                                              "value": {
-                                                "kind": {
-                                                  "Array": [
-                                                    {
-                                                      "key": {
-                                                        "kind": {
-                                                          "String": "error"
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "Array": [
+                                                      {
+                                                        "key": {
+                                                          "kind": {
+                                                            "String": "error"
+                                                          },
+                                                          "span": {
+                                                            "start": 1298,
+                                                            "end": 1305
+                                                          }
                                                         },
-                                                        "span": {
-                                                          "start": 1298,
-                                                          "end": 1305
-                                                        }
-                                                      },
-                                                      "value": {
                                                         "kind": {
-                                                          "MethodCall": {
-                                                            "object": {
-                                                              "kind": {
-                                                                "Variable": "e"
-                                                              },
-                                                              "span": {
-                                                                "start": 1309,
-                                                                "end": 1311
+                                                          "Value": {
+                                                            "kind": {
+                                                              "MethodCall": {
+                                                                "object": {
+                                                                  "kind": {
+                                                                    "Variable": "e"
+                                                                  },
+                                                                  "span": {
+                                                                    "start": 1309,
+                                                                    "end": 1311
+                                                                  }
+                                                                },
+                                                                "method": {
+                                                                  "kind": {
+                                                                    "Identifier": "getMessage"
+                                                                  },
+                                                                  "span": {
+                                                                    "start": 1313,
+                                                                    "end": 1323
+                                                                  }
+                                                                },
+                                                                "args": []
                                                               }
                                                             },
-                                                            "method": {
-                                                              "kind": {
-                                                                "Identifier": "getMessage"
-                                                              },
-                                                              "span": {
-                                                                "start": 1313,
-                                                                "end": 1323
-                                                              }
-                                                            },
-                                                            "args": []
+                                                            "span": {
+                                                              "start": 1309,
+                                                              "end": 1325
+                                                            }
                                                           }
                                                         },
                                                         "span": {
-                                                          "start": 1309,
+                                                          "start": 1298,
                                                           "end": 1325
                                                         }
-                                                      },
-                                                      "unpack": false,
-                                                      "span": {
-                                                        "start": 1298,
-                                                        "end": 1325
                                                       }
-                                                    }
-                                                  ]
-                                                },
-                                                "span": {
-                                                  "start": 1297,
-                                                  "end": 1326
+                                                    ]
+                                                  },
+                                                  "span": {
+                                                    "start": 1297,
+                                                    "end": 1326
+                                                  }
                                                 }
                                               },
-                                              "unpack": false,
-                                              "by_ref": false,
                                               "span": {
                                                 "start": 1297,
                                                 "end": 1326
@@ -1824,57 +1826,57 @@ class RateLimitMiddleware implements MiddlewareInterface
                                               "args": [
                                                 {
                                                   "name": null,
-                                                  "value": {
-                                                    "kind": {
-                                                      "Binary": {
-                                                        "left": {
-                                                          "kind": {
-                                                            "String": "Auth error: "
-                                                          },
-                                                          "span": {
-                                                            "start": 1411,
-                                                            "end": 1425
-                                                          }
-                                                        },
-                                                        "op": "Concat",
-                                                        "right": {
-                                                          "kind": {
-                                                            "MethodCall": {
-                                                              "object": {
-                                                                "kind": {
-                                                                  "Variable": "e"
-                                                                },
-                                                                "span": {
-                                                                  "start": 1428,
-                                                                  "end": 1430
-                                                                }
-                                                              },
-                                                              "method": {
-                                                                "kind": {
-                                                                  "Identifier": "getMessage"
-                                                                },
-                                                                "span": {
-                                                                  "start": 1432,
-                                                                  "end": 1442
-                                                                }
-                                                              },
-                                                              "args": []
+                                                  "kind": {
+                                                    "Value": {
+                                                      "kind": {
+                                                        "Binary": {
+                                                          "left": {
+                                                            "kind": {
+                                                              "String": "Auth error: "
+                                                            },
+                                                            "span": {
+                                                              "start": 1411,
+                                                              "end": 1425
                                                             }
                                                           },
-                                                          "span": {
-                                                            "start": 1428,
-                                                            "end": 1444
+                                                          "op": "Concat",
+                                                          "right": {
+                                                            "kind": {
+                                                              "MethodCall": {
+                                                                "object": {
+                                                                  "kind": {
+                                                                    "Variable": "e"
+                                                                  },
+                                                                  "span": {
+                                                                    "start": 1428,
+                                                                    "end": 1430
+                                                                  }
+                                                                },
+                                                                "method": {
+                                                                  "kind": {
+                                                                    "Identifier": "getMessage"
+                                                                  },
+                                                                  "span": {
+                                                                    "start": 1432,
+                                                                    "end": 1442
+                                                                  }
+                                                                },
+                                                                "args": []
+                                                              }
+                                                            },
+                                                            "span": {
+                                                              "start": 1428,
+                                                              "end": 1444
+                                                            }
                                                           }
                                                         }
+                                                      },
+                                                      "span": {
+                                                        "start": 1411,
+                                                        "end": 1444
                                                       }
-                                                    },
-                                                    "span": {
-                                                      "start": 1411,
-                                                      "end": 1444
                                                     }
                                                   },
-                                                  "unpack": false,
-                                                  "by_ref": false,
                                                   "span": {
                                                     "start": 1411,
                                                     "end": 1444
@@ -1926,17 +1928,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                           "args": [
                                             {
                                               "name": null,
-                                              "value": {
-                                                "kind": {
-                                                  "Int": 500
-                                                },
-                                                "span": {
-                                                  "start": 1479,
-                                                  "end": 1482
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "Int": 500
+                                                  },
+                                                  "span": {
+                                                    "start": 1479,
+                                                    "end": 1482
+                                                  }
                                                 }
                                               },
-                                              "unpack": false,
-                                              "by_ref": false,
                                               "span": {
                                                 "start": 1479,
                                                 "end": 1482
@@ -1944,43 +1946,44 @@ class RateLimitMiddleware implements MiddlewareInterface
                                             },
                                             {
                                               "name": null,
-                                              "value": {
-                                                "kind": {
-                                                  "Array": [
-                                                    {
-                                                      "key": {
+                                              "kind": {
+                                                "Value": {
+                                                  "kind": {
+                                                    "Array": [
+                                                      {
+                                                        "key": {
+                                                          "kind": {
+                                                            "String": "error"
+                                                          },
+                                                          "span": {
+                                                            "start": 1485,
+                                                            "end": 1492
+                                                          }
+                                                        },
                                                         "kind": {
-                                                          "String": "error"
+                                                          "Value": {
+                                                            "kind": {
+                                                              "String": "Internal error"
+                                                            },
+                                                            "span": {
+                                                              "start": 1496,
+                                                              "end": 1512
+                                                            }
+                                                          }
                                                         },
                                                         "span": {
                                                           "start": 1485,
-                                                          "end": 1492
-                                                        }
-                                                      },
-                                                      "value": {
-                                                        "kind": {
-                                                          "String": "Internal error"
-                                                        },
-                                                        "span": {
-                                                          "start": 1496,
                                                           "end": 1512
                                                         }
-                                                      },
-                                                      "unpack": false,
-                                                      "span": {
-                                                        "start": 1485,
-                                                        "end": 1512
                                                       }
-                                                    }
-                                                  ]
-                                                },
-                                                "span": {
-                                                  "start": 1484,
-                                                  "end": 1513
+                                                    ]
+                                                  },
+                                                  "span": {
+                                                    "start": 1484,
+                                                    "end": 1513
+                                                  }
                                                 }
                                               },
-                                              "unpack": false,
-                                              "by_ref": false,
                                               "span": {
                                                 "start": 1484,
                                                 "end": 1513
@@ -2032,17 +2035,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                               "args": [
                                 {
                                   "name": null,
-                                  "value": {
-                                    "kind": {
-                                      "Variable": "request"
-                                    },
-                                    "span": {
-                                      "start": 1548,
-                                      "end": 1556
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "Variable": "request"
+                                      },
+                                      "span": {
+                                        "start": 1548,
+                                        "end": 1556
+                                      }
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 1548,
                                     "end": 1556
@@ -2194,44 +2197,45 @@ class RateLimitMiddleware implements MiddlewareInterface
                                   "Array": [
                                     {
                                       "key": null,
-                                      "value": {
-                                        "kind": {
-                                          "StaticPropertyAccess": {
-                                            "class": {
-                                              "kind": {
-                                                "Name": {
-                                                  "parts": [
-                                                    "self"
-                                                  ],
-                                                  "kind": "Unqualified",
-                                                  "span": {
-                                                    "start": 1666,
-                                                    "end": 1670
+                                      "kind": {
+                                        "Spread": {
+                                          "kind": {
+                                            "StaticPropertyAccess": {
+                                              "class": {
+                                                "kind": {
+                                                  "Name": {
+                                                    "parts": [
+                                                      "self"
+                                                    ],
+                                                    "kind": "Unqualified",
+                                                    "span": {
+                                                      "start": 1666,
+                                                      "end": 1670
+                                                    }
                                                   }
+                                                },
+                                                "span": {
+                                                  "start": 1666,
+                                                  "end": 1670
                                                 }
                                               },
-                                              "span": {
-                                                "start": 1666,
-                                                "end": 1670
-                                              }
-                                            },
-                                            "member": {
-                                              "kind": {
-                                                "Identifier": "excludedPaths"
-                                              },
-                                              "span": {
-                                                "start": 1672,
-                                                "end": 1686
+                                              "member": {
+                                                "kind": {
+                                                  "Identifier": "excludedPaths"
+                                                },
+                                                "span": {
+                                                  "start": 1672,
+                                                  "end": 1686
+                                                }
                                               }
                                             }
+                                          },
+                                          "span": {
+                                            "start": 1666,
+                                            "end": 1686
                                           }
-                                        },
-                                        "span": {
-                                          "start": 1666,
-                                          "end": 1686
                                         }
                                       },
-                                      "unpack": true,
                                       "span": {
                                         "start": 1663,
                                         "end": 1686
@@ -2239,16 +2243,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                     },
                                     {
                                       "key": null,
-                                      "value": {
-                                        "kind": {
-                                          "Variable": "paths"
-                                        },
-                                        "span": {
-                                          "start": 1691,
-                                          "end": 1697
+                                      "kind": {
+                                        "Spread": {
+                                          "kind": {
+                                            "Variable": "paths"
+                                          },
+                                          "span": {
+                                            "start": 1691,
+                                            "end": 1697
+                                          }
                                         }
                                       },
-                                      "unpack": true,
                                       "span": {
                                         "start": 1688,
                                         "end": 1697
@@ -2646,17 +2651,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "key"
-                                          },
-                                          "span": {
-                                            "start": 2019,
-                                            "end": 2023
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "key"
+                                            },
+                                            "span": {
+                                              "start": 2019,
+                                              "end": 2023
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 2019,
                                           "end": 2023
@@ -2887,17 +2892,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         "args": [
                                           {
                                             "name": null,
-                                            "value": {
-                                              "kind": {
-                                                "Int": 429
-                                              },
-                                              "span": {
-                                                "start": 2181,
-                                                "end": 2184
+                                            "kind": {
+                                              "Value": {
+                                                "kind": {
+                                                  "Int": 429
+                                                },
+                                                "span": {
+                                                  "start": 2181,
+                                                  "end": 2184
+                                                }
                                               }
                                             },
-                                            "unpack": false,
-                                            "by_ref": false,
                                             "span": {
                                               "start": 2181,
                                               "end": 2184
@@ -2905,43 +2910,44 @@ class RateLimitMiddleware implements MiddlewareInterface
                                           },
                                           {
                                             "name": null,
-                                            "value": {
-                                              "kind": {
-                                                "Array": [
-                                                  {
-                                                    "key": {
+                                            "kind": {
+                                              "Value": {
+                                                "kind": {
+                                                  "Array": [
+                                                    {
+                                                      "key": {
+                                                        "kind": {
+                                                          "String": "error"
+                                                        },
+                                                        "span": {
+                                                          "start": 2187,
+                                                          "end": 2194
+                                                        }
+                                                      },
                                                       "kind": {
-                                                        "String": "error"
+                                                        "Value": {
+                                                          "kind": {
+                                                            "String": "Too many requests"
+                                                          },
+                                                          "span": {
+                                                            "start": 2198,
+                                                            "end": 2217
+                                                          }
+                                                        }
                                                       },
                                                       "span": {
                                                         "start": 2187,
-                                                        "end": 2194
-                                                      }
-                                                    },
-                                                    "value": {
-                                                      "kind": {
-                                                        "String": "Too many requests"
-                                                      },
-                                                      "span": {
-                                                        "start": 2198,
                                                         "end": 2217
                                                       }
-                                                    },
-                                                    "unpack": false,
-                                                    "span": {
-                                                      "start": 2187,
-                                                      "end": 2217
                                                     }
-                                                  }
-                                                ]
-                                              },
-                                              "span": {
-                                                "start": 2186,
-                                                "end": 2218
+                                                  ]
+                                                },
+                                                "span": {
+                                                  "start": 2186,
+                                                  "end": 2218
+                                                }
                                               }
                                             },
-                                            "unpack": false,
-                                            "by_ref": false,
                                             "span": {
                                               "start": 2186,
                                               "end": 2218
@@ -2977,17 +2983,17 @@ class RateLimitMiddleware implements MiddlewareInterface
                                         "args": [
                                           {
                                             "name": null,
-                                            "value": {
-                                              "kind": {
-                                                "Variable": "request"
-                                              },
-                                              "span": {
-                                                "start": 2250,
-                                                "end": 2258
+                                            "kind": {
+                                              "Value": {
+                                                "kind": {
+                                                  "Variable": "request"
+                                                },
+                                                "span": {
+                                                  "start": 2250,
+                                                  "end": 2258
+                                                }
                                               }
                                             },
-                                            "unpack": false,
-                                            "by_ref": false,
                                             "span": {
                                               "start": 2250,
                                               "end": 2258

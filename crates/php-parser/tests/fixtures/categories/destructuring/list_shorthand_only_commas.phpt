@@ -17,14 +17,15 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 1
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 7,
-                          "end": 8
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 7,
+                            "end": 8
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 7,
                         "end": 8
@@ -32,14 +33,15 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 1
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 9,
-                          "end": 10
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 9,
+                            "end": 10
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 9,
                         "end": 10
@@ -47,14 +49,15 @@ PHP Fatal error:  Cannot use empty list in Standard input code on line 1
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 11,
-                          "end": 12
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 11,
+                            "end": 12
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 11,
                         "end": 12

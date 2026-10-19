@@ -458,16 +458,17 @@ $nested = "{{ {$x} }}";
                           "end": 292
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "String": "value"
-                        },
-                        "span": {
-                          "start": 296,
-                          "end": 303
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "String": "value"
+                          },
+                          "span": {
+                            "start": 296,
+                            "end": 303
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 287,
                         "end": 303

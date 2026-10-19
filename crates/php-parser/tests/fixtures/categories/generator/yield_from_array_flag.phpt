@@ -26,16 +26,17 @@
                           "Array": [
                             {
                               "key": null,
-                              "value": {
-                                "kind": {
-                                  "Int": 1
-                                },
-                                "span": {
-                                  "start": 33,
-                                  "end": 34
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "Int": 1
+                                  },
+                                  "span": {
+                                    "start": 33,
+                                    "end": 34
+                                  }
                                 }
                               },
-                              "unpack": false,
                               "span": {
                                 "start": 33,
                                 "end": 34

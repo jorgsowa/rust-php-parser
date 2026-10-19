@@ -45,42 +45,44 @@ min_php=8.5
                                 "end": 30
                               }
                             },
-                            "value": {
-                              "kind": {
-                                "Array": [
-                                  {
-                                    "key": {
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "Array": [
+                                    {
+                                      "key": {
+                                        "kind": {
+                                          "String": "nested"
+                                        },
+                                        "span": {
+                                          "start": 35,
+                                          "end": 43
+                                        }
+                                      },
                                       "kind": {
-                                        "String": "nested"
+                                        "Value": {
+                                          "kind": {
+                                            "Int": 1
+                                          },
+                                          "span": {
+                                            "start": 47,
+                                            "end": 48
+                                          }
+                                        }
                                       },
                                       "span": {
                                         "start": 35,
-                                        "end": 43
-                                      }
-                                    },
-                                    "value": {
-                                      "kind": {
-                                        "Int": 1
-                                      },
-                                      "span": {
-                                        "start": 47,
                                         "end": 48
                                       }
-                                    },
-                                    "unpack": false,
-                                    "span": {
-                                      "start": 35,
-                                      "end": 48
                                     }
-                                  }
-                                ]
-                              },
-                              "span": {
-                                "start": 34,
-                                "end": 49
+                                  ]
+                                },
+                                "span": {
+                                  "start": 34,
+                                  "end": 49
+                                }
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 24,
                               "end": 49

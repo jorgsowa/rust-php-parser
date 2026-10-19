@@ -233,45 +233,46 @@ function f() {
                             "Array": [
                               {
                                 "key": null,
-                                "value": {
-                                  "kind": {
-                                    "StaticMethodCall": {
-                                      "class": {
-                                        "kind": {
-                                          "Name": {
-                                            "parts": [
-                                              "parent"
-                                            ],
-                                            "kind": "Unqualified",
-                                            "span": {
-                                              "start": 127,
-                                              "end": 133
+                                "kind": {
+                                  "Value": {
+                                    "kind": {
+                                      "StaticMethodCall": {
+                                        "class": {
+                                          "kind": {
+                                            "Name": {
+                                              "parts": [
+                                                "parent"
+                                              ],
+                                              "kind": "Unqualified",
+                                              "span": {
+                                                "start": 127,
+                                                "end": 133
+                                              }
                                             }
+                                          },
+                                          "span": {
+                                            "start": 127,
+                                            "end": 133
                                           }
                                         },
-                                        "span": {
-                                          "start": 127,
-                                          "end": 133
-                                        }
-                                      },
-                                      "method": {
-                                        "kind": {
-                                          "Identifier": "m"
+                                        "method": {
+                                          "kind": {
+                                            "Identifier": "m"
+                                          },
+                                          "span": {
+                                            "start": 135,
+                                            "end": 136
+                                          }
                                         },
-                                        "span": {
-                                          "start": 135,
-                                          "end": 136
-                                        }
-                                      },
-                                      "args": []
+                                        "args": []
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 127,
+                                      "end": 138
                                     }
-                                  },
-                                  "span": {
-                                    "start": 127,
-                                    "end": 138
                                   }
                                 },
-                                "unpack": false,
                                 "span": {
                                   "start": 127,
                                   "end": 138
@@ -279,36 +280,37 @@ function f() {
                               },
                               {
                                 "key": null,
-                                "value": {
-                                  "kind": {
-                                    "New": {
-                                      "class": {
-                                        "kind": {
-                                          "Name": {
-                                            "parts": [
-                                              "self"
-                                            ],
-                                            "kind": "Unqualified",
-                                            "span": {
-                                              "start": 144,
-                                              "end": 148
+                                "kind": {
+                                  "Value": {
+                                    "kind": {
+                                      "New": {
+                                        "class": {
+                                          "kind": {
+                                            "Name": {
+                                              "parts": [
+                                                "self"
+                                              ],
+                                              "kind": "Unqualified",
+                                              "span": {
+                                                "start": 144,
+                                                "end": 148
+                                              }
                                             }
+                                          },
+                                          "span": {
+                                            "start": 144,
+                                            "end": 148
                                           }
                                         },
-                                        "span": {
-                                          "start": 144,
-                                          "end": 148
-                                        }
-                                      },
-                                      "args": []
+                                        "args": []
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 140,
+                                      "end": 148
                                     }
-                                  },
-                                  "span": {
-                                    "start": 140,
-                                    "end": 148
                                   }
                                 },
-                                "unpack": false,
                                 "span": {
                                   "start": 140,
                                   "end": 148
@@ -316,44 +318,45 @@ function f() {
                               },
                               {
                                 "key": null,
-                                "value": {
-                                  "kind": {
-                                    "StaticPropertyAccess": {
-                                      "class": {
-                                        "kind": {
-                                          "Name": {
-                                            "parts": [
-                                              "static"
-                                            ],
-                                            "kind": "Unqualified",
-                                            "span": {
-                                              "start": 150,
-                                              "end": 156
+                                "kind": {
+                                  "Value": {
+                                    "kind": {
+                                      "StaticPropertyAccess": {
+                                        "class": {
+                                          "kind": {
+                                            "Name": {
+                                              "parts": [
+                                                "static"
+                                              ],
+                                              "kind": "Unqualified",
+                                              "span": {
+                                                "start": 150,
+                                                "end": 156
+                                              }
                                             }
+                                          },
+                                          "span": {
+                                            "start": 150,
+                                            "end": 156
                                           }
                                         },
-                                        "span": {
-                                          "start": 150,
-                                          "end": 156
-                                        }
-                                      },
-                                      "member": {
-                                        "kind": {
-                                          "Identifier": "x"
-                                        },
-                                        "span": {
-                                          "start": 158,
-                                          "end": 160
+                                        "member": {
+                                          "kind": {
+                                            "Identifier": "x"
+                                          },
+                                          "span": {
+                                            "start": 158,
+                                            "end": 160
+                                          }
                                         }
                                       }
+                                    },
+                                    "span": {
+                                      "start": 150,
+                                      "end": 160
                                     }
-                                  },
-                                  "span": {
-                                    "start": 150,
-                                    "end": 160
                                   }
                                 },
-                                "unpack": false,
                                 "span": {
                                   "start": 150,
                                   "end": 160
@@ -361,45 +364,46 @@ function f() {
                               },
                               {
                                 "key": null,
-                                "value": {
-                                  "kind": {
-                                    "Binary": {
-                                      "left": {
-                                        "kind": {
-                                          "Variable": "a"
-                                        },
-                                        "span": {
-                                          "start": 162,
-                                          "end": 164
-                                        }
-                                      },
-                                      "op": "Instanceof",
-                                      "right": {
-                                        "kind": {
-                                          "Name": {
-                                            "parts": [
-                                              "parent"
-                                            ],
-                                            "kind": "Unqualified",
-                                            "span": {
-                                              "start": 176,
-                                              "end": 182
-                                            }
+                                "kind": {
+                                  "Value": {
+                                    "kind": {
+                                      "Binary": {
+                                        "left": {
+                                          "kind": {
+                                            "Variable": "a"
+                                          },
+                                          "span": {
+                                            "start": 162,
+                                            "end": 164
                                           }
                                         },
-                                        "span": {
-                                          "start": 176,
-                                          "end": 182
+                                        "op": "Instanceof",
+                                        "right": {
+                                          "kind": {
+                                            "Name": {
+                                              "parts": [
+                                                "parent"
+                                              ],
+                                              "kind": "Unqualified",
+                                              "span": {
+                                                "start": 176,
+                                                "end": 182
+                                              }
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 176,
+                                            "end": 182
+                                          }
                                         }
                                       }
+                                    },
+                                    "span": {
+                                      "start": 162,
+                                      "end": 182
                                     }
-                                  },
-                                  "span": {
-                                    "start": 162,
-                                    "end": 182
                                   }
                                 },
-                                "unpack": false,
                                 "span": {
                                   "start": 162,
                                   "end": 182

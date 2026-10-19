@@ -48,14 +48,55 @@ pub struct Program<'arena, 'src> {
 pub struct Arg<'arena, 'src> {
     /// Argument name in a named argument (PHP 8.0+).
     pub name: Option<Name<'arena, 'src>>,
-    /// `None` is a PHP 8.6 partial-application placeholder (`?`, or `...` when `unpack` is set).
-    pub value: Option<Expr<'arena, 'src>>,
-    /// `true` for spread (`...$args`).
-    pub unpack: bool,
-    /// `true` when `&` precedes the argument.
-    pub by_ref: bool,
+    /// What the argument passes.
+    pub kind: ArgKind<'arena, 'src>,
     /// Source range of this node.
     pub span: Span,
+}
+
+/// The form of a call argument.
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
+pub enum ArgKind<'arena, 'src> {
+    /// A plain value: `f($x)`, or `f(name: $x)` when the argument has a name.
+    Value(Expr<'arena, 'src>),
+    /// A spread: `f(...$args)`.
+    Spread(Expr<'arena, 'src>),
+    /// Call-time pass-by-reference: `f(&$x)`, a fatal error since PHP 5.4.
+    ByRef(Expr<'arena, 'src>),
+    /// The PHP 8.6 partial-application placeholder `?`.
+    Placeholder,
+    /// The PHP 8.6 partial-application placeholder `...`.
+    SpreadPlaceholder,
+}
+
+impl<'arena, 'src> Arg<'arena, 'src> {
+    /// The argument expression; `None` for a placeholder.
+    pub fn value(&self) -> Option<&Expr<'arena, 'src>> {
+        match &self.kind {
+            ArgKind::Value(e) | ArgKind::Spread(e) | ArgKind::ByRef(e) => Some(e),
+            ArgKind::Placeholder | ArgKind::SpreadPlaceholder => None,
+        }
+    }
+
+    /// Mutable access to the argument expression; `None` for a placeholder.
+    pub fn value_mut(&mut self) -> Option<&mut Expr<'arena, 'src>> {
+        match &mut self.kind {
+            ArgKind::Value(e) | ArgKind::Spread(e) | ArgKind::ByRef(e) => Some(e),
+            ArgKind::Placeholder | ArgKind::SpreadPlaceholder => None,
+        }
+    }
+
+    /// Whether the argument is a `...` spread (not the `...` placeholder).
+    pub fn is_spread(&self) -> bool {
+        matches!(self.kind, ArgKind::Spread(_))
+    }
+
+    /// Whether the argument is a PHP 8.6 `?` or `...` placeholder.
+    pub fn is_placeholder(&self) -> bool {
+        matches!(self.kind, ArgKind::Placeholder | ArgKind::SpreadPlaceholder)
+    }
 }
 
 /// A single attribute: `#[Name(args)]`.

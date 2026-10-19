@@ -224,17 +224,17 @@ PHP Fatal error:  Cannot use temporary expression in write context in Standard i
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 81,
-                      "end": 82
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 81,
+                        "end": 82
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 81,
                     "end": 82
@@ -267,16 +267,17 @@ PHP Fatal error:  Cannot use temporary expression in write context in Standard i
                         "Array": [
                           {
                             "key": null,
-                            "value": {
-                              "kind": {
-                                "Int": 0
-                              },
-                              "span": {
-                                "start": 86,
-                                "end": 87
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "Int": 0
+                                },
+                                "span": {
+                                  "start": 86,
+                                  "end": 87
+                                }
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 86,
                               "end": 87
@@ -284,16 +285,17 @@ PHP Fatal error:  Cannot use temporary expression in write context in Standard i
                           },
                           {
                             "key": null,
-                            "value": {
-                              "kind": {
-                                "Int": 1
-                              },
-                              "span": {
-                                "start": 89,
-                                "end": 90
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "Int": 1
+                                },
+                                "span": {
+                                  "start": 89,
+                                  "end": 90
+                                }
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 89,
                               "end": 90

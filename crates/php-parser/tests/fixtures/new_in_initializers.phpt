@@ -120,17 +120,17 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 1
-                          },
-                          "span": {
-                            "start": 48,
-                            "end": 49
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 48,
+                              "end": 49
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 48,
                           "end": 49
@@ -138,17 +138,17 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                       },
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 2
-                          },
-                          "span": {
-                            "start": 51,
-                            "end": 52
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 2
+                            },
+                            "span": {
+                              "start": 51,
+                              "end": 52
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 51,
                           "end": 52
@@ -495,37 +495,37 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "New": {
-                        "class": {
-                          "kind": {
-                            "Name": {
-                              "parts": [
-                                "Foo"
-                              ],
-                              "kind": "Unqualified",
-                              "span": {
-                                "start": 256,
-                                "end": 259
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "New": {
+                          "class": {
+                            "kind": {
+                              "Name": {
+                                "parts": [
+                                  "Foo"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 256,
+                                  "end": 259
+                                }
                               }
+                            },
+                            "span": {
+                              "start": 256,
+                              "end": 259
                             }
                           },
-                          "span": {
-                            "start": 256,
-                            "end": 259
-                          }
-                        },
-                        "args": []
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 252,
+                        "end": 261
                       }
-                    },
-                    "span": {
-                      "start": 252,
-                      "end": 261
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 252,
                     "end": 261

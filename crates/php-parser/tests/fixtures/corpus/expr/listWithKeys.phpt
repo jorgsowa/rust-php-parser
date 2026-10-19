@@ -24,16 +24,17 @@ list('a' => list($b => $c), 'd' => $e) = $x;
                           "end": 15
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 19,
-                          "end": 21
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 19,
+                            "end": 21
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 12,
                         "end": 21
@@ -60,16 +61,17 @@ list('a' => list($b => $c), 'd' => $e) = $x;
                           "end": 29
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "String": "b"
-                        },
-                        "span": {
-                          "start": 33,
-                          "end": 36
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "String": "b"
+                          },
+                          "span": {
+                            "start": 33,
+                            "end": 36
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 26,
                         "end": 36
@@ -113,42 +115,44 @@ list('a' => list($b => $c), 'd' => $e) = $x;
                           "end": 47
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": {
+                                  "kind": {
+                                    "Variable": "b"
+                                  },
+                                  "span": {
+                                    "start": 56,
+                                    "end": 58
+                                  }
+                                },
                                 "kind": {
-                                  "Variable": "b"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "c"
+                                    },
+                                    "span": {
+                                      "start": 62,
+                                      "end": 64
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 56,
-                                  "end": 58
-                                }
-                              },
-                              "value": {
-                                "kind": {
-                                  "Variable": "c"
-                                },
-                                "span": {
-                                  "start": 62,
                                   "end": 64
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 56,
-                                "end": 64
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 51,
-                          "end": 65
+                            ]
+                          },
+                          "span": {
+                            "start": 51,
+                            "end": 65
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 44,
                         "end": 65
@@ -164,16 +168,17 @@ list('a' => list($b => $c), 'd' => $e) = $x;
                           "end": 70
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "e"
-                        },
-                        "span": {
-                          "start": 74,
-                          "end": 76
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "e"
+                          },
+                          "span": {
+                            "start": 74,
+                            "end": 76
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 67,
                         "end": 76

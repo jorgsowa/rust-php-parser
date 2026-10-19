@@ -29,23 +29,24 @@ bar(<<<X
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Heredoc": {
-                            "label": "X",
-                            "parts": [
-                              {
-                                "Literal": "body"
-                              }
-                            ]
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Heredoc": {
+                              "label": "X",
+                              "parts": [
+                                {
+                                  "Literal": "body"
+                                }
+                              ]
+                            }
+                          },
+                          "span": {
+                            "start": 12,
+                            "end": 25
                           }
-                        },
-                        "span": {
-                          "start": 12,
-                          "end": 25
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 12,
                         "end": 25
@@ -53,16 +54,17 @@ bar(<<<X
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "String": "other"
-                        },
-                        "span": {
-                          "start": 27,
-                          "end": 34
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "String": "other"
+                          },
+                          "span": {
+                            "start": 27,
+                            "end": 34
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 27,
                         "end": 34
@@ -114,44 +116,44 @@ bar(<<<X
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Binary": {
-                        "left": {
-                          "kind": {
-                            "Heredoc": {
-                              "label": "X",
-                              "parts": [
-                                {
-                                  "Literal": "body"
-                                }
-                              ]
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "Heredoc": {
+                                "label": "X",
+                                "parts": [
+                                  {
+                                    "Literal": "body"
+                                  }
+                                ]
+                              }
+                            },
+                            "span": {
+                              "start": 41,
+                              "end": 54
                             }
                           },
-                          "span": {
-                            "start": 41,
-                            "end": 54
-                          }
-                        },
-                        "op": "Concat",
-                        "right": {
-                          "kind": {
-                            "String": "suffix"
-                          },
-                          "span": {
-                            "start": 57,
-                            "end": 65
+                          "op": "Concat",
+                          "right": {
+                            "kind": {
+                              "String": "suffix"
+                            },
+                            "span": {
+                              "start": 57,
+                              "end": 65
+                            }
                           }
                         }
+                      },
+                      "span": {
+                        "start": 41,
+                        "end": 65
                       }
-                    },
-                    "span": {
-                      "start": 41,
-                      "end": 65
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 41,
                     "end": 65

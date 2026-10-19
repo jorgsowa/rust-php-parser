@@ -178,17 +178,17 @@ function f($argv, $HTTP_RAW_POST_DATA) { global $GLOBALS, $_GET; static $GLOBALS
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "this"
-                        },
-                        "span": {
-                          "start": 56,
-                          "end": 61
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "this"
+                          },
+                          "span": {
+                            "start": 56,
+                            "end": 61
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 55,
                         "end": 61
@@ -403,35 +403,36 @@ function f($argv, $HTTP_RAW_POST_DATA) { global $GLOBALS, $_GET; static $GLOBALS
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "PropertyAccess": {
-                            "object": {
-                              "kind": {
-                                "Variable": "this"
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "PropertyAccess": {
+                              "object": {
+                                "kind": {
+                                  "Variable": "this"
+                                },
+                                "span": {
+                                  "start": 114,
+                                  "end": 119
+                                }
                               },
-                              "span": {
-                                "start": 114,
-                                "end": 119
-                              }
-                            },
-                            "property": {
-                              "kind": {
-                                "Identifier": "a"
-                              },
-                              "span": {
-                                "start": 121,
-                                "end": 122
+                              "property": {
+                                "kind": {
+                                  "Identifier": "a"
+                                },
+                                "span": {
+                                  "start": 121,
+                                  "end": 122
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 114,
+                            "end": 122
                           }
-                        },
-                        "span": {
-                          "start": 114,
-                          "end": 122
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 114,
                         "end": 122
@@ -439,35 +440,36 @@ function f($argv, $HTTP_RAW_POST_DATA) { global $GLOBALS, $_GET; static $GLOBALS
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "ArrayAccess": {
-                            "array": {
-                              "kind": {
-                                "Variable": "this"
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "ArrayAccess": {
+                              "array": {
+                                "kind": {
+                                  "Variable": "this"
+                                },
+                                "span": {
+                                  "start": 124,
+                                  "end": 129
+                                }
                               },
-                              "span": {
-                                "start": 124,
-                                "end": 129
-                              }
-                            },
-                            "index": {
-                              "kind": {
-                                "Int": 0
-                              },
-                              "span": {
-                                "start": 130,
-                                "end": 131
+                              "index": {
+                                "kind": {
+                                  "Int": 0
+                                },
+                                "span": {
+                                  "start": 130,
+                                  "end": 131
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 124,
+                            "end": 132
                           }
-                        },
-                        "span": {
-                          "start": 124,
-                          "end": 132
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 124,
                         "end": 132
@@ -1117,35 +1119,36 @@ function f($argv, $HTTP_RAW_POST_DATA) { global $GLOBALS, $_GET; static $GLOBALS
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "ArrayAccess": {
-                            "array": {
-                              "kind": {
-                                "Variable": "GLOBALS"
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "ArrayAccess": {
+                              "array": {
+                                "kind": {
+                                  "Variable": "GLOBALS"
+                                },
+                                "span": {
+                                  "start": 355,
+                                  "end": 363
+                                }
                               },
-                              "span": {
-                                "start": 355,
-                                "end": 363
-                              }
-                            },
-                            "index": {
-                              "kind": {
-                                "String": "a"
-                              },
-                              "span": {
-                                "start": 364,
-                                "end": 367
+                              "index": {
+                                "kind": {
+                                  "String": "a"
+                                },
+                                "span": {
+                                  "start": 364,
+                                  "end": 367
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 355,
+                            "end": 368
                           }
-                        },
-                        "span": {
-                          "start": 355,
-                          "end": 368
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 355,
                         "end": 368
@@ -1264,17 +1267,17 @@ function f($argv, $HTTP_RAW_POST_DATA) { global $GLOBALS, $_GET; static $GLOBALS
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "GLOBALS"
-                    },
-                    "span": {
-                      "start": 411,
-                      "end": 419
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "GLOBALS"
+                      },
+                      "span": {
+                        "start": 411,
+                        "end": 419
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 411,
                     "end": 419

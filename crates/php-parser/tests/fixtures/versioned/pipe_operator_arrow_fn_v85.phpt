@@ -109,17 +109,17 @@ min_php=8.5
                                     "args": [
                                       {
                                         "name": null,
-                                        "value": {
-                                          "kind": {
-                                            "Variable": "s"
-                                          },
-                                          "span": {
-                                            "start": 53,
-                                            "end": 55
+                                        "kind": {
+                                          "Value": {
+                                            "kind": {
+                                              "Variable": "s"
+                                            },
+                                            "span": {
+                                              "start": 53,
+                                              "end": 55
+                                            }
                                           }
                                         },
-                                        "unpack": false,
-                                        "by_ref": false,
                                         "span": {
                                           "start": 53,
                                           "end": 55

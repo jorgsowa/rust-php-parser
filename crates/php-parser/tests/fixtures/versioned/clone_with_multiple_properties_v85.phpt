@@ -45,16 +45,17 @@ min_php=8.5
                                 "end": 27
                               }
                             },
-                            "value": {
-                              "kind": {
-                                "Int": 1
-                              },
-                              "span": {
-                                "start": 31,
-                                "end": 32
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "Int": 1
+                                },
+                                "span": {
+                                  "start": 31,
+                                  "end": 32
+                                }
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 24,
                               "end": 32
@@ -70,16 +71,17 @@ min_php=8.5
                                 "end": 37
                               }
                             },
-                            "value": {
-                              "kind": {
-                                "Int": 2
-                              },
-                              "span": {
-                                "start": 41,
-                                "end": 42
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "Int": 2
+                                },
+                                "span": {
+                                  "start": 41,
+                                  "end": 42
+                                }
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 34,
                               "end": 42
@@ -95,16 +97,17 @@ min_php=8.5
                                 "end": 47
                               }
                             },
-                            "value": {
-                              "kind": {
-                                "Int": 3
-                              },
-                              "span": {
-                                "start": 51,
-                                "end": 52
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "Int": 3
+                                },
+                                "span": {
+                                  "start": 51,
+                                  "end": 52
+                                }
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 44,
                               "end": 52

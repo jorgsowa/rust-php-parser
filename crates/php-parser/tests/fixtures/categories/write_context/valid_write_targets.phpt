@@ -151,24 +151,25 @@ foreach ($a as A::$p => &$o[0]) {}
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Parenthesized": {
-                            "kind": {
-                              "Variable": "a"
-                            },
-                            "span": {
-                              "start": 34,
-                              "end": 36
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Parenthesized": {
+                              "kind": {
+                                "Variable": "a"
+                              },
+                              "span": {
+                                "start": 34,
+                                "end": 36
+                              }
                             }
+                          },
+                          "span": {
+                            "start": 33,
+                            "end": 37
                           }
-                        },
-                        "span": {
-                          "start": 33,
-                          "end": 37
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 33,
                         "end": 37
@@ -282,17 +283,17 @@ foreach ($a as A::$p => &$o[0]) {}
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 63,
-                          "end": 65
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 63,
+                            "end": 65
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 62,
                         "end": 65
@@ -308,36 +309,36 @@ foreach ($a as A::$p => &$o[0]) {}
                           "end": 70
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "ArrayAccess": {
-                            "array": {
-                              "kind": {
-                                "Variable": "b"
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "ArrayAccess": {
+                              "array": {
+                                "kind": {
+                                  "Variable": "b"
+                                },
+                                "span": {
+                                  "start": 75,
+                                  "end": 77
+                                }
                               },
-                              "span": {
-                                "start": 75,
-                                "end": 77
-                              }
-                            },
-                            "index": {
-                              "kind": {
-                                "Int": 0
-                              },
-                              "span": {
-                                "start": 78,
-                                "end": 79
+                              "index": {
+                                "kind": {
+                                  "Int": 0
+                                },
+                                "span": {
+                                  "start": 78,
+                                  "end": 79
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 75,
+                            "end": 80
                           }
-                        },
-                        "span": {
-                          "start": 75,
-                          "end": 80
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 67,
                         "end": 80
@@ -345,36 +346,36 @@ foreach ($a as A::$p => &$o[0]) {}
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "PropertyAccess": {
-                            "object": {
-                              "kind": {
-                                "Variable": "c"
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "PropertyAccess": {
+                              "object": {
+                                "kind": {
+                                  "Variable": "c"
+                                },
+                                "span": {
+                                  "start": 83,
+                                  "end": 85
+                                }
                               },
-                              "span": {
-                                "start": 83,
-                                "end": 85
-                              }
-                            },
-                            "property": {
-                              "kind": {
-                                "Identifier": "d"
-                              },
-                              "span": {
-                                "start": 87,
-                                "end": 88
+                              "property": {
+                                "kind": {
+                                  "Identifier": "d"
+                                },
+                                "span": {
+                                  "start": 87,
+                                  "end": 88
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 83,
+                            "end": 88
                           }
-                        },
-                        "span": {
-                          "start": 83,
-                          "end": 88
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 82,
                         "end": 88
@@ -382,45 +383,45 @@ foreach ($a as A::$p => &$o[0]) {}
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "StaticPropertyAccess": {
-                            "class": {
-                              "kind": {
-                                "Name": {
-                                  "parts": [
-                                    "A"
-                                  ],
-                                  "kind": "Unqualified",
-                                  "span": {
-                                    "start": 91,
-                                    "end": 92
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "StaticPropertyAccess": {
+                              "class": {
+                                "kind": {
+                                  "Name": {
+                                    "parts": [
+                                      "A"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 91,
+                                      "end": 92
+                                    }
                                   }
+                                },
+                                "span": {
+                                  "start": 91,
+                                  "end": 92
                                 }
                               },
-                              "span": {
-                                "start": 91,
-                                "end": 92
-                              }
-                            },
-                            "member": {
-                              "kind": {
-                                "Identifier": "e"
-                              },
-                              "span": {
-                                "start": 94,
-                                "end": 96
+                              "member": {
+                                "kind": {
+                                  "Identifier": "e"
+                                },
+                                "span": {
+                                  "start": 94,
+                                  "end": 96
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 91,
+                            "end": 96
                           }
-                        },
-                        "span": {
-                          "start": 91,
-                          "end": 96
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 90,
                         "end": 96
@@ -456,16 +457,17 @@ foreach ($a as A::$p => &$o[0]) {}
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 100,
-                          "end": 102
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 100,
+                            "end": 102
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 100,
                         "end": 102
@@ -473,66 +475,70 @@ foreach ($a as A::$p => &$o[0]) {}
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "b"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "b"
+                                    },
+                                    "span": {
+                                      "start": 105,
+                                      "end": 107
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 105,
                                   "end": 107
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 105,
-                                "end": 107
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
-                                "kind": "Omit",
+                              {
+                                "key": null,
+                                "kind": {
+                                  "Value": {
+                                    "kind": "Omit",
+                                    "span": {
+                                      "start": 109,
+                                      "end": 110
+                                    }
+                                  }
+                                },
                                 "span": {
                                   "start": 109,
                                   "end": 110
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 109,
-                                "end": 110
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "c"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "c"
+                                    },
+                                    "span": {
+                                      "start": 111,
+                                      "end": 113
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 111,
                                   "end": 113
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 111,
-                                "end": 113
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 104,
-                          "end": 114
+                            ]
+                          },
+                          "span": {
+                            "start": 104,
+                            "end": 114
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 104,
                         "end": 114
@@ -578,17 +584,17 @@ foreach ($a as A::$p => &$o[0]) {}
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 124,
-                          "end": 126
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 124,
+                            "end": 126
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 123,
                         "end": 126
@@ -596,35 +602,36 @@ foreach ($a as A::$p => &$o[0]) {}
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "b"
+                                  "ByRef": {
+                                    "kind": {
+                                      "Variable": "b"
+                                    },
+                                    "span": {
+                                      "start": 130,
+                                      "end": 132
+                                    }
+                                  }
                                 },
                                 "span": {
-                                  "start": 130,
+                                  "start": 129,
                                   "end": 132
                                 }
-                              },
-                              "unpack": false,
-                              "by_ref": true,
-                              "span": {
-                                "start": 129,
-                                "end": 132
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 128,
-                          "end": 133
+                            ]
+                          },
+                          "span": {
+                            "start": 128,
+                            "end": 133
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 128,
                         "end": 133
@@ -798,16 +805,17 @@ foreach ($a as A::$p => &$o[0]) {}
               "Array": [
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "x"
-                    },
-                    "span": {
-                      "start": 196,
-                      "end": 198
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "x"
+                      },
+                      "span": {
+                        "start": 196,
+                        "end": 198
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 196,
                     "end": 198
@@ -815,14 +823,15 @@ foreach ($a as A::$p => &$o[0]) {}
                 },
                 {
                   "key": null,
-                  "value": {
-                    "kind": "Omit",
-                    "span": {
-                      "start": 200,
-                      "end": 201
+                  "kind": {
+                    "Value": {
+                      "kind": "Omit",
+                      "span": {
+                        "start": 200,
+                        "end": 201
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 200,
                     "end": 201
@@ -830,34 +839,36 @@ foreach ($a as A::$p => &$o[0]) {}
                 },
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Array": [
-                        {
-                          "key": null,
-                          "value": {
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Array": [
+                          {
+                            "key": null,
                             "kind": {
-                              "Variable": "y"
+                              "Value": {
+                                "kind": {
+                                  "Variable": "y"
+                                },
+                                "span": {
+                                  "start": 203,
+                                  "end": 205
+                                }
+                              }
                             },
                             "span": {
                               "start": 203,
                               "end": 205
                             }
-                          },
-                          "unpack": false,
-                          "span": {
-                            "start": 203,
-                            "end": 205
                           }
-                        }
-                      ]
-                    },
-                    "span": {
-                      "start": 202,
-                      "end": 206
+                        ]
+                      },
+                      "span": {
+                        "start": 202,
+                        "end": 206
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 202,
                     "end": 206

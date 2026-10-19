@@ -36,9 +36,7 @@ PHP Fatal error:  Cannot create Closure for new expression in Standard input cod
               "args": [
                 {
                   "name": null,
-                  "value": null,
-                  "unpack": false,
-                  "by_ref": false,
+                  "kind": "Placeholder",
                   "span": {
                     "start": 14,
                     "end": 15

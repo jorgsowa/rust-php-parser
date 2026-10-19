@@ -22,16 +22,17 @@ list('name' => $name, 'age' => $age) = $person;
                           "end": 17
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "name"
-                        },
-                        "span": {
-                          "start": 21,
-                          "end": 26
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "name"
+                          },
+                          "span": {
+                            "start": 21,
+                            "end": 26
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 11,
                         "end": 26
@@ -47,16 +48,17 @@ list('name' => $name, 'age' => $age) = $person;
                           "end": 33
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "age"
-                        },
-                        "span": {
-                          "start": 37,
-                          "end": 41
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "age"
+                          },
+                          "span": {
+                            "start": 37,
+                            "end": 41
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 28,
                         "end": 41

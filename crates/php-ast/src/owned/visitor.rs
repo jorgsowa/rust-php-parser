@@ -399,7 +399,7 @@ pub fn walk_owned_expr<V: OwnedVisitor + ?Sized>(visitor: &mut V, expr: &Expr) -
                 if let Some(key) = &elem.key {
                     visitor.visit_expr(key)?;
                 }
-                visitor.visit_expr(&elem.value)?;
+                visitor.visit_expr(elem.value())?;
             }
         }
         ExprKind::ArrayAccess(access) => {
@@ -597,7 +597,7 @@ pub fn walk_owned_arg<V: OwnedVisitor + ?Sized>(visitor: &mut V, arg: &Arg) -> C
     if let Some(name) = &arg.name {
         visitor.visit_name(name)?;
     }
-    match &arg.value {
+    match arg.value() {
         Some(value) => visitor.visit_expr(value),
         None => ControlFlow::Continue(()),
     }

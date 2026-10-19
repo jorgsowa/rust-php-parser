@@ -282,17 +282,17 @@ class A {
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 136,
-                      "end": 138
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 136,
+                        "end": 138
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 136,
                     "end": 138
@@ -300,17 +300,17 @@ class A {
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 140,
-                      "end": 142
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 140,
+                        "end": 142
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 140,
                     "end": 142
@@ -433,17 +433,17 @@ class A {
                               "args": [
                                 {
                                   "name": null,
-                                  "value": {
-                                    "kind": {
-                                      "Variable": "this"
-                                    },
-                                    "span": {
-                                      "start": 235,
-                                      "end": 240
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "Variable": "this"
+                                      },
+                                      "span": {
+                                        "start": 235,
+                                        "end": 240
+                                      }
                                     }
                                   },
-                                  "unpack": false,
-                                  "by_ref": false,
                                   "span": {
                                     "start": 235,
                                     "end": 240

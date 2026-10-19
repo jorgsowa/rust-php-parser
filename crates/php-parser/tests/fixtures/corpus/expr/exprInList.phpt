@@ -22,24 +22,25 @@ PHP Fatal error:  Assignments can only happen to writable values in Standard inp
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Parenthesized": {
-                            "kind": {
-                              "Variable": "a"
-                            },
-                            "span": {
-                              "start": 31,
-                              "end": 33
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Parenthesized": {
+                              "kind": {
+                                "Variable": "a"
+                              },
+                              "span": {
+                                "start": 31,
+                                "end": 33
+                              }
                             }
+                          },
+                          "span": {
+                            "start": 30,
+                            "end": 34
                           }
-                        },
-                        "span": {
-                          "start": 30,
-                          "end": 34
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 30,
                         "end": 34
@@ -47,40 +48,41 @@ PHP Fatal error:  Assignments can only happen to writable values in Standard inp
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Parenthesized": {
-                            "kind": {
-                              "Parenthesized": {
-                                "kind": {
-                                  "Parenthesized": {
-                                    "kind": {
-                                      "Variable": "b"
-                                    },
-                                    "span": {
-                                      "start": 39,
-                                      "end": 41
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Parenthesized": {
+                              "kind": {
+                                "Parenthesized": {
+                                  "kind": {
+                                    "Parenthesized": {
+                                      "kind": {
+                                        "Variable": "b"
+                                      },
+                                      "span": {
+                                        "start": 39,
+                                        "end": 41
+                                      }
                                     }
+                                  },
+                                  "span": {
+                                    "start": 38,
+                                    "end": 42
                                   }
-                                },
-                                "span": {
-                                  "start": 38,
-                                  "end": 42
                                 }
+                              },
+                              "span": {
+                                "start": 37,
+                                "end": 43
                               }
-                            },
-                            "span": {
-                              "start": 37,
-                              "end": 43
                             }
+                          },
+                          "span": {
+                            "start": 36,
+                            "end": 44
                           }
-                        },
-                        "span": {
-                          "start": 36,
-                          "end": 44
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 36,
                         "end": 44
@@ -126,36 +128,37 @@ PHP Fatal error:  Assignments can only happen to writable values in Standard inp
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Binary": {
-                            "left": {
-                              "kind": {
-                                "Int": 1
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Binary": {
+                              "left": {
+                                "kind": {
+                                  "Int": 1
+                                },
+                                "span": {
+                                  "start": 101,
+                                  "end": 102
+                                }
                               },
-                              "span": {
-                                "start": 101,
-                                "end": 102
-                              }
-                            },
-                            "op": "Add",
-                            "right": {
-                              "kind": {
-                                "Int": 1
-                              },
-                              "span": {
-                                "start": 105,
-                                "end": 106
+                              "op": "Add",
+                              "right": {
+                                "kind": {
+                                  "Int": 1
+                                },
+                                "span": {
+                                  "start": 105,
+                                  "end": 106
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 101,
+                            "end": 106
                           }
-                        },
-                        "span": {
-                          "start": 101,
-                          "end": 106
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 101,
                         "end": 106

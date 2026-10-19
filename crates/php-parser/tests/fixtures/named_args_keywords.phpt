@@ -40,17 +40,17 @@ foo(class: 'MyClass', static: true, match: 'yes');
                       "end": 23
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "arr"
-                    },
-                    "span": {
-                      "start": 25,
-                      "end": 29
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "arr"
+                      },
+                      "span": {
+                        "start": 25,
+                        "end": 29
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 18,
                     "end": 29
@@ -67,17 +67,17 @@ foo(class: 'MyClass', static: true, match: 'yes');
                       "end": 37
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 39,
-                      "end": 40
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 1
+                      },
+                      "span": {
+                        "start": 39,
+                        "end": 40
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 31,
                     "end": 40
@@ -94,17 +94,17 @@ foo(class: 'MyClass', static: true, match: 'yes');
                       "end": 48
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Int": 2
-                    },
-                    "span": {
-                      "start": 50,
-                      "end": 51
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 2
+                      },
+                      "span": {
+                        "start": 50,
+                        "end": 51
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 42,
                     "end": 51
@@ -159,17 +159,17 @@ foo(class: 'MyClass', static: true, match: 'yes');
                       "end": 63
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "String": "MyClass"
-                    },
-                    "span": {
-                      "start": 65,
-                      "end": 74
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "String": "MyClass"
+                      },
+                      "span": {
+                        "start": 65,
+                        "end": 74
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 58,
                     "end": 74
@@ -186,17 +186,17 @@ foo(class: 'MyClass', static: true, match: 'yes');
                       "end": 82
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Bool": true
-                    },
-                    "span": {
-                      "start": 84,
-                      "end": 88
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Bool": true
+                      },
+                      "span": {
+                        "start": 84,
+                        "end": 88
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 76,
                     "end": 88
@@ -213,17 +213,17 @@ foo(class: 'MyClass', static: true, match: 'yes');
                       "end": 95
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "String": "yes"
-                    },
-                    "span": {
-                      "start": 97,
-                      "end": 102
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "String": "yes"
+                      },
+                      "span": {
+                        "start": 97,
+                        "end": 102
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 90,
                     "end": 102

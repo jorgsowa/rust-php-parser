@@ -31,17 +31,17 @@
                   "args": [
                     {
                       "name": null,
-                      "value": {
-                        "kind": {
-                          "String": "missing.txt"
-                        },
-                        "span": {
-                          "start": 25,
-                          "end": 38
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "String": "missing.txt"
+                          },
+                          "span": {
+                            "start": 25,
+                            "end": 38
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": false,
                       "span": {
                         "start": 25,
                         "end": 38

@@ -13,16 +13,17 @@
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 11,
-                          "end": 13
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 11,
+                            "end": 13
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 11,
                         "end": 13
@@ -30,14 +31,15 @@
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": "Omit",
-                        "span": {
-                          "start": 15,
-                          "end": 16
+                      "kind": {
+                        "Value": {
+                          "kind": "Omit",
+                          "span": {
+                            "start": 15,
+                            "end": 16
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 15,
                         "end": 16
@@ -45,16 +47,17 @@
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "c"
-                        },
-                        "span": {
-                          "start": 17,
-                          "end": 19
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "c"
+                          },
+                          "span": {
+                            "start": 17,
+                            "end": 19
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 17,
                         "end": 19

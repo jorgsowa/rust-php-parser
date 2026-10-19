@@ -198,27 +198,28 @@ $f = function () { $a[] = 1; };
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "ArrayAccess": {
-                            "array": {
-                              "kind": {
-                                "Variable": "a"
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "ArrayAccess": {
+                              "array": {
+                                "kind": {
+                                  "Variable": "a"
+                                },
+                                "span": {
+                                  "start": 44,
+                                  "end": 46
+                                }
                               },
-                              "span": {
-                                "start": 44,
-                                "end": 46
-                              }
-                            },
-                            "index": null
+                              "index": null
+                            }
+                          },
+                          "span": {
+                            "start": 44,
+                            "end": 48
                           }
-                        },
-                        "span": {
-                          "start": 44,
-                          "end": 48
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 44,
                         "end": 48
@@ -226,45 +227,47 @@ $f = function () { $a[] = 1; };
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "ArrayAccess": {
-                                    "array": {
-                                      "kind": {
-                                        "Variable": "a"
-                                      },
-                                      "span": {
-                                        "start": 51,
-                                        "end": 53
+                                  "Value": {
+                                    "kind": {
+                                      "ArrayAccess": {
+                                        "array": {
+                                          "kind": {
+                                            "Variable": "a"
+                                          },
+                                          "span": {
+                                            "start": 51,
+                                            "end": 53
+                                          }
+                                        },
+                                        "index": null
                                       }
                                     },
-                                    "index": null
+                                    "span": {
+                                      "start": 51,
+                                      "end": 55
+                                    }
                                   }
                                 },
                                 "span": {
                                   "start": 51,
                                   "end": 55
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 51,
-                                "end": 55
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 50,
-                          "end": 56
+                            ]
+                          },
+                          "span": {
+                            "start": 50,
+                            "end": 56
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 50,
                         "end": 56
@@ -283,16 +286,17 @@ $f = function () { $a[] = 1; };
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 61,
-                          "end": 62
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 61,
+                            "end": 62
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 61,
                         "end": 62
@@ -300,34 +304,36 @@ $f = function () { $a[] = 1; };
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Int": 2
+                                  "Value": {
+                                    "kind": {
+                                      "Int": 2
+                                    },
+                                    "span": {
+                                      "start": 65,
+                                      "end": 66
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 65,
                                   "end": 66
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 65,
-                                "end": 66
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 64,
-                          "end": 67
+                            ]
+                          },
+                          "span": {
+                            "start": 64,
+                            "end": 67
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 64,
                         "end": 67
@@ -363,27 +369,28 @@ $f = function () { $a[] = 1; };
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "ArrayAccess": {
-                            "array": {
-                              "kind": {
-                                "Variable": "a"
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "ArrayAccess": {
+                              "array": {
+                                "kind": {
+                                  "Variable": "a"
+                                },
+                                "span": {
+                                  "start": 75,
+                                  "end": 77
+                                }
                               },
-                              "span": {
-                                "start": 75,
-                                "end": 77
-                              }
-                            },
-                            "index": null
+                              "index": null
+                            }
+                          },
+                          "span": {
+                            "start": 75,
+                            "end": 79
                           }
-                        },
-                        "span": {
-                          "start": 75,
-                          "end": 79
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 75,
                         "end": 79
@@ -402,16 +409,17 @@ $f = function () { $a[] = 1; };
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 84,
-                          "end": 85
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 84,
+                            "end": 85
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 84,
                         "end": 85
@@ -520,28 +528,28 @@ $f = function () { $a[] = 1; };
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "ArrayAccess": {
-                        "array": {
-                          "kind": {
-                            "Variable": "a"
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "ArrayAccess": {
+                          "array": {
+                            "kind": {
+                              "Variable": "a"
+                            },
+                            "span": {
+                              "start": 120,
+                              "end": 122
+                            }
                           },
-                          "span": {
-                            "start": 120,
-                            "end": 122
-                          }
-                        },
-                        "index": null
+                          "index": null
+                        }
+                      },
+                      "span": {
+                        "start": 120,
+                        "end": 124
                       }
-                    },
-                    "span": {
-                      "start": 120,
-                      "end": 124
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 120,
                     "end": 124
@@ -549,47 +557,47 @@ $f = function () { $a[] = 1; };
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "ArrayAccess": {
-                        "array": {
-                          "kind": {
-                            "ArrayAccess": {
-                              "array": {
-                                "kind": {
-                                  "Variable": "a"
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "ArrayAccess": {
+                          "array": {
+                            "kind": {
+                              "ArrayAccess": {
+                                "array": {
+                                  "kind": {
+                                    "Variable": "a"
+                                  },
+                                  "span": {
+                                    "start": 126,
+                                    "end": 128
+                                  }
                                 },
-                                "span": {
-                                  "start": 126,
-                                  "end": 128
-                                }
-                              },
-                              "index": null
+                                "index": null
+                              }
+                            },
+                            "span": {
+                              "start": 126,
+                              "end": 130
                             }
                           },
-                          "span": {
-                            "start": 126,
-                            "end": 130
-                          }
-                        },
-                        "index": {
-                          "kind": {
-                            "Int": 0
-                          },
-                          "span": {
-                            "start": 131,
-                            "end": 132
+                          "index": {
+                            "kind": {
+                              "Int": 0
+                            },
+                            "span": {
+                              "start": 131,
+                              "end": 132
+                            }
                           }
                         }
+                      },
+                      "span": {
+                        "start": 126,
+                        "end": 133
                       }
-                    },
-                    "span": {
-                      "start": 126,
-                      "end": 133
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 126,
                     "end": 133

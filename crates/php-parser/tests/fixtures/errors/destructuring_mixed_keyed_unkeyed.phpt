@@ -47,16 +47,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 7,
-                          "end": 9
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 7,
+                            "end": 9
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 7,
                         "end": 9
@@ -72,16 +73,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                           "end": 14
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 18,
-                          "end": 20
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 18,
+                            "end": 20
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 11,
                         "end": 20
@@ -135,16 +137,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                           "end": 32
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 36,
-                          "end": 38
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 36,
+                            "end": 38
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 29,
                         "end": 38
@@ -152,16 +155,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 40,
-                          "end": 42
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 40,
+                            "end": 42
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 40,
                         "end": 42
@@ -215,16 +219,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                           "end": 52
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 56,
-                          "end": 58
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 56,
+                            "end": 58
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 51,
                         "end": 58
@@ -240,16 +245,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                           "end": 61
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 65,
-                          "end": 67
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 65,
+                            "end": 67
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 60,
                         "end": 67
@@ -257,16 +263,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "c"
-                        },
-                        "span": {
-                          "start": 69,
-                          "end": 71
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "c"
+                          },
+                          "span": {
+                            "start": 69,
+                            "end": 71
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 69,
                         "end": 71
@@ -320,16 +327,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                           "end": 87
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 91,
-                          "end": 93
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 91,
+                            "end": 93
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 84,
                         "end": 93
@@ -337,16 +345,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 95,
-                          "end": 97
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 95,
+                            "end": 97
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 95,
                         "end": 97
@@ -392,16 +401,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 110,
-                          "end": 112
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 110,
+                            "end": 112
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 110,
                         "end": 112
@@ -417,16 +427,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                           "end": 117
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 121,
-                          "end": 123
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 121,
+                            "end": 123
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 114,
                         "end": 123
@@ -472,16 +483,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 132,
-                          "end": 134
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 132,
+                            "end": 134
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 132,
                         "end": 134
@@ -497,17 +509,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                           "end": 139
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 144,
-                          "end": 146
+                      "kind": {
+                        "ByRef": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 144,
+                            "end": 146
+                          }
                         }
                       },
-                      "unpack": false,
-                      "by_ref": true,
                       "span": {
                         "start": 136,
                         "end": 146
@@ -553,59 +565,62 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "a"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "a"
+                                    },
+                                    "span": {
+                                      "start": 156,
+                                      "end": 158
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 156,
                                   "end": 158
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 156,
-                                "end": 158
-                              }
-                            },
-                            {
-                              "key": {
+                              {
+                                "key": {
+                                  "kind": {
+                                    "String": "k"
+                                  },
+                                  "span": {
+                                    "start": 160,
+                                    "end": 163
+                                  }
+                                },
                                 "kind": {
-                                  "String": "k"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "b"
+                                    },
+                                    "span": {
+                                      "start": 167,
+                                      "end": 169
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 160,
-                                  "end": 163
-                                }
-                              },
-                              "value": {
-                                "kind": {
-                                  "Variable": "b"
-                                },
-                                "span": {
-                                  "start": 167,
                                   "end": 169
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 160,
-                                "end": 169
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 155,
-                          "end": 170
+                            ]
+                          },
+                          "span": {
+                            "start": 155,
+                            "end": 170
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 155,
                         "end": 170
@@ -659,59 +674,62 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                           "end": 182
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "a"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "a"
+                                    },
+                                    "span": {
+                                      "start": 187,
+                                      "end": 189
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 187,
                                   "end": 189
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 187,
-                                "end": 189
-                              }
-                            },
-                            {
-                              "key": {
+                              {
+                                "key": {
+                                  "kind": {
+                                    "String": "j"
+                                  },
+                                  "span": {
+                                    "start": 191,
+                                    "end": 194
+                                  }
+                                },
                                 "kind": {
-                                  "String": "j"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "b"
+                                    },
+                                    "span": {
+                                      "start": 198,
+                                      "end": 200
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 191,
-                                  "end": 194
-                                }
-                              },
-                              "value": {
-                                "kind": {
-                                  "Variable": "b"
-                                },
-                                "span": {
-                                  "start": 198,
                                   "end": 200
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 191,
-                                "end": 200
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 186,
-                          "end": 201
+                            ]
+                          },
+                          "span": {
+                            "start": 186,
+                            "end": 201
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 179,
                         "end": 201
@@ -757,16 +775,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 210,
-                          "end": 212
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 210,
+                            "end": 212
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 210,
                         "end": 212
@@ -774,59 +793,62 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "b"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "b"
+                                    },
+                                    "span": {
+                                      "start": 215,
+                                      "end": 217
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 215,
                                   "end": 217
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 215,
-                                "end": 217
-                              }
-                            },
-                            {
-                              "key": {
+                              {
+                                "key": {
+                                  "kind": {
+                                    "String": "k"
+                                  },
+                                  "span": {
+                                    "start": 219,
+                                    "end": 222
+                                  }
+                                },
                                 "kind": {
-                                  "String": "k"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "c"
+                                    },
+                                    "span": {
+                                      "start": 226,
+                                      "end": 228
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 219,
-                                  "end": 222
-                                }
-                              },
-                              "value": {
-                                "kind": {
-                                  "Variable": "c"
-                                },
-                                "span": {
-                                  "start": 226,
                                   "end": 228
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 219,
-                                "end": 228
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 214,
-                          "end": 229
+                            ]
+                          },
+                          "span": {
+                            "start": 214,
+                            "end": 229
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 214,
                         "end": 229
@@ -842,16 +864,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                           "end": 234
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "d"
-                        },
-                        "span": {
-                          "start": 238,
-                          "end": 240
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "d"
+                          },
+                          "span": {
+                            "start": 238,
+                            "end": 240
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 231,
                         "end": 240
@@ -897,16 +920,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 249,
-                          "end": 251
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 249,
+                            "end": 251
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 249,
                         "end": 251
@@ -922,16 +946,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                           "end": 256
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 260,
-                          "end": 262
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 260,
+                            "end": 262
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 253,
                         "end": 262
@@ -953,16 +978,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                         "Array": [
                           {
                             "key": null,
-                            "value": {
-                              "kind": {
-                                "Variable": "c"
-                              },
-                              "span": {
-                                "start": 267,
-                                "end": 269
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "Variable": "c"
+                                },
+                                "span": {
+                                  "start": 267,
+                                  "end": 269
+                                }
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 267,
                               "end": 269
@@ -978,16 +1004,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                                 "end": 274
                               }
                             },
-                            "value": {
-                              "kind": {
-                                "Variable": "d"
-                              },
-                              "span": {
-                                "start": 278,
-                                "end": 280
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "Variable": "d"
+                                },
+                                "span": {
+                                  "start": 278,
+                                  "end": 280
+                                }
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 271,
                               "end": 280
@@ -1040,16 +1067,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "a"
-                        },
-                        "span": {
-                          "start": 289,
-                          "end": 291
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 289,
+                            "end": 291
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 289,
                         "end": 291
@@ -1065,16 +1093,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                           "end": 296
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "b"
-                        },
-                        "span": {
-                          "start": 300,
-                          "end": 302
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "b"
+                          },
+                          "span": {
+                            "start": 300,
+                            "end": 302
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 293,
                         "end": 302
@@ -1090,16 +1119,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                           "end": 307
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "c"
-                        },
-                        "span": {
-                          "start": 311,
-                          "end": 313
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "c"
+                          },
+                          "span": {
+                            "start": 311,
+                            "end": 313
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 304,
                         "end": 313
@@ -1107,16 +1137,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "d"
-                        },
-                        "span": {
-                          "start": 315,
-                          "end": 317
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "d"
+                          },
+                          "span": {
+                            "start": 315,
+                            "end": 317
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 315,
                         "end": 317
@@ -1178,16 +1209,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                       "end": 344
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 348,
-                      "end": 350
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 348,
+                        "end": 350
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 341,
                     "end": 350
@@ -1195,16 +1227,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                 },
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 352,
-                      "end": 354
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 352,
+                        "end": 354
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 352,
                     "end": 354
@@ -1259,16 +1292,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
               "Array": [
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 382,
-                      "end": 384
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 382,
+                        "end": 384
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 382,
                     "end": 384
@@ -1284,16 +1318,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                       "end": 389
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 393,
-                      "end": 395
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 393,
+                        "end": 395
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 386,
                     "end": 395
@@ -1348,16 +1383,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                       "end": 424
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 428,
-                      "end": 430
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 428,
+                        "end": 430
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 421,
                     "end": 430
@@ -1365,16 +1401,17 @@ PHP Fatal error:  Cannot mix keyed and unkeyed array entries in assignments in S
                 },
                 {
                   "key": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 432,
-                      "end": 434
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 432,
+                        "end": 434
+                      }
                     }
                   },
-                  "unpack": false,
                   "span": {
                     "start": 432,
                     "end": 434

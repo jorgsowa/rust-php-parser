@@ -33,17 +33,17 @@ PHP Parse error:  syntax error, unexpected token "&" in Standard input code on l
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 9,
-                      "end": 11
+                  "kind": {
+                    "ByRef": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 9,
+                        "end": 11
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": true,
                   "span": {
                     "start": 8,
                     "end": 11

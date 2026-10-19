@@ -43,16 +43,17 @@ function arrGen() {
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 16,
-                          "end": 17
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 16,
+                            "end": 17
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 16,
                         "end": 17
@@ -60,16 +61,17 @@ function arrGen() {
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 19,
-                          "end": 20
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 19,
+                            "end": 20
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 19,
                         "end": 20
@@ -77,16 +79,17 @@ function arrGen() {
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 3
-                        },
-                        "span": {
-                          "start": 22,
-                          "end": 23
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 3
+                          },
+                          "span": {
+                            "start": 22,
+                            "end": 23
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 22,
                         "end": 23
@@ -131,16 +134,17 @@ function arrGen() {
                     "Array": [
                       {
                         "key": null,
-                        "value": {
-                          "kind": {
-                            "Int": 4
-                          },
-                          "span": {
-                            "start": 56,
-                            "end": 57
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 4
+                            },
+                            "span": {
+                              "start": 56,
+                              "end": 57
+                            }
                           }
                         },
-                        "unpack": false,
                         "span": {
                           "start": 56,
                           "end": 57
@@ -148,16 +152,17 @@ function arrGen() {
                       },
                       {
                         "key": null,
-                        "value": {
-                          "kind": {
-                            "Int": 5
-                          },
-                          "span": {
-                            "start": 59,
-                            "end": 60
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 5
+                            },
+                            "span": {
+                              "start": 59,
+                              "end": 60
+                            }
                           }
                         },
-                        "unpack": false,
                         "span": {
                           "start": 59,
                           "end": 60
@@ -350,16 +355,17 @@ function arrGen() {
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Array": []
-                  },
-                  "span": {
-                    "start": 139,
-                    "end": 141
+                "kind": {
+                  "Spread": {
+                    "kind": {
+                      "Array": []
+                    },
+                    "span": {
+                      "start": 139,
+                      "end": 141
+                    }
                   }
                 },
-                "unpack": true,
                 "span": {
                   "start": 136,
                   "end": 141
@@ -385,68 +391,72 @@ function arrGen() {
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Array": [
-                      {
-                        "key": null,
-                        "value": {
+                "kind": {
+                  "Spread": {
+                    "kind": {
+                      "Array": [
+                        {
+                          "key": null,
                           "kind": {
-                            "Int": 1
+                            "Value": {
+                              "kind": {
+                                "Int": 1
+                              },
+                              "span": {
+                                "start": 149,
+                                "end": 150
+                              }
+                            }
                           },
                           "span": {
                             "start": 149,
                             "end": 150
                           }
                         },
-                        "unpack": false,
-                        "span": {
-                          "start": 149,
-                          "end": 150
-                        }
-                      },
-                      {
-                        "key": null,
-                        "value": {
+                        {
+                          "key": null,
                           "kind": {
-                            "Int": 2
+                            "Value": {
+                              "kind": {
+                                "Int": 2
+                              },
+                              "span": {
+                                "start": 152,
+                                "end": 153
+                              }
+                            }
                           },
                           "span": {
                             "start": 152,
                             "end": 153
                           }
                         },
-                        "unpack": false,
-                        "span": {
-                          "start": 152,
-                          "end": 153
-                        }
-                      },
-                      {
-                        "key": null,
-                        "value": {
+                        {
+                          "key": null,
                           "kind": {
-                            "Int": 3
+                            "Value": {
+                              "kind": {
+                                "Int": 3
+                              },
+                              "span": {
+                                "start": 155,
+                                "end": 156
+                              }
+                            }
                           },
                           "span": {
                             "start": 155,
                             "end": 156
                           }
-                        },
-                        "unpack": false,
-                        "span": {
-                          "start": 155,
-                          "end": 156
                         }
-                      }
-                    ]
-                  },
-                  "span": {
-                    "start": 148,
-                    "end": 157
+                      ]
+                    },
+                    "span": {
+                      "start": 148,
+                      "end": 157
+                    }
                   }
                 },
-                "unpack": true,
                 "span": {
                   "start": 145,
                   "end": 157
@@ -472,16 +482,17 @@ function arrGen() {
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Variable": "array"
-                  },
-                  "span": {
-                    "start": 164,
-                    "end": 170
+                "kind": {
+                  "Spread": {
+                    "kind": {
+                      "Variable": "array"
+                    },
+                    "span": {
+                      "start": 164,
+                      "end": 170
+                    }
                   }
                 },
-                "unpack": true,
                 "span": {
                   "start": 161,
                   "end": 170
@@ -507,36 +518,37 @@ function arrGen() {
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "FunctionCall": {
-                      "name": {
-                        "kind": {
-                          "Name": {
-                            "parts": [
-                              "getArr"
-                            ],
-                            "kind": "Unqualified",
-                            "span": {
-                              "start": 177,
-                              "end": 183
+                "kind": {
+                  "Spread": {
+                    "kind": {
+                      "FunctionCall": {
+                        "name": {
+                          "kind": {
+                            "Name": {
+                              "parts": [
+                                "getArr"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 177,
+                                "end": 183
+                              }
                             }
+                          },
+                          "span": {
+                            "start": 177,
+                            "end": 183
                           }
                         },
-                        "span": {
-                          "start": 177,
-                          "end": 183
-                        }
-                      },
-                      "args": []
+                        "args": []
+                      }
+                    },
+                    "span": {
+                      "start": 177,
+                      "end": 185
                     }
-                  },
-                  "span": {
-                    "start": 177,
-                    "end": 185
                   }
                 },
-                "unpack": true,
                 "span": {
                   "start": 174,
                   "end": 185
@@ -562,36 +574,37 @@ function arrGen() {
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "FunctionCall": {
-                      "name": {
-                        "kind": {
-                          "Name": {
-                            "parts": [
-                              "arrGen"
-                            ],
-                            "kind": "Unqualified",
-                            "span": {
-                              "start": 192,
-                              "end": 198
+                "kind": {
+                  "Spread": {
+                    "kind": {
+                      "FunctionCall": {
+                        "name": {
+                          "kind": {
+                            "Name": {
+                              "parts": [
+                                "arrGen"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 192,
+                                "end": 198
+                              }
                             }
+                          },
+                          "span": {
+                            "start": 192,
+                            "end": 198
                           }
                         },
-                        "span": {
-                          "start": 192,
-                          "end": 198
-                        }
-                      },
-                      "args": []
+                        "args": []
+                      }
+                    },
+                    "span": {
+                      "start": 192,
+                      "end": 200
                     }
-                  },
-                  "span": {
-                    "start": 192,
-                    "end": 200
                   }
                 },
-                "unpack": true,
                 "span": {
                   "start": 189,
                   "end": 200
@@ -617,107 +630,111 @@ function arrGen() {
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "New": {
-                      "class": {
-                        "kind": {
-                          "Name": {
-                            "parts": [
-                              "ArrayIterator"
-                            ],
-                            "kind": "Unqualified",
-                            "span": {
-                              "start": 211,
-                              "end": 224
+                "kind": {
+                  "Spread": {
+                    "kind": {
+                      "New": {
+                        "class": {
+                          "kind": {
+                            "Name": {
+                              "parts": [
+                                "ArrayIterator"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 211,
+                                "end": 224
+                              }
                             }
+                          },
+                          "span": {
+                            "start": 211,
+                            "end": 224
                           }
                         },
-                        "span": {
-                          "start": 211,
-                          "end": 224
-                        }
-                      },
-                      "args": [
-                        {
-                          "name": null,
-                          "value": {
+                        "args": [
+                          {
+                            "name": null,
                             "kind": {
-                              "Array": [
-                                {
-                                  "key": null,
-                                  "value": {
-                                    "kind": {
-                                      "String": "a"
+                              "Value": {
+                                "kind": {
+                                  "Array": [
+                                    {
+                                      "key": null,
+                                      "kind": {
+                                        "Value": {
+                                          "kind": {
+                                            "String": "a"
+                                          },
+                                          "span": {
+                                            "start": 226,
+                                            "end": 229
+                                          }
+                                        }
+                                      },
+                                      "span": {
+                                        "start": 226,
+                                        "end": 229
+                                      }
                                     },
-                                    "span": {
-                                      "start": 226,
-                                      "end": 229
+                                    {
+                                      "key": null,
+                                      "kind": {
+                                        "Value": {
+                                          "kind": {
+                                            "String": "b"
+                                          },
+                                          "span": {
+                                            "start": 231,
+                                            "end": 234
+                                          }
+                                        }
+                                      },
+                                      "span": {
+                                        "start": 231,
+                                        "end": 234
+                                      }
+                                    },
+                                    {
+                                      "key": null,
+                                      "kind": {
+                                        "Value": {
+                                          "kind": {
+                                            "String": "c"
+                                          },
+                                          "span": {
+                                            "start": 236,
+                                            "end": 239
+                                          }
+                                        }
+                                      },
+                                      "span": {
+                                        "start": 236,
+                                        "end": 239
+                                      }
                                     }
-                                  },
-                                  "unpack": false,
-                                  "span": {
-                                    "start": 226,
-                                    "end": 229
-                                  }
+                                  ]
                                 },
-                                {
-                                  "key": null,
-                                  "value": {
-                                    "kind": {
-                                      "String": "b"
-                                    },
-                                    "span": {
-                                      "start": 231,
-                                      "end": 234
-                                    }
-                                  },
-                                  "unpack": false,
-                                  "span": {
-                                    "start": 231,
-                                    "end": 234
-                                  }
-                                },
-                                {
-                                  "key": null,
-                                  "value": {
-                                    "kind": {
-                                      "String": "c"
-                                    },
-                                    "span": {
-                                      "start": 236,
-                                      "end": 239
-                                    }
-                                  },
-                                  "unpack": false,
-                                  "span": {
-                                    "start": 236,
-                                    "end": 239
-                                  }
+                                "span": {
+                                  "start": 225,
+                                  "end": 240
                                 }
-                              ]
+                              }
                             },
                             "span": {
                               "start": 225,
                               "end": 240
                             }
-                          },
-                          "unpack": false,
-                          "by_ref": false,
-                          "span": {
-                            "start": 225,
-                            "end": 240
                           }
-                        }
-                      ]
+                        ]
+                      }
+                    },
+                    "span": {
+                      "start": 207,
+                      "end": 241
                     }
-                  },
-                  "span": {
-                    "start": 207,
-                    "end": 241
                   }
                 },
-                "unpack": true,
                 "span": {
                   "start": 204,
                   "end": 241
@@ -743,16 +760,17 @@ function arrGen() {
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Int": 0
-                  },
-                  "span": {
-                    "start": 245,
-                    "end": 246
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 245,
+                      "end": 246
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 245,
                   "end": 246
@@ -760,16 +778,17 @@ function arrGen() {
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Variable": "array"
-                  },
-                  "span": {
-                    "start": 251,
-                    "end": 257
+                "kind": {
+                  "Spread": {
+                    "kind": {
+                      "Variable": "array"
+                    },
+                    "span": {
+                      "start": 251,
+                      "end": 257
+                    }
                   }
                 },
-                "unpack": true,
                 "span": {
                   "start": 248,
                   "end": 257
@@ -777,36 +796,37 @@ function arrGen() {
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "FunctionCall": {
-                      "name": {
-                        "kind": {
-                          "Name": {
-                            "parts": [
-                              "getArr"
-                            ],
-                            "kind": "Unqualified",
-                            "span": {
-                              "start": 262,
-                              "end": 268
+                "kind": {
+                  "Spread": {
+                    "kind": {
+                      "FunctionCall": {
+                        "name": {
+                          "kind": {
+                            "Name": {
+                              "parts": [
+                                "getArr"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 262,
+                                "end": 268
+                              }
                             }
+                          },
+                          "span": {
+                            "start": 262,
+                            "end": 268
                           }
                         },
-                        "span": {
-                          "start": 262,
-                          "end": 268
-                        }
-                      },
-                      "args": []
+                        "args": []
+                      }
+                    },
+                    "span": {
+                      "start": 262,
+                      "end": 270
                     }
-                  },
-                  "span": {
-                    "start": 262,
-                    "end": 270
                   }
                 },
-                "unpack": true,
                 "span": {
                   "start": 259,
                   "end": 270
@@ -814,16 +834,17 @@ function arrGen() {
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Int": 6
-                  },
-                  "span": {
-                    "start": 272,
-                    "end": 273
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 6
+                    },
+                    "span": {
+                      "start": 272,
+                      "end": 273
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 272,
                   "end": 273
@@ -831,16 +852,17 @@ function arrGen() {
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Int": 7
-                  },
-                  "span": {
-                    "start": 275,
-                    "end": 276
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 7
+                    },
+                    "span": {
+                      "start": 275,
+                      "end": 276
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 275,
                   "end": 276
@@ -848,16 +870,17 @@ function arrGen() {
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Int": 8
-                  },
-                  "span": {
-                    "start": 278,
-                    "end": 279
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 8
+                    },
+                    "span": {
+                      "start": 278,
+                      "end": 279
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 278,
                   "end": 279
@@ -865,16 +888,17 @@ function arrGen() {
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Int": 9
-                  },
-                  "span": {
-                    "start": 281,
-                    "end": 282
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 9
+                    },
+                    "span": {
+                      "start": 281,
+                      "end": 282
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 281,
                   "end": 282
@@ -882,16 +906,17 @@ function arrGen() {
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Int": 10
-                  },
-                  "span": {
-                    "start": 284,
-                    "end": 286
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 10
+                    },
+                    "span": {
+                      "start": 284,
+                      "end": 286
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 284,
                   "end": 286
@@ -899,36 +924,37 @@ function arrGen() {
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "FunctionCall": {
-                      "name": {
-                        "kind": {
-                          "Name": {
-                            "parts": [
-                              "arrGen"
-                            ],
-                            "kind": "Unqualified",
-                            "span": {
-                              "start": 291,
-                              "end": 297
+                "kind": {
+                  "Spread": {
+                    "kind": {
+                      "FunctionCall": {
+                        "name": {
+                          "kind": {
+                            "Name": {
+                              "parts": [
+                                "arrGen"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 291,
+                                "end": 297
+                              }
                             }
+                          },
+                          "span": {
+                            "start": 291,
+                            "end": 297
                           }
                         },
-                        "span": {
-                          "start": 291,
-                          "end": 297
-                        }
-                      },
-                      "args": []
+                        "args": []
+                      }
+                    },
+                    "span": {
+                      "start": 291,
+                      "end": 299
                     }
-                  },
-                  "span": {
-                    "start": 291,
-                    "end": 299
                   }
                 },
-                "unpack": true,
                 "span": {
                   "start": 288,
                   "end": 299
@@ -954,16 +980,17 @@ function arrGen() {
             "Array": [
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Int": 0
-                  },
-                  "span": {
-                    "start": 303,
-                    "end": 304
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "Int": 0
+                    },
+                    "span": {
+                      "start": 303,
+                      "end": 304
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 303,
                   "end": 304
@@ -971,16 +998,17 @@ function arrGen() {
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Variable": "array"
-                  },
-                  "span": {
-                    "start": 309,
-                    "end": 315
+                "kind": {
+                  "Spread": {
+                    "kind": {
+                      "Variable": "array"
+                    },
+                    "span": {
+                      "start": 309,
+                      "end": 315
+                    }
                   }
                 },
-                "unpack": true,
                 "span": {
                   "start": 306,
                   "end": 315
@@ -988,16 +1016,17 @@ function arrGen() {
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "Variable": "array"
-                  },
-                  "span": {
-                    "start": 320,
-                    "end": 326
+                "kind": {
+                  "Spread": {
+                    "kind": {
+                      "Variable": "array"
+                    },
+                    "span": {
+                      "start": 320,
+                      "end": 326
+                    }
                   }
                 },
-                "unpack": true,
                 "span": {
                   "start": 317,
                   "end": 326
@@ -1005,16 +1034,17 @@ function arrGen() {
               },
               {
                 "key": null,
-                "value": {
-                  "kind": {
-                    "String": "end"
-                  },
-                  "span": {
-                    "start": 328,
-                    "end": 333
+                "kind": {
+                  "Value": {
+                    "kind": {
+                      "String": "end"
+                    },
+                    "span": {
+                      "start": 328,
+                      "end": 333
+                    }
                   }
                 },
-                "unpack": false,
                 "span": {
                   "start": 328,
                   "end": 333

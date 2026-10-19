@@ -92,17 +92,17 @@ App\Helpers\format($data);
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "data"
-                    },
-                    "span": {
-                      "start": 56,
-                      "end": 61
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "data"
+                      },
+                      "span": {
+                        "start": 56,
+                        "end": 61
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 56,
                     "end": 61

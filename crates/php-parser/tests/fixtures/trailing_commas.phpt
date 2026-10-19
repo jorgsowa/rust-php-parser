@@ -26,16 +26,17 @@ function bar($x, $y,) {}
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 14,
-                          "end": 15
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 14,
+                            "end": 15
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 14,
                         "end": 15
@@ -43,16 +44,17 @@ function bar($x, $y,) {}
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 17,
-                          "end": 18
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 17,
+                            "end": 18
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 17,
                         "end": 18
@@ -60,16 +62,17 @@ function bar($x, $y,) {}
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 3
-                        },
-                        "span": {
-                          "start": 20,
-                          "end": 21
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 3
+                          },
+                          "span": {
+                            "start": 20,
+                            "end": 21
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 20,
                         "end": 21
@@ -121,17 +124,17 @@ function bar($x, $y,) {}
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "a"
-                    },
-                    "span": {
-                      "start": 29,
-                      "end": 31
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 29,
+                        "end": 31
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 29,
                     "end": 31
@@ -139,17 +142,17 @@ function bar($x, $y,) {}
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 33,
-                      "end": 35
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 33,
+                        "end": 35
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 33,
                     "end": 35
@@ -157,17 +160,17 @@ function bar($x, $y,) {}
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "c"
-                    },
-                    "span": {
-                      "start": 37,
-                      "end": 39
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 37,
+                        "end": 39
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 37,
                     "end": 39

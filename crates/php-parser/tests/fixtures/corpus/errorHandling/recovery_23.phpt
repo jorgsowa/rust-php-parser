@@ -47,35 +47,36 @@ PHP Parse error:  syntax error, unexpected variable "$oopsAnotherValue", expecti
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "PropertyAccess": {
-                            "object": {
-                              "kind": {
-                                "Variable": "this"
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "PropertyAccess": {
+                              "object": {
+                                "kind": {
+                                  "Variable": "this"
+                                },
+                                "span": {
+                                  "start": 21,
+                                  "end": 26
+                                }
                               },
-                              "span": {
-                                "start": 21,
-                                "end": 26
-                              }
-                            },
-                            "property": {
-                              "kind": {
-                                "Identifier": "value"
-                              },
-                              "span": {
-                                "start": 28,
-                                "end": 33
+                              "property": {
+                                "kind": {
+                                  "Identifier": "value"
+                                },
+                                "span": {
+                                  "start": 28,
+                                  "end": 33
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 21,
+                            "end": 33
                           }
-                        },
-                        "span": {
-                          "start": 21,
-                          "end": 33
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 21,
                         "end": 33
@@ -165,16 +166,17 @@ PHP Parse error:  syntax error, unexpected variable "$oopsAnotherValue", expecti
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Variable": "value"
-                        },
-                        "span": {
-                          "start": 77,
-                          "end": 83
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "value"
+                          },
+                          "span": {
+                            "start": 77,
+                            "end": 83
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 77,
                         "end": 83
@@ -252,16 +254,17 @@ PHP Parse error:  syntax error, unexpected variable "$oopsAnotherValue", expecti
                           "end": 125
                         }
                       },
-                      "value": {
-                        "kind": {
-                          "Variable": "value"
-                        },
-                        "span": {
-                          "start": 129,
-                          "end": 135
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Variable": "value"
+                          },
+                          "span": {
+                            "start": 129,
+                            "end": 135
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 120,
                         "end": 135

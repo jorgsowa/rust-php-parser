@@ -741,44 +741,45 @@ PHP Fatal error:  Cannot use temporary expression in write context in Standard i
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "PropertyAccess": {
-                            "object": {
-                              "kind": {
-                                "Name": {
-                                  "parts": [
-                                    "OBJ"
-                                  ],
-                                  "kind": "Unqualified",
-                                  "span": {
-                                    "start": 160,
-                                    "end": 163
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "PropertyAccess": {
+                              "object": {
+                                "kind": {
+                                  "Name": {
+                                    "parts": [
+                                      "OBJ"
+                                    ],
+                                    "kind": "Unqualified",
+                                    "span": {
+                                      "start": 160,
+                                      "end": 163
+                                    }
                                   }
+                                },
+                                "span": {
+                                  "start": 160,
+                                  "end": 163
                                 }
                               },
-                              "span": {
-                                "start": 160,
-                                "end": 163
-                              }
-                            },
-                            "property": {
-                              "kind": {
-                                "Identifier": "a"
-                              },
-                              "span": {
-                                "start": 165,
-                                "end": 166
+                              "property": {
+                                "kind": {
+                                  "Identifier": "a"
+                                },
+                                "span": {
+                                  "start": 165,
+                                  "end": 166
+                                }
                               }
                             }
+                          },
+                          "span": {
+                            "start": 160,
+                            "end": 166
                           }
-                        },
-                        "span": {
-                          "start": 160,
-                          "end": 166
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 160,
                         "end": 166
@@ -797,16 +798,17 @@ PHP Fatal error:  Cannot use temporary expression in write context in Standard i
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 171,
-                          "end": 172
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 171,
+                            "end": 172
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 171,
                         "end": 172

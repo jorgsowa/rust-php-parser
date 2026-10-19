@@ -14,51 +14,54 @@ list(list($a, $b), list($c, $d)) = $pairs;
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "a"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "a"
+                                    },
+                                    "span": {
+                                      "start": 16,
+                                      "end": 18
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 16,
                                   "end": 18
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 16,
-                                "end": 18
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "b"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "b"
+                                    },
+                                    "span": {
+                                      "start": 20,
+                                      "end": 22
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 20,
                                   "end": 22
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 20,
-                                "end": 22
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 11,
-                          "end": 23
+                            ]
+                          },
+                          "span": {
+                            "start": 11,
+                            "end": 23
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 11,
                         "end": 23
@@ -66,51 +69,54 @@ list(list($a, $b), list($c, $d)) = $pairs;
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Array": [
-                            {
-                              "key": null,
-                              "value": {
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Array": [
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "c"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "c"
+                                    },
+                                    "span": {
+                                      "start": 30,
+                                      "end": 32
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 30,
                                   "end": 32
                                 }
                               },
-                              "unpack": false,
-                              "span": {
-                                "start": 30,
-                                "end": 32
-                              }
-                            },
-                            {
-                              "key": null,
-                              "value": {
+                              {
+                                "key": null,
                                 "kind": {
-                                  "Variable": "d"
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "d"
+                                    },
+                                    "span": {
+                                      "start": 34,
+                                      "end": 36
+                                    }
+                                  }
                                 },
                                 "span": {
                                   "start": 34,
                                   "end": 36
                                 }
-                              },
-                              "unpack": false,
-                              "span": {
-                                "start": 34,
-                                "end": 36
                               }
-                            }
-                          ]
-                        },
-                        "span": {
-                          "start": 25,
-                          "end": 37
+                            ]
+                          },
+                          "span": {
+                            "start": 25,
+                            "end": 37
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 25,
                         "end": 37

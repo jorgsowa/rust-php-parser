@@ -136,16 +136,17 @@ $foo::BAR[2][1][0];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 35,
-                          "end": 36
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 35,
+                            "end": 36
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 35,
                         "end": 36
@@ -153,16 +154,17 @@ $foo::BAR[2][1][0];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 38,
-                          "end": 39
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 38,
+                            "end": 39
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 38,
                         "end": 39
@@ -170,16 +172,17 @@ $foo::BAR[2][1][0];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 3
-                        },
-                        "span": {
-                          "start": 41,
-                          "end": 42
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 3
+                          },
+                          "span": {
+                            "start": 41,
+                            "end": 42
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 41,
                         "end": 42
@@ -230,16 +233,17 @@ $foo::BAR[2][1][0];
                               "Array": [
                                 {
                                   "key": null,
-                                  "value": {
-                                    "kind": {
-                                      "Int": 1
-                                    },
-                                    "span": {
-                                      "start": 49,
-                                      "end": 50
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "Int": 1
+                                      },
+                                      "span": {
+                                        "start": 49,
+                                        "end": 50
+                                      }
                                     }
                                   },
-                                  "unpack": false,
                                   "span": {
                                     "start": 49,
                                     "end": 50
@@ -247,16 +251,17 @@ $foo::BAR[2][1][0];
                                 },
                                 {
                                   "key": null,
-                                  "value": {
-                                    "kind": {
-                                      "Int": 2
-                                    },
-                                    "span": {
-                                      "start": 52,
-                                      "end": 53
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "Int": 2
+                                      },
+                                      "span": {
+                                        "start": 52,
+                                        "end": 53
+                                      }
                                     }
                                   },
-                                  "unpack": false,
                                   "span": {
                                     "start": 52,
                                     "end": 53
@@ -264,16 +269,17 @@ $foo::BAR[2][1][0];
                                 },
                                 {
                                   "key": null,
-                                  "value": {
-                                    "kind": {
-                                      "Int": 3
-                                    },
-                                    "span": {
-                                      "start": 55,
-                                      "end": 56
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "Int": 3
+                                      },
+                                      "span": {
+                                        "start": 55,
+                                        "end": 56
+                                      }
                                     }
                                   },
-                                  "unpack": false,
                                   "span": {
                                     "start": 55,
                                     "end": 56
@@ -350,16 +356,17 @@ $foo::BAR[2][1][0];
                   "Array": [
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 1
-                        },
-                        "span": {
-                          "start": 75,
-                          "end": 76
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 1
+                          },
+                          "span": {
+                            "start": 75,
+                            "end": 76
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 75,
                         "end": 76
@@ -367,16 +374,17 @@ $foo::BAR[2][1][0];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 2
-                        },
-                        "span": {
-                          "start": 78,
-                          "end": 79
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 2
+                          },
+                          "span": {
+                            "start": 78,
+                            "end": 79
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 78,
                         "end": 79
@@ -384,16 +392,17 @@ $foo::BAR[2][1][0];
                     },
                     {
                       "key": null,
-                      "value": {
-                        "kind": {
-                          "Int": 3
-                        },
-                        "span": {
-                          "start": 81,
-                          "end": 82
+                      "kind": {
+                        "Value": {
+                          "kind": {
+                            "Int": 3
+                          },
+                          "span": {
+                            "start": 81,
+                            "end": 82
+                          }
                         }
                       },
-                      "unpack": false,
                       "span": {
                         "start": 81,
                         "end": 82
@@ -444,16 +453,17 @@ $foo::BAR[2][1][0];
                               "Array": [
                                 {
                                   "key": null,
-                                  "value": {
-                                    "kind": {
-                                      "Int": 1
-                                    },
-                                    "span": {
-                                      "start": 94,
-                                      "end": 95
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "Int": 1
+                                      },
+                                      "span": {
+                                        "start": 94,
+                                        "end": 95
+                                      }
                                     }
                                   },
-                                  "unpack": false,
                                   "span": {
                                     "start": 94,
                                     "end": 95
@@ -461,16 +471,17 @@ $foo::BAR[2][1][0];
                                 },
                                 {
                                   "key": null,
-                                  "value": {
-                                    "kind": {
-                                      "Int": 2
-                                    },
-                                    "span": {
-                                      "start": 97,
-                                      "end": 98
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "Int": 2
+                                      },
+                                      "span": {
+                                        "start": 97,
+                                        "end": 98
+                                      }
                                     }
                                   },
-                                  "unpack": false,
                                   "span": {
                                     "start": 97,
                                     "end": 98
@@ -478,16 +489,17 @@ $foo::BAR[2][1][0];
                                 },
                                 {
                                   "key": null,
-                                  "value": {
-                                    "kind": {
-                                      "Int": 3
-                                    },
-                                    "span": {
-                                      "start": 100,
-                                      "end": 101
+                                  "kind": {
+                                    "Value": {
+                                      "kind": {
+                                        "Int": 3
+                                      },
+                                      "span": {
+                                        "start": 100,
+                                        "end": 101
+                                      }
                                     }
                                   },
-                                  "unpack": false,
                                   "span": {
                                     "start": 100,
                                     "end": 101

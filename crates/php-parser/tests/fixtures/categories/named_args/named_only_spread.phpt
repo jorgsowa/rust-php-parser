@@ -29,43 +29,44 @@
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Array": [
-                        {
-                          "key": {
+                  "kind": {
+                    "Spread": {
+                      "kind": {
+                        "Array": [
+                          {
+                            "key": {
+                              "kind": {
+                                "String": "name"
+                              },
+                              "span": {
+                                "start": 14,
+                                "end": 20
+                              }
+                            },
                             "kind": {
-                              "String": "name"
+                              "Value": {
+                                "kind": {
+                                  "Variable": "x"
+                                },
+                                "span": {
+                                  "start": 24,
+                                  "end": 26
+                                }
+                              }
                             },
                             "span": {
                               "start": 14,
-                              "end": 20
-                            }
-                          },
-                          "value": {
-                            "kind": {
-                              "Variable": "x"
-                            },
-                            "span": {
-                              "start": 24,
                               "end": 26
                             }
-                          },
-                          "unpack": false,
-                          "span": {
-                            "start": 14,
-                            "end": 26
                           }
-                        }
-                      ]
-                    },
-                    "span": {
-                      "start": 13,
-                      "end": 27
+                        ]
+                      },
+                      "span": {
+                        "start": 13,
+                        "end": 27
+                      }
                     }
                   },
-                  "unpack": true,
-                  "by_ref": false,
                   "span": {
                     "start": 10,
                     "end": 27

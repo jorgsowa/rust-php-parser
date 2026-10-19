@@ -294,17 +294,17 @@ $obj
                           "args": [
                             {
                               "name": null,
-                              "value": {
-                                "kind": {
-                                  "Variable": "a"
-                                },
-                                "span": {
-                                  "start": 363,
-                                  "end": 365
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "Variable": "a"
+                                  },
+                                  "span": {
+                                    "start": 363,
+                                    "end": 365
+                                  }
                                 }
                               },
-                              "unpack": false,
-                              "by_ref": false,
                               "span": {
                                 "start": 363,
                                 "end": 365
@@ -330,17 +330,17 @@ $obj
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Variable": "b"
-                          },
-                          "span": {
-                            "start": 392,
-                            "end": 394
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Variable": "b"
+                            },
+                            "span": {
+                              "start": 392,
+                              "end": 394
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 392,
                           "end": 394
@@ -366,17 +366,17 @@ $obj
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "c"
-                    },
-                    "span": {
-                      "start": 435,
-                      "end": 437
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "c"
+                      },
+                      "span": {
+                        "start": 435,
+                        "end": 437
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 435,
                     "end": 437
@@ -384,17 +384,17 @@ $obj
                 },
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "d"
-                    },
-                    "span": {
-                      "start": 448,
-                      "end": 450
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "d"
+                      },
+                      "span": {
+                        "start": 448,
+                        "end": 450
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 448,
                     "end": 450
@@ -955,17 +955,17 @@ $obj
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Variable": "x"
-                          },
-                          "span": {
-                            "start": 1129,
-                            "end": 1131
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Variable": "x"
+                            },
+                            "span": {
+                              "start": 1129,
+                              "end": 1131
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 1129,
                           "end": 1131
@@ -973,17 +973,17 @@ $obj
                       },
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Variable": "y"
-                          },
-                          "span": {
-                            "start": 1149,
-                            "end": 1151
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Variable": "y"
+                            },
+                            "span": {
+                              "start": 1149,
+                              "end": 1151
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 1149,
                           "end": 1151
@@ -1009,17 +1009,17 @@ $obj
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "z"
-                    },
-                    "span": {
-                      "start": 1204,
-                      "end": 1206
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "z"
+                      },
+                      "span": {
+                        "start": 1204,
+                        "end": 1206
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 1204,
                     "end": 1206
@@ -1068,57 +1068,57 @@ $obj
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "MethodCall": {
-                              "object": {
-                                "kind": {
-                                  "MethodCall": {
-                                    "object": {
-                                      "kind": {
-                                        "Variable": "inner"
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "MethodCall": {
+                                "object": {
+                                  "kind": {
+                                    "MethodCall": {
+                                      "object": {
+                                        "kind": {
+                                          "Variable": "inner"
+                                        },
+                                        "span": {
+                                          "start": 1272,
+                                          "end": 1278
+                                        }
                                       },
-                                      "span": {
-                                        "start": 1272,
-                                        "end": 1278
-                                      }
-                                    },
-                                    "method": {
-                                      "kind": {
-                                        "Identifier": "innerMethod"
+                                      "method": {
+                                        "kind": {
+                                          "Identifier": "innerMethod"
+                                        },
+                                        "span": {
+                                          "start": 1287,
+                                          "end": 1298
+                                        }
                                       },
-                                      "span": {
-                                        "start": 1287,
-                                        "end": 1298
-                                      }
-                                    },
-                                    "args": []
+                                      "args": []
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 1272,
+                                    "end": 1300
                                   }
                                 },
-                                "span": {
-                                  "start": 1272,
-                                  "end": 1300
-                                }
-                              },
-                              "method": {
-                                "kind": {
-                                  "Identifier": "anotherInner"
+                                "method": {
+                                  "kind": {
+                                    "Identifier": "anotherInner"
+                                  },
+                                  "span": {
+                                    "start": 1332,
+                                    "end": 1344
+                                  }
                                 },
-                                "span": {
-                                  "start": 1332,
-                                  "end": 1344
-                                }
-                              },
-                              "args": []
+                                "args": []
+                              }
+                            },
+                            "span": {
+                              "start": 1272,
+                              "end": 1346
                             }
-                          },
-                          "span": {
-                            "start": 1272,
-                            "end": 1346
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 1272,
                           "end": 1346

@@ -62,17 +62,17 @@ interface I { #[A] const X = 1, Y = 2; }
                       "args": [
                         {
                           "name": null,
-                          "value": {
-                            "kind": {
-                              "Int": 1
-                            },
-                            "span": {
-                              "start": 24,
-                              "end": 25
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "Int": 1
+                              },
+                              "span": {
+                                "start": 24,
+                                "end": 25
+                              }
                             }
                           },
-                          "unpack": false,
-                          "by_ref": false,
                           "span": {
                             "start": 24,
                             "end": 25
@@ -80,26 +80,26 @@ interface I { #[A] const X = 1, Y = 2; }
                         },
                         {
                           "name": null,
-                          "value": {
-                            "kind": {
-                              "Name": {
-                                "parts": [
-                                  "X"
-                                ],
-                                "kind": "Unqualified",
-                                "span": {
-                                  "start": 27,
-                                  "end": 28
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "Name": {
+                                  "parts": [
+                                    "X"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 27,
+                                    "end": 28
+                                  }
                                 }
+                              },
+                              "span": {
+                                "start": 27,
+                                "end": 28
                               }
-                            },
-                            "span": {
-                              "start": 27,
-                              "end": 28
                             }
                           },
-                          "unpack": false,
-                          "by_ref": false,
                           "span": {
                             "start": 27,
                             "end": 28
@@ -155,17 +155,17 @@ interface I { #[A] const X = 1, Y = 2; }
                       "args": [
                         {
                           "name": null,
-                          "value": {
-                            "kind": {
-                              "Int": 1
-                            },
-                            "span": {
-                              "start": 24,
-                              "end": 25
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "Int": 1
+                              },
+                              "span": {
+                                "start": 24,
+                                "end": 25
+                              }
                             }
                           },
-                          "unpack": false,
-                          "by_ref": false,
                           "span": {
                             "start": 24,
                             "end": 25
@@ -173,26 +173,26 @@ interface I { #[A] const X = 1, Y = 2; }
                         },
                         {
                           "name": null,
-                          "value": {
-                            "kind": {
-                              "Name": {
-                                "parts": [
-                                  "X"
-                                ],
-                                "kind": "Unqualified",
-                                "span": {
-                                  "start": 27,
-                                  "end": 28
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "Name": {
+                                  "parts": [
+                                    "X"
+                                  ],
+                                  "kind": "Unqualified",
+                                  "span": {
+                                    "start": 27,
+                                    "end": 28
+                                  }
                                 }
+                              },
+                              "span": {
+                                "start": 27,
+                                "end": 28
                               }
-                            },
-                            "span": {
-                              "start": 27,
-                              "end": 28
                             }
                           },
-                          "unpack": false,
-                          "by_ref": false,
                           "span": {
                             "start": 27,
                             "end": 28

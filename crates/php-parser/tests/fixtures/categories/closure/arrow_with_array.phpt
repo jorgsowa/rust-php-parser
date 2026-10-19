@@ -53,16 +53,17 @@
                         "Array": [
                           {
                             "key": null,
-                            "value": {
-                              "kind": {
-                                "Variable": "x"
-                              },
-                              "span": {
-                                "start": 23,
-                                "end": 25
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "Variable": "x"
+                                },
+                                "span": {
+                                  "start": 23,
+                                  "end": 25
+                                }
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 23,
                               "end": 25
@@ -70,36 +71,37 @@
                           },
                           {
                             "key": null,
-                            "value": {
-                              "kind": {
-                                "Binary": {
-                                  "left": {
-                                    "kind": {
-                                      "Variable": "x"
+                            "kind": {
+                              "Value": {
+                                "kind": {
+                                  "Binary": {
+                                    "left": {
+                                      "kind": {
+                                        "Variable": "x"
+                                      },
+                                      "span": {
+                                        "start": 27,
+                                        "end": 29
+                                      }
                                     },
-                                    "span": {
-                                      "start": 27,
-                                      "end": 29
-                                    }
-                                  },
-                                  "op": "Mul",
-                                  "right": {
-                                    "kind": {
-                                      "Int": 2
-                                    },
-                                    "span": {
-                                      "start": 32,
-                                      "end": 33
+                                    "op": "Mul",
+                                    "right": {
+                                      "kind": {
+                                        "Int": 2
+                                      },
+                                      "span": {
+                                        "start": 32,
+                                        "end": 33
+                                      }
                                     }
                                   }
+                                },
+                                "span": {
+                                  "start": 27,
+                                  "end": 33
                                 }
-                              },
-                              "span": {
-                                "start": 27,
-                                "end": 33
                               }
                             },
-                            "unpack": false,
                             "span": {
                               "start": 27,
                               "end": 33

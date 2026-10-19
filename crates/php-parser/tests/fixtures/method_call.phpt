@@ -69,17 +69,17 @@
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "String": "foo"
-                          },
-                          "span": {
-                            "start": 41,
-                            "end": 46
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "String": "foo"
+                            },
+                            "span": {
+                              "start": 41,
+                              "end": 46
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 41,
                           "end": 46

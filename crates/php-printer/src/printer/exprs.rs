@@ -570,17 +570,19 @@ impl<'src> Printer<'src> {
                 self.print_name(name);
                 self.w(": ");
             }
-            if arg.unpack {
-                self.w("...");
-            }
-            if arg.by_ref {
-                self.w("&");
-            }
-            match &arg.value {
-                Some(expr) => self.print_expr(expr, PREC_LOWEST),
-                // PHP 8.6 placeholder: bare `?`, or `...` (already written above).
-                None if !arg.unpack => self.w("?"),
-                None => {}
+            match &arg.kind {
+                ArgKind::Value(expr) => self.print_expr(expr, PREC_LOWEST),
+                ArgKind::Spread(expr) => {
+                    self.w("...");
+                    self.print_expr(expr, PREC_LOWEST);
+                }
+                ArgKind::ByRef(expr) => {
+                    self.w("&");
+                    self.print_expr(expr, PREC_LOWEST);
+                }
+                ArgKind::Placeholder => self.w("?"),
+                ArgKind::SpreadPlaceholder => self.w("..."),
+                _ => {}
             }
         }
     }
@@ -645,16 +647,16 @@ impl<'src> Printer<'src> {
             for elem in elements {
                 self.flush_leading_comments(elem.span.start);
                 self.write_indent();
-                if elem.unpack {
+                if elem.is_spread() {
                     self.w("...");
                 }
                 if let Some(key) = &elem.key {
                     self.print_array_key(key);
                 }
-                if elem.by_ref {
+                if elem.is_by_ref() {
                     self.w("&");
                 }
-                self.print_expr(&elem.value, PREC_LOWEST);
+                self.print_expr(elem.value(), PREC_LOWEST);
                 self.w(",");
                 self.flush_same_line_comments(elem.span.end);
                 self.newline();
@@ -667,17 +669,17 @@ impl<'src> Printer<'src> {
                 if i > 0 {
                     self.w(", ");
                 }
-                if elem.unpack {
+                if elem.is_spread() {
                     self.w("...");
                 }
                 if let Some(key) = &elem.key {
                     self.print_array_key(key);
                 }
-                if elem.by_ref {
+                if elem.is_by_ref() {
                     self.w("&");
                 }
-                self.print_expr(&elem.value, PREC_LOWEST);
-                if i == elements.len() - 1 && matches!(elem.value.kind, ExprKind::Omit) {
+                self.print_expr(elem.value(), PREC_LOWEST);
+                if i == elements.len() - 1 && matches!(elem.value().kind, ExprKind::Omit) {
                     self.w(",");
                 }
             }

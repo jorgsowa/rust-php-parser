@@ -40,17 +40,17 @@ bar(class: 0);
                       "end": 11
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "b"
-                    },
-                    "span": {
-                      "start": 13,
-                      "end": 15
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "b"
+                      },
+                      "span": {
+                        "start": 13,
+                        "end": 15
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 10,
                     "end": 15
@@ -67,17 +67,17 @@ bar(class: 0);
                       "end": 18
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Variable": "d"
-                    },
-                    "span": {
-                      "start": 20,
-                      "end": 22
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Variable": "d"
+                      },
+                      "span": {
+                        "start": 20,
+                        "end": 22
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 17,
                     "end": 22
@@ -132,17 +132,17 @@ bar(class: 0);
                       "end": 34
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "Int": 0
-                    },
-                    "span": {
-                      "start": 36,
-                      "end": 37
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "Int": 0
+                      },
+                      "span": {
+                        "start": 36,
+                        "end": 37
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 29,
                     "end": 37

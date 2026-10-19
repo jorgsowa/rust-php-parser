@@ -29,17 +29,17 @@
               "args": [
                 {
                   "name": null,
-                  "value": {
-                    "kind": {
-                      "Variable": "args"
-                    },
-                    "span": {
-                      "start": 14,
-                      "end": 19
+                  "kind": {
+                    "Spread": {
+                      "kind": {
+                        "Variable": "args"
+                      },
+                      "span": {
+                        "start": 14,
+                        "end": 19
+                      }
                     }
                   },
-                  "unpack": true,
-                  "by_ref": false,
                   "span": {
                     "start": 11,
                     "end": 19
@@ -56,17 +56,17 @@
                       "end": 25
                     }
                   },
-                  "value": {
-                    "kind": {
-                      "String": "end"
-                    },
-                    "span": {
-                      "start": 27,
-                      "end": 32
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "String": "end"
+                      },
+                      "span": {
+                        "start": 27,
+                        "end": 32
+                      }
                     }
                   },
-                  "unpack": false,
-                  "by_ref": false,
                   "span": {
                     "start": 21,
                     "end": 32

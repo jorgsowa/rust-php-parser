@@ -47,17 +47,17 @@ if ($current = $users->find($id)) {
                       "args": [
                         {
                           "name": null,
-                          "value": {
-                            "kind": {
-                              "Variable": "id"
-                            },
-                            "span": {
-                              "start": 60,
-                              "end": 63
+                          "kind": {
+                            "Value": {
+                              "kind": {
+                                "Variable": "id"
+                              },
+                              "span": {
+                                "start": 60,
+                                "end": 63
+                              }
                             }
                           },
-                          "unpack": false,
-                          "by_ref": false,
                           "span": {
                             "start": 60,
                             "end": 63

@@ -75,17 +75,17 @@ from\bar();
                             "args": [
                               {
                                 "name": null,
-                                "value": {
-                                  "kind": {
-                                    "Variable": "a"
-                                  },
-                                  "span": {
-                                    "start": 42,
-                                    "end": 44
+                                "kind": {
+                                  "Value": {
+                                    "kind": {
+                                      "Variable": "a"
+                                    },
+                                    "span": {
+                                      "start": 42,
+                                      "end": 44
+                                    }
                                   }
                                 },
-                                "unpack": false,
-                                "by_ref": false,
                                 "span": {
                                   "start": 42,
                                   "end": 44
@@ -124,16 +124,17 @@ from\bar();
                           "Array": [
                             {
                               "key": null,
-                              "value": {
-                                "kind": {
-                                  "Int": 1
-                                },
-                                "span": {
-                                  "start": 59,
-                                  "end": 60
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "Int": 1
+                                  },
+                                  "span": {
+                                    "start": 59,
+                                    "end": 60
+                                  }
                                 }
                               },
-                              "unpack": false,
                               "span": {
                                 "start": 59,
                                 "end": 60
@@ -210,17 +211,17 @@ from\bar();
                     "args": [
                       {
                         "name": null,
-                        "value": {
-                          "kind": {
-                            "Int": 1
-                          },
-                          "span": {
-                            "start": 75,
-                            "end": 76
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 75,
+                              "end": 76
+                            }
                           }
                         },
-                        "unpack": false,
-                        "by_ref": false,
                         "span": {
                           "start": 75,
                           "end": 76
