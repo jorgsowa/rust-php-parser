@@ -707,6 +707,7 @@ pub struct StaticMethodCallDynamicExpr<'arena, 'src> {
 /// A closure: `function() use ($x) { ... }`.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct ClosureExpr<'arena, 'src> {
     /// `true` for `static`.
     pub is_static: bool,
@@ -724,6 +725,22 @@ pub struct ClosureExpr<'arena, 'src> {
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
 }
 
+impl<'arena, 'src> ClosureExpr<'arena, 'src> {
+    /// Builds a `ClosureExpr` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(arena: &'arena bumpalo::Bump, body: &'arena Block<'arena, 'src>) -> Self {
+        Self {
+            is_static: false,
+            by_ref: false,
+            params: ArenaVec::new_in(arena),
+            use_vars: ArenaVec::new_in(arena),
+            return_type: None,
+            body,
+            attributes: ArenaVec::new_in(arena),
+        }
+    }
+}
+
 /// A variable captured in a closure `use` list.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
@@ -739,6 +756,7 @@ pub struct ClosureUseVar<'src> {
 /// An arrow function: `fn($x) => expr`.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct ArrowFunctionExpr<'arena, 'src> {
     /// `true` for `static`.
     pub is_static: bool,
@@ -754,9 +772,25 @@ pub struct ArrowFunctionExpr<'arena, 'src> {
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
 }
 
+impl<'arena, 'src> ArrowFunctionExpr<'arena, 'src> {
+    /// Builds a `ArrowFunctionExpr` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(arena: &'arena bumpalo::Bump, body: &'arena Expr<'arena, 'src>) -> Self {
+        Self {
+            is_static: false,
+            by_ref: false,
+            params: ArenaVec::new_in(arena),
+            return_type: None,
+            body,
+            attributes: ArenaVec::new_in(arena),
+        }
+    }
+}
+
 /// A `match` expression.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct MatchExpr<'arena, 'src> {
     /// Expression being matched.
     pub subject: &'arena Expr<'arena, 'src>,
@@ -766,6 +800,22 @@ pub struct MatchExpr<'arena, 'src> {
     #[cfg_attr(feature = "serde", serde(skip))]
     #[doc(hidden)]
     pub brace_span: Span,
+}
+
+impl<'arena, 'src> MatchExpr<'arena, 'src> {
+    /// Builds a `MatchExpr` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(
+        subject: &'arena Expr<'arena, 'src>,
+        arms: ArenaVec<'arena, MatchArm<'arena, 'src>>,
+        brace_span: Span,
+    ) -> Self {
+        Self {
+            subject,
+            arms,
+            brace_span,
+        }
+    }
 }
 
 /// One arm of a `match`.

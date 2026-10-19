@@ -146,11 +146,12 @@ pub(super) fn parse_enum<'arena, 'src>(
             let span = Span::new(member_start, parser.previous_end());
             parser.check_attributes(&member_attrs, &AttrSite::new(AttrTarget::ClassConst));
             members.push(EnumMember {
-                kind: EnumMemberKind::Case(EnumCase {
-                    name: case_name,
-                    value,
-                    attributes: member_attrs,
-                    doc_comment: parser.take_doc_comment(member_start),
+                kind: EnumMemberKind::Case({
+                    let mut built = EnumCase::new(parser.arena, case_name);
+                    built.value = value;
+                    built.attributes = member_attrs;
+                    built.doc_comment = parser.take_doc_comment(member_start);
+                    built
                 }),
                 span,
             });
@@ -279,13 +280,13 @@ pub(super) fn parse_enum<'arena, 'src>(
                     None
                 };
                 members.push(EnumMember {
-                    kind: EnumMemberKind::ClassConst(ClassConstDecl {
-                        name: const_name,
-                        modifiers: super::class::const_modifiers_of(visibility, is_final),
-                        type_hint: const_type,
-                        value,
-                        attributes,
-                        doc_comment,
+                    kind: EnumMemberKind::ClassConst({
+                        let mut built = ClassConstDecl::new(parser.arena, const_name, value);
+                        built.modifiers = super::class::const_modifiers_of(visibility, is_final);
+                        built.type_hint = const_type;
+                        built.attributes = attributes;
+                        built.doc_comment = doc_comment;
+                        built
                     }),
                     span: Span::new(member_start, parser.previous_end()),
                 });
@@ -357,16 +358,20 @@ pub(super) fn parse_enum<'arena, 'src>(
     parser.expect(TokenKind::RightBrace);
     let end = parser.previous_end();
     Stmt {
-        kind: StmtKind::Enum(parser.alloc(EnumDecl {
-            name,
-            scalar_type,
-            implements,
-            body: EnumBody {
-                members,
-                span: Span::new(brace_start, end),
-            },
-            attributes,
-            doc_comment,
+        kind: StmtKind::Enum(parser.alloc({
+            let mut built = EnumDecl::new(
+                parser.arena,
+                name,
+                EnumBody {
+                    members,
+                    span: Span::new(brace_start, end),
+                },
+            );
+            built.scalar_type = scalar_type;
+            built.implements = implements;
+            built.attributes = attributes;
+            built.doc_comment = doc_comment;
+            built
         })),
         span: Span::new(start, end),
         doc_comment: None,

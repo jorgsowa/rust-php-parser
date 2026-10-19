@@ -249,6 +249,7 @@ impl Serialize for TypeHintKind {
 /// A call argument.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct Arg {
     /// Name of a named argument.
     pub name: Option<Name>,
@@ -256,6 +257,14 @@ pub struct Arg {
     pub kind: ArgKind,
     /// Source span.
     pub span: Span,
+}
+
+impl Arg {
+    /// Builds a `Arg` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(name: Option<Name>, kind: ArgKind, span: Span) -> Self {
+        Self { name, kind, span }
+    }
 }
 
 /// The form of a call argument.
@@ -306,6 +315,7 @@ impl Arg {
 /// A `#[...]` attribute.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct Attribute {
     /// Attribute class name.
     pub name: Name,
@@ -313,6 +323,18 @@ pub struct Attribute {
     pub args: Box<[Arg]>,
     /// Source span.
     pub span: Span,
+}
+
+impl Attribute {
+    /// Builds a `Attribute` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(name: Name, span: Span) -> Self {
+        Self {
+            name,
+            args: Box::new([]),
+            span,
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -452,6 +474,7 @@ pub enum StmtKind {
 /// An `if` statement.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct IfStmt {
     /// The `if` condition.
     pub condition: Expr,
@@ -470,6 +493,21 @@ pub struct IfStmt {
     pub uses_alternative: bool,
 }
 
+impl IfStmt {
+    /// Builds a `IfStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(condition: Expr, then_branch: Box<Stmt>) -> Self {
+        Self {
+            condition,
+            then_branch,
+            elseif_branches: Box::new([]),
+            else_branch: None,
+            else_kw_span: None,
+            uses_alternative: false,
+        }
+    }
+}
+
 /// An `elseif` branch.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
@@ -485,6 +523,7 @@ pub struct ElseIfBranch {
 /// A `while` loop.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct WhileStmt {
     /// The loop condition.
     pub condition: Expr,
@@ -495,9 +534,22 @@ pub struct WhileStmt {
     pub uses_alternative: bool,
 }
 
+impl WhileStmt {
+    /// Builds a `WhileStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(condition: Expr, body: Box<Stmt>) -> Self {
+        Self {
+            condition,
+            body,
+            uses_alternative: false,
+        }
+    }
+}
+
 /// A `for` loop.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct ForStmt {
     /// Initializer expressions.
     pub init: Box<[Expr]>,
@@ -512,9 +564,24 @@ pub struct ForStmt {
     pub uses_alternative: bool,
 }
 
+impl ForStmt {
+    /// Builds a `ForStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(body: Box<Stmt>) -> Self {
+        Self {
+            init: Box::new([]),
+            condition: Box::new([]),
+            update: Box::new([]),
+            body,
+            uses_alternative: false,
+        }
+    }
+}
+
 /// A `foreach` loop.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct ForeachStmt {
     /// The iterated expression.
     pub expr: Expr,
@@ -532,14 +599,38 @@ pub struct ForeachStmt {
     pub uses_alternative: bool,
 }
 
+impl ForeachStmt {
+    /// Builds a `ForeachStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(expr: Expr, value: Expr, body: Box<Stmt>) -> Self {
+        Self {
+            expr,
+            key: None,
+            value,
+            by_ref: false,
+            body,
+            uses_alternative: false,
+        }
+    }
+}
+
 /// A `do ... while` loop.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct DoWhileStmt {
     /// The loop body.
     pub body: Box<Stmt>,
     /// The loop condition.
     pub condition: Expr,
+}
+
+impl DoWhileStmt {
+    /// Builds a `DoWhileStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(body: Box<Stmt>, condition: Expr) -> Self {
+        Self { body, condition }
+    }
 }
 
 /// The braced body of a `switch`.
@@ -556,6 +647,7 @@ pub struct SwitchBody {
 /// A `switch` statement.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct SwitchStmt {
     /// The switched-on expression.
     pub expr: Expr,
@@ -565,6 +657,18 @@ pub struct SwitchStmt {
     /// Whether the `switch: ... endswitch;` syntax is used.
     #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub uses_alternative: bool,
+}
+
+impl SwitchStmt {
+    /// Builds a `SwitchStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(expr: Expr, body: SwitchBody) -> Self {
+        Self {
+            expr,
+            body,
+            uses_alternative: false,
+        }
+    }
 }
 
 /// A `case` or `default` arm.
@@ -582,6 +686,7 @@ pub struct SwitchCase {
 /// A `try` statement.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct TryCatchStmt {
     /// The `try` block.
     pub body: Box<Block>,
@@ -595,9 +700,23 @@ pub struct TryCatchStmt {
     pub finally_kw_span: Option<Span>,
 }
 
+impl TryCatchStmt {
+    /// Builds a `TryCatchStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(body: Box<Block>) -> Self {
+        Self {
+            body,
+            catches: Box::new([]),
+            finally: None,
+            finally_kw_span: None,
+        }
+    }
+}
+
 /// A `catch` clause.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct CatchClause {
     /// Caught exception types (multi-catch allowed).
     pub types: Box<[Name]>,
@@ -609,14 +728,36 @@ pub struct CatchClause {
     pub span: Span,
 }
 
+impl CatchClause {
+    /// Builds a `CatchClause` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(body: Box<Block>, span: Span) -> Self {
+        Self {
+            types: Box::new([]),
+            var: None,
+            body,
+            span,
+        }
+    }
+}
+
 /// A `namespace` declaration.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct NamespaceDecl {
     /// Namespace name; `None` for the global namespace.
     pub name: Option<Name>,
     /// Braced or simple form.
     pub body: NamespaceBody,
+}
+
+impl NamespaceDecl {
+    /// Builds a `NamespaceDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(name: Option<Name>, body: NamespaceBody) -> Self {
+        Self { name, body }
+    }
 }
 
 /// Whether a namespace is braced or statement-terminated.
@@ -633,6 +774,7 @@ pub enum NamespaceBody {
 /// A `declare(...)` statement.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct DeclareStmt {
     /// Directive name and value pairs.
     pub directives: Box<[(Box<str>, Expr)]>,
@@ -643,14 +785,35 @@ pub struct DeclareStmt {
     pub uses_alternative: bool,
 }
 
+impl DeclareStmt {
+    /// Builds a `DeclareStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(directives: Box<[(Box<str>, Expr)]>) -> Self {
+        Self {
+            directives,
+            body: None,
+            uses_alternative: false,
+        }
+    }
+}
+
 /// A `use` import declaration.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct UseDecl {
     /// Import kind (class, function or const).
     pub kind: UseKind,
     /// The imported items.
     pub uses: Box<[UseItem]>,
+}
+
+impl UseDecl {
+    /// Builds a `UseDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(kind: UseKind, uses: Box<[UseItem]>) -> Self {
+        Self { kind, uses }
+    }
 }
 
 /// One imported name in a `use` declaration.
@@ -1273,6 +1436,7 @@ pub struct StaticMethodCallDynamicExpr {
 /// An anonymous function.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct ClosureExpr {
     /// Whether declared `static`.
     pub is_static: bool,
@@ -1290,6 +1454,22 @@ pub struct ClosureExpr {
     pub attributes: Box<[Attribute]>,
 }
 
+impl ClosureExpr {
+    /// Builds a `ClosureExpr` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(body: Box<Block>) -> Self {
+        Self {
+            is_static: false,
+            by_ref: false,
+            params: Box::new([]),
+            use_vars: Box::new([]),
+            return_type: None,
+            body,
+            attributes: Box::new([]),
+        }
+    }
+}
+
 /// A variable captured by a closure `use` clause.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
@@ -1305,6 +1485,7 @@ pub struct ClosureUseVar {
 /// An `fn` arrow function.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct ArrowFunctionExpr {
     /// Whether declared `static`.
     pub is_static: bool,
@@ -1320,9 +1501,25 @@ pub struct ArrowFunctionExpr {
     pub attributes: Box<[Attribute]>,
 }
 
+impl ArrowFunctionExpr {
+    /// Builds a `ArrowFunctionExpr` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(body: Box<Expr>) -> Self {
+        Self {
+            is_static: false,
+            by_ref: false,
+            params: Box::new([]),
+            return_type: None,
+            body,
+            attributes: Box::new([]),
+        }
+    }
+}
+
 /// A `match` expression.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct MatchExpr {
     /// Matched expression.
     pub subject: Box<Expr>,
@@ -1332,6 +1529,18 @@ pub struct MatchExpr {
     #[cfg_attr(feature = "serde", serde(skip))]
     #[doc(hidden)]
     pub brace_span: Span,
+}
+
+impl MatchExpr {
+    /// Builds a `MatchExpr` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(subject: Box<Expr>, arms: Box<[MatchArm]>, brace_span: Span) -> Self {
+        Self {
+            subject,
+            arms,
+            brace_span,
+        }
+    }
 }
 
 /// An arm of a `match` expression.
@@ -1414,6 +1623,7 @@ pub enum StringPart {
 /// A function declaration.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct FunctionDecl {
     /// Function name.
     pub name: Ident,
@@ -1430,6 +1640,22 @@ pub struct FunctionDecl {
     /// Preceding doc comment.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
+}
+
+impl FunctionDecl {
+    /// Builds a `FunctionDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(name: Ident, body: Box<Block>) -> Self {
+        Self {
+            name,
+            params: Box::new([]),
+            body,
+            return_type: None,
+            by_ref: false,
+            attributes: Box::new([]),
+            doc_comment: None,
+        }
+    }
 }
 
 /// A function or method parameter.
@@ -1497,6 +1723,7 @@ pub struct ClassBody {
 /// A class declaration.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct ClassDecl {
     /// Class name; `None` for anonymous classes.
     pub name: Option<Ident>,
@@ -1514,6 +1741,22 @@ pub struct ClassDecl {
     /// Preceding doc comment.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
+}
+
+impl ClassDecl {
+    /// Builds a `ClassDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(name: Option<Ident>, body: ClassBody) -> Self {
+        Self {
+            name,
+            modifiers: ClassModifiers::default(),
+            extends: None,
+            implements: Box::new([]),
+            body,
+            attributes: Box::new([]),
+            doc_comment: None,
+        }
+    }
 }
 
 /// A member of a class-like body.
@@ -1544,6 +1787,7 @@ pub enum ClassMemberKind {
 /// A property declaration.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct PropertyDecl {
     /// Property name without `$`.
     pub name: Ident,
@@ -1564,9 +1808,26 @@ pub struct PropertyDecl {
     pub doc_comment: Option<Comment>,
 }
 
+impl PropertyDecl {
+    /// Builds a `PropertyDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(name: Ident) -> Self {
+        Self {
+            name,
+            modifiers: Modifiers::new(),
+            type_hint: None,
+            default: None,
+            attributes: Box::new([]),
+            hooks: Box::new([]),
+            doc_comment: None,
+        }
+    }
+}
+
 /// A property `get` or `set` hook.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct PropertyHook {
     /// `get` or `set`.
     pub kind: PropertyHookKind,
@@ -1583,6 +1844,22 @@ pub struct PropertyHook {
     pub attributes: Box<[Attribute]>,
     /// Source span.
     pub span: Span,
+}
+
+impl PropertyHook {
+    /// Builds a `PropertyHook` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(kind: PropertyHookKind, body: PropertyHookBody, span: Span) -> Self {
+        Self {
+            kind,
+            body,
+            modifiers: Modifiers::new(),
+            by_ref: false,
+            params: Box::new([]),
+            attributes: Box::new([]),
+            span,
+        }
+    }
 }
 
 /// The body of a property hook.
@@ -1643,6 +1920,7 @@ impl MethodDecl {
 /// A class constant declaration.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct ClassConstDecl {
     /// Constant name.
     pub name: Ident,
@@ -1661,9 +1939,25 @@ pub struct ClassConstDecl {
     pub doc_comment: Option<Comment>,
 }
 
+impl ClassConstDecl {
+    /// Builds a `ClassConstDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(name: Ident, value: Expr) -> Self {
+        Self {
+            name,
+            modifiers: Modifiers::new(),
+            type_hint: None,
+            value,
+            attributes: Box::new([]),
+            doc_comment: None,
+        }
+    }
+}
+
 /// A `use Trait;` clause inside a class.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct TraitUseDecl {
     /// Used traits.
     pub traits: Box<[Name]>,
@@ -1676,6 +1970,19 @@ pub struct TraitUseDecl {
     /// Preceding doc comment.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
+}
+
+impl TraitUseDecl {
+    /// Builds a `TraitUseDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(traits: Box<[Name]>) -> Self {
+        Self {
+            traits,
+            adaptations: Box::new([]),
+            adaptations_brace_span: None,
+            doc_comment: None,
+        }
+    }
 }
 
 /// A `insteadof` or `as` rule in a trait use.
@@ -1721,6 +2028,7 @@ pub enum TraitAdaptationKind {
 /// An interface declaration.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct InterfaceDecl {
     /// Interface name.
     pub name: Ident,
@@ -1736,9 +2044,24 @@ pub struct InterfaceDecl {
     pub doc_comment: Option<Comment>,
 }
 
+impl InterfaceDecl {
+    /// Builds a `InterfaceDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(name: Ident, body: ClassBody) -> Self {
+        Self {
+            name,
+            extends: Box::new([]),
+            body,
+            attributes: Box::new([]),
+            doc_comment: None,
+        }
+    }
+}
+
 /// A trait declaration.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct TraitDecl {
     /// Trait name.
     pub name: Ident,
@@ -1750,6 +2073,19 @@ pub struct TraitDecl {
     /// Preceding doc comment.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
+}
+
+impl TraitDecl {
+    /// Builds a `TraitDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(name: Ident, body: ClassBody) -> Self {
+        Self {
+            name,
+            body,
+            attributes: Box::new([]),
+            doc_comment: None,
+        }
+    }
 }
 
 /// The braced member list of an enum.
@@ -1766,6 +2102,7 @@ pub struct EnumBody {
 /// An enum declaration.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct EnumDecl {
     /// Enum name.
     pub name: Ident,
@@ -1781,6 +2118,21 @@ pub struct EnumDecl {
     /// Preceding doc comment.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
+}
+
+impl EnumDecl {
+    /// Builds a `EnumDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(name: Ident, body: EnumBody) -> Self {
+        Self {
+            name,
+            scalar_type: None,
+            implements: Box::new([]),
+            body,
+            attributes: Box::new([]),
+            doc_comment: None,
+        }
+    }
 }
 
 /// A member of an enum body.
@@ -1811,6 +2163,7 @@ pub enum EnumMemberKind {
 /// An enum `case`.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct EnumCase {
     /// Case name.
     pub name: Ident,
@@ -1821,6 +2174,19 @@ pub struct EnumCase {
     /// Preceding doc comment.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
+}
+
+impl EnumCase {
+    /// Builds a `EnumCase` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(name: Ident) -> Self {
+        Self {
+            name,
+            value: None,
+            attributes: Box::new([]),
+            doc_comment: None,
+        }
+    }
 }
 
 // ===========================================================================

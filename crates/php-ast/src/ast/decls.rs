@@ -8,6 +8,7 @@ use super::{ArenaVec, Attribute, Block, Comment, Expr, Ident, Name, TypeHint};
 /// A named function declaration: `function foo() {}`.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct FunctionDecl<'arena, 'src> {
     /// Function name.
     pub name: Ident<'src>,
@@ -29,6 +30,26 @@ pub struct FunctionDecl<'arena, 'src> {
     /// block) remain in `ParseResult::comments` regardless of position.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
+}
+
+impl<'arena, 'src> FunctionDecl<'arena, 'src> {
+    /// Builds a `FunctionDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(
+        arena: &'arena bumpalo::Bump,
+        name: Ident<'src>,
+        body: &'arena Block<'arena, 'src>,
+    ) -> Self {
+        Self {
+            name,
+            params: ArenaVec::new_in(arena),
+            body,
+            return_type: None,
+            by_ref: false,
+            attributes: ArenaVec::new_in(arena),
+            doc_comment: None,
+        }
+    }
 }
 
 /// A function, method, closure or hook parameter.
@@ -159,6 +180,7 @@ pub struct ClassBody<'arena, 'src> {
 /// A class declaration, or the body of an anonymous class.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct ClassDecl<'arena, 'src> {
     /// Class name; `None` for anonymous classes.
     pub name: Option<Ident<'src>>,
@@ -176,6 +198,26 @@ pub struct ClassDecl<'arena, 'src> {
     /// Preceding `/** */` doc-block, if any.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
+}
+
+impl<'arena, 'src> ClassDecl<'arena, 'src> {
+    /// Builds a `ClassDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(
+        arena: &'arena bumpalo::Bump,
+        name: Option<Ident<'src>>,
+        body: ClassBody<'arena, 'src>,
+    ) -> Self {
+        Self {
+            name,
+            modifiers: ClassModifiers::default(),
+            extends: None,
+            implements: ArenaVec::new_in(arena),
+            body,
+            attributes: ArenaVec::new_in(arena),
+            doc_comment: None,
+        }
+    }
 }
 
 /// Modifiers preceding `class`.
@@ -219,6 +261,7 @@ pub enum ClassMemberKind<'arena, 'src> {
 /// A property declaration: `public int $x = 0;`.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct PropertyDecl<'arena, 'src> {
     /// Property name without `$`.
     pub name: Ident<'src>,
@@ -237,6 +280,22 @@ pub struct PropertyDecl<'arena, 'src> {
     /// Preceding `/** */` doc-block, if any.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
+}
+
+impl<'arena, 'src> PropertyDecl<'arena, 'src> {
+    /// Builds a `PropertyDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(arena: &'arena bumpalo::Bump, name: Ident<'src>) -> Self {
+        Self {
+            name,
+            modifiers: Modifiers::new(),
+            type_hint: None,
+            default: None,
+            attributes: ArenaVec::new_in(arena),
+            hooks: ArenaVec::new_in(arena),
+            doc_comment: None,
+        }
+    }
 }
 
 /// Which accessor a property hook implements.
@@ -266,6 +325,7 @@ pub enum PropertyHookBody<'arena, 'src> {
 /// A property hook: `get { ... }` or `set => ...` (PHP 8.4+).
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct PropertyHook<'arena, 'src> {
     /// Whether this is a `get` or `set` hook.
     pub kind: PropertyHookKind,
@@ -282,6 +342,27 @@ pub struct PropertyHook<'arena, 'src> {
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
     /// Source range of this node.
     pub span: Span,
+}
+
+impl<'arena, 'src> PropertyHook<'arena, 'src> {
+    /// Builds a `PropertyHook` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(
+        arena: &'arena bumpalo::Bump,
+        kind: PropertyHookKind,
+        body: PropertyHookBody<'arena, 'src>,
+        span: Span,
+    ) -> Self {
+        Self {
+            kind,
+            body,
+            modifiers: Modifiers::new(),
+            by_ref: false,
+            params: ArenaVec::new_in(arena),
+            attributes: ArenaVec::new_in(arena),
+            span,
+        }
+    }
 }
 
 /// A method declaration inside a class-like body.
@@ -330,6 +411,7 @@ impl<'arena, 'src> MethodDecl<'arena, 'src> {
 /// A class constant: `const X = 1;`.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct ClassConstDecl<'arena, 'src> {
     /// Constant name.
     pub name: Ident<'src>,
@@ -348,9 +430,25 @@ pub struct ClassConstDecl<'arena, 'src> {
     pub doc_comment: Option<Comment<'src>>,
 }
 
+impl<'arena, 'src> ClassConstDecl<'arena, 'src> {
+    /// Builds a `ClassConstDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(arena: &'arena bumpalo::Bump, name: Ident<'src>, value: Expr<'arena, 'src>) -> Self {
+        Self {
+            name,
+            modifiers: Modifiers::new(),
+            type_hint: None,
+            value,
+            attributes: ArenaVec::new_in(arena),
+            doc_comment: None,
+        }
+    }
+}
+
 /// A `use` of traits inside a class-like body.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct TraitUseDecl<'arena, 'src> {
     /// Traits being used.
     pub traits: ArenaVec<'arena, Name<'arena, 'src>>,
@@ -364,6 +462,19 @@ pub struct TraitUseDecl<'arena, 'src> {
     /// Preceding `/** */` doc-block, if any.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
+}
+
+impl<'arena, 'src> TraitUseDecl<'arena, 'src> {
+    /// Builds a `TraitUseDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(arena: &'arena bumpalo::Bump, traits: ArenaVec<'arena, Name<'arena, 'src>>) -> Self {
+        Self {
+            traits,
+            adaptations: ArenaVec::new_in(arena),
+            adaptations_brace_span: None,
+            doc_comment: None,
+        }
+    }
 }
 
 /// A single rule in a trait `use` adaptation block.
@@ -409,6 +520,7 @@ pub enum TraitAdaptationKind<'arena, 'src> {
 /// An interface declaration.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct InterfaceDecl<'arena, 'src> {
     /// Interface name.
     pub name: Ident<'src>,
@@ -424,9 +536,28 @@ pub struct InterfaceDecl<'arena, 'src> {
     pub doc_comment: Option<Comment<'src>>,
 }
 
+impl<'arena, 'src> InterfaceDecl<'arena, 'src> {
+    /// Builds a `InterfaceDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(
+        arena: &'arena bumpalo::Bump,
+        name: Ident<'src>,
+        body: ClassBody<'arena, 'src>,
+    ) -> Self {
+        Self {
+            name,
+            extends: ArenaVec::new_in(arena),
+            body,
+            attributes: ArenaVec::new_in(arena),
+            doc_comment: None,
+        }
+    }
+}
+
 /// A trait declaration.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct TraitDecl<'arena, 'src> {
     /// Trait name.
     pub name: Ident<'src>,
@@ -438,6 +569,23 @@ pub struct TraitDecl<'arena, 'src> {
     /// Preceding `/** */` doc-block, if any.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
+}
+
+impl<'arena, 'src> TraitDecl<'arena, 'src> {
+    /// Builds a `TraitDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(
+        arena: &'arena bumpalo::Bump,
+        name: Ident<'src>,
+        body: ClassBody<'arena, 'src>,
+    ) -> Self {
+        Self {
+            name,
+            body,
+            attributes: ArenaVec::new_in(arena),
+            doc_comment: None,
+        }
+    }
 }
 
 /// The braced member list of an enum.
@@ -454,6 +602,7 @@ pub struct EnumBody<'arena, 'src> {
 /// An enum declaration (PHP 8.1+).
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct EnumDecl<'arena, 'src> {
     /// Enum name.
     pub name: Ident<'src>,
@@ -469,6 +618,25 @@ pub struct EnumDecl<'arena, 'src> {
     /// Preceding `/** */` doc-block, if any.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
+}
+
+impl<'arena, 'src> EnumDecl<'arena, 'src> {
+    /// Builds a `EnumDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(
+        arena: &'arena bumpalo::Bump,
+        name: Ident<'src>,
+        body: EnumBody<'arena, 'src>,
+    ) -> Self {
+        Self {
+            name,
+            scalar_type: None,
+            implements: ArenaVec::new_in(arena),
+            body,
+            attributes: ArenaVec::new_in(arena),
+            doc_comment: None,
+        }
+    }
 }
 
 /// A member of an enum body.
@@ -499,6 +667,7 @@ pub enum EnumMemberKind<'arena, 'src> {
 /// A `case` inside an enum.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct EnumCase<'arena, 'src> {
     /// Case name.
     pub name: Ident<'src>,
@@ -509,4 +678,17 @@ pub struct EnumCase<'arena, 'src> {
     /// Preceding `/** */` doc-block, if any.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
+}
+
+impl<'arena, 'src> EnumCase<'arena, 'src> {
+    /// Builds a `EnumCase` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(arena: &'arena bumpalo::Bump, name: Ident<'src>) -> Self {
+        Self {
+            name,
+            value: None,
+            attributes: ArenaVec::new_in(arena),
+            doc_comment: None,
+        }
+    }
 }

@@ -200,6 +200,7 @@ pub enum StmtKind<'arena, 'src> {
 /// An `if` statement with optional `elseif`/`else` branches.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct IfStmt<'arena, 'src> {
     /// `if` condition.
     pub condition: Expr<'arena, 'src>,
@@ -218,6 +219,25 @@ pub struct IfStmt<'arena, 'src> {
     pub uses_alternative: bool,
 }
 
+impl<'arena, 'src> IfStmt<'arena, 'src> {
+    /// Builds a `IfStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(
+        arena: &'arena bumpalo::Bump,
+        condition: Expr<'arena, 'src>,
+        then_branch: &'arena Stmt<'arena, 'src>,
+    ) -> Self {
+        Self {
+            condition,
+            then_branch,
+            elseif_branches: ArenaVec::new_in(arena),
+            else_branch: None,
+            else_kw_span: None,
+            uses_alternative: false,
+        }
+    }
+}
+
 /// An `elseif` branch. `else if` parses as an `else` whose body is an `if` statement.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
@@ -233,6 +253,7 @@ pub struct ElseIfBranch<'arena, 'src> {
 /// A `while` loop.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct WhileStmt<'arena, 'src> {
     /// Condition expression.
     pub condition: Expr<'arena, 'src>,
@@ -243,9 +264,22 @@ pub struct WhileStmt<'arena, 'src> {
     pub uses_alternative: bool,
 }
 
+impl<'arena, 'src> WhileStmt<'arena, 'src> {
+    /// Builds a `WhileStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(condition: Expr<'arena, 'src>, body: &'arena Stmt<'arena, 'src>) -> Self {
+        Self {
+            condition,
+            body,
+            uses_alternative: false,
+        }
+    }
+}
+
 /// A `for` loop.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct ForStmt<'arena, 'src> {
     /// Initializer expressions.
     pub init: ArenaVec<'arena, Expr<'arena, 'src>>,
@@ -260,9 +294,24 @@ pub struct ForStmt<'arena, 'src> {
     pub uses_alternative: bool,
 }
 
+impl<'arena, 'src> ForStmt<'arena, 'src> {
+    /// Builds a `ForStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(arena: &'arena bumpalo::Bump, body: &'arena Stmt<'arena, 'src>) -> Self {
+        Self {
+            init: ArenaVec::new_in(arena),
+            condition: ArenaVec::new_in(arena),
+            update: ArenaVec::new_in(arena),
+            body,
+            uses_alternative: false,
+        }
+    }
+}
+
 /// A `foreach` loop.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct ForeachStmt<'arena, 'src> {
     /// Expression being iterated.
     pub expr: Expr<'arena, 'src>,
@@ -280,14 +329,42 @@ pub struct ForeachStmt<'arena, 'src> {
     pub uses_alternative: bool,
 }
 
+impl<'arena, 'src> ForeachStmt<'arena, 'src> {
+    /// Builds a `ForeachStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(
+        expr: Expr<'arena, 'src>,
+        value: Expr<'arena, 'src>,
+        body: &'arena Stmt<'arena, 'src>,
+    ) -> Self {
+        Self {
+            expr,
+            key: None,
+            value,
+            by_ref: false,
+            body,
+            uses_alternative: false,
+        }
+    }
+}
+
 /// A `do ... while` loop.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct DoWhileStmt<'arena, 'src> {
     /// Loop body.
     pub body: &'arena Stmt<'arena, 'src>,
     /// Condition checked after each iteration.
     pub condition: Expr<'arena, 'src>,
+}
+
+impl<'arena, 'src> DoWhileStmt<'arena, 'src> {
+    /// Builds a `DoWhileStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(body: &'arena Stmt<'arena, 'src>, condition: Expr<'arena, 'src>) -> Self {
+        Self { body, condition }
+    }
 }
 
 /// The case list of a `switch`.
@@ -304,6 +381,7 @@ pub struct SwitchBody<'arena, 'src> {
 /// A `switch` statement.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct SwitchStmt<'arena, 'src> {
     /// Subject expression.
     pub expr: Expr<'arena, 'src>,
@@ -313,6 +391,18 @@ pub struct SwitchStmt<'arena, 'src> {
     /// `true` when written in alternative syntax (`: ... endX;`).
     #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub uses_alternative: bool,
+}
+
+impl<'arena, 'src> SwitchStmt<'arena, 'src> {
+    /// Builds a `SwitchStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(expr: Expr<'arena, 'src>, body: SwitchBody<'arena, 'src>) -> Self {
+        Self {
+            expr,
+            body,
+            uses_alternative: false,
+        }
+    }
 }
 
 /// A `case` or `default` clause.
@@ -330,6 +420,7 @@ pub struct SwitchCase<'arena, 'src> {
 /// A `try` statement with `catch` and `finally` clauses.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct TryCatchStmt<'arena, 'src> {
     /// `try` block.
     pub body: &'arena Block<'arena, 'src>,
@@ -343,9 +434,23 @@ pub struct TryCatchStmt<'arena, 'src> {
     pub finally_kw_span: Option<Span>,
 }
 
+impl<'arena, 'src> TryCatchStmt<'arena, 'src> {
+    /// Builds a `TryCatchStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(arena: &'arena bumpalo::Bump, body: &'arena Block<'arena, 'src>) -> Self {
+        Self {
+            body,
+            catches: ArenaVec::new_in(arena),
+            finally: None,
+            finally_kw_span: None,
+        }
+    }
+}
+
 /// A `catch (Type $e) { ... }` clause.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct CatchClause<'arena, 'src> {
     /// Caught exception types (`A|B`).
     pub types: ArenaVec<'arena, Name<'arena, 'src>>,
@@ -357,14 +462,40 @@ pub struct CatchClause<'arena, 'src> {
     pub span: Span,
 }
 
+impl<'arena, 'src> CatchClause<'arena, 'src> {
+    /// Builds a `CatchClause` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(
+        arena: &'arena bumpalo::Bump,
+        body: &'arena Block<'arena, 'src>,
+        span: Span,
+    ) -> Self {
+        Self {
+            types: ArenaVec::new_in(arena),
+            var: None,
+            body,
+            span,
+        }
+    }
+}
+
 /// A `namespace` declaration.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct NamespaceDecl<'arena, 'src> {
     /// Namespace name; `None` for the global namespace.
     pub name: Option<Name<'arena, 'src>>,
     /// Braced or simple form.
     pub body: NamespaceBody<'arena, 'src>,
+}
+
+impl<'arena, 'src> NamespaceDecl<'arena, 'src> {
+    /// Builds a `NamespaceDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(name: Option<Name<'arena, 'src>>, body: NamespaceBody<'arena, 'src>) -> Self {
+        Self { name, body }
+    }
 }
 
 /// Whether a namespace is braced or simple.
@@ -381,6 +512,7 @@ pub enum NamespaceBody<'arena, 'src> {
 /// A `declare(...)` statement.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct DeclareStmt<'arena, 'src> {
     /// `name = value` directives.
     pub directives: ArenaVec<'arena, (&'src str, Expr<'arena, 'src>)>,
@@ -391,14 +523,35 @@ pub struct DeclareStmt<'arena, 'src> {
     pub uses_alternative: bool,
 }
 
+impl<'arena, 'src> DeclareStmt<'arena, 'src> {
+    /// Builds a `DeclareStmt` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(directives: ArenaVec<'arena, (&'src str, Expr<'arena, 'src>)>) -> Self {
+        Self {
+            directives,
+            body: None,
+            uses_alternative: false,
+        }
+    }
+}
+
 /// A `use` import statement.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct UseDecl<'arena, 'src> {
     /// Whether importing classes, functions or constants.
     pub kind: UseKind,
     /// Imported names.
     pub uses: ArenaVec<'arena, UseItem<'arena, 'src>>,
+}
+
+impl<'arena, 'src> UseDecl<'arena, 'src> {
+    /// Builds a `UseDecl` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(kind: UseKind, uses: ArenaVec<'arena, UseItem<'arena, 'src>>) -> Self {
+        Self { kind, uses }
+    }
 }
 
 /// What a `use` import brings in.

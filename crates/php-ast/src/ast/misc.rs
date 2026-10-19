@@ -45,6 +45,7 @@ pub struct Program<'arena, 'src> {
 /// A call argument, including named, spread and by-reference forms.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct Arg<'arena, 'src> {
     /// Argument name in a named argument (PHP 8.0+).
     pub name: Option<Name<'arena, 'src>>,
@@ -52,6 +53,14 @@ pub struct Arg<'arena, 'src> {
     pub kind: ArgKind<'arena, 'src>,
     /// Source range of this node.
     pub span: Span,
+}
+
+impl<'arena, 'src> Arg<'arena, 'src> {
+    /// Builds a `Arg` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(name: Option<Name<'arena, 'src>>, kind: ArgKind<'arena, 'src>, span: Span) -> Self {
+        Self { name, kind, span }
+    }
 }
 
 /// The form of a call argument.
@@ -102,6 +111,7 @@ impl<'arena, 'src> Arg<'arena, 'src> {
 /// A single attribute: `#[Name(args)]`.
 #[derive(Debug)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct Attribute<'arena, 'src> {
     /// Attribute class name.
     pub name: Name<'arena, 'src>,
@@ -109,4 +119,16 @@ pub struct Attribute<'arena, 'src> {
     pub args: ArenaVec<'arena, Arg<'arena, 'src>>,
     /// Source range of this node.
     pub span: Span,
+}
+
+impl<'arena, 'src> Attribute<'arena, 'src> {
+    /// Builds a `Attribute` from its identifying fields with every other field empty. Set
+    /// the rest by assignment, as with `Param::new`.
+    pub fn new(arena: &'arena bumpalo::Bump, name: Name<'arena, 'src>, span: Span) -> Self {
+        Self {
+            name,
+            args: ArenaVec::new_in(arena),
+            span,
+        }
+    }
 }

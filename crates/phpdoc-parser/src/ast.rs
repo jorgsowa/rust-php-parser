@@ -9,6 +9,7 @@ use serde::Serialize;
 /// An inline `{@tagname body}` tag embedded in text.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct InlineTag {
     /// Tag name without braces or `@`.
     pub name: String,
@@ -32,6 +33,7 @@ pub enum TextSegment {
 /// A prose run (summary, description, or tag body) that may contain inline tags.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct PhpDocText {
     /// Segments in source order.
     pub segments: Vec<TextSegment>,
@@ -42,6 +44,7 @@ pub struct PhpDocText {
 /// A block-level `@tag` — generic, no semantic interpretation.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct PhpDocTag {
     /// Raw tag name, e.g. `"param"`, `"psalm-type"`, `"return"`.
     pub name: String,
@@ -58,6 +61,7 @@ pub struct PhpDocTag {
 /// A parsed docblock.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
+#[non_exhaustive]
 pub struct PhpDoc {
     /// Leading summary text.
     pub summary: Option<PhpDocText>,

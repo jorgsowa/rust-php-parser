@@ -1268,17 +1268,21 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         parser.expect(TokenKind::RightBrace);
         let end = parser.previous_end();
 
-        let class_decl = ClassDecl {
-            name: None,
-            modifiers: crate::stmt::class_modifiers(false, false, anon_readonly),
-            extends,
-            implements,
-            body: ClassBody {
-                members,
-                span: Span::new(brace_start, end),
-            },
-            attributes: anon_attributes,
-            doc_comment: None,
+        let class_decl = {
+            let mut built = ClassDecl::new(
+                parser.arena,
+                None,
+                ClassBody {
+                    members,
+                    span: Span::new(brace_start, end),
+                },
+            );
+            built.modifiers = crate::stmt::class_modifiers(false, false, anon_readonly);
+            built.extends = extends;
+            built.implements = implements;
+            built.attributes = anon_attributes;
+            built.doc_comment = None;
+            built
         };
 
         let anon_class_expr = Expr {
@@ -1520,14 +1524,15 @@ pub(crate) fn parse_closure<'arena, 'src>(
     );
 
     Expr {
-        kind: ExprKind::Closure(parser.alloc(ClosureExpr {
-            is_static,
-            by_ref,
-            params,
-            use_vars,
-            return_type,
-            body,
-            attributes,
+        kind: ExprKind::Closure(parser.alloc({
+            let mut built = ClosureExpr::new(parser.arena, body);
+            built.is_static = is_static;
+            built.by_ref = by_ref;
+            built.params = params;
+            built.use_vars = use_vars;
+            built.return_type = return_type;
+            built.attributes = attributes;
+            built
         })),
         span: Span::new(start, end),
     }
@@ -1622,13 +1627,14 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
     );
 
     Expr {
-        kind: ExprKind::ArrowFunction(parser.alloc(ArrowFunctionExpr {
-            is_static,
-            by_ref,
-            params,
-            return_type,
-            body: parser.alloc(body),
-            attributes,
+        kind: ExprKind::ArrowFunction(parser.alloc({
+            let mut built = ArrowFunctionExpr::new(parser.arena, parser.alloc(body));
+            built.is_static = is_static;
+            built.by_ref = by_ref;
+            built.params = params;
+            built.return_type = return_type;
+            built.attributes = attributes;
+            built
         })),
         span,
     }
@@ -1697,11 +1703,7 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     let end = parser.previous_end();
 
     Expr {
-        kind: ExprKind::Match(MatchExpr {
-            subject: parser.alloc(subject),
-            arms,
-            brace_span,
-        }),
+        kind: ExprKind::Match(MatchExpr::new(parser.alloc(subject), arms, brace_span)),
         span: Span::new(start, end),
     }
 }
@@ -1936,11 +1938,11 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
             "partial function application",
             ellipsis_span,
         );
-        return Arg {
+        return Arg::new(
             name,
-            kind: ArgKind::SpreadPlaceholder,
-            span: Span::new(start, parser.previous_end()),
-        };
+            ArgKind::SpreadPlaceholder,
+            Span::new(start, parser.previous_end()),
+        );
     }
 
     // Bare `?` (PHP 8.6 placeholder) — never starts an expression, so no lookahead is needed.
@@ -1952,11 +1954,11 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
             "partial function application",
             question_span,
         );
-        return Arg {
+        return Arg::new(
             name,
-            kind: ArgKind::Placeholder,
-            span: Span::new(start, parser.previous_end()),
-        };
+            ArgKind::Placeholder,
+            Span::new(start, parser.previous_end()),
+        );
     }
 
     // Check for by-reference: &$var (call-time pass-by-ref, removed in PHP 7.0)
@@ -1980,7 +1982,7 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
     } else {
         ArgKind::Value(value)
     };
-    Arg { name, kind, span }
+    Arg::new(name, kind, span)
 }
 
 /// An unnamed, unspread argument (a by-ref one has already been reported).

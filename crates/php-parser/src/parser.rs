@@ -2085,7 +2085,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 };
 
                 let span = Span::new(attr_start, self.previous_end());
-                attributes.push(Attribute { name, args, span });
+                attributes.push({
+                    let mut built = Attribute::new(self.arena, name, span);
+                    built.args = args;
+                    built
+                });
 
                 if self.eat(TokenKind::Comma).is_none() {
                     break;

@@ -175,14 +175,15 @@ fn custom_fold_closure_use_var() {
         stmts: ArenaVec::new_in(&arena),
         span: Span::DUMMY,
     });
-    let closure = arena.alloc(ClosureExpr {
-        is_static: false,
-        by_ref: false,
-        params: ArenaVec::new_in(&arena),
-        use_vars,
-        return_type: None,
-        body: closure_body,
-        attributes: ArenaVec::new_in(&arena),
+    let closure = arena.alloc({
+        let mut built = ClosureExpr::new(&arena, closure_body);
+        built.is_static = false;
+        built.by_ref = false;
+        built.params = ArenaVec::new_in(&arena);
+        built.use_vars = use_vars;
+        built.return_type = None;
+        built.attributes = ArenaVec::new_in(&arena);
+        built
     });
     let expr = Expr {
         kind: ExprKind::Closure(closure),
@@ -558,24 +559,23 @@ fn fold_arg_override_clears_named_arg() {
     struct StripArgNames;
     impl<'src> Fold<'src> for StripArgNames {
         fn fold_arg<'new>(&mut self, arena: &'new Bump, arg: &Arg<'_, 'src>) -> Arg<'new, 'src> {
-            Arg {
-                name: None,
-                ..fold_arg(self, arena, arg)
-            }
+            let mut folded = fold_arg(self, arena, arg);
+            folded.name = None;
+            folded
         }
     }
     let out = Bump::new();
-    let arg = Arg {
-        name: Some(Name::Simple {
+    let arg = Arg::new(
+        Some(Name::Simple {
             value: "key",
             span: Span::DUMMY,
         }),
-        kind: ArgKind::Value(Expr {
+        ArgKind::Value(Expr {
             kind: ExprKind::Int(1),
             span: Span::DUMMY,
         }),
-        span: Span::DUMMY,
-    };
+        Span::DUMMY,
+    );
     let folded = StripArgNames.fold_arg(&out, &arg);
     assert!(
         folded.name.is_none(),
@@ -603,16 +603,20 @@ fn fold_class_member_override_is_dispatched() {
     let arena = Bump::new();
     let out = Bump::new();
     let member = ClassMember {
-        kind: ClassMemberKind::ClassConst(ClassConstDecl {
-            name: Ident::new("FOO", Span::DUMMY),
-            modifiers: Modifiers::new(),
-            type_hint: None,
-            value: Expr {
-                kind: ExprKind::Int(1),
-                span: Span::DUMMY,
-            },
-            attributes: ArenaVec::new_in(&arena),
-            doc_comment: None,
+        kind: ClassMemberKind::ClassConst({
+            let mut built = ClassConstDecl::new(
+                &arena,
+                Ident::new("FOO", Span::DUMMY),
+                Expr {
+                    kind: ExprKind::Int(1),
+                    span: Span::DUMMY,
+                },
+            );
+            built.modifiers = Modifiers::new();
+            built.type_hint = None;
+            built.attributes = ArenaVec::new_in(&arena);
+            built.doc_comment = None;
+            built
         }),
         span: Span::DUMMY,
     };
@@ -643,11 +647,12 @@ fn fold_enum_member_override_is_dispatched() {
     let arena = Bump::new();
     let out = Bump::new();
     let member = EnumMember {
-        kind: EnumMemberKind::Case(EnumCase {
-            name: Ident::new("Active", Span::DUMMY),
-            value: None,
-            attributes: ArenaVec::new_in(&arena),
-            doc_comment: None,
+        kind: EnumMemberKind::Case({
+            let mut built = EnumCase::new(&arena, Ident::new("Active", Span::DUMMY));
+            built.value = None;
+            built.attributes = ArenaVec::new_in(&arena);
+            built.doc_comment = None;
+            built
         }),
         span: Span::DUMMY,
     };
@@ -686,11 +691,12 @@ fn fold_trait_use_override_is_dispatched_through_class_member() {
         span: Span::DUMMY,
     });
     let member = ClassMember {
-        kind: ClassMemberKind::TraitUse(TraitUseDecl {
-            traits,
-            adaptations: ArenaVec::new_in(&arena),
-            adaptations_brace_span: None,
-            doc_comment: None,
+        kind: ClassMemberKind::TraitUse({
+            let mut built = TraitUseDecl::new(&arena, traits);
+            built.adaptations = ArenaVec::new_in(&arena);
+            built.adaptations_brace_span = None;
+            built.doc_comment = None;
+            built
         }),
         span: Span::DUMMY,
     };
@@ -713,10 +719,9 @@ fn fold_property_hook_override_block_body() {
             arena: &'new Bump,
             hook: &PropertyHook<'_, 'src>,
         ) -> PropertyHook<'new, 'src> {
-            PropertyHook {
-                body: PropertyHookBody::Abstract,
-                ..fold_property_hook(self, arena, hook)
-            }
+            let mut folded = fold_property_hook(self, arena, hook);
+            folded.body = PropertyHookBody::Abstract;
+            folded
         }
     }
     let arena = Bump::new();
@@ -731,14 +736,18 @@ fn fold_property_hook_override_block_body() {
         stmts: body_stmts,
         span: Span::DUMMY,
     });
-    let hook = PropertyHook {
-        kind: PropertyHookKind::Get,
-        body: PropertyHookBody::Block(block),
-        modifiers: Modifiers::new(),
-        by_ref: false,
-        params: ArenaVec::new_in(&arena),
-        attributes: ArenaVec::new_in(&arena),
-        span: Span::DUMMY,
+    let hook = {
+        let mut built = PropertyHook::new(
+            &arena,
+            PropertyHookKind::Get,
+            PropertyHookBody::Block(block),
+            Span::DUMMY,
+        );
+        built.modifiers = Modifiers::new();
+        built.by_ref = false;
+        built.params = ArenaVec::new_in(&arena);
+        built.attributes = ArenaVec::new_in(&arena);
+        built
     };
     let folded = MakeAbstract.fold_property_hook(&out, &hook);
     assert!(
@@ -758,25 +767,28 @@ fn fold_property_hook_override_expression_body() {
             arena: &'new Bump,
             hook: &PropertyHook<'_, 'src>,
         ) -> PropertyHook<'new, 'src> {
-            PropertyHook {
-                body: PropertyHookBody::Abstract,
-                ..fold_property_hook(self, arena, hook)
-            }
+            let mut folded = fold_property_hook(self, arena, hook);
+            folded.body = PropertyHookBody::Abstract;
+            folded
         }
     }
     let arena = Bump::new();
     let out = Bump::new();
-    let hook = PropertyHook {
-        kind: PropertyHookKind::Set,
-        body: PropertyHookBody::Expression(Expr {
-            kind: ExprKind::Int(0),
-            span: Span::DUMMY,
-        }),
-        modifiers: Modifiers::new(),
-        by_ref: false,
-        params: ArenaVec::new_in(&arena),
-        attributes: ArenaVec::new_in(&arena),
-        span: Span::DUMMY,
+    let hook = {
+        let mut built = PropertyHook::new(
+            &arena,
+            PropertyHookKind::Set,
+            PropertyHookBody::Expression(Expr {
+                kind: ExprKind::Int(0),
+                span: Span::DUMMY,
+            }),
+            Span::DUMMY,
+        );
+        built.modifiers = Modifiers::new();
+        built.by_ref = false;
+        built.params = ArenaVec::new_in(&arena);
+        built.attributes = ArenaVec::new_in(&arena);
+        built
     };
     let folded = MakeAbstract.fold_property_hook(&out, &hook);
     assert!(
@@ -803,13 +815,17 @@ fn fold_attribute_override_is_dispatched() {
     }
     let arena = Bump::new();
     let out = Bump::new();
-    let attr = Attribute {
-        name: Name::Simple {
-            value: "Route",
-            span: Span::DUMMY,
-        },
-        args: ArenaVec::new_in(&arena),
-        span: Span::DUMMY,
+    let attr = {
+        let mut built = Attribute::new(
+            &arena,
+            Name::Simple {
+                value: "Route",
+                span: Span::DUMMY,
+            },
+            Span::DUMMY,
+        );
+        built.args = ArenaVec::new_in(&arena);
+        built
     };
     let mut folder = CountAttrs { count: 0 };
     folder.fold_attribute(&out, &attr);
@@ -868,11 +884,7 @@ fn fold_match_arm_override_dispatched_for_both_arm_kinds() {
         span: Span::DUMMY,
     });
     let match_expr = Expr {
-        kind: ExprKind::Match(MatchExpr {
-            subject,
-            arms,
-            brace_span: Span::DUMMY,
-        }),
+        kind: ExprKind::Match(MatchExpr::new(subject, arms, Span::DUMMY)),
         span: Span::DUMMY,
     };
     let mut folder = CountArms { count: 0 };
@@ -893,10 +905,9 @@ fn fold_catch_clause_override_clears_var() {
             arena: &'new Bump,
             catch: &CatchClause<'_, 'src>,
         ) -> CatchClause<'new, 'src> {
-            CatchClause {
-                var: None,
-                ..fold_catch_clause(self, arena, catch)
-            }
+            let mut folded = fold_catch_clause(self, arena, catch);
+            folded.var = None;
+            folded
         }
     }
     let arena = Bump::new();
@@ -910,11 +921,11 @@ fn fold_catch_clause_override_clears_var() {
         stmts: ArenaVec::new_in(&arena),
         span: Span::DUMMY,
     });
-    let catch = CatchClause {
-        types,
-        var: Some(Ident::new("e", Span::DUMMY)),
-        body: empty_block,
-        span: Span::DUMMY,
+    let catch = {
+        let mut built = CatchClause::new(&arena, empty_block, Span::DUMMY);
+        built.types = types;
+        built.var = Some(Ident::new("e", Span::DUMMY));
+        built
     };
     let folded = DropCatchVar.fold_catch_clause(&out, &catch);
     assert!(
@@ -979,17 +990,17 @@ fn fold_name_override_is_dispatched() {
         }
     }
     let out = Bump::new();
-    let arg = Arg {
-        name: Some(Name::Simple {
+    let arg = Arg::new(
+        Some(Name::Simple {
             value: "key",
             span: Span::DUMMY,
         }),
-        kind: ArgKind::Value(Expr {
+        ArgKind::Value(Expr {
             kind: ExprKind::Int(1),
             span: Span::DUMMY,
         }),
-        span: Span::DUMMY,
-    };
+        Span::DUMMY,
+    );
     let mut folder = CountNames { count: 0 };
     folder.fold_arg(&out, &arg);
     assert_eq!(
@@ -1034,19 +1045,22 @@ fn foreach_without_key_stays_none() {
         span: Span::DUMMY,
         doc_comment: None,
     });
-    let foreach = arena.alloc(ForeachStmt {
-        expr: Expr {
-            kind: ExprKind::Variable(NameStr::from_source("items")),
-            span: Span::DUMMY,
-        },
-        key: None,
-        value: Expr {
-            kind: ExprKind::Variable(NameStr::from_source("item")),
-            span: Span::DUMMY,
-        },
-        by_ref: false,
-        body: nop,
-        uses_alternative: false,
+    let foreach = arena.alloc({
+        let mut built = ForeachStmt::new(
+            Expr {
+                kind: ExprKind::Variable(NameStr::from_source("items")),
+                span: Span::DUMMY,
+            },
+            Expr {
+                kind: ExprKind::Variable(NameStr::from_source("item")),
+                span: Span::DUMMY,
+            },
+            nop,
+        );
+        built.key = None;
+        built.by_ref = false;
+        built.uses_alternative = false;
+        built
     });
     let stmt = Stmt {
         kind: StmtKind::Foreach(foreach),
@@ -1199,11 +1213,7 @@ fn fold_preserves_arg_and_array_element_kinds() {
         kind: ExprKind::Variable(NameStr::from_source(name)),
         span: Span::DUMMY,
     };
-    let arg = |kind| Arg {
-        name: None,
-        kind,
-        span: Span::DUMMY,
-    };
+    let arg = |kind| Arg::new(None, kind, Span::DUMMY);
     let mut args = ArenaVec::new_in(&arena);
     args.push(arg(ArgKind::Spread(var("a"))));
     args.push(arg(ArgKind::ByRef(var("b"))));
@@ -1271,4 +1281,51 @@ fn fold_preserves_modifiers() {
     assert!(
         method.modifiers.is_static && method.modifiers.is_final && !method.modifiers.is_abstract
     );
+}
+
+#[test]
+fn declaration_and_statement_constructors_leave_the_rest_empty() {
+    let arena = Bump::new();
+    let name = || Ident::new("A", Span::DUMMY);
+    let block: &Block = arena.alloc(Block {
+        stmts: ArenaVec::new_in(&arena),
+        span: Span::DUMMY,
+    });
+    let body = || ClassBody {
+        members: ArenaVec::new_in(&arena),
+        span: Span::DUMMY,
+    };
+
+    let class = ClassDecl::new(&arena, Some(name()), body());
+    assert!(class.extends.is_none() && class.implements.is_empty() && class.attributes.is_empty());
+    assert!(!class.modifiers.is_final && !class.modifiers.is_abstract);
+
+    let function = FunctionDecl::new(&arena, name(), block);
+    assert!(function.params.is_empty() && function.return_type.is_none() && !function.by_ref);
+
+    let closure = ClosureExpr::new(&arena, block);
+    assert!(closure.params.is_empty() && closure.use_vars.is_empty() && !closure.is_static);
+
+    let property = PropertyDecl::new(&arena, name());
+    assert!(
+        property.modifiers.is_empty() && property.hooks.is_empty() && property.default.is_none()
+    );
+
+    let if_stmt = IfStmt::new(
+        &arena,
+        Expr {
+            kind: ExprKind::Bool(true),
+            span: Span::DUMMY,
+        },
+        arena.alloc(Stmt {
+            kind: StmtKind::Nop,
+            span: Span::DUMMY,
+            doc_comment: None,
+        }),
+    );
+    assert!(if_stmt.elseif_branches.is_empty() && if_stmt.else_branch.is_none());
+    assert!(!if_stmt.uses_alternative && if_stmt.else_kw_span.is_none());
+
+    let try_catch = TryCatchStmt::new(&arena, block);
+    assert!(try_catch.catches.is_empty() && try_catch.finally.is_none());
 }

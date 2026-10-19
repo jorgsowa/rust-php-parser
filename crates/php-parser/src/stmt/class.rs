@@ -136,17 +136,21 @@ pub(super) fn parse_class<'arena, 'src>(
     let end = parser.previous_end();
 
     Stmt {
-        kind: StmtKind::Class(parser.alloc(ClassDecl {
-            name: Some(name),
-            modifiers,
-            extends,
-            implements,
-            body: ClassBody {
-                members,
-                span: Span::new(brace_start, end),
-            },
-            attributes,
-            doc_comment,
+        kind: StmtKind::Class(parser.alloc({
+            let mut built = ClassDecl::new(
+                parser.arena,
+                Some(name),
+                ClassBody {
+                    members,
+                    span: Span::new(brace_start, end),
+                },
+            );
+            built.modifiers = modifiers;
+            built.extends = extends;
+            built.implements = implements;
+            built.attributes = attributes;
+            built.doc_comment = doc_comment;
+            built
         })),
         span: Span::new(start, end),
         doc_comment: None,
@@ -387,14 +391,13 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
         let hook_span = Span::new(hook_start, parser.previous_end());
         let mut hook_modifiers = Modifiers::new();
         hook_modifiers.is_final = is_final;
-        hooks.push(PropertyHook {
-            kind,
-            body,
-            modifiers: hook_modifiers,
-            by_ref,
-            params,
-            attributes: hook_attrs,
-            span: hook_span,
+        hooks.push({
+            let mut built = PropertyHook::new(parser.arena, kind, body, hook_span);
+            built.modifiers = hook_modifiers;
+            built.by_ref = by_ref;
+            built.params = params;
+            built.attributes = hook_attrs;
+            built
         });
     }
 
@@ -851,11 +854,12 @@ pub(super) fn parse_trait_use_decl<'arena, 'src>(
         parser.expect(TokenKind::Semicolon);
         (parser.alloc_vec(), None)
     };
-    TraitUseDecl {
-        traits,
-        adaptations,
-        adaptations_brace_span,
-        doc_comment,
+    {
+        let mut built = TraitUseDecl::new(parser.arena, traits);
+        built.adaptations = adaptations;
+        built.adaptations_brace_span = adaptations_brace_span;
+        built.doc_comment = doc_comment;
+        built
     }
 }
 
@@ -1143,13 +1147,13 @@ fn parse_class_const_member<'arena, 'src>(
     let mut const_iter = const_items.into_iter();
     if let Some((first_name, first_value)) = const_iter.next() {
         members.push(ClassMember {
-            kind: ClassMemberKind::ClassConst(ClassConstDecl {
-                name: first_name,
-                modifiers: const_modifiers(mods),
-                type_hint: shared_type_hint,
-                value: first_value,
-                attributes: member_attrs,
-                doc_comment: parser.take_doc_comment(member_start),
+            kind: ClassMemberKind::ClassConst({
+                let mut built = ClassConstDecl::new(parser.arena, first_name, first_value);
+                built.modifiers = const_modifiers(mods);
+                built.type_hint = shared_type_hint;
+                built.attributes = member_attrs;
+                built.doc_comment = parser.take_doc_comment(member_start);
+                built
             }),
             span,
         });
@@ -1159,13 +1163,13 @@ fn parse_class_const_member<'arena, 'src>(
             };
             let attributes = copy_attributes(parser, &first.attributes);
             members.push(ClassMember {
-                kind: ClassMemberKind::ClassConst(ClassConstDecl {
-                    name: rest_name,
-                    modifiers: const_modifiers(mods),
-                    type_hint: shared_type_hint,
-                    value: rest_value,
-                    attributes,
-                    doc_comment: None,
+                kind: ClassMemberKind::ClassConst({
+                    let mut built = ClassConstDecl::new(parser.arena, rest_name, rest_value);
+                    built.modifiers = const_modifiers(mods);
+                    built.type_hint = shared_type_hint;
+                    built.attributes = attributes;
+                    built.doc_comment = None;
+                    built
                 }),
                 span,
             });
@@ -1771,14 +1775,15 @@ fn parse_property_member<'arena, 'src>(
     let span = Span::new(member_start, parser.previous_end());
     let first_index = members.len();
     members.push(ClassMember {
-        kind: ClassMemberKind::Property(PropertyDecl {
-            name: prop_name,
-            modifiers: *mods,
-            type_hint,
-            default,
-            attributes: member_attrs,
-            hooks,
-            doc_comment: parser.take_doc_comment(member_start),
+        kind: ClassMemberKind::Property({
+            let mut built = PropertyDecl::new(parser.arena, prop_name);
+            built.modifiers = *mods;
+            built.type_hint = type_hint;
+            built.default = default;
+            built.attributes = member_attrs;
+            built.hooks = hooks;
+            built.doc_comment = parser.take_doc_comment(member_start);
+            built
         }),
         span,
     });
@@ -1825,14 +1830,15 @@ fn parse_property_member<'arena, 'src>(
                 .map(|t| AstCopy.fold_type_hint(parser.arena, t));
             let pattributes = copy_attributes(parser, &first.attributes);
             members.push(ClassMember {
-                kind: ClassMemberKind::Property(PropertyDecl {
-                    name: pname,
-                    modifiers: *mods,
-                    type_hint: ptype_hint,
-                    default: pdefault,
-                    attributes: pattributes,
-                    hooks: phooks,
-                    doc_comment: None,
+                kind: ClassMemberKind::Property({
+                    let mut built = PropertyDecl::new(parser.arena, pname);
+                    built.modifiers = *mods;
+                    built.type_hint = ptype_hint;
+                    built.default = pdefault;
+                    built.attributes = pattributes;
+                    built.hooks = phooks;
+                    built.doc_comment = None;
+                    built
                 }),
                 span: pspan,
             });
@@ -1908,15 +1914,19 @@ pub(super) fn parse_interface<'arena, 'src>(
     let end = parser.previous_end();
 
     Stmt {
-        kind: StmtKind::Interface(parser.alloc(InterfaceDecl {
-            name,
-            extends,
-            body: ClassBody {
-                members,
-                span: Span::new(brace_start, end),
-            },
-            attributes,
-            doc_comment,
+        kind: StmtKind::Interface(parser.alloc({
+            let mut built = InterfaceDecl::new(
+                parser.arena,
+                name,
+                ClassBody {
+                    members,
+                    span: Span::new(brace_start, end),
+                },
+            );
+            built.extends = extends;
+            built.attributes = attributes;
+            built.doc_comment = doc_comment;
+            built
         })),
         span: Span::new(start, end),
         doc_comment: None,
@@ -1962,14 +1972,18 @@ pub(super) fn parse_trait<'arena, 'src>(
     let end = parser.previous_end();
 
     Stmt {
-        kind: StmtKind::Trait(parser.alloc(TraitDecl {
-            name,
-            body: ClassBody {
-                members,
-                span: Span::new(brace_start, end),
-            },
-            attributes,
-            doc_comment,
+        kind: StmtKind::Trait(parser.alloc({
+            let mut built = TraitDecl::new(
+                parser.arena,
+                name,
+                ClassBody {
+                    members,
+                    span: Span::new(brace_start, end),
+                },
+            );
+            built.attributes = attributes;
+            built.doc_comment = doc_comment;
+            built
         })),
         span: Span::new(start, end),
         doc_comment: None,

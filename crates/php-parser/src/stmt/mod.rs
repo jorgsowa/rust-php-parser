@@ -832,13 +832,13 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
         let span = Span::new(start, parser.previous_end());
 
         return Stmt {
-            kind: StmtKind::If(parser.alloc(IfStmt {
-                condition,
-                then_branch,
-                elseif_branches,
-                else_branch,
-                else_kw_span: None,
-                uses_alternative: true,
+            kind: StmtKind::If(parser.alloc({
+                let mut built = IfStmt::new(parser.arena, condition, then_branch);
+                built.elseif_branches = elseif_branches;
+                built.else_branch = else_branch;
+                built.else_kw_span = None;
+                built.uses_alternative = true;
+                built
             })),
             span,
             doc_comment: None,
@@ -881,13 +881,13 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
     let span = Span::new(start, end);
 
     Stmt {
-        kind: StmtKind::If(parser.alloc(IfStmt {
-            condition,
-            then_branch,
-            elseif_branches,
-            else_branch,
-            else_kw_span,
-            uses_alternative: false,
+        kind: StmtKind::If(parser.alloc({
+            let mut built = IfStmt::new(parser.arena, condition, then_branch);
+            built.elseif_branches = elseif_branches;
+            built.else_branch = else_branch;
+            built.else_kw_span = else_kw_span;
+            built.uses_alternative = false;
+            built
         })),
         span,
         doc_comment: None,
@@ -921,10 +921,10 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
             doc_comment: None,
         });
         return Stmt {
-            kind: StmtKind::While(parser.alloc(WhileStmt {
-                condition,
-                body,
-                uses_alternative: true,
+            kind: StmtKind::While(parser.alloc({
+                let mut built = WhileStmt::new(condition, body);
+                built.uses_alternative = true;
+                built
             })),
             span,
             doc_comment: None,
@@ -937,10 +937,10 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
     let body = parser.alloc(body_stmt);
     let span = Span::new(start, body.span.end);
     Stmt {
-        kind: StmtKind::While(parser.alloc(WhileStmt {
-            condition,
-            body,
-            uses_alternative: false,
+        kind: StmtKind::While(parser.alloc({
+            let mut built = WhileStmt::new(condition, body);
+            built.uses_alternative = false;
+            built
         })),
         span,
         doc_comment: None,
@@ -964,7 +964,7 @@ fn parse_do_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
     parser.expect_semicolon("do-while statement");
     let span = Span::new(start, parser.previous_end());
     Stmt {
-        kind: StmtKind::DoWhile(parser.alloc(DoWhileStmt { body, condition })),
+        kind: StmtKind::DoWhile(parser.alloc(DoWhileStmt::new(body, condition))),
         span,
         doc_comment: None,
     }
@@ -997,12 +997,13 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             doc_comment: None,
         });
         return Stmt {
-            kind: StmtKind::For(parser.alloc(ForStmt {
-                init,
-                condition,
-                update,
-                body,
-                uses_alternative: true,
+            kind: StmtKind::For(parser.alloc({
+                let mut built = ForStmt::new(parser.arena, body);
+                built.init = init;
+                built.condition = condition;
+                built.update = update;
+                built.uses_alternative = true;
+                built
             })),
             span,
             doc_comment: None,
@@ -1015,12 +1016,13 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
     let body = parser.alloc(body_stmt);
     let span = Span::new(start, body.span.end);
     Stmt {
-        kind: StmtKind::For(parser.alloc(ForStmt {
-            init,
-            condition,
-            update,
-            body,
-            uses_alternative: false,
+        kind: StmtKind::For(parser.alloc({
+            let mut built = ForStmt::new(parser.arena, body);
+            built.init = init;
+            built.condition = condition;
+            built.update = update;
+            built.uses_alternative = false;
+            built
         })),
         span,
         doc_comment: None,
@@ -1102,13 +1104,12 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
             doc_comment: None,
         });
         return Stmt {
-            kind: StmtKind::Foreach(parser.alloc(ForeachStmt {
-                expr: collection,
-                key,
-                value,
-                by_ref,
-                body,
-                uses_alternative: true,
+            kind: StmtKind::Foreach(parser.alloc({
+                let mut built = ForeachStmt::new(collection, value, body);
+                built.key = key;
+                built.by_ref = by_ref;
+                built.uses_alternative = true;
+                built
             })),
             span,
             doc_comment: None,
@@ -1121,13 +1122,12 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     let body = parser.alloc(body_stmt);
     let span = Span::new(start, body.span.end);
     Stmt {
-        kind: StmtKind::Foreach(parser.alloc(ForeachStmt {
-            expr: collection,
-            key,
-            value,
-            by_ref,
-            body,
-            uses_alternative: false,
+        kind: StmtKind::Foreach(parser.alloc({
+            let mut built = ForeachStmt::new(collection, value, body);
+            built.key = key;
+            built.by_ref = by_ref;
+            built.uses_alternative = false;
+            built
         })),
         span,
         doc_comment: None,
@@ -1240,14 +1240,14 @@ fn parse_function<'arena, 'src>(
     );
 
     Stmt {
-        kind: StmtKind::Function(parser.alloc(FunctionDecl {
-            name,
-            params,
-            body,
-            return_type,
-            by_ref,
-            attributes,
-            doc_comment,
+        kind: StmtKind::Function(parser.alloc({
+            let mut built = FunctionDecl::new(parser.arena, name, body);
+            built.params = params;
+            built.return_type = return_type;
+            built.by_ref = by_ref;
+            built.attributes = attributes;
+            built.doc_comment = doc_comment;
+            built
         })),
         span,
         doc_comment: None,
@@ -1982,13 +1982,16 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
     let body_span = Span::new(body_brace_start, parser.previous_end());
     let span = Span::new(start, parser.previous_end());
     Stmt {
-        kind: StmtKind::Switch(parser.alloc(SwitchStmt {
-            expr: switch_expr,
-            body: SwitchBody {
-                cases,
-                span: body_span,
-            },
-            uses_alternative: alt_syntax,
+        kind: StmtKind::Switch(parser.alloc({
+            let mut built = SwitchStmt::new(
+                switch_expr,
+                SwitchBody {
+                    cases,
+                    span: body_span,
+                },
+            );
+            built.uses_alternative = alt_syntax;
+            built
         })),
         span,
         doc_comment: None,
@@ -2097,11 +2100,15 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             span: Span::new(catch_body_brace_start, parser.previous_end()),
         });
 
-        catches.push(CatchClause {
-            types,
-            var,
-            body: catch_body,
-            span: Span::new(catch_start, parser.previous_end()),
+        catches.push({
+            let mut built = CatchClause::new(
+                parser.arena,
+                catch_body,
+                Span::new(catch_start, parser.previous_end()),
+            );
+            built.types = types;
+            built.var = var;
+            built
         });
     }
 
@@ -2140,11 +2147,12 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
 
     let span = Span::new(start, parser.previous_end());
     Stmt {
-        kind: StmtKind::TryCatch(parser.alloc(TryCatchStmt {
-            body,
-            catches,
-            finally,
-            finally_kw_span,
+        kind: StmtKind::TryCatch(parser.alloc({
+            let mut built = TryCatchStmt::new(parser.arena, body);
+            built.catches = catches;
+            built.finally = finally;
+            built.finally_kw_span = finally_kw_span;
+            built
         })),
         span,
         doc_comment: None,
@@ -2398,10 +2406,11 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
 
     let span = Span::new(start, parser.previous_end());
     Stmt {
-        kind: StmtKind::Declare(parser.alloc(DeclareStmt {
-            directives,
-            body,
-            uses_alternative,
+        kind: StmtKind::Declare(parser.alloc({
+            let mut built = DeclareStmt::new(directives);
+            built.body = body;
+            built.uses_alternative = uses_alternative;
+            built
         })),
         span,
         doc_comment: None,
@@ -2569,10 +2578,9 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             span: Span::new(brace_start, end),
         });
         return Stmt {
-            kind: StmtKind::Namespace(parser.alloc(NamespaceDecl {
-                name: None,
-                body: NamespaceBody::Braced(block),
-            })),
+            kind: StmtKind::Namespace(
+                parser.alloc(NamespaceDecl::new(None, NamespaceBody::Braced(block))),
+            ),
             span: Span::new(start, end),
             doc_comment: None,
         };
@@ -2612,10 +2620,9 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             span: Span::new(brace_start, end),
         });
         Stmt {
-            kind: StmtKind::Namespace(parser.alloc(NamespaceDecl {
-                name: Some(name),
-                body: NamespaceBody::Braced(block),
-            })),
+            kind: StmtKind::Namespace(
+                parser.alloc(NamespaceDecl::new(Some(name), NamespaceBody::Braced(block))),
+            ),
             span: Span::new(start, end),
             doc_comment: None,
         }
@@ -2626,10 +2633,9 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         parser.expect_statement_end();
         let span = Span::new(start, parser.previous_end());
         Stmt {
-            kind: StmtKind::Namespace(parser.alloc(NamespaceDecl {
-                name: Some(name),
-                body: NamespaceBody::Simple,
-            })),
+            kind: StmtKind::Namespace(
+                parser.alloc(NamespaceDecl::new(Some(name), NamespaceBody::Simple)),
+            ),
             span,
             doc_comment: None,
         }
@@ -2863,7 +2869,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
     parser.expect_statement_end();
     let span = Span::new(start, parser.previous_end());
     Stmt {
-        kind: StmtKind::Use(parser.alloc(UseDecl { kind, uses })),
+        kind: StmtKind::Use(parser.alloc(UseDecl::new(kind, uses))),
         span,
         doc_comment: None,
     }

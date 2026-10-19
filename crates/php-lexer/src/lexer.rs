@@ -64,6 +64,7 @@ pub enum LexerErrorKind {
 
 /// A recoverable error found while lexing.
 #[derive(Debug, Clone, PartialEq)]
+#[non_exhaustive]
 pub struct LexerError {
     /// Error category.
     pub kind: LexerErrorKind,
