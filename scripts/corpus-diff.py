@@ -54,7 +54,11 @@ def main():
         with ThreadPoolExecutor(os.cpu_count() or 4) as pool:
             verdicts = list(pool.map(php_accepts, flagged))
 
-    tracked = {name[: -len(".phpt")] for name in os.listdir(IGNORED)}
+    tracked = (
+        {name[: -len(".phpt")] for name in os.listdir(IGNORED)}
+        if os.path.isdir(IGNORED)
+        else set()
+    )
     accepted = {
         mapping[path]: messages
         for (path, messages), ok in zip(flagged.items(), verdicts)
