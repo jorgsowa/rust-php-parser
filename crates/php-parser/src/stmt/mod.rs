@@ -3272,12 +3272,14 @@ fn parse_expression_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
     }
 }
 
-/// Report every `$a[]` that is read or unset; PHP allows it only where it is written to: as
-/// an assignment, increment, `foreach` or destructuring target, by-reference source, call
-/// argument, or the base of such a fetch, as in `$a[][0] = 1`.
+/// Report every `$a[]` in `stmts` and the read expressions `exprs` that is read or unset; PHP
+/// allows it only where it is written to: as an assignment, increment, `foreach` or
+/// destructuring target, by-reference source, call argument, or the base of such a fetch, as
+/// in `$a[][0] = 1`.
 pub(crate) fn check_empty_dims<'arena, 'src>(
     parser: &mut Parser<'arena, 'src>,
     stmts: &[Stmt<'arena, 'src>],
+    exprs: &[&Expr<'arena, 'src>],
 ) {
     use php_ast::visitor::{
         walk_class_member, walk_enum_member, walk_expr, walk_property_hook, walk_stmt, Visitor,
@@ -3495,6 +3497,10 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
 
         fn visit_expr(&mut self, expr: &Expr<'a, 's>) -> ControlFlow<()> {
             match &expr.kind {
+                // Interpolations are checked as they are parsed.
+                ExprKind::InterpolatedString(_)
+                | ExprKind::Heredoc { .. }
+                | ExprKind::ShellExec(_) => {}
                 ExprKind::ArrayAccess(a) if a.index.is_none() => {
                     if is_globals(a.array) {
                         self.globals_append.push(expr.span);
@@ -3604,6 +3610,9 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
     };
     for stmt in stmts {
         let _ = finder.visit_stmt(stmt);
+    }
+    for expr in exprs {
+        let _ = finder.visit_expr(expr);
     }
     for (spans, message) in [
         (finder.read, "cannot use [] for reading"),

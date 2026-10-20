@@ -2386,7 +2386,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             crate::stmt::check_void_casts(self, &stmts);
         }
         if self.empty_dim_count > 0 {
-            crate::stmt::check_empty_dims(self, &stmts);
+            crate::stmt::check_empty_dims(self, &stmts, &[]);
         }
         if self.has_goto_or_label {
             crate::stmt::check_gotos(self, &stmts);

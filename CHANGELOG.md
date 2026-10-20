@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `{$b[]}` in a string, heredoc or backtick string was accepted; PHP rejects `[]` for reading (`php-rs-parser`).
 - Invalid `\u{…}` escapes in a heredoc without interpolation were accepted (`php-rs-parser`).
 - A heredoc label starting with a digit (`<<<1X`) or followed by anything but a newline (`<<<X"`) was accepted; PHP lexes `<<` there (`php-lexer`).
 - `use namespace\A;` was accepted (`php-rs-parser`).
