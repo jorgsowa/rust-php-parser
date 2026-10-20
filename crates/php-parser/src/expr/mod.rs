@@ -1085,6 +1085,11 @@ fn parse_assign_continuation<'arena, 'src>(
             message: "Cannot assign reference to non referenceable value".into(),
             span: rhs.span,
         });
+    } else if by_ref && matches!(rhs.kind, ExprKind::CallableCreate(_)) {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot use result of built-in function in write context".into(),
+            span: rhs.span,
+        });
     } else if let Some(message) = by_ref.then(|| temporary_write_message(&rhs.kind)).flatten() {
         parser.error(ParseError::Forbidden {
             message: message.into(),
