@@ -302,12 +302,20 @@ pub fn parse_interpolated_parts<'arena, 'src>(
     parts
 }
 
+/// Length of the indentation PHP strips from a heredoc line: up to `indent_len` spaces or tabs.
+pub(crate) fn heredoc_indent_len(line: &[u8], indent_len: usize) -> usize {
+    line.iter()
+        .take(indent_len)
+        .take_while(|b| matches!(b, b' ' | b'\t'))
+        .count()
+}
+
 /// Parse the inner content of an indented heredoc body into parts.
 /// `raw_body` must be a verbatim subslice of `source` (with indentation intact).
 /// `body_offset` is the byte offset of `raw_body[0]` within `source`.
 /// `indent` is the indentation prefix stripped from each line (e.g. `"    "`).
 ///
-/// At the start and after every newline, `indent.len()` bytes are skipped so that
+/// At the start and after every newline, up to `indent.len()` bytes are skipped so that
 /// all source offsets remain accurate. Complex `{$expr}` interpolations are parsed
 /// with a direct sub-parser on `source`, eliminating the wrapping/reoffset overhead
 /// of the old `parse_interpolated_parts_heredoc` path.
@@ -330,12 +338,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
     let len = bytes.len();
 
     // Skip leading indent on the first line
-    let mut i = if indent_len > 0 && len >= indent_len && bytes[..indent_len] == *indent.as_bytes()
-    {
-        indent_len
-    } else {
-        0
-    };
+    let mut i = heredoc_indent_len(bytes, indent_len);
 
     while i < len {
         match bytes[i] {
@@ -346,12 +349,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                 // Preserve the newline in the literal, then skip the indent on the next line
                 literal.push(b'\n');
                 i += 1;
-                if indent_len > 0
-                    && i + indent_len <= len
-                    && bytes[i..i + indent_len] == *indent.as_bytes()
-                {
-                    i += indent_len;
-                }
+                i += heredoc_indent_len(&bytes[i..], indent_len);
             }
             b'$' => {
                 if i + 1 < len && bytes[i + 1] == b'{' {

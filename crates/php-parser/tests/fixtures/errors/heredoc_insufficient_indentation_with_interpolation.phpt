@@ -69,7 +69,7 @@ PHP Parse error:  Invalid body indentation level (expecting an indentation level
                     "label": "END",
                     "parts": [
                       {
-                        "Literal": "  hello "
+                        "Literal": "hello "
                       },
                       {
                         "Expr": {

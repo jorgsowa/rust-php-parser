@@ -10,7 +10,8 @@ use crate::stmt;
 use crate::version::PhpVersion;
 
 use super::{
-    parse_assign_continuation, parse_expr, parse_expr_bp, parse_expr_continue, parse_member_name,
+    interpolation::heredoc_indent_len, parse_assign_continuation, parse_expr, parse_expr_bp,
+    parse_expr_continue, parse_member_name,
 };
 
 /// Cast keyword strings and their CastKind values
@@ -564,7 +565,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 let de_indented = if !indent.is_empty() {
                     raw_body
                         .lines()
-                        .map(|line| line.strip_prefix(&indent).unwrap_or(line))
+                        .map(|line| &line[heredoc_indent_len(line.as_bytes(), indent.len())..])
                         .collect::<Vec<_>>()
                         .join("\n")
                 } else {
@@ -603,7 +604,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let value: &'arena str = if !indent.is_empty() {
                 let s = raw_body
                     .lines()
-                    .map(|line| line.strip_prefix(&indent).unwrap_or(line))
+                    .map(|line| &line[heredoc_indent_len(line.as_bytes(), indent.len())..])
                     .collect::<Vec<_>>()
                     .join("\n");
                 parser.arena.alloc_str(&s)
@@ -2470,9 +2471,8 @@ fn parse_heredoc_content(text: &str) -> (&str, usize, usize, String) {
     (label, body_start_in_text, body_end_in_text, indent)
 }
 
-/// Validate that every non-empty body line of an indented heredoc/nowdoc starts with `indent`.
+/// Validate that every body line of an indented heredoc/nowdoc starts with `indent`, as PHP does.
 /// Emits `ParseError::Forbidden` for each line that violates the indentation requirement.
-/// Empty lines are always valid.
 fn validate_heredoc_indentation(
     raw_body: &str,
     indent: &str,
@@ -2495,10 +2495,18 @@ fn validate_heredoc_indentation(
         // In a CRLF file a blank line still carries the `\r`; PHP's scanner
         // treats it as empty (it stops at `\r` or `\n` when checking indent).
         let line = raw_line.strip_suffix('\r').unwrap_or(raw_line);
-        if !line.is_empty() && !line.starts_with(indent) {
+        let span = Span::new(offset as u32, (offset + line.len()) as u32);
+        let leading = heredoc_indent_len(line.as_bytes(), indent.len());
+        if line[..leading].bytes().any(|b| b != indent.as_bytes()[0]) {
+            errors.push(ParseError::Forbidden {
+                message: "Invalid indentation - tabs and spaces cannot be mixed".into(),
+                span,
+            });
+        } else if leading < indent.len() && leading < line.len() {
+            // A whitespace-only line may be shorter than the indentation.
             errors.push(ParseError::Forbidden {
                 message: "Invalid body indentation level".into(),
-                span: Span::new(offset as u32, (offset + line.len()) as u32),
+                span,
             });
         }
         offset += raw_line.len() + 1; // +1 for the '\n'

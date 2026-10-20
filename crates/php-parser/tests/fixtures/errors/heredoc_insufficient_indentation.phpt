@@ -31,7 +31,7 @@ PHP Parse error:  Invalid body indentation level (expecting an indentation level
                     "label": "END",
                     "parts": [
                       {
-                        "Literal": "  line with only 2 spaces"
+                        "Literal": "line with only 2 spaces"
                       }
                     ]
                   }

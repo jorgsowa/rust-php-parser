@@ -4,7 +4,7 @@ $x = <<<'END'
 	    mixed line
     END;
 ===errors===
-Invalid body indentation level
+Invalid indentation - tabs and spaces cannot be mixed
 ===php_error===
 PHP Parse error:  Invalid indentation - tabs and spaces cannot be mixed in Standard input code on line 3
 ===ast===
@@ -29,7 +29,7 @@ PHP Parse error:  Invalid indentation - tabs and spaces cannot be mixed in Stand
                 "kind": {
                   "Nowdoc": {
                     "label": "END",
-                    "value": "\t    mixed line"
+                    "value": " mixed line"
                   }
                 },
                 "span": {

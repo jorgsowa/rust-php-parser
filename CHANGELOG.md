@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A whitespace-only heredoc or nowdoc line shorter than the closing indentation was rejected; PHP accepts it. A body line indented with the other whitespace character reports "Invalid indentation - tabs and spaces cannot be mixed", and the stripped indentation follows PHP (`php-rs-parser`).
 - `1...2` was rejected and `1..2` accepted; a number followed by `.` lexes as a float (`1.`) even before another dot, as in PHP (`php-lexer`).
 - `case 1 ?>` and `default ?>` were rejected; as in PHP, `?>` ends the case label like `;` (`php-rs-parser`).
 - A long run of prefix operators (`~~~…$x`, as in php-src's `stack_limit_013`) hit "maximum nesting depth exceeded"; such runs are parsed, converted to and from the owned AST, dropped and printed without recursion, like other operator chains (`php-rs-parser`, `php-ast`, `php-printer`).

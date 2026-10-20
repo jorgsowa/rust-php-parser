@@ -29,7 +29,7 @@ PHP Parse error:  Invalid body indentation level (expecting an indentation level
                 "kind": {
                   "Nowdoc": {
                     "label": "END",
-                    "value": "  line with only 2 spaces"
+                    "value": "line with only 2 spaces"
                   }
                 },
                 "span": {
