@@ -14,7 +14,7 @@ assert(false && $y = clone(object: $x, [ "foo" => $foo, "bar" => $bar ]));
 assert(false && $y = clone(...["object" => $x, "withProperties" => [ "foo" => $foo, "bar" => $bar ]]));
 assert(false && $y = clone(...));
 ===php_error <=8.4===
-PHP Parse error:  syntax error, unexpected token "," in Standard input code on line 6
+PHP Parse error:  syntax error, unexpected token "," in Standard input code on line 5
 ===ast >=8.5===
 {
   "stmts": [

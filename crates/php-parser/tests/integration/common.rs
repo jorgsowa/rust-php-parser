@@ -349,9 +349,8 @@ fn check_header(header: &str) -> Result<(), String> {
             current = Some(name);
             continue;
         }
-        match current {
-            None => return Err(format!("text before the first section: `{line}`")),
-            Some(_) => {}
+        if current.is_none() {
+            return Err(format!("text before the first section: `{line}`"));
         }
     }
     Ok(())
