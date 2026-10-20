@@ -36,7 +36,6 @@ PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard 
 ===php_error 8.4-8.5===
 PHP Fatal error:  Readonly property A::$a cannot have default value in Standard input code on line 3
 ===php_error >=8.6===
-PHP Deprecated:  A::__construct(): Optional parameter $d declared before required parameter $f is implicitly treated as a required parameter in Standard input code on line 6
 PHP Fatal error:  Readonly property A::$e must have type in Standard input code on line 7
 ===ast===
 {
