@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `1...2` was rejected and `1..2` accepted; a number followed by `.` lexes as a float (`1.`) even before another dot, as in PHP (`php-lexer`).
 - `case 1 ?>` and `default ?>` were rejected; as in PHP, `?>` ends the case label like `;` (`php-rs-parser`).
 - A long run of prefix operators (`~~~…$x`, as in php-src's `stack_limit_013`) hit "maximum nesting depth exceeded"; such runs are parsed, converted to and from the owned AST, dropped and printed without recursion, like other operator chains (`php-rs-parser`, `php-ast`, `php-printer`).
 - Errors PHP raises only while compiling (such as "Cannot use lexical variable $c as a parameter name") were reported in the right operand of `&&`, `||`, `and` or `or` after a constant that decides the result (`assert(false && …)`); PHP never compiles that operand, so only syntax errors are reported there (`php-rs-parser`).

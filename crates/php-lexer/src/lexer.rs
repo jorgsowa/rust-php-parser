@@ -1113,8 +1113,8 @@ impl<'src> Lexer<'src> {
                 // Invalid separator after decimal: 1._0
                 self.consume_invalid_numeric_rest();
                 return self.invalid_numeric(start);
-            } else if self.pos + 1 >= bytes.len() || bytes[self.pos + 1] != b'.' {
-                // Trailing dot without digit: 1. (not followed by another dot for .. or ...)
+            } else {
+                // Trailing dot without digit: 1. (also in `1..2` and `1...2`, as in PHP)
                 self.pos += 1; // consume '.'
                 kind = TokenKind::FloatLiteralSimple;
             }

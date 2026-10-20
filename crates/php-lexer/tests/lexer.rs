@@ -391,11 +391,10 @@ mod numeric_literals {
     }
 
     #[test]
-    fn test_trailing_dot_not_confused_with_dotdot() {
-        // "1.." must lex as IntLiteral("1") + Dot + Dot, not FloatLiteralSimple("1.") + Dot
-        // because the second dot prevents the trailing-dot branch from firing
-        let toks = php_tokens("1..");
-        assert_eq!(toks[0], (TokenKind::IntLiteral, "1".to_string()));
+    fn test_trailing_dot_before_dots() {
+        // PHP's DNUM is greedy: "1..." lexes as "1." "." "."
+        let toks = php_tokens("1...");
+        assert_eq!(toks[0], (TokenKind::FloatLiteralSimple, "1.".to_string()));
         assert_eq!(toks[1], (TokenKind::Dot, ".".to_string()));
         assert_eq!(toks[2], (TokenKind::Dot, ".".to_string()));
     }
