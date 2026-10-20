@@ -174,6 +174,26 @@ fn set_section_for_changes_one_version() {
     assert!(fixture.render().contains("===php_error===\nall\n===ast"));
 }
 
+#[test]
+fn fixtures_render_unchanged() {
+    use crate::common::{collect_phpt_files, Fixture};
+    let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures");
+    let mut changed: Vec<String> = collect_phpt_files(&dir)
+        .into_iter()
+        .filter(|path| {
+            let content = std::fs::read_to_string(path).unwrap();
+            Fixture::parse(&content).is_ok_and(|f| f.render() != content)
+        })
+        .map(|path| path.strip_prefix(&dir).unwrap().display().to_string())
+        .collect();
+    changed.sort();
+    assert!(
+        changed.is_empty(),
+        "fixtures not in canonical form:\n{}",
+        changed.join("\n")
+    );
+}
+
 // ---------------------------------------------------------------------------
 // Owned-API compile-time and runtime properties
 // ---------------------------------------------------------------------------
