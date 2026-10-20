@@ -140,7 +140,7 @@ crates/php-parser/tests/fixtures/
   categories/    feature-organized tests (enums, closures, match, traits, …)
   errors/        tests where the parser is expected to emit errors
   corpus/        adapted from nikic/PHP-Parser test suite
-  no_hang/       regression tests for parser hang issues
+  no_hang/       malformed or unterminated input (unclosed bodies, strings) that must still parse to completion
 
 crates/php-printer/tests/fixtures/
 ```
