@@ -8,4 +8,3 @@ PHP Fatal error:  Cannot use 'static' as method modifier in Standard input code 
 ===php_error >=8.3===
 PHP Fatal error:  Cannot use "static" as method modifier in trait alias in Standard input code on line 2
 ===ast >=8.5===
-

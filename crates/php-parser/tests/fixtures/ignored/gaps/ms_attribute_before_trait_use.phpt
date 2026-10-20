@@ -8,4 +8,3 @@ PHP Parse error:  syntax error, unexpected token "use", expecting "function" or 
 ===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected token "use", expecting "function" in Standard input code on line 2
 ===ast >=8.5===
-

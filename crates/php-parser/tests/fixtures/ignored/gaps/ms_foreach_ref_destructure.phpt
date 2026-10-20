@@ -8,4 +8,3 @@ PHP Parse error:  syntax error, unexpected token ")", expecting "->" or "?->" or
 ===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token ")", expecting "->" or "?->" or "[" in Standard input code on line 2
 ===ast >=8.5===
-

@@ -10,4 +10,3 @@ PHP Parse error:  syntax error, unexpected token ")", expecting variable or "&" 
 ===php_error >=8.5===
 PHP Parse error:  syntax error, unexpected token ")", expecting variable or "&" or token "&" in Standard input code on line 2
 ===ast >=8.5===
-

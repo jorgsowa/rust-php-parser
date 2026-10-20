@@ -8,4 +8,3 @@ PHP Parse error:  syntax error, unexpected identifier "X", expecting "=" in Stan
 ===php_error >=8.3===
 PHP Fatal error:  Cannot use null as value for class constant A::X of type int in Standard input code on line 2
 ===ast >=8.5===
-

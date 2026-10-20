@@ -8,4 +8,3 @@ PHP Parse error:  syntax error, unexpected variable "$val", expecting "function"
 ===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected variable "$val", expecting "function" in Standard input code on line 2
 ===ast >=8.5===
-

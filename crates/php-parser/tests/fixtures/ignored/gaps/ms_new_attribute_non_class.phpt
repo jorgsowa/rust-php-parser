@@ -8,4 +8,3 @@ PHP Parse error:  syntax error, unexpected identifier "B", expecting "class" or 
 ===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected identifier "B", expecting "class" in Standard input code on line 2
 ===ast >=8.5===
-

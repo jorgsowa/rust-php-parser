@@ -8,4 +8,3 @@ PHP Fatal error:  Class A contains 1 abstract method and must therefore be decla
 ===php_error >=8.5===
 PHP Fatal error:  Class A declares abstract method h() and must therefore be declared abstract in Standard input code on line 2
 ===ast >=8.5===
-

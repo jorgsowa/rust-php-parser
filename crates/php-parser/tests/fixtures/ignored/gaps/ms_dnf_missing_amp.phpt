@@ -10,4 +10,3 @@ PHP Parse error:  syntax error, unexpected token ")", expecting amp in Standard 
 ===php_error >=8.5===
 PHP Parse error:  syntax error, unexpected token ")", expecting token "&" in Standard input code on line 2
 ===ast >=8.5===
-

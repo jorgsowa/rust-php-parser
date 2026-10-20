@@ -8,4 +8,3 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
 ===php_error >=8.4===
 PHP Fatal error:  Parameter $a of set hook A::$x must not be pass-by-reference in Standard input code on line 2
 ===ast >=8.5===
-
