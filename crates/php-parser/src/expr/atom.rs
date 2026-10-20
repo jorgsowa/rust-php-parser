@@ -1035,7 +1035,8 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                                     | TokenKind::DoubleColon
                                     | TokenKind::LeftBracket
                                     | TokenKind::LeftParen
-                            ) {
+                            ) && !has_trailing_comma(src, object.span.end, parser.previous_end())
+                            {
                                 // `clone($a)->b` is `clone (($a)->b)`: the parentheses are only grouping
                                 let grouped = Expr {
                                     kind: ExprKind::Parenthesized(parser.alloc(object)),
@@ -2076,6 +2077,37 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
 }
 
 /// An unnamed, unspread argument (a by-ref one has already been reported).
+/// True if a comma follows the last argument before the closing `)` that ends at `close_end`.
+fn has_trailing_comma(src: &str, last_arg_end: u32, close_end: u32) -> bool {
+    let gap = &src.as_bytes()[last_arg_end as usize..close_end as usize - 1];
+    let mut i = 0;
+    while i < gap.len() {
+        match gap[i] {
+            b',' => return true,
+            b'#' => {
+                i += gap[i..]
+                    .iter()
+                    .position(|&b| b == b'\n')
+                    .unwrap_or(gap.len() - i)
+            }
+            b'/' if gap.get(i + 1) == Some(&b'/') => {
+                i += gap[i..]
+                    .iter()
+                    .position(|&b| b == b'\n')
+                    .unwrap_or(gap.len() - i)
+            }
+            b'/' if gap.get(i + 1) == Some(&b'*') => {
+                i += gap[i + 2..]
+                    .windows(2)
+                    .position(|w| w == b"*/")
+                    .map_or(gap.len() - i, |p| p + 4);
+            }
+            _ => i += 1,
+        }
+    }
+    false
+}
+
 fn is_plain_arg(arg: &Arg) -> bool {
     arg.name.is_none() && matches!(arg.kind, ArgKind::Value(_) | ArgKind::ByRef(_))
 }

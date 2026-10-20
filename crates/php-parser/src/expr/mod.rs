@@ -204,6 +204,11 @@ pub(crate) fn is_superglobal(name: &str) -> bool {
     )
 }
 
+/// True for the unqualified `clone` that the parser only produces from the keyword.
+fn is_clone_keyword(name: &Expr<'_, '_>) -> bool {
+    matches!(&name.kind, ExprKind::Name(Name::Simple { value, .. }) if value.eq_ignore_ascii_case("clone"))
+}
+
 /// Report `->`, `?->`, `::`, `[` or a call applied to an expression PHP cannot
 /// dereference, such as `match (...) {...}[0]`, `1->a` or `function () {}()`.
 fn check_dereferencable(parser: &mut Parser<'_, '_>, lhs: &Expr<'_, '_>, op: TokenKind) {
@@ -224,6 +229,12 @@ fn check_dereferencable(parser: &mut Parser<'_, '_>, lhs: &Expr<'_, '_>, op: Tok
             op != TokenKind::DoubleColon && !is_list_syntax(parser.source(), lhs.span)
         }
         ExprKind::MagicConst(_) => !matches!(op, TokenKind::DoubleColon | TokenKind::LeftParen),
+        // The 8.5 call forms of `clone`; the plain `clone($a)` is grouped before it gets here.
+        ExprKind::CloneWith(..) | ExprKind::Clone(_) => false,
+        ExprKind::CallableCreate(CallableCreateExpr {
+            kind: CallableCreateKind::Function(name),
+        })
+        | ExprKind::FunctionCall(FunctionCallExpr { name, .. }) => !is_clone_keyword(name),
         _ => true,
     };
     if !dereferencable {
