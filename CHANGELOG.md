@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- An abstract method in a class not declared abstract was accepted (`php-rs-parser`).
 - A typed class constant with a literal its type does not accept (`const int X = 'a';`, `= null`) was accepted (`php-rs-parser`).
 - A class constant named `class` was accepted (`php-rs-parser`).
 - Attributes before a trait `use` (`#[A] use T;`) and a trait `use` in an interface were accepted (`php-rs-parser`).

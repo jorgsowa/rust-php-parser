@@ -6,8 +6,12 @@ class A {
     function bar() {}
     static abstract function baz() {}
 }
-===errors >=7.4===
+===errors <=8.4===
 Abstract function A::baz() cannot contain body
+Class A contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (A::baz)
+===errors >=8.5===
+Abstract function A::baz() cannot contain body
+Class A declares abstract method baz() and must therefore be declared abstract
 ===php_error <=8.4===
 PHP Fatal error:  Abstract function A::baz() cannot contain body in Standard input code on line 6
 ===php_error >=8.5===

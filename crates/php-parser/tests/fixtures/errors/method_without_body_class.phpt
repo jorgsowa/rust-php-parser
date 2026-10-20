@@ -8,6 +8,7 @@ class A {
 ===errors===
 Non-abstract method A::f() must contain body
 Non-abstract method A::g() must contain body
+Class A declares abstract method h() and must therefore be declared abstract
 ===php_error===
 PHP Fatal error:  Non-abstract method A::f() must contain body in Standard input code on line 3
 ===ast===

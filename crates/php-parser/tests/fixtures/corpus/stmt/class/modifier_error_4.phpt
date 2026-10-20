@@ -2,6 +2,7 @@
 <?php class A { abstract abstract function a(); }
 ===errors===
 duplicate modifier 'abstract'
+Class A declares abstract method a() and must therefore be declared abstract
 ===php_error===
 PHP Fatal error:  Multiple abstract modifiers are not allowed in Standard input code on line 1
 ===ast===

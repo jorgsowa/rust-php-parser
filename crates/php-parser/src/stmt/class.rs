@@ -128,7 +128,11 @@ pub(super) fn parse_class<'arena, 'src>(
         is_readonly: modifiers.is_readonly,
     };
     parser.check_attributes(&attributes, &AttrSite::class(kind, &scope.name));
+    let class_name = scope.name.clone();
     let members = parse_class_members(parser, false, false, scope);
+    if !modifiers.is_abstract {
+        check_abstract_methods(parser, &class_name, &members);
+    }
     if modifiers.is_readonly {
         check_readonly_class_members(parser, &members);
     }
@@ -542,6 +546,46 @@ pub(super) fn check_hook_bodies(
             span: hook.span,
         });
     }
+}
+
+/// Report abstract methods in a class that is not declared abstract.
+fn check_abstract_methods(
+    parser: &mut Parser<'_, '_>,
+    class_name: &str,
+    members: &[ClassMember<'_, '_>],
+) {
+    let abstract_methods: Vec<(&str, Span)> = members
+        .iter()
+        .filter_map(|m| match &m.kind {
+            ClassMemberKind::Method(decl) if decl.modifiers.is_abstract => {
+                Some((decl.name.as_str()?, m.span))
+            }
+            _ => None,
+        })
+        .collect();
+    let Some(&(first, span)) = abstract_methods.first() else {
+        return;
+    };
+    let message = if parser.version >= PhpVersion::Php85 {
+        format!("Class {class_name} declares abstract method {first}() and must therefore be declared abstract")
+    } else {
+        let count = abstract_methods.len();
+        let names: Vec<String> = abstract_methods
+            .iter()
+            .take(3)
+            .map(|(name, _)| format!("{class_name}::{name}"))
+            .collect();
+        format!(
+            "Class {class_name} contains {count} abstract method{} and must therefore be declared abstract or implement the remaining methods ({}{})",
+            if count == 1 { "" } else { "s" },
+            names.join(", "),
+            if count > 3 { ", ..." } else { "" }
+        )
+    };
+    parser.error(ParseError::Forbidden {
+        message: message.into(),
+        span,
+    });
 }
 
 pub fn parse_class_members<'arena, 'src>(
