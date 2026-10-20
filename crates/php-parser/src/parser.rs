@@ -101,6 +101,7 @@ fn is_raised_by_php_parser(message: &str) -> bool {
         "Chaining non-associative operators requires explicit parentheses.",
         "Cannot use increment/decrement as an assignment target.",
         "Cannot use expression as assignment target.",
+        "Cannot use a destructuring pattern with a compound assignment operator",
         "Cannot increment or decrement an expression that is not a variable",
         "Cannot dereference this expression",
         "Can't use this expression in write context",

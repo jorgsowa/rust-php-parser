@@ -986,6 +986,7 @@ fn parse_assign_continuation<'arena, 'src>(
 ) -> Expr<'arena, 'src> {
     debug_assert!(parser.current_kind().is_assignment_op());
     let span = parser.current_span();
+    let is_plain_assign = parser.current_kind() == TokenKind::Equals;
     // PHP rejects pre/post-increment/decrement as an assignment target at parse time.
     if matches!(
         lhs.kind,
@@ -1006,6 +1007,12 @@ fn parse_assign_continuation<'arena, 'src>(
             message: message.into(),
             span: lhs.span,
         });
+    } else if matches!(lhs.kind, ExprKind::Array(_)) && !is_plain_assign {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot use a destructuring pattern with a compound assignment operator"
+                .into(),
+            span,
+        });
     } else if !is_valid_assignment_target(&lhs.kind) {
         parser.error(ParseError::Forbidden {
             message: "Cannot use expression as assignment target.".into(),
@@ -1021,21 +1028,23 @@ fn parse_assign_continuation<'arena, 'src>(
         // This array is a destructuring target, so empty slots are legal here —
         // retract the eager "empty array element" errors emitted while parsing it.
         parser.retract_destructuring_errors_within(lhs.span);
-        check_list_entries(parser, &lhs);
-        // Each non-omitted element must itself be a writable target. PHP
-        // rejects e.g. `[null, $b] = …` and `list(1 + 1) = …` with
-        // "Assignments can only happen to writable values".
-        for el in elems.iter() {
-            if el.is_spread() {
-                parser.error(ParseError::Forbidden {
-                    message: "Spread operator is not supported in assignments".into(),
-                    span: el.span,
-                });
-            } else if !is_valid_destructure_element(&el.value().kind) {
-                parser.error(ParseError::Forbidden {
-                    message: "Assignments can only happen to writable values".into(),
-                    span: el.value().span,
-                });
+        if is_plain_assign {
+            check_list_entries(parser, &lhs);
+            // Each non-omitted element must itself be a writable target. PHP
+            // rejects e.g. `[null, $b] = …` and `list(1 + 1) = …` with
+            // "Assignments can only happen to writable values".
+            for el in elems.iter() {
+                if el.is_spread() {
+                    parser.error(ParseError::Forbidden {
+                        message: "Spread operator is not supported in assignments".into(),
+                        span: el.span,
+                    });
+                } else if !is_valid_destructure_element(&el.value().kind) {
+                    parser.error(ParseError::Forbidden {
+                        message: "Assignments can only happen to writable values".into(),
+                        span: el.value().span,
+                    });
+                }
             }
         }
     }
