@@ -1596,11 +1596,15 @@ fn parse_closure_use_list<'arena, 'src>(
 ) -> ArenaVec<'arena, ClosureUseVar<'src>> {
     let mut vars = parser.alloc_vec_with_capacity(2);
     loop {
-        if parser.check(TokenKind::RightParen) {
+        // Only a trailing comma may precede `)`; the list itself must not be empty.
+        if parser.check(TokenKind::RightParen) && !vars.is_empty() {
             break;
         }
         let var_start = parser.start_span();
         let by_ref = parser.eat(TokenKind::Ampersand).is_some();
+        if !parser.check(TokenKind::Variable) {
+            parser.error_expected("variable");
+        }
         if let Some(token) = parser.eat(TokenKind::Variable) {
             let name = parser.variable_ident(token);
             let span = Span::new(var_start, token.span.end);
