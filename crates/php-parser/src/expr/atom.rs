@@ -1561,7 +1561,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
     let saved_has_yield = std::mem::take(&mut parser.has_yield);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
-        body_stmts.push(stmt::parse_stmt(parser));
+        stmt::push_stmt(parser, &mut body_stmts);
         if parser.current_span() == span_before {
             parser.advance();
         }

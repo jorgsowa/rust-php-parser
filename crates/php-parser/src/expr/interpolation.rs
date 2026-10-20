@@ -980,8 +980,12 @@ fn parse_dollar_brace<'arena, 'src>(
             }
         }
     }
+    // Whitespace may separate the closing `]` from the `}`.
+    let bracket_end = text[..close]
+        .trim_end_matches([' ', '\t', '\n', '\r'])
+        .len();
     let is_name = name_end > content_start
-        && (name_end == close || (bytes[name_end] == b'[' && bytes[close - 1] == b']'));
+        && (name_end == close || (bytes[name_end] == b'[' && bytes[bracket_end - 1] == b']'));
     if !is_name {
         let empty = text[content_start..close].trim().is_empty();
         if empty {
@@ -1005,14 +1009,14 @@ fn parse_dollar_brace<'arena, 'src>(
     if name_end == close {
         return (var, after);
     }
-    let empty = text[name_end + 1..close - 1].trim().is_empty();
+    let empty = text[name_end + 1..bracket_end - 1].trim().is_empty();
     if empty {
         errors.push(ParseError::Forbidden {
             message: "empty index in string interpolation".into(),
             span: Span::new(offset + name_end as u32, offset + close as u32),
         });
     }
-    let index = sub_expr(name_end + 1, close - 1, !empty, errors);
+    let index = sub_expr(name_end + 1, bracket_end - 1, !empty, errors);
     let expr = Expr {
         kind: ExprKind::ArrayAccess(ArrayAccessExpr {
             array: arena.alloc(var),

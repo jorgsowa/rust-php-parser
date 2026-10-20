@@ -69,13 +69,6 @@ function page() {
               }
             },
             {
-              "kind": "Nop",
-              "span": {
-                "start": 62,
-                "end": 65
-              }
-            },
-            {
               "kind": {
                 "Expression": {
                   "kind": {
@@ -119,13 +112,6 @@ function page() {
               "span": {
                 "start": 75,
                 "end": 84
-              }
-            },
-            {
-              "kind": "Nop",
-              "span": {
-                "start": 94,
-                "end": 98
               }
             },
             {

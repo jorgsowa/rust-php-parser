@@ -39,13 +39,6 @@
                   }
                 },
                 {
-                  "kind": "Nop",
-                  "span": {
-                    "start": 47,
-                    "end": 52
-                  }
-                },
-                {
                   "kind": {
                     "Break": null
                   },
@@ -61,13 +54,6 @@
                   "span": {
                     "start": 56,
                     "end": 57
-                  }
-                },
-                {
-                  "kind": "Nop",
-                  "span": {
-                    "start": 63,
-                    "end": 72
                   }
                 }
               ],

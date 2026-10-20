@@ -60,7 +60,7 @@ Hi!
     },
     {
       "kind": {
-        "HaltCompiler": "\nHi!"
+        "HaltCompiler": "Hi!"
       },
       "span": {
         "start": 39,

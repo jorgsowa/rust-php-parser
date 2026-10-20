@@ -43,13 +43,6 @@
                         "start": 33,
                         "end": 34
                       }
-                    },
-                    {
-                      "kind": "Nop",
-                      "span": {
-                        "start": 40,
-                        "end": 41
-                      }
                     }
                   ],
                   "attributes": []

@@ -15,13 +15,6 @@
                 "start": 14,
                 "end": 15
               }
-            },
-            {
-              "kind": "Nop",
-              "span": {
-                "start": 21,
-                "end": 22
-              }
             }
           ],
           "catches": [

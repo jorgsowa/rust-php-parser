@@ -1,7 +1,11 @@
 ===source===
 <?php function test(int $x { }
 ===errors >=7.4===
+Cannot declare promoted property outside a constructor
+Property hook list must not be empty
 expected ')' to close the delimiter opened at byte 19
+expected '{', found end of file
+expected '}' to close the delimiter opened at byte 30
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '{', expecting ')' in Standard input code on line 1
 ===php_error 8.0-8.3===

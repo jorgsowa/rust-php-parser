@@ -35,13 +35,6 @@
                           "start": 26,
                           "end": 27
                         }
-                      },
-                      {
-                        "kind": "Nop",
-                        "span": {
-                          "start": 33,
-                          "end": 34
-                        }
                       }
                     ],
                     "attributes": []

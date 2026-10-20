@@ -38,13 +38,6 @@ switch ($a) { case 1 ?>x<?php break; }
                   }
                 },
                 {
-                  "kind": "Nop",
-                  "span": {
-                    "start": 36,
-                    "end": 41
-                  }
-                },
-                {
                   "kind": {
                     "Break": null
                   },

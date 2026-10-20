@@ -27,7 +27,7 @@ Hallo World!
     },
     {
       "kind": {
-        "HaltCompiler": "\nHallo World!"
+        "HaltCompiler": "Hallo World!"
       },
       "span": {
         "start": 11,

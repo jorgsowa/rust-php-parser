@@ -69,13 +69,6 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                               "start": 43,
                               "end": 44
                             }
-                          },
-                          {
-                            "kind": "Nop",
-                            "span": {
-                              "start": 50,
-                              "end": 51
-                            }
                           }
                         ]
                       },

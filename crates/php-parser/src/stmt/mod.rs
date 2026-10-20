@@ -15,6 +15,18 @@ mod trait_use;
 pub(crate) use class::validate_class_ref;
 pub use class::{check_readonly_class_members, parse_class_members, parse_name_list};
 
+/// Push the next statement; a bare `<?php` reopening after inline HTML is skipped, not a `Nop`.
+pub(crate) fn push_stmt<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    stmts: &mut ArenaVec<'arena, Stmt<'arena, 'src>>,
+) {
+    if parser.check(TokenKind::OpenTag) && parser.current_text() != "<?=" {
+        parser.advance();
+        return;
+    }
+    stmts.push(parse_stmt(parser));
+}
+
 /// Parse a single statement.
 ///
 /// # Stack depth
@@ -641,7 +653,7 @@ pub fn parse_block<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             continue;
         }
         let span_before = parser.current_span();
-        stmts.push(parse_stmt(parser));
+        push_stmt(parser, &mut stmts);
         if parser.current_span() == span_before {
             parser.advance();
         }
@@ -698,7 +710,7 @@ fn parse_stmts_until_end<'arena, 'src>(
             continue;
         }
         let span_before = parser.current_span();
-        stmts.push(parse_stmt(parser));
+        push_stmt(parser, &mut stmts);
         if parser.current_span() == span_before {
             parser.advance();
         }
@@ -1225,7 +1237,7 @@ fn parse_function<'arena, 'src>(
     let saved_has_yield = std::mem::take(&mut parser.has_yield);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
-        body_stmts.push(parse_stmt(parser));
+        push_stmt(parser, &mut body_stmts);
         if parser.current_span() == span_before {
             parser.advance();
         }
@@ -1702,7 +1714,12 @@ pub fn parse_param_list<'arena, 'src>(
         let starts_hooks = parser.check(TokenKind::LeftBrace)
             && (first_modifier_span.is_some()
                 || match parser.peek_kind() {
-                    Some(TokenKind::Ampersand | TokenKind::HashBracket | TokenKind::Final) => true,
+                    Some(
+                        TokenKind::Ampersand
+                        | TokenKind::HashBracket
+                        | TokenKind::Final
+                        | TokenKind::RightBrace,
+                    ) => true,
                     Some(TokenKind::Identifier) => parser.peek_text().is_some_and(|t| {
                         t.eq_ignore_ascii_case("get") || t.eq_ignore_ascii_case("set")
                     }),
@@ -2068,7 +2085,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
             && !parser.check(TokenKind::Eof)
         {
             let span_before = parser.current_span();
-            body.push(parse_stmt(parser));
+            push_stmt(parser, &mut body);
             if parser.current_span() == span_before {
                 parser.advance();
             }
@@ -2136,7 +2153,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
     let mut body_stmts = parser.alloc_vec_with_capacity(16);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
-        body_stmts.push(parse_stmt(parser));
+        push_stmt(parser, &mut body_stmts);
         if parser.current_span() == span_before {
             parser.advance();
         }
@@ -2200,7 +2217,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         let mut catch_body_stmts = parser.alloc_vec_with_capacity(8);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
-            catch_body_stmts.push(parse_stmt(parser));
+            push_stmt(parser, &mut catch_body_stmts);
             if parser.current_span() == span_before {
                 parser.advance();
             }
@@ -2232,7 +2249,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         let saved_finally_loop_depth = parser.finally_loop_depth.replace(parser.loop_depth);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
-            finally_stmts.push(parse_stmt(parser));
+            push_stmt(parser, &mut finally_stmts);
             if parser.current_span() == span_before {
                 parser.advance();
             }
@@ -2676,7 +2693,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         let saved_imports = std::mem::take(&mut parser.class_imports);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
-            stmts.push(parse_stmt(parser));
+            push_stmt(parser, &mut stmts);
             if parser.current_span() == span_before {
                 parser.advance();
             }
@@ -2718,7 +2735,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         let saved_imports = std::mem::take(&mut parser.class_imports);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
-            stmts.push(parse_stmt(parser));
+            push_stmt(parser, &mut stmts);
             if parser.current_span() == span_before {
                 parser.advance();
             }
@@ -3040,10 +3057,11 @@ fn parse_halt_compiler<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> St
     parser.advance(); // consume '__halt_compiler'
     parser.expect(TokenKind::LeftParen);
     parser.expect(TokenKind::RightParen);
+    let closed_by_tag = parser.check(TokenKind::CloseTag);
     // Accept either ; or ?> as terminator
     if parser.check(TokenKind::Semicolon) {
         parser.advance();
-    } else if parser.check(TokenKind::CloseTag) {
+    } else if closed_by_tag {
         parser.advance(); // consume ?> — everything after is raw data
     } else {
         parser.error(ParseError::ExpectedAfter {
@@ -3055,7 +3073,15 @@ fn parse_halt_compiler<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> St
 
     // Everything after the terminator is raw data. Use previous_end() to capture
     // the position right after the terminator, preserving any whitespace.
-    let current_pos = parser.previous_end() as usize;
+    let mut current_pos = parser.previous_end() as usize;
+    if closed_by_tag {
+        let rest = &parser.source.as_bytes()[current_pos..];
+        current_pos += if rest.starts_with(b"\r\n") {
+            2
+        } else {
+            usize::from(rest.starts_with(b"\n"))
+        };
+    }
     let remaining = &parser.source[current_pos..];
 
     // Advance to EOF so the parser stops

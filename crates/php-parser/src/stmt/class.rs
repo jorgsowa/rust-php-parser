@@ -345,7 +345,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
             let mut stmts = parser.alloc_vec_with_capacity(8);
             while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
                 let span_before = parser.current_span();
-                stmts.push(super::parse_stmt(parser));
+                super::push_stmt(parser, &mut stmts);
                 if parser.current_span() == span_before {
                     parser.advance();
                 }
@@ -1546,7 +1546,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
         let saved_has_yield = std::mem::take(&mut parser.has_yield);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
-            stmts.push(super::parse_stmt(parser));
+            super::push_stmt(parser, &mut stmts);
             if parser.current_span() == span_before {
                 parser.advance();
             }

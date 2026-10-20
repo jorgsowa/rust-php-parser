@@ -62,13 +62,6 @@ PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code
                         "start": 47,
                         "end": 48
                       }
-                    },
-                    {
-                      "kind": "Nop",
-                      "span": {
-                        "start": 54,
-                        "end": 55
-                      }
                     }
                   ],
                   "attributes": []

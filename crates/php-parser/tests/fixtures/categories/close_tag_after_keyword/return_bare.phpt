@@ -32,13 +32,6 @@
                 "start": 30,
                 "end": 31
               }
-            },
-            {
-              "kind": "Nop",
-              "span": {
-                "start": 37,
-                "end": 38
-              }
             }
           ],
           "return_type": null,

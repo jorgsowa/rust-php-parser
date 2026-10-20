@@ -89,13 +89,6 @@ function tmpl() {
               }
             },
             {
-              "kind": "Nop",
-              "span": {
-                "start": 73,
-                "end": 76
-              }
-            },
-            {
               "kind": {
                 "Expression": {
                   "kind": {
