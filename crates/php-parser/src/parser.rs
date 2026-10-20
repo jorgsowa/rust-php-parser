@@ -1733,7 +1733,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
                 let mut end = first.span.end;
                 let mut types = self.alloc_vec_one(first);
-                while self.eat(TokenKind::Ampersand).is_some() {
+                while self.check(TokenKind::Ampersand)
+                    && self.peek_kind().is_some_and(starts_intersection_member)
+                {
+                    self.advance();
                     let t = self.parse_simple_type();
                     end = t.span.end;
                     types.push(t);
