@@ -130,6 +130,18 @@ fn is_ident_continue(b: u8) -> bool {
     IS_IDENT_CONTINUE[b as usize]
 }
 
+/// Length of the heredoc label (`[A-Za-z_\x80-\xff][A-Za-z0-9_\x80-\xff]*`) at the start of `s`.
+fn label_len(s: &str) -> usize {
+    let bytes = s.as_bytes();
+    if !bytes.first().copied().is_some_and(is_ident_start) {
+        return 0;
+    }
+    1 + bytes[1..]
+        .iter()
+        .take_while(|b| is_ident_continue(**b))
+        .count()
+}
+
 /// Scan past a balanced `{ ... }` that starts at `p` (pointing at `{`).
 /// Used to skip `{$...}` and `${...}` interpolation inside double-quoted strings and
 /// heredocs, where the expression body may itself contain nested strings.
@@ -1316,11 +1328,16 @@ impl<'src> Lexer<'src> {
         let (label, is_nowdoc, label_line_end);
         if let Some(after_quote) = after_arrows_trimmed.strip_prefix('\'') {
             // Nowdoc: <<<'LABEL'
-            let closing = after_quote.find('\'')?;
+            let closing = label_len(after_quote);
+            if after_quote.as_bytes().get(closing) != Some(&b'\'') {
+                return None;
+            }
             label = &after_quote[..closing];
             is_nowdoc = true;
             let after_label = &after_arrows_trimmed[2 + closing..];
-            // Find end of line
+            if !(after_label.starts_with('\n') || after_label.starts_with("\r\n")) {
+                return None;
+            }
             let nl = after_label.find('\n').unwrap_or(after_label.len());
             label_line_end = arrows_offset + 2 + closing + nl;
             if label_line_end < remaining.len() {
@@ -1329,20 +1346,21 @@ impl<'src> Lexer<'src> {
         } else {
             // Heredoc: <<<LABEL or <<<"LABEL"
             let s = if let Some(after_dquote) = after_arrows_trimmed.strip_prefix('"') {
-                let closing = after_dquote.find('"')?;
+                let closing = label_len(after_dquote);
+                if after_dquote.as_bytes().get(closing) != Some(&b'"') {
+                    return None;
+                }
                 label = &after_dquote[..closing];
                 &after_dquote[1 + closing..]
             } else {
-                // Bare identifier
-                let end = after_arrows_trimmed
-                    .find(|c: char| !c.is_ascii_alphanumeric() && c != '_')
-                    .unwrap_or(after_arrows_trimmed.len());
-                if end == 0 {
-                    return None;
-                }
+                let end = label_len(after_arrows_trimmed);
                 label = &after_arrows_trimmed[..end];
                 &after_arrows_trimmed[end..]
             };
+            // PHP requires the newline right after the label.
+            if !(s.starts_with('\n') || s.starts_with("\r\n")) {
+                return None;
+            }
             is_nowdoc = false;
             let nl = s.find('\n').unwrap_or(s.len());
             label_line_end = arrows_offset + (after_arrows_trimmed.len() - s.len()) + nl;
