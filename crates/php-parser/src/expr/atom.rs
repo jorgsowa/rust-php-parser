@@ -571,6 +571,12 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 } else {
                     raw_body.to_string()
                 };
+                // Escapes never span lines, so the raw source gives exact error spans.
+                super::interpolation::check_heredoc_escapes(
+                    raw_body,
+                    body_offset,
+                    parser.errors_mut(),
+                );
                 let body_str = super::interpolation::process_heredoc_escapes(&de_indented);
                 let mut parts = parser.alloc_vec_with_capacity(1);
                 parts.push(StringPart::Literal(ByteStr::new_in(

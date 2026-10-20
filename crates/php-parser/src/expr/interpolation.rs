@@ -750,6 +750,29 @@ pub fn has_interpolation(inner: &str) -> bool {
     false
 }
 
+/// Report malformed escape sequences in the raw body of a heredoc without interpolation.
+pub fn check_heredoc_escapes(raw_body: &str, body_offset: u32, errors: &mut Vec<ParseError>) {
+    let bytes = raw_body.as_bytes();
+    let mut discarded = Vec::new();
+    let mut i = 0;
+    while i < bytes.len() {
+        if bytes[i] == b'\\' {
+            i = decode_escape_at(
+                bytes,
+                raw_body,
+                i,
+                &mut discarded,
+                errors,
+                body_offset,
+                false,
+            );
+            discarded.clear();
+        } else {
+            i += 1;
+        }
+    }
+}
+
 /// Process escape sequences in a heredoc string without interpolation.
 pub fn process_heredoc_escapes(inner: &str) -> Vec<u8> {
     let bytes = inner.as_bytes();

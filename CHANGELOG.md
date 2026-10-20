@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Invalid `\u{…}` escapes in a heredoc without interpolation were accepted (`php-rs-parser`).
 - A heredoc label starting with a digit (`<<<1X`) or followed by anything but a newline (`<<<X"`) was accepted; PHP lexes `<<` there (`php-lexer`).
 - `use namespace\A;` was accepted (`php-rs-parser`).
 - A trait alias with `static`, `abstract` or `readonly` (`T::a as static;`) or with neither a modifier nor a name (`a as;`) was accepted (`php-rs-parser`).
