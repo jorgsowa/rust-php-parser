@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `static` as an expression not followed by `::` (`$a = static;`) was accepted; `instanceof static` stays valid (`php-rs-parser`).
 - `foreach ($a as &[$b])` (a by-reference destructuring target) was accepted (`php-rs-parser`).
 - An empty closure `use` list, `use (&)` and `use ($a,,)` were accepted (`php-rs-parser`).
 - An abstract method in a class not declared abstract was accepted (`php-rs-parser`).

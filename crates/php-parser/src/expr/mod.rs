@@ -1719,7 +1719,17 @@ fn parse_expr_rest<'arena, 'src>(
                 (BinaryOp::BooleanOr | BinaryOp::LogicalOr, Some(truth)) => truth,
                 _ => false,
             };
-            let mut rhs = parse_expr_bp(parser, right_bp);
+            // `instanceof static` names the class; `static` is no expression on its own.
+            let instanceof_static = op == BinaryOp::Instanceof
+                && parser.check(TokenKind::Static)
+                && parser.peek_kind() != Some(TokenKind::DoubleColon);
+            let mut rhs = if instanceof_static {
+                let token = parser.advance();
+                parser.has_class_keyword_ref = true;
+                atom::simple_name_expr("static", token.span)
+            } else {
+                parse_expr_bp(parser, right_bp)
+            };
             if parser.current_kind().is_assignment_op() {
                 rhs = parse_assign_continuation(parser, rhs);
             }

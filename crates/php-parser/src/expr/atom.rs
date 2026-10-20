@@ -712,6 +712,12 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             if parser.check(TokenKind::Fn_) {
                 return parse_arrow_function(parser, true, token.span.start, parser.alloc_vec());
             }
+            if !parser.check(TokenKind::DoubleColon) {
+                parser.error(ParseError::Forbidden {
+                    message: "Cannot use 'static' as a standalone expression".into(),
+                    span: token.span,
+                });
+            }
             parser.has_class_keyword_ref = true;
             simple_name_expr("static", token.span)
         }
@@ -2618,7 +2624,7 @@ fn name_expr<'arena, 'src>(name: Name<'arena, 'src>) -> Expr<'arena, 'src> {
     Expr { kind, span }
 }
 
-fn simple_name_expr<'arena, 'src>(value: &'src str, span: Span) -> Expr<'arena, 'src> {
+pub(super) fn simple_name_expr<'arena, 'src>(value: &'src str, span: Span) -> Expr<'arena, 'src> {
     Expr {
         kind: ExprKind::Name(Name::Simple { value, span }),
         span,
