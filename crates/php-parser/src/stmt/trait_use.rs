@@ -149,11 +149,34 @@ fn parse_alias_rhs<'arena, 'src>(
         }
         _ => None,
     };
+    // Other member modifiers parse here but cannot apply to an alias.
+    let mut has_modifier = is_final || new_modifier.is_some();
+    if !has_modifier {
+        let message = match parser.current_kind() {
+            TokenKind::Static | TokenKind::Abstract => Some(format!(
+                "Cannot use \"{}\" as method modifier in trait alias",
+                parser.current_text().to_ascii_lowercase()
+            )),
+            TokenKind::Readonly => Some("Cannot use the readonly modifier on a method".into()),
+            _ => None,
+        };
+        if let Some(message) = message {
+            let span = parser.advance().span;
+            parser.error(ParseError::Forbidden {
+                message: message.into(),
+                span,
+            });
+            has_modifier = true;
+        }
+    }
 
-    // New name (optional if visibility was given)
+    // New name (optional if a modifier was given)
     let new_name = parser
         .eat_identifier_or_keyword()
         .map(|(text, span)| Name::Simple { value: text, span });
+    if new_name.is_none() && !has_modifier {
+        parser.error_expected("identifier");
+    }
 
     (new_modifier, is_final, new_name)
 }
