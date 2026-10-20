@@ -1,5 +1,5 @@
 ===description===
-PHP: "x" . ($a - 1).
+`"x" . $a - 1` parses as `"x" . ($a - 1)`: `-` binds tighter than `.`.
 ===source===
 <?php
 "x" . $a - 1;

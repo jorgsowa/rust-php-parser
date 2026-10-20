@@ -1,6 +1,5 @@
 ===description===
-PHP rejects __construct declaring a return type with
-"Method A::__construct() cannot declare a return type".
+PHP rejects a return type on __construct with "Method A::__construct() cannot declare a return type".
 ===source===
 <?php
 class A {

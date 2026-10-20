@@ -1,5 +1,5 @@
 ===description===
-PHP: (int)((string)$a). Casts stack right-associatively.
+`(int)(string)$a` parses as `(int)((string)$a)`: casts nest right to left.
 ===source===
 <?php
 (int)(string)$a;

@@ -1,5 +1,5 @@
 ===description===
-PHP: "a" . (1 << 3) . "b".
+`"a" . 1 << 3 . "b"` parses as `"a" . (1 << 3) . "b"`: `<<` binds tighter than `.`.
 ===source===
 <?php
 "a" . 1 << 3 . "b";

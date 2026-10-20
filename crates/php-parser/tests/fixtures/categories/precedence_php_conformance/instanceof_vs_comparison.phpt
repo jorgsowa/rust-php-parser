@@ -1,5 +1,5 @@
 ===description===
-PHP: ($a instanceof Foo) < 5. instanceof above comparison.
+`$a instanceof Foo < 5` parses as `($a instanceof Foo) < 5`: `instanceof` binds tighter than comparisons.
 ===source===
 <?php
 $a instanceof Foo < 5;

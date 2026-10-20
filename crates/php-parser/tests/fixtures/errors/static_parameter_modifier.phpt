@@ -1,8 +1,5 @@
 ===description===
-PHP rejects `static` as a parameter modifier with
-"Cannot use the static modifier on a parameter". Replaces the
-generic "expected variable, found identifier" diagnostic that the
-parser previously emitted when encountering `static` in this position.
+PHP rejects `static` on a parameter with "Cannot use the static modifier on a parameter".
 ===source===
 <?php
 class A {

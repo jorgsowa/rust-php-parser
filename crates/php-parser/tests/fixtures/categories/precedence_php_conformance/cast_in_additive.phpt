@@ -1,5 +1,5 @@
 ===description===
-PHP: ((int)$a) + ((string)$b). Casts bind to immediate operand.
+`(int)$a + (string)$b` parses as `((int)$a) + ((string)$b)`: casts bind to their immediate operand.
 ===source===
 <?php
 (int)$a + (string)$b;

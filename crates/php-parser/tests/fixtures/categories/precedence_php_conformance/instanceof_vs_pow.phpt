@@ -1,5 +1,5 @@
 ===description===
-PHP: ($a ** $b) instanceof Foo. ** is highest binary op.
+`$a ** $b instanceof Foo` parses as `($a ** $b) instanceof Foo`: `**` binds tighter than `instanceof`.
 ===source===
 <?php
 $a ** $b instanceof Foo;

@@ -1,5 +1,5 @@
 ===description===
-PHP: (!($a instanceof Foo)) && (!($b instanceof Bar)).
+`!$a instanceof Foo && !$b instanceof Bar` parses as `(!($a instanceof Foo)) && (!($b instanceof Bar))`.
 ===source===
 <?php
 !$a instanceof Foo && !$b instanceof Bar;

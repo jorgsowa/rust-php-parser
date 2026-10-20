@@ -1,5 +1,5 @@
 ===description===
-PHP: clone ($a->b). Member access has highest precedence after primary.
+`clone $a->b` parses as `clone ($a->b)`: member access binds tighter than `clone`.
 ===source===
 <?php
 clone $a->b;

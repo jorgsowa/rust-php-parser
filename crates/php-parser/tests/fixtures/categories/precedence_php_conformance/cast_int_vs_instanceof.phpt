@@ -1,5 +1,5 @@
 ===description===
-PHP: ((int)$a) instanceof Foo. Cast binds tighter than instanceof.
+`(int)$a instanceof Foo` parses as `((int)$a) instanceof Foo`: casts bind tighter than `instanceof`.
 ===source===
 <?php
 (int)$a instanceof Foo;

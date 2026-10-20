@@ -1,5 +1,5 @@
 ===description===
-PHP: 2 ** (3 ** 2) = 512. ** is right-associative.
+`2 ** 3 ** 2` parses as `2 ** (3 ** 2)` (`512`): `**` is right-associative.
 ===source===
 <?php
 2 ** 3 ** 2;

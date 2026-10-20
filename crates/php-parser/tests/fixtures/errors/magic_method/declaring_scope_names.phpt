@@ -1,5 +1,5 @@
 ===description===
-Messages name the declaring interface, trait, namespaced class or anonymous class.
+Magic method errors name the declaring interface, trait, enum, namespaced class or anonymous class.
 ===source===
 <?php
 namespace N;

@@ -1,5 +1,5 @@
 ===description===
-PHP: (1 + 2) . 3 = "33". + binds tighter than concat (currently same level, accidentally correct).
+`1 + 2 . 3` parses as `(1 + 2) . 3` (`"33"`): `+` binds tighter than `.`.
 ===source===
 <?php
 1 + 2 . 3;

@@ -1,5 +1,5 @@
 ===description===
-#[NoDiscard] on void or never functions, constructors and property hooks.
+PHP rejects #[NoDiscard] on void or never functions and methods and on constructors; the parser reports each one.
 ===source===
 <?php
 #[NoDiscard] function f(): void {}

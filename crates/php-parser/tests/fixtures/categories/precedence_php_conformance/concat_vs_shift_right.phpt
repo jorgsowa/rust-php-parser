@@ -1,5 +1,5 @@
 ===description===
-PHP: "x" . (16 >> 2).
+`"x" . 16 >> 2` parses as `"x" . (16 >> 2)`: `>>` binds tighter than `.`.
 ===source===
 <?php
 "x" . 16 >> 2;

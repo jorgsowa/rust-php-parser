@@ -1,10 +1,5 @@
 ===description===
-Regression test: a doc comment nested inside a statement's own parens/brackets
-(here, above a closure argument in a function call) must not leak forward and
-get attached to whichever statement is parsed next. Statements like this one
-close without ever opening a `{`/`}` scope of their own, so the doc-comment
-floor must also track the end of the last fully-parsed statement, not just
-scope braces.
+A doc comment inside a statement's call arguments belongs to that expression and is not attached to the next statement.
 ===source===
 <?php
 foo(/** @param T $x */ fn($x) => $x, $other);

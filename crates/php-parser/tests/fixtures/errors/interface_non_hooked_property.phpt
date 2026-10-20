@@ -1,7 +1,5 @@
 ===description===
-PHP 8.4 introduced hooked properties in interfaces. A plain (non-hooked)
-property declaration in an interface is rejected with "Interfaces may
-only include hooked properties".
+PHP rejects a property without hooks in an interface with "Interfaces may only include hooked properties".
 ===source===
 <?php
 interface I {

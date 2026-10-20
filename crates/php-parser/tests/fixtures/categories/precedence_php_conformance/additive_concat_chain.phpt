@@ -1,5 +1,5 @@
 ===description===
-PHP: ($a + $b) . ($c + $d). Diagnostic: + above .
+`$a + $b . $c + $d` parses as `($a + $b) . ($c + $d)`: `+` binds tighter than `.`.
 ===source===
 <?php
 $a + $b . $c + $d;

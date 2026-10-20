@@ -1,5 +1,5 @@
 ===description===
-PHP: ((bool)$a) instanceof Foo.
+`(bool)$a instanceof Foo` parses as `((bool)$a) instanceof Foo`: casts bind tighter than `instanceof`.
 ===source===
 <?php
 (bool)$a instanceof Foo;

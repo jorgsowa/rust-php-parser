@@ -1,6 +1,5 @@
 ===description===
-PHP rejects redeclared enum cases with
-"Cannot redefine class constant E::X". Detection is case-insensitive.
+PHP rejects a redeclared enum case, compared case-insensitively, with "Cannot redefine class constant E::X".
 ===source===
 <?php
 enum E {

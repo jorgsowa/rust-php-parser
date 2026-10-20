@@ -1,5 +1,5 @@
 ===description===
-PHP: (+$a) instanceof Foo.
+`+$a instanceof Foo` parses as `(+$a) instanceof Foo`: unary plus binds tighter than `instanceof`.
 ===source===
 <?php
 +$a instanceof Foo;

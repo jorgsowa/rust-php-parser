@@ -1,5 +1,5 @@
 ===description===
-PHP stops at the first violation; every independent violation of one method is reported.
+PHP stops at the first magic method violation; the parser reports every independent violation of each method.
 ===source===
 <?php
 class A {

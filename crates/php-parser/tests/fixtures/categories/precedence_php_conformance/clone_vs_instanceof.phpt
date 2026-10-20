@@ -1,5 +1,5 @@
 ===description===
-PHP: (clone $a) instanceof Box. clone binds tighter than instanceof (clone is highest non-primary).
+`clone $a instanceof Box` parses as `(clone $a) instanceof Box`: `clone` binds tighter than `instanceof`.
 ===source===
 <?php
 clone $a instanceof Box;

@@ -1,5 +1,5 @@
 ===description===
-Built-in attributes listed more than once on one declaration, in one group or several.
+PHP rejects a non-repeatable built-in attribute listed twice on one declaration, in one group or across groups; the parser reports each repeat.
 ===source===
 <?php
 #[Attribute] #[Attribute] class A {}

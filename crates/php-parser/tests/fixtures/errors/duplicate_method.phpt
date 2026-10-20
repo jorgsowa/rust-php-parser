@@ -1,6 +1,5 @@
 ===description===
-PHP rejects redeclared methods within the same class with
-"Cannot redeclare A::f()". Detection is case-insensitive.
+PHP rejects a method redeclared in the same class, compared case-insensitively, with "Cannot redeclare A::f()".
 ===source===
 <?php
 class A {

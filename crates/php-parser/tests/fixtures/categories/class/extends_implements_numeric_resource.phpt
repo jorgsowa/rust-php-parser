@@ -1,6 +1,5 @@
 ===description===
-`numeric`/`resource` are valid class/interface names, so they are also valid
-targets in extends/implements clauses. Exercises the validate_class_ref path.
+`numeric` and `resource` are valid class/interface names, so PHP also accepts them in extends and implements clauses.
 ===source===
 <?php
 class numeric {}

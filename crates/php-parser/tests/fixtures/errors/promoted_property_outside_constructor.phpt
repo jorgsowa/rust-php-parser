@@ -1,8 +1,5 @@
 ===description===
-PHP rejects promoted property modifiers on non-constructor parameters with
-"Cannot declare promoted property outside a constructor". The check fires
-when any of visibility, set-visibility, final, or readonly appears on a
-parameter outside __construct.
+PHP rejects visibility, set-visibility, final or readonly on a parameter outside __construct with "Cannot declare promoted property outside a constructor".
 ===source===
 <?php
 class A {

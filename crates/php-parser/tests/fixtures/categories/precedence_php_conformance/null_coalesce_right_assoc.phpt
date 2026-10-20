@@ -1,5 +1,5 @@
 ===description===
-PHP: $a ?? ($b ?? $c). Right-associative.
+`$a ?? $b ?? $c` parses as `$a ?? ($b ?? $c)`: `??` is right-associative.
 ===source===
 <?php
 $a ?? $b ?? $c;

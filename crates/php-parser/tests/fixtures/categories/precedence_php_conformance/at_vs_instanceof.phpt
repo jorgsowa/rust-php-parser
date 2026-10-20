@@ -1,5 +1,5 @@
 ===description===
-PHP: (@$a) instanceof Foo. @ is at the high unary tier (with ~ and casts), above instanceof.
+`@$a instanceof Foo` parses as `(@$a) instanceof Foo`: `@` binds tighter than `instanceof`.
 ===source===
 <?php
 @$a instanceof Foo;

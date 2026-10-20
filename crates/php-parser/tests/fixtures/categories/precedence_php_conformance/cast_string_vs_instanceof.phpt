@@ -1,5 +1,5 @@
 ===description===
-PHP: ((string)$a) instanceof Foo.
+`(string)$a instanceof Foo` parses as `((string)$a) instanceof Foo`: casts bind tighter than `instanceof`.
 ===source===
 <?php
 (string)$a instanceof Foo;

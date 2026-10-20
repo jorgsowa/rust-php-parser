@@ -1,5 +1,5 @@
 ===description===
-PHP: -(2 ** 3) = -8. ** binds tighter than unary minus.
+`-2 ** 3` parses as `-(2 ** 3)`: `**` binds tighter than unary minus.
 ===source===
 <?php
 -2 ** 3;

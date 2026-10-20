@@ -1,5 +1,5 @@
 ===description===
-PHP: (1 << 2) . "3" = "43". Shift binds tighter than concat.
+`1 << 2 . "3"` parses as `(1 << 2) . "3"` (`"43"`): `<<` binds tighter than `.`.
 ===source===
 <?php
 1 << 2 . "3";

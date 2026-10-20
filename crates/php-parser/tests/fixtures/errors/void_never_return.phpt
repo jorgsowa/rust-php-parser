@@ -1,11 +1,5 @@
 ===description===
-PHP rejects:
-- "A void function must not return a value" when a function declared `: void` has `return $expr;`
-- "A never-returning function must not return" when a function declared `: never` has any `return`
-
-The check walks the body through control-flow nesting (if/while/for/switch/try)
-but stops at nested function/closure/class declarations whose returns are
-attributed to their own scope.
+PHP rejects `return $expr` in a void function and any `return` in a never function, including inside nested control flow.
 ===source===
 <?php
 function v(): void { return 5; }

@@ -1,5 +1,5 @@
 ===description===
-PHP: !($a instanceof Foo). ! is BELOW instanceof (exception to unary tier).
+`!$a instanceof Foo` parses as `!($a instanceof Foo)`: unlike other unary operators, `!` binds looser than `instanceof`.
 ===source===
 <?php
 !$a instanceof Foo;

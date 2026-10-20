@@ -1,5 +1,5 @@
 ===description===
-A promoted constructor property redeclares a property of the same name (case-sensitive) declared before or after the constructor.
+PHP rejects a promoted property that redeclares a property (case-sensitive) declared before or after the constructor; the parser reports "Cannot redeclare".
 ===source===
 <?php
 class A {
