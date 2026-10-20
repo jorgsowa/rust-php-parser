@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Attributes after `new` before a class name (`new #[A] B`) were accepted; they are only valid before an anonymous class (`php-rs-parser`).
 - `class callable {}` was accepted (`php-rs-parser`).
 - `break` and `continue` with an operand other than an integer literal (`break $a;`, `break 1.5;`) were accepted (`php-rs-parser`).
 - `static` as an expression not followed by `::` (`$a = static;`) was accepted; `instanceof static` stays valid (`php-rs-parser`).

@@ -1260,6 +1260,10 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
     };
     let anon_readonly =
         parser.check(TokenKind::Readonly) && parser.peek_kind() == Some(TokenKind::Class);
+    if !anon_attributes.is_empty() && !parser.check(TokenKind::Class) && !anon_readonly {
+        // Attributes after `new` belong to an anonymous class only.
+        parser.error_expected("'class'");
+    }
     if parser.check(TokenKind::Class) || anon_readonly {
         if anon_readonly {
             parser.advance(); // consume 'readonly'
