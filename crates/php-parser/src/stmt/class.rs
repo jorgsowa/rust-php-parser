@@ -1148,6 +1148,15 @@ fn parse_class_const_member<'arena, 'src>(
             });
             parser.missing_ident()
         };
+        if const_name
+            .as_str()
+            .is_some_and(|name| name.eq_ignore_ascii_case("class"))
+        {
+            parser.error(ParseError::Forbidden {
+                message: "A class constant must not be called 'class'; it is reserved for class name fetching".into(),
+                span: const_name.span,
+            });
+        }
         if let (Some(ty), Some(name), true) =
             (&const_type, const_name.as_str(), const_items.is_empty())
         {

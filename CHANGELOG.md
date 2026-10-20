@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A class constant named `class` was accepted (`php-rs-parser`).
 - Attributes before a trait `use` (`#[A] use T;`) and a trait `use` in an interface were accepted (`php-rs-parser`).
 - A property without a modifier or `var` (`class A { $x; }`, `?int $x;`) was accepted (`php-rs-parser`).
 - A trailing `\` in a name (`namespace Foo\;`, `use X\;`, `foo\()`, `new Bar\`, `instanceof Bar\`, types, attributes) was silently dropped; it is only valid before a group `use` list (`php-rs-parser`).
