@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A `set` hook parameter that is by-reference, variadic or of a type incompatible with the property, and a generator `get` or `set` hook, were accepted (`php-rs-parser`).
 - Imports whose names differ only in case (`use A\B; use A\b;`, also functions and group `use`) were accepted; class and function import names compare case-insensitively, and duplicates use PHP's "Cannot use [function|const] X as Y because the name is already in use" (`php-rs-parser`).
 - `{$b[]}` in a string, heredoc or backtick string was accepted; PHP rejects `[]` for reading (`php-rs-parser`).
 - Invalid `\u{…}` escapes in a heredoc without interpolation were accepted (`php-rs-parser`).

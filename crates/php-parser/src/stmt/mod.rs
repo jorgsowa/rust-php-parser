@@ -1293,9 +1293,9 @@ pub(crate) fn is_never_type(rt: &TypeHint<'_, '_>) -> bool {
 }
 
 /// Report a generator whose return type does not admit `Generator`.
-pub(crate) fn check_generator_return_type<'arena, 'src>(
-    parser: &mut Parser<'arena, 'src>,
-    return_type: &TypeHint<'arena, 'src>,
+pub(crate) fn check_generator_return_type(
+    parser: &mut Parser<'_, '_>,
+    return_type: &TypeHint<'_, '_>,
 ) {
     let members = match &return_type.kind {
         TypeHintKind::Union(types) | TypeHintKind::Intersection(types) => &types[..],
@@ -1715,7 +1715,7 @@ pub fn parse_param_list<'arena, 'src>(
                     span: parser.current_span(),
                 });
             }
-            class::parse_property_hooks(parser)
+            class::parse_property_hooks(parser, type_hint.as_ref(), name.as_str())
         } else {
             parser.alloc_vec()
         };

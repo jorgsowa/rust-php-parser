@@ -178,9 +178,12 @@ pub fn parse_name_list<'arena, 'src>(
     names
 }
 
-/// Parse property hooks: `{ get { ... } set(Type $value) { ... } }`
+/// Parse property hooks: `{ get { ... } set(Type $value) { ... } }` of the property
+/// `property_name` with the declared `property_type`.
 pub(super) fn parse_property_hooks<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
+    property_type: Option<&TypeHint<'arena, 'src>>,
+    property_name: Option<&str>,
 ) -> ArenaVec<'arena, PropertyHook<'arena, 'src>> {
     let open = parser.expect(TokenKind::LeftBrace);
     let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
@@ -367,7 +370,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
         parser.function_depth -= 1;
         parser.by_ref_function = saved_by_ref;
         parser.static_vars = saved_static_vars;
-        parser.has_yield = saved_has_yield;
+        let is_generator = std::mem::replace(&mut parser.has_yield, saved_has_yield);
         parser.has_goto_or_label = saved_has_goto_or_label;
         parser.finally_loop_depth = saved_finally_loop_depth;
         parser.loop_depth = saved_loop_depth;
@@ -397,6 +400,15 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
 
         parser.check_attributes(&hook_attrs, &AttrSite::hook());
         let hook_span = Span::new(hook_start, parser.previous_end());
+        check_hook_signature(
+            parser,
+            kind,
+            &params,
+            is_generator,
+            hook_span,
+            property_type,
+            property_name,
+        );
         let mut hook_modifiers = Modifiers::new();
         hook_modifiers.is_final = is_final;
         hooks.push({
@@ -517,6 +529,126 @@ pub(super) fn check_virtual_set_visibility(
         .into(),
         span,
     });
+}
+
+/// The members of a type for comparing a set hook parameter with its property: a union's
+/// members, with `?T` as `T|null`.
+fn hook_type_members<'a, 'arena, 'src>(
+    ty: &'a TypeHint<'arena, 'src>,
+) -> Vec<&'a TypeHint<'arena, 'src>> {
+    match &ty.kind {
+        TypeHintKind::Nullable(inner) => vec![*inner, ty],
+        TypeHintKind::Union(types) => types.iter().collect(),
+        _ => vec![ty],
+    }
+}
+
+/// Whether PHP can tell at compile time that `param` accepts every value of `property`. Class
+/// types are assumed to be related, as PHP only checks them at inheritance.
+fn hook_param_accepts(
+    property: Option<&TypeHint<'_, '_>>,
+    param: Option<&TypeHint<'_, '_>>,
+) -> bool {
+    let (property, param) = match (property, param) {
+        (None, None) => return true,
+        (Some(property), Some(param)) => (property, param),
+        _ => return false,
+    };
+    let is_class = |ty: &TypeHint<'_, '_>| {
+        matches!(
+            ty.kind,
+            TypeHintKind::Named(_)
+                | TypeHintKind::Intersection(_)
+                | TypeHintKind::Keyword(
+                    BuiltinType::Self_ | BuiltinType::Parent_ | BuiltinType::Static,
+                    _
+                )
+        )
+    };
+    let builtin = |ty: &TypeHint<'_, '_>| match ty.kind {
+        TypeHintKind::Keyword(builtin, _) => Some(builtin),
+        // The `?T` entry of `hook_type_members` stands for `null`.
+        TypeHintKind::Nullable(_) => Some(BuiltinType::Null),
+        _ => None,
+    };
+    let accepted = hook_type_members(param);
+    if accepted
+        .iter()
+        .any(|q| builtin(q) == Some(BuiltinType::Mixed))
+    {
+        return true;
+    }
+    hook_type_members(property).iter().all(|p| {
+        accepted.iter().any(|q| match (builtin(p), builtin(q)) {
+            _ if is_class(p) => {
+                is_class(q)
+                    || matches!(
+                        builtin(q),
+                        Some(BuiltinType::Object | BuiltinType::Iterable)
+                    )
+            }
+            (Some(p), Some(q)) => {
+                p == q
+                    || q == BuiltinType::Bool && matches!(p, BuiltinType::True | BuiltinType::False)
+                    || q == BuiltinType::Iterable && p == BuiltinType::Array
+            }
+            _ => false,
+        })
+    })
+}
+
+/// Report a `set` hook parameter that is by-reference, variadic or of a type that does not
+/// accept the property's values, and a generator hook.
+fn check_hook_signature(
+    parser: &mut Parser<'_, '_>,
+    kind: PropertyHookKind,
+    params: &[Param<'_, '_>],
+    is_generator: bool,
+    hook_span: Span,
+    property_type: Option<&TypeHint<'_, '_>>,
+    property_name: Option<&str>,
+) {
+    let class_name = parser.class_scope.as_ref().map_or("", |scope| &scope.name);
+    let property = format!("{class_name}::${}", property_name.unwrap_or(""));
+    let mut messages = Vec::new();
+    if let (PropertyHookKind::Set, Some(param)) = (kind, params.first()) {
+        let name = param.name.as_str().unwrap_or("");
+        if param.by_ref {
+            messages.push((
+                format!("Parameter ${name} of set hook {property} must not be pass-by-reference"),
+                param.span,
+            ));
+        }
+        if param.variadic {
+            messages.push((
+                format!("Parameter ${name} of set hook {property} must not be variadic"),
+                param.span,
+            ));
+        }
+        if !hook_param_accepts(property_type, param.type_hint.as_ref()) {
+            messages.push((
+                format!("Type of parameter ${name} of hook {property}::set must be compatible with property type"),
+                param.span,
+            ));
+        }
+    }
+    for (message, span) in messages {
+        parser.error(ParseError::Forbidden {
+            message: message.into(),
+            span,
+        });
+    }
+    if is_generator {
+        match (kind, property_type) {
+            (PropertyHookKind::Get, Some(ty)) => super::check_generator_return_type(parser, ty),
+            (PropertyHookKind::Set, _) => parser.error(ParseError::Forbidden {
+                message: "Generator return type must be a supertype of Generator, void given"
+                    .into(),
+                span: hook_span,
+            }),
+            _ => {}
+        }
+    }
 }
 
 /// Report hook bodies that don't match whether the property is abstract; every hook of an
@@ -1815,7 +1947,7 @@ fn parse_property_member<'arena, 'src>(
     let hooks = if had_hooks_block {
         let span = parser.current_span();
         parser.require_version(PhpVersion::Php84, "property hooks", span);
-        parse_property_hooks(parser)
+        parse_property_hooks(parser, type_hint.as_ref(), prop_name.as_str())
     } else {
         parser.alloc_vec()
     };
@@ -1995,7 +2127,7 @@ fn parse_property_member<'arena, 'src>(
                     message: "cannot have hooks on comma-separated property".into(),
                     span: parser.current_span(),
                 });
-                parse_property_hooks(parser)
+                parse_property_hooks(parser, None, pname.as_str())
             } else {
                 parser.alloc_vec()
             };
