@@ -21,6 +21,7 @@ enum E {
     function f() { return parent::X; }
 }
 ===errors===
+Cannot use int as value for class constant A::C of type parent
 Cannot use "parent" when current class scope has no parent
 Cannot use "parent" when current class scope has no parent
 Cannot use "parent" when current class scope has no parent

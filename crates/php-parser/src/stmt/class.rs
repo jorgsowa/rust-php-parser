@@ -1093,6 +1093,78 @@ pub(super) fn const_modifiers_of(visibility: Option<Visibility>, is_final: bool)
     modifiers
 }
 
+/// PHP's type name for a literal constant value; `None` for anything it evaluates later.
+fn literal_value_type(value: &Expr<'_, '_>) -> Option<&'static str> {
+    match &value.kind {
+        ExprKind::Int(_) => Some("int"),
+        ExprKind::Float(_) => Some("float"),
+        ExprKind::String(_) | ExprKind::Nowdoc { .. } => Some("string"),
+        ExprKind::Bool(_) => Some("bool"),
+        ExprKind::Null => Some("null"),
+        ExprKind::UnaryPrefix(u) if matches!(u.op, UnaryPrefixOp::Negate | UnaryPrefixOp::Plus) => {
+            literal_value_type(u.operand).filter(|t| matches!(*t, "int" | "float"))
+        }
+        _ => None,
+    }
+}
+
+fn type_accepts_literal(ty: &TypeHint<'_, '_>, value: &Expr<'_, '_>, value_type: &str) -> bool {
+    match &ty.kind {
+        TypeHintKind::Nullable(inner) => {
+            value_type == "null" || type_accepts_literal(inner, value, value_type)
+        }
+        TypeHintKind::Union(types) => types
+            .iter()
+            .any(|t| type_accepts_literal(t, value, value_type)),
+        TypeHintKind::Keyword(builtin, _) => match builtin {
+            BuiltinType::Mixed => true,
+            BuiltinType::Int => value_type == "int",
+            BuiltinType::Float => matches!(value_type, "int" | "float"),
+            BuiltinType::String => value_type == "string",
+            BuiltinType::Bool => value_type == "bool",
+            BuiltinType::True => matches!(value.kind, ExprKind::Bool(true)),
+            BuiltinType::False => matches!(value.kind, ExprKind::Bool(false)),
+            BuiltinType::Null => value_type == "null",
+            _ => false,
+        },
+        _ => false,
+    }
+}
+
+/// Report a literal value that a typed class constant's type does not accept.
+fn check_typed_const_value(
+    parser: &mut Parser<'_, '_>,
+    ty: &TypeHint<'_, '_>,
+    name: &str,
+    value: &Expr<'_, '_>,
+) {
+    let Some(value_type) = literal_value_type(value) else {
+        return;
+    };
+    // These types are reported on their own; a class constant cannot have them.
+    if matches!(
+        ty.kind,
+        TypeHintKind::Keyword(
+            BuiltinType::Void | BuiltinType::Never | BuiltinType::Callable,
+            _
+        )
+    ) {
+        return;
+    }
+    if type_accepts_literal(ty, value, value_type) {
+        return;
+    }
+    let class_name = parser.class_scope.as_ref().map_or("", |scope| &scope.name);
+    let message = format!(
+        "Cannot use {value_type} as value for class constant {class_name}::{name} of type {}",
+        parser.type_display(ty)
+    );
+    parser.error(ParseError::Forbidden {
+        message: message.into(),
+        span: value.span,
+    });
+}
+
 fn parse_class_const_member<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     members: &mut ArenaVec<'arena, ClassMember<'arena, 'src>>,
@@ -1165,6 +1237,9 @@ fn parse_class_const_member<'arena, 'src>(
         parser.expect(TokenKind::Equals);
         let value = expr::parse_expr(parser);
         expr::check_const_expr(parser, &value, false);
+        if let (Some(ty), Some(name)) = (&const_type, const_name.as_str()) {
+            check_typed_const_value(parser, ty, name, &value);
+        }
         const_items.push((const_name, value));
         if parser.eat(TokenKind::Comma).is_none() {
             break;
