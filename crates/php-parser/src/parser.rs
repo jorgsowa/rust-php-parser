@@ -2500,7 +2500,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
 
         // Pass 3: duplicate `use` alias detection (per UseKind scope, per top-level / per
-        // braced namespace body).
+        // braced namespace body), within and across statements.
         self.validate_use_scope(stmts, true);
         for stmt in stmts {
             if let StmtKind::Namespace(decl) = stmt.kind {
@@ -2512,19 +2512,16 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     }
 
     fn validate_use_scope(&mut self, stmts: &[Stmt<'arena, 'src>], top_level: bool) {
-        use std::collections::HashSet;
-        // Intra-statement duplicates (incl. group-use) are caught at parse time
-        // in `parse_use_items`; this pass closes the cross-statement gap.
-        let mut seen: HashSet<(u8, &'src str)> = HashSet::new();
+        use php_ast::UseKind;
+        // Class and function names are case-insensitive, constant names are not.
+        let mut seen: std::collections::HashSet<(u8, String)> = std::collections::HashSet::new();
 
         for stmt in stmts {
             // For top-level calls, track when we enter an unbraced namespace.
             if top_level {
                 if let StmtKind::Namespace(decl) = stmt.kind {
                     if matches!(decl.body, php_ast::NamespaceBody::Simple) {
-                        // Each unbraced `namespace X;` opens a fresh import scope;
-                        // names imported in a previous namespace do not collide
-                        // with the same import here.
+                        // Each unbraced `namespace X;` opens a fresh import scope.
                         seen.clear();
                     }
                     continue;
@@ -2534,50 +2531,34 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             let StmtKind::Use(decl) = &stmt.kind else {
                 continue;
             };
-            let mut added_this_stmt: HashSet<(u8, &'src str)> = HashSet::new();
             for item in decl.uses.iter() {
                 let item_kind = item.kind.unwrap_or(decl.kind);
-                let kind_tag: u8 = match item_kind {
-                    php_ast::UseKind::Normal => 0,
-                    php_ast::UseKind::Function => 1,
-                    php_ast::UseKind::Const => 2,
-                    _ => 3,
-                };
                 let parts = item.name.parts_slice();
-                let effective_alias = item
+                let alias = item
                     .alias
                     .and_then(|a| a.as_str())
                     .unwrap_or_else(|| parts.last().copied().unwrap_or(""));
-                if !effective_alias.is_empty()
-                    && seen.contains(&(kind_tag, effective_alias))
-                    && added_this_stmt.insert((kind_tag, effective_alias))
-                {
-                    let full = item.name.join_parts();
+                if alias.is_empty() {
+                    continue;
+                }
+                let key = match item_kind {
+                    UseKind::Const => alias.to_string(),
+                    _ => alias.to_ascii_lowercase(),
+                };
+                if !seen.insert((item_kind as u8, key)) {
+                    let prefix = match item_kind {
+                        UseKind::Function => "function ",
+                        UseKind::Const => "const ",
+                        _ => "",
+                    };
                     self.error(ParseError::Forbidden {
                         message: format!(
-                            "Cannot use {} as {} because the name is already in use",
-                            full, effective_alias
+                            "Cannot use {prefix}{} as {alias} because the name is already in use",
+                            parts.join("\\")
                         )
                         .into(),
                         span: item.span,
                     });
-                }
-            }
-            for item in decl.uses.iter() {
-                let item_kind = item.kind.unwrap_or(decl.kind);
-                let kind_tag: u8 = match item_kind {
-                    php_ast::UseKind::Normal => 0,
-                    php_ast::UseKind::Function => 1,
-                    php_ast::UseKind::Const => 2,
-                    _ => 3,
-                };
-                let parts = item.name.parts_slice();
-                let effective_alias = item
-                    .alias
-                    .and_then(|a| a.as_str())
-                    .unwrap_or_else(|| parts.last().copied().unwrap_or(""));
-                if !effective_alias.is_empty() {
-                    seen.insert((kind_tag, effective_alias));
                 }
             }
         }

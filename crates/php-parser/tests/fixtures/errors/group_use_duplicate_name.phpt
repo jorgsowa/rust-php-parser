@@ -1,7 +1,7 @@
 ===source===
 <?php use A\{Foo, Foo};
 ===errors===
-cannot import A\Foo as Foo because the name is already in use
+Cannot use A\Foo as Foo because the name is already in use
 ===php_error===
 PHP Fatal error:  Cannot use A\Foo as Foo because the name is already in use in Standard input code on line 1
 ===ast===

@@ -9,8 +9,8 @@ use A\B\{C\D, function b\c, const D};
 ===errors===
 Cannot use A\B\C\D as D because the name is already in use
 Cannot use A\B\C\D as D because the name is already in use
-Cannot use A\B\b\c as c because the name is already in use
-Cannot use A\B\D as D because the name is already in use
+Cannot use function A\B\b\c as c because the name is already in use
+Cannot use const A\B\D as D because the name is already in use
 ===php_error===
 PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in Standard input code on line 4
 ===ast===

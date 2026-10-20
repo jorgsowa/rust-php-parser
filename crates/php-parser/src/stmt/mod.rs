@@ -2803,11 +2803,6 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             });
         }
         let prefix_parts = first_name.parts_slice();
-        // Track seen local names per UseKind — PHP allows e.g. `Normal D` and `Const D`
-        // to coexist, but rejects two `Normal D` items within the same group.
-        let mut seen_normal: std::collections::HashSet<&str> = std::collections::HashSet::new();
-        let mut seen_function: std::collections::HashSet<&str> = std::collections::HashSet::new();
-        let mut seen_const: std::collections::HashSet<&str> = std::collections::HashSet::new();
         loop {
             if parser.check(TokenKind::RightBrace) {
                 break;
@@ -2847,9 +2842,6 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                 });
             }
 
-            // Save the last segment before sub_name is moved into combined_parts.
-            let sub_last_part = sub_name.parts_slice().last().copied().unwrap_or("");
-
             // Combine prefix with sub-name
             let combined_parts = {
                 let sub_slice = sub_name.parts_slice();
@@ -2882,25 +2874,6 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             let alias = parse_use_alias(parser);
 
             let use_span = Span::new(sub_start, parser.previous_end());
-            let local_name = alias.and_then(|a| a.as_str()).unwrap_or(sub_last_part);
-            let effective_kind = item_kind.unwrap_or(kind);
-            let seen = match effective_kind {
-                UseKind::Normal => Some(&mut seen_normal),
-                UseKind::Function => Some(&mut seen_function),
-                UseKind::Const => Some(&mut seen_const),
-                _ => None,
-            };
-            if !local_name.is_empty() && seen.is_some_and(|seen| !seen.insert(local_name)) {
-                parser.error(ParseError::Forbidden {
-                    message: format!(
-                        "cannot import {} as {} because the name is already in use",
-                        combined_name.parts_slice().join("\\"),
-                        local_name
-                    )
-                    .into(),
-                    span: use_span,
-                });
-            }
             uses.push(UseItem {
                 name: combined_name,
                 alias,
