@@ -207,8 +207,8 @@ fn parse_results_can_be_stored_in_hashmap() {
 
     let fixtures = [
         "categories/class/anon_class_full.phpt",
-        "enum_basic.phpt",
-        "heredoc_with_complex_interpolation.phpt",
+        "categories/enum/enum_basic.phpt",
+        "categories/heredoc/heredoc_with_complex_interpolation.phpt",
     ];
 
     let cache: HashMap<PathBuf, php_rs_parser::ParseResult> = fixtures
