@@ -1896,6 +1896,13 @@ fn skip_empty_php_break(parser: &mut Parser<'_, '_>) -> bool {
     true
 }
 
+/// `:` or `;` after a case label; `?>` also acts as the `;` and stays for the case body.
+fn expect_case_separator(parser: &mut Parser<'_, '_>) {
+    if parser.eat(TokenKind::Colon).is_none() && !parser.check(TokenKind::CloseTag) {
+        parser.expect(TokenKind::Semicolon);
+    }
+}
+
 fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     instrument::record_parse_switch();
 
@@ -1940,9 +1947,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
         let case_start = parser.start_span();
         let value = if parser.eat(TokenKind::Case).is_some() {
             let v = expr::parse_expr(parser);
-            if parser.eat(TokenKind::Colon).is_none() {
-                parser.expect(TokenKind::Semicolon);
-            }
+            expect_case_separator(parser);
             Some(v)
         } else if let Some(default_tok) = parser.eat(TokenKind::Default) {
             // PHP rejects "Switch statements may only contain one default clause".
@@ -1954,9 +1959,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
             } else {
                 seen_default_span = Some(default_tok.span);
             }
-            if parser.eat(TokenKind::Colon).is_none() {
-                parser.expect(TokenKind::Semicolon);
-            }
+            expect_case_separator(parser);
             None
         } else {
             break;
