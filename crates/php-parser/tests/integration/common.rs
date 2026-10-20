@@ -325,8 +325,10 @@ impl Fixture {
                 Some(spec) => out.push_str(&format!("==={} {spec}===\n", s.name)),
                 None => out.push_str(&format!("==={}===\n", s.name)),
             }
-            out.push_str(&s.body);
-            out.push('\n');
+            if !s.body.is_empty() {
+                out.push_str(&s.body);
+                out.push('\n');
+            }
         }
         out
     }
