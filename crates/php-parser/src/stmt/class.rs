@@ -569,8 +569,24 @@ pub fn parse_class_members<'arena, 'src>(
         let member_attrs = parser.parse_attributes();
 
         if parser.check(TokenKind::Use) {
-            let _ = member_attrs;
-            members.push(parse_trait_use_member(parser, member_start));
+            if !member_attrs.is_empty() {
+                parser.error_expected("'function' or 'const'");
+            }
+            let member = parse_trait_use_member(parser, member_start);
+            if let (true, ClassMemberKind::TraitUse(decl)) = (in_interface, &member.kind) {
+                if let Some(first) = decl.traits.first() {
+                    let message = format!(
+                        "Cannot use traits inside of interfaces. {} is used in {}",
+                        parser.resolve_class_name(first),
+                        parser.class_scope.as_ref().map_or("", |scope| &scope.name)
+                    );
+                    parser.error(ParseError::Forbidden {
+                        message: message.into(),
+                        span: member.span,
+                    });
+                }
+            }
+            members.push(member);
             continue;
         }
 

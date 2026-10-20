@@ -80,6 +80,9 @@ pub(super) fn parse_enum<'arena, 'src>(
 
         // Trait use
         if parser.check(TokenKind::Use) {
+            if !member_attrs.is_empty() {
+                parser.error_expected("'function' or 'const'");
+            }
             let decl = super::class::parse_trait_use_decl(parser, member_start);
             let span = Span::new(member_start, parser.previous_end());
             members.push(EnumMember {
