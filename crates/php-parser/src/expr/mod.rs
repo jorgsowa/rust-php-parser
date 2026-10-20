@@ -223,6 +223,7 @@ fn check_dereferencable(parser: &mut Parser<'_, '_>, lhs: &Expr<'_, '_>, op: Tok
         ExprKind::Array(_) => {
             op != TokenKind::DoubleColon && !is_list_syntax(parser.source(), lhs.span)
         }
+        ExprKind::MagicConst(_) => !matches!(op, TokenKind::DoubleColon | TokenKind::LeftParen),
         _ => true,
     };
     if !dereferencable {
