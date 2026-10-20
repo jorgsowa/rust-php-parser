@@ -12,7 +12,11 @@ Duplicate type 'FOO' in intersection type
 Duplicate type 'true' in union type
 Duplicate type 'array' in union type
 Type B&A is redundant with type A&B
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token "&", expecting "{" in Standard input code on line 3
+===php_error 8.1===
+PHP Parse error:  syntax error, unexpected token "(" in Standard input code on line 6
+===php_error >=8.2===
 PHP Fatal error:  Duplicate type FOO is redundant in Standard input code on line 2
 ===ast===
 {

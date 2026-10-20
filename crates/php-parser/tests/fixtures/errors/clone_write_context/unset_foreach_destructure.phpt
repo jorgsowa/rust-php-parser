@@ -9,7 +9,9 @@ Cannot use result of built-in function in write context
 Cannot use result of built-in function in write context
 Cannot use result of built-in function in write context
 Assignments can only happen to writable values
-===php_error===
+===php_error <=8.4===
+PHP Fatal error:  Cannot use temporary expression in write context in Standard input code on line 2
+===php_error >=8.5===
 PHP Fatal error:  Cannot use result of built-in function in write context in Standard input code on line 2
 ===ast===
 {

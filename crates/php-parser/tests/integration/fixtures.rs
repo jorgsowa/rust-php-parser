@@ -107,8 +107,15 @@ fn malformed_fixtures_are_rejected() {
             "===errors 8.1=== covers none of the versions the ===ast=== sections name",
         ),
         (
-            format!("===source===\n<?php\n===php_error <=8.3===\nx\n===ast===\n{ast}\n"),
-            "===php_error <=8.3=== needs a version-qualified ===ast=== section",
+            format!("===source===\n<?php\n===errors <=8.3===\nx\n===ast===\n{ast}\n"),
+            "===errors <=8.3=== needs a version-qualified ===ast=== section",
+        ),
+        (
+            format!(
+                "===source===\n<?php\n===php_error <=8.3===\nx\n===php_error >=8.3===\ny\n\
+                 ===ast===\n{ast}\n"
+            ),
+            "===php_error <=8.3=== overlaps ===php_error >=8.3===",
         ),
         (
             format!("===source===\n<?php\n===ast===\n{ast}\n===ast >=8.4===\n{ast}\n"),
@@ -130,6 +137,41 @@ fn malformed_fixtures_are_rejected() {
     let fixture = Fixture::parse(&valid).unwrap();
     assert!(fixture.is_ignored());
     assert_eq!(fixture.targets().len(), crate::common::SUPPORTED.len());
+}
+
+#[test]
+fn php_error_sections_are_independent_of_parse_targets() {
+    use crate::common::Fixture;
+    let content = "===source===\n<?php\n===php_error <=8.0===\nx\n===ast===\n{}\n";
+    let fixture = Fixture::parse(content).unwrap();
+    assert_eq!(
+        fixture.section("php_error", Some((8, 0))).unwrap().body,
+        "x"
+    );
+    assert!(fixture.section("php_error", Some((8, 1))).is_none());
+}
+
+#[test]
+fn set_section_for_changes_one_version() {
+    use crate::common::Fixture;
+    let mut fixture =
+        Fixture::parse("===source===\n<?php\n===php_error <=8.3===\nold\n===ast===\n{}\n").unwrap();
+    fixture.set_section_for("php_error", (8, 1), Some("new"));
+    assert!(fixture.render().contains(
+        "===php_error <=8.0===\nold\n===php_error 8.1===\nnew\n===php_error 8.2-8.3===\nold\n"
+    ));
+    fixture.set_section_for("php_error", (8, 1), Some("old"));
+    assert!(fixture
+        .render()
+        .contains("===php_error <=8.3===\nold\n===ast"));
+    fixture.set_section_for("php_error", (8, 0), None);
+    assert!(fixture
+        .render()
+        .contains("===php_error <=7.4===\nold\n===php_error 8.1-8.3===\nold\n===ast"));
+    for v in crate::common::SUPPORTED {
+        fixture.set_section_for("php_error", v, Some("all"));
+    }
+    assert!(fixture.render().contains("===php_error===\nall\n===ast"));
 }
 
 // ---------------------------------------------------------------------------

@@ -3,7 +3,13 @@
 class A { final private $x; }
 ===errors >=8.4===
 Property cannot be both final and private
-===php_error===
+===php_error <=8.0===
+PHP Fatal error:  Cannot declare property A::$x final, the final modifier is allowed only for methods and classes in Standard input code on line 2
+===php_error 8.1-8.2===
+PHP Fatal error:  Cannot declare property A::$x final, the final modifier is allowed only for methods, classes, and class constants in Standard input code on line 2
+===php_error 8.3===
+PHP Fatal error:  Cannot use the final modifier on a property in Standard input code on line 2
+===php_error >=8.4===
 PHP Fatal error:  Property cannot be both final and private in Standard input code on line 2
 ===ast >=8.4===
 {

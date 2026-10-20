@@ -33,7 +33,11 @@ Cannot use "parent" when current class scope has no parent
 Cannot use "parent" when current class scope has no parent
 Cannot use "parent" when current class scope has no parent
 Cannot use "parent" when current class scope has no parent
-===php_error===
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected identifier "C", expecting "=" in Standard input code on line 5
+===php_error 8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 13
+===php_error >=8.4===
 PHP Fatal error:  Cannot use "parent" when current class scope has no parent in Standard input code on line 3
 ===ast===
 {

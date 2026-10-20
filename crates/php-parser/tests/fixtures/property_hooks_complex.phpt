@@ -13,6 +13,8 @@ class Foo {
         &get { return $this->id; }
     }
 }
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===ast >=8.4===
 {
   "stmts": [

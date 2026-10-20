@@ -7,7 +7,9 @@ class Foo {
 }
 ===errors >=8.4===
 set hook must have exactly one parameter
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
+===php_error >=8.4===
 PHP Fatal error:  set hook of property Foo::$x must accept exactly one parameters in Standard input code on line 4
 ===ast >=8.4===
 {

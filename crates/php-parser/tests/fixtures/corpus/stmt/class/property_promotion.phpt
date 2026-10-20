@@ -12,6 +12,12 @@ class Point {
         final $i,
     ) {}
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "int", expecting variable in Standard input code on line 8
+===php_error 8.1-8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 9
+===php_error 8.4===
+PHP Fatal error:  Cannot use the final modifier on a parameter in Standard input code on line 11
 ===ast >=8.5===
 {
   "stmts": [

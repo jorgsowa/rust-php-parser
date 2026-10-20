@@ -1,6 +1,8 @@
 ===source===
 <?php
 for ((void) f() + 1; ;) {}
+===php_error <=8.4===
+PHP Parse error:  syntax error, unexpected identifier "f", expecting ";" in Standard input code on line 2
 ===ast >=8.5===
 {
   "stmts": [

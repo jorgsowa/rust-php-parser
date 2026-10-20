@@ -14,7 +14,9 @@ Cannot use(...) variables in constant expression
 Closures in constant expressions must be static
 Cannot use(...) variables in constant expression
 Closures in constant expressions must be static
-===php_error===
+===php_error <=8.4===
+PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 2
+===php_error >=8.5===
 PHP Fatal error:  Closures in constant expressions must be static in Standard input code on line 2
 ===ast===
 {

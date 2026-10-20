@@ -2,7 +2,7 @@
 <?php $fn = foo(1, ?, 3);
 ===errors 8.5===
 'partial function application' requires PHP 8.6 or higher
-===php_error===
+===php_error <=8.5===
 PHP Parse error:  syntax error, unexpected token "?", expecting ")" in Standard input code on line 1
 ===ast 8.5===
 {

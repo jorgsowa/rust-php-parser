@@ -32,6 +32,16 @@ namespace {
         public function t(): I|J;
     }
 }
+===errors 8.3-8.4===
+Type self cannot be part of an intersection type
+Type self cannot be part of an intersection type
+Type parent cannot be part of an intersection type
+===php_error <=8.1===
+PHP Parse error:  syntax error, unexpected token "(" in Standard input code on line 13
+===php_error 8.2===
+PHP Parse error:  syntax error, unexpected token "|", expecting "=" in Standard input code on line 17
+===php_error 8.3-8.4===
+PHP Fatal error:  Type self cannot be part of an intersection type in Standard input code on line 20
 ===ast >=8.3===
 {
   "stmts": [

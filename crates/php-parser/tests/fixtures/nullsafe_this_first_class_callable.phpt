@@ -8,6 +8,8 @@ class C {
         $d = ($this)?->foo(...);
     }
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 4
 ===ast >=8.1===
 {
   "stmts": [

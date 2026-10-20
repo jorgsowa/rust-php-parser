@@ -106,6 +106,8 @@ class UserRepository extends AbstractRepository implements RepositoryInterface
         return self::$queryCount;
     }
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "DB", expecting variable in Standard input code on line 20
 ===ast===
 {
   "stmts": [

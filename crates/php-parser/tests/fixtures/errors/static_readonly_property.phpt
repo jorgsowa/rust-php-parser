@@ -10,7 +10,11 @@ Readonly property cannot have default value
 ===errors >=8.1===
 static properties cannot be readonly
 Readonly property cannot have default value
-===php_error <=8.5===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'int' (T_STRING), expecting variable (T_VARIABLE) in Standard input code on line 3
+===php_error 8.0===
+PHP Parse error:  syntax error, unexpected identifier "int", expecting variable in Standard input code on line 3
+===php_error 8.1-8.5===
 PHP Fatal error:  Readonly property Foo::$x cannot have default value in Standard input code on line 3
 ===php_error >=8.6===
 PHP Fatal error:  Static property Foo::$x cannot be readonly in Standard input code on line 3

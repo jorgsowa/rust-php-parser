@@ -1,5 +1,7 @@
 ===source===
 <?php class Foo { function __construct(readonly string $x) {} }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "string", expecting variable in Standard input code on line 1
 ===ast >=8.1===
 {
   "stmts": [

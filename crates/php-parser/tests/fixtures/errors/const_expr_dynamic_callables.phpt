@@ -15,7 +15,11 @@ Cannot use dynamic class name in constant expression
 "static" is not allowed in compile-time constants
 Cannot use dynamic method name in constant expression
 Cannot use dynamic method name in constant expression
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 2
+===php_error 8.1-8.4===
+PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 2
+===php_error >=8.5===
 PHP Fatal error:  Cannot use dynamic function name in constant expression in Standard input code on line 2
 ===ast===
 {

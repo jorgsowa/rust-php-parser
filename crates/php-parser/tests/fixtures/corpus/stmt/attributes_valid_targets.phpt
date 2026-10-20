@@ -31,6 +31,12 @@ class H {
     #[Foo] public $p, $q;
     public function __construct(#[SensitiveParameter] public $r) {}
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "readonly", expecting "abstract" or "final" or "class" in Standard input code on line 6
+===php_error 8.1===
+PHP Parse error:  syntax error, unexpected token "readonly", expecting "abstract" or "final" or "class" in Standard input code on line 6
+===php_error 8.2-8.4===
+PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 11
 ===ast >=8.5===
 {
   "stmts": [

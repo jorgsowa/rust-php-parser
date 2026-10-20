@@ -4,6 +4,8 @@ enum Enum: string {
     case A = "a";
     case B = "b";
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Enum" in Standard input code on line 2
 ===ast >=8.1===
 {
   "stmts": [

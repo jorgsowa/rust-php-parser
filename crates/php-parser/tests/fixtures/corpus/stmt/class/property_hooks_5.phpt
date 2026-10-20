@@ -26,7 +26,9 @@ Non-abstract property hook must have a body
 Non-abstract property hook must have a body
 Non-abstract property hook must have a body
 Non-abstract property hook must have a body
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
+===php_error >=8.4===
 PHP Fatal error:  Cannot use the public modifier on a property hook in Standard input code on line 4
 ===ast >=8.4===
 {

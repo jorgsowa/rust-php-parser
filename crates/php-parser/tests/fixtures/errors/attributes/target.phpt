@@ -47,7 +47,11 @@ Attribute "Attribute" cannot target class constant (allowed targets: class)
 Attribute "Override" cannot target class constant (allowed targets: method, property)
 Attribute "Override" cannot target constant (allowed targets: method, property)
 Attribute "Attribute" cannot target constant (allowed targets: class)
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 17
+===php_error 8.4===
+PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 23
+===php_error >=8.5===
 PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets: class) in Standard input code on line 2
 ===ast >=8.5===
 {

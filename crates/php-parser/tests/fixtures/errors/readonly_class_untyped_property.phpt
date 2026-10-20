@@ -10,7 +10,13 @@ $x = new readonly class { public $f; };
 readonly property must have type
 readonly property must have type
 readonly property must have type
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token "class" in Standard input code on line 2
+===php_error 8.1===
+PHP Parse error:  syntax error, unexpected token "readonly", expecting end of file in Standard input code on line 2
+===php_error 8.2===
+PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 7
+===php_error >=8.3===
 PHP Fatal error:  Readonly property C::$a must have type in Standard input code on line 3
 ===ast===
 {

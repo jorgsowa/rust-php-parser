@@ -2,7 +2,9 @@
 <?php class Foo { public function __construct(public final string $bar) {} }
 ===errors 8.4===
 'final promoted properties' requires PHP 8.5 or higher
-===php_error <=8.4===
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected token "final", expecting variable in Standard input code on line 1
+===php_error 8.3-8.4===
 PHP Fatal error:  Cannot use the final modifier on a parameter in Standard input code on line 1
 ===ast >=8.4===
 {

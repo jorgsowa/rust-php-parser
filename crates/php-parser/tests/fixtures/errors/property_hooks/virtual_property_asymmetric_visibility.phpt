@@ -18,8 +18,12 @@ Read-only virtual property A::$b must not specify asymmetric visibility
 Write-only virtual property A::$c must not specify asymmetric visibility
 Read-only virtual property A::$e must not specify asymmetric visibility
 Write-only virtual property A::$f must not specify asymmetric visibility
-===php_error===
+===php_error <=8.3===
+PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 3
+===php_error 8.4-8.5===
 PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric visibility in Standard input code on line 3
+===php_error >=8.6===
+PHP Fatal error:  get-only virtual property I::$a must not specify asymmetric visibility in Standard input code on line 3
 ===ast >=8.4===
 {
   "stmts": [

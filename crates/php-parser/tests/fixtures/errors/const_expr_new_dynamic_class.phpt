@@ -13,7 +13,9 @@ Cannot use anonymous class in constant expression
 Argument unpacking in constant expressions is not supported
 Constant expression contains invalid operations
 Constant expression contains invalid operations
-===php_error===
+===php_error <=8.0===
+PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 2
+===php_error >=8.1===
 PHP Fatal error:  "static" is not allowed in compile-time constants in Standard input code on line 2
 ===ast===
 {

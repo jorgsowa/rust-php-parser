@@ -1,5 +1,9 @@
 ===source===
 <?php readonly class Point { public function __construct(public int $x, public int $y) {} }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token "class" in Standard input code on line 1
+===php_error 8.1===
+PHP Parse error:  syntax error, unexpected token "readonly", expecting end of file in Standard input code on line 1
 ===ast >=8.2===
 {
   "stmts": [

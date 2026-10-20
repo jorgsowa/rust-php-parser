@@ -19,6 +19,8 @@ class D {
 enum M { case Y; }
 interface I {}
 trait T {}
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "M" in Standard input code on line 16
 ===ast >=8.3===
 {
   "stmts": [

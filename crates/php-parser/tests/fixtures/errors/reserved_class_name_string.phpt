@@ -6,7 +6,9 @@ PHP rejects type-name aliases (int, string, void, etc.) as class names with
 class string {}
 ===errors >=8.5===
 Cannot use "string" as a class name as it is reserved
-===php_error >=8.5===
+===php_error <=8.3===
+PHP Fatal error:  Cannot use 'string' as class name as it is reserved in Standard input code on line 2
+===php_error >=8.4===
 PHP Fatal error:  Cannot use "string" as a class name as it is reserved in Standard input code on line 2
 ===ast >=8.5===
 {

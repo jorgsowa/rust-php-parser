@@ -46,6 +46,8 @@ class UserController extends BaseController implements JsonResponder
         return $filtered;
     }
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "AuthService", expecting variable in Standard input code on line 9
 ===ast===
 {
   "stmts": [

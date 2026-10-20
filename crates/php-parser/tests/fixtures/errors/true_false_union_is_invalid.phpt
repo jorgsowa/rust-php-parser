@@ -2,7 +2,9 @@
 <?php function f(): true|false {}
 ===errors >=8.2===
 Type contains both true and false, bool must be used instead
-===php_error <=8.3===
+===php_error <=8.1===
+PHP Fatal error:  Cannot use 'true' as class name as it is reserved in Standard input code on line 1
+===php_error 8.2-8.3===
 PHP Fatal error:  Type contains both true and false, bool should be used instead in Standard input code on line 1
 ===php_error >=8.4===
 PHP Fatal error:  Type contains both true and false, bool must be used instead in Standard input code on line 1

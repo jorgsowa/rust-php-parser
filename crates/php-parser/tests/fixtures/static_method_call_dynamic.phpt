@@ -13,6 +13,8 @@ Foo::$method(...);
 
 // chained array access before call — produces FunctionCall(ArrayAccess(StaticPropertyAccess))
 Foo::$method['key']();
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 11
 ===ast===
 {
   "stmts": [

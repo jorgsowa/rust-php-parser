@@ -1,5 +1,7 @@
 ===source===
 <?php class A { const int X = 1; private const string Y = 'a'; const Foo|Bar|null Z = null; }
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected identifier "X", expecting "=" in Standard input code on line 1
 ===ast >=8.3===
 {
   "stmts": [

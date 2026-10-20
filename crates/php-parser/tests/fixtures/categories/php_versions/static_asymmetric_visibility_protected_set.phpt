@@ -1,5 +1,9 @@
 ===source===
 <?php class Foo { public static protected(set) int $count = 0; }
+===php_error <=8.3===
+PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 1
+===php_error 8.4===
+PHP Fatal error:  Static property may not have asymmetric visibility in Standard input code on line 1
 ===ast >=8.5===
 {
   "stmts": [

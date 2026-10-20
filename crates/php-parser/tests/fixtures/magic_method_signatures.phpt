@@ -36,6 +36,8 @@ enum E {
     function __call($n, $a) {}
 }
 function __get() {}
+===php_error <=8.1===
+PHP Parse error:  syntax error, unexpected token "(" in Standard input code on line 16
 ===ast===
 {
   "stmts": [

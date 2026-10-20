@@ -5,7 +5,7 @@ trait T {
 }
 ===errors 8.1===
 'constants in traits' requires PHP 8.2 or higher
-===php_error===
+===php_error <=8.1===
 PHP Fatal error:  Traits cannot have constants in Standard input code on line 3
 ===ast 8.1===
 {

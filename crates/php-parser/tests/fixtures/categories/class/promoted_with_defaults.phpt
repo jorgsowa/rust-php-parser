@@ -1,5 +1,7 @@
 ===source===
 <?php class Foo { public function __construct(public readonly int $x, private string $y = 'default') {} }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "int", expecting variable in Standard input code on line 1
 ===ast===
 {
   "stmts": [

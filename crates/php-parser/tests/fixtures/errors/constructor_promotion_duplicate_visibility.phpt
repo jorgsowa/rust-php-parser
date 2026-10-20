@@ -7,7 +7,9 @@ class Foo {
 }
 ===errors >=8.0===
 cannot use multiple visibility modifiers
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token "public", expecting variable in Standard input code on line 4
+===php_error >=8.1===
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 4
 ===ast >=8.0===
 {

@@ -6,6 +6,8 @@ class C {
         int $x = 1 { get => 1; },
     ) {}
 }
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 4
 ===ast===
 {
   "stmts": [

@@ -3,6 +3,8 @@
 $x = $a |> $b |> $c;
 $y = $a + $b |> $c;
 $z = $a |> $b + $c;
+===php_error <=8.4===
+PHP Parse error:  syntax error, unexpected token ">" in Standard input code on line 2
 ===ast >=8.5===
 {
   "stmts": [

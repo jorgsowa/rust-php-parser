@@ -16,6 +16,8 @@ enum Status: int {
      */
     case NOT_FOUND = 404;
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 7
 ===ast===
 {
   "stmts": [

@@ -1,6 +1,8 @@
 ===source===
 <?php
 function f(mixed\X&object\Y $a) {}
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected namespaced name "object\Y", expecting variable in Standard input code on line 2
 ===ast===
 {
   "stmts": [

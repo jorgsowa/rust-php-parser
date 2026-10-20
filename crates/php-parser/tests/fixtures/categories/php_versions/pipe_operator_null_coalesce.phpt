@@ -1,5 +1,7 @@
 ===source===
 <?php $x |> ($x ?? 'default');
+===php_error <=8.4===
+PHP Parse error:  syntax error, unexpected token ">" in Standard input code on line 1
 ===ast >=8.5===
 {
   "stmts": [

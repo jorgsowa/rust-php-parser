@@ -4,6 +4,8 @@
 (void) $x + 1;
 (void) $x && $y;
 (void) $a * $b + $c;
+===php_error <=8.4===
+PHP Parse error:  syntax error, unexpected integer "5" in Standard input code on line 2
 ===ast >=8.5===
 {
   "stmts": [

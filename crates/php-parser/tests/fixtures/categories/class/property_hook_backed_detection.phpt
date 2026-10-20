@@ -27,6 +27,8 @@ abstract class A {
     public protected(set) int $t { set { $this->t = $value; } }
     public function __construct(public $u = 1 { get => 1; }) {}
 }
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 5
 ===ast >=8.4===
 {
   "stmts": [

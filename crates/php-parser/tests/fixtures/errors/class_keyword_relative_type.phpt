@@ -6,12 +6,15 @@ class A {
     function m(): namespace\parent {}
 }
 ===errors===
+Type declaration 'static' must be unqualified
 Cannot use "self" when no class scope is active
 Cannot use "static" when no class scope is active
 Cannot use "parent" when no class scope is active
 Cannot use "parent" when current class scope has no parent
-===php_error===
+===php_error <=8.5===
 PHP Fatal error:  Cannot use "static" when no class scope is active in Standard input code on line 2
+===php_error >=8.6===
+PHP Fatal error:  Type declaration 'static' must be unqualified in Standard input code on line 2
 ===ast===
 {
   "stmts": [

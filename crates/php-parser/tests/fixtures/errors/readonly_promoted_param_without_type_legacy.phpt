@@ -8,14 +8,16 @@ class Foo {
 ===errors <=7.4===
 'constructor property promotion' requires PHP 8.0 or higher
 'readonly parameters' requires PHP 8.1 or higher
-readonly promoted property must have type
 ===errors 8.0===
 'readonly parameters' requires PHP 8.1 or higher
-readonly promoted property must have type
 ===errors 8.1-8.4===
 readonly promoted property must have type
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 4
+===php_error 8.1-8.4===
 PHP Fatal error:  Readonly property Foo::$x must have type in Standard input code on line 3
+===php_error >=8.5===
+PHP Fatal error:  Readonly property Foo::$x must have type in Standard input code on line 4
 ===ast <=8.4===
 {
   "stmts": [

@@ -1,5 +1,9 @@
 ===source===
 <?php abstract readonly class Foo {}
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "readonly", expecting "abstract" or "final" or "class" in Standard input code on line 1
+===php_error 8.1===
+PHP Parse error:  syntax error, unexpected token "readonly", expecting "abstract" or "final" or "class" in Standard input code on line 1
 ===ast >=8.2===
 {
   "stmts": [

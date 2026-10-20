@@ -2,6 +2,10 @@
 <?php
 #[A]
 readonly abstract class Foo {}
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "readonly" in Standard input code on line 3
+===php_error 8.1===
+PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 3
 ===ast 8.2===
 {
   "stmts": [

@@ -6,7 +6,9 @@ enum Status: string {
 }
 ===errors >=8.1===
 Case Active of backed enum Status must have a value
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 2
+===php_error >=8.1===
 PHP Fatal error:  Case Active of backed enum Status must have a value in Standard input code on line 3
 ===ast >=8.1===
 {

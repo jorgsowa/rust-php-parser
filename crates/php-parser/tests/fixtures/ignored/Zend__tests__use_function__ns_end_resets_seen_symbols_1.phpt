@@ -44,6 +44,8 @@ namespace Ns {
 }
 
 ?>
+===php_error <=8.3===
+PHP Fatal error:  Cannot use function Ns\f as f because the name is already in use in Standard input code on line 18
 ===ast >=8.5===
 {
   "stmts": [

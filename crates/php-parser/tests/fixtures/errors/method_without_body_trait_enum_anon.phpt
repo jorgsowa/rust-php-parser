@@ -7,7 +7,9 @@ $o = new class { function f(); };
 Non-abstract method T::f() must contain body
 Non-abstract method E::f() must contain body
 Non-abstract method class@anonymous::f() must contain body
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 3
+===php_error >=8.1===
 PHP Fatal error:  Non-abstract method T::f() must contain body in Standard input code on line 2
 ===ast===
 {

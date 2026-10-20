@@ -9,6 +9,8 @@ function test(
     false $a9, // PHP 8.0
 ): void {} // PHP 7.1
 function test2(): never {} // PHP 8.1
+===php_error <=8.1===
+PHP Fatal error:  Null can not be used as a standalone type in Standard input code on line 2
 ===ast >=8.2===
 {
   "stmts": [

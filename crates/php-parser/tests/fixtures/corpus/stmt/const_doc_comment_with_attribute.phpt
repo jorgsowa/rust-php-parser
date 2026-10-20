@@ -4,6 +4,8 @@
 /** @api */
 #[SomeAttribute]
 const VERSION = '1.0.0';
+===php_error <=8.4===
+PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 5
 ===ast >=8.5===
 {
   "stmts": [

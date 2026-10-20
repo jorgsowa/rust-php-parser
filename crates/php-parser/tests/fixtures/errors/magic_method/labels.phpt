@@ -14,7 +14,9 @@ Method N\T::__get() must take exactly 1 argument
 N\C::__call(): Parameter #2 ($a) must be of type array when declared
 class@anonymous::__set(): Parameter #1 ($n) must be of type string when declared
 Method N\E::__call() must take exactly 2 arguments
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 7
+===php_error >=8.1===
 PHP Fatal error:  N\I::__toString(): Return type must be string when declared in Standard input code on line 3
 ===ast===
 {

@@ -4,6 +4,8 @@ $x = function () { (void) f(); };
 g(function () { (void) f(); });
 for ((void) f(), (void) g(); (void) f(), $i < 3; (void) h()) {}
 class C { function m() { (void) f(); } }
+===php_error <=8.4===
+PHP Parse error:  syntax error, unexpected identifier "f" in Standard input code on line 2
 ===ast >=8.5===
 {
   "stmts": [

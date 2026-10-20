@@ -29,8 +29,15 @@ static properties cannot be readonly
 A readonly property cannot declare hooks
 A readonly property cannot declare hooks
 Readonly property cannot have default value
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "int", expecting variable in Standard input code on line 3
+===php_error 8.1-8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 8
+===php_error 8.4-8.5===
 PHP Fatal error:  Readonly property A::$a cannot have default value in Standard input code on line 3
+===php_error >=8.6===
+PHP Deprecated:  A::__construct(): Optional parameter $d declared before required parameter $f is implicitly treated as a required parameter in Standard input code on line 6
+PHP Fatal error:  Readonly property A::$e must have type in Standard input code on line 7
 ===ast===
 {
   "stmts": [

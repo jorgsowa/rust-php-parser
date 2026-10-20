@@ -50,7 +50,9 @@ Constant expression contains invalid operations
 Constant expression contains invalid operations
 Constant expression contains invalid operations
 Constant expression contains invalid operations
-===php_error===
+===php_error <=8.4===
+PHP Parse error:  syntax error, unexpected token ">" in Standard input code on line 10
+===php_error >=8.5===
 PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 2
 ===ast===
 {

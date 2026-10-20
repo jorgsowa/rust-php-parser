@@ -5,7 +5,11 @@
 Cannot use the readonly modifier on a method
 ===errors >=8.1===
 Cannot use the readonly modifier on a method
-===php_error <=8.2===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'readonly' (T_STRING), expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 1
+===php_error 8.0===
+PHP Parse error:  syntax error, unexpected identifier "readonly", expecting "function" or "const" in Standard input code on line 1
+===php_error 8.1-8.2===
 PHP Fatal error:  Cannot use 'readonly' as method modifier in Standard input code on line 1
 ===php_error >=8.3===
 PHP Fatal error:  Cannot use the readonly modifier on a method in Standard input code on line 1

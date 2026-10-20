@@ -99,25 +99,31 @@ ignore=reason         known bug: skipped by the parser tests (php -l still check
 ===errors===          (optional; presence means parser errors are expected)
 error message text    one ParseError display message per line
 
-===php_error===       (optional; auto-generated when php -l rejects the source)
+===php_error===       (optional; auto-generated when php -l rejects the source; may be version-qualified)
 PHP message from stderr
 
 ===ast===             (optional; expected JSON AST — auto-generated)
 { ... }
 ```
 
-A version range on a section marker (`===ast >=8.4===`, `===php_error <=8.3===`, `===errors 8.1-8.2===`;
-also `8.3`) makes the fixture multi-version. The parser targets, and `php -l` checks, exactly the
-versions named by the `===ast===` sections. For a version, the matching qualified section applies,
-and an unqualified section is the fallback. A fixture with no qualified `===ast===` has one default
-parse target and `php -l` runs on every PHP version. `UPDATE_FIXTURES=1` regenerates `errors` and
-`ast` per version, one section per run of identical output. `===php_error===` is recorded by
-`php -l` on the installed PHP only, so other versions' messages are edited by hand. Do not split a
-fixture into `_php83`/`_v82` copies.
+A version range on a section marker (`===ast >=8.4===`, `===errors 8.1-8.2===`; also `8.3`) makes
+the fixture multi-version: the parser targets exactly the versions named by the `===ast===`
+sections. A fixture with no qualified `===ast===` has one target, the default PHP version. For a
+version, the matching qualified section applies, and an unqualified section is the fallback.
+`UPDATE_FIXTURES=1` regenerates `errors` and `ast` per target, one section per run of identical
+output.
+
+`===php_error===` ranges name the PHP version running `php -l`, independent of the parse targets,
+so any fixture may qualify them (`===php_error <=8.3===`). CI runs `php -l` on every fixture with
+each PHP version from 8.0 up, and fails when its output has no matching section or differs from it.
+PHP 7.4 is linted only for fixtures that target it; for the rest it records the 8.0 output.
+`UPDATE_FIXTURES=1 cargo test --test php_syntax` records the output of the `php` on `PATH` for that
+version alone, so run it once per PHP version. Do not split a fixture into `_php83`/`_v82` copies.
 
 Malformed fixtures fail the tests: unknown config keys or sections, ranges naming an unsupported
-version, overlapping ranges for one section, a qualified section covering none of the `===ast===`
-versions, and qualified `errors`/`php_error` sections in a fixture without a qualified `===ast===`.
+version, overlapping ranges for one section, a qualified `errors`/`ast` section covering none of
+the `===ast===` versions, and qualified `errors` sections in a fixture without a qualified
+`===ast===`.
 Adding a PHP version to `SUPPORTED` in `tests/integration/common.rs` extends every open-ended `>=`
 range to it.
 

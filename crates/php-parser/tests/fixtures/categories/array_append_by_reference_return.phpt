@@ -7,6 +7,8 @@ class C {
     public $p { &get { return $this->d[]; } }
 }
 $h = fn&() => $a[];
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 6
 ===ast===
 {
   "stmts": [

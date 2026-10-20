@@ -1,5 +1,9 @@
 ===source===
 <?php enum Config { const int|float|string VALUE = 1; const bool|null MAYBE = false; }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Config" in Standard input code on line 1
+===php_error 8.1-8.2===
+PHP Parse error:  syntax error, unexpected token "|", expecting "=" in Standard input code on line 1
 ===ast >=8.3===
 {
   "stmts": [

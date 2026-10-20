@@ -30,7 +30,9 @@ Redefinition of parameter $a
 Redefinition of parameter $a
 Redefinition of parameter $a
 Redefinition of parameter $a
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 15
+===php_error >=8.1===
 PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2
 ===ast===
 {

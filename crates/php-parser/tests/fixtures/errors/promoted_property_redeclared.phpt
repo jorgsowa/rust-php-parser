@@ -17,7 +17,9 @@ Cannot redeclare A::$a
 Cannot redeclare A::$c
 Redefinition of parameter $x
 Cannot redeclare T::$x
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "int", expecting variable in Standard input code on line 5
+===php_error >=8.1===
 PHP Fatal error:  Cannot redeclare A::$a in Standard input code on line 5
 ===ast===
 {

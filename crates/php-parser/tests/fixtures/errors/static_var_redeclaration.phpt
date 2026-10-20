@@ -28,7 +28,9 @@ Duplicate declaration of static variable $a
 Duplicate declaration of static variable $a
 Duplicate declaration of static variable $a
 Duplicate declaration of static variable $a
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 19
+===php_error >=8.4===
 PHP Fatal error:  Duplicate declaration of static variable $top in Standard input code on line 3
 ===ast===
 {

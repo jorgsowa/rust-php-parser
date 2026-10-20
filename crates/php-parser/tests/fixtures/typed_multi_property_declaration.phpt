@@ -1,5 +1,7 @@
 ===source===
 <?php class A { #[Attr] public private(set) ?int $a = 1, $b; }
+===php_error <=8.3===
+PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 1
 ===ast===
 {
   "stmts": [

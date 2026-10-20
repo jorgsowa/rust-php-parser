@@ -33,7 +33,9 @@ Cannot specify default value for virtual hooked property A::$k
 Cannot specify default value for virtual hooked property A::$l
 Cannot specify default value for virtual hooked property A::$n
 Cannot specify default value for virtual hooked property A::$o
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
+===php_error >=8.4===
 PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a in Standard input code on line 3
 ===ast >=8.4===
 {

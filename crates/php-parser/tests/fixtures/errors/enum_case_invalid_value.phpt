@@ -6,7 +6,9 @@ enum Status: int {
 }
 ===errors >=8.1===
 expected expression
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 2
+===php_error >=8.1===
 PHP Parse error:  syntax error, unexpected token ";" in Standard input code on line 3
 ===ast >=8.1===
 {

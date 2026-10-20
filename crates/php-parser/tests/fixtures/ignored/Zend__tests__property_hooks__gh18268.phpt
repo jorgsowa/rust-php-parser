@@ -17,6 +17,8 @@ array_walk($b, function (&$item) {
 });
 
 ?>
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 8
 ===ast >=8.5===
 {
   "stmts": [

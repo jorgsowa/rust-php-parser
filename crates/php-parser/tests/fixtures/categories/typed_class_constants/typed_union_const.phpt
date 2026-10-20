@@ -1,5 +1,7 @@
 ===source===
 <?php class A { const int|string Z = 1; }
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected token "|", expecting "=" in Standard input code on line 1
 ===ast >=8.3===
 {
   "stmts": [

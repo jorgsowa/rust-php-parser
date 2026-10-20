@@ -34,7 +34,9 @@ Constant expression contains invalid operations
 Constant expression contains invalid operations
 Constant expression contains invalid operations
 Constant expression contains invalid operations
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 12
+===php_error >=8.1===
 PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 3
 ===ast===
 {

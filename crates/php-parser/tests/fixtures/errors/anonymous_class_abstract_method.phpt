@@ -7,7 +7,9 @@ $o = new class {
 ===errors===
 Anonymous class method f() must not be abstract
 Anonymous class method g() must not be abstract
-===php_error===
+===php_error <=8.4===
+PHP Fatal error:  Class class@anonymous contains 2 abstract methods and must therefore be declared abstract or implement the remaining methods (class@anonymous::f, class@anonymous::g) in Standard input code on line 2
+===php_error >=8.5===
 PHP Fatal error:  Anonymous class method f() must not be abstract in Standard input code on line 3
 ===ast===
 {

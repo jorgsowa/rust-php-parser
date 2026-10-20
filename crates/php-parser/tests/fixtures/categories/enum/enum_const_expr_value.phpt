@@ -1,5 +1,7 @@
 ===source===
 <?php enum Status: string { case Active = 'a'; const DEFAULT = self::Active; const SUM = 1 + 2; }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 1
 ===ast >=8.1===
 {
   "stmts": [

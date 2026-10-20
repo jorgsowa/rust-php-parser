@@ -5,6 +5,10 @@ enum E {
     #[A] const X = 1, Y = self::X;
     public const int P = 1, Q = 2;
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 2
+===php_error 8.1-8.2===
+PHP Parse error:  syntax error, unexpected identifier "P", expecting "=" in Standard input code on line 5
 ===ast===
 {
   "stmts": [

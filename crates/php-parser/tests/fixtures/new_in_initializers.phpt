@@ -21,7 +21,9 @@ $g = fn($x = new Foo()) => $x;
 ===errors===
 New expressions are not supported in this context
 New expressions are not supported in this context
-===php_error===
+===php_error <=8.0===
+PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 2
+===php_error >=8.1===
 PHP Fatal error:  New expressions are not supported in this context in Standard input code on line 5
 ===ast===
 {

@@ -48,6 +48,8 @@ list($x) = $y;
 (boolean) $boolean;
 (string) $string;
 (binary) $binary;
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "o14" in Standard input code on line 4
 ===ast===
 {
   "stmts": [

@@ -2,7 +2,9 @@
 <?php function foo(readonly string $x) {}
 ===errors >=8.1===
 Cannot declare promoted property outside a constructor
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "string", expecting variable in Standard input code on line 1
+===php_error >=8.1===
 PHP Fatal error:  Cannot declare promoted property outside a constructor in Standard input code on line 1
 ===ast >=8.1===
 {

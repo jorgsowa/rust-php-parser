@@ -8,7 +8,9 @@ class Foo {
 }
 ===errors >=7.4===
 expected modifier, found identifier
-===php_error <=8.2===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'publi' (T_STRING), expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 5
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected identifier "publi", expecting "function" or "const" in Standard input code on line 5
 ===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected identifier "publi", expecting "function" in Standard input code on line 5

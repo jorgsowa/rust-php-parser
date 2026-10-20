@@ -2,7 +2,9 @@
 <?php enum Status { private final const PRIV = 1; }
 ===errors >=8.1===
 Private constant cannot be final as it is not visible to other classes
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 1
+===php_error >=8.1===
 PHP Fatal error:  Private constant Status::PRIV cannot be final as it is not visible to other classes in Standard input code on line 1
 ===ast >=8.1===
 {

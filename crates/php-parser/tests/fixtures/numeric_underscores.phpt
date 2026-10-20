@@ -6,6 +6,8 @@ $c = 0b1010_0101;
 $d = 0o77_77;
 $e = 1_000.50;
 $f = 1_0e1_0;
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "o77_77" in Standard input code on line 5
 ===ast===
 {
   "stmts": [

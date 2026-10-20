@@ -12,7 +12,9 @@ enum E {
 ===errors===
 Cannot redefine class constant C::A
 Cannot redefine class constant E::X
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 7
+===php_error >=8.1===
 PHP Fatal error:  Cannot redefine class constant C::A in Standard input code on line 4
 ===ast===
 {

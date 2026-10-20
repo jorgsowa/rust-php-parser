@@ -13,6 +13,8 @@ exit($a, $b);
 \exit($a);
 exit(...);
 DIE($a, $b);
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token ":", expecting ")" in Standard input code on line 9
 ===ast >=8.4===
 {
   "stmts": [

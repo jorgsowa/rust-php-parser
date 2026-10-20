@@ -1,5 +1,7 @@
 ===source===
 <?php function f(): true|null { return null; }
+===php_error <=8.1===
+PHP Fatal error:  Cannot use 'true' as class name as it is reserved in Standard input code on line 1
 ===ast >=8.2===
 {
   "stmts": [

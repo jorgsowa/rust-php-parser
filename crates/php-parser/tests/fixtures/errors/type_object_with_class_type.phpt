@@ -17,7 +17,9 @@ Type Traversable|Closure|object|array contains both object and a class type, whi
 Type C|object contains both object and a class type, which is redundant
 Type P|object contains both object and a class type, which is redundant
 Type static|object contains both object and a class type, which is redundant
-===php_error===
+===php_error <=8.1===
+PHP Parse error:  syntax error, unexpected token "(" in Standard input code on line 4
+===php_error >=8.2===
 PHP Fatal error:  Type A|object contains both object and a class type, which is redundant in Standard input code on line 2
 ===ast >=8.2===
 {

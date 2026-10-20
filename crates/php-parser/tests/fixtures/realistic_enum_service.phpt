@@ -44,6 +44,8 @@ class TaskService
         ];
     }
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Priority" in Standard input code on line 4
 ===ast >=8.1===
 {
   "stmts": [

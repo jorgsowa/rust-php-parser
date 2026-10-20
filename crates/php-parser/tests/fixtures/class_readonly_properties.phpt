@@ -8,6 +8,8 @@ class Point {
         $this->y = $y;
     }
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "float", expecting variable in Standard input code on line 3
 ===ast===
 {
   "stmts": [

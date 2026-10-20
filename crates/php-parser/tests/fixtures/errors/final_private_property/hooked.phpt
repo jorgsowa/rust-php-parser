@@ -3,7 +3,11 @@
 class A { final private int $x { get => 1; } }
 ===errors >=8.4===
 Property cannot be both final and private
-===php_error===
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
+===php_error 8.3===
+PHP Fatal error:  Cannot use the final modifier on a property in Standard input code on line 2
+===php_error >=8.4===
 PHP Fatal error:  Property cannot be both final and private in Standard input code on line 2
 ===ast >=8.4===
 {

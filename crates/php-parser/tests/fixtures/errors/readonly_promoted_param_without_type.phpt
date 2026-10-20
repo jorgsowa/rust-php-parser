@@ -7,7 +7,9 @@ class Foo {
 }
 ===errors >=8.5===
 readonly promoted property must have type
-===php_error===
+===php_error 8.1-8.4===
+PHP Fatal error:  Readonly property Foo::$x must have type in Standard input code on line 3
+===php_error >=8.5===
 PHP Fatal error:  Readonly property Foo::$x must have type in Standard input code on line 4
 ===ast >=8.5===
 {

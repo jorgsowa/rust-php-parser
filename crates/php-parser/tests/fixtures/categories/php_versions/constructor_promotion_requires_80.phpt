@@ -9,6 +9,8 @@ class Point {
 ===errors <=7.4===
 'constructor property promotion' requires PHP 8.0 or higher
 'constructor property promotion' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 4
 ===ast >=7.4===
 {
   "stmts": [

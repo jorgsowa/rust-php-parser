@@ -17,6 +17,8 @@ class Test {
         return null;
     }
 }
+===php_error <=8.1===
+PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 5
 ===ast >=8.4===
 {
   "stmts": [

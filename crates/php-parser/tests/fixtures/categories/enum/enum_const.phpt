@@ -1,5 +1,7 @@
 ===source===
 <?php enum Suit: string { const TOTAL = 4; case Hearts = 'H'; }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Suit" in Standard input code on line 1
 ===ast >=8.1===
 {
   "stmts": [

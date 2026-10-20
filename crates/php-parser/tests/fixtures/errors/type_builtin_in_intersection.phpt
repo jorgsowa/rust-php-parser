@@ -39,7 +39,11 @@ Type static cannot be part of an intersection type
 Type SELF cannot be part of an intersection type
 Type parent cannot be part of an intersection type
 Type self cannot be part of an intersection type
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token "&", expecting "{" in Standard input code on line 2
+===php_error 8.1===
+PHP Parse error:  syntax error, unexpected token "(" in Standard input code on line 7
+===php_error >=8.2===
 PHP Fatal error:  Type int cannot be part of an intersection type in Standard input code on line 2
 ===ast >=8.2===
 {

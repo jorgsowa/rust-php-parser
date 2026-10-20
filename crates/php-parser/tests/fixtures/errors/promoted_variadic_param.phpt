@@ -19,7 +19,11 @@ class E {
 Cannot declare variadic promoted property
 Cannot declare variadic promoted property
 Cannot declare variadic promoted property
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "int", expecting variable in Standard input code on line 6
+===php_error 8.1-8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 9
+===php_error >=8.4===
 PHP Fatal error:  Cannot declare variadic promoted property in Standard input code on line 3
 ===ast===
 {

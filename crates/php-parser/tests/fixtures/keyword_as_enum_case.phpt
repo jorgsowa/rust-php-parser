@@ -1,5 +1,7 @@
 ===source===
 <?php enum Suit { case for; case function; case match; }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Suit" in Standard input code on line 1
 ===ast >=8.1===
 {
   "stmts": [

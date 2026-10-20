@@ -1,5 +1,9 @@
 ===source===
 <?php enum Status { const ?string MAYBE = null; const ?int COUNT = 0; }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 1
+===php_error 8.1-8.2===
+PHP Parse error:  syntax error, unexpected token "?" in Standard input code on line 1
 ===ast >=8.3===
 {
   "stmts": [

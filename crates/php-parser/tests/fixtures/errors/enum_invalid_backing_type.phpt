@@ -5,7 +5,9 @@ enum Suit: bool {
 }
 ===errors >=8.1===
 Enum backing type must be int or string
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Suit" in Standard input code on line 2
+===php_error >=8.1===
 PHP Fatal error:  Enum backing type must be int or string, bool given in Standard input code on line 2
 ===ast >=8.1===
 {

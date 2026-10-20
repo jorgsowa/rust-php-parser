@@ -2,7 +2,11 @@
 <?php class Foo { private public(set) static int $count = 0; }
 ===errors >=8.5===
 Visibility of property must not be weaker than set visibility
-===php_error===
+===php_error <=8.3===
+PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 1
+===php_error 8.4===
+PHP Fatal error:  Static property may not have asymmetric visibility in Standard input code on line 1
+===php_error >=8.5===
 PHP Fatal error:  Visibility of property Foo::$count must not be weaker than set visibility in Standard input code on line 1
 ===ast >=8.5===
 {

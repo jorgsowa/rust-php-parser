@@ -5,7 +5,9 @@ $g = function(): never { if ($a) { return 1; } };
 ===errors >=8.1===
 A never-returning function must not return
 A never-returning function must not return
-===php_error===
+===php_error <=8.0===
+PHP Fatal error:  A function with return type must return a value in Standard input code on line 2
+===php_error >=8.1===
 PHP Fatal error:  A never-returning function must not return in Standard input code on line 2
 ===ast >=8.1===
 {

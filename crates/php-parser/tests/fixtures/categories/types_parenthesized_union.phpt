@@ -14,6 +14,8 @@ class X {
     public (A&B)|(C&D) $prop1;
     public (A&B)|(C&D)|(E&F) $prop2;
 }
+===php_error <=8.1===
+PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 3
 ===ast >=8.2===
 {
   "stmts": [

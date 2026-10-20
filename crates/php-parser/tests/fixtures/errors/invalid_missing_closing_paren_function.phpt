@@ -5,7 +5,9 @@ function foo(int $a, $b {
 }
 ===errors >=7.4===
 expected ')' to close the delimiter opened at byte 18
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ')' in Standard input code on line 2
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 2
 ===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token "return", expecting identifier in Standard input code on line 3

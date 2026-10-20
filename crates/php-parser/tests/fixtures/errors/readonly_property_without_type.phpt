@@ -5,7 +5,7 @@ class Foo {
 }
 ===errors===
 readonly property must have type
-===php_error===
+===php_error >=8.1===
 PHP Fatal error:  Readonly property Foo::$bar must have type in Standard input code on line 3
 ===ast===
 {

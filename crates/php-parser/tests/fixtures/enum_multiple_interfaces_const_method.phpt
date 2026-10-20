@@ -14,6 +14,8 @@ enum Status: string implements Loggable, Serializable {
         return $this === self::Active;
     }
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 2
 ===ast >=8.1===
 {
   "stmts": [

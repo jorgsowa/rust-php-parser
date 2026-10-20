@@ -10,7 +10,9 @@ class A {
 }
 ===errors >=8.5===
 Cannot use the static modifier on a parameter
-===php_error >=8.5===
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected token "static", expecting variable in Standard input code on line 3
+===php_error >=8.3===
 PHP Fatal error:  Cannot use the static modifier on a parameter in Standard input code on line 3
 ===ast >=8.5===
 {

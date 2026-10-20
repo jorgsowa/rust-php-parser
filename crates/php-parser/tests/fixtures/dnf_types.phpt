@@ -6,6 +6,8 @@ function foo((A&B)|C $x): (X&Y)|Z {
 function bar((A&B)|(C&D) $y): (E&F)|null {
     return $y;
 }
+===php_error <=8.1===
+PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 2
 ===ast >=8.2===
 {
   "stmts": [

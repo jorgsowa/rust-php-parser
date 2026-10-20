@@ -1,6 +1,8 @@
 ===source===
 <?php
 (void) $a ? f() : g();
+===php_error <=8.4===
+PHP Parse error:  syntax error, unexpected variable "$a" in Standard input code on line 2
 ===ast >=8.5===
 {
   "stmts": [

@@ -1,5 +1,7 @@
 ===source===
 <?php class A { const ?string N = null; }
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected token "?" in Standard input code on line 1
 ===ast >=8.3===
 {
   "stmts": [

@@ -39,6 +39,8 @@ class Foo5 extends Foo3 {
 }
 
 ?>
+===php_error <=8.2===
+PHP Fatal error:  Cannot use 'final' as method modifier in Standard input code on line 12
 ===ast >=8.5===
 {
   "stmts": [

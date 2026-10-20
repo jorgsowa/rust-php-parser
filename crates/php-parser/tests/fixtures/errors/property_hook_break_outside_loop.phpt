@@ -3,7 +3,9 @@
 while (1) { $o = new class { public $p { get { break; } } }; }
 ===errors===
 Cannot 'break' 1 level
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
+===php_error >=8.4===
 PHP Fatal error:  'break' not in the 'loop' or 'switch' context in Standard input code on line 2
 ===ast===
 {

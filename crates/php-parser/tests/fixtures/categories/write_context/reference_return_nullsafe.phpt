@@ -18,7 +18,9 @@ Cannot take reference of a nullsafe chain
 Cannot take reference of a nullsafe chain
 Cannot take reference of a nullsafe chain
 Cannot take reference of a nullsafe chain
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 11
+===php_error >=8.4===
 PHP Fatal error:  Cannot take reference of a nullsafe chain in Standard input code on line 5
 ===ast===
 {

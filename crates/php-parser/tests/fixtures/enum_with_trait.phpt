@@ -7,6 +7,8 @@ enum Direction implements HasLabel {
     case East;
     case West;
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Direction" in Standard input code on line 2
 ===ast >=8.1===
 {
   "stmts": [

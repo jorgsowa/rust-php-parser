@@ -13,6 +13,10 @@ pub const SUPPORTED: [Version; 8] = [
     (8, 6),
 ];
 
+/// Version the parser targets by default; the parse target of a fixture without version ranges.
+#[allow(dead_code)]
+pub const DEFAULT: Version = SUPPORTED[SUPPORTED.len() - 1];
+
 const SECTION_NAMES: [&str; 3] = ["errors", "php_error", "ast"];
 
 fn parse_version(val: &str) -> Option<Version> {
@@ -168,6 +172,12 @@ impl Fixture {
                 return Err(format!("more than one ==={name}=== section"));
             }
             let qualified: Vec<VersionSpec> = named.iter().filter_map(|s| s.spec).collect();
+            // `php_error` ranges name `php -l` versions, which are independent of the parse targets.
+            let versions = if name == "php_error" {
+                Some(SUPPORTED.to_vec())
+            } else {
+                versions.clone()
+            };
             let Some(versions) = &versions else {
                 if let Some(spec) = qualified.first() {
                     return Err(format!(
@@ -270,24 +280,34 @@ impl Fixture {
         self.sections.extend(new);
     }
 
-    /// Set the body of the section applying to `version`, or add one limited to it.
-    pub fn set_section(&mut self, name: &str, version: Option<Version>, body: &str) {
-        match self.section_index(name, version) {
-            Some(i) => self.sections[i].body = body.to_string(),
-            None => {
-                let spec = version
-                    .filter(|_| self.versions().is_some())
-                    .map(|v| VersionSpec {
-                        lo: Some(v),
-                        hi: Some(v),
-                    });
-                self.sections.push(Section {
+    /// Set or remove the body of section `name` for `version` alone, keeping the other versions'
+    /// bodies and merging runs of identical ones.
+    pub fn set_section_for(&mut self, name: &str, version: Version, body: Option<&str>) {
+        let bodies: Vec<Option<String>> = SUPPORTED
+            .iter()
+            .map(|v| match *v == version {
+                true => body.map(str::to_string),
+                false => self.section(name, Some(*v)).map(|s| s.body.clone()),
+            })
+            .collect();
+        let mut new = Vec::new();
+        let mut start = 0;
+        while start < SUPPORTED.len() {
+            let mut end = start + 1;
+            while end < SUPPORTED.len() && bodies[end] == bodies[start] {
+                end += 1;
+            }
+            if let Some(body) = &bodies[start] {
+                let whole = start == 0 && end == SUPPORTED.len();
+                new.push(Section {
                     name: name.to_string(),
-                    spec,
-                    body: body.to_string(),
+                    spec: (!whole).then(|| VersionSpec::for_run(&SUPPORTED[start..end])),
+                    body: body.clone(),
                 });
             }
+            start = end;
         }
+        self.replace_sections(name, new);
     }
 
     pub fn render(&self) -> String {
@@ -477,7 +497,7 @@ where
                 continue;
             }
             if errors.is_empty() {
-                let php_error = fixture.section("php_error", *target);
+                let php_error = fixture.section("php_error", Some(target.unwrap_or(DEFAULT)));
                 if php_error.is_some_and(|s| !s.body.trim().is_empty()) {
                     fail(format!(
                         "closure-check failure in {at}: php -l rejects this input but the parser \

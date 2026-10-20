@@ -20,7 +20,9 @@ Array and string offset access syntax with curly braces is no longer supported
 Array and string offset access syntax with curly braces is no longer supported
 Array and string offset access syntax with curly braces is no longer supported
 Array and string offset access syntax with curly braces is no longer supported
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{' in Standard input code on line 8
+===php_error 8.0-8.3===
 PHP Fatal error:  Array and string offset access syntax with curly braces is no longer supported in Standard input code on line 3
 ===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token "{" in Standard input code on line 3

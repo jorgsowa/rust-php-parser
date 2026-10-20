@@ -1,5 +1,7 @@
 ===source===
 <?php foo(...$extra, name: 'test');
+===php_error <=8.0===
+PHP Fatal error:  Cannot combine named arguments and argument unpacking in Standard input code on line 1
 ===ast===
 {
   "stmts": [

@@ -1,5 +1,7 @@
 ===source===
 <?php enum Status { /** Doc for constant */ const VALUE = 1; }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 1
 ===ast >=8.1===
 {
   "stmts": [

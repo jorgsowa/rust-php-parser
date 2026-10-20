@@ -7,6 +7,8 @@ class Foo {
         private readonly int $c,
     ) {}
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token "protected", expecting variable in Standard input code on line 4
 ===ast >=8.1===
 {
   "stmts": [

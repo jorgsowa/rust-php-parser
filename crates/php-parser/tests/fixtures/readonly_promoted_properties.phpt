@@ -7,6 +7,10 @@ readonly class Point {
         public int $z = 0,
     ) {}
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token "class" in Standard input code on line 2
+===php_error 8.1===
+PHP Parse error:  syntax error, unexpected token "readonly", expecting end of file in Standard input code on line 2
 ===ast >=8.2===
 {
   "stmts": [

@@ -6,6 +6,8 @@ $c = Foo::CONST;
 $d = static::method();
 $e = parent::method();
 $f = self::$prop;
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 2
 ===ast===
 {
   "stmts": [

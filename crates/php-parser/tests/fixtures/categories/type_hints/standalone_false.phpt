@@ -1,5 +1,7 @@
 ===source===
 <?php function f(): false { return false; }
+===php_error <=8.1===
+PHP Fatal error:  False can not be used as a standalone type in Standard input code on line 1
 ===ast >=8.2===
 {
   "stmts": [

@@ -5,7 +5,7 @@ class A {
 }
 ===errors >=8.5===
 Method A::__construct cannot be #[\NoDiscard]
-===php_error===
+===php_error >=8.5===
 PHP Fatal error:  Method A::__construct cannot be #[\NoDiscard] in Standard input code on line 3
 ===ast >=8.5===
 {

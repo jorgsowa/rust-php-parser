@@ -3,6 +3,8 @@
 class Foo {
     public readonly Countable&Traversable $prop;
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Countable", expecting variable in Standard input code on line 3
 ===ast===
 {
   "stmts": [

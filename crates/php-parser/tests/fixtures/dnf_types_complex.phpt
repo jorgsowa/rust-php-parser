@@ -7,6 +7,8 @@ class Foo {
     public (A&B)|C $prop;
     public function bar((A&B)|(C&D) $a, E|null $b): (F&G)|null {}
 }
+===php_error <=8.1===
+PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 2
 ===ast >=8.2===
 {
   "stmts": [

@@ -4,6 +4,8 @@
 function f_null(): null {}
 function f_false(): false {}
 function f_true(): true {}
+===php_error <=8.1===
+PHP Fatal error:  Null can not be used as a standalone type in Standard input code on line 3
 ===ast >=8.2===
 {
   "stmts": [

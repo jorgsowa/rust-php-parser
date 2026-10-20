@@ -1,5 +1,7 @@
 ===source===
 <?php enum Status { case Active; case Inactive; } $r = match($s) { Status::Active => 'on', Status::Inactive => 'off' };
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 1
 ===ast >=8.1===
 {
   "stmts": [

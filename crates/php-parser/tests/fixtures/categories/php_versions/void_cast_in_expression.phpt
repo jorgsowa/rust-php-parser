@@ -2,7 +2,9 @@
 <?php $x = (void)1 + 2;
 ===errors >=8.5===
 (void) cast cannot be used in an expression context
-===php_error===
+===php_error <=8.4===
+PHP Parse error:  syntax error, unexpected integer "1" in Standard input code on line 1
+===php_error >=8.5===
 PHP Parse error:  syntax error, unexpected token "(void)" in Standard input code on line 1
 ===ast >=8.5===
 {

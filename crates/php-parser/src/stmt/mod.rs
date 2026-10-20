@@ -568,7 +568,8 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             parser.require_version(PhpVersion::Php85, "attributes on constants", attr_span);
             let stmt = parse_const_with_attrs(parser, attributes);
             if let StmtKind::Const(ref items) = stmt.kind {
-                if items.len() > 1 {
+                // PHP 7.4 reads `#[` as a comment, so the attribute is only a version gate there.
+                if items.len() > 1 && parser.version >= PhpVersion::Php80 {
                     parser.error(ParseError::Forbidden {
                         message: "Cannot apply attributes to multiple constants at once".into(),
                         span: stmt.span,
@@ -1271,6 +1272,10 @@ pub(crate) fn is_void_type(rt: &TypeHint<'_, '_>) -> bool {
     classify_void_or_never(rt) == Some(true)
 }
 
+pub(crate) fn is_never_type(rt: &TypeHint<'_, '_>) -> bool {
+    classify_void_or_never(rt) == Some(false)
+}
+
 /// Walks `body` and emits a diagnostic for every `return` statement that
 /// violates `void` ("must not return a value") or `never` ("must not return")
 /// semantics. Recurses through control-flow nesting (`if`, `while`, …) but
@@ -1549,7 +1554,8 @@ pub fn parse_param_list<'arena, 'src>(
             None
         };
 
-        if is_readonly && type_hint.is_none() {
+        // Before 8.1 `readonly` is reported as a version gate; PHP 8.0 reads it as a class type.
+        if is_readonly && type_hint.is_none() && parser.version >= PhpVersion::Php81 {
             parser.error(ParseError::Forbidden {
                 message: "readonly promoted property must have type".into(),
                 span: Span::new(param_start, parser.previous_end()),

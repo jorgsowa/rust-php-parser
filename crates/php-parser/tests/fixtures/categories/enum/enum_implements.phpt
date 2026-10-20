@@ -1,5 +1,7 @@
 ===source===
 <?php enum Color implements HasLabel { case Red; public function label(): string { return 'red'; } }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Color" in Standard input code on line 1
 ===ast >=8.1===
 {
   "stmts": [

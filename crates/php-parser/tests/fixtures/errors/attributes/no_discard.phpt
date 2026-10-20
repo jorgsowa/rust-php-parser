@@ -25,7 +25,9 @@ Method A::__construct cannot be #[\NoDiscard]
 A void method does not return a value, but #[\NoDiscard] requires a return value
 A never returning method does not return a value, but #[\NoDiscard] requires a return value
 Method B::__Construct cannot be #[\NoDiscard]
-===php_error===
+===php_error 8.1===
+PHP Fatal error:  A never-returning function must not return in Standard input code on line 5
+===php_error >=8.5===
 PHP Fatal error:  A void function does not return a value, but #[\NoDiscard] requires a return value in Standard input code on line 2
 ===ast >=8.5===
 {

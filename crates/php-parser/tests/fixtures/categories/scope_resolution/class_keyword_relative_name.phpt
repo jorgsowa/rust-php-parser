@@ -12,7 +12,11 @@ class A extends B {
 trait T {
     function m(): namespace\parent {}
 }
-===ast===
+===errors >=8.6===
+Type declaration 'static' must be unqualified
+===php_error >=8.6===
+PHP Fatal error:  Type declaration 'static' must be unqualified in Standard input code on line 4
+===ast >=8.0===
 {
   "stmts": [
     {

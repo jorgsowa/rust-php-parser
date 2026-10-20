@@ -10,7 +10,9 @@ enum Suit: string
 }
 ===errors===
 Case Diamonds of backed enum Suit must have a value
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Suit" in Standard input code on line 3
+===php_error >=8.1===
 PHP Fatal error:  Case Diamonds of backed enum Suit must have a value in Standard input code on line 6
 ===ast===
 {

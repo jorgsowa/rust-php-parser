@@ -1,5 +1,7 @@
 ===source===
 <?php #[Attr(new Config(debug: false))] function f() {}
+===php_error <=8.0===
+PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 1
 ===ast===
 {
   "stmts": [

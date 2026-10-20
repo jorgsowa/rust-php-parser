@@ -31,7 +31,17 @@ Cannot apply #[\Deprecated] to interface K
 Cannot apply #[\Deprecated] to enum G
 Cannot apply #[\Deprecated] to class class@anonymous
 Cannot apply #[\AllowDynamicProperties] to readonly class class@anonymous
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "enum" in Standard input code on line 4
+===php_error 8.1===
+PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 9
+===php_error 8.2===
+PHP Parse error:  syntax error, unexpected token "readonly", expecting "class" or "#[" in Standard input code on line 15
+===php_error 8.3===
+PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to interface in Standard input code on line 6
+===php_error 8.4===
+PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to interface J in Standard input code on line 6
+===php_error >=8.5===
 PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input code on line 2
 ===ast >=8.5===
 {

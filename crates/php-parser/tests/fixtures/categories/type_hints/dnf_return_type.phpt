@@ -1,5 +1,7 @@
 ===source===
 <?php function baz(): (A&B)|(C&D) {}
+===php_error <=8.1===
+PHP Parse error:  syntax error, unexpected token "(" in Standard input code on line 1
 ===ast >=8.2===
 {
   "stmts": [

@@ -3,7 +3,11 @@
 ===errors >=8.3===
 cannot use 'static' as constant modifier
 cannot use 'abstract' as constant modifier
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 1
+===php_error 8.1-8.2===
+PHP Fatal error:  Cannot use 'static' as constant modifier in Standard input code on line 1
+===php_error >=8.3===
 PHP Fatal error:  Cannot use the static modifier on a class constant in Standard input code on line 1
 ===ast >=8.3===
 {

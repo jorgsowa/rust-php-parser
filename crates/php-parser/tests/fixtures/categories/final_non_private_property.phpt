@@ -6,6 +6,12 @@ class A {
     final private(set) public int $c;
     private int $d;
 }
+===php_error <=8.1===
+PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 5
+===php_error 8.2===
+PHP Parse error:  syntax error, unexpected token ")", expecting amp in Standard input code on line 5
+===php_error 8.3===
+PHP Fatal error:  Cannot use the final modifier on a property in Standard input code on line 3
 ===ast >=8.4===
 {
   "stmts": [

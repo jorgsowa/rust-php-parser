@@ -7,7 +7,11 @@ expected class name, found '{'
 ===errors >=8.2===
 expected ';' after expression
 expected class name, found '{'
-===php_error <=8.2===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'readonly' (T_STRING) in Standard input code on line 1
+===php_error 8.0===
+PHP Parse error:  syntax error, unexpected identifier "readonly" in Standard input code on line 1
+===php_error 8.1-8.2===
 PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 1
 ===php_error >=8.3===
 PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input code on line 1

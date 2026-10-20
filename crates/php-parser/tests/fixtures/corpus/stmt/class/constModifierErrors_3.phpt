@@ -8,7 +8,11 @@ class A {
 cannot use 'readonly' as constant modifier
 ===errors >=8.1===
 cannot use 'readonly' as constant modifier
-===php_error <=8.2===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'readonly' (T_STRING), expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 3
+===php_error 8.0===
+PHP Parse error:  syntax error, unexpected identifier "readonly", expecting "function" or "const" in Standard input code on line 3
+===php_error 8.1-8.2===
 PHP Fatal error:  Cannot use 'readonly' as constant modifier in Standard input code on line 3
 ===php_error >=8.3===
 PHP Fatal error:  Cannot use the readonly modifier on a class constant in Standard input code on line 3

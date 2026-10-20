@@ -6,6 +6,10 @@ $obj = new readonly class(1, 2) {
         public int $y,
     ) {}
 };
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token "class" in Standard input code on line 2
+===php_error 8.1-8.2===
+PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 2
 ===ast >=8.3===
 {
   "stmts": [

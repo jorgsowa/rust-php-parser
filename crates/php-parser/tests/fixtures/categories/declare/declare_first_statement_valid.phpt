@@ -17,6 +17,8 @@ E, ticks=<<<'E'
 1
 E, ticks='x', ticks=1.5e3);
 namespace A;
+===php_error <=8.4===
+PHP Fatal error:  strict_types declaration must be the very first statement in the script in Standard input code on line 7
 ===ast===
 {
   "stmts": [

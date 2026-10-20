@@ -9,7 +9,11 @@ interface I {
 }
 ===errors >=8.4===
 Interfaces may only include hooked properties
-===php_error===
+===php_error <=8.0===
+PHP Fatal error:  Interfaces may not include member variables in Standard input code on line 3
+===php_error 8.1-8.3===
+PHP Fatal error:  Interfaces may not include properties in Standard input code on line 3
+===php_error >=8.4===
 PHP Fatal error:  Interfaces may only include hooked properties in Standard input code on line 3
 ===ast >=8.4===
 {

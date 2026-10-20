@@ -3,7 +3,9 @@
 new Foo(...);
 ===errors===
 Cannot create Closure for new expression
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 2
+===php_error >=8.1===
 PHP Fatal error:  Cannot create Closure for new expression in Standard input code on line 2
 ===ast===
 {

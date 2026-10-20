@@ -1,5 +1,7 @@
 ===source===
 <?php enum E { case A; #[Override] public function foo(): void {} }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 1
 ===ast >=8.1===
 {
   "stmts": [

@@ -78,6 +78,8 @@ function test24(object|int $x) {}
 
 // Edge case 25: Iterable in union
 function test25(iterable|A $x) {}
+===php_error <=8.1===
+PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 3
 ===ast >=8.2===
 {
   "stmts": [

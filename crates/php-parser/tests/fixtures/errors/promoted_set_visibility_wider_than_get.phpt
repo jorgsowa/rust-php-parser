@@ -5,7 +5,11 @@ class C {
 }
 ===errors >=8.4===
 Visibility of property must not be weaker than set visibility
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token "protected", expecting variable in Standard input code on line 3
+===php_error 8.1-8.3===
+PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 3
+===php_error >=8.4===
 PHP Fatal error:  Visibility of property C::$a must not be weaker than set visibility in Standard input code on line 3
 ===ast >=8.4===
 {

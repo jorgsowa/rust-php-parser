@@ -2,7 +2,9 @@
 <?php function f($x { get => 1; }) {}
 ===errors===
 Cannot declare promoted property outside a constructor
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 1
+===php_error >=8.4===
 PHP Fatal error:  Cannot declare promoted property outside a constructor in Standard input code on line 1
 ===ast===
 {

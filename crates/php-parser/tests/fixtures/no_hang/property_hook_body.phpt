@@ -1,5 +1,7 @@
 ===source===
 <?php class A { public string $x { get { ?> <?php } } }
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 1
 ===ast >=8.4===
 {
   "stmts": [

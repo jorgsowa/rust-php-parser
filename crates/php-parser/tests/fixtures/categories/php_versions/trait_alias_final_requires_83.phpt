@@ -2,6 +2,8 @@
 <?php class A { use T { f as final g; } }
 ===errors 8.2===
 'final trait method alias' requires PHP 8.3 or higher
+===php_error <=8.2===
+PHP Fatal error:  Cannot use 'final' as method modifier in Standard input code on line 1
 ===ast 8.2===
 {
   "stmts": [

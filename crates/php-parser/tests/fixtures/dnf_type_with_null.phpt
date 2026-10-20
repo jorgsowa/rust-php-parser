@@ -1,5 +1,7 @@
 ===source===
 <?php function foo((Countable&Traversable)|null $x): (A&B)|null {}
+===php_error <=8.1===
+PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 1
 ===ast >=8.2===
 {
   "stmts": [

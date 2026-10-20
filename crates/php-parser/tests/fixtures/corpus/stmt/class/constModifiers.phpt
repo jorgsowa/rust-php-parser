@@ -8,6 +8,8 @@ class Foo {
     private const D = 4;
     final const E = 5;
 }
+===php_error <=8.0===
+PHP Fatal error:  Cannot use 'final' as constant modifier in Standard input code on line 8
 ===ast===
 {
   "stmts": [

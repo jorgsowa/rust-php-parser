@@ -9,7 +9,9 @@ class Foo {
 }
 ===errors >=8.3===
 expected class member, found '@'
-===php_error===
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected token "@", expecting "function" or "const" in Standard input code on line 5
+===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected token "@", expecting "function" in Standard input code on line 5
 ===ast >=8.3===
 {

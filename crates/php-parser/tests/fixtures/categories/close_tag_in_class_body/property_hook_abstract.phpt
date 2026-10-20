@@ -1,5 +1,9 @@
 ===source===
 <?php abstract class A { abstract public int $a { get ?><?php } }
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 1
+===php_error 8.3===
+PHP Fatal error:  Cannot use the abstract modifier on a property in Standard input code on line 1
 ===ast===
 {
   "stmts": [

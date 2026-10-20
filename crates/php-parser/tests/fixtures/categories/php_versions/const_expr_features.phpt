@@ -5,6 +5,10 @@ const B = strlen(...);
 const C = (int) "1";
 const D = E::A->value;
 function f($a = new Foo) {}
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 3
+===php_error 8.1-8.4===
+PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 2
 ===ast >=8.5===
 {
   "stmts": [

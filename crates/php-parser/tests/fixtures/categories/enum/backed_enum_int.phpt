@@ -1,5 +1,7 @@
 ===source===
 <?php enum Status: int { case Active = 1; case Inactive = 0; }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 1
 ===ast >=8.1===
 {
   "stmts": [

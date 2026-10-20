@@ -11,7 +11,9 @@ enum C: int implements Bar {
 }
 ===errors===
 'class' cannot be used as an enum case name
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "A" in Standard input code on line 3
+===php_error >=8.1===
 PHP Fatal error:  A class constant must not be called 'class'; it is reserved for class name fetching in Standard input code on line 4
 ===ast===
 {

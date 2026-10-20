@@ -18,7 +18,9 @@ Property with asymmetric visibility Test::$x must have type
 cannot use multiple set-visibility modifiers
 Property with asymmetric visibility Test::$x must have type
 Cannot redeclare Test::$x
-===php_error <=8.3===
+===php_error <=8.1===
+PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 3
+===php_error 8.2-8.3===
 PHP Parse error:  syntax error, unexpected token ")", expecting amp in Standard input code on line 3
 ===php_error >=8.4===
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 3

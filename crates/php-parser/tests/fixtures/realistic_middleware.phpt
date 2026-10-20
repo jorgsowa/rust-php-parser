@@ -87,6 +87,8 @@ class RateLimitMiddleware implements MiddlewareInterface
         return $counts[$key];
     }
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "TokenValidator", expecting variable in Standard input code on line 17
 ===ast===
 {
   "stmts": [

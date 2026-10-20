@@ -16,6 +16,8 @@ class C extends P {
 var_dump((new C)->prop);
 
 ?>
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "=>" in Standard input code on line 11
 ===ast >=8.5===
 {
   "stmts": [

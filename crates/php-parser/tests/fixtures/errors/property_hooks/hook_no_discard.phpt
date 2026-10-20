@@ -24,7 +24,11 @@ namespace {
 #[\NoDiscard] is not supported for property hooks
 #[\NoDiscard] is not supported for property hooks
 #[\NoDiscard] is not supported for property hooks
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 5
+===php_error 8.4===
+PHP Fatal error:  N\A::$d::get() has #[\Override] attribute, but no matching parent method exists in Standard input code on line 10
+===php_error >=8.5===
 PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard input code on line 5
 ===ast >=8.5===
 {

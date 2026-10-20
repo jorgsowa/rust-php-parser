@@ -6,6 +6,8 @@ class A {
         T::h as final;
     }
 }
+===php_error <=8.2===
+PHP Fatal error:  Cannot use 'final' as method modifier in Standard input code on line 3
 ===ast===
 {
   "stmts": [

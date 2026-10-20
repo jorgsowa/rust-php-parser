@@ -11,7 +11,9 @@ Cannot use "self" as interface name, as it is reserved
 Cannot use "self" as class name, as it is reserved
 '\static' is an invalid class name
 Cannot use "parent" as interface name, as it is reserved
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 2
+===php_error >=8.1===
 PHP Fatal error:  Cannot use "self" as interface name, as it is reserved in Standard input code on line 2
 ===ast===
 {

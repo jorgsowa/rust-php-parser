@@ -20,7 +20,9 @@ null cannot be marked as nullable
 Void can only be used as a standalone type
 Void can only be used as a standalone type
 Void can only be used as a standalone type
-===php_error===
+===php_error <=8.0===
+PHP Fatal error:  Void can only be used as a standalone type in Standard input code on line 2
+===php_error >=8.1===
 PHP Fatal error:  never can only be used as a standalone type in Standard input code on line 2
 ===ast >=8.1===
 {

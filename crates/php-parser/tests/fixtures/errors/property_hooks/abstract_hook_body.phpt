@@ -27,7 +27,9 @@ Property hook cannot be both abstract and final
 Property hook cannot be both abstract and private
 Non-abstract property hook must have a body
 Property hook cannot be both abstract and private
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
+===php_error >=8.4===
 PHP Fatal error:  Abstract property hook cannot have body in Standard input code on line 3
 ===ast >=8.4===
 {

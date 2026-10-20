@@ -4,6 +4,8 @@
 0O123;
 0o1_2_3;
 0o1000000000000000000000;
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "o123" in Standard input code on line 2
 ===ast===
 {
   "stmts": [

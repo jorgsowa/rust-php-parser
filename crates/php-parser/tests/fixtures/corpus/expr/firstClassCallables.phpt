@@ -10,7 +10,9 @@ $this?->foo(...);
 function foo() {}
 ===errors===
 Cannot create Closure as attribute argument
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 2
+===php_error >=8.1===
 PHP Fatal error:  Cannot create Closure as attribute argument in Standard input code on line 9
 ===ast===
 {

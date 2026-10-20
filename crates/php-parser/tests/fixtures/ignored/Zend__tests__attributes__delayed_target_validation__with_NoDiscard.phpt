@@ -62,6 +62,10 @@ demoFn();
 $v = demoFn();
 var_dump(GLOBAL_CONST);
 ?>
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 10
+===php_error 8.4===
+PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 49
 ===ast >=8.5===
 {
   "stmts": [

@@ -36,6 +36,14 @@ foreach ($cases as $r) {
 }
 
 ?>
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "readonly" in Standard input code on line 13
+===php_error 8.1===
+PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 13
+===php_error 8.2-8.3===
+PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to trait in Standard input code on line 5
+===php_error 8.4===
+PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to trait DemoTrait in Standard input code on line 5
 ===ast >=8.5===
 {
   "stmts": [

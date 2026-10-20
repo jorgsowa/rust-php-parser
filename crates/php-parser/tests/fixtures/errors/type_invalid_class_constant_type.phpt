@@ -21,7 +21,9 @@ Class constant A::D cannot have type callable|int
 Class constant I::E cannot have type never
 Class constant E::F cannot have type callable
 Class constant class@anonymous::G cannot have type void
-===php_error===
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected identifier "A", expecting "=" in Standard input code on line 3
+===php_error >=8.3===
 PHP Fatal error:  Class constant A::A cannot have type void in Standard input code on line 3
 ===ast >=8.3===
 {

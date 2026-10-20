@@ -4,7 +4,9 @@ function foo((Foo|Bar)&Baz $x) { }
 
 ===errors >=8.2===
 Type declarations cannot be union types, use DNF syntax (A&B)|C instead
-===php_error <=8.4===
+===php_error <=8.1===
+PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 2
+===php_error 8.2-8.4===
 PHP Parse error:  syntax error, unexpected token "|", expecting amp in Standard input code on line 2
 ===php_error >=8.5===
 PHP Parse error:  syntax error, unexpected token "|", expecting token "&" in Standard input code on line 2

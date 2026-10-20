@@ -6,6 +6,8 @@ class Test {
     const array ARRAY = [];
     const Foo|Bar|null FOO = null;
 }
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected identifier "X", expecting "=" in Standard input code on line 3
 ===ast >=8.3===
 {
   "stmts": [

@@ -2,6 +2,8 @@
 <?php
 (clone($a, []))->b = 1;
 (clone $a)::$s = 1;
+===php_error <=8.4===
+PHP Parse error:  syntax error, unexpected token "," in Standard input code on line 2
 ===ast >=8.5===
 {
   "stmts": [

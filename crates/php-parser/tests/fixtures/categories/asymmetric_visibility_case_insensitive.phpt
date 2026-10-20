@@ -5,6 +5,8 @@ class D {
     Protected(Set) int $b;
     public function __construct(public private(Set) int $c, private (A&B)|null $d) {}
 }
+===php_error <=8.3===
+PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 3
 ===ast >=8.4===
 {
   "stmts": [

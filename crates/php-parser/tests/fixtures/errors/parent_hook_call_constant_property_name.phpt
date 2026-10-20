@@ -43,7 +43,11 @@ Must not use parent::$1.0E+25::set() in a different property ($a)
 Must not use parent::$1.0E-7::set() in a different property ($a)
 Must not use parent::$9.2233720368548E+18::set() in a different property ($a)
 Must not use parent::$b::set() in a different property ($a)
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 6
+===php_error 8.1-8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 8
+===php_error >=8.4===
 PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard input code on line 2
 ===ast===
 {

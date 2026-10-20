@@ -1,5 +1,7 @@
 ===source===
 <?php enum Numbers { const PI = 3.14; const TAU = 6.28; }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Numbers" in Standard input code on line 1
 ===ast >=8.1===
 {
   "stmts": [

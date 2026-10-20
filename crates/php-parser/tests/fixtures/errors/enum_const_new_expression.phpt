@@ -6,7 +6,9 @@ enum E: int {
 }
 ===errors >=8.1===
 New expressions are not supported in this context
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 2
+===php_error >=8.1===
 PHP Fatal error:  New expressions are not supported in this context in Standard input code on line 4
 ===ast >=8.1===
 {

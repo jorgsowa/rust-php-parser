@@ -5,6 +5,8 @@ enum Color {
     case Green;
     case Blue;
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Color" in Standard input code on line 2
 ===ast >=8.1===
 {
   "stmts": [

@@ -23,7 +23,9 @@ Must not use parent::$b::get() in a different property ($a)
 Must not use parent::$a::get() in a different property hook (set)
 Must not use parent::$a::set() outside a property hook
 Cannot create Closure for parent property hook call
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 8
+===php_error >=8.4===
 PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard input code on line 2
 ===ast===
 {

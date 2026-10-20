@@ -9,6 +9,8 @@ enum E {
 }
 ===errors >=8.1===
 Cannot redefine class constant E::A
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 2
 ===php_error >=8.1===
 PHP Fatal error:  Cannot redefine class constant E::A in Standard input code on line 4
 ===ast >=8.1===

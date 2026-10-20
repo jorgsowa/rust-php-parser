@@ -25,6 +25,8 @@ abstract class Complete {
         return $this->id;
     }
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "string", expecting variable in Standard input code on line 11
 ===ast===
 {
   "stmts": [

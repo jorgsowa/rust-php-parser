@@ -40,6 +40,8 @@ namespace Ns {
 }
 
 ?>
+===php_error <=8.3===
+PHP Fatal error:  Cannot use Ns\C as C because the name is already in use in Standard input code on line 14
 ===ast >=8.5===
 {
   "stmts": [

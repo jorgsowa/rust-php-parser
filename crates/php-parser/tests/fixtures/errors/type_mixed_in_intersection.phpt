@@ -4,7 +4,9 @@ function foo(mixed&Foo $x) { }
 
 ===errors >=8.1===
 Type mixed cannot be part of an intersection type
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Foo", expecting variable in Standard input code on line 2
+===php_error >=8.1===
 PHP Fatal error:  Type mixed cannot be part of an intersection type in Standard input code on line 2
 ===ast >=8.1===
 {

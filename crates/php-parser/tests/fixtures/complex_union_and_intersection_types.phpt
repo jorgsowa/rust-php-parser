@@ -9,6 +9,8 @@ class Container {
         private string|int|float $value
     ) {}
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "ArrayAccess", expecting variable in Standard input code on line 2
 ===ast===
 {
   "stmts": [

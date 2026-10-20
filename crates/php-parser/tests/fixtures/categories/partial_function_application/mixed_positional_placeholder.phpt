@@ -1,5 +1,7 @@
 ===source===
 <?php $fn = foo(1, ?, 3);
+===php_error <=8.5===
+PHP Parse error:  syntax error, unexpected token "?", expecting ")" in Standard input code on line 1
 ===ast >=8.6===
 {
   "stmts": [

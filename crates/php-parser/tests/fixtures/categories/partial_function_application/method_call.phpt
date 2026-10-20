@@ -1,5 +1,7 @@
 ===source===
 <?php $fn = $obj->method(?, 2);
+===php_error <=8.5===
+PHP Parse error:  syntax error, unexpected token "?" in Standard input code on line 1
 ===ast >=8.6===
 {
   "stmts": [

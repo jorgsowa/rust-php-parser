@@ -7,6 +7,10 @@ const C = (int) "1";
 'closures in constant expressions' requires PHP 8.5 or higher
 'first-class callables in constant expressions' requires PHP 8.5 or higher
 'casts in constant expressions' requires PHP 8.5 or higher
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 3
+===php_error 8.1-8.4===
+PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 2
 ===ast 8.4===
 {
   "stmts": [

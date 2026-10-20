@@ -1373,8 +1373,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
-    /// Report a builtin type in an intersection; `self` and `parent` are allowed only where
-    /// they resolve to a class at compile time.
+    /// Report a builtin type in an intersection; from PHP 8.5 `self` and `parent` are allowed
+    /// where they resolve to a class at compile time.
     fn check_intersection_members(&mut self, members: &[TypeHint<'arena, 'src>]) {
         for ty in members {
             let TypeHintKind::Keyword(builtin, span) = &ty.kind else {
@@ -1386,14 +1386,17 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     scope.self_name.is_none()
                         || *builtin == BuiltinType::Parent_ && scope.parent_name.is_none()
                 });
-                if !unresolved {
+                if !unresolved && self.version >= PhpVersion::Php85 {
                     continue;
                 }
             }
-            let message = format!(
-                "Type {} cannot be part of an intersection type",
-                self.type_display(ty)
-            );
+            let shown = match builtin {
+                BuiltinType::Self_ | BuiltinType::Parent_ => {
+                    self.source[span.start as usize..span.end as usize].to_string()
+                }
+                _ => self.type_display(ty),
+            };
+            let message = format!("Type {shown} cannot be part of an intersection type");
             self.error(ParseError::Forbidden {
                 message: message.into(),
                 span: *span,
@@ -1554,6 +1557,17 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 }
                 let Some(last) = parts.last() else { return };
                 let relative = name.kind() == NameKind::Relative;
+                let unqualified_static = self.version >= PhpVersion::Php86
+                    && relative
+                    && parts.len() == 1
+                    && last.eq_ignore_ascii_case("static");
+                if unqualified_static {
+                    self.error(ParseError::Forbidden {
+                        message: "Type declaration 'static' must be unqualified".into(),
+                        span: *span,
+                    });
+                    return;
+                }
                 if relative && parts.len() == 1 && crate::stmt::class_keyword(last).is_some() {
                     // `namespace\self` names the class scope like `self` does.
                     self.has_class_keyword_ref = true;

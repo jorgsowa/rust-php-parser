@@ -7,7 +7,11 @@ class Foo {
 }
 ===errors >=8.4===
 A readonly property cannot declare hooks
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "string", expecting variable in Standard input code on line 3
+===php_error 8.1-8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
+===php_error >=8.4===
 PHP Fatal error:  Hooked properties cannot be readonly in Standard input code on line 3
 ===ast >=8.4===
 {

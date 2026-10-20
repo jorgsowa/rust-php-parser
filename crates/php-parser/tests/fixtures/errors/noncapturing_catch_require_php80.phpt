@@ -5,6 +5,8 @@ try {
 }
 ===errors <=7.4===
 'non-capturing catch' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ')', expecting '|' or variable (T_VARIABLE) in Standard input code on line 3
 ===ast >=7.4===
 {
   "stmts": [

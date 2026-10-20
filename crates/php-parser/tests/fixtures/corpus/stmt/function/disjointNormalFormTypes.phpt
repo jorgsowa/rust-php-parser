@@ -7,6 +7,8 @@ class Test {
 }
 
 function test((A&B)|(X&Y) $a): (A&B)|(X&Y) {}
+===php_error <=8.1===
+PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 4
 ===ast >=8.2===
 {
   "stmts": [

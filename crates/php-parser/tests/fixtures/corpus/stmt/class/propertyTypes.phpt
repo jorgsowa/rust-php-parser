@@ -9,7 +9,9 @@ class A {
 }
 ===errors===
 static properties cannot be readonly
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "readonly", expecting "function" or "const" in Standard input code on line 7
+===php_error >=8.1===
 PHP Fatal error:  Static property A::$d cannot be readonly in Standard input code on line 7
 ===ast===
 {

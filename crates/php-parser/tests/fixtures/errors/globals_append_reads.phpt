@@ -50,7 +50,9 @@ Cannot append to $GLOBALS
 Cannot append to $GLOBALS
 Cannot append to $GLOBALS
 Cannot append to $GLOBALS
-===php_error===
+===php_error <=8.0===
+PHP Fatal error:  Cannot use [] for reading in Standard input code on line 2
+===php_error >=8.1===
 PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2
 ===ast===
 {

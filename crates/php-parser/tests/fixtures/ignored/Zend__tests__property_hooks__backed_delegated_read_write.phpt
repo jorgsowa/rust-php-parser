@@ -49,6 +49,8 @@ $child->prop2 = 43;
 var_dump($child->prop2);
 
 ?>
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 4
 ===ast >=8.5===
 {
   "stmts": [

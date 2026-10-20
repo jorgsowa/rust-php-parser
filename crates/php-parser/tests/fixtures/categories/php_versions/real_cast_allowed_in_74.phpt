@@ -1,5 +1,7 @@
 ===source===
 <?php $a = (real) 1.5;
+===php_error >=8.0===
+PHP Parse error:  The (real) cast has been removed, use (float) instead in Standard input code on line 1
 ===ast <=7.4===
 {
   "stmts": [

@@ -27,7 +27,11 @@ Property in interface cannot be explicitly abstract. All interface members are i
 Property in interface cannot be protected or private
 Property in interface cannot be protected or private
 Property in interface cannot be final
-===php_error===
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 11
+===php_error 8.3===
+PHP Fatal error:  Cannot use the abstract modifier on a property in Standard input code on line 11
+===php_error >=8.4===
 PHP Fatal error:  Access type for interface constant I::A must be public in Standard input code on line 3
 ===ast >=8.4===
 {

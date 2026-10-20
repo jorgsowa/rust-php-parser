@@ -3,7 +3,9 @@
 $a =& new B;
 ===errors >=7.4===
 Cannot use by-reference assignment with 'new' expression
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in Standard input code on line 2
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "new" in Standard input code on line 2
 ===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token ";", expecting "(" in Standard input code on line 2

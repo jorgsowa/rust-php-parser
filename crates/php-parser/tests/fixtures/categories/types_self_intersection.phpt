@@ -4,6 +4,10 @@
 class TestSelfIntersection {
     public function test(self&A $x) {}
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "A", expecting variable in Standard input code on line 4
+===php_error 8.1-8.4===
+PHP Fatal error:  Type self cannot be part of an intersection type in Standard input code on line 4
 ===ast >=8.5===
 {
   "stmts": [

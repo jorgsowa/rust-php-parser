@@ -8,6 +8,8 @@ class Foo {
         },
     ) {}
 }
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 4
 ===ast >=8.4===
 {
   "stmts": [

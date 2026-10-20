@@ -23,7 +23,9 @@ Object casts are not supported in this context
 New expressions are not supported in this context
 Object casts are not supported in this context
 New expressions are not supported in this context
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 9
+===php_error >=8.1===
 PHP Fatal error:  New expressions are not supported in this context in Standard input code on line 3
 ===ast===
 {

@@ -47,7 +47,9 @@ Cannot append to $GLOBALS
 Cannot append to $GLOBALS
 Cannot append to $GLOBALS
 Cannot append to $GLOBALS
-===php_error===
+===php_error <=8.0===
+PHP Fatal error:  Cannot re-assign auto-global variable GLOBALS in Standard input code on line 19
+===php_error >=8.1===
 PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax in Standard input code on line 2
 ===ast===
 {

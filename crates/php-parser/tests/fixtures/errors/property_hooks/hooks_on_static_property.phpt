@@ -5,7 +5,9 @@ class F {
 }
 ===errors >=8.4===
 Cannot declare hooks for static property
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
+===php_error >=8.4===
 PHP Fatal error:  Cannot declare hooks for static property in Standard input code on line 3
 ===ast >=8.4===
 {

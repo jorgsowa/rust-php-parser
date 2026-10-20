@@ -16,7 +16,9 @@ only a variable, property, index or call can be interpolated with '{$...}'
 Array and string offset access syntax with curly braces is no longer supported
 expected expression
 expected member name, found end of file
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "+", expecting "->" or "?->" or "{" or "[" in Standard input code on line 2
+===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token "+", expecting "->" or "?->" or "[" in Standard input code on line 2
 ===ast===
 {

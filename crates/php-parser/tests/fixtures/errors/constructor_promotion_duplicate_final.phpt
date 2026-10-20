@@ -7,7 +7,11 @@ class Foo {
 }
 ===errors >=8.5===
 duplicate modifier 'final'
-===php_error===
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected token "final", expecting variable in Standard input code on line 4
+===php_error 8.3-8.4===
+PHP Fatal error:  Cannot use the final modifier on a parameter in Standard input code on line 4
+===php_error >=8.5===
 PHP Fatal error:  Multiple final modifiers are not allowed in Standard input code on line 4
 ===ast >=8.5===
 {

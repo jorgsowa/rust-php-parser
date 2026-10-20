@@ -8,6 +8,8 @@ enum Status {
     public function match(): string { return ''; }
     public function switch(): void {}
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 2
 ===ast >=8.1===
 {
   "stmts": [

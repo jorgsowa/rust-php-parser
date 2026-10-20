@@ -43,6 +43,12 @@ class Foo {
 function f($a = new Foo(new Bar)) {
     static $b = $x, $c = new Foo, $d = f();
 }
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected token ";", expecting "(" in Standard input code on line 2
+===php_error 8.3===
+PHP Parse error:  syntax error, unexpected token "->", expecting "," or ";" in Standard input code on line 12
+===php_error 8.4===
+PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 29
 ===ast===
 {
   "stmts": [

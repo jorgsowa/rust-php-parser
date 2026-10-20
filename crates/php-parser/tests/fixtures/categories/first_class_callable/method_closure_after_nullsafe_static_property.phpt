@@ -2,7 +2,9 @@
 <?php $a?->b::$c->d(...);
 ===errors===
 Cannot combine nullsafe operator with Closure creation
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 1
+===php_error >=8.1===
 PHP Fatal error:  Cannot combine nullsafe operator with Closure creation in Standard input code on line 1
 ===ast===
 {

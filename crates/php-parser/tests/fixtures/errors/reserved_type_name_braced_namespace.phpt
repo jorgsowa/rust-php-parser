@@ -11,7 +11,9 @@ Cannot use "M\Foo\callable" as a type name as it is reserved
 Cannot use "Foo\int" as a type name as it is reserved
 Type declaration 'iterable' must be unqualified
 Cannot use "self" when no class scope is active
-===php_error===
+===php_error <=8.4===
+PHP Fatal error:  Cannot use "self" when no class scope is active in Standard input code on line 3
+===php_error >=8.5===
 PHP Fatal error:  Cannot use "M\Foo\callable" as a type name as it is reserved in Standard input code on line 3
 ===ast===
 {

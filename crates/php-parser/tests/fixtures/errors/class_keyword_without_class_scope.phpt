@@ -28,7 +28,9 @@ Cannot use "self" when no class scope is active
 Cannot use "parent" when no class scope is active
 Cannot use "self" when no class scope is active
 Cannot use "static" when no class scope is active
-===php_error===
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected token ";", expecting "(" in Standard input code on line 5
+===php_error >=8.3===
 PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard input code on line 2
 ===ast===
 {

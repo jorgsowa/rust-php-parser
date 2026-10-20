@@ -19,7 +19,9 @@ Dynamic class names are not allowed in compile-time class constant references
 "static::" is not allowed in compile-time constants
 static::class cannot be used for compile-time class name resolution
 static::class cannot be used for compile-time class name resolution
-===php_error===
+===php_error <=8.2===
+PHP Parse error:  syntax error, unexpected token ";", expecting "(" in Standard input code on line 3
+===php_error >=8.3===
 PHP Fatal error:  Dynamic class names are not allowed in compile-time class constant references in Standard input code on line 2
 ===ast===
 {

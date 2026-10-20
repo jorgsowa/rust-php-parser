@@ -1,5 +1,7 @@
 ===source===
 <?php function f(Countable&Traversable&ArrayAccess $x): void {}
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Traversable", expecting variable in Standard input code on line 1
 ===ast===
 {
   "stmts": [

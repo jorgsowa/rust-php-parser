@@ -13,7 +13,9 @@ $o = new class {
 Cannot specify default value for virtual hooked property A::$a
 Cannot specify default value for virtual hooked property T::$b
 Cannot specify default value for virtual hooked property class@anonymous::$c
-===php_error===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
+===php_error >=8.4===
 PHP Fatal error:  Cannot specify default value for virtual hooked property A::$a in Standard input code on line 3
 ===ast >=8.4===
 {

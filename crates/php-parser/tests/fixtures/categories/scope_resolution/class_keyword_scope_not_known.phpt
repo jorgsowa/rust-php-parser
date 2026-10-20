@@ -35,6 +35,10 @@ $h = function () {
         const Y = parent::class;
     }
 };
+===php_error <=8.0===
+PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 10
+===php_error 8.1===
+PHP Fatal error:  Traits cannot have constants in Standard input code on line 19
 ===ast===
 {
   "stmts": [

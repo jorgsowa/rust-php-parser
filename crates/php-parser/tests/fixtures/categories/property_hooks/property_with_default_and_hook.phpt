@@ -1,5 +1,7 @@
 ===source===
 <?php class Foo { public string $name = 'default' { get => $this->name; } }
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "=>" in Standard input code on line 1
 ===ast >=8.4===
 {
   "stmts": [

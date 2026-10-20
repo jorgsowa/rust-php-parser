@@ -5,6 +5,8 @@ class B implements string, mixed {}
 interface I extends object {}
 enum E implements iterable {}
 new class extends never {};
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 5
 ===ast===
 {
   "stmts": [

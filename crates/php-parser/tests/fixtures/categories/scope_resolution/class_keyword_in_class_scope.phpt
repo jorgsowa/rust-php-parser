@@ -23,6 +23,8 @@ function f() {
         }
     };
 }
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 12
 ===ast===
 {
   "stmts": [

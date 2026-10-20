@@ -1,5 +1,7 @@
 ===source===
 <?php (void)foo();
+===php_error <=8.4===
+PHP Parse error:  syntax error, unexpected identifier "foo" in Standard input code on line 1
 ===ast >=8.5===
 {
   "stmts": [

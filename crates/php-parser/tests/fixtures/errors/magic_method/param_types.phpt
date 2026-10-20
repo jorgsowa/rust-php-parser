@@ -27,7 +27,9 @@ A::__unserialize(): Parameter #1 ($a) must be of type array when declared
 A::__set_state(): Parameter #1 ($a) must be of type array when declared
 B::__get(): Parameter #1 ($n) must be of type string when declared
 B::__set(): Parameter #1 ($n) must be of type string when declared
-===php_error===
+===php_error <=8.0===
+PHP Parse error:  syntax error, unexpected identifier "Bar", expecting variable in Standard input code on line 6
+===php_error >=8.1===
 PHP Fatal error:  A::__get(): Parameter #1 ($n) must be of type string when declared in Standard input code on line 3
 ===ast===
 {

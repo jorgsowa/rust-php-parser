@@ -1675,6 +1675,13 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
             span: body.span,
         });
     }
+    // PHP 8.1 treats the arrow body as a `return` even when it is a `throw`.
+    if parser.version < PhpVersion::Php82 && return_type.as_ref().is_some_and(stmt::is_never_type) {
+        parser.error(ParseError::Forbidden {
+            message: "A never-returning function must not return".into(),
+            span: body.span,
+        });
+    }
     parser.check_attributes(
         &attributes,
         &AttrSite::new(AttrTarget::Function).with_return_type(return_type.as_ref()),
