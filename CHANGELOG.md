@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `foreach ($a as &[$b])` (a by-reference destructuring target) was accepted (`php-rs-parser`).
 - An empty closure `use` list, `use (&)` and `use ($a,,)` were accepted (`php-rs-parser`).
 - An abstract method in a class not declared abstract was accepted (`php-rs-parser`).
 - A typed class constant with a literal its type does not accept (`const int X = 'a';`, `= null`) was accepted (`php-rs-parser`).

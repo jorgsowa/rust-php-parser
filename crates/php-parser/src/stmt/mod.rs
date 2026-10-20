@@ -1083,6 +1083,14 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     } else {
         (None, first, first_ref.is_some())
     };
+    if by_ref && matches!(value.kind, ExprKind::Array(_)) {
+        // `&[$a]` and `&list($a)` are not foreach targets; only a variable can be taken by reference.
+        parser.error(ParseError::Expected {
+            expected: "variable".into(),
+            found: "array destructuring".into(),
+            span: value.span,
+        });
+    }
     if let Some(k) = &key {
         expr::check_write_target(parser, k, false);
         expr::check_special_variable_write(parser, k, expr::WriteKind::Assign);
