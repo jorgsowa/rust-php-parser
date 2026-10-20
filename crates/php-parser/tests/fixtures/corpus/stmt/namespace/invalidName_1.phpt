@@ -1,8 +1,7 @@
 ===source===
 <?php use A as self;
 ===errors===
-expected identifier, found 'self'
-expected ';', found 'self'
+Cannot use A as self because 'self' is a special class name
 ===php_error===
 PHP Fatal error:  Cannot use A as self because 'self' is a special class name in Standard input code on line 1
 ===ast===
@@ -24,10 +23,16 @@ PHP Fatal error:  Cannot use A as self because 'self' is a special class name in
                   "end": 11
                 }
               },
-              "alias": null,
+              "alias": {
+                "name": "self",
+                "span": {
+                  "start": 15,
+                  "end": 19
+                }
+              },
               "span": {
                 "start": 10,
-                "end": 14
+                "end": 19
               }
             }
           ]
@@ -35,32 +40,6 @@ PHP Fatal error:  Cannot use A as self because 'self' is a special class name in
       },
       "span": {
         "start": 6,
-        "end": 14
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Name": {
-              "parts": [
-                "self"
-              ],
-              "kind": "Unqualified",
-              "span": {
-                "start": 15,
-                "end": 19
-              }
-            }
-          },
-          "span": {
-            "start": 15,
-            "end": 19
-          }
-        }
-      },
-      "span": {
-        "start": 15,
         "end": 20
       }
     }

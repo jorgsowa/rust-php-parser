@@ -26,7 +26,7 @@ pub(super) fn visibility_rank(v: php_ast::Visibility) -> u8 {
     }
 }
 
-fn is_reserved_class_name(name: &str) -> bool {
+pub(crate) fn is_reserved_class_name(name: &str) -> bool {
     matches!(
         name.to_ascii_lowercase().as_str(),
         // self / parent / static / readonly: meta-names that PHP rejects as

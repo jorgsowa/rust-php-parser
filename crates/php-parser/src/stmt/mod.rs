@@ -2787,14 +2787,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                 span: sub_span,
             };
 
-            let alias = if parser.eat(TokenKind::As).is_some() {
-                let alias_token = parser.expect(TokenKind::Identifier);
-                let src = parser.source;
-                alias_token
-                    .map(|t| Ident::new(&src[t.span.start as usize..t.span.end as usize], t.span))
-            } else {
-                None
-            };
+            let alias = parse_use_alias(parser);
 
             let use_span = Span::new(sub_start, parser.previous_end());
             let local_name = alias.and_then(|a| a.as_str()).unwrap_or(sub_last_part);
@@ -2830,14 +2823,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
         parser.expect(TokenKind::RightBrace);
     } else {
         // Regular use (possibly comma-separated)
-        let alias = if parser.eat(TokenKind::As).is_some() {
-            let alias_token = parser.expect(TokenKind::Identifier);
-            let src = parser.source;
-            alias_token
-                .map(|t| Ident::new(&src[t.span.start as usize..t.span.end as usize], t.span))
-        } else {
-            None
-        };
+        let alias = parse_use_alias(parser);
 
         let item_span = Span::new(item_start, parser.previous_end());
         uses.push(UseItem {
@@ -2855,14 +2841,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             let next_start = parser.start_span();
             let name = parser.parse_name();
 
-            let alias = if parser.eat(TokenKind::As).is_some() {
-                let alias_token = parser.expect(TokenKind::Identifier);
-                let src = parser.source;
-                alias_token
-                    .map(|t| Ident::new(&src[t.span.start as usize..t.span.end as usize], t.span))
-            } else {
-                None
-            };
+            let alias = parse_use_alias(parser);
 
             let next_span = Span::new(next_start, parser.previous_end());
             uses.push(UseItem {
@@ -2877,6 +2856,18 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
     for item in uses.iter() {
         if item.kind.unwrap_or(kind) != UseKind::Normal {
             continue;
+        }
+        if let Some(alias) = item.alias.and_then(|a| a.as_str()) {
+            if class::is_reserved_class_name(alias) {
+                let name = item.name.parts_slice().join("\\");
+                parser.error(ParseError::Forbidden {
+                    message: format!(
+                        "Cannot use {name} as {alias} because '{alias}' is a special class name"
+                    )
+                    .into(),
+                    span: item.span,
+                });
+            }
         }
         let local = match &item.alias {
             Some(alias) => alias.as_str(),
@@ -3080,7 +3071,18 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
 // Expression statement (and label detection)
 // =============================================================================
 
-/// Tokens PHP lexes as a plain name where a goto label is allowed.
+/// `as alias` after an imported name.
+fn parse_use_alias<'arena, 'src>(parser: &mut Parser<'arena, 'src>) -> Option<Ident<'src>> {
+    parser.eat(TokenKind::As)?;
+    if !is_label_name(parser.current_kind()) {
+        parser.expect(TokenKind::Identifier);
+        return None;
+    }
+    let text = parser.current_text();
+    Some(Ident::new(text, parser.advance().span))
+}
+
+/// Tokens PHP lexes as a plain name where a goto label or a `use` alias is allowed.
 fn is_label_name(kind: TokenKind) -> bool {
     matches!(
         kind,

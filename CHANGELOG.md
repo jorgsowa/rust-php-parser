@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `use A as enum` was rejected, and a special class name as a class import alias (`use A as int`, `as mixed`, `as self`) was accepted; PHP reports "Cannot use A as int because 'int' is a special class name" (`php-rs-parser`).
 - `self:`, `parent:`, `enum:`, `null:`, `true:` and `false:` were rejected as goto labels, and `goto` to them; PHP lexes these words as plain names there (`php-rs-parser`).
 - A parenthesized type group other than an intersection (`(A)|B`, `(A|B)|C`, `(A&B|C)`) was accepted; PHP allows only `(A&B)` and the parser reports the missing `&` (`php-rs-parser`).
 - `A&B &$x` (an intersection type before a by-reference parameter) was rejected (`php-rs-parser`).
