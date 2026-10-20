@@ -518,6 +518,15 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
+    /// Report that `expected` was expected at the current token.
+    pub fn error_expected(&mut self, expected: &'static str) {
+        self.error(ParseError::Expected {
+            expected: expected.into(),
+            found: self.current_kind().description().into(),
+            span: self.current_span(),
+        });
+    }
+
     /// Expect a semicolon or `?>` close tag (which acts as an implicit semicolon in PHP).
     /// Does NOT consume `?>` — it stays in the stream for the main loop to handle.
     /// `after` feeds the diagnostic label; pass a `TokenKind` when the preceding
@@ -1879,8 +1888,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
-    /// Parse the content inside parentheses in a type context.
-    /// Handles unions (A|B) and intersections (A&B) with proper precedence.
+    /// Parse the content inside parentheses in a type context: an intersection (A&B).
+    /// A single type or a union is reported and kept for recovery.
     fn parse_parenthesized_type(&mut self) -> TypeHint<'arena, 'src> {
         let start = self.start_span();
 
@@ -1901,7 +1910,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
             // Check if there are union operators after the intersection
             if self.check(TokenKind::Pipe) {
-                // This is a DNF type: (A&B|C)
+                // PHP rejects a union inside the group: (A&B|C)
+                self.error_expected("'&' or ')'");
                 self.advance(); // consume |
 
                 // Wrap the first intersection member
@@ -1958,7 +1968,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 }
             }
         } else if self.check(TokenKind::Pipe) {
-            // Parse union: A|B|C or (A|B|C) where A is single types
+            // PHP rejects a union in parentheses: (A|B)
+            self.error_expected("'&'");
             self.advance(); // consume |
             let mut union_members = self.alloc_vec_one(first_type);
 
@@ -1999,7 +2010,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 span: Span::new(start, end),
             }
         } else {
-            // Just a single type wrapped in parentheses
+            // PHP rejects a single type in parentheses: (A)
+            self.error_expected("'&'");
             let end = self.previous_end();
             TypeHint {
                 kind: first_type.kind,

@@ -2,6 +2,7 @@
 <?php
 class D { private (set) mixed $v; }
 ===errors >=8.4===
+expected '&', found ')'
 expected class member, found identifier
 ===php_error <=8.1===
 PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 2

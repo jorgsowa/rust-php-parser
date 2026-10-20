@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A parenthesized type group other than an intersection (`(A)|B`, `(A|B)|C`, `(A&B|C)`) was accepted; PHP allows only `(A&B)` and the parser reports the missing `&` (`php-rs-parser`).
 - `A&B &$x` (an intersection type before a by-reference parameter) was rejected (`php-rs-parser`).
 - A whitespace-only heredoc or nowdoc line shorter than the closing indentation was rejected; PHP accepts it. A body line indented with the other whitespace character reports "Invalid indentation - tabs and spaces cannot be mixed", and the stripped indentation follows PHP (`php-rs-parser`).
 - `1...2` was rejected and `1..2` accepted; a number followed by `.` lexes as a float (`1.`) even before another dot, as in PHP (`php-lexer`).
