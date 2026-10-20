@@ -654,6 +654,23 @@ pub fn parse_class_members<'arena, 'src>(
             continue;
         }
 
+        let unknown_modifier =
+            parser.check(TokenKind::Identifier) && parser.peek_kind() == Some(TokenKind::Variable);
+        let starts_property = match parser.current_kind() {
+            TokenKind::Variable | TokenKind::Question | TokenKind::LeftParen => true,
+            _ => {
+                parser.could_be_type_hint()
+                    && matches!(
+                        parser.peek_kind(),
+                        Some(TokenKind::Pipe | TokenKind::Ampersand | TokenKind::Backslash)
+                    )
+            }
+        };
+        if mods.is_empty() && !unknown_modifier && starts_property {
+            // A property needs a modifier or `var`.
+            parser.error_expected("'function' or 'const'");
+        }
+
         let type_hint = if parser.could_be_type_hint() && !parser.check(TokenKind::Variable) {
             let type_hint = parser.parse_type_hint();
             parser.reject_static_type(&type_hint, "property");

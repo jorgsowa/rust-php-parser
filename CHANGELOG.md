@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A property without a modifier or `var` (`class A { $x; }`, `?int $x;`) was accepted (`php-rs-parser`).
 - A trailing `\` in a name (`namespace Foo\;`, `use X\;`, `foo\()`, `new Bar\`, `instanceof Bar\`, types, attributes) was silently dropped; it is only valid before a group `use` list (`php-rs-parser`).
 - `return;` in a function, method or closure with a non-`void` return type, and a generator whose return type does not admit `Generator` (`function g(): int { yield 1; }`, also arrow functions), were accepted; PHP rejects both at compile time (`php-rs-parser`).
 - `use A as enum` was rejected, and a special class name as a class import alias (`use A as int`, `as mixed`, `as self`) was accepted; PHP reports "Cannot use A as int because 'int' is a special class name" (`php-rs-parser`).
