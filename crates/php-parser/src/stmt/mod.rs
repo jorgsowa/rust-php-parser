@@ -2775,6 +2775,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
     // Parse first name to check for group use
     let item_start = parser.start_span();
     let first_name = parser.parse_name_with(true);
+    reject_relative_import(parser, &first_name);
 
     // Group use: use App\{Models\User, Services\Auth};
     if parser.check(TokenKind::LeftBrace) {
@@ -2835,6 +2836,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                 None
             };
             let sub_name = parser.parse_name();
+            reject_relative_import(parser, &sub_name);
 
             // Validate: sub-names must not have leading backslash
             if sub_name.kind() == NameKind::FullyQualified {
@@ -2930,6 +2932,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             }
             let next_start = parser.start_span();
             let name = parser.parse_name();
+            reject_relative_import(parser, &name);
 
             let alias = parse_use_alias(parser);
 
@@ -3160,6 +3163,17 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
 // =============================================================================
 // Expression statement (and label detection)
 // =============================================================================
+
+/// `use namespace\A` is a syntax error: imports are always fully qualified.
+fn reject_relative_import(parser: &mut Parser<'_, '_>, name: &Name<'_, '_>) {
+    if name.kind() == NameKind::Relative {
+        parser.error(ParseError::Expected {
+            expected: "name".into(),
+            found: "namespace-relative name".into(),
+            span: name.span(),
+        });
+    }
+}
 
 /// `as alias` after an imported name.
 fn parse_use_alias<'arena, 'src>(parser: &mut Parser<'arena, 'src>) -> Option<Ident<'src>> {

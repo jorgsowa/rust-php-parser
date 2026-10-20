@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `use namespace\A;` was accepted (`php-rs-parser`).
 - A trait alias with `static`, `abstract` or `readonly` (`T::a as static;`) or with neither a modifier nor a name (`a as;`) was accepted (`php-rs-parser`).
 - Attributes after `new` before a class name (`new #[A] B`) were accepted; they are only valid before an anonymous class (`php-rs-parser`).
 - `class callable {}` was accepted (`php-rs-parser`).
