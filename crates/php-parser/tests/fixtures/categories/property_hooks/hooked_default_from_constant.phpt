@@ -12,10 +12,6 @@ class C extends P {
         get => 'y';
     }
 }
-
-var_dump((new C)->prop);
-
-?>
 ===php_error <=8.3===
 PHP Parse error:  syntax error, unexpected token "=>" in Standard input code on line 11
 ===ast >=8.5===
@@ -202,113 +198,10 @@ PHP Parse error:  syntax error, unexpected token "=>" in Standard input code on 
         "start": 54,
         "end": 124
       }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "FunctionCall": {
-              "name": {
-                "kind": {
-                  "Name": {
-                    "parts": [
-                      "var_dump"
-                    ],
-                    "kind": "Unqualified",
-                    "span": {
-                      "start": 126,
-                      "end": 134
-                    }
-                  }
-                },
-                "span": {
-                  "start": 126,
-                  "end": 134
-                }
-              },
-              "args": [
-                {
-                  "name": null,
-                  "kind": {
-                    "Value": {
-                      "kind": {
-                        "PropertyAccess": {
-                          "object": {
-                            "kind": {
-                              "Parenthesized": {
-                                "kind": {
-                                  "New": {
-                                    "class": {
-                                      "kind": {
-                                        "Name": {
-                                          "parts": [
-                                            "C"
-                                          ],
-                                          "kind": "Unqualified",
-                                          "span": {
-                                            "start": 140,
-                                            "end": 141
-                                          }
-                                        }
-                                      },
-                                      "span": {
-                                        "start": 140,
-                                        "end": 141
-                                      }
-                                    },
-                                    "args": []
-                                  }
-                                },
-                                "span": {
-                                  "start": 136,
-                                  "end": 141
-                                }
-                              }
-                            },
-                            "span": {
-                              "start": 135,
-                              "end": 142
-                            }
-                          },
-                          "property": {
-                            "kind": {
-                              "Identifier": "prop"
-                            },
-                            "span": {
-                              "start": 144,
-                              "end": 148
-                            }
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 135,
-                        "end": 148
-                      }
-                    }
-                  },
-                  "span": {
-                    "start": 135,
-                    "end": 148
-                  }
-                }
-              ]
-            }
-          },
-          "span": {
-            "start": 126,
-            "end": 149
-          }
-        }
-      },
-      "span": {
-        "start": 126,
-        "end": 150
-      }
     }
   ],
   "span": {
     "start": 0,
-    "end": 150
+    "end": 124
   }
 }

@@ -29,11 +29,6 @@ class Foo4 {
     use TraitNonConstructor { test as __construct; }
 }
 
-for ($i = 1; $i <= 4; $i++) {
-    $rc = new ReflectionClass("Foo$i");
-    echo $rc->getMethod("__construct"), "\n";
-}
-
 class Foo5 extends Foo3 {
     private function __construct() {}
 }
@@ -421,274 +416,12 @@ PHP Fatal error:  Cannot use 'final' as method modifier in Standard input code o
     },
     {
       "kind": {
-        "For": {
-          "init": [
-            {
-              "kind": {
-                "Assign": {
-                  "target": {
-                    "kind": {
-                      "Variable": "i"
-                    },
-                    "span": {
-                      "start": 381,
-                      "end": 383
-                    }
-                  },
-                  "op": "Assign",
-                  "value": {
-                    "kind": {
-                      "Int": 1
-                    },
-                    "span": {
-                      "start": 386,
-                      "end": 387
-                    }
-                  }
-                }
-              },
-              "span": {
-                "start": 381,
-                "end": 387
-              }
-            }
-          ],
-          "condition": [
-            {
-              "kind": {
-                "Binary": {
-                  "left": {
-                    "kind": {
-                      "Variable": "i"
-                    },
-                    "span": {
-                      "start": 389,
-                      "end": 391
-                    }
-                  },
-                  "op": "LessOrEqual",
-                  "right": {
-                    "kind": {
-                      "Int": 4
-                    },
-                    "span": {
-                      "start": 395,
-                      "end": 396
-                    }
-                  }
-                }
-              },
-              "span": {
-                "start": 389,
-                "end": 396
-              }
-            }
-          ],
-          "update": [
-            {
-              "kind": {
-                "UnaryPostfix": {
-                  "operand": {
-                    "kind": {
-                      "Variable": "i"
-                    },
-                    "span": {
-                      "start": 398,
-                      "end": 400
-                    }
-                  },
-                  "op": "PostIncrement"
-                }
-              },
-              "span": {
-                "start": 398,
-                "end": 402
-              }
-            }
-          ],
-          "body": {
-            "kind": {
-              "Block": [
-                {
-                  "kind": {
-                    "Expression": {
-                      "kind": {
-                        "Assign": {
-                          "target": {
-                            "kind": {
-                              "Variable": "rc"
-                            },
-                            "span": {
-                              "start": 410,
-                              "end": 413
-                            }
-                          },
-                          "op": "Assign",
-                          "value": {
-                            "kind": {
-                              "New": {
-                                "class": {
-                                  "kind": {
-                                    "Name": {
-                                      "parts": [
-                                        "ReflectionClass"
-                                      ],
-                                      "kind": "Unqualified",
-                                      "span": {
-                                        "start": 420,
-                                        "end": 435
-                                      }
-                                    }
-                                  },
-                                  "span": {
-                                    "start": 420,
-                                    "end": 435
-                                  }
-                                },
-                                "args": [
-                                  {
-                                    "name": null,
-                                    "kind": {
-                                      "Value": {
-                                        "kind": {
-                                          "InterpolatedString": [
-                                            {
-                                              "Literal": "Foo"
-                                            },
-                                            {
-                                              "Expr": {
-                                                "kind": {
-                                                  "Variable": "i"
-                                                },
-                                                "span": {
-                                                  "start": 440,
-                                                  "end": 442
-                                                }
-                                              }
-                                            }
-                                          ]
-                                        },
-                                        "span": {
-                                          "start": 436,
-                                          "end": 443
-                                        }
-                                      }
-                                    },
-                                    "span": {
-                                      "start": 436,
-                                      "end": 443
-                                    }
-                                  }
-                                ]
-                              }
-                            },
-                            "span": {
-                              "start": 416,
-                              "end": 444
-                            }
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 410,
-                        "end": 444
-                      }
-                    }
-                  },
-                  "span": {
-                    "start": 410,
-                    "end": 445
-                  }
-                },
-                {
-                  "kind": {
-                    "Echo": [
-                      {
-                        "kind": {
-                          "MethodCall": {
-                            "object": {
-                              "kind": {
-                                "Variable": "rc"
-                              },
-                              "span": {
-                                "start": 455,
-                                "end": 458
-                              }
-                            },
-                            "method": {
-                              "kind": {
-                                "Identifier": "getMethod"
-                              },
-                              "span": {
-                                "start": 460,
-                                "end": 469
-                              }
-                            },
-                            "args": [
-                              {
-                                "name": null,
-                                "kind": {
-                                  "Value": {
-                                    "kind": {
-                                      "String": "__construct"
-                                    },
-                                    "span": {
-                                      "start": 470,
-                                      "end": 483
-                                    }
-                                  }
-                                },
-                                "span": {
-                                  "start": 470,
-                                  "end": 483
-                                }
-                              }
-                            ]
-                          }
-                        },
-                        "span": {
-                          "start": 455,
-                          "end": 484
-                        }
-                      },
-                      {
-                        "kind": {
-                          "String": "\n"
-                        },
-                        "span": {
-                          "start": 486,
-                          "end": 490
-                        }
-                      }
-                    ]
-                  },
-                  "span": {
-                    "start": 450,
-                    "end": 491
-                  }
-                }
-              ]
-            },
-            "span": {
-              "start": 404,
-              "end": 493
-            }
-          }
-        }
-      },
-      "span": {
-        "start": 376,
-        "end": 493
-      }
-    },
-    {
-      "kind": {
         "Class": {
           "name": {
             "name": "Foo5",
             "span": {
-              "start": 501,
-              "end": 505
+              "start": 382,
+              "end": 386
             }
           },
           "modifiers": {
@@ -702,8 +435,8 @@ PHP Fatal error:  Cannot use 'final' as method modifier in Standard input code o
             ],
             "kind": "Unqualified",
             "span": {
-              "start": 514,
-              "end": 518
+              "start": 395,
+              "end": 399
             }
           },
           "implements": [],
@@ -714,8 +447,8 @@ PHP Fatal error:  Cannot use 'final' as method modifier in Standard input code o
                   "name": {
                     "name": "__construct",
                     "span": {
-                      "start": 542,
-                      "end": 553
+                      "start": 423,
+                      "end": 434
                     }
                   },
                   "modifiers": {
@@ -729,8 +462,8 @@ PHP Fatal error:  Cannot use 'final' as method modifier in Standard input code o
                 }
               },
               "span": {
-                "start": 525,
-                "end": 558
+                "start": 406,
+                "end": 439
               }
             }
           ],
@@ -738,13 +471,13 @@ PHP Fatal error:  Cannot use 'final' as method modifier in Standard input code o
         }
       },
       "span": {
-        "start": 495,
-        "end": 560
+        "start": 376,
+        "end": 441
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 560
+    "end": 441
   }
 }

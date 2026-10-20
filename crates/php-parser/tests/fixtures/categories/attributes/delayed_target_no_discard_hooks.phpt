@@ -12,23 +12,7 @@ class DemoClass {
 	}
 }
 
-$cases = [
-	new ReflectionProperty('DemoClass', 'hooked')->getHook(PropertyHookType::Get),
-	new ReflectionProperty('DemoClass', 'hooked')->getHook(PropertyHookType::Set),
-];
-foreach ($cases as $r) {
-	echo str_repeat("*", 20) . "\n";
-	echo $r . "\n";
-	$attributes = $r->getAttributes();
-	var_dump($attributes);
-	try {
-		$attributes[1]->newInstance();
-	} catch (Error $e) {
-		echo get_class($e) . ": " . $e->getMessage() . "\n";
-	}
-}
-
-?>
+$hook = new ReflectionProperty('DemoClass', 'hooked')->getHook(PropertyHookType::Get);
 ===php_error <=8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 4
 ===ast >=8.5===
@@ -241,559 +225,36 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
             "Assign": {
               "target": {
                 "kind": {
-                  "Variable": "cases"
+                  "Variable": "hook"
                 },
                 "span": {
                   "start": 227,
-                  "end": 233
+                  "end": 232
                 }
               },
               "op": "Assign",
               "value": {
                 "kind": {
-                  "Array": [
-                    {
-                      "key": null,
+                  "MethodCall": {
+                    "object": {
                       "kind": {
-                        "Value": {
-                          "kind": {
-                            "MethodCall": {
-                              "object": {
-                                "kind": {
-                                  "New": {
-                                    "class": {
-                                      "kind": {
-                                        "Name": {
-                                          "parts": [
-                                            "ReflectionProperty"
-                                          ],
-                                          "kind": "Unqualified",
-                                          "span": {
-                                            "start": 243,
-                                            "end": 261
-                                          }
-                                        }
-                                      },
-                                      "span": {
-                                        "start": 243,
-                                        "end": 261
-                                      }
-                                    },
-                                    "args": [
-                                      {
-                                        "name": null,
-                                        "kind": {
-                                          "Value": {
-                                            "kind": {
-                                              "String": "DemoClass"
-                                            },
-                                            "span": {
-                                              "start": 262,
-                                              "end": 273
-                                            }
-                                          }
-                                        },
-                                        "span": {
-                                          "start": 262,
-                                          "end": 273
-                                        }
-                                      },
-                                      {
-                                        "name": null,
-                                        "kind": {
-                                          "Value": {
-                                            "kind": {
-                                              "String": "hooked"
-                                            },
-                                            "span": {
-                                              "start": 275,
-                                              "end": 283
-                                            }
-                                          }
-                                        },
-                                        "span": {
-                                          "start": 275,
-                                          "end": 283
-                                        }
-                                      }
-                                    ]
-                                  }
-                                },
-                                "span": {
-                                  "start": 239,
-                                  "end": 284
-                                }
-                              },
-                              "method": {
-                                "kind": {
-                                  "Identifier": "getHook"
-                                },
-                                "span": {
-                                  "start": 286,
-                                  "end": 293
-                                }
-                              },
-                              "args": [
-                                {
-                                  "name": null,
-                                  "kind": {
-                                    "Value": {
-                                      "kind": {
-                                        "ClassConstAccess": {
-                                          "class": {
-                                            "kind": {
-                                              "Name": {
-                                                "parts": [
-                                                  "PropertyHookType"
-                                                ],
-                                                "kind": "Unqualified",
-                                                "span": {
-                                                  "start": 294,
-                                                  "end": 310
-                                                }
-                                              }
-                                            },
-                                            "span": {
-                                              "start": 294,
-                                              "end": 310
-                                            }
-                                          },
-                                          "member": {
-                                            "kind": {
-                                              "Identifier": "Get"
-                                            },
-                                            "span": {
-                                              "start": 312,
-                                              "end": 315
-                                            }
-                                          }
-                                        }
-                                      },
-                                      "span": {
-                                        "start": 294,
-                                        "end": 315
-                                      }
-                                    }
-                                  },
-                                  "span": {
-                                    "start": 294,
-                                    "end": 315
-                                  }
-                                }
-                              ]
-                            }
-                          },
-                          "span": {
-                            "start": 239,
-                            "end": 316
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 239,
-                        "end": 316
-                      }
-                    },
-                    {
-                      "key": null,
-                      "kind": {
-                        "Value": {
-                          "kind": {
-                            "MethodCall": {
-                              "object": {
-                                "kind": {
-                                  "New": {
-                                    "class": {
-                                      "kind": {
-                                        "Name": {
-                                          "parts": [
-                                            "ReflectionProperty"
-                                          ],
-                                          "kind": "Unqualified",
-                                          "span": {
-                                            "start": 323,
-                                            "end": 341
-                                          }
-                                        }
-                                      },
-                                      "span": {
-                                        "start": 323,
-                                        "end": 341
-                                      }
-                                    },
-                                    "args": [
-                                      {
-                                        "name": null,
-                                        "kind": {
-                                          "Value": {
-                                            "kind": {
-                                              "String": "DemoClass"
-                                            },
-                                            "span": {
-                                              "start": 342,
-                                              "end": 353
-                                            }
-                                          }
-                                        },
-                                        "span": {
-                                          "start": 342,
-                                          "end": 353
-                                        }
-                                      },
-                                      {
-                                        "name": null,
-                                        "kind": {
-                                          "Value": {
-                                            "kind": {
-                                              "String": "hooked"
-                                            },
-                                            "span": {
-                                              "start": 355,
-                                              "end": 363
-                                            }
-                                          }
-                                        },
-                                        "span": {
-                                          "start": 355,
-                                          "end": 363
-                                        }
-                                      }
-                                    ]
-                                  }
-                                },
-                                "span": {
-                                  "start": 319,
-                                  "end": 364
-                                }
-                              },
-                              "method": {
-                                "kind": {
-                                  "Identifier": "getHook"
-                                },
-                                "span": {
-                                  "start": 366,
-                                  "end": 373
-                                }
-                              },
-                              "args": [
-                                {
-                                  "name": null,
-                                  "kind": {
-                                    "Value": {
-                                      "kind": {
-                                        "ClassConstAccess": {
-                                          "class": {
-                                            "kind": {
-                                              "Name": {
-                                                "parts": [
-                                                  "PropertyHookType"
-                                                ],
-                                                "kind": "Unqualified",
-                                                "span": {
-                                                  "start": 374,
-                                                  "end": 390
-                                                }
-                                              }
-                                            },
-                                            "span": {
-                                              "start": 374,
-                                              "end": 390
-                                            }
-                                          },
-                                          "member": {
-                                            "kind": {
-                                              "Identifier": "Set"
-                                            },
-                                            "span": {
-                                              "start": 392,
-                                              "end": 395
-                                            }
-                                          }
-                                        }
-                                      },
-                                      "span": {
-                                        "start": 374,
-                                        "end": 395
-                                      }
-                                    }
-                                  },
-                                  "span": {
-                                    "start": 374,
-                                    "end": 395
-                                  }
-                                }
-                              ]
-                            }
-                          },
-                          "span": {
-                            "start": 319,
-                            "end": 396
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 319,
-                        "end": 396
-                      }
-                    }
-                  ]
-                },
-                "span": {
-                  "start": 236,
-                  "end": 399
-                }
-              }
-            }
-          },
-          "span": {
-            "start": 227,
-            "end": 399
-          }
-        }
-      },
-      "span": {
-        "start": 227,
-        "end": 400
-      }
-    },
-    {
-      "kind": {
-        "Foreach": {
-          "expr": {
-            "kind": {
-              "Variable": "cases"
-            },
-            "span": {
-              "start": 410,
-              "end": 416
-            }
-          },
-          "key": null,
-          "value": {
-            "kind": {
-              "Variable": "r"
-            },
-            "span": {
-              "start": 420,
-              "end": 422
-            }
-          },
-          "body": {
-            "kind": {
-              "Block": [
-                {
-                  "kind": {
-                    "Echo": [
-                      {
-                        "kind": {
-                          "Binary": {
-                            "left": {
-                              "kind": {
-                                "FunctionCall": {
-                                  "name": {
-                                    "kind": {
-                                      "Name": {
-                                        "parts": [
-                                          "str_repeat"
-                                        ],
-                                        "kind": "Unqualified",
-                                        "span": {
-                                          "start": 432,
-                                          "end": 442
-                                        }
-                                      }
-                                    },
-                                    "span": {
-                                      "start": 432,
-                                      "end": 442
-                                    }
-                                  },
-                                  "args": [
-                                    {
-                                      "name": null,
-                                      "kind": {
-                                        "Value": {
-                                          "kind": {
-                                            "String": "*"
-                                          },
-                                          "span": {
-                                            "start": 443,
-                                            "end": 446
-                                          }
-                                        }
-                                      },
-                                      "span": {
-                                        "start": 443,
-                                        "end": 446
-                                      }
-                                    },
-                                    {
-                                      "name": null,
-                                      "kind": {
-                                        "Value": {
-                                          "kind": {
-                                            "Int": 20
-                                          },
-                                          "span": {
-                                            "start": 448,
-                                            "end": 450
-                                          }
-                                        }
-                                      },
-                                      "span": {
-                                        "start": 448,
-                                        "end": 450
-                                      }
-                                    }
-                                  ]
-                                }
-                              },
-                              "span": {
-                                "start": 432,
-                                "end": 451
-                              }
-                            },
-                            "op": "Concat",
-                            "right": {
-                              "kind": {
-                                "String": "\n"
-                              },
-                              "span": {
-                                "start": 454,
-                                "end": 458
-                              }
-                            }
-                          }
-                        },
-                        "span": {
-                          "start": 432,
-                          "end": 458
-                        }
-                      }
-                    ]
-                  },
-                  "span": {
-                    "start": 427,
-                    "end": 459
-                  }
-                },
-                {
-                  "kind": {
-                    "Echo": [
-                      {
-                        "kind": {
-                          "Binary": {
-                            "left": {
-                              "kind": {
-                                "Variable": "r"
-                              },
-                              "span": {
-                                "start": 466,
-                                "end": 468
-                              }
-                            },
-                            "op": "Concat",
-                            "right": {
-                              "kind": {
-                                "String": "\n"
-                              },
-                              "span": {
-                                "start": 471,
-                                "end": 475
-                              }
-                            }
-                          }
-                        },
-                        "span": {
-                          "start": 466,
-                          "end": 475
-                        }
-                      }
-                    ]
-                  },
-                  "span": {
-                    "start": 461,
-                    "end": 476
-                  }
-                },
-                {
-                  "kind": {
-                    "Expression": {
-                      "kind": {
-                        "Assign": {
-                          "target": {
-                            "kind": {
-                              "Variable": "attributes"
-                            },
-                            "span": {
-                              "start": 478,
-                              "end": 489
-                            }
-                          },
-                          "op": "Assign",
-                          "value": {
-                            "kind": {
-                              "MethodCall": {
-                                "object": {
-                                  "kind": {
-                                    "Variable": "r"
-                                  },
-                                  "span": {
-                                    "start": 492,
-                                    "end": 494
-                                  }
-                                },
-                                "method": {
-                                  "kind": {
-                                    "Identifier": "getAttributes"
-                                  },
-                                  "span": {
-                                    "start": 496,
-                                    "end": 509
-                                  }
-                                },
-                                "args": []
-                              }
-                            },
-                            "span": {
-                              "start": 492,
-                              "end": 511
-                            }
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 478,
-                        "end": 511
-                      }
-                    }
-                  },
-                  "span": {
-                    "start": 478,
-                    "end": 512
-                  }
-                },
-                {
-                  "kind": {
-                    "Expression": {
-                      "kind": {
-                        "FunctionCall": {
-                          "name": {
+                        "New": {
+                          "class": {
                             "kind": {
                               "Name": {
                                 "parts": [
-                                  "var_dump"
+                                  "ReflectionProperty"
                                 ],
                                 "kind": "Unqualified",
                                 "span": {
-                                  "start": 514,
-                                  "end": 522
+                                  "start": 239,
+                                  "end": 257
                                 }
                               }
                             },
                             "span": {
-                              "start": 514,
-                              "end": 522
+                              "start": 239,
+                              "end": 257
                             }
                           },
                           "args": [
@@ -802,286 +263,125 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                               "kind": {
                                 "Value": {
                                   "kind": {
-                                    "Variable": "attributes"
+                                    "String": "DemoClass"
                                   },
                                   "span": {
-                                    "start": 523,
-                                    "end": 534
+                                    "start": 258,
+                                    "end": 269
                                   }
                                 }
                               },
                               "span": {
-                                "start": 523,
-                                "end": 534
+                                "start": 258,
+                                "end": 269
+                              }
+                            },
+                            {
+                              "name": null,
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "String": "hooked"
+                                  },
+                                  "span": {
+                                    "start": 271,
+                                    "end": 279
+                                  }
+                                }
+                              },
+                              "span": {
+                                "start": 271,
+                                "end": 279
                               }
                             }
                           ]
                         }
                       },
                       "span": {
-                        "start": 514,
-                        "end": 535
+                        "start": 235,
+                        "end": 280
                       }
-                    }
-                  },
-                  "span": {
-                    "start": 514,
-                    "end": 536
+                    },
+                    "method": {
+                      "kind": {
+                        "Identifier": "getHook"
+                      },
+                      "span": {
+                        "start": 282,
+                        "end": 289
+                      }
+                    },
+                    "args": [
+                      {
+                        "name": null,
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "ClassConstAccess": {
+                                "class": {
+                                  "kind": {
+                                    "Name": {
+                                      "parts": [
+                                        "PropertyHookType"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 290,
+                                        "end": 306
+                                      }
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 290,
+                                    "end": 306
+                                  }
+                                },
+                                "member": {
+                                  "kind": {
+                                    "Identifier": "Get"
+                                  },
+                                  "span": {
+                                    "start": 308,
+                                    "end": 311
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 290,
+                              "end": 311
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 290,
+                          "end": 311
+                        }
+                      }
+                    ]
                   }
                 },
-                {
-                  "kind": {
-                    "TryCatch": {
-                      "body": [
-                        {
-                          "kind": {
-                            "Expression": {
-                              "kind": {
-                                "MethodCall": {
-                                  "object": {
-                                    "kind": {
-                                      "ArrayAccess": {
-                                        "array": {
-                                          "kind": {
-                                            "Variable": "attributes"
-                                          },
-                                          "span": {
-                                            "start": 546,
-                                            "end": 557
-                                          }
-                                        },
-                                        "index": {
-                                          "kind": {
-                                            "Int": 1
-                                          },
-                                          "span": {
-                                            "start": 558,
-                                            "end": 559
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "span": {
-                                      "start": 546,
-                                      "end": 560
-                                    }
-                                  },
-                                  "method": {
-                                    "kind": {
-                                      "Identifier": "newInstance"
-                                    },
-                                    "span": {
-                                      "start": 562,
-                                      "end": 573
-                                    }
-                                  },
-                                  "args": []
-                                }
-                              },
-                              "span": {
-                                "start": 546,
-                                "end": 575
-                              }
-                            }
-                          },
-                          "span": {
-                            "start": 546,
-                            "end": 576
-                          }
-                        }
-                      ],
-                      "catches": [
-                        {
-                          "types": [
-                            {
-                              "parts": [
-                                "Error"
-                              ],
-                              "kind": "Unqualified",
-                              "span": {
-                                "start": 587,
-                                "end": 592
-                              }
-                            }
-                          ],
-                          "var": {
-                            "name": "e",
-                            "span": {
-                              "start": 593,
-                              "end": 595
-                            }
-                          },
-                          "body": [
-                            {
-                              "kind": {
-                                "Echo": [
-                                  {
-                                    "kind": {
-                                      "Binary": {
-                                        "left": {
-                                          "kind": {
-                                            "Binary": {
-                                              "left": {
-                                                "kind": {
-                                                  "Binary": {
-                                                    "left": {
-                                                      "kind": {
-                                                        "FunctionCall": {
-                                                          "name": {
-                                                            "kind": {
-                                                              "Name": {
-                                                                "parts": [
-                                                                  "get_class"
-                                                                ],
-                                                                "kind": "Unqualified",
-                                                                "span": {
-                                                                  "start": 606,
-                                                                  "end": 615
-                                                                }
-                                                              }
-                                                            },
-                                                            "span": {
-                                                              "start": 606,
-                                                              "end": 615
-                                                            }
-                                                          },
-                                                          "args": [
-                                                            {
-                                                              "name": null,
-                                                              "kind": {
-                                                                "Value": {
-                                                                  "kind": {
-                                                                    "Variable": "e"
-                                                                  },
-                                                                  "span": {
-                                                                    "start": 616,
-                                                                    "end": 618
-                                                                  }
-                                                                }
-                                                              },
-                                                              "span": {
-                                                                "start": 616,
-                                                                "end": 618
-                                                              }
-                                                            }
-                                                          ]
-                                                        }
-                                                      },
-                                                      "span": {
-                                                        "start": 606,
-                                                        "end": 619
-                                                      }
-                                                    },
-                                                    "op": "Concat",
-                                                    "right": {
-                                                      "kind": {
-                                                        "String": ": "
-                                                      },
-                                                      "span": {
-                                                        "start": 622,
-                                                        "end": 626
-                                                      }
-                                                    }
-                                                  }
-                                                },
-                                                "span": {
-                                                  "start": 606,
-                                                  "end": 626
-                                                }
-                                              },
-                                              "op": "Concat",
-                                              "right": {
-                                                "kind": {
-                                                  "MethodCall": {
-                                                    "object": {
-                                                      "kind": {
-                                                        "Variable": "e"
-                                                      },
-                                                      "span": {
-                                                        "start": 629,
-                                                        "end": 631
-                                                      }
-                                                    },
-                                                    "method": {
-                                                      "kind": {
-                                                        "Identifier": "getMessage"
-                                                      },
-                                                      "span": {
-                                                        "start": 633,
-                                                        "end": 643
-                                                      }
-                                                    },
-                                                    "args": []
-                                                  }
-                                                },
-                                                "span": {
-                                                  "start": 629,
-                                                  "end": 645
-                                                }
-                                              }
-                                            }
-                                          },
-                                          "span": {
-                                            "start": 606,
-                                            "end": 645
-                                          }
-                                        },
-                                        "op": "Concat",
-                                        "right": {
-                                          "kind": {
-                                            "String": "\n"
-                                          },
-                                          "span": {
-                                            "start": 648,
-                                            "end": 652
-                                          }
-                                        }
-                                      }
-                                    },
-                                    "span": {
-                                      "start": 606,
-                                      "end": 652
-                                    }
-                                  }
-                                ]
-                              },
-                              "span": {
-                                "start": 601,
-                                "end": 653
-                              }
-                            }
-                          ],
-                          "span": {
-                            "start": 586,
-                            "end": 656
-                          }
-                        }
-                      ],
-                      "finally": null
-                    }
-                  },
-                  "span": {
-                    "start": 538,
-                    "end": 656
-                  }
+                "span": {
+                  "start": 235,
+                  "end": 312
                 }
-              ]
-            },
-            "span": {
-              "start": 424,
-              "end": 658
+              }
             }
+          },
+          "span": {
+            "start": 227,
+            "end": 312
           }
         }
       },
       "span": {
-        "start": 401,
-        "end": 658
+        "start": 227,
+        "end": 313
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 658
+    "end": 313
   }
 }

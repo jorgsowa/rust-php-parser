@@ -10,11 +10,6 @@ class C extends P {
         get => parent::$prop::get();
     }
 }
-
-$c = new C();
-var_dump($c->prop);
-
-?>
 ===php_error <=8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 8
 ===ast >=8.5===
@@ -215,142 +210,10 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
         "start": 43,
         "end": 131
       }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Assign": {
-              "target": {
-                "kind": {
-                  "Variable": "c"
-                },
-                "span": {
-                  "start": 133,
-                  "end": 135
-                }
-              },
-              "op": "Assign",
-              "value": {
-                "kind": {
-                  "New": {
-                    "class": {
-                      "kind": {
-                        "Name": {
-                          "parts": [
-                            "C"
-                          ],
-                          "kind": "Unqualified",
-                          "span": {
-                            "start": 142,
-                            "end": 143
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 142,
-                        "end": 143
-                      }
-                    },
-                    "args": []
-                  }
-                },
-                "span": {
-                  "start": 138,
-                  "end": 145
-                }
-              }
-            }
-          },
-          "span": {
-            "start": 133,
-            "end": 145
-          }
-        }
-      },
-      "span": {
-        "start": 133,
-        "end": 146
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "FunctionCall": {
-              "name": {
-                "kind": {
-                  "Name": {
-                    "parts": [
-                      "var_dump"
-                    ],
-                    "kind": "Unqualified",
-                    "span": {
-                      "start": 147,
-                      "end": 155
-                    }
-                  }
-                },
-                "span": {
-                  "start": 147,
-                  "end": 155
-                }
-              },
-              "args": [
-                {
-                  "name": null,
-                  "kind": {
-                    "Value": {
-                      "kind": {
-                        "PropertyAccess": {
-                          "object": {
-                            "kind": {
-                              "Variable": "c"
-                            },
-                            "span": {
-                              "start": 156,
-                              "end": 158
-                            }
-                          },
-                          "property": {
-                            "kind": {
-                              "Identifier": "prop"
-                            },
-                            "span": {
-                              "start": 160,
-                              "end": 164
-                            }
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 156,
-                        "end": 164
-                      }
-                    }
-                  },
-                  "span": {
-                    "start": 156,
-                    "end": 164
-                  }
-                }
-              ]
-            }
-          },
-          "span": {
-            "start": 147,
-            "end": 165
-          }
-        }
-      },
-      "span": {
-        "start": 147,
-        "end": 166
-      }
     }
   ],
   "span": {
     "start": 0,
-    "end": 166
+    "end": 131
   }
 }

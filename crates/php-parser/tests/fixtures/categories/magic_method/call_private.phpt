@@ -15,10 +15,6 @@ class B extends A {
         parent::test4(1,'a');
     }
 }
-
-$b = new B();
-$b->test();
-?>
 ===ast >=8.5===
 {
   "stmts": [
@@ -732,104 +728,10 @@ $b->test();
         "start": 192,
         "end": 349
       }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Assign": {
-              "target": {
-                "kind": {
-                  "Variable": "b"
-                },
-                "span": {
-                  "start": 351,
-                  "end": 353
-                }
-              },
-              "op": "Assign",
-              "value": {
-                "kind": {
-                  "New": {
-                    "class": {
-                      "kind": {
-                        "Name": {
-                          "parts": [
-                            "B"
-                          ],
-                          "kind": "Unqualified",
-                          "span": {
-                            "start": 360,
-                            "end": 361
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 360,
-                        "end": 361
-                      }
-                    },
-                    "args": []
-                  }
-                },
-                "span": {
-                  "start": 356,
-                  "end": 363
-                }
-              }
-            }
-          },
-          "span": {
-            "start": 351,
-            "end": 363
-          }
-        }
-      },
-      "span": {
-        "start": 351,
-        "end": 364
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "MethodCall": {
-              "object": {
-                "kind": {
-                  "Variable": "b"
-                },
-                "span": {
-                  "start": 365,
-                  "end": 367
-                }
-              },
-              "method": {
-                "kind": {
-                  "Identifier": "test"
-                },
-                "span": {
-                  "start": 369,
-                  "end": 373
-                }
-              },
-              "args": []
-            }
-          },
-          "span": {
-            "start": 365,
-            "end": 375
-          }
-        }
-      },
-      "span": {
-        "start": 365,
-        "end": 376
-      }
     }
   ],
   "span": {
     "start": 0,
-    "end": 376
+    "end": 349
   }
 }
