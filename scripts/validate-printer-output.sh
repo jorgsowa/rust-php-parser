@@ -3,7 +3,7 @@ set -e
 
 FIXTURES_DIR="crates/php-printer/tests/fixtures"
 TEMP_DIR=$(mktemp -d)
-trap "rm -rf $TEMP_DIR" EXIT
+trap 'rm -rf "$TEMP_DIR"' EXIT
 
 failed=0
 
@@ -40,9 +40,9 @@ for fixture in "$FIXTURES_DIR"/*.phpt; do
 
     # Run php -l
     if ! php -l "$temp_file" > /dev/null 2>&1; then
-        echo "✗ FAIL: $(basename "$fixture")"
+        echo "✗ FAIL (PHP $PHP_VERSION): $(basename "$fixture")"
         php -l "$temp_file" || true
-        ((failed++))
+        failed=$((failed + 1))
     else
         echo "✓ $(basename "$fixture")"
     fi
