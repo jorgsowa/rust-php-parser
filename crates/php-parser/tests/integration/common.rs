@@ -120,7 +120,7 @@ pub struct Fixture {
 
 #[allow(dead_code)]
 impl Fixture {
-    /// Parse `content`, rejecting unknown config keys, malformed markers and ambiguous sections.
+    /// Parse `content`, rejecting unknown sections, malformed markers and ambiguous sections.
     pub fn parse(content: &str) -> Result<Fixture, String> {
         let source_marker = "===source===\n";
         let source_pos = content.find(source_marker).ok_or("missing ===source===")?;
@@ -214,22 +214,6 @@ impl Fixture {
                 .strip_suffix('\n')
                 .unwrap_or(&self.source_block)
         }
-    }
-
-    fn config_value(&self, key: &str) -> Option<&str> {
-        let marker = "===config===\n";
-        let after_cfg = &self.header[self.header.find(marker)? + marker.len()..];
-        let cfg_end = after_cfg
-            .find("\n===")
-            .map(|p| p + 1)
-            .unwrap_or(after_cfg.len());
-        after_cfg[..cfg_end]
-            .lines()
-            .find_map(|l| l.strip_prefix(key)?.strip_prefix('='))
-    }
-
-    pub fn is_ignored(&self) -> bool {
-        self.config_value("ignore").is_some()
     }
 
     /// Versions a multi-version fixture covers; `None` for a single-target fixture.
@@ -349,14 +333,13 @@ fn parse_section_marker(line: &str) -> Result<(String, Option<VersionSpec>), Str
     Ok((name.to_string(), spec))
 }
 
-/// The header holds at most one `===config===` and one `===description===` section; the only
-/// config key is `ignore=<reason>`.
+/// The header holds at most one `===description===` section.
 fn check_header(header: &str) -> Result<(), String> {
     let mut current = None;
     let mut seen = Vec::new();
     for line in header.lines() {
         if let Some(name) = line.strip_prefix("===").and_then(|l| l.strip_suffix("===")) {
-            if !["config", "description"].contains(&name) {
+            if name != "description" {
                 return Err(format!("unknown section `{line}` before ===source==="));
             }
             if seen.contains(&name) {
@@ -368,10 +351,6 @@ fn check_header(header: &str) -> Result<(), String> {
         }
         match current {
             None => return Err(format!("text before the first section: `{line}`")),
-            Some("config") => match line.split_once('=') {
-                Some(("ignore", reason)) if !reason.trim().is_empty() => {}
-                _ => return Err(format!("unknown config line `{line}`")),
-            },
             Some(_) => {}
         }
     }
@@ -465,9 +444,6 @@ where
                 return;
             }
         };
-        if fixture.is_ignored() {
-            return;
-        }
         let targets = fixture.targets();
         let results: Vec<(Vec<String>, String)> = targets
             .iter()

@@ -89,10 +89,6 @@ cargo fmt --check
 ### Fixture format (parser)
 
 ```
-===config===          (optional)
-ignore=reason         known bug: skipped by the parser tests (php -l still checks it); the
-                      fixture holds the expected output once fixed
-
 ===source===          (required)
 <?php ...
 
@@ -120,7 +116,7 @@ PHP 7.4 is linted only for fixtures that target it; for the rest it records the 
 `UPDATE_FIXTURES=1 cargo test --test php_syntax` records the output of the `php` on `PATH` for that
 version alone, so run it once per PHP version. Do not split a fixture into `_php83`/`_v82` copies.
 
-Malformed fixtures fail the tests: unknown config keys or sections, ranges naming an unsupported
+Malformed fixtures fail the tests: unknown sections, ranges naming an unsupported
 version, overlapping ranges for one section, a qualified `errors`/`ast` section covering none of
 the `===ast===` versions, and qualified `errors` sections in a fixture without a qualified
 `===ast===`.

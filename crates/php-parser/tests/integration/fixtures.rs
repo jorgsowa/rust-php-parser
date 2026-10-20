@@ -68,11 +68,7 @@ fn malformed_fixtures_are_rejected() {
     let cases = [
         (
             format!("===config===\nmin_php=8.1\n===source===\n<?php\n===ast===\n{ast}\n"),
-            "unknown config line `min_php=8.1`",
-        ),
-        (
-            format!("===config===\nignore=\n===source===\n<?php\n===ast===\n{ast}\n"),
-            "unknown config line `ignore=`",
+            "unknown section `===config===` before ===source===",
         ),
         (
             format!("stray\n===source===\n<?php\n===ast===\n{ast}\n"),
@@ -131,11 +127,10 @@ fn malformed_fixtures_are_rejected() {
     }
 
     let valid = format!(
-        "===config===\nignore=known bug\n===source===\n<?php\n===errors <=8.3===\nx\n\
+        "===source===\n<?php\n===errors <=8.3===\nx\n\
          ===php_error===\ny\n===ast <=8.3===\n{ast}\n===ast >=8.4===\n{ast}\n"
     );
     let fixture = Fixture::parse(&valid).unwrap();
-    assert!(fixture.is_ignored());
     assert_eq!(fixture.targets().len(), crate::common::SUPPORTED.len());
 }
 

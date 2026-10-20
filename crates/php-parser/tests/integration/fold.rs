@@ -44,9 +44,6 @@ fn identity_fold_across_corpus() {
         let content = std::fs::read_to_string(path).unwrap();
         let fixture = crate::common::Fixture::parse(&content)
             .unwrap_or_else(|e| panic!("malformed fixture {rel}: {e}"));
-        if fixture.is_ignored() {
-            continue;
-        }
         for min_php in fixture.targets() {
             let source = fixture.source();
             let src_arena = Bump::new();
@@ -104,9 +101,6 @@ fn owned_identity_fold_matches_original_json_across_corpus() {
                 let content = std::fs::read_to_string(path).unwrap();
                 let fixture = crate::common::Fixture::parse(&content)
                     .unwrap_or_else(|e| panic!("malformed fixture {}: {e}", path.display()));
-                if fixture.is_ignored() {
-                    continue;
-                }
                 for min_php in fixture.targets() {
                     let source = fixture.source();
                     let result = match min_php {

@@ -243,7 +243,7 @@ fn parser_corpus_round_trip() {
             .into_iter()
             .filter(|t| fixture.section("errors", *t).is_none())
             .collect();
-        if fixture.is_ignored() || targets.is_empty() {
+        if targets.is_empty() {
             skipped.fetch_add(1, Ordering::Relaxed);
             return;
         }
