@@ -86,6 +86,12 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
     }
 
     match parser.current_kind() {
+        kind if is_label_name(kind)
+            && kind != TokenKind::Identifier
+            && parser.peek_kind() == Some(TokenKind::Colon) =>
+        {
+            parse_label(parser)
+        }
         // ?> ... <?php  /  ?> ... <?=  transitions — valid anywhere a statement is expected
         TokenKind::CloseTag => {
             parser.advance(); // consume ?>
@@ -2181,11 +2187,13 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
 fn parse_goto<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
-    let name_token = parser.expect(TokenKind::Identifier);
-    let src = parser.source;
-    let name = name_token
-        .map(|t| Ident::new(&src[t.span.start as usize..t.span.end as usize], t.span))
-        .unwrap_or(parser.missing_ident());
+    let name = if is_label_name(parser.current_kind()) {
+        let text = parser.current_text();
+        Ident::new(text, parser.advance().span)
+    } else {
+        parser.expect(TokenKind::Identifier);
+        parser.missing_ident()
+    };
     parser.expect_statement_end();
     parser.has_goto_or_label = true;
     let span = Span::new(start, parser.previous_end());
@@ -3071,6 +3079,33 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
 // =============================================================================
 // Expression statement (and label detection)
 // =============================================================================
+
+/// Tokens PHP lexes as a plain name where a goto label is allowed.
+fn is_label_name(kind: TokenKind) -> bool {
+    matches!(
+        kind,
+        TokenKind::Identifier
+            | TokenKind::Null
+            | TokenKind::True
+            | TokenKind::False
+            | TokenKind::Enum_
+            | TokenKind::Self_
+            | TokenKind::Parent_
+    )
+}
+
+/// `name:` where `name` is a keyword token that PHP lexes as a plain name.
+fn parse_label<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    let text = parser.current_text();
+    let token = parser.advance();
+    parser.advance(); // consume ':'
+    parser.has_goto_or_label = true;
+    Stmt {
+        kind: StmtKind::Label(Ident::new(text, token.span)),
+        span: Span::new(token.span.start, parser.previous_end()),
+        doc_comment: None,
+    }
+}
 
 fn parse_expression_stmt_or_label<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
