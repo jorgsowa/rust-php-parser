@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `break` and `continue` with an operand other than an integer literal (`break $a;`, `break 1.5;`) were accepted (`php-rs-parser`).
 - `static` as an expression not followed by `::` (`$a = static;`) was accepted; `instanceof static` stays valid (`php-rs-parser`).
 - `foreach ($a as &[$b])` (a by-reference destructuring target) was accepted (`php-rs-parser`).
 - An empty closure `use` list, `use (&)` and `use ($a,,)` were accepted (`php-rs-parser`).

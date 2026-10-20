@@ -1912,10 +1912,24 @@ fn validate_break_continue<'arena, 'src>(
             1
         }
         Some(e) => {
-            // Non-integer expressions: PHP rejects these at compile time too,
-            // but that is covered by the php_syntax test (php -l).
-            let ExprKind::Int(n) = e.kind else {
-                return;
+            let mut e = e;
+            while let ExprKind::Parenthesized(inner) = e.kind {
+                e = inner;
+            }
+            let n = match e.kind {
+                ExprKind::Int(n) => n,
+                ExprKind::Float(_) | ExprKind::String(_) => 0,
+                ExprKind::Error => return,
+                _ => {
+                    parser.error(ParseError::Forbidden {
+                        message: format!(
+                            "'{kw}' operator with non-integer operand is no longer supported"
+                        )
+                        .into(),
+                        span,
+                    });
+                    return;
+                }
             };
             if n <= 0 {
                 parser.error(ParseError::Forbidden {
