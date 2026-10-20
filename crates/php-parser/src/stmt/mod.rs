@@ -2752,7 +2752,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
 
     // Parse first name to check for group use
     let item_start = parser.start_span();
-    let first_name = parser.parse_name();
+    let first_name = parser.parse_name_with(true);
 
     // Group use: use App\{Models\User, Services\Auth};
     if parser.check(TokenKind::LeftBrace) {

@@ -1051,6 +1051,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// Parse a name: qualified, fully-qualified, relative, or unqualified.
     /// e.g., `Foo`, `Foo\Bar`, `\Foo\Bar`, `namespace\Foo\Bar`
     pub fn parse_name(&mut self) -> Name<'arena, 'src> {
+        self.parse_name_with(false)
+    }
+
+    /// Parse a name; with `group_prefix`, a trailing `\` before `{` is left for a group `use`.
+    pub(crate) fn parse_name_with(&mut self, group_prefix: bool) -> Name<'arena, 'src> {
         let start = self.start_span();
 
         // Check for fully qualified: \Foo\Bar
@@ -1108,6 +1113,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 }
                 parts.push(text);
                 last_end = span.end;
+            } else if !(group_prefix && self.check(TokenKind::LeftBrace)) {
+                self.error_expected("identifier");
             }
         }
 
