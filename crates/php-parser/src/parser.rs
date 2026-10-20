@@ -150,6 +150,8 @@ pub struct Parser<'arena, 'src> {
     pub(crate) by_ref_function: bool,
     /// Names declared by `static` in the current function body or top-level code.
     pub(crate) static_vars: Vec<&'src str>,
+    /// Whether the current function body contains `yield`, which makes it a generator.
+    pub(crate) has_yield: bool,
     /// Number of statements being parsed around the current one; 1 for a top-level statement,
     /// including one directly inside a braced `namespace`.
     pub(crate) stmt_depth: u32,
@@ -281,6 +283,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             function_depth: 0,
             by_ref_function: false,
             static_vars: Vec::new(),
+            has_yield: false,
             stmt_depth: 0,
             top_level_code_seen: false,
             top_level_nop_seen: false,
@@ -335,6 +338,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             function_depth: 0,
             by_ref_function: false,
             static_vars: Vec::new(),
+            has_yield: false,
             stmt_depth: 0,
             top_level_code_seen: false,
             top_level_nop_seen: false,

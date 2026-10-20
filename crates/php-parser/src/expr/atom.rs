@@ -1541,6 +1541,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
     parser.function_depth += 1;
     let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
     let saved_static_vars = std::mem::take(&mut parser.static_vars);
+    let saved_has_yield = std::mem::take(&mut parser.has_yield);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body_stmts.push(stmt::parse_stmt(parser));
@@ -1551,6 +1552,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
     parser.function_depth -= 1;
     parser.by_ref_function = saved_by_ref;
     parser.static_vars = saved_static_vars;
+    let is_generator = std::mem::replace(&mut parser.has_yield, saved_has_yield);
     if parser.has_goto_or_label {
         stmt::check_gotos(parser, &body_stmts);
     }
@@ -1565,7 +1567,8 @@ pub(crate) fn parse_closure<'arena, 'src>(
         span: Span::new(brace_start, end),
     });
     if let Some(rt) = &return_type {
-        stmt::check_returns_against_type(parser, body, rt);
+        let in_class = parser.class_scope.is_some();
+        stmt::check_returns_against_type(parser, body, rt, is_generator, in_class);
     }
     parser.check_attributes(
         &attributes,
@@ -1663,14 +1666,18 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
     parser.function_depth += 1;
     let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
     let saved_static_vars = std::mem::take(&mut parser.static_vars);
+    let saved_has_yield = std::mem::take(&mut parser.has_yield);
     let body = parse_expr(parser);
     super::check_reference_return(parser, &body);
     parser.function_depth -= 1;
     parser.by_ref_function = saved_by_ref;
     parser.static_vars = saved_static_vars;
+    let is_generator = std::mem::replace(&mut parser.has_yield, saved_has_yield);
     parser.restore_class_keywords(saved_class_keywords);
     let span = Span::new(start, body.span.end);
-    if return_type.as_ref().is_some_and(stmt::is_void_type) {
+    if let (true, Some(rt)) = (is_generator, &return_type) {
+        stmt::check_generator_return_type(parser, rt);
+    } else if return_type.as_ref().is_some_and(stmt::is_void_type) {
         parser.error(ParseError::Forbidden {
             message: "A void function must not return a value".into(),
             span: body.span,
@@ -1777,6 +1784,7 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
 fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'yield'
+    parser.has_yield = true;
 
     if parser.function_depth == 0 {
         parser.error(ParseError::Forbidden {

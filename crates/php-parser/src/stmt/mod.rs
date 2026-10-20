@@ -1214,6 +1214,7 @@ fn parse_function<'arena, 'src>(
     parser.function_depth += 1;
     let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
     let saved_static_vars = std::mem::take(&mut parser.static_vars);
+    let saved_has_yield = std::mem::take(&mut parser.has_yield);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
         body_stmts.push(parse_stmt(parser));
@@ -1225,6 +1226,7 @@ fn parse_function<'arena, 'src>(
     parser.function_depth -= 1;
     parser.by_ref_function = saved_by_ref;
     parser.static_vars = saved_static_vars;
+    let is_generator = std::mem::replace(&mut parser.has_yield, saved_has_yield);
     if parser.has_goto_or_label {
         check_gotos(parser, &body_stmts);
     }
@@ -1241,7 +1243,7 @@ fn parse_function<'arena, 'src>(
     });
 
     if let Some(rt) = &return_type {
-        check_returns_against_type(parser, body, rt);
+        check_returns_against_type(parser, body, rt, is_generator, false);
     }
     parser.check_attributes(
         &attributes,
@@ -1282,82 +1284,148 @@ pub(crate) fn is_never_type(rt: &TypeHint<'_, '_>) -> bool {
     classify_void_or_never(rt) == Some(false)
 }
 
-/// Walks `body` and emits a diagnostic for every `return` statement that
-/// violates `void` ("must not return a value") or `never` ("must not return")
-/// semantics. Recurses through control-flow nesting (`if`, `while`, …) but
-/// stops at nested function-like declarations so their returns are not
-/// attributed to the enclosing function.
+/// Report a generator whose return type does not admit `Generator`.
+pub(crate) fn check_generator_return_type<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    return_type: &TypeHint<'arena, 'src>,
+) {
+    let members = match &return_type.kind {
+        TypeHintKind::Union(types) | TypeHintKind::Intersection(types) => &types[..],
+        TypeHintKind::Nullable(inner) => std::slice::from_ref(*inner),
+        _ => std::slice::from_ref(return_type),
+    };
+    let admits_generator = members.iter().any(|ty| match &ty.kind {
+        TypeHintKind::Keyword(
+            BuiltinType::Mixed | BuiltinType::Object | BuiltinType::Iterable,
+            _,
+        ) => true,
+        TypeHintKind::Named(name) => matches!(
+            parser
+                .resolve_class_name(name)
+                .to_ascii_lowercase()
+                .as_str(),
+            "traversable" | "iterator" | "generator"
+        ),
+        _ => false,
+    });
+    if !admits_generator {
+        parser.error(ParseError::Forbidden {
+            message: format!(
+                "Generator return type must be a supertype of Generator, {} given",
+                parser.type_display(return_type)
+            )
+            .into(),
+            span: return_type.span,
+        });
+    }
+}
+
+fn admits_null(ty: &TypeHint<'_, '_>) -> bool {
+    match &ty.kind {
+        TypeHintKind::Nullable(_) => true,
+        TypeHintKind::Keyword(builtin, _) => {
+            matches!(builtin, BuiltinType::Null | BuiltinType::Mixed)
+        }
+        TypeHintKind::Union(types) => types.iter().any(admits_null),
+        _ => false,
+    }
+}
+
+/// Check the `return` statements of a function-like `body` against its declared return type:
+/// a value from `void`, any `return` from `never`, and a bare `return;` from any other type.
+/// A generator is checked for a return type that admits `Generator` instead. `in_class` selects
+/// PHP 8.4's "A method ..." wording. Stops at nested function-like declarations.
 pub(crate) fn check_returns_against_type<'arena, 'src>(
     parser: &mut Parser<'arena, 'src>,
     body: &Block<'arena, 'src>,
     return_type: &TypeHint<'arena, 'src>,
+    is_generator: bool,
+    in_class: bool,
 ) {
-    let Some(is_void) = classify_void_or_never(return_type) else {
+    if is_generator {
+        check_generator_return_type(parser, return_type);
         return;
+    }
+    let bare_return_message: std::borrow::Cow<'static, str> = {
+        let what = if in_class && parser.version >= PhpVersion::Php84 {
+            "method"
+        } else {
+            "function"
+        };
+        let hint = if admits_null(return_type) {
+            " (did you mean \"return null;\" instead of \"return;\"?)"
+        } else {
+            ""
+        };
+        format!("A {what} with return type must return a value{hint}").into()
     };
+    let rule = match classify_void_or_never(return_type) {
+        Some(true) => ReturnRule::Void,
+        Some(false) => ReturnRule::Never,
+        None => ReturnRule::Value(bare_return_message),
+    };
+    enum ReturnRule {
+        Void,
+        Never,
+        Value(std::borrow::Cow<'static, str>),
+    }
     fn walk<'arena, 'src>(
         parser: &mut Parser<'arena, 'src>,
         stmts: &[Stmt<'arena, 'src>],
-        is_void: bool,
+        rule: &ReturnRule,
     ) {
         for stmt in stmts {
             match &stmt.kind {
                 StmtKind::Return(value) => {
-                    if is_void {
-                        if value.is_some() {
-                            parser.error(ParseError::Forbidden {
-                                message: "A void function must not return a value".into(),
-                                span: stmt.span,
-                            });
+                    let message = match (rule, value) {
+                        (ReturnRule::Void, Some(_)) => {
+                            "A void function must not return a value".into()
                         }
-                    } else {
-                        // never
-                        parser.error(ParseError::Forbidden {
-                            message: "A never-returning function must not return".into(),
-                            span: stmt.span,
-                        });
-                    }
+                        (ReturnRule::Never, _) => {
+                            "A never-returning function must not return".into()
+                        }
+                        (ReturnRule::Value(message), None) => message.clone(),
+                        _ => continue,
+                    };
+                    parser.error(ParseError::Forbidden {
+                        message,
+                        span: stmt.span,
+                    });
                 }
-                StmtKind::Block(b) => walk(parser, &b.stmts, is_void),
+                StmtKind::Block(b) => walk(parser, &b.stmts, rule),
                 StmtKind::If(if_) => {
-                    walk(parser, std::slice::from_ref(if_.then_branch), is_void);
+                    walk(parser, std::slice::from_ref(if_.then_branch), rule);
                     for eb in if_.elseif_branches.iter() {
-                        walk(parser, std::slice::from_ref(&eb.body), is_void);
+                        walk(parser, std::slice::from_ref(&eb.body), rule);
                     }
                     if let Some(eb) = if_.else_branch {
-                        walk(parser, std::slice::from_ref(eb), is_void);
+                        walk(parser, std::slice::from_ref(eb), rule);
                     }
                 }
-                StmtKind::While(w) => walk(parser, std::slice::from_ref(w.body), is_void),
-                StmtKind::DoWhile(d) => walk(parser, std::slice::from_ref(d.body), is_void),
-                StmtKind::For(f) => walk(parser, std::slice::from_ref(f.body), is_void),
-                StmtKind::Foreach(f) => walk(parser, std::slice::from_ref(f.body), is_void),
+                StmtKind::While(w) => walk(parser, std::slice::from_ref(w.body), rule),
+                StmtKind::DoWhile(d) => walk(parser, std::slice::from_ref(d.body), rule),
+                StmtKind::For(f) => walk(parser, std::slice::from_ref(f.body), rule),
+                StmtKind::Foreach(f) => walk(parser, std::slice::from_ref(f.body), rule),
                 StmtKind::Switch(s) => {
                     for c in s.body.cases.iter() {
-                        walk(parser, &c.body, is_void);
+                        walk(parser, &c.body, rule);
                     }
                 }
                 StmtKind::TryCatch(t) => {
-                    walk(parser, &t.body.stmts, is_void);
+                    walk(parser, &t.body.stmts, rule);
                     for c in t.catches.iter() {
-                        walk(parser, &c.body.stmts, is_void);
+                        walk(parser, &c.body.stmts, rule);
                     }
                     if let Some(fin) = t.finally {
-                        walk(parser, &fin.stmts, is_void);
+                        walk(parser, &fin.stmts, rule);
                     }
                 }
-                // Do NOT descend into nested function-like declarations:
-                // their returns are scoped to themselves.
-                StmtKind::Function(_)
-                | StmtKind::Class(_)
-                | StmtKind::Interface(_)
-                | StmtKind::Trait(_)
-                | StmtKind::Enum(_) => {}
+                // Nested function-like declarations have their own returns.
                 _ => {}
             }
         }
     }
-    walk(parser, &body.stmts, is_void);
+    walk(parser, &body.stmts, &rule);
 }
 
 fn check_param_name(

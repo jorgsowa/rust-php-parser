@@ -329,6 +329,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
         parser.function_depth += 1;
         let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
         let saved_static_vars = std::mem::take(&mut parser.static_vars);
+        let saved_has_yield = std::mem::take(&mut parser.has_yield);
         let body = if parser.check(TokenKind::LeftBrace) {
             let open_brace = parser.expect(TokenKind::LeftBrace);
             let brace_span = open_brace.map(|t| t.span).unwrap_or(parser.current_span());
@@ -360,6 +361,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
         parser.function_depth -= 1;
         parser.by_ref_function = saved_by_ref;
         parser.static_vars = saved_static_vars;
+        parser.has_yield = saved_has_yield;
         parser.has_goto_or_label = saved_has_goto_or_label;
         parser.finally_loop_depth = saved_finally_loop_depth;
         parser.loop_depth = saved_loop_depth;
@@ -1234,6 +1236,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
     let doc_comment = parser.take_doc_comment(member_start);
 
     let mut terminated_without_body = false;
+    let mut is_generator = false;
     let body = if parser.check(TokenKind::LeftBrace) {
         let brace_start = parser.start_span();
         parser.expect(TokenKind::LeftBrace);
@@ -1245,6 +1248,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
         parser.function_depth += 1;
         let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
         let saved_static_vars = std::mem::take(&mut parser.static_vars);
+        let saved_has_yield = std::mem::take(&mut parser.has_yield);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             stmts.push(super::parse_stmt(parser));
@@ -1255,6 +1259,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
         parser.function_depth -= 1;
         parser.by_ref_function = saved_by_ref;
         parser.static_vars = saved_static_vars;
+        is_generator = std::mem::replace(&mut parser.has_yield, saved_has_yield);
         if parser.has_goto_or_label {
             super::check_gotos(parser, &stmts);
         }
@@ -1339,7 +1344,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
     }
 
     if let (Some(rt), Some(b)) = (&return_type, body) {
-        super::check_returns_against_type(parser, b, rt);
+        super::check_returns_against_type(parser, b, rt, is_generator, true);
     }
 
     if let Some(signature) = method_name
