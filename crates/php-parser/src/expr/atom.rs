@@ -1848,6 +1848,14 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
         || parser.check(TokenKind::RightBrace)
         || parser.check(TokenKind::Comma)
         || is_binary_only
+        || matches!(
+            kind,
+            TokenKind::Question
+                | TokenKind::QuestionQuestion
+                | TokenKind::Colon
+                | TokenKind::FatArrow
+                | TokenKind::As
+        )
     {
         let span = Span::new(start, parser.previous_end());
         return Expr {
