@@ -1580,7 +1580,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 }
                 let Some(last) = parts.last() else { return };
                 let relative = name.kind() == NameKind::Relative;
-                let unqualified_static = self.version >= PhpVersion::Php86
+                let unqualified_static = self.version >= PhpVersion::Php85
                     && relative
                     && parts.len() == 1
                     && last.eq_ignore_ascii_case("static");
