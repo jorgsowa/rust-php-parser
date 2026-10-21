@@ -628,6 +628,18 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         Some(self.next2.kind)
     }
 
+    /// Span of the peeked token (one token ahead of current).
+    #[inline]
+    pub fn peek_span(&self) -> Span {
+        self.next.span
+    }
+
+    /// Span of the token two tokens ahead of current.
+    #[inline]
+    pub fn peek2_span(&self) -> Span {
+        self.next2.span
+    }
+
     /// Get the text of the peeked token (one token ahead of current).
     #[inline]
     pub fn peek_text(&mut self) -> Option<&'src str> {

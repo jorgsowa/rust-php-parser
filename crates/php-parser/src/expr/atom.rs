@@ -978,17 +978,8 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             // Distinguish `clone (cast) $x` (unary prefix with cast operand) from
             // `clone(args)` (function-call / first-class-callable form). A `(` that
             // starts a cast is followed by a cast keyword and a `)`.
-            let looks_like_cast = parser.check(TokenKind::LeftParen)
-                && matches!(
-                    parser.peek_kind(),
-                    Some(TokenKind::Identifier) | Some(TokenKind::Array) | Some(TokenKind::Unset)
-                )
-                && parser.peek2_kind() == Some(TokenKind::RightParen)
-                && parser.peek_text().is_some_and(|t| {
-                    CAST_KEYWORDS
-                        .iter()
-                        .any(|(kw, _)| kw.eq_ignore_ascii_case(t))
-                });
+            let looks_like_cast =
+                parser.check(TokenKind::LeftParen) && cast_kind_ahead(parser).is_some();
             if !looks_like_cast && parser.check(TokenKind::LeftParen) {
                 let src = parser.source;
                 let name_text = Name::Simple {
@@ -2419,14 +2410,10 @@ fn parse_list_element<'arena, 'src>(
     }
 }
 
-/// Try to parse a cast expression like `(int)$x`. Returns Some(Expr) if successful,
-/// or None if this is not a cast (just a parenthesized expression).
-fn try_parse_cast<'arena, 'src>(
-    parser: &'_ mut Parser<'arena, 'src>,
-) -> Option<Expr<'arena, 'src>> {
-    let peeked = parser.peek_kind();
-
-    let cast_kind = match peeked {
+/// The cast spelled by the current `(` and the next two tokens. PHP lexes a cast as one token,
+/// so only spaces and tabs may surround the keyword; anything else is a parenthesized constant.
+fn cast_kind_ahead(parser: &mut Parser<'_, '_>) -> Option<CastKind> {
+    let cast_kind = match parser.peek_kind() {
         Some(TokenKind::Identifier) => {
             let peek_text = parser.peek_text()?;
             CAST_KEYWORDS
@@ -2437,16 +2424,27 @@ fn try_parse_cast<'arena, 'src>(
         Some(TokenKind::Array) => Some(CastKind::Array),
         Some(TokenKind::Unset) => Some(CastKind::Unset),
         _ => None,
-    };
-
-    let cast_kind = cast_kind?;
-
-    // Verify `)` follows the cast keyword before consuming anything.
-    // Without this check, `( array() ... )` would be misidentified as `(array)` cast,
-    // consuming `(` and `array` and leaving the parser in a corrupted state.
+    }?;
     if parser.peek2_kind() != Some(TokenKind::RightParen) {
         return None;
     }
+    let blank = |from: u32, to: u32| {
+        parser.source[from as usize..to as usize]
+            .bytes()
+            .all(|b| b == b' ' || b == b'\t')
+    };
+    let keyword = parser.peek_span();
+    (blank(parser.current_span().end, keyword.start)
+        && blank(keyword.end, parser.peek2_span().start))
+    .then_some(cast_kind)
+}
+
+/// Try to parse a cast expression like `(int)$x`. Returns Some(Expr) if successful,
+/// or None if this is not a cast (just a parenthesized expression).
+fn try_parse_cast<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+) -> Option<Expr<'arena, 'src>> {
+    let cast_kind = cast_kind_ahead(parser)?;
 
     let start = parser.start_span();
     parser.advance(); // consume (
