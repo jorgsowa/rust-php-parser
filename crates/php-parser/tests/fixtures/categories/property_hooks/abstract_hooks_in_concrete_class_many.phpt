@@ -6,7 +6,6 @@ Class C contains 3 abstract methods and must therefore be declared abstract or i
 ===php_error <=8.1===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
 ===php_error 8.2===
-Cannot load Xdebug - it was already loaded
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
 ===php_error 8.3===
 PHP Fatal error:  Cannot use the abstract modifier on a property in Standard input code on line 2

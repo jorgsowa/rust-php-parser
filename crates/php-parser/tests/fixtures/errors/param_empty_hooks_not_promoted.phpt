@@ -2,10 +2,10 @@
 <?php class C { function __construct($a { }) {} }
 ===errors===
 Property hook list must not be empty
-===php_error 8.5===
+===php_error <=8.3===
+PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 1
+===php_error >=8.4===
 PHP Fatal error:  Property hook list must not be empty in Standard input code on line 1
-===php_error===
-PHP Fatal error:  Property hook list must not be empty in Standard input code on line 2
 ===ast===
 {
   "stmts": [

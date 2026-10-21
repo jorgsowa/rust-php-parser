@@ -8,7 +8,6 @@ class C {
 ===php_error <=8.1===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error 8.2===
-Cannot load Xdebug - it was already loaded
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error 8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3

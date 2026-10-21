@@ -6,7 +6,6 @@ Cannot use "yield from" inside a by-reference generator
 ===php_error <=8.1===
 PHP Fatal error:  Cannot use "yield from" inside a by-reference generator in Standard input code on line 2
 ===php_error 8.2===
-Cannot load Xdebug - it was already loaded
 PHP Fatal error:  Cannot use "yield from" inside a by-reference generator in Standard input code on line 2
 ===php_error >=8.3===
 PHP Fatal error:  Cannot use "yield from" inside a by-reference generator in Standard input code on line 2

@@ -6,7 +6,6 @@ cannot use [] for reading
 ===php_error <=8.1===
 PHP Fatal error:  Cannot use [] for reading in Standard input code on line 2
 ===php_error 8.2===
-Cannot load Xdebug - it was already loaded
 PHP Fatal error:  Cannot use [] for reading in Standard input code on line 2
 ===php_error >=8.3===
 PHP Fatal error:  Cannot use [] for reading in Standard input code on line 2

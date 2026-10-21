@@ -6,7 +6,6 @@ Cannot assign by reference to a destructuring pattern
 ===php_error <=8.1===
 PHP Parse error:  syntax error, unexpected token "&" in Standard input code on line 2
 ===php_error 8.2===
-Cannot load Xdebug - it was already loaded
 PHP Parse error:  syntax error, unexpected token "&" in Standard input code on line 2
 ===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected token "&" in Standard input code on line 2
