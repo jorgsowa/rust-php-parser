@@ -1,7 +1,7 @@
 #[path = "../../php-parser/tests/integration/common.rs"]
 mod parser_common;
 
-use parser_common::{collect_phpt_files, php_version, Fixture};
+use parser_common::{collect_phpt_files, php_version, Fixture, DEFAULT};
 use php_printer::{PrettyPrinter, PrinterConfig};
 use rayon::prelude::*;
 use std::sync::Mutex;
@@ -250,10 +250,8 @@ fn parser_corpus_round_trip() {
 
         let rel = path.strip_prefix(&parser_fixtures).unwrap();
         for target in targets {
-            let options = match target {
-                Some(v) => php_rs_parser::ParseOptions::default().version(php_version(v)),
-                None => php_rs_parser::ParseOptions::default(),
-            };
+            let options = php_rs_parser::ParseOptions::default()
+                .version(php_version(target.unwrap_or(DEFAULT)));
             let print = |source: &str| {
                 let arena = bumpalo::Bump::new();
                 let result = php_rs_parser::parse_arena_with(&arena, source, &options);

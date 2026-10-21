@@ -1,6 +1,6 @@
 //! Fixture corpus tests for both the arena and owned parse APIs.
 
-use crate::common::{php_version, run_fixture_corpus};
+use crate::common::{php_version, run_fixture_corpus, DEFAULT};
 
 #[test]
 fn arena_fixtures() {
@@ -8,14 +8,12 @@ fn arena_fixtures() {
     run_fixture_corpus(
         |source, min_php| {
             let arena = bumpalo::Bump::new();
-            let result = match min_php.map(php_version) {
-                Some(v) => php_rs_parser::parse_arena_with(
-                    &arena,
-                    source,
-                    &php_rs_parser::ParseOptions::default().version(v),
-                ),
-                None => php_rs_parser::parse_arena(&arena, source),
-            };
+            let result = php_rs_parser::parse_arena_with(
+                &arena,
+                source,
+                &php_rs_parser::ParseOptions::default()
+                    .version(php_version(min_php.unwrap_or(DEFAULT))),
+            );
             let errors = result.errors.iter().map(|e| e.to_string()).collect();
             let json = serde_json::to_string_pretty(&result.program).unwrap();
             (errors, json)
@@ -28,13 +26,11 @@ fn arena_fixtures() {
 fn owned_fixtures() {
     run_fixture_corpus(
         |source, min_php| {
-            let result = match min_php.map(php_version) {
-                Some(v) => php_rs_parser::parse_with(
-                    source,
-                    &php_rs_parser::ParseOptions::default().version(v),
-                ),
-                None => php_rs_parser::parse(source),
-            };
+            let result = php_rs_parser::parse_with(
+                source,
+                &php_rs_parser::ParseOptions::default()
+                    .version(php_version(min_php.unwrap_or(DEFAULT))),
+            );
             let errors = result.errors.iter().map(|e| e.to_string()).collect();
             let json = serde_json::to_string_pretty(&result.program).unwrap();
             (errors, json)
@@ -52,7 +48,7 @@ fn supported_versions_match_parser() {
             format!("{major}.{minor}")
         );
     }
-    let latest = php_rs_parser::PhpVersion::default();
+    let latest = php_rs_parser::PhpVersion::Php86;
     assert_eq!(
         php_version(*SUPPORTED.last().unwrap()),
         latest,

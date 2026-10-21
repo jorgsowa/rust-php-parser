@@ -48,16 +48,13 @@ fn identity_fold_across_corpus() {
             let source = fixture.source();
             let src_arena = Bump::new();
 
-            let result = if let Some(ver) = min_php {
-                php_rs_parser::parse_arena_with(
-                    &src_arena,
-                    source,
-                    &php_rs_parser::ParseOptions::default()
-                        .version(crate::common::php_version(ver)),
-                )
-            } else {
-                php_rs_parser::parse_arena(&src_arena, source)
-            };
+            let result = php_rs_parser::parse_arena_with(
+                &src_arena,
+                source,
+                &php_rs_parser::ParseOptions::default().version(crate::common::php_version(
+                    min_php.unwrap_or(crate::common::DEFAULT),
+                )),
+            );
 
             let original_json = to_json(&result.program);
 
@@ -103,14 +100,12 @@ fn owned_identity_fold_matches_original_json_across_corpus() {
                     .unwrap_or_else(|e| panic!("malformed fixture {}: {e}", path.display()));
                 for min_php in fixture.targets() {
                     let source = fixture.source();
-                    let result = match min_php {
-                        Some(ver) => php_rs_parser::parse_with(
-                            source,
-                            &php_rs_parser::ParseOptions::default()
-                                .version(crate::common::php_version(ver)),
+                    let result = php_rs_parser::parse_with(
+                        source,
+                        &php_rs_parser::ParseOptions::default().version(
+                            crate::common::php_version(min_php.unwrap_or(crate::common::DEFAULT)),
                         ),
-                        None => php_rs_parser::parse(source),
-                    };
+                    );
                     let original = serde_json::to_string(&result.program).unwrap();
                     let folded = OwnedIdentity.fold_program(result.program);
                     if serde_json::to_string(&folded).unwrap() != original {

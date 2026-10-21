@@ -9,7 +9,7 @@ use std::fmt;
 ///
 /// Ordering is meaningful: `Php82 > Php81`, etc.
 ///
-/// Defaults to [`PhpVersion::Php86`], the latest supported version.
+/// Defaults to [`PhpVersion::Php85`], the latest released version.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
 #[non_exhaustive]
 pub enum PhpVersion {
@@ -27,9 +27,9 @@ pub enum PhpVersion {
     Php84,
     /// PHP 8.5 — pipe operator (`|>`), `clone` with property overrides, `final` promoted properties,
     ///           asymmetric visibility on static properties.
+    #[default]
     Php85,
     /// PHP 8.6 (unreleased) — partial function application (`?`/`...` call-argument placeholders).
-    #[default]
     Php86,
 }
 
