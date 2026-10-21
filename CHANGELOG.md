@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.24.1] - 2026-10-21
+
+### Fixed
+
+- An unqualified `static` in a type position reports the PHP 8.5 error (`php-rs-parser`).
+
 ## [0.24.0] - 2026-10-21
 
 ### Added
