@@ -215,13 +215,22 @@ fn skip_complex_interp(bytes: &[u8], mut p: usize) -> usize {
     p
 }
 
+/// Length of the `\n`, `\r\n` or `\r` that `bytes` starts with.
+fn newline_len(bytes: &[u8]) -> Option<usize> {
+    match bytes {
+        [b'\r', b'\n', ..] => Some(2),
+        [b'\n' | b'\r', ..] => Some(1),
+        _ => None,
+    }
+}
+
 /// Start of the heredoc body line after the one at `p`. A line break inside a `{$...}` or
 /// `${...}` interpolation does not start a line, so the closing label cannot match there.
 fn next_heredoc_line(bytes: &[u8], mut p: usize) -> usize {
     while p < bytes.len() {
         match bytes[p] {
-            b'\n' => return p + 1,
-            b'\\' if bytes.get(p + 1) != Some(&b'\n') => p += 2,
+            b'\n' | b'\r' => return p + newline_len(&bytes[p..]).unwrap_or(1),
+            b'\\' if !matches!(bytes.get(p + 1), Some(b'\n' | b'\r')) => p += 2,
             b'{' if bytes.get(p + 1) == Some(&b'$') => p = skip_complex_interp(bytes, p),
             b'$' if bytes.get(p + 1) == Some(&b'{') => p = skip_complex_interp(bytes, p + 1),
             _ => p += 1,
@@ -1226,18 +1235,18 @@ impl<'src> Lexer<'src> {
 
     /// Skip a line comment body (`//` or `#` already consumed).
     /// Advances `pos` to the newline (inclusive stop) or `?>` or end of file.
-    /// Leaves `pos` at `\n` / `?` so the surrounding loops consume them correctly.
+    /// Leaves `pos` at `\n` / `\r` / `?` so the surrounding loops consume them correctly.
     #[inline]
     fn skip_line_comment_body(bytes: &[u8], pos: &mut usize) {
         loop {
-            match memchr2(b'\n', b'?', &bytes[*pos..]) {
+            match memchr::memchr3(b'\n', b'\r', b'?', &bytes[*pos..]) {
                 None => {
                     *pos = bytes.len();
                     return;
                 }
                 Some(offset) => {
                     let p = *pos + offset;
-                    if bytes[p] == b'\n' {
+                    if bytes[p] != b'?' {
                         *pos = p; // stop at newline; outer whitespace loop will consume it
                         return;
                     }
@@ -1335,14 +1344,10 @@ impl<'src> Lexer<'src> {
             label = &after_quote[..closing];
             is_nowdoc = true;
             let after_label = &after_arrows_trimmed[2 + closing..];
-            if !(after_label.starts_with('\n') || after_label.starts_with("\r\n")) {
+            let Some(nl) = newline_len(after_label.as_bytes()) else {
                 return None;
-            }
-            let nl = after_label.find('\n').unwrap_or(after_label.len());
-            label_line_end = arrows_offset + 2 + closing + nl;
-            if label_line_end < remaining.len() {
-                // +1 for the newline
-            }
+            };
+            label_line_end = arrows_offset + 2 + closing + nl - 1;
         } else {
             // Heredoc: <<<LABEL or <<<"LABEL"
             let s = if let Some(after_dquote) = after_arrows_trimmed.strip_prefix('"') {
@@ -1358,12 +1363,11 @@ impl<'src> Lexer<'src> {
                 &after_arrows_trimmed[end..]
             };
             // PHP requires the newline right after the label.
-            if !(s.starts_with('\n') || s.starts_with("\r\n")) {
+            let Some(nl) = newline_len(s.as_bytes()) else {
                 return None;
-            }
+            };
             is_nowdoc = false;
-            let nl = s.find('\n').unwrap_or(s.len());
-            label_line_end = arrows_offset + (after_arrows_trimmed.len() - s.len()) + nl;
+            label_line_end = arrows_offset + (after_arrows_trimmed.len() - s.len()) + nl - 1;
         };
 
         if label.is_empty() {
@@ -1372,7 +1376,7 @@ impl<'src> Lexer<'src> {
 
         // Body starts after the first newline
         let body_start_in_remaining = if label_line_end < remaining.len() {
-            label_line_end + 1 // skip \n
+            label_line_end + 1 // skip the last newline byte
         } else {
             return None; // no body
         };
@@ -1388,7 +1392,7 @@ impl<'src> Lexer<'src> {
             }
             let line_start = search_pos;
             let line_end = body[line_start..]
-                .find('\n')
+                .find(['\n', '\r'])
                 .map(|p| line_start + p)
                 .unwrap_or(body.len());
             let line = &body[line_start..line_end];
@@ -1411,11 +1415,7 @@ impl<'src> Lexer<'src> {
             }
 
             search_pos = if is_nowdoc {
-                if line_end < body.len() {
-                    line_end + 1
-                } else {
-                    body.len()
-                }
+                line_end + newline_len(&body.as_bytes()[line_end..]).unwrap_or(0)
             } else {
                 next_heredoc_line(body.as_bytes(), line_start)
             };

@@ -563,11 +563,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 // No interpolation — build the (possibly de-indented) body string,
                 // then process escape sequences
                 let de_indented = if !indent.is_empty() {
-                    raw_body
-                        .lines()
-                        .map(|line| &line[heredoc_indent_len(line.as_bytes(), indent.len())..])
-                        .collect::<Vec<_>>()
-                        .join("\n")
+                    strip_heredoc_indent(raw_body, indent.len())
                 } else {
                     raw_body.to_string()
                 };
@@ -608,12 +604,9 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 parser.errors_mut(),
             );
             let value: &'arena str = if !indent.is_empty() {
-                let s = raw_body
-                    .lines()
-                    .map(|line| &line[heredoc_indent_len(line.as_bytes(), indent.len())..])
-                    .collect::<Vec<_>>()
-                    .join("\n");
-                parser.arena.alloc_str(&s)
+                parser
+                    .arena
+                    .alloc_str(&strip_heredoc_indent(raw_body, indent.len()))
             } else {
                 parser.arena.alloc_str(raw_body)
             };
@@ -2525,13 +2518,18 @@ fn parse_heredoc_content(text: &str) -> (&str, usize, usize, String) {
     let rest = &after[label_consumed..];
     let rest_start = after_start + label_consumed;
 
-    // Skip to first newline (end of label line)
-    let newline_pos = rest.find('\n').unwrap_or(rest.len());
-    let body_start_in_text = rest_start + newline_pos + 1;
+    // Skip past the newline that ends the label line
+    let newline_pos = rest.find(['\n', '\r']).unwrap_or(rest.len());
+    let newline_len = if rest[newline_pos..].starts_with("\r\n") {
+        2
+    } else {
+        1
+    };
+    let body_start_in_text = rest_start + newline_pos + newline_len;
     let body = &text[body_start_in_text..];
 
     // The lexer ends the token at the closing label, so the last line is the end marker.
-    let end_line_start = body.rfind('\n').map_or(0, |p| p + 1);
+    let end_line_start = body.rfind(['\n', '\r']).map_or(0, |p| p + 1);
     let end_line = &body[end_line_start..];
     let indent_len = end_line.len() - end_line.trim_start_matches([' ', '\t']).len();
     let indent = end_line[..indent_len].to_string();
@@ -2543,6 +2541,22 @@ fn parse_heredoc_content(text: &str) -> (&str, usize, usize, String) {
     let body_end_in_text = body_start_in_text + content.len();
 
     (label, body_start_in_text, body_end_in_text, indent)
+}
+
+/// `raw_body` with up to `indent_len` spaces or tabs removed from the start of every line.
+fn strip_heredoc_indent(raw_body: &str, indent_len: usize) -> String {
+    let mut out = String::with_capacity(raw_body.len());
+    let mut rest = raw_body;
+    loop {
+        rest = &rest[heredoc_indent_len(rest.as_bytes(), indent_len)..];
+        let Some(p) = rest.find(['\n', '\r']) else {
+            out.push_str(rest);
+            return out;
+        };
+        let end = p + if rest[p..].starts_with("\r\n") { 2 } else { 1 };
+        out.push_str(&rest[..end]);
+        rest = &rest[end..];
+    }
 }
 
 /// Validate that every body line of an indented heredoc/nowdoc starts with `indent`, as PHP does.
@@ -2565,10 +2579,8 @@ fn validate_heredoc_indentation(
         return;
     }
     let mut offset = body_offset as usize;
-    for raw_line in raw_body.split('\n') {
-        // In a CRLF file a blank line still carries the `\r`; PHP's scanner
-        // treats it as empty (it stops at `\r` or `\n` when checking indent).
-        let line = raw_line.strip_suffix('\r').unwrap_or(raw_line);
+    // `\r\n` yields an extra empty line, which needs no indentation.
+    for line in raw_body.split(['\n', '\r']) {
         let span = Span::new(offset as u32, (offset + line.len()) as u32);
         let leading = heredoc_indent_len(line.as_bytes(), indent.len());
         if line[..leading].bytes().any(|b| b != indent.as_bytes()[0]) {
@@ -2583,7 +2595,7 @@ fn validate_heredoc_indentation(
                 span,
             });
         }
-        offset += raw_line.len() + 1; // +1 for the '\n'
+        offset += line.len() + 1; // +1 for the line break byte
     }
 }
 

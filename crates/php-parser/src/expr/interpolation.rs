@@ -345,10 +345,14 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
             b'\\' => {
                 i = decode_escape_at(bytes, raw_body, i, &mut literal, errors, body_offset, false);
             }
-            b'\n' => {
+            b'\n' | b'\r' => {
                 // Preserve the newline in the literal, then skip the indent on the next line
-                literal.push(b'\n');
+                literal.push(bytes[i]);
                 i += 1;
+                if bytes[i - 1] == b'\r' && bytes.get(i) == Some(&b'\n') {
+                    literal.push(b'\n');
+                    i += 1;
+                }
                 i += heredoc_indent_len(&bytes[i..], indent_len);
             }
             b'$' => {
