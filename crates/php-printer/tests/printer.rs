@@ -14,6 +14,7 @@ use std::sync::Mutex;
 /// blank_lines_upper_bound=0
 /// no_source=true
 /// strip_parens=true
+/// min_php=8.6           (skip php -l validation on older PHP)
 /// ===source===
 /// <?php ...
 /// ===print===
@@ -69,6 +70,8 @@ fn parse_printer_fixture(content: &str) -> Result<PrinterFixture, String> {
             no_source = true;
         } else if line == "strip_parens=true" {
             strip_parens = true;
+        } else if line.starts_with("min_php=") {
+            // consumed by scripts/validate-printer-output.sh
         } else {
             return Err(format!("unknown config line `{line}`"));
         }
