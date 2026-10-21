@@ -25,9 +25,11 @@ class Test {
 'property hooks' requires PHP 8.4 or higher
 Type of parameter $value of hook Test::$prop4::set must be compatible with property type
 Type of parameter $value of hook Test::$prop4::set must be compatible with property type
+Class Test contains 2 abstract methods and must therefore be declared abstract or implement the remaining methods (Test::$prop3::get, Test::$prop3::set)
 ===errors >=8.4===
 Type of parameter $value of hook Test::$prop4::set must be compatible with property type
 Type of parameter $value of hook Test::$prop4::set must be compatible with property type
+Class Test contains 2 abstract methods and must therefore be declared abstract or implement the remaining methods (Test::$prop3::get, Test::$prop3::set)
 ===php_error <=8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error >=8.4===

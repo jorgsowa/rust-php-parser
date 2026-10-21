@@ -12,6 +12,7 @@ mod class;
 mod enum_decl;
 mod trait_use;
 
+pub(crate) use class::check_abstract_hooks;
 pub(crate) use class::validate_class_ref;
 pub use class::{check_readonly_class_members, parse_class_members, parse_name_list};
 
@@ -3407,9 +3408,14 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         }
 
         fn args(&mut self, args: &[Arg<'_, '_>]) {
-            for value in args.iter().filter_map(|a| a.value()) {
+            for arg in args {
+                let Some(value) = arg.value() else { continue };
                 match value.kind {
-                    ExprKind::ArrayAccess(_) | ExprKind::PropertyAccess(_) => self.write(value),
+                    ExprKind::ArrayAccess(_) | ExprKind::PropertyAccess(_)
+                        if !matches!(arg.kind, ArgKind::Spread(_)) =>
+                    {
+                        self.write(value)
+                    }
                     _ => {
                         let _ = self.visit_expr(value);
                     }

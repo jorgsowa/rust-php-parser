@@ -361,6 +361,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
             }))
         } else if parser.eat(TokenKind::FatArrow).is_some() {
             let e = expr::parse_expr(parser);
+            expr::check_reference_return(parser, &e);
             parser.expect_member_end();
             PropertyHookBody::Expression(e)
         } else {
@@ -698,6 +699,7 @@ fn check_abstract_methods(
         })
         .collect();
     let Some(&(first, span)) = abstract_methods.first() else {
+        check_abstract_hooks(parser, class_name, members);
         return;
     };
     let message = if parser.version >= PhpVersion::Php85 {
@@ -718,6 +720,52 @@ fn check_abstract_methods(
     };
     parser.error(ParseError::Forbidden {
         message: message.into(),
+        span,
+    });
+}
+
+/// Report abstract property hooks in a class that is not declared abstract.
+pub(crate) fn check_abstract_hooks(
+    parser: &mut Parser<'_, '_>,
+    class_name: &str,
+    members: &[ClassMember<'_, '_>],
+) {
+    let mut abstract_hooks: Vec<(&str, &str)> = Vec::new();
+    let mut span = None;
+    for member in members {
+        let ClassMemberKind::Property(prop) = &member.kind else {
+            continue;
+        };
+        if !prop.modifiers.is_abstract {
+            continue;
+        }
+        for hook in prop.hooks.iter() {
+            if matches!(hook.body, PropertyHookBody::Abstract) {
+                span.get_or_insert(member.span);
+                let kind = match hook.kind {
+                    PropertyHookKind::Get => "get",
+                    _ => "set",
+                };
+                abstract_hooks.push((prop.name.as_str().unwrap_or_default(), kind));
+            }
+        }
+    }
+    let Some(span) = span else { return };
+    let count = abstract_hooks.len();
+    let names: Vec<String> = abstract_hooks
+        .iter()
+        .take(3)
+        .map(|(name, kind)| format!("{class_name}::${name}::{kind}"))
+        .collect();
+    parser.error(ParseError::Forbidden {
+        message: format!(
+            "Class {class_name} contains {count} abstract method{} and must therefore be declared abstract or implement the remaining method{} ({}{})",
+            if count == 1 { "" } else { "s" },
+            if count == 1 { "" } else { "s" },
+            names.join(", "),
+            if count > 3 { ", ..." } else { "" }
+        )
+        .into(),
         span,
     });
 }

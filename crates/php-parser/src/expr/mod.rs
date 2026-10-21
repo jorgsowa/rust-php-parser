@@ -1056,7 +1056,14 @@ fn parse_assign_continuation<'arena, 'src>(
         WriteKind::Modify
     };
     check_special_variable_write(parser, &lhs, write_kind);
+    let by_ref_span = parser.current_span();
     let by_ref = op_token.kind == TokenKind::Equals && parser.eat(TokenKind::Ampersand).is_some();
+    if by_ref && matches!(lhs.kind, ExprKind::Array(_)) {
+        parser.error(ParseError::Forbidden {
+            message: "Cannot assign by reference to a destructuring pattern".into(),
+            span: by_ref_span,
+        });
+    }
     let op = match op_token.kind {
         TokenKind::Equals => AssignOp::Assign,
         TokenKind::PlusEquals => AssignOp::Plus,

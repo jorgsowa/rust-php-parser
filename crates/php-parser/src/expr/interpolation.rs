@@ -988,7 +988,13 @@ fn parse_dollar_brace<'arena, 'src>(
         && (name_end == close || (bytes[name_end] == b'[' && bytes[bracket_end - 1] == b']'));
     if !is_name {
         let empty = text[content_start..close].trim().is_empty();
-        if empty {
+        // A name followed by `[` takes an index, so anything after the closing `]` is a syntax error.
+        if closed && name_end > content_start && name_end < close && bytes[name_end] == b'[' {
+            errors.push(ParseError::Forbidden {
+                message: "expected ']' to close the index in '${...}' string interpolation".into(),
+                span,
+            });
+        } else if empty {
             errors.push(ParseError::Forbidden {
                 message: "empty variable name in '${...}' string interpolation".into(),
                 span,

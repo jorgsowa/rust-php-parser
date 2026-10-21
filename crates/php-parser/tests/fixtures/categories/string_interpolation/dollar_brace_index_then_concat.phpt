@@ -1,0 +1,106 @@
+===source===
+<?php
+"${A[0] . 1}";
+===errors===
+expected ']' to close the index in '${...}' string interpolation
+===php_error <=8.1===
+PHP Parse error:  syntax error, unexpected token ".", expecting "}" in Standard input code on line 2
+===php_error 8.2===
+Cannot load Xdebug - it was already loaded
+PHP Parse error:  syntax error, unexpected token ".", expecting "}" in Standard input code on line 2
+===php_error >=8.3===
+PHP Parse error:  syntax error, unexpected token ".", expecting "}" in Standard input code on line 2
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "InterpolatedString": [
+              {
+                "Expr": {
+                  "kind": {
+                    "VariableVariable": {
+                      "kind": {
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "ArrayAccess": {
+                                "array": {
+                                  "kind": {
+                                    "Name": {
+                                      "parts": [
+                                        "A"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 9,
+                                        "end": 10
+                                      }
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 9,
+                                    "end": 10
+                                  }
+                                },
+                                "index": {
+                                  "kind": {
+                                    "Int": 0
+                                  },
+                                  "span": {
+                                    "start": 11,
+                                    "end": 12
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 9,
+                              "end": 13
+                            }
+                          },
+                          "op": "Concat",
+                          "right": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 16,
+                              "end": 17
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 9,
+                        "end": 17
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 7,
+                    "end": 18
+                  }
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 6,
+            "end": 19
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 20
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 20
+  }
+}

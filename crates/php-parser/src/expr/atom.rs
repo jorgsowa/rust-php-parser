@@ -1324,7 +1324,9 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             is_readonly: anon_readonly,
         };
         parser.check_attributes(&anon_attributes, &AttrSite::class(kind, &scope.name));
+        let class_name = scope.name.clone();
         let members = stmt::parse_class_members(parser, false, false, scope);
+        stmt::check_abstract_hooks(parser, &class_name, &members);
         if anon_readonly {
             stmt::check_readonly_class_members(parser, &members);
         }
@@ -1819,6 +1821,12 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
         parser.advance();
         let value = parse_expr_bp(parser, precedence::YIELD_OPERAND_BP);
         let span = Span::new(start, value.span.end);
+        if parser.by_ref_function {
+            parser.error(ParseError::Forbidden {
+                message: "Cannot use \"yield from\" inside a by-reference generator".into(),
+                span,
+            });
+        }
         return Expr {
             kind: ExprKind::Yield(YieldExpr {
                 key: None,
