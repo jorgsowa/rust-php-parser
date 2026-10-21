@@ -253,11 +253,11 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
         // Expect "get" or "set" identifier (contextual keywords)
         let kind = if parser.check(TokenKind::Identifier) {
             match parser.current_text() {
-                "get" => {
+                t if t.eq_ignore_ascii_case("get") => {
                     parser.advance();
                     PropertyHookKind::Get
                 }
-                "set" => {
+                t if t.eq_ignore_ascii_case("set") => {
                     parser.advance();
                     PropertyHookKind::Set
                 }
@@ -1150,7 +1150,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
     let mut is_readonly = false;
 
     // Handle `var` keyword (PHP4 style, equivalent to public)
-    if parser.check(TokenKind::Identifier) && parser.current_text() == "var" {
+    if parser.check(TokenKind::Identifier) && parser.current_text().eq_ignore_ascii_case("var") {
         parser.advance();
         visibility = Some(Visibility::Public);
     }

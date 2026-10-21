@@ -43,7 +43,9 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
             };
 
             // Check for `insteadof` or `as`
-            if parser.check(TokenKind::Identifier) && parser.current_text() == "insteadof" {
+            if parser.check(TokenKind::Identifier)
+                && parser.current_text().eq_ignore_ascii_case("insteadof")
+            {
                 parser.advance(); // consume `insteadof`
                 let mut insteadof = {
                     let mut _v = parser.alloc_vec_with_capacity(1);
