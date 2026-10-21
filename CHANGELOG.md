@@ -7,201 +7,83 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.24.0] - 2026-10-21
+
 ### Added
 
-- `walk_trait_adaptation` and `walk_owned_trait_adaptation` (`php-ast`).
-- `php_ast::owned` re-exports `walk_owned_block` and `fold_owned_block` like the other walk and fold functions (`php-ast`).
-- `Fold::fold_stmts` hook, called for the program, every block and every `case` body, so a fold can delete, split or insert statements; the free `fold_stmts` is public (`php-ast`).
-- `php_ast::Modifiers` (`visibility`, `set_visibility`, `is_static`, `is_abstract`, `is_final`, `is_readonly`; `Modifiers::new()` and `is_empty()`), shared by methods, properties, parameters, class constants and property hooks (`php-ast`).
-- `new` constructors for the structs below; each takes the fields that identify the node (and the arena when it has vector fields) and leaves the rest empty (`php-ast`).
-- Owned `Name::span()`, `kind()`, `to_string_repr()` and `join_parts()`, `Expr::name_str()` and `Expr::into_kind()`, like their arena counterparts. `Expr` implements `Drop` (so long chains are freed iteratively), which is now documented; take the kind out with `into_kind()` instead of destructuring (`php-ast`).
-- `OwnedFold::fold_stmts` hook, called for the program, every block and every `case` body, so a fold can delete, split or insert statements; the free `fold_owned_stmts` is public (`php-ast`).
-- `php_ast::ByteStr` (arena) and `php_ast::owned::ByteString`, the value of a PHP string literal as bytes: `as_bytes()`, `to_str()` (`None` unless valid UTF-8) and `to_string_lossy()`. With `serde`, valid UTF-8 serializes as a JSON string and anything else as `{"bytes": [..]}`. `fold::fold_byte_str` moves one into a fold's output arena (`php-ast`).
+- `php_ast::Modifiers` (`visibility`, `set_visibility`, `is_static`, `is_abstract`, `is_final`, `is_readonly`), shared by methods, properties, parameters, class constants and property hooks (`php-ast`).
+- `php_ast::ByteStr` (arena) and `php_ast::owned::ByteString`: a PHP string literal's value as bytes, with `as_bytes()`, `to_str()` and `to_string_lossy()`. With `serde`, valid UTF-8 serializes as a string and anything else as `{"bytes": [..]}` (`php-ast`).
+- `Fold::fold_stmts` and `OwnedFold::fold_stmts` hooks, called for the program, every block and every `case` body, so a fold can delete, split or insert statements (`php-ast`).
+- `walk_trait_adaptation`, `walk_owned_trait_adaptation`, and `walk_owned_block` / `fold_owned_block` re-exported from `php_ast::owned` (`php-ast`).
+- `new` constructors for the node structs that are now `#[non_exhaustive]` (`php-ast`).
+- Owned `Name::span()`, `kind()`, `to_string_repr()`, `join_parts()` and `Expr::name_str()`, `into_kind()`, like their arena counterparts. `Expr` implements `Drop`; take the kind out with `into_kind()` instead of destructuring (`php-ast`).
 
 ### Changed
 
-- The printer puts trait `use` first in class, trait and enum bodies and sorts each run of top-level `use` imports (kind, then name ignoring case; a blank line in the source starts a new run). Anonymous classes open their brace on the same line (`php-printer`).
-- The printer puts a blank line before a class member that starts with a comment, keeps a same-line comment after a member on that line, and indents a comment in an empty block (`php-printer`).
-- **Breaking:** removed `BuiltinType::Integer`, `BuiltinType::Double` and `BuiltinType::Boolean`. In type position PHP treats `integer`, `double` and `boolean` as class names, so they now parse as `TypeHintKind::Named` (`php-ast`, `php-rs-parser`).
-- **Breaking:** `PropertyDecl` has new `is_final` and `is_abstract` fields; the PHP 8.4 `final` and `abstract` property modifiers were parsed and then dropped, so the printer lost them too. Both are serialized only when `true` (`php-ast`, `php-rs-parser`, `php-printer`).
-- **Breaking:** function, class and constant references in expressions (call and `new` targets, the class in `Foo::bar()`, `Foo::C` and `instanceof`, constants) are `ExprKind::Name(Name)` instead of `ExprKind::Identifier`, so `visit_name`, `fold_name` and `NameResolver` see them with their qualification. `Identifier` is kept for member names after `->`, `?->` and `::` (`php-ast`, `php-rs-parser`, `php-printer`).
-- **Breaking:** `Ident` (arena and owned) carries the `span` of its token; for variable names it includes the `$`. `Ident::name(s)` and `Ident::ERROR` are replaced by `Ident::new(s, span)` and `Ident::error(span)`. `CatchClause::var`, `UseItem::alias` and `ClosureUseVar::name` are `Ident` instead of strings. A real identifier serializes as `{"name": ..., "span": ...}` instead of a string; the error state is still `null` (`php-ast`, `php-rs-parser`, `php-printer`).
-- **Breaking:** `TraitAdaptationKind::Alias` (arena and owned) has a new `is_final` field for the PHP 8.3 `foo as final bar;` alias, which was rejected; it is serialized only when `true` (`php-ast`, `php-rs-parser`, `php-printer`).
-- **Breaking:** removed `TokenKind::From`. `from` is lexed as an identifier; the parser recognizes it only after `yield` (`php-lexer`).
-- **Breaking:** `ForeachStmt` (arena and owned) has a new `by_ref` field for `foreach ($a as &$v)`; the `&` was parsed and dropped, so the printer wrote a by-value loop. It is serialized only when `true` (`php-ast`, `php-rs-parser`, `php-printer`).
-- **Breaking:** removed `ParseError::ForbiddenWarning`, `Severity` and `ParseError::severity()`. Every diagnostic is an error, matching what `php -l` rejects; the parser no longer reports PHP warnings: a `use` with a non-compound name, a `final private` method, a non-public magic method and an unsupported `declare` directive (`php-rs-parser`).
-- **Breaking:** the hidden `NameStr::__src` / `__arena` constructors are now the documented `NameStr::from_source` / `from_arena`, and `__into_src_str` / `__into_arena_str` are no longer public (`php-ast`).
-- **Breaking:** the printer-only spans (`else_kw_span`, `finally_kw_span`, `brace_span`, `adaptations_brace_span`) are `#[doc(hidden)]` and outside semver; `Lexer::is_verbatim_string` is `#[doc(hidden)]` and the `Lexer::errors` field is the `errors()` accessor; `ArenaVec::into_iter` returns `php_ast::ast::IntoIter` instead of the bumpalo iterator; the `instrument` module is documented as outside semver (`php-ast`, `php-lexer`, `php-rs-parser`).
-- **Breaking:** removed the `php_rs_parser::phpdoc` re-export. Depend on `phpdoc-parser` directly; the `serde` feature of `php-rs-parser` no longer enables `phpdoc-parser/serde` (`php-rs-parser`).
-- **Breaking:** `Fold::fold_closure_use_var` takes the arena like every other fold method (`php-ast`).
-- **Breaking:** `FoldOwned` is renamed `OwnedFold`, matching `OwnedVisitor` (`php-ast`).
-- **Breaking:** `Arg` (arena and owned) has a `kind: ArgKind` (`Value`, `Spread`, `ByRef`, `Placeholder`, `SpreadPlaceholder`) instead of `value: Option<Expr>` + `unpack` + `by_ref`, and `ArrayElement` has a `kind: ArrayElementKind` (`Value`, `Spread`, `ByRef`) instead of `value` + `unpack` + `by_ref`, so impossible combinations cannot be built. `Arg::value()` / `value_mut()` / `is_spread()` / `is_placeholder()` and `ArrayElement::value()` / `value_mut()` / `is_spread()` / `is_by_ref()` read them; the JSON shape changes accordingly (`php-ast`, `php-rs-parser`, `php-printer`).
-- **Breaking:** `MethodDecl`, `PropertyDecl`, `Param`, `ClassConstDecl` and `PropertyHook` (arena and owned) carry a `modifiers: Modifiers` instead of separate `visibility`, `set_visibility`, `is_static`, `is_abstract`, `is_final` and `is_readonly` fields (`MethodDecl.visibility` becomes `MethodDecl.modifiers.visibility`). It is serialized as `"modifiers"`, with only the set flags, and left out when empty (`php-ast`, `php-rs-parser`, `php-printer`).
-- **Breaking:** the structs that are most likely to grow fields are `#[non_exhaustive]`, so they cannot be built with a struct literal or `..base` update outside their crate: `ClassDecl`, `InterfaceDecl`, `TraitDecl`, `EnumDecl`, `EnumCase`, `FunctionDecl`, `PropertyDecl`, `PropertyHook`, `ClassConstDecl`, `TraitUseDecl`, `ClosureExpr`, `ArrowFunctionExpr`, `MatchExpr`, `Arg`, `Attribute`, `IfStmt`, `WhileStmt`, `DoWhileStmt`, `ForStmt`, `ForeachStmt`, `SwitchStmt`, `TryCatchStmt`, `CatchClause`, `DeclareStmt`, `NamespaceDecl` and `UseDecl` (arena and owned). Use `Type::new(..)` and assign the remaining public fields; `Type { field, ..other }` becomes `let mut value = other; value.field = field;` (`php-ast`).
-- **Breaking:** the struct variants of `ParseError`, `LexerError` and the `phpdoc-parser` structs `InlineTag`, `PhpDocText`, `PhpDocTag` and `PhpDoc` are `#[non_exhaustive]`; match `ParseError` fields with `..` (`php-rs-parser`, `php-lexer`, `phpdoc-parser`).
-- **Breaking:** `Visitor`, `ScopeVisitor`, `OwnedVisitor` and `OwnedScopeVisitor` have an associated `type Break`, and every `visit_*` and `walk_*` returns `ControlFlow<Self::Break>` / `ControlFlow<V::Break>`, so a visitor can hand a result out of the walk with `ControlFlow::Break(value)`. Existing visitors add `type Break = ();` (`php-ast`).
-- **Breaking:** `OwnedFold` takes every node by value (`fn fold_expr(&mut self, expr: Expr) -> Expr`) and the free `fold_owned_*` functions move the children they keep instead of cloning them. `OwnedFold::fold_program(&program)` becomes `fold_program(program)` (`php-ast`).
-- **Breaking:** `ExprKind::String` and `StringPart::Literal` (arena and owned) hold a `ByteStr` / `ByteString` instead of a `str`, because a PHP string is bytes and `"\xff"` or `"\u{D800}"` are not valid UTF-8. Use `as_bytes()`, or `to_str()` / `to_string_lossy()` when you need text. Nowdoc values are unchanged (`php-ast`, `php-rs-parser`, `php-printer`).
+- **Breaking:** function, class and constant references in expressions are `ExprKind::Name(Name)` instead of `ExprKind::Identifier`, so `visit_name`, `fold_name` and `NameResolver` see them. `Identifier` stays for member names after `->`, `?->` and `::` (`php-ast`, `php-rs-parser`, `php-printer`).
+- **Breaking:** `Ident` carries the `span` of its token. `Ident::name(s)` and `Ident::ERROR` are replaced by `Ident::new(s, span)` and `Ident::error(span)`; `CatchClause::var`, `UseItem::alias` and `ClosureUseVar::name` are `Ident`. A real identifier serializes as `{"name", "span"}` (`php-ast`, `php-rs-parser`, `php-printer`).
+- **Breaking:** `Arg` has `kind: ArgKind` and `ArrayElement` has `kind: ArrayElementKind` instead of `value` + `unpack` + `by_ref`. Read them with `value()`, `is_spread()`, `is_by_ref()` and `is_placeholder()` (`php-ast`, `php-rs-parser`, `php-printer`).
+- **Breaking:** `MethodDecl`, `PropertyDecl`, `Param`, `ClassConstDecl` and `PropertyHook` carry `modifiers: Modifiers` instead of separate `visibility`, `is_static`, `is_final`, … fields (`php-ast`, `php-rs-parser`, `php-printer`).
+- **Breaking:** `ExprKind::String` and `StringPart::Literal` hold a `ByteStr` / `ByteString` instead of a `str`, because a PHP string is bytes. Nowdoc values are unchanged (`php-ast`, `php-rs-parser`, `php-printer`).
+- **Breaking:** new fields that were parsed and dropped before: `PropertyDecl::is_final` / `is_abstract` (PHP 8.4), `ForeachStmt::by_ref`, and `TraitAdaptationKind::Alias::is_final`. Each is serialized only when `true` (`php-ast`, `php-rs-parser`, `php-printer`).
+- **Breaking:** removed `BuiltinType::Integer`, `Double` and `Boolean`; `integer`, `double` and `boolean` are class names and parse as `TypeHintKind::Named` (`php-ast`, `php-rs-parser`).
+- **Breaking:** removed `TokenKind::From`; `from` is an identifier that the parser recognizes only after `yield` (`php-lexer`).
+- **Breaking:** removed `ParseError::ForbiddenWarning`, `Severity` and `ParseError::severity()`. Every diagnostic is an error, matching `php -l`; PHP warnings are no longer reported (`php-rs-parser`).
+- **Breaking:** `Visitor`, `ScopeVisitor`, `OwnedVisitor` and `OwnedScopeVisitor` have an associated `type Break`, and `visit_*` / `walk_*` return `ControlFlow<Self::Break>`. Existing visitors add `type Break = ();` (`php-ast`).
+- **Breaking:** `FoldOwned` is renamed `OwnedFold` and takes every node by value; `fold_owned_*` move the children they keep instead of cloning them. `Fold::fold_closure_use_var` takes the arena (`php-ast`).
+- **Breaking:** removed the `php_rs_parser::phpdoc` re-export; depend on `phpdoc-parser` directly. The `serde` feature of `php-rs-parser` no longer enables `phpdoc-parser/serde` (`php-rs-parser`).
+- **Breaking:** the most extensible structs (`ClassDecl`, `FunctionDecl`, `ClosureExpr`, `IfStmt`, `ForeachStmt`, `TryCatchStmt`, `UseDecl`, … in arena and owned form), the struct variants of `ParseError` and `LexerError`, and the `phpdoc-parser` structs are `#[non_exhaustive]`. Build structs with `new(..)` and match errors with `..` (`php-ast`, `php-rs-parser`, `php-lexer`, `phpdoc-parser`).
+- **Breaking:** `NameStr::__src` / `__arena` are the documented `from_source` / `from_arena`; `ArenaVec::into_iter` returns `php_ast::ast::IntoIter`; `Lexer::errors` is the `errors()` accessor. Printer-only spans and `Lexer::is_verbatim_string` are `#[doc(hidden)]` and outside semver (`php-ast`, `php-lexer`, `php-rs-parser`).
+- The printer puts trait `use` first in class bodies, sorts each run of top-level `use` imports, opens anonymous class braces on the same line, puts a blank line before a member that starts with a comment, and indents a comment in an empty block (`php-printer`).
 
 ### Fixed
 
-- A `set` hook parameter that is by-reference, variadic or of a type incompatible with the property, and a generator `get` or `set` hook, were accepted (`php-rs-parser`).
-- Imports whose names differ only in case (`use A\B; use A\b;`, also functions and group `use`) were accepted; class and function import names compare case-insensitively, and duplicates use PHP's "Cannot use [function|const] X as Y because the name is already in use" (`php-rs-parser`).
-- `{$b[]}` in a string, heredoc or backtick string was accepted; PHP rejects `[]` for reading (`php-rs-parser`).
-- Invalid `\u{…}` escapes in a heredoc without interpolation were accepted (`php-rs-parser`).
-- A heredoc label starting with a digit (`<<<1X`) or followed by anything but a newline (`<<<X"`) was accepted; PHP lexes `<<` there (`php-lexer`).
-- `use namespace\A;` was accepted (`php-rs-parser`).
-- A trait alias with `static`, `abstract` or `readonly` (`T::a as static;`) or with neither a modifier nor a name (`a as;`) was accepted (`php-rs-parser`).
-- Attributes after `new` before a class name (`new #[A] B`) were accepted; they are only valid before an anonymous class (`php-rs-parser`).
-- `class callable {}` was accepted (`php-rs-parser`).
-- `break` and `continue` with an operand other than an integer literal (`break $a;`, `break 1.5;`) were accepted (`php-rs-parser`).
-- `static` as an expression not followed by `::` (`$a = static;`) was accepted; `instanceof static` stays valid (`php-rs-parser`).
-- `foreach ($a as &[$b])` (a by-reference destructuring target) was accepted (`php-rs-parser`).
-- An empty closure `use` list, `use (&)` and `use ($a,,)` were accepted (`php-rs-parser`).
-- An abstract method in a class not declared abstract was accepted (`php-rs-parser`).
-- A typed class constant with a literal its type does not accept (`const int X = 'a';`, `= null`) was accepted (`php-rs-parser`).
-- A class constant named `class` was accepted (`php-rs-parser`).
-- Attributes before a trait `use` (`#[A] use T;`) and a trait `use` in an interface were accepted (`php-rs-parser`).
-- A property without a modifier or `var` (`class A { $x; }`, `?int $x;`) was accepted (`php-rs-parser`).
-- A trailing `\` in a name (`namespace Foo\;`, `use X\;`, `foo\()`, `new Bar\`, `instanceof Bar\`, types, attributes) was silently dropped; it is only valid before a group `use` list (`php-rs-parser`).
-- `return;` in a function, method or closure with a non-`void` return type, and a generator whose return type does not admit `Generator` (`function g(): int { yield 1; }`, also arrow functions), were accepted; PHP rejects both at compile time (`php-rs-parser`).
-- `use A as enum` was rejected, and a special class name as a class import alias (`use A as int`, `as mixed`, `as self`) was accepted; PHP reports "Cannot use A as int because 'int' is a special class name" (`php-rs-parser`).
-- `self:`, `parent:`, `enum:`, `null:`, `true:` and `false:` were rejected as goto labels, and `goto` to them; PHP lexes these words as plain names there (`php-rs-parser`).
-- A parenthesized type group other than an intersection (`(A)|B`, `(A|B)|C`, `(A&B|C)`) was accepted; PHP allows only `(A&B)` and the parser reports the missing `&` (`php-rs-parser`).
-- `A&B &$x` (an intersection type before a by-reference parameter) was rejected (`php-rs-parser`).
-- A whitespace-only heredoc or nowdoc line shorter than the closing indentation was rejected; PHP accepts it. A body line indented with the other whitespace character reports "Invalid indentation - tabs and spaces cannot be mixed", and the stripped indentation follows PHP (`php-rs-parser`).
-- `1...2` was rejected and `1..2` accepted; a number followed by `.` lexes as a float (`1.`) even before another dot, as in PHP (`php-lexer`).
-- `case 1 ?>` and `default ?>` were rejected; as in PHP, `?>` ends the case label like `;` (`php-rs-parser`).
-- A long run of prefix operators (`~~~…$x`, as in php-src's `stack_limit_013`) hit "maximum nesting depth exceeded"; such runs are parsed, converted to and from the owned AST, dropped and printed without recursion, like other operator chains (`php-rs-parser`, `php-ast`, `php-printer`).
-- Errors PHP raises only while compiling (such as "Cannot use lexical variable $c as a parameter name") were reported in the right operand of `&&`, `||`, `and` or `or` after a constant that decides the result (`assert(false && …)`); PHP never compiles that operand, so only syntax errors are reported there (`php-rs-parser`).
-- `<?php` directly followed by a character other than whitespace (``<?php`ls`;``) opened PHP code; PHP reads it as inline HTML (`php-lexer`).
-- Version-specific checks follow PHP: `self` and `parent` in an intersection type are reported before 8.5, `fn(): never => …` is reported on 8.1, `namespace\static` as a type is reported from 8.6, and an untyped readonly promoted parameter (before 8.1) or attributes on several constants (before 8.0) report only the version gate (`php-rs-parser`).
-- `"$a[k"` (and the heredoc and backtick forms) silently dropped the unclosed subscript; the parser now reports "unclosed '[' in string interpolation" and keeps the text (`php-rs-parser`).
-- `return` with a value in a `void` closure, a `return` in a `never` closure and any `fn(): void => expr` were accepted; PHP rejects them like it does for functions and methods (`php-rs-parser`).
-- `final private $x` (also static, readonly, hooked, in traits and anonymous classes) was accepted; PHP rejects it with "Property cannot be both final and private" (`php-rs-parser`).
-- Dereferencing a heredoc or nowdoc (`<<<X ... X->b`, `X[0]`, `X::C`, `X()`) was accepted; PHP rejects it, and the parser now reports "Cannot dereference this expression" (`php-rs-parser`).
-- Writes through `(clone $a)` and `f(...)` (`(clone $a)->b = 1`, `(clone $a)[0]++`, `unset((clone $a)->b)`, `&(clone $a)[0]`) were accepted; PHP rejects them with "Cannot use result of built-in function in write context" (`php-rs-parser`).
-- A name with a `__halt_compiler` segment (`\__halt_compiler()`, `Foo\__halt_compiler`, `namespace\__halt_compiler`, in `use`, `namespace`, types and `new`) was read as the `__halt_compiler();` statement and swallowed the rest of the file (`php-rs-parser`).
-- `$this?->foo(...)` was rejected with "Cannot combine nullsafe operator with Closure creation"; PHP accepts it, as it compiles `$this?->` as `$this->` (`php-rs-parser`).
-- "Cannot specify default value for virtual hooked property" was reported for classes with a parent; PHP checks it at inheritance there, so only classes without `extends` get the error (`php-rs-parser`).
-- `#[\DelayedTargetValidation]` still reported `#[\Attribute]`, `#[\AllowDynamicProperties]` and `#[\Deprecated]` class-kind errors and `#[\NoDiscard]` on property hooks; it now suppresses them (`php-rs-parser`).
-- `?>` ending a class member (constant, property, trait `use` and its adaptations, abstract or interface method, enum case, property hook) was rejected; it ends the member like `;`, and the `<?php` that reopens the body goes with it (`php-rs-parser`).
-- `?>` right after a bare `break`, `continue`, `return` or `yield` was rejected with "expected expression"; it ends the statement like `;` (`php-rs-parser`).
-- Class names in a namespace named like a builtin type (`int\X`, `string\Y`, `self\Z`) were rejected in type positions (`php-rs-parser`).
-- `abstract readonly class` (and `readonly abstract class`) was rejected below PHP 8.4; it is valid since PHP 8.2 (`php-rs-parser`).
-- `(void) f() + 1` was parsed as `((void) f()) + 1`; `(void)` is a statement prefix in PHP, so its operand is the whole expression, `(void) (f() + 1)` (`php-rs-parser`).
-- `include $a or $b` and `$x = throw $e or 1` were parsed as `(include $a) or $b` and `throw $e` followed by `or 1`; `include`, `require` and `throw` bind looser than the word operators, so the operand takes them (`php-rs-parser`).
-- `yield $a or $b` (also `and`, `xor`, `yield from` and `yield $k => $v`) was parsed as `yield ($a or $b)`; PHP binds `yield` tighter than the word operators, so it is `(yield $a) or $b` (`php-rs-parser`).
-- `clone($a)->b = 1` was parsed as `(clone $a)->b = 1`; PHP reads the parentheses as grouping, so it is `clone (($a)->b = 1)`, and the printer wrote code PHP rejects. The same goes for `->`, `?->`, `::`, `[` and `(` after `clone(...)` (`php-rs-parser`).
-- Report methods without a body outside interfaces and abstract declarations, abstract methods in anonymous classes, and variadic promoted constructor parameters, like PHP (`php-rs-parser`).
-- `new namespace\Foo` dropped the `namespace\` prefix of the class name (`php-rs-parser`).
-- `declare(...) ?>` took the inline HTML after `?>` as its body instead of ending at `?>` like at `;`, so the printer wrote `declare(strict_types=1) { ?>...`, which PHP rejects (`php-rs-parser`).
-- A float literal longer than 256 bytes was cut off before parsing, so `0.000…5` with hundreds of digits read as `0.0` (`php-rs-parser`).
-- `clone $a ** 2` parsed as `clone ($a ** 2)`; `clone` binds tighter than `**`, so it is now `(clone $a) ** 2` (`php-rs-parser`).
-- `"$a?->b"` (and the same in heredocs and backticks) parsed as `$a` followed by the text `?->b`; from PHP 8.0 it is a nullsafe property fetch (`php-rs-parser`).
-- `++` and `--` on something that is not a variable (`--1`, `---$a`, `++f()`), a nullsafe fetch or a temporary are reported, as are writes to an offset of a string literal such as `"a"[0] = 1` (`php-rs-parser`).
-- Writes PHP rejects are reported: through a nullsafe chain (`$a?->b = 1`, `$x = &$a?->b`, `unset($a?->b)`), to a parenthesized variable (`($a) = 1`, `&($a)`), with a spread in a destructuring list, to an unwritable `unset` argument, `foreach` target or by-reference array element (`unset(f())`, `foreach ($a as f())`, `[&f()]`), and to an unwritable element of a nested or `foreach` destructuring list (`php-rs-parser`).
-- A method closure created on a nullsafe chain, such as `$a?->b(...)` or `$a?->b()->c(...)`, is reported. Nullsafe chains are followed through static property fetches and static calls, so `$a?->b::$c = 1` is reported too (`php-rs-parser`).
-- Dereferencing an expression PHP cannot dereference is reported: a fetch, index, call or `::` on `match`, a closure, a number, a backtick string, `isset`, `empty`, `exit`, `eval` or `list()`, and `::` on an array literal (`php-rs-parser`).
-- A `switch` may open with `?>` and `<?php` before its first `case`, as in templates, which was rejected; more than one `;` there is now reported, as PHP does (`php-rs-parser`).
-- `Visitor`, `OwnedVisitor` and both scope walkers call `visit_name` for the namespace name, named-argument names and the names in trait `insteadof`/`as` adaptations, matching `Fold`. The default `visit_trait_adaptation` now walks into the adaptation (`php-ast`).
-- `ScopeWalker` and `OwnedScopeWalker` start every walk from the global scope; a reused walker kept the namespace of the previous program, and the class and function names after a `Break` (`php-ast`).
-- `NameResolver` resolves unqualified `true`, `false` and `null` constants to the global name inside a namespace instead of `ResolvedName::Fallback` (`php-ast`).
-- The printer dropped the per-item `function` and `const` keywords of a mixed group use such as `use A\{B, function c, const D};`; it now starts a new `use` statement whenever the kind changes (`php-printer`).
-- In a grouped property declaration such as `#[A] public int $a, $b;`, every property now carries the declared visibility, set visibility, type and attributes; only the first one did (`php-rs-parser`).
-- The printer wrote `- -$a` as `--$a` and `+ ++$a` as `+++$a`, a decrement and a syntax error; a space now separates adjacent signs (`php-printer`).
-- The printer dropped the braces of `"{$a}b"`, `"{$a}[0]"` and `"{$a}->b"`, turning them into `$ab`, an index or a property fetch, and in heredocs and backticks turned a literal `{` before a variable into `{$...}` syntax (`php-printer`).
-- The printer dropped the attributes of an anonymous class such as `new #[A] class {}` (`php-printer`).
-- The printer dropped the hooks of a promoted constructor property; parameter lists with hooks are now printed one parameter per line (`php-printer`).
-- A comment right after `<?php` that follows inline HTML was printed before the `<?php`, so it became page output; a file holding only comments lost its `<?php` tag the same way (`php-printer`).
-- Inline HTML on both sides of an empty `<?php ?>` was printed as one run, so the newline that `?>` consumed reappeared in the output (`php-printer`).
-- Block and doc comments inside an expression, such as `foo(/** @var T */ $x)`, are printed where they are instead of before the next statement, where a doc comment attached to that statement or declaration. A doc comment printed on its own line no longer doubles the indentation of the line after it (`php-printer`).
-- The printer re-indented doc comments with each continuation `*` under the `/` instead of one column right of it (`php-printer`).
-- Floats below `1e-4` or from `1e15` up are printed in exponent notation; `1e100` and `5e-324` were spelled out to hundreds of digits (`php-printer`).
-- The printer's precedence table placed `and`, `or` and `xor` above assignment, `|>` below `??`, casts above `**` and `!` above `instanceof`, so a tree without `Parenthesized` nodes could print with a different meaning. It now also parenthesizes a property fetch used as a callee (`($a->b)()`), a non-dereferencable operand of `->`, `::`, `[]` or a call, an arrow function followed by more of the expression or on the right of `|>`, a `new` class that is not a variable or name, and a `yield` used as an array or `yield` key. Parsed code that relied on the old table loses redundant parentheses, such as `$a = $b or $c` (`php-printer`).
-- Comments after the last statement start on their own line instead of being appended to it, as in `}// comment` (`php-printer`).
-- A `switch` case whose body ends in inline HTML printed the next `case` or `default` as HTML (`php-printer`).
-- The printer wrote a dynamic method name in a first-class callable without braces, so `$a->{$n . 'b'}(...)` became `$a->($n . 'b')(...)`, a syntax error. Static method calls with an expression as the name are braced too (`php-printer`).
-- Line comments inside an array or argument list that were not between two items, such as in an empty `[]` or `f()`, before the first item or after the last, were moved after the statement, and an array with a comment before its first element was printed on one line; printing such output again changed it. The list is now printed one item per line with the comments in place. Block comments between items stay inline (`php-printer`).
-- A comment at the end of a line, after a statement or after an item of a multi-line array or argument list, was moved onto its own line before the next one; it now stays on that line (`php-printer`).
-- Line comments between the links of a method chain were moved after the statement, or into the body of a closure passed further along the chain. The chain now breaks onto indented continuation lines at those comments (`php-printer`).
-- A doc comment followed by other comments before its statement or class member, as in `$a = 1; /** @var T */ // note` followed by `$b = f();`, was printed after those comments, and the blank lines before it were counted from the statement, so printing the output again added a blank line (`php-printer`).
-- Postfix `++` and `--` bound looser than the prefix operators, so `@$i++`, `(string) $i++`, `-$i++` and `clone $o++` parsed as an increment of `@$i`, `(string) $i`, … and were reported; they now apply to the variable as in PHP (`php-rs-parser`).
-- `from` was a keyword, so a function, class or constant named `from` could be declared but not used: `from()`, `From::class`, `new From` and `From` as a type were rejected (`php-lexer`, `php-rs-parser`).
-- `${expr}` in a string took only a bare name: `"${'a'}"` and `"${"a$b"}"` were reported as an empty variable name, a `"` inside ended the string, and in an indented heredoc `${...}` was kept as text. Any expression is now a variable variable, and the index in `${a[expr]}` is a full expression, so `${a['k']}` indexes `k` instead of `'k'` (`php-lexer`, `php-rs-parser`).
-- `"\u{D800}"` through `"\u{DFFF}"` were reported as too large; PHP accepts surrogate code points and encodes them as three UTF-8 bytes, which are now stored one char per byte like `\x` escapes (`php-rs-parser`).
-- `$obj->__halt_compiler` was rejected; after `->` and `?->` PHP accepts any name (`php-rs-parser`).
-- A trait adaptation for a method named `namespace`, such as `namespace as bar;`, was read as the start of a `namespace\Foo` name and rejected (`php-rs-parser`).
-- `yield` in a property hook body was reported as outside a function; hooks can be generators. A `break` or `continue` in a hook no longer sees loops around the class (`php-rs-parser`).
-- Attributes on a grouped class constant such as `#[A] const X = 1, Y = 2;` were reported; PHP rejects them only on global constants. Every constant of the group now carries the attributes (`php-rs-parser`).
-- An enum rejected a grouped constant declaration such as `const X = 1, Y = 2;` (`php-rs-parser`).
-- Trailing commas PHP rejects are reported: in `use`, `const`, `echo`, `<?=`, `global` and `static` lists, `for` expression lists, `declare(...)`, `extends` and `implements` lists, trait `use` and `insteadof` lists, and grouped class constants and properties. Argument, parameter, array, closure `use`, `match`, `unset`, `isset` and group `use` lists keep accepting them (`php-rs-parser`).
-- A constructor parameter with hooks but no visibility, such as `__construct($a { set => $value * 2; })`, was rejected; hooks promote it like a modifier does, and outside a constructor this is reported (`php-rs-parser`).
-- `?>` ends a `goto`, `unset`, `global`, `static`, `use`, `const` or `namespace Foo` statement like `;` does; these required a `;` before it (`php-rs-parser`).
-- A heredoc ended at a line inside a multi-line `{$...}` or `${...}` interpolation that looked like its closing label (`php-lexer`, `php-rs-parser`).
-- `const`, `use` and `namespace` declarations inside a function, block or control structure are reported; PHP allows them only at the outermost scope. `__halt_compiler()` in a function body was not reported (`php-rs-parser`).
-- `static` in a parameter or property type, such as `?static $a`, is reported; PHP allows it only in return and class constant types (`php-rs-parser`).
-- Writes through a property or index fetch on something other than a variable or call are reported as temporary, as in `FOO->a = 1`, `C::X[0] = 1`, `(new A)->b = 1` and `unset(FOO->a)`; only array and string literals were (`php-rs-parser`).
-- References to values PHP cannot reference are reported: `$a = &C::X`, `$a = &"s"`, `$a = &FOO->b`, and a destructuring list with a `&` element assigned from something other than a variable or call, as in `[&$a] = [1]`, or from a nullsafe chain (`php-rs-parser`).
-- A `return` or `yield` of a nullsafe fetch such as `$a?->b` in a function, method, closure, arrow function or hook that returns by reference is reported (`php-rs-parser`).
-- Syntax errors inside `{$...}` and `${...}` string interpolation were dropped, so `"{$a $b}"`, `"{$a->}"` and `"{$g{0}}"` parsed without errors. They are reported now, as is a `{$...}` holding something other than a variable, property, index or call, such as `"{$a + 1}"` (`php-rs-parser`).
-- `$a = &$b + $c` parsed as `$a = &($b + $c)`; the right side of `= &` is a single variable, so it is `($a = &$b) + $c` as in PHP (`php-rs-parser`).
-- Octal escapes above `\377`, such as `"\400"`, were dropped from the string; PHP keeps the low byte, so `"\400"` is `"\0"` (`php-rs-parser`).
-- `private(set)` and the other set-visibility modifiers are matched like PHP's single case-insensitive token: `private(SET)` was rejected and `private (set)` was accepted (`php-rs-parser`).
-- A `(void)` cast is reported wherever its value is used, such as in an `if`, `echo`, `return` or `for` condition; only expression statements were checked. A `(void)` statement inside a closure assigned to a variable is no longer reported (`php-rs-parser`).
-- A `$` followed by something other than a variable, `$` or `{`, as in `$"abc"`, `$1` or `$a->$"b"`, is reported (`php-rs-parser`).
-- A keyword directly followed by `\` and a name, such as `class\Foo` or `implements\A`, is lexed as the first part of a qualified name like PHP 8 does, so `class\Foo::x()` parses and `class B implements\A {}` is reported (`php-lexer`).
-- `include \dirname(__DIR__)`, `print \f()` and `require_once \A::B` parsed as a call or fetch of a name starting with the keyword, such as `include\dirname`; a keyword followed by a space and a fully qualified name is now the keyword applied to that name (`php-rs-parser`).
-- Whitespace inside a namespaced name, as in `Foo \ Bar` or `\ Foo()`, is reported; PHP 8 reads a name as a single token. A group `use Foo \ {A}` keeps accepting it (`php-rs-parser`).
-- An offset in simple string interpolation that is not a name, number or variable, such as `"$a['k']"` or `"$a[ 0 ]"`, is reported (`php-rs-parser`).
-- A `function` or `const` item inside a `use function` or `use const` group, such as `use const A\{B, const C}`, is reported; per-item kinds are only allowed in an untyped group (`php-rs-parser`).
-- `list(...)` used as a value, as in `f(list($a))` or `$x = list($a);`, is reported; it is only valid as an assignment or `foreach` target (`php-rs-parser`).
-- A namespace declared with a namespace-relative name, such as `namespace namespace\Foo;`, is reported (`php-rs-parser`).
-- A heredoc or nowdoc whose closing marker is indented with both tabs and spaces is reported (`php-rs-parser`).
-- `A::{$m}()` parsed as a call of the value of the dynamic class constant `A::{$m}`; it is a static method call whose name is `$m`, now `ExprKind::StaticMethodCallDynamic`. It no longer requires PHP 8.3, which applies only to the constant fetch (`php-rs-parser`).
-- A `foreach` key taken by reference, as in `foreach ($a as &$k => $v)`, is reported (`php-rs-parser`).
-- `$a[]` is reported wherever it is read or unset, such as `$x = $a[]`, `isset($a[])`, `foreach ($a[] as $v)`, `$x ??= $a[]` and `unset($a[])`; only an `$a[];` statement was. Writes, `foreach` and destructuring targets, by-reference sources, call arguments and the `return` or `yield` of a function that returns by reference keep accepting it (`php-rs-parser`).
-- Duplicate types compare class names case-insensitively and are reported in intersections and between DNF members too, as in `Foo|FOO`, `A&A` and `(A&B)|(B&A)`; `true` or `false` next to `bool` and `array` or `Traversable` next to `iterable` are duplicates as well (`php-rs-parser`).
-- A builtin type written with a namespace is reported: `\int` and `namespace\int` must be unqualified, and `Foo\int`, `\array` and `\callable` use a reserved name (`php-rs-parser`).
-- A class, interface, trait or enum constant declared twice is reported, as is an enum constant named like a case. Enum cases differing only in case, such as `case A; case a;`, were reported as redefined; constant names are case-sensitive (`php-rs-parser`).
-- A promoted constructor parameter with asymmetric visibility is checked like the same property declaration: a set visibility wider than its visibility, as in `private protected(set) string $a`, and a missing type are reported (`php-rs-parser`).
-- Enum methods are parsed like class methods. `yield` in an enum method was reported as outside a function, and a `void` return with a value, a by-reference return of a nullsafe chain and `readonly` on the method went unreported (`php-rs-parser`).
-- Every magic method PHP requires to be an instance method, such as `__get`, `__call`, `__toString` or `__invoke`, is reported when `static`, and `__callStatic` and `__set_state` are reported when not `static`; only `__construct`, `__destruct` and `__clone` were checked (`php-rs-parser`).
-- An untyped property or promoted constructor parameter in a `readonly` class, named or anonymous, is reported; every property of such a class is readonly and must have a type (`php-rs-parser`).
-- A readonly property with a default value, including later items of a grouped declaration, is reported, as are a readonly promoted constructor parameter with hooks and an untyped `readonly` promoted parameter without a visibility. In a `readonly` class, static and hooked properties and property defaults are reported too, and an explicitly readonly untyped property is reported once (`php-rs-parser`).
-- Writes PHP rejects to `$this` and `$GLOBALS` are reported: assigning, destructuring into, iterating into, catching into or unsetting `$this`, and `$this` as a parameter or a `global`, `static` or closure `use` variable; any write to or reference of `$GLOBALS` itself, any use of `$GLOBALS[]` ("Cannot append to $GLOBALS"; it was reported as a read or, as a call argument, not at all), and an auto-global such as `$_GET` as a parameter or closure `use` variable (`php-rs-parser`).
-- A parameter declared twice in one function, method, closure or arrow function is reported ("Redefinition of parameter $a"), as are a closure `use` variable listed twice or named like a parameter, and a `static` variable declared twice in one function body or in top-level code (`php-rs-parser`).
-- A destructuring list mixing keyed and unkeyed entries, such as `[$a, 'k' => $b] = $x`, or with an empty entry in a keyed list, such as `['k' => $a, , 'j' => $b] = $x`, is reported, as is an empty nested list or `foreach` target (`[$a, []] = $x`, `foreach ($x as [])`). `list() = $a` reported "Cannot use empty list" twice (`php-rs-parser`).
-- Jumps PHP rejects are reported: a `goto` to an undefined label (labels are per function body, so one outside a function, method, closure or hook does not count), into a loop or `switch`, or into or out of a `finally` block; a label defined twice; and a `break` or `continue` that leaves a `finally` block (`php-rs-parser`).
-- `self`, `parent` and `static` are reported where PHP knows at compile time that they name no class: as a class reference or type in a function outside any class ("Cannot use "self" when no class scope is active"), and `parent` in a class, interface or enum without a parent. Closures, traits and top-level code are not checked, and in constant expressions only `X::class` is, as in PHP. Misuses of a parent property hook call such as `parent::$a::get()` are reported too: outside a hook, in a hook of another property or kind, or as `parent::$a::get(...)` (`php-rs-parser`).
-- `\self`, `\parent` and `\static` as a class reference, type, `catch` type, parent or trait are reported ("'\self' is an invalid class name"), as is `self`, `parent` or `static` as a `catch` type ("Bad class name in the catch statement"), a trait in `use` or an adaptation, an interface an enum implements, or the parent or an interface of an anonymous class (`php-rs-parser`).
-- `extends` and `implements` with a builtin type name such as `class A extends int` were rejected; PHP accepts them at compile time. Reserved names there are reported with PHP's message, which says "interface name" for interfaces (`php-rs-parser`).
-- A parent property hook call with a literal property name, such as `parent::${'a'}::get()` or `parent::${0}::get()`, is checked like `parent::$a::get()` (`php-rs-parser`).
-- `namespace\self`, `namespace\parent` and `namespace\static` types were rejected as reserved names; PHP reads them as `self`, `parent` and `static`, so they are checked against the class scope instead. A reserved type name written with a namespace is reported with its namespace-resolved name, such as `"N\Foo\array"` instead of `"Foo\array"` (`php-rs-parser`).
-- Constant expressions (constant values, property and parameter defaults, enum case values and attribute arguments) are checked like PHP does at compile time: variables, calls, interpolated strings, `instanceof`, `match` and other runtime operations are reported ("Constant expression contains invalid operations"), as are dynamic class names (`$foo::BAR`, `$foo::class`, `new $x`), `static::BAR` and `static::class`, dynamic function and method names in first-class callables, non-static closures and closures with `use`, anonymous classes and argument unpacking in `new`, and `(object)` casts where `new` is not supported. Branches PHP folds away, such as `true ? 1 : $x`, are not checked. `new`, property fetches, closures, first-class callables and casts there are reported below PHP 8.1, 8.2 and 8.5. `new` in the second and later properties of a grouped declaration was not reported (`php-rs-parser`).
-- Argument unpacking in an attribute, such as `#[A(...$x)]`, is reported (`php-rs-parser`).
-- A literal that is not a string used as a class name, such as `(1)::A`, `new (1)` or `$a instanceof (1)`, is reported ("Illegal class name"; `Cannot use "::class" on array` for `([])::class`) (`php-rs-parser`).
-- The right side of `instanceof` accepted any expression, such as `$a instanceof f()`, `"A"` or `A::B`; only a class name, a variable or a parenthesized expression is allowed (`php-rs-parser`).
-- Type declarations are checked like PHP does at compile time: `void` and `never` outside a standalone return type (`?void`, `never|null`, `void $a`), `?null`, builtin types in intersections (`int&A`, `static&A`, and `self&A` in traits and closures), `void`, `never` and `callable` property and class constant types, `object` together with a class type (`object|A`), and intersections made redundant by another member (`A|(A&B)`, `(A&B)|(A&B&C)`). Messages name the types as PHP does, with class names resolved (`Property N\A::$a cannot have type X\Y|callable`) (`php-rs-parser`).
-- Duplicate class types in a union or intersection are compared after name resolution, so `\Foo|Foo`, `namespace\A|A`, `\X\A|B` after `use X\A as B`, `A|self` in class `A` and `iterable|\Traversable` are reported, and `iterable|Traversable` in a namespace is no longer reported (`php-rs-parser`).
-- `A&null`, `A&true` and `A&false` were syntax errors; they parse and are reported as builtin types in an intersection (`php-rs-parser`).
-- `mixed`, `void` and `never` misuse, `Cannot redefine class constant` and the set hook parameter type error use PHP's wording, including the class name (`php-rs-parser`).
-- Property hook rules are checked like PHP: visibility, `abstract`, `static` and `readonly` on a hook, repeated `final`, `#[\NoDiscard]` on a hook (8.5), a default value on a virtual property, and asymmetric visibility on a read-only or write-only virtual property. A property is virtual when no hook accesses `$this->name` outside a nested function or class (`php-rs-parser`).
-- A named class, interface, trait or enum declared inside a class member body is reported as nested; a function declared in a method body no longer has the method's class scope (`php-rs-parser`).
-- `Property with asymmetric visibility … must have type` names the property (`php-rs-parser`).
-- Interface member rules are checked like PHP: non-public constants, methods and properties, `final` and `abstract` methods, and `final` or explicitly `abstract` properties. A promoted property in an abstract or interface constructor is reported, as are an `abstract private` method outside a trait, a hook without a body on a non-abstract property, a hook with a body in an interface, an abstract hook that is `final` or on a `private` property, and an abstract property without an abstract hook (`php-rs-parser`).
-- `__construct` was recognized only in lowercase, so promoted parameters in `__CONSTRUCT` were rejected and its return type and `final private` checks were skipped (`php-rs-parser`).
-- A return type on `__destruct` is reported (`php-rs-parser`).
-- Abstract and interface method body errors and the constructor return type error use PHP's wording, including the class and method name (`php-rs-parser`).
-- `declare` directives are checked like PHP: a value that is not a literal, `strict_types` or `encoding` that is not the first statement, `strict_types` in block mode or with a value other than `0` or `1`, and the warnings for unsupported directives and the ignored `encoding` (`php-rs-parser`).
-- Magic method signatures are checked like PHP: argument count, by-reference arguments, parameter and return types, and the warning for a non-public magic method. Static-modifier and redeclaration messages name the class (`Method A::__get() cannot be static`, `Cannot redeclare A::f()`) (`php-rs-parser`).
-- Duplicate enum methods and a promoted constructor property redeclaring a declared property are reported (`php-rs-parser`).
-- Built-in attributes are checked like PHP: the declaration kind they may target (`#[Attribute]` on a function, `#[Override]` on a class, `#[SensitiveParameter]` on a method, …), repetition, `#[Attribute]`/`#[AllowDynamicProperties]`/`#[Deprecated]` on a class-like they cannot apply to, `#[NoDiscard]` on a constructor or a `void`/`never` function, and `#[DelayedTargetValidation]`. Names are resolved like class names and only attributes that exist at the target version are checked (`php-rs-parser`).
-- `#[Attr] function &f() {}` was parsed as a by-reference closure; it is a function declaration (`php-rs-parser`).
-- Attributes on a `const` with several items report PHP's wording, `Cannot apply attributes to multiple constants at once` (`php-rs-parser`).
+#### Parser: invalid code PHP rejects
+
+Many constructs were accepted that PHP reports at compile time; they are now reported with PHP's wording:
+
+- Names and imports: imports differing only in case, `use namespace\A`, a trailing `\` in a name, whitespace inside a namespaced name, `namespace namespace\Foo`, builtin or special class names as import aliases or with a namespace (`\int`, `Foo\int`, `use A as self`), `self`, `parent` and `static` where no class scope exists or written as `\self`.
+- Declarations: `class callable`, a class constant named `class`, duplicate constants, parameters, properties and methods, abstract methods in non-abstract classes, methods without a body, `const`, `use` and `namespace` inside blocks, and nested named classes.
+- Members and modifiers: properties without a modifier, `final private` properties, readonly rules (untyped, default values, `readonly` classes), asymmetric visibility rules, interface member rules, magic method signatures and `static`, constructor and destructor rules, and promoted parameters in abstract constructors.
+- Property hooks: visibility, `abstract`, `static`, `readonly` and repeated `final` on a hook, `set` parameter checks, generator hooks, and defaults on virtual properties.
+- Types: `void` / `never` misuse, `?null`, builtin types in intersections, duplicates after name resolution, parenthesized groups other than `(A&B)`, `static` in parameter and property types, and `return;` or generators with an incompatible return type (also `fn(): void => expr`).
+- Attributes: built-in attribute targets and repetition, attributes after `new` before a named class, before trait `use`, on grouped global constants, and argument unpacking in attributes. `#[\DelayedTargetValidation]` suppresses them.
+- Writes and references: `$this` and `$GLOBALS`, nullsafe chains, temporaries (`FOO->a = 1`, `(clone $a)->b = 1`), string literal offsets, by-reference destructuring and `foreach` keys, `++` / `--` on non-variables, `$a[]` read or unset, `list()` as a value, and `(void)` used as a value.
+- Expressions: dereferencing heredocs, `match`, closures, numbers and other non-dereferenceable expressions, illegal class names, `instanceof` with arbitrary expressions, `break` / `continue` operands, `static` not followed by `::`, constant-expression checks, and a nullsafe method closure.
+- Control flow: `goto` to undefined labels or into loops and `finally`, duplicate labels, `break` / `continue` outside loops, and `declare` directive checks.
+- Lists and strings: trailing commas in `use`, `const`, `echo`, `global`, `static`, `declare`, `extends` and `implements` lists, destructuring lists mixing keyed and unkeyed entries, `{$b[]}`, `"$a['k']"`, unclosed `"$a[k"`, syntax errors inside `{$...}` and `${...}`, invalid `\u{…}` in heredocs, and mixed tab and space heredoc closing indentation.
+
+#### Parser: valid code PHP accepts
+
+- `$this?->foo(...)`, `?>` ending a class member or a `case`, `goto`, `unset`, `global`, `static`, `use`, `const` or `namespace` statement, `break`, `continue`, `return` or `yield`, and a `switch` opening with `?>`/`<?php`.
+- `use A as enum`, goto labels such as `self:` and `null:`, a method named `namespace` in a trait adaptation, `$obj->__halt_compiler`, `A&B &$x`, `abstract readonly class` below 8.4, `int\X` class names, `extends int`, a constructor parameter with hooks and no visibility, grouped class constants in enums and with attributes, `yield` in hooks and enum methods, `1...2`, and whitespace-only heredoc lines shorter than the closing indentation.
+- `from` works as a function, class or constant name (`php-lexer`).
+- `__CONSTRUCT` is recognized case-insensitively, and `private(SET)` is matched like PHP's single token.
+
+#### Parser: wrong trees
+
+- Precedence and binding: `(void) f() + 1`, `include $a or $b`, `throw $e or 1`, `yield $a or $b`, `clone($a)->b = 1`, `clone $a ** 2`, `$a = &$b + $c`, and postfix `++` / `--` against prefix operators.
+- `new namespace\Foo` lost the `namespace\` prefix; `A::{$m}()` is now `ExprKind::StaticMethodCallDynamic` and no longer requires PHP 8.3; `#[Attr] function &f() {}` is a function, not a by-reference closure; `include \dirname(...)` and similar apply the keyword to the name.
+- Strings: octal escapes above `\377`, surrogate `\u{D800}` escapes, `"$a?->b"`, `${expr}`, `"\xff"` and other non-UTF-8 escapes now decode to the bytes PHP stores; a heredoc line inside `{$...}` that looks like the closing label; long float literals were truncated; `declare(...) ?>` took following HTML as its body.
+- Grouped property declarations give every property the declared visibility, type and attributes.
+- Version gates follow PHP (`fn(): never`, `self` in intersections, `namespace\static`, untyped readonly promotion).
+
+#### Lexer
+
+- `<?php` followed by a non-whitespace character is inline HTML, a heredoc label starting with a digit or followed by anything but a newline lexes `<<`, and a keyword followed by `\` and a name is a qualified name (`php-lexer`).
+
+#### AST
+
+- Deeply nested prefix operators (`~~~…$x`) parse, convert and drop without recursion (`php-rs-parser`, `php-ast`, `php-printer`).
+- `Visitor`, `OwnedVisitor` and both scope walkers call `visit_name` for namespace names, named arguments and trait adaptation names; `ScopeWalker` starts every walk from the global scope; `NameResolver` resolves `true`, `false` and `null` in a namespace to the global name (`php-ast`).
+
+#### Printer
+
+- Printed code PHP rejects or reads differently: `- -$a` and `+ ++$a`, braces in `"{$a}b"`, mixed group `use` kinds, `$a->{$n . 'b'}(...)`, attributes on anonymous classes, hooks on promoted properties, the precedence of `and`, `or`, `xor`, `|>`, casts and `!`, and inline HTML around `<?php ?>` and in `switch` cases.
+- Comments: kept on their own line or at the end of the line, inside arrays, argument lists and method chains, around doc comments, and after the last statement; doc comments are re-indented under `/**`.
+- Floats below `1e-4` or from `1e15` use exponent notation, and non-UTF-8 string bytes are written as escapes (`php-printer`).
 
 ---
-- String escapes decode to the bytes PHP stores. `"\xff"`, `"\400"` and `"\u{D800}"` were stored one character per byte, so they could not be told apart from `"ÿ"` and the printer wrote different bytes; the printer now writes bytes that are not valid UTF-8 as `\xNN` (`php-rs-parser`, `php-printer`).
 
 ## [0.23.0] - 2026-10-18
 
