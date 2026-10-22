@@ -2177,7 +2177,13 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
 /// An unnamed, unspread argument (a by-ref one has already been reported).
 /// True if a comma follows the last argument before the closing `)` that ends at `close_end`.
 fn has_trailing_comma(src: &str, last_arg_end: u32, close_end: u32) -> bool {
-    let gap = &src.as_bytes()[last_arg_end as usize..close_end as usize - 1];
+    // An unclosed argument list leaves `close_end` at the end of the last argument.
+    let Some(gap) = src
+        .as_bytes()
+        .get(last_arg_end as usize..(close_end as usize).saturating_sub(1))
+    else {
+        return false;
+    };
     let mut i = 0;
     while i < gap.len() {
         match gap[i] {
