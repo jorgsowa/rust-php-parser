@@ -1,3 +1,4 @@
+mod class_keywords;
 mod common;
 mod fingerprint;
 mod fixtures;

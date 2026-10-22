@@ -2099,7 +2099,7 @@ fn parse_expr_rest<'arena, 'src>(
                 && parser.peek_kind() != Some(TokenKind::DoubleColon);
             let mut rhs = if instanceof_static {
                 let token = parser.advance();
-                parser.has_class_keyword_ref = true;
+                parser.note_class_keyword(TokenKind::Static);
                 atom::simple_name_expr("static", token.span)
             } else {
                 parse_expr_bp(parser, right_bp)

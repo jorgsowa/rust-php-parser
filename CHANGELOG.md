@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `Name::to_string_repr` builds a fully qualified name in one allocation instead of two, for both the arena and the owned `Name` (`php-ast`).
+- Parsing skips the walk that checks `self`, `parent` and `static` when every use is known to be valid, such as `self::` in a class body (`php-rs-parser`).
 
 ### Fixed
 

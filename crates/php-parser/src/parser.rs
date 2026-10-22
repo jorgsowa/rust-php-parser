@@ -1303,6 +1303,32 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
+    /// Turns on the class keyword walk for the `self`, `parent` or `static` just consumed,
+    /// unless it is known to name a class: in a class, interface or enum body, outside
+    /// traits and closures, and for `parent` only when the class extends one.
+    /// `static::class` (constant expressions) and `parent::$x` (hook calls) still need it.
+    pub(crate) fn note_class_keyword(&mut self, keyword: TokenKind) {
+        if self.has_class_keyword_ref {
+            return;
+        }
+        let known = self.class_scope.as_ref().is_some_and(|scope| {
+            scope.self_name.is_some()
+                && (keyword != TokenKind::Parent_ || scope.parent_name.is_some())
+        });
+        let checked_use = self.check(TokenKind::DoubleColon)
+            && match keyword {
+                TokenKind::Static => self.peek_kind() == Some(TokenKind::Class),
+                TokenKind::Parent_ => matches!(
+                    self.peek_kind(),
+                    Some(TokenKind::Variable | TokenKind::Dollar)
+                ),
+                _ => false,
+            };
+        if !known || checked_use {
+            self.has_class_keyword_ref = true;
+        }
+    }
+
     /// Scope for the body of a class-like declaration named `name` (`None` for an anonymous
     /// class) that extends `parent`.
     pub(crate) fn class_scope_for(
@@ -2220,7 +2246,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
             TokenKind::Self_ => {
                 let token = self.advance();
-                self.has_class_keyword_ref = true;
+                self.note_class_keyword(TokenKind::Self_);
                 TypeHint {
                     kind: TypeHintKind::Keyword(BuiltinType::Self_, token.span),
                     span: token.span,
@@ -2228,7 +2254,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
             TokenKind::Parent_ => {
                 let token = self.advance();
-                self.has_class_keyword_ref = true;
+                self.note_class_keyword(TokenKind::Parent_);
                 TypeHint {
                     kind: TypeHintKind::Keyword(BuiltinType::Parent_, token.span),
                     span: token.span,
@@ -2237,7 +2263,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             TokenKind::Static => {
                 let token = self.advance();
                 self.require_version(PhpVersion::Php80, "static type", token.span);
-                self.has_class_keyword_ref = true;
+                self.note_class_keyword(TokenKind::Static);
                 TypeHint {
                     kind: TypeHintKind::Keyword(BuiltinType::Static, token.span),
                     span: token.span,

@@ -697,12 +697,12 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         // self, parent, static — used as class names (e.g. self::method())
         TokenKind::Self_ => {
             let token = parser.advance();
-            parser.has_class_keyword_ref = true;
+            parser.note_class_keyword(TokenKind::Self_);
             simple_name_expr("self", token.span)
         }
         TokenKind::Parent_ => {
             let token = parser.advance();
-            parser.has_class_keyword_ref = true;
+            parser.note_class_keyword(TokenKind::Parent_);
             simple_name_expr("parent", token.span)
         }
         TokenKind::Static => {
@@ -722,7 +722,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                     token.span,
                 );
             }
-            parser.has_class_keyword_ref = true;
+            parser.note_class_keyword(TokenKind::Static);
             simple_name_expr("static", token.span)
         }
 
@@ -1397,17 +1397,17 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
     let class = match parser.current_kind() {
         TokenKind::Self_ => {
             let t = parser.advance();
-            parser.has_class_keyword_ref = true;
+            parser.note_class_keyword(TokenKind::Self_);
             simple_name_expr("self", t.span)
         }
         TokenKind::Parent_ => {
             let t = parser.advance();
-            parser.has_class_keyword_ref = true;
+            parser.note_class_keyword(TokenKind::Parent_);
             simple_name_expr("parent", t.span)
         }
         TokenKind::Static => {
             let t = parser.advance();
-            parser.has_class_keyword_ref = true;
+            parser.note_class_keyword(TokenKind::Static);
             simple_name_expr("static", t.span)
         }
         TokenKind::Variable => {
