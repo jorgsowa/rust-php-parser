@@ -4,7 +4,7 @@ function foo(int $a, $b {
     return $a + $b;
 }
 ===errors===
-expected ')' to close the delimiter opened at byte 18
+missing closing ')'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '{', expecting ')' in Standard input code on line 2
 ===php_error 8.0-8.3===

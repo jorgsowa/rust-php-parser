@@ -36,7 +36,7 @@ readonly promoted property must have type
 Cannot declare promoted property outside a constructor
 readonly promoted property must have type
 expected variable, found '|'
-expected ')' to close the delimiter opened at byte 284
+missing closing ')'
 expected '{', found '|'
 expected expression, found '|'
 expected ';' after expression

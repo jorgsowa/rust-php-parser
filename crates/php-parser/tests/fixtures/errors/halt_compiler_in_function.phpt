@@ -2,7 +2,7 @@
 <?php function f() { __halt_compiler(); }
 ===errors===
 __halt_compiler() can only be used at the outermost scope
-expected '}' to close the delimiter opened at byte 19
+missing closing '}'
 ===php_error===
 PHP Fatal error:  __HALT_COMPILER() can only be used from the outermost scope in Standard input code on line 1
 ===ast===

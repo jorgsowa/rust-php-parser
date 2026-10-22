@@ -2,7 +2,7 @@
 <?php for (;;; ) {} while (true) { break; }
 ===errors===
 expected expression, found ';'
-expected ')' to close the delimiter opened at byte 10
+missing closing ')'
 expected expression, found ')'
 expected expression, found '}'
 ===php_error <=7.4===

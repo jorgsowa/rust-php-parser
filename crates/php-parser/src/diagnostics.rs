@@ -46,7 +46,7 @@ pub enum ParseError {
     },
 
     /// A delimiter (parenthesis, bracket, brace) was opened but never closed.
-    #[error("expected {delimiter} to close the delimiter opened at byte {}", opened_at.start)]
+    #[error("missing closing {delimiter}")]
     #[non_exhaustive]
     UnclosedDelimiter {
         /// The expected closing delimiter, e.g. `"')'"`.

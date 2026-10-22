@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `ParseError::UnclosedDelimiter` reads `missing closing ')'` instead of naming the byte offset where the delimiter opened, which stays in `opened_at` (`php-rs-parser`).
 - A malformed numeric literal is reported as `LexerErrorKind::InvalidNumericLiteral` instead of `LexerErrorKind::Other` (`php-lexer`).
 - `Name::join_parts` and `Name::to_string_repr` borrow single-part names such as `\strlen` and `namespace\foo` instead of allocating, except `to_string_repr` of a fully qualified name (`php-ast`).
 

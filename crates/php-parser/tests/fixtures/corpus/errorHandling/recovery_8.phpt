@@ -8,7 +8,7 @@ while (true) {
     $i = 1;
     $i = 2;
 ===errors===
-expected '}' to close the delimiter opened at byte 118
+missing closing '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected end of file in Standard input code on line 8
 ===php_error >=8.0===

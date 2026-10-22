@@ -3,13 +3,13 @@
 ===errors <=7.4===
 expected '(', found '{'
 expected expression, found '{'
-expected ')' to close the delimiter opened at byte 9
+missing closing ')'
 expected statement, found end of file
 ===errors >=8.0===
 expected '(', found '{'
 expected expression, found '{'
 Array and string offset access syntax with curly braces is no longer supported
-expected ')' to close the delimiter opened at byte 9
+missing closing ')'
 expected statement, found end of file
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '{', expecting '(' in Standard input code on line 1

@@ -6,10 +6,10 @@ if ($b) {
     /* unterminated
 }
 ===errors <=7.4===
-expected '}' to close the delimiter opened at byte 15
+missing closing '}'
 ===errors >=8.0===
 unterminated block comment
-expected '}' to close the delimiter opened at byte 15
+missing closing '}'
 ===php_error <=7.4===
 PHP Warning:  Unterminated comment starting line 5 in Standard input code on line 5
 PHP Parse error:  syntax error, unexpected end of file in Standard input code on line 6

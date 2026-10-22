@@ -3,7 +3,7 @@
 if ($x > 1) {
     echo "hello";
 ===errors===
-expected '}' to close the delimiter opened at byte 18
+missing closing '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected end of file in Standard input code on line 3
 ===php_error >=8.0===

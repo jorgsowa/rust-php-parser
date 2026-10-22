@@ -37,7 +37,7 @@ expected variable, found ')'
 expected '{', found ';'
 expected '}', found end of file
 expected ';' after expression
-expected '}' to close the delimiter opened at byte 171
+missing closing '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ')', expecting variable (T_VARIABLE) in Standard input code on line 3
 ===php_error >=8.0===
