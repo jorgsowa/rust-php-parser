@@ -2300,6 +2300,8 @@ pub enum EnumMemberKind {
     ClassConst(ClassConstDecl),
     /// Trait use clause.
     TraitUse(TraitUseDecl),
+    /// Property declaration, which PHP rejects in enums.
+    Property(PropertyDecl),
 }
 
 /// An enum `case`.
@@ -3056,18 +3058,22 @@ fn owned_function_decl(f: &arena_ast::FunctionDecl<'_, '_>) -> FunctionDecl {
     }
 }
 
+fn owned_property(p: &arena_ast::PropertyDecl<'_, '_>) -> PropertyDecl {
+    PropertyDecl {
+        name: owned_ident(p.name),
+        modifiers: p.modifiers,
+        type_hint: p.type_hint.as_ref().map(owned_type_hint),
+        default: p.default.as_ref().map(owned_expr),
+        attributes: owned_attrs(&p.attributes),
+        hooks: owned_hooks(&p.hooks),
+        doc_comment: owned_opt_comment(&p.doc_comment),
+    }
+}
+
 fn owned_class_member(m: &arena_ast::ClassMember<'_, '_>) -> ClassMember {
     ClassMember {
         kind: match &m.kind {
-            arena_ast::ClassMemberKind::Property(p) => ClassMemberKind::Property(PropertyDecl {
-                name: owned_ident(p.name),
-                modifiers: p.modifiers,
-                type_hint: p.type_hint.as_ref().map(owned_type_hint),
-                default: p.default.as_ref().map(owned_expr),
-                attributes: owned_attrs(&p.attributes),
-                hooks: owned_hooks(&p.hooks),
-                doc_comment: owned_opt_comment(&p.doc_comment),
-            }),
+            arena_ast::ClassMemberKind::Property(p) => ClassMemberKind::Property(owned_property(p)),
             arena_ast::ClassMemberKind::Method(m) => ClassMemberKind::Method(MethodDecl {
                 name: owned_ident(m.name),
                 modifiers: m.modifiers,
@@ -3250,6 +3256,9 @@ fn owned_enum_decl(en: &arena_ast::EnumDecl<'_, '_>) -> EnumDecl {
                         }
                         arena_ast::EnumMemberKind::TraitUse(t) => {
                             EnumMemberKind::TraitUse(owned_trait_use(t))
+                        }
+                        arena_ast::EnumMemberKind::Property(p) => {
+                            EnumMemberKind::Property(owned_property(p))
                         }
                     },
                     span: m.span,
@@ -4178,6 +4187,18 @@ fn av_function_decl<'a>(
     }
 }
 
+fn av_property<'a>(arena: &'a bumpalo::Bump, p: &PropertyDecl) -> arena_ast::PropertyDecl<'a, 'a> {
+    arena_ast::PropertyDecl {
+        name: av_ident(arena, &p.name),
+        modifiers: p.modifiers,
+        type_hint: p.type_hint.as_ref().map(|t| av_type_hint(arena, t)),
+        default: p.default.as_ref().map(|e| av_expr(arena, e)),
+        attributes: av_attrs(arena, &p.attributes),
+        hooks: av_hooks(arena, &p.hooks),
+        doc_comment: av_opt_comment(arena, &p.doc_comment),
+    }
+}
+
 fn av_class_member<'a>(
     arena: &'a bumpalo::Bump,
     m: &ClassMember,
@@ -4185,15 +4206,7 @@ fn av_class_member<'a>(
     arena_ast::ClassMember {
         kind: match &m.kind {
             ClassMemberKind::Property(p) => {
-                arena_ast::ClassMemberKind::Property(arena_ast::PropertyDecl {
-                    name: av_ident(arena, &p.name),
-                    modifiers: p.modifiers,
-                    type_hint: p.type_hint.as_ref().map(|t| av_type_hint(arena, t)),
-                    default: p.default.as_ref().map(|e| av_expr(arena, e)),
-                    attributes: av_attrs(arena, &p.attributes),
-                    hooks: av_hooks(arena, &p.hooks),
-                    doc_comment: av_opt_comment(arena, &p.doc_comment),
-                })
+                arena_ast::ClassMemberKind::Property(av_property(arena, p))
             }
             ClassMemberKind::Method(m) => {
                 arena_ast::ClassMemberKind::Method(arena_ast::MethodDecl {
@@ -4381,6 +4394,9 @@ fn av_enum_decl<'a>(arena: &'a bumpalo::Bump, en: &EnumDecl) -> arena_ast::EnumD
                 }
                 EnumMemberKind::TraitUse(t) => {
                     arena_ast::EnumMemberKind::TraitUse(av_trait_use(arena, t))
+                }
+                EnumMemberKind::Property(p) => {
+                    arena_ast::EnumMemberKind::Property(av_property(arena, p))
                 }
             },
             span: m.span,

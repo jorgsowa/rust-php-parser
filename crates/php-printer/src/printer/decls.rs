@@ -516,6 +516,7 @@ impl<'src> Printer<'src> {
             EnumMemberKind::Method(method) => self.print_method(method),
             EnumMemberKind::ClassConst(cc) => self.print_class_const(cc),
             EnumMemberKind::TraitUse(tu) => self.print_trait_use(tu),
+            EnumMemberKind::Property(prop) => self.print_property(prop),
             _ => self.unsupported("enum member"),
         }
     }

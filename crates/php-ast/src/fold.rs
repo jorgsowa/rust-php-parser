@@ -795,6 +795,9 @@ pub fn fold_enum_member<'new, 'src, F: Fold<'src> + ?Sized>(
             EnumMemberKind::ClassConst(fold_class_const_decl(folder, arena, cc))
         }
         EnumMemberKind::TraitUse(tu) => EnumMemberKind::TraitUse(folder.fold_trait_use(arena, tu)),
+        EnumMemberKind::Property(prop) => {
+            EnumMemberKind::Property(fold_property_decl(folder, arena, prop))
+        }
     };
     EnumMember {
         kind,

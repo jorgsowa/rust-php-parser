@@ -2049,7 +2049,7 @@ pub(super) fn copy_attributes<'arena, 'src>(
     out
 }
 
-fn parse_property_member<'arena, 'src>(
+pub(super) fn parse_property_member<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     members: &mut ArenaVec<'arena, ClassMember<'arena, 'src>>,
     member_attrs: ArenaVec<'arena, Attribute<'arena, 'src>>,

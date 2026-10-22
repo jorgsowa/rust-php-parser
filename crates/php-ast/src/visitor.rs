@@ -696,7 +696,7 @@ pub fn walk_property_hook<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     ControlFlow::Continue(())
 }
 
-/// Dispatches an enum member (case, method, constant, or trait use) to its child visitors.
+/// Dispatches an enum member (case, method, constant, trait use, or property) to its child visitors.
 pub fn walk_enum_member<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
     visitor: &mut V,
     member: &EnumMember<'arena, 'src>,
@@ -716,6 +716,9 @@ pub fn walk_enum_member<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
         }
         EnumMemberKind::TraitUse(trait_use) => {
             visitor.visit_trait_use(trait_use)?;
+        }
+        EnumMemberKind::Property(prop) => {
+            walk_property_decl(visitor, prop)?;
         }
     }
     ControlFlow::Continue(())

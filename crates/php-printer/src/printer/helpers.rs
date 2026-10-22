@@ -42,6 +42,7 @@ pub(crate) fn enum_member_doc_comment<'a>(member: &'a EnumMember) -> Option<&'a 
         EnumMemberKind::Method(m) => m.doc_comment.as_ref(),
         EnumMemberKind::ClassConst(c) => c.doc_comment.as_ref(),
         EnumMemberKind::TraitUse(t) => t.doc_comment.as_ref(),
+        EnumMemberKind::Property(p) => p.doc_comment.as_ref(),
         _ => None,
     }
 }

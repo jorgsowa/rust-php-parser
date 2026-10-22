@@ -429,6 +429,8 @@ forbidden_rules! {
     MissingEnumCaseValue = "missing-enum-case-value", Compile;
     /// A case of a pure enum has a value.
     PureEnumCaseValue = "pure-enum-case-value", Compile;
+    /// An enum declares a property.
+    EnumProperty = "enum-property", Compile;
     /// A trait alias is `static` or `abstract`.
     InvalidTraitAliasModifier = "invalid-trait-alias-modifier", Compile;
     /// A `/*` comment is never closed.
@@ -793,6 +795,7 @@ mod tests {
             ForbiddenRule::EnumCaseNamedClass => &[("<?php enum E { case class; }", "class"),],
             ForbiddenRule::MissingEnumCaseValue => &[("<?php enum E: int { case A; }", "A"),],
             ForbiddenRule::PureEnumCaseValue => &[("<?php enum E { case A = 1; }", "="),],
+            ForbiddenRule::EnumProperty => &[("<?php enum E { public int $a; }", "$a"), ("<?php enum E { var $a, $b; }", "$a"),],
             ForbiddenRule::InvalidTraitAliasModifier => &[("<?php class A { use T { f as static g; } }", "static"),],
             ForbiddenRule::UnterminatedComment => &[("<?php /* x", "/* x"),],
             ForbiddenRule::NestedClassDeclaration => &[("<?php class A { function f() { class B {} } }", "B"),],

@@ -359,6 +359,77 @@ pub(super) fn parse_enum<'arena, 'src>(
             continue;
         }
 
+        let has_modifier =
+            visibility.is_some() || is_static || is_abstract || is_final || is_readonly;
+        let is_var = !has_modifier
+            && parser.check(TokenKind::Identifier)
+            && parser.current_text().eq_ignore_ascii_case("var");
+        if is_var {
+            parser.advance();
+            visibility = Some(Visibility::Public);
+        }
+        let starts_property = match parser.current_kind() {
+            TokenKind::Variable | TokenKind::Question | TokenKind::LeftParen => true,
+            _ => {
+                parser.could_be_type_hint()
+                    && matches!(
+                        parser.peek_kind(),
+                        Some(
+                            TokenKind::Variable
+                                | TokenKind::Pipe
+                                | TokenKind::Ampersand
+                                | TokenKind::Backslash
+                        )
+                    )
+            }
+        };
+        // Without a modifier or `var`, PHP fails to parse the property.
+        if (has_modifier || is_var) && starts_property {
+            let type_hint = if parser.check(TokenKind::Variable) {
+                None
+            } else {
+                let type_hint = parser.parse_type_hint();
+                parser.reject_static_type(&type_hint, "property");
+                Some(type_hint)
+            };
+            if parser.check(TokenKind::Variable) {
+                let message = if parser.version >= PhpVersion::Php82 {
+                    format!(
+                        "Enum {} cannot include properties",
+                        parser.class_scope.as_ref().map_or("", |scope| &scope.name)
+                    )
+                } else {
+                    "Enums may not include properties".to_string()
+                };
+                parser.forbid(ForbiddenRule::EnumProperty, message, parser.current_span());
+                let mut mods = php_ast::Modifiers::new();
+                mods.visibility = visibility;
+                mods.is_static = is_static;
+                mods.is_abstract = is_abstract;
+                mods.is_final = is_final;
+                mods.is_readonly = is_readonly;
+                let mut properties = parser.alloc_vec();
+                super::class::parse_property_member(
+                    parser,
+                    &mut properties,
+                    member_attrs,
+                    member_start,
+                    &mods,
+                    type_hint,
+                    false,
+                );
+                for member in properties {
+                    if let ClassMemberKind::Property(prop) = member.kind {
+                        members.push(EnumMember {
+                            kind: EnumMemberKind::Property(prop),
+                            span: member.span,
+                        });
+                    }
+                }
+                continue;
+            }
+        }
+
         parser.error(ParseError::Expected {
             expected: "enum member".into(),
             found: parser.current_kind().description().into(),

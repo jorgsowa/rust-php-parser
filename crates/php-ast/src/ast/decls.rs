@@ -662,6 +662,8 @@ pub enum EnumMemberKind<'arena, 'src> {
     ClassConst(ClassConstDecl<'arena, 'src>),
     /// A trait use inside the enum body: `use SomeTrait;`.
     TraitUse(TraitUseDecl<'arena, 'src>),
+    /// A property, which PHP rejects in enums: `public $x;`.
+    Property(PropertyDecl<'arena, 'src>),
 }
 
 /// A `case` inside an enum.

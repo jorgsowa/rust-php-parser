@@ -705,6 +705,18 @@ fn fold_owned_method<F: OwnedFold + ?Sized>(folder: &mut F, m: MethodDecl) -> Me
     }
 }
 
+fn fold_owned_property<F: OwnedFold + ?Sized>(folder: &mut F, p: PropertyDecl) -> PropertyDecl {
+    PropertyDecl {
+        name: p.name,
+        modifiers: p.modifiers,
+        type_hint: p.type_hint.map(|t| folder.fold_type_hint(t)),
+        default: p.default.map(|e| folder.fold_expr(e)),
+        attributes: fold_owned_attrs(folder, p.attributes),
+        hooks: fold_owned_hooks(folder, p.hooks),
+        doc_comment: p.doc_comment,
+    }
+}
+
 /// Folds a class member, recursing into its children.
 pub fn fold_owned_class_member<F: OwnedFold + ?Sized>(
     folder: &mut F,
@@ -712,15 +724,9 @@ pub fn fold_owned_class_member<F: OwnedFold + ?Sized>(
 ) -> ClassMember {
     ClassMember {
         kind: match member.kind {
-            ClassMemberKind::Property(p) => ClassMemberKind::Property(PropertyDecl {
-                name: p.name,
-                modifiers: p.modifiers,
-                type_hint: p.type_hint.map(|t| folder.fold_type_hint(t)),
-                default: p.default.map(|e| folder.fold_expr(e)),
-                attributes: fold_owned_attrs(folder, p.attributes),
-                hooks: fold_owned_hooks(folder, p.hooks),
-                doc_comment: p.doc_comment,
-            }),
+            ClassMemberKind::Property(p) => {
+                ClassMemberKind::Property(fold_owned_property(folder, p))
+            }
             ClassMemberKind::Method(m) => ClassMemberKind::Method(fold_owned_method(folder, m)),
             ClassMemberKind::ClassConst(c) => {
                 ClassMemberKind::ClassConst(fold_owned_class_const(folder, c))
@@ -749,6 +755,7 @@ pub fn fold_owned_enum_member<F: OwnedFold + ?Sized>(
                 EnumMemberKind::ClassConst(fold_owned_class_const(folder, c))
             }
             EnumMemberKind::TraitUse(t) => EnumMemberKind::TraitUse(folder.fold_trait_use(t)),
+            EnumMemberKind::Property(p) => EnumMemberKind::Property(fold_owned_property(folder, p)),
         },
         span: member.span,
     }

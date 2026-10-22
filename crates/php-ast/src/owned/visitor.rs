@@ -685,6 +685,9 @@ pub fn walk_owned_enum_member<V: OwnedVisitor + ?Sized>(
         EnumMemberKind::TraitUse(trait_use) => {
             visitor.visit_trait_use(trait_use)?;
         }
+        EnumMemberKind::Property(prop) => {
+            walk_owned_property_decl(visitor, prop)?;
+        }
     }
     ControlFlow::Continue(())
 }
