@@ -1683,8 +1683,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         | "iterable"
                         | "object"
                         | "mixed"
-                        | "never"
-                );
+                ) || (last == "never" && self.version >= PhpVersion::Php81);
                 let reserved = builtin
                     || matches!(
                         last.as_str(),
@@ -2138,7 +2137,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 "string" => Some(BuiltinType::String),
                 "bool" => Some(BuiltinType::Bool),
                 "void" => Some(BuiltinType::Void),
-                "never" => Some(BuiltinType::Never),
+                // Before 8.1 `never` is a class name.
+                "never" if self.version >= PhpVersion::Php81 => Some(BuiltinType::Never),
                 "mixed" => Some(BuiltinType::Mixed),
                 "object" => Some(BuiltinType::Object),
                 "iterable" => Some(BuiltinType::Iterable),
@@ -2147,14 +2147,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             };
             if let Some(builtin) = builtin {
                 let token = self.advance();
-                match builtin {
-                    BuiltinType::Never => {
-                        self.require_version(PhpVersion::Php81, "never type", token.span);
-                    }
-                    BuiltinType::Mixed => {
-                        self.require_version(PhpVersion::Php80, "mixed type", token.span);
-                    }
-                    _ => {}
+                if builtin == BuiltinType::Mixed {
+                    self.require_version(PhpVersion::Php80, "mixed type", token.span);
                 }
                 return TypeHint {
                     kind: TypeHintKind::Keyword(builtin, token.span),

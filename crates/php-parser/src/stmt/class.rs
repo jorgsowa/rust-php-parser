@@ -28,8 +28,8 @@ pub(super) fn visibility_rank(v: php_ast::Visibility) -> u8 {
 
 pub(crate) fn is_reserved_class_name(name: &str, version: PhpVersion) -> bool {
     let name = name.to_ascii_lowercase();
-    // `readonly` is a keyword from PHP 8.1 on.
-    (name == "readonly" && version >= PhpVersion::Php81)
+    // `readonly` is a keyword and `never` a type from PHP 8.1 on.
+    (matches!(name.as_str(), "readonly" | "never") && version >= PhpVersion::Php81)
         || matches!(
             name.as_str(),
             // self / parent / static: meta-names that PHP rejects as
@@ -38,7 +38,7 @@ pub(crate) fn is_reserved_class_name(name: &str, version: PhpVersion) -> bool {
             // PHP's reserved type names — invalid as class names anywhere
             // ("Cannot use 'string' as a class name as it is reserved").
             | "int" | "float" | "bool" | "string" | "true" | "false" | "null"
-            | "void" | "iterable" | "object" | "mixed" | "never" | "array"
+            | "void" | "iterable" | "object" | "mixed" | "array"
             // A keyword in PHP, lexed as a name here.
             | "callable"
         )

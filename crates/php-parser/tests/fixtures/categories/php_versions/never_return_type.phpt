@@ -1,7 +1,5 @@
 ===source===
 <?php function f(): never { throw new \Exception(); }
-===errors 8.0===
-'never type' requires PHP 8.1 or higher
 ===ast >=8.0===
 {
   "stmts": [
