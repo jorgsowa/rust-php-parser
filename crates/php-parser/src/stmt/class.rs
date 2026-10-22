@@ -1524,6 +1524,18 @@ fn parse_class_const_member<'arena, 'src>(
     }
     parser.expect_member_end();
     let span = Span::new(member_start, parser.previous_end());
+    if let (true, Some(Visibility::Private), Some((name, _))) =
+        (mods.is_final, mods.visibility, const_items.first())
+    {
+        let class = parser.class_member_prefix();
+        parser.error(ParseError::Forbidden {
+            message: format!(
+                "Private constant {class}{name} cannot be final as it is not visible to other classes"
+            )
+            .into(),
+            span,
+        });
+    }
     if let (true, Some(Visibility::Protected | Visibility::Private), Some((name, _))) =
         (in_interface, mods.visibility, const_items.first())
     {
