@@ -225,9 +225,7 @@ fn check_dereferencable(parser: &mut Parser<'_, '_>, lhs: &Expr<'_, '_>, op: Tok
         | ExprKind::Empty(_)
         | ExprKind::Exit(_)
         | ExprKind::Eval(_) => false,
-        ExprKind::Array(_) => {
-            op != TokenKind::DoubleColon && !is_list_syntax(parser.source(), lhs.span)
-        }
+        ExprKind::Array(_) => !is_list_syntax(parser.source(), lhs.span),
         ExprKind::MagicConst(_) => !matches!(op, TokenKind::DoubleColon | TokenKind::LeftParen),
         // The 8.5 call forms of `clone`; the plain `clone($a)` is grouped before it gets here.
         ExprKind::CloneWith(..) | ExprKind::Clone(_) => false,
@@ -1618,7 +1616,7 @@ fn parse_expr_rest<'arena, 'src>(
             }
             check_dereferencable(parser, &lhs, kind);
             parser.advance(); // consume ::
-            if matches!(lhs.kind, ExprKind::Parenthesized(_)) {
+            if matches!(lhs.kind, ExprKind::Parenthesized(_) | ExprKind::Array(_)) {
                 if parser.check(TokenKind::Class) {
                     check_class_name_fetch_literal(parser, &lhs);
                 } else {

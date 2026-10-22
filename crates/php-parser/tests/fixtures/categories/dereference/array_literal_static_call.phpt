@@ -1,7 +1,7 @@
 ===source===
 <?php [1]::b();
 ===errors===
-Cannot dereference this expression
+Illegal class name
 ===php_error===
 PHP Fatal error:  Illegal class name in Standard input code on line 1
 ===ast===
