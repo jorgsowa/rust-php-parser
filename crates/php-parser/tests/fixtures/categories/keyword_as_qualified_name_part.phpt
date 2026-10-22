@@ -7,6 +7,7 @@ namespace\Foo::X;
 ===errors <=7.4===
 expected class name, found '\'
 expected '{', found '\'
+expected 'function' or 'const', found '\'
 expected class member, found '::'
 expected method name, found '\'
 expected '(', found '\'

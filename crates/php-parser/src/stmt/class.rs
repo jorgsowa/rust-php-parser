@@ -947,7 +947,10 @@ pub fn parse_class_members<'arena, 'src>(
         let unknown_modifier =
             parser.check(TokenKind::Identifier) && parser.peek_kind() == Some(TokenKind::Variable);
         let starts_property = match parser.current_kind() {
-            TokenKind::Variable | TokenKind::Question | TokenKind::LeftParen => true,
+            TokenKind::Variable
+            | TokenKind::Question
+            | TokenKind::LeftParen
+            | TokenKind::Backslash => true,
             _ => {
                 parser.could_be_type_hint()
                     && matches!(
