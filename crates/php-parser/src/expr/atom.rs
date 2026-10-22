@@ -2435,6 +2435,32 @@ fn cast_kind_ahead(parser: &mut Parser<'_, '_>) -> Option<CastKind> {
     .then_some(cast_kind)
 }
 
+/// Whether the current token starts an operand rather than continuing an expression.
+fn operand_follows(parser: &mut Parser<'_, '_>) -> bool {
+    let kind = parser.current_kind();
+    !(parser.at_statement_end()
+        || precedence::infix_binding_power(kind).is_some()
+        || kind.is_assignment_op()
+        || matches!(
+            kind,
+            TokenKind::RightParen
+                | TokenKind::RightBracket
+                | TokenKind::RightBrace
+                | TokenKind::Comma
+                | TokenKind::Question
+                | TokenKind::QuestionQuestion
+                | TokenKind::Colon
+                | TokenKind::FatArrow
+                | TokenKind::As
+                | TokenKind::LeftParen
+                | TokenKind::LeftBracket
+                | TokenKind::LeftBrace
+                | TokenKind::Arrow
+                | TokenKind::NullsafeArrow
+                | TokenKind::DoubleColon
+        ))
+}
+
 /// Try to parse a cast expression like `(int)$x`. Returns Some(Expr) if successful,
 /// or None if this is not a cast (just a parenthesized expression).
 fn try_parse_cast<'arena, 'src>(
@@ -2447,6 +2473,20 @@ fn try_parse_cast<'arena, 'src>(
     let kw_span = parser.current_span();
     parser.advance(); // consume the cast keyword
     parser.eat(TokenKind::RightParen)?;
+
+    // Before 8.5 `(void)` is a parenthesized constant; it is read as a cast only when an
+    // operand follows, so that the cast reports the version it needs.
+    if cast_kind == CastKind::Void && parser.version < PhpVersion::Php85 && !operand_follows(parser)
+    {
+        let name = simple_name_expr(
+            &parser.source[kw_span.start as usize..kw_span.end as usize],
+            kw_span,
+        );
+        return Some(Expr {
+            kind: ExprKind::Parenthesized(parser.alloc(name)),
+            span: Span::new(start, parser.previous_end()),
+        });
+    }
 
     if cast_kind == CastKind::Unset && parser.version >= PhpVersion::Php80 {
         parser.error(ParseError::Forbidden {
