@@ -622,9 +622,21 @@ mod tests {
         ),
         (
             ForbiddenRule::QualifiedBuiltinType,
-            PhpVersion::Php86,
-            "<?php function f(namespace\\static $x) {}",
+            PhpVersion::Php85,
+            "<?php class A { function m(): namespace\\static {} }",
             "namespace\\static",
+        ),
+        (
+            ForbiddenRule::QualifiedBuiltinType,
+            PhpVersion::Php85,
+            "<?php function f(): \\static {}",
+            "\\static",
+        ),
+        (
+            ForbiddenRule::QualifiedClassKeyword,
+            PhpVersion::Php84,
+            "<?php function f(): \\static {}",
+            "\\static",
         ),
     ];
 
@@ -891,6 +903,13 @@ mod tests {
                 .collect();
             assert_eq!(spans, [text], "{rule:?} in {src:?}: {errors:?}");
         }
+    }
+
+    #[test]
+    fn relative_static_type_is_valid_in_a_class_before_8_5() {
+        let options = crate::ParseOptions::default().version(PhpVersion::Php84);
+        let src = "<?php class A { function m(): namespace\\static {} }";
+        assert_eq!(crate::parse_with(src, &options).errors.len(), 0);
     }
 
     #[test]

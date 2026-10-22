@@ -1686,24 +1686,26 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     fn check_qualified_type_names(&mut self, type_hint: &TypeHint<'arena, 'src>) {
         match &type_hint.kind {
             TypeHintKind::Named(name @ Name::Complex { parts, span, .. }) => {
-                if let Some(text) = crate::stmt::fully_qualified_class_keyword(name) {
+                let Some(last) = parts.last() else { return };
+                let relative = name.kind() == NameKind::Relative;
+                let fully_qualified = crate::stmt::fully_qualified_class_keyword(name);
+                // From 8.5 `static` is a builtin type, so PHP rejects `\static` and `namespace\static`.
+                let qualified_static = self.version >= PhpVersion::Php85
+                    && (relative || fully_qualified.is_some())
+                    && parts.len() == 1
+                    && last.eq_ignore_ascii_case("static");
+                if qualified_static {
                     self.forbid(
-                        ForbiddenRule::QualifiedClassKeyword,
-                        format!("'\\{text}' is an invalid class name"),
+                        ForbiddenRule::QualifiedBuiltinType,
+                        "Type declaration 'static' must be unqualified",
                         *span,
                     );
                     return;
                 }
-                let Some(last) = parts.last() else { return };
-                let relative = name.kind() == NameKind::Relative;
-                let unqualified_static = self.version >= PhpVersion::Php86
-                    && relative
-                    && parts.len() == 1
-                    && last.eq_ignore_ascii_case("static");
-                if unqualified_static {
+                if let Some(text) = fully_qualified {
                     self.forbid(
-                        ForbiddenRule::QualifiedBuiltinType,
-                        "Type declaration 'static' must be unqualified",
+                        ForbiddenRule::QualifiedClassKeyword,
+                        format!("'\\{text}' is an invalid class name"),
                         *span,
                     );
                     return;

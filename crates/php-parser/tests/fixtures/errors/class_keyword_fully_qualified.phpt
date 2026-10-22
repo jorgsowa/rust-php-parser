@@ -23,9 +23,20 @@ class A {
 '\parent' is an invalid class name
 '\self' is an invalid class name
 '\self' is an invalid class name
-===errors >=8.0===
+===errors 8.0-8.4===
 '\self' is an invalid class name
 '\static' is an invalid class name
+'\parent' is an invalid class name
+'\self' is an invalid class name
+'\parent' is an invalid class name
+'\static' is an invalid class name
+'\self' is an invalid class name
+'\parent' is an invalid class name
+'\self' is an invalid class name
+'\self' is an invalid class name
+===errors >=8.5===
+'\self' is an invalid class name
+Type declaration 'static' must be unqualified
 '\parent' is an invalid class name
 '\self' is an invalid class name
 '\parent' is an invalid class name

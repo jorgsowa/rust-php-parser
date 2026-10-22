@@ -16,11 +16,11 @@ trait T {
 'reserved keyword in namespaced name' requires PHP 8.0 or higher
 'reserved keyword in namespaced name' requires PHP 8.0 or higher
 'reserved keyword in namespaced name' requires PHP 8.0 or higher
-===errors >=8.6===
+===errors >=8.5===
 Type declaration 'static' must be unqualified
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'static' (T_STATIC), expecting identifier (T_STRING) in Standard input code on line 2
-===php_error >=8.6===
+===php_error >=8.5===
 PHP Fatal error:  Type declaration 'static' must be unqualified in Standard input code on line 4
 ===ast===
 {

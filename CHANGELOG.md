@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `\static` and `namespace\static` in a type are reported as `Type declaration 'static' must be unqualified` from PHP 8.5, as PHP 8.5.12 does, instead of from 8.6 and as an invalid class name; `namespace\static` inside a class stays valid before 8.5 (`php-rs-parser`).
 - Errors that PHP versions older than the latest report but the parser missed (`php-rs-parser`):
   - PHP 8.0: trailing commas in parameter and closure `use` lists, the `static` type, reserved keywords in namespaced names, `::class` on a non-name, `new (expr)`, `instanceof (expr)`, `->` on constants, `->`/`::` on class constants, and dereferencing magic constants or interpolated strings.
   - PHP 7.4: chained non-associative comparisons such as `1 < 2 < 3`.
