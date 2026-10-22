@@ -1562,7 +1562,7 @@ pub fn parse_param_list<'arena, 'src>(
                             parser.forbid(
                                 ForbiddenRule::MultipleSetVisibilityModifiers,
                                 "cannot use multiple set-visibility modifiers",
-                                span,
+                                Span::new(param_start, parser.previous_end()),
                             );
                         }
                         parser.advance(); // consume visibility keyword
