@@ -49,7 +49,7 @@ PHP Parse error:  syntax error, unexpected token "}" in Standard input code on l
                       "attributes": [],
                       "span": {
                         "start": 34,
-                        "end": 33
+                        "end": 34
                       }
                     }
                   ],

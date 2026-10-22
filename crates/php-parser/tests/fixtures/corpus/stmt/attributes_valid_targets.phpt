@@ -323,7 +323,7 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
                               "attributes": [],
                               "span": {
                                 "start": 1063,
-                                "end": 1027
+                                "end": 1063
                               }
                             }
                           ],

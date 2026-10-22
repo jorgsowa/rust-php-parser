@@ -714,7 +714,7 @@ PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) 
               "attributes": [],
               "span": {
                 "start": 330,
-                "end": 311
+                "end": 330
               }
             }
           ],
@@ -739,7 +739,7 @@ PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) 
                       "attributes": [],
                       "span": {
                         "start": 366,
-                        "end": 346
+                        "end": 366
                       }
                     }
                   ],
@@ -764,7 +764,7 @@ PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) 
                               "attributes": [],
                               "span": {
                                 "start": 406,
-                                "end": 382
+                                "end": 406
                               }
                             }
                           ],
@@ -789,7 +789,7 @@ PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) 
                                       "attributes": [],
                                       "span": {
                                         "start": 447,
-                                        "end": 422
+                                        "end": 447
                                       }
                                     }
                                   ],
@@ -1073,7 +1073,7 @@ PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) 
                                                       "attributes": [],
                                                       "span": {
                                                         "start": 706,
-                                                        "end": 682
+                                                        "end": 706
                                                       }
                                                     }
                                                   ],

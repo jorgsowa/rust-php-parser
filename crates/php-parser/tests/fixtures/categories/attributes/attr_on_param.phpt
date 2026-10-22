@@ -30,7 +30,7 @@ PHP Parse error:  syntax error, unexpected end of file, expecting variable (T_VA
               "attributes": [],
               "span": {
                 "start": 41,
-                "end": 19
+                "end": 41
               }
             }
           ],

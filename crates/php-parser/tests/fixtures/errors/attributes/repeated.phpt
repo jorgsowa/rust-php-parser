@@ -106,7 +106,7 @@ PHP Fatal error:  Attribute "Attribute" must not be repeated in Standard input c
               "attributes": [],
               "span": {
                 "start": 479,
-                "end": 395
+                "end": 479
               }
             }
           ],

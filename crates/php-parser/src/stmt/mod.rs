@@ -1815,7 +1815,11 @@ pub fn parse_param_list<'arena, 'src>(
         parser.check_attributes(&param_attrs, &attr_site);
 
         params.push({
-            let mut param = Param::new(parser.arena, name, Span::new(param_start, param_end));
+            let mut param = Param::new(
+                parser.arena,
+                name,
+                Span::new(param_start, param_end.max(param_start)),
+            );
             param.type_hint = type_hint;
             param.default = default;
             param.by_ref = by_ref;
