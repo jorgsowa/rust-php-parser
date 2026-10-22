@@ -1425,7 +1425,7 @@ fn type_accepts_literal(ty: &TypeHint<'_, '_>, value: &Expr<'_, '_>, value_type:
 }
 
 /// Report a literal value that a typed class constant's type does not accept.
-fn check_typed_const_value(
+pub(super) fn check_typed_const_value(
     parser: &mut Parser<'_, '_>,
     ty: &TypeHint<'_, '_>,
     name: &str,

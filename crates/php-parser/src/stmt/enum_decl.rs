@@ -276,6 +276,9 @@ pub(super) fn parse_enum<'arena, 'src>(
                 parser.expect(TokenKind::Equals);
                 let value = expr::parse_expr(parser);
                 expr::check_const_expr(parser, &value, false);
+                if let (Some(ty), Some(name)) = (const_type, const_name.as_str()) {
+                    super::class::check_typed_const_value(parser, ty, name, &value);
+                }
                 // Every item of `const A = 1, B = 2;` gets its own copy of the attributes.
                 let attributes = attributes.take().unwrap_or_else(|| {
                     let EnumMemberKind::ClassConst(first) = &members[first_index].kind else {
