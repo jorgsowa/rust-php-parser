@@ -10,7 +10,10 @@ A{0};
 A::B{0};
 new $array{'className'};
 new $a->b{'c'}();
-===errors >=7.4===
+===errors <=7.4===
+expected ';', found '{'
+expected ';', found '{'
+===errors >=8.0===
 Array and string offset access syntax with curly braces is no longer supported
 Array and string offset access syntax with curly braces is no longer supported
 Array and string offset access syntax with curly braces is no longer supported

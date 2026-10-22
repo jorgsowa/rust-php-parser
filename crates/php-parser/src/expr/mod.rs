@@ -244,6 +244,9 @@ fn check_dereferencable(parser: &mut Parser<'_, '_>, lhs: &Expr<'_, '_>, op: Tok
     }
 }
 
+pub(crate) const CURLY_OFFSET_REMOVED: &str =
+    "Array and string offset access syntax with curly braces is no longer supported";
+
 /// PHP's `class_name_reference`: a name, a parenthesized expression or a `new_variable`.
 fn is_class_name_reference(expr: &Expr<'_, '_>) -> bool {
     matches!(
@@ -1866,12 +1869,22 @@ fn parse_expr_rest<'arena, 'src>(
                 Some(parser.alloc(e))
             };
             parser.expect(TokenKind::RightBrace);
-            parser.error(ParseError::Forbidden {
-                message:
-                    "Array and string offset access syntax with curly braces is no longer supported"
-                        .into(),
-                span: brace_span,
-            });
+            // PHP 7.4 only deprecates the syntax, which it has for variables alone.
+            if parser.version >= PhpVersion::Php80 {
+                parser.error(ParseError::Forbidden {
+                    message: CURLY_OFFSET_REMOVED.into(),
+                    span: brace_span,
+                });
+            } else if matches!(
+                lhs.kind,
+                ExprKind::Name(_) | ExprKind::ClassConstAccess(_) | ExprKind::MagicConst(_)
+            ) {
+                parser.error(ParseError::Expected {
+                    expected: "';'".into(),
+                    found: "'{'".into(),
+                    span: brace_span,
+                });
+            }
             let span = Span::new(lhs.span.start, parser.previous_end());
             lhs = Expr {
                 kind: ExprKind::ArrayAccess(ArrayAccessExpr {

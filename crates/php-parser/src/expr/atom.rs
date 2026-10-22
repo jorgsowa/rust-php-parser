@@ -814,6 +814,9 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             }
             parser.expect(TokenKind::RightParen);
             let end = parser.previous_end();
+            for e in exprs.iter() {
+                allow_curly_offsets(parser, e);
+            }
             // PHP rejects non-lvalue arguments to isset with
             // "Cannot use isset() on the result of an expression
             //  (you can use \"null !== expression\" instead)".
@@ -842,6 +845,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let inner = parse_expr(parser);
             parser.expect(TokenKind::RightParen);
             let end = parser.previous_end();
+            allow_curly_offsets(parser, &inner);
             Expr {
                 kind: ExprKind::Empty(parser.alloc(inner)),
                 span: Span::new(start, end),
@@ -1883,6 +1887,39 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
         }),
         span,
     }
+}
+
+/// Retract the error for a `{}` offset in the fetch chain of an `isset()` or `empty()` operand,
+/// which PHP 8.0 to 8.3 compile without the check; their indexes are still checked.
+fn allow_curly_offsets(parser: &mut Parser<'_, '_>, operand: &Expr<'_, '_>) {
+    if !(PhpVersion::Php80..PhpVersion::Php84).contains(&parser.version) {
+        return;
+    }
+    let mut brackets = Vec::new();
+    let mut expr = operand;
+    loop {
+        match &expr.kind {
+            ExprKind::ArrayAccess(a) => {
+                let end = a.index.map_or(expr.span.end, |index| index.span.start);
+                brackets.push(Span::new(a.array.span.end, end));
+                expr = a.array;
+            }
+            ExprKind::PropertyAccess(p) | ExprKind::NullsafePropertyAccess(p) => expr = p.object,
+            ExprKind::Parenthesized(inner) => expr = inner,
+            _ => break,
+        }
+    }
+    if brackets.is_empty() {
+        return;
+    }
+    parser.errors_mut().retain(|e| match e {
+        ParseError::Forbidden { message, span } if message == super::CURLY_OFFSET_REMOVED => {
+            !brackets
+                .iter()
+                .any(|b| span.start >= b.start && span.end <= b.end)
+        }
+        _ => true,
+    });
 }
 
 // =============================================================================
