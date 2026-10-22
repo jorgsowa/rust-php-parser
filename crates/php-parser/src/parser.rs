@@ -44,7 +44,11 @@ fn lex_error_to_parse_error(e: LexerError) -> ParseError {
         ParseError::UnterminatedString { span: e.span }
     } else {
         ParseError::Forbidden {
-            rule: ForbiddenRule::Other,
+            rule: if e.kind == LexerErrorKind::InvalidNumericLiteral {
+                ForbiddenRule::InvalidNumericLiteral
+            } else {
+                ForbiddenRule::Other
+            },
             message: e.message.into(),
             span: e.span,
         }
@@ -74,60 +78,6 @@ fn advance_lexer_skip_comments<'src>(
 /// Reported for every `list(...)` and retracted when it turns out to be a destructuring target.
 pub(crate) const LIST_OUTSIDE_DESTRUCTURING: &str =
     "list() can only be used as an assignment or foreach target";
-
-/// Whether PHP reports a [`ParseError::Forbidden`] message while lexing or
-/// parsing, as opposed to while compiling. Messages whose phase depends on
-/// the construct (reserved names, write contexts) count as parse-time.
-fn is_raised_by_php_parser(message: &str) -> bool {
-    const PREFIXES: &[&str] = &[
-        "unclosed '",
-        "empty index in string interpolation",
-        "empty variable name in '${...}' string interpolation",
-        "expected ']' to close the index in '${...}' string interpolation",
-        "class constant access is not valid as a standalone interpolation expression",
-        "invalid offset in simple string interpolation",
-        "Invalid numeric literal",
-        "Invalid UTF-8 codepoint escape sequence",
-        "Invalid indentation",
-        "Invalid body indentation level",
-        "A namespaced name cannot contain whitespace",
-        "cannot use multiple ",
-        "duplicate modifier ",
-        "Multiple final modifiers are not allowed",
-        "Type declarations cannot be union types",
-        "A parenthesized intersection type can only be used as part of a union type",
-        "static cannot be used as a ",
-        "call-time pass-by-reference is not allowed",
-        "Array and string offset access syntax with curly braces is no longer supported",
-        "(void) cast cannot be used in an expression context",
-        "the (real) cast is no longer supported",
-        "Chaining non-associative operators requires explicit parentheses.",
-        "Cannot use increment/decrement as an assignment target.",
-        "Cannot use expression as assignment target.",
-        "Cannot use a destructuring pattern with a compound assignment operator",
-        "Cannot assign by reference to a destructuring pattern",
-        "Cannot increment or decrement an expression that is not a variable",
-        "Cannot dereference this expression",
-        "Can't use this expression in write context",
-        LIST_OUTSIDE_DESTRUCTURING,
-        "Cannot use by-reference assignment with 'new' expression",
-        "cannot have hooks on comma-separated property",
-        "right side of instanceof must be",
-        "Only one ';' may precede the first case of a switch",
-        "Cannot use partial function application in new expression",
-        "Cannot use a new expression with a class name as a dereferenceable expression",
-        "Cannot use 'static' as a standalone expression",
-        "Cannot take reference of a parenthesized expression",
-        "Cannot assign reference to non referenceable value",
-        "Attribute list cannot be empty",
-    ];
-    PREFIXES.iter().any(|p| message.starts_with(p))
-        // Modifier combinations and keywords used as declaration names.
-        || message.starts_with("cannot use '")
-        || message.ends_with(" as a class name as it is reserved")
-        || message.ends_with(" can only be used at the outermost scope")
-        || message.starts_with("Cannot use the ") && message.contains(" modifier on ")
-}
 
 pub struct Parser<'arena, 'src> {
     current: Token,
@@ -816,9 +766,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// such a target is recognized (assignment LHS / foreach).
     pub fn retract_destructuring_errors_within(&mut self, within: Span) {
         self.errors.retain(|e| {
-            !matches!(e, ParseError::Forbidden { message, span, .. }
-                if (message.as_ref() == "Cannot use empty array elements in arrays"
-                    || message.as_ref() == LIST_OUTSIDE_DESTRUCTURING)
+            !matches!(e, ParseError::Forbidden { rule, span, .. }
+                if matches!(rule, ForbiddenRule::EmptyArrayElement | ForbiddenRule::ListOutsideDestructuring)
                     && span.start >= within.start
                     && span.end <= within.end)
         });
@@ -832,11 +781,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
         let spans = std::mem::take(&mut self.uncompiled_spans);
         self.errors.retain(|e| match e {
-            ParseError::Forbidden { message, span, .. } if !is_raised_by_php_parser(message) => {
-                !spans
-                    .iter()
-                    .any(|s| span.start >= s.start && span.end <= s.end)
-            }
+            ParseError::Forbidden { rule, span, .. } if !rule.raised_by_php_parser() => !spans
+                .iter()
+                .any(|s| span.start >= s.start && span.end <= s.end),
             _ => true,
         });
     }
@@ -1285,7 +1232,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         self.check_name_parts_before_80(&parts, span);
         if separated_at.is_some() && self.version >= PhpVersion::Php80 {
             self.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::WhitespaceInNamespacedName,
                 "A namespaced name cannot contain whitespace",
                 span,
             );
@@ -1314,7 +1261,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         match &type_hint.kind {
             TypeHintKind::Keyword(BuiltinType::Static, span) => {
                 self.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::StaticTypePosition,
                     format!("static cannot be used as a {position} type"),
                     *span,
                 );
@@ -1910,7 +1857,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 // Check for invalid outer-form DNF: (A|B)&C
                 if let TypeHintKind::Union(_) = &first.kind {
                     self.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::UnparenthesizedIntersectionInUnion,
                         "Type declarations cannot be union types, use DNF syntax (A&B)|C instead",
                         first.span,
                     );
@@ -2007,7 +1954,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // parenthesized branch (parse_simple_type never produces Intersection).
         if let TypeHintKind::Intersection(_) = &first.kind {
             self.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::ParenthesizedIntersectionOutsideUnion,
                 "A parenthesized intersection type can only be used as part of a union type",
                 first.span,
             );
@@ -2415,7 +2362,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
             if attributes.len() == group_len_before {
                 self.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::EmptyAttributeList,
                     "Attribute list cannot be empty",
                     Span::new(group_start, self.current_span().end),
                 );

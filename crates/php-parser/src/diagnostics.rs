@@ -191,6 +191,100 @@ pub enum ForbiddenRule {
     DuplicateParameter,
     /// `$this` is assigned or used as a `catch` variable.
     ReassignThis,
+    /// A `[`, `{` or `${` in an interpolated string is never closed.
+    UnclosedInterpolation,
+    /// An interpolated array index is empty.
+    EmptyInterpolationIndex,
+    /// A `${}` interpolation names no variable.
+    EmptyInterpolationVariableName,
+    /// The index in a `${name[...]}` interpolation is not closed.
+    UnclosedInterpolationIndex,
+    /// A class constant is interpolated with `{$...}`.
+    ClassConstantInterpolation,
+    /// A simple interpolation `"$a[...]"` has an invalid offset.
+    InvalidInterpolationOffset,
+    /// A numeric literal has invalid digits, e.g. `08`.
+    InvalidNumericLiteral,
+    /// A `\u{...}` escape is empty or out of range.
+    InvalidCodepointEscape,
+    /// A heredoc's closing indentation mixes tabs and spaces.
+    MixedHeredocIndentation,
+    /// A heredoc line is indented less than its closing marker.
+    HeredocBodyIndentation,
+    /// A namespaced name contains whitespace.
+    WhitespaceInNamespacedName,
+    /// A member has more than one visibility modifier.
+    MultipleVisibilityModifiers,
+    /// A property has more than one set-visibility modifier.
+    MultipleSetVisibilityModifiers,
+    /// A modifier is repeated.
+    DuplicateModifier,
+    /// A declaration is both `abstract` and `final`.
+    AbstractFinalConflict,
+    /// A class constant has a modifier constants cannot have.
+    InvalidConstantModifier,
+    /// A modifier is used where it cannot apply, e.g. `static` on a parameter.
+    ModifierNotAllowed,
+    /// A reserved keyword names a declaration.
+    KeywordAsDeclarationName,
+    /// A reserved type name names a class.
+    ReservedClassName,
+    /// A statement that must be at the outermost scope is nested.
+    OutermostScopeOnly,
+    /// An intersection type is used in a union without parentheses.
+    UnparenthesizedIntersectionInUnion,
+    /// A parenthesized intersection type is not part of a union.
+    ParenthesizedIntersectionOutsideUnion,
+    /// `static` is used as a type where it cannot be.
+    StaticTypePosition,
+    /// An attribute group `#[]` is empty.
+    EmptyAttributeList,
+    /// An argument is passed as `&$x`.
+    CallTimePassByReference,
+    /// An offset is read with curly braces, `$a{0}`.
+    CurlyOffsetAccess,
+    /// A `(void)` cast is used as an expression.
+    VoidCastInExpression,
+    /// A `(real)` cast is used.
+    RealCast,
+    /// Non-associative operators are chained, e.g. `1 < 2 < 3`.
+    NonAssociativeChain,
+    /// An increment or decrement is assigned to.
+    IncDecAsAssignTarget,
+    /// An expression that cannot be assigned to is assigned to.
+    InvalidAssignTarget,
+    /// A destructuring pattern is used with a compound assignment.
+    CompoundAssignToDestructuring,
+    /// A destructuring pattern is assigned by reference.
+    ReferenceAssignToDestructuring,
+    /// `++` or `--` is applied to something other than a variable.
+    IncDecNonVariable,
+    /// An expression that cannot be dereferenced is dereferenced.
+    InvalidDereference,
+    /// An expression that cannot be written to is written to.
+    InvalidWriteContext,
+    /// `list()` is used outside an assignment or `foreach` target.
+    ListOutsideDestructuring,
+    /// An array literal has an empty element outside destructuring.
+    EmptyArrayElement,
+    /// A `new` expression is assigned by reference.
+    ReferenceAssignNew,
+    /// A comma-separated property declaration has hooks.
+    HooksOnPropertyList,
+    /// The right side of `instanceof` is not a class name, variable or parenthesized expression.
+    InvalidInstanceofOperand,
+    /// More than one `;` precedes a switch's first case.
+    SwitchLeadingSemicolons,
+    /// Partial function application is used in a `new` expression.
+    PartialApplicationInNew,
+    /// `new A()` is dereferenced without parentheses before PHP 8.4.
+    UnparenthesizedNewDereference,
+    /// `static` is used as a standalone expression.
+    StaticStandaloneExpression,
+    /// A parenthesized expression is assigned by reference.
+    ReferenceToParenthesized,
+    /// A value that has no reference is assigned by reference.
+    ReferenceToNonReferenceable,
     /// Not yet classified.
     Other,
 }
@@ -214,8 +308,112 @@ impl ForbiddenRule {
             ForbiddenRule::ReadonlyPropertyDefault => "readonly-property-default",
             ForbiddenRule::DuplicateParameter => "duplicate-parameter",
             ForbiddenRule::ReassignThis => "reassign-this",
+            ForbiddenRule::UnclosedInterpolation => "unclosed-interpolation",
+            ForbiddenRule::EmptyInterpolationIndex => "empty-interpolation-index",
+            ForbiddenRule::EmptyInterpolationVariableName => "empty-interpolation-variable-name",
+            ForbiddenRule::UnclosedInterpolationIndex => "unclosed-interpolation-index",
+            ForbiddenRule::ClassConstantInterpolation => "class-constant-interpolation",
+            ForbiddenRule::InvalidInterpolationOffset => "invalid-interpolation-offset",
+            ForbiddenRule::InvalidNumericLiteral => "invalid-numeric-literal",
+            ForbiddenRule::InvalidCodepointEscape => "invalid-codepoint-escape",
+            ForbiddenRule::MixedHeredocIndentation => "mixed-heredoc-indentation",
+            ForbiddenRule::HeredocBodyIndentation => "heredoc-body-indentation",
+            ForbiddenRule::WhitespaceInNamespacedName => "whitespace-in-namespaced-name",
+            ForbiddenRule::MultipleVisibilityModifiers => "multiple-visibility-modifiers",
+            ForbiddenRule::MultipleSetVisibilityModifiers => "multiple-set-visibility-modifiers",
+            ForbiddenRule::DuplicateModifier => "duplicate-modifier",
+            ForbiddenRule::AbstractFinalConflict => "abstract-final-conflict",
+            ForbiddenRule::InvalidConstantModifier => "invalid-constant-modifier",
+            ForbiddenRule::ModifierNotAllowed => "modifier-not-allowed",
+            ForbiddenRule::KeywordAsDeclarationName => "keyword-as-declaration-name",
+            ForbiddenRule::ReservedClassName => "reserved-class-name",
+            ForbiddenRule::OutermostScopeOnly => "outermost-scope-only",
+            ForbiddenRule::UnparenthesizedIntersectionInUnion => {
+                "unparenthesized-intersection-in-union"
+            }
+            ForbiddenRule::ParenthesizedIntersectionOutsideUnion => {
+                "parenthesized-intersection-outside-union"
+            }
+            ForbiddenRule::StaticTypePosition => "static-type-position",
+            ForbiddenRule::EmptyAttributeList => "empty-attribute-list",
+            ForbiddenRule::CallTimePassByReference => "call-time-pass-by-reference",
+            ForbiddenRule::CurlyOffsetAccess => "curly-offset-access",
+            ForbiddenRule::VoidCastInExpression => "void-cast-in-expression",
+            ForbiddenRule::RealCast => "real-cast",
+            ForbiddenRule::NonAssociativeChain => "non-associative-chain",
+            ForbiddenRule::IncDecAsAssignTarget => "inc-dec-as-assign-target",
+            ForbiddenRule::InvalidAssignTarget => "invalid-assign-target",
+            ForbiddenRule::CompoundAssignToDestructuring => "compound-assign-to-destructuring",
+            ForbiddenRule::ReferenceAssignToDestructuring => "reference-assign-to-destructuring",
+            ForbiddenRule::IncDecNonVariable => "inc-dec-non-variable",
+            ForbiddenRule::InvalidDereference => "invalid-dereference",
+            ForbiddenRule::InvalidWriteContext => "invalid-write-context",
+            ForbiddenRule::ListOutsideDestructuring => "list-outside-destructuring",
+            ForbiddenRule::EmptyArrayElement => "empty-array-element",
+            ForbiddenRule::ReferenceAssignNew => "reference-assign-new",
+            ForbiddenRule::HooksOnPropertyList => "hooks-on-property-list",
+            ForbiddenRule::InvalidInstanceofOperand => "invalid-instanceof-operand",
+            ForbiddenRule::SwitchLeadingSemicolons => "switch-leading-semicolons",
+            ForbiddenRule::PartialApplicationInNew => "partial-application-in-new",
+            ForbiddenRule::UnparenthesizedNewDereference => "unparenthesized-new-dereference",
+            ForbiddenRule::StaticStandaloneExpression => "static-standalone-expression",
+            ForbiddenRule::ReferenceToParenthesized => "reference-to-parenthesized",
+            ForbiddenRule::ReferenceToNonReferenceable => "reference-to-non-referenceable",
             ForbiddenRule::Other => "other",
         }
+    }
+
+    /// Whether PHP reports the rule while lexing or parsing, as opposed to while compiling.
+    pub(crate) fn raised_by_php_parser(self) -> bool {
+        matches!(
+            self,
+            ForbiddenRule::UnclosedInterpolation
+                | ForbiddenRule::EmptyInterpolationIndex
+                | ForbiddenRule::EmptyInterpolationVariableName
+                | ForbiddenRule::UnclosedInterpolationIndex
+                | ForbiddenRule::ClassConstantInterpolation
+                | ForbiddenRule::InvalidInterpolationOffset
+                | ForbiddenRule::InvalidNumericLiteral
+                | ForbiddenRule::InvalidCodepointEscape
+                | ForbiddenRule::MixedHeredocIndentation
+                | ForbiddenRule::HeredocBodyIndentation
+                | ForbiddenRule::WhitespaceInNamespacedName
+                | ForbiddenRule::MultipleVisibilityModifiers
+                | ForbiddenRule::MultipleSetVisibilityModifiers
+                | ForbiddenRule::DuplicateModifier
+                | ForbiddenRule::AbstractFinalConflict
+                | ForbiddenRule::InvalidConstantModifier
+                | ForbiddenRule::ModifierNotAllowed
+                | ForbiddenRule::KeywordAsDeclarationName
+                | ForbiddenRule::ReservedClassName
+                | ForbiddenRule::OutermostScopeOnly
+                | ForbiddenRule::UnparenthesizedIntersectionInUnion
+                | ForbiddenRule::ParenthesizedIntersectionOutsideUnion
+                | ForbiddenRule::StaticTypePosition
+                | ForbiddenRule::EmptyAttributeList
+                | ForbiddenRule::CallTimePassByReference
+                | ForbiddenRule::CurlyOffsetAccess
+                | ForbiddenRule::VoidCastInExpression
+                | ForbiddenRule::RealCast
+                | ForbiddenRule::NonAssociativeChain
+                | ForbiddenRule::IncDecAsAssignTarget
+                | ForbiddenRule::InvalidAssignTarget
+                | ForbiddenRule::CompoundAssignToDestructuring
+                | ForbiddenRule::ReferenceAssignToDestructuring
+                | ForbiddenRule::IncDecNonVariable
+                | ForbiddenRule::InvalidDereference
+                | ForbiddenRule::InvalidWriteContext
+                | ForbiddenRule::ListOutsideDestructuring
+                | ForbiddenRule::ReferenceAssignNew
+                | ForbiddenRule::HooksOnPropertyList
+                | ForbiddenRule::InvalidInstanceofOperand
+                | ForbiddenRule::SwitchLeadingSemicolons
+                | ForbiddenRule::PartialApplicationInNew
+                | ForbiddenRule::UnparenthesizedNewDereference
+                | ForbiddenRule::StaticStandaloneExpression
+                | ForbiddenRule::ReferenceToParenthesized
+                | ForbiddenRule::ReferenceToNonReferenceable
+        )
     }
 }
 
@@ -237,6 +435,53 @@ mod tests {
         ForbiddenRule::ReadonlyPropertyDefault,
         ForbiddenRule::DuplicateParameter,
         ForbiddenRule::ReassignThis,
+        ForbiddenRule::UnclosedInterpolation,
+        ForbiddenRule::EmptyInterpolationIndex,
+        ForbiddenRule::EmptyInterpolationVariableName,
+        ForbiddenRule::UnclosedInterpolationIndex,
+        ForbiddenRule::ClassConstantInterpolation,
+        ForbiddenRule::InvalidInterpolationOffset,
+        ForbiddenRule::InvalidNumericLiteral,
+        ForbiddenRule::InvalidCodepointEscape,
+        ForbiddenRule::MixedHeredocIndentation,
+        ForbiddenRule::HeredocBodyIndentation,
+        ForbiddenRule::WhitespaceInNamespacedName,
+        ForbiddenRule::MultipleVisibilityModifiers,
+        ForbiddenRule::MultipleSetVisibilityModifiers,
+        ForbiddenRule::DuplicateModifier,
+        ForbiddenRule::AbstractFinalConflict,
+        ForbiddenRule::InvalidConstantModifier,
+        ForbiddenRule::ModifierNotAllowed,
+        ForbiddenRule::KeywordAsDeclarationName,
+        ForbiddenRule::ReservedClassName,
+        ForbiddenRule::OutermostScopeOnly,
+        ForbiddenRule::UnparenthesizedIntersectionInUnion,
+        ForbiddenRule::ParenthesizedIntersectionOutsideUnion,
+        ForbiddenRule::StaticTypePosition,
+        ForbiddenRule::EmptyAttributeList,
+        ForbiddenRule::CallTimePassByReference,
+        ForbiddenRule::CurlyOffsetAccess,
+        ForbiddenRule::VoidCastInExpression,
+        ForbiddenRule::RealCast,
+        ForbiddenRule::NonAssociativeChain,
+        ForbiddenRule::IncDecAsAssignTarget,
+        ForbiddenRule::InvalidAssignTarget,
+        ForbiddenRule::CompoundAssignToDestructuring,
+        ForbiddenRule::ReferenceAssignToDestructuring,
+        ForbiddenRule::IncDecNonVariable,
+        ForbiddenRule::InvalidDereference,
+        ForbiddenRule::InvalidWriteContext,
+        ForbiddenRule::ListOutsideDestructuring,
+        ForbiddenRule::EmptyArrayElement,
+        ForbiddenRule::ReferenceAssignNew,
+        ForbiddenRule::HooksOnPropertyList,
+        ForbiddenRule::InvalidInstanceofOperand,
+        ForbiddenRule::SwitchLeadingSemicolons,
+        ForbiddenRule::PartialApplicationInNew,
+        ForbiddenRule::UnparenthesizedNewDereference,
+        ForbiddenRule::StaticStandaloneExpression,
+        ForbiddenRule::ReferenceToParenthesized,
+        ForbiddenRule::ReferenceToNonReferenceable,
     ];
 
     /// `(source, reported span text)` for each site that reports `rule`.
@@ -288,6 +533,53 @@ mod tests {
                 ("<?php function f() { $this = 1; }", "$this"),
                 ("<?php try {} catch (E $this) {}", "$this"),
             ],
+            ForbiddenRule::UnclosedInterpolation => &[("<?php echo \"{$a\";", "{$a\";"), ("<?php echo \"$a[0\";", "[0"), ("<?php echo \"${a\";", "${a\";"),],
+            ForbiddenRule::EmptyInterpolationIndex => &[("<?php echo \"$a[]\";", "[]"), ("<?php echo \"${a[]}\";", "[]"),],
+            ForbiddenRule::EmptyInterpolationVariableName => &[("<?php echo \"${}\";", "${}"),],
+            ForbiddenRule::UnclosedInterpolationIndex => &[("<?php echo \"${a[0]x}\";", "${a[0]x}"),],
+            ForbiddenRule::ClassConstantInterpolation => &[("<?php echo \"{$a::B}\";", "$a::B"),],
+            ForbiddenRule::InvalidInterpolationOffset => &[("<?php echo \"$a[ 1]\";", " 1"),],
+            ForbiddenRule::InvalidNumericLiteral => &[("<?php echo 08;", "08"), ("<?php echo 1_;", "1_"),],
+            ForbiddenRule::InvalidCodepointEscape => &[("<?php echo \"\\u{}\";", "\\u{}"), ("<?php echo \"\\u{110000}\";", "\\u{110000}"),],
+            ForbiddenRule::MixedHeredocIndentation => &[("<?php echo <<<A\n \tx\n \tA;\n", " \t"),],
+            ForbiddenRule::HeredocBodyIndentation => &[("<?php echo <<<A\nx\n  A;\n", "x"),],
+            ForbiddenRule::WhitespaceInNamespacedName => &[("<?php echo A \\ B;", "A \\ B"),],
+            ForbiddenRule::MultipleVisibilityModifiers => &[("<?php class A { public private $x; }", "public private"), ("<?php function f() {} class B { function __construct(public private $x) {} }", "public"),],
+            ForbiddenRule::MultipleSetVisibilityModifiers => &[("<?php class A { public private(set) protected(set) int $x; }", "public private(set) protected"), ("<?php class B { function __construct(public private(set) protected(set) int $x) {} }", "public private(set)"),],
+            ForbiddenRule::DuplicateModifier => &[("<?php class A { static static $x; }", "static"), ("<?php class A { public $x { final final get => 1; } }", "final"), ("<?php class B { function __construct(readonly readonly int $x) {} }", "readonly"),],
+            ForbiddenRule::AbstractFinalConflict => &[("<?php abstract final class A {}", "abstract final"), ("<?php abstract class A { abstract final function f(); }", "abstract final"),],
+            ForbiddenRule::InvalidConstantModifier => &[("<?php class A { static const X = 1; }", "const"), ("<?php enum E { static const X = 1; }", "const"),],
+            ForbiddenRule::ModifierNotAllowed => &[("<?php function f(static $x) {}", "static"), ("<?php class A { readonly function f() {} }", "readonly function f() {}"), ("<?php trait T { function f() {} } class A { use T { f as readonly g; } }", "readonly"),],
+            ForbiddenRule::KeywordAsDeclarationName => &[("<?php function list() {}", "list"), ("<?php interface list {}", "list"), ("<?php #[A] enum list {}", "list"),],
+            ForbiddenRule::ReservedClassName => &[("<?php class int {}", "int"),],
+            ForbiddenRule::OutermostScopeOnly => &[("<?php function f() { __halt_compiler(); }", "__halt_compiler"),],
+            ForbiddenRule::UnparenthesizedIntersectionInUnion => &[("<?php function f((A|B)&C $x) {}", "(A|B)"),],
+            ForbiddenRule::ParenthesizedIntersectionOutsideUnion => &[("<?php function f((A&B) $x) {}", "(A&B)"),],
+            ForbiddenRule::StaticTypePosition => &[("<?php class A { public ?static $p; }", "static"), ("<?php function f(?static $x) {}", "static"),],
+            ForbiddenRule::EmptyAttributeList => &[("<?php #[] function f() {}", "#[]"),],
+            ForbiddenRule::CallTimePassByReference => &[("<?php f(&$x);", "&"),],
+            ForbiddenRule::CurlyOffsetAccess => &[("<?php echo $a{0};", "{"),],
+            ForbiddenRule::VoidCastInExpression => &[("<?php $x = (void) f();", "(void) f()"),],
+            ForbiddenRule::RealCast => &[("<?php $x = (real) 1;", "real"),],
+            ForbiddenRule::NonAssociativeChain => &[("<?php $x = 1 < 2 < 3;", "<"),],
+            ForbiddenRule::IncDecAsAssignTarget => &[("<?php $a++ = 1;", "="),],
+            ForbiddenRule::InvalidAssignTarget => &[("<?php 1 = 2;", "="),],
+            ForbiddenRule::CompoundAssignToDestructuring => &[("<?php [$a] += 1;", "+="),],
+            ForbiddenRule::ReferenceAssignToDestructuring => &[("<?php [$a] = &$b;", "&"),],
+            ForbiddenRule::IncDecNonVariable => &[("<?php f()++;", "f()"),],
+            ForbiddenRule::InvalidDereference => &[("<?php echo 1[0];", "1"),],
+            ForbiddenRule::InvalidWriteContext => &[("<?php unset(f());", "f()"),],
+            ForbiddenRule::ListOutsideDestructuring => &[("<?php $x = list($a);", "list($a)"),],
+            ForbiddenRule::EmptyArrayElement => &[("<?php $x = [1, , 2];", ","),],
+            ForbiddenRule::ReferenceAssignNew => &[("<?php $x = &new A;", "new A"),],
+            ForbiddenRule::HooksOnPropertyList => &[("<?php class A { public $x, $y { get => 1; } }", "{"),],
+            ForbiddenRule::InvalidInstanceofOperand => &[("<?php $x instanceof 1;", "1"),],
+            ForbiddenRule::SwitchLeadingSemicolons => &[("<?php switch ($x) {;; case 1: }", ";"),],
+            ForbiddenRule::PartialApplicationInNew => &[("<?php new A(?);", "?"),],
+            ForbiddenRule::UnparenthesizedNewDereference => &[("<?php new A::B;", "::"),],
+            ForbiddenRule::StaticStandaloneExpression => &[("<?php static;", "static"),],
+            ForbiddenRule::ReferenceToParenthesized => &[("<?php $x = &($y);", "($y)"),],
+            ForbiddenRule::ReferenceToNonReferenceable => &[("<?php $x = &1;", "1"), ("<?php [&$a] = 1;", "1"),],
             ForbiddenRule::Other => &[],
         }
     }

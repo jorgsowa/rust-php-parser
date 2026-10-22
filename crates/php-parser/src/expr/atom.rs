@@ -238,7 +238,11 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
             if text.as_bytes()[1..].iter().any(|&b| b == b'8' || b == b'9') {
-                parser.forbid(ForbiddenRule::Other, "Invalid numeric literal", token.span);
+                parser.forbid(
+                    ForbiddenRule::InvalidNumericLiteral,
+                    "Invalid numeric literal",
+                    token.span,
+                );
             }
             match parse_int_no_alloc(&text.as_bytes()[1..], 8) {
                 Some(value) => Expr {
@@ -713,7 +717,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             }
             if !parser.check(TokenKind::DoubleColon) {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::StaticStandaloneExpression,
                     "Cannot use 'static' as a standalone expression",
                     token.span,
                 );
@@ -1508,7 +1512,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             // `Name::$prop` was already consumed above). A parenless `new` with a
             // class name cannot be dereferenced — `new Foo->bar`, `new Foo::class`,
             // `new Foo[0]`, `new self::C` are all rejected by PHP.
-            parser.forbid(ForbiddenRule::Other, "Cannot use a new expression with a class name as a dereferenceable expression without parentheses", parser.current_span());
+            parser.forbid(ForbiddenRule::UnparenthesizedNewDereference, "Cannot use a new expression with a class name as a dereferenceable expression without parentheses", parser.current_span());
         }
     }
 
@@ -1943,11 +1947,13 @@ fn allow_curly_offsets(parser: &mut Parser<'_, '_>, operand: &Expr<'_, '_>) {
         return;
     }
     parser.errors_mut().retain(|e| match e {
-        ParseError::Forbidden { message, span, .. } if message == super::CURLY_OFFSET_REMOVED => {
-            !brackets
-                .iter()
-                .any(|b| span.start >= b.start && span.end <= b.end)
-        }
+        ParseError::Forbidden {
+            rule: ForbiddenRule::CurlyOffsetAccess,
+            span,
+            ..
+        } => !brackets
+            .iter()
+            .any(|b| span.start >= b.start && span.end <= b.end),
         _ => true,
     });
 }
@@ -2037,7 +2043,7 @@ fn reject_pfa_placeholders_in_new(parser: &mut Parser<'_, '_>, args: &[Arg]) {
     for arg in args {
         if arg.is_placeholder() {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::PartialApplicationInNew,
                 "Cannot use partial function application in new expression",
                 arg.span,
             );
@@ -2140,7 +2146,7 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
     if by_ref {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::CallTimePassByReference,
             "call-time pass-by-reference is not allowed",
             by_ref_span,
         );
@@ -2265,7 +2271,7 @@ fn parse_array_literal<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Ex
                 // arrays"). We emit the error eagerly here and retract it at the
                 // destructuring sites (assignment LHS, `foreach as`) where it is legal.
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::EmptyArrayElement,
                     "Cannot use empty array elements in arrays",
                     span,
                 );
@@ -2424,7 +2430,7 @@ fn parse_list_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'
     let span = Span::new(start, end);
 
     parser.forbid(
-        ForbiddenRule::Other,
+        ForbiddenRule::ListOutsideDestructuring,
         crate::parser::LIST_OUTSIDE_DESTRUCTURING,
         span,
     );
@@ -2588,7 +2594,7 @@ fn try_parse_cast<'arena, 'src>(
     let kw_text = &parser.source[kw_span.start as usize..kw_span.end as usize];
     if kw_text.eq_ignore_ascii_case("real") && parser.version >= PhpVersion::Php80 {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::RealCast,
             "the (real) cast is no longer supported, use (float) instead",
             kw_span,
         );
@@ -2703,7 +2709,7 @@ fn validate_heredoc_indentation(
     }
     if indent.contains(' ') && indent.contains('\t') {
         errors.push(ParseError::Forbidden {
-            rule: ForbiddenRule::Other,
+            rule: ForbiddenRule::MixedHeredocIndentation,
             message: "Invalid indentation - tabs and spaces cannot be mixed".into(),
             span: indent_span,
         });
@@ -2715,14 +2721,14 @@ fn validate_heredoc_indentation(
         let leading = heredoc_indent_len(line.as_bytes(), indent.len());
         if line[..leading].bytes().any(|b| b != indent.as_bytes()[0]) {
             errors.push(ParseError::Forbidden {
-                rule: ForbiddenRule::Other,
+                rule: ForbiddenRule::MixedHeredocIndentation,
                 message: "Invalid indentation - tabs and spaces cannot be mixed".into(),
                 span,
             });
         } else if leading < indent.len() && leading < line.len() {
             // A whitespace-only line may be shorter than the indentation.
             errors.push(ParseError::Forbidden {
-                rule: ForbiddenRule::Other,
+                rule: ForbiddenRule::HeredocBodyIndentation,
                 message: "Invalid body indentation level".into(),
                 span,
             });

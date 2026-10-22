@@ -60,6 +60,8 @@ pub enum LexerErrorKind {
     FileTooLarge,
     /// The lexer reached end-of-file inside a `/* */` or `/** */` comment.
     UnterminatedComment,
+    /// A numeric literal is malformed, e.g. `1_` or `0x`.
+    InvalidNumericLiteral,
     /// Any other lexer-level error (e.g. invalid numeric literal).
     Other,
 }
@@ -1383,7 +1385,7 @@ impl<'src> Lexer<'src> {
     fn invalid_numeric(&mut self, start: usize) -> Token {
         let span = Span::new(start as u32, self.pos as u32);
         self.errors.push(LexerError {
-            kind: LexerErrorKind::Other,
+            kind: LexerErrorKind::InvalidNumericLiteral,
             message: "Invalid numeric literal".to_string(),
             span,
         });

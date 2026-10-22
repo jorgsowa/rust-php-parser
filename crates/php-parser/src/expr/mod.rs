@@ -83,7 +83,7 @@ fn is_valid_assignment_target(kind: &ExprKind<'_, '_>) -> bool {
 
 /// Report an operand of `++` or `--` that PHP cannot write to.
 pub(crate) fn check_increment_operand(parser: &mut Parser<'_, '_>, operand: &Expr<'_, '_>) {
-    let message = if !matches!(
+    let (rule, message) = if !matches!(
         operand.kind,
         ExprKind::Variable(_)
             | ExprKind::VariableVariable(_)
@@ -94,15 +94,21 @@ pub(crate) fn check_increment_operand(parser: &mut Parser<'_, '_>, operand: &Exp
             | ExprKind::StaticPropertyAccessDynamic { .. }
             | ExprKind::Error
     ) {
-        "Cannot increment or decrement an expression that is not a variable"
+        (
+            ForbiddenRule::IncDecNonVariable,
+            "Cannot increment or decrement an expression that is not a variable",
+        )
     } else if let Some(message) = temporary_write_message(&operand.kind, parser.version) {
-        message
+        (ForbiddenRule::Other, message)
     } else if has_nullsafe_link(&operand.kind) {
-        "Can't use nullsafe operator in write context"
+        (
+            ForbiddenRule::Other,
+            "Can't use nullsafe operator in write context",
+        )
     } else {
         return check_special_variable_write(parser, operand, WriteKind::Modify);
     };
-    parser.forbid(ForbiddenRule::Other, message, operand.span);
+    parser.forbid(rule, message, operand.span);
 }
 
 /// Report `target` where PHP writes to it (an `unset` argument, a `foreach`
@@ -113,20 +119,30 @@ pub(crate) fn check_write_target(
     target: &Expr<'_, '_>,
     allow_list: bool,
 ) {
-    let message = if let Some(message) = temporary_write_message(&target.kind, parser.version) {
-        message
-    } else if has_nullsafe_link(&target.kind) {
-        "Can't use nullsafe operator in write context"
-    } else if !is_valid_assignment_target(&target.kind)
-        || !allow_list && matches!(target.kind, ExprKind::Array(_))
-    {
-        "Can't use this expression in write context"
-    } else if !is_valid_destructure_element(&target.kind, parser.version) {
-        "Assignments can only happen to writable values"
-    } else {
-        return;
-    };
-    parser.forbid(ForbiddenRule::Other, message, target.span);
+    let (rule, message) =
+        if let Some(message) = temporary_write_message(&target.kind, parser.version) {
+            (ForbiddenRule::Other, message)
+        } else if has_nullsafe_link(&target.kind) {
+            (
+                ForbiddenRule::Other,
+                "Can't use nullsafe operator in write context",
+            )
+        } else if !is_valid_assignment_target(&target.kind)
+            || !allow_list && matches!(target.kind, ExprKind::Array(_))
+        {
+            (
+                ForbiddenRule::InvalidWriteContext,
+                "Can't use this expression in write context",
+            )
+        } else if !is_valid_destructure_element(&target.kind, parser.version) {
+            (
+                ForbiddenRule::Other,
+                "Assignments can only happen to writable values",
+            )
+        } else {
+            return;
+        };
+    parser.forbid(rule, message, target.span);
 }
 
 /// How a write reaches its target; PHP rejects different writes to `$this` and `$GLOBALS`.
@@ -232,7 +248,7 @@ fn check_dereferencable(parser: &mut Parser<'_, '_>, lhs: &Expr<'_, '_>, op: Tok
     };
     if !dereferencable {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::InvalidDereference,
             "Cannot dereference this expression",
             lhs.span,
         );
@@ -1246,7 +1262,7 @@ fn parse_assign_continuation<'arena, 'src>(
         })
     ) {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::IncDecAsAssignTarget,
             "Cannot use increment/decrement as an assignment target.",
             span,
         );
@@ -1254,13 +1270,13 @@ fn parse_assign_continuation<'arena, 'src>(
         parser.forbid(ForbiddenRule::Other, message, lhs.span);
     } else if matches!(lhs.kind, ExprKind::Array(_)) && !is_plain_assign {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::CompoundAssignToDestructuring,
             "Cannot use a destructuring pattern with a compound assignment operator",
             span,
         );
     } else if !is_valid_assignment_target(&lhs.kind) {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::InvalidAssignTarget,
             "Cannot use expression as assignment target.",
             span,
         );
@@ -1309,7 +1325,7 @@ fn parse_assign_continuation<'arena, 'src>(
     let by_ref = op_token.kind == TokenKind::Equals && parser.eat(TokenKind::Ampersand).is_some();
     if by_ref && matches!(lhs.kind, ExprKind::Array(_)) {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::ReferenceAssignToDestructuring,
             "Cannot assign by reference to a destructuring pattern",
             by_ref_span,
         );
@@ -1345,7 +1361,7 @@ fn parse_assign_continuation<'arena, 'src>(
     );
     if by_ref && matches!(rhs.kind, ExprKind::New(..)) {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::ReferenceAssignNew,
             "Cannot use by-reference assignment with 'new' expression",
             rhs.span,
         );
@@ -1357,13 +1373,13 @@ fn parse_assign_continuation<'arena, 'src>(
         );
     } else if by_ref && matches!(rhs.kind, ExprKind::Parenthesized(_)) {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::ReferenceToParenthesized,
             "Cannot take reference of a parenthesized expression",
             rhs.span,
         );
     } else if by_ref && !is_variable_or_call(&rhs.kind) {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::ReferenceToNonReferenceable,
             "Cannot assign reference to non referenceable value",
             rhs.span,
         );
@@ -1385,15 +1401,21 @@ fn parse_assign_continuation<'arena, 'src>(
         while let ExprKind::Parenthesized(inner) = source {
             source = &inner.kind;
         }
-        let message = if has_nullsafe_link(source) {
-            "Cannot take reference of a nullsafe chain"
+        let error = if has_nullsafe_link(source) {
+            Some((
+                ForbiddenRule::Other,
+                "Cannot take reference of a nullsafe chain",
+            ))
         } else if !is_variable_or_call(source) {
-            "Cannot assign reference to non referenceable value"
+            Some((
+                ForbiddenRule::ReferenceToNonReferenceable,
+                "Cannot assign reference to non referenceable value",
+            ))
         } else {
-            ""
+            None
         };
-        if !message.is_empty() {
-            parser.forbid(ForbiddenRule::Other, message, rhs.span);
+        if let Some((rule, message)) = error {
+            parser.forbid(rule, message, rhs.span);
         }
     }
     let span = lhs.span.merge(rhs.span);
@@ -1944,7 +1966,11 @@ fn parse_expr_rest<'arena, 'src>(
             parser.expect(TokenKind::RightBrace);
             // PHP 7.4 only deprecates the syntax, which it has for variables alone.
             if parser.version >= PhpVersion::Php80 {
-                parser.forbid(ForbiddenRule::Other, CURLY_OFFSET_REMOVED, brace_span);
+                parser.forbid(
+                    ForbiddenRule::CurlyOffsetAccess,
+                    CURLY_OFFSET_REMOVED,
+                    brace_span,
+                );
             } else if matches!(
                 lhs.kind,
                 ExprKind::Name(_)
@@ -1993,7 +2019,7 @@ fn parse_expr_rest<'arena, 'src>(
                 {
                     let span = parser.current_span();
                     parser.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::NonAssociativeChain,
                         "Chaining non-associative operators requires explicit parentheses.",
                         span,
                     );
@@ -2049,7 +2075,7 @@ fn parse_expr_rest<'arena, 'src>(
                 if is_class_name_reference(&rhs) {
                     check_class_name_literal(parser, &rhs);
                 } else {
-                    parser.forbid(ForbiddenRule::Other, "right side of instanceof must be a class name, a variable or a parenthesized expression", rhs.span);
+                    parser.forbid(ForbiddenRule::InvalidInstanceofOperand, "right side of instanceof must be a class name, a variable or a parenthesized expression", rhs.span);
                 }
             }
             // Check if pipe operator has unparenthesized arrow function on RHS

@@ -18,7 +18,7 @@ pub(super) fn parse_enum<'arena, 'src>(
     let name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
         if name_is_reserved_kw {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::KeywordAsDeclarationName,
                 format!("cannot use '{}' as enum name", text),
                 span,
             );
@@ -216,21 +216,21 @@ pub(super) fn parse_enum<'arena, 'src>(
         if parser.check(TokenKind::Const) {
             if is_static {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::InvalidConstantModifier,
                     "cannot use 'static' as constant modifier",
                     parser.current_span(),
                 );
             }
             if is_abstract {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::InvalidConstantModifier,
                     "cannot use 'abstract' as constant modifier",
                     parser.current_span(),
                 );
             }
             if is_readonly {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::InvalidConstantModifier,
                     "cannot use 'readonly' as constant modifier",
                     parser.current_span(),
                 );

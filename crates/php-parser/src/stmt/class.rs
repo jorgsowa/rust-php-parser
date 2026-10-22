@@ -94,7 +94,7 @@ pub(super) fn parse_class<'arena, 'src>(
     if let Some(text) = name.as_str() {
         if is_reserved_class_name(text, parser.version) || name_is_reserved_kw {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::ReservedClassName,
                 format!("Cannot use \"{}\" as a class name as it is reserved", text),
                 name_span,
             );
@@ -210,7 +210,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                     parser.advance();
                     if is_final {
                         parser.forbid(
-                            ForbiddenRule::Other,
+                            ForbiddenRule::DuplicateModifier,
                             "Multiple final modifiers are not allowed",
                             span,
                         );
@@ -243,7 +243,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                             keyword
                         };
                     parser.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::ModifierNotAllowed,
                         format!("Cannot use the {modifier} modifier on a property hook"),
                         Span::new(start, parser.previous_end()),
                     );
@@ -1216,7 +1216,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
                         // Get visibility is implicitly public (visibility stays None).
                         if set_visibility.is_some() {
                             parser.forbid(
-                                ForbiddenRule::Other,
+                                ForbiddenRule::MultipleSetVisibilityModifiers,
                                 "cannot use multiple set-visibility modifiers",
                                 Span::new(member_start, parser.previous_end()),
                             );
@@ -1254,7 +1254,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
                     // iteration didn't consume it via the two-keyword lookahead.
                     if set_visibility.is_some() {
                         parser.forbid(
-                            ForbiddenRule::Other,
+                            ForbiddenRule::MultipleSetVisibilityModifiers,
                             "cannot use multiple set-visibility modifiers",
                             Span::new(member_start, parser.previous_end()),
                         );
@@ -1267,7 +1267,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
                     set_visibility = Some(vis);
                 } else {
                     parser.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::MultipleVisibilityModifiers,
                         "cannot use multiple visibility modifiers",
                         Span::new(member_start, parser.previous_end()),
                     );
@@ -1276,7 +1276,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
             TokenKind::Static => {
                 if is_static {
                     parser.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::DuplicateModifier,
                         "duplicate modifier 'static'",
                         Span::new(member_start, parser.previous_end()),
                     );
@@ -1287,7 +1287,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
             TokenKind::Abstract => {
                 if is_abstract {
                     parser.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::DuplicateModifier,
                         "duplicate modifier 'abstract'",
                         Span::new(member_start, parser.previous_end()),
                     );
@@ -1298,7 +1298,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
             TokenKind::Final => {
                 if is_final {
                     parser.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::DuplicateModifier,
                         "duplicate modifier 'final'",
                         Span::new(member_start, parser.previous_end()),
                     );
@@ -1309,7 +1309,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
             TokenKind::Readonly => {
                 if is_readonly {
                     parser.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::DuplicateModifier,
                         "duplicate modifier 'readonly'",
                         Span::new(member_start, parser.previous_end()),
                     );
@@ -1332,7 +1332,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
 
     if is_abstract && is_final {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::AbstractFinalConflict,
             "cannot use 'abstract' and 'final' together",
             Span::new(member_start, parser.previous_end()),
         );
@@ -1459,21 +1459,21 @@ fn parse_class_const_member<'arena, 'src>(
 ) {
     if mods.is_static {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::InvalidConstantModifier,
             "cannot use 'static' as constant modifier",
             parser.current_span(),
         );
     }
     if mods.is_abstract {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::InvalidConstantModifier,
             "cannot use 'abstract' as constant modifier",
             parser.current_span(),
         );
     }
     if mods.is_readonly {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::InvalidConstantModifier,
             "cannot use 'readonly' as constant modifier",
             parser.current_span(),
         );
@@ -1758,7 +1758,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
     }
     if mods.is_readonly {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::ModifierNotAllowed,
             "Cannot use the readonly modifier on a method",
             Span::new(member_start, parser.previous_end()),
         );
@@ -2250,7 +2250,7 @@ fn parse_property_member<'arena, 'src>(
 
             let phooks = if parser.check(TokenKind::LeftBrace) {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::HooksOnPropertyList,
                     "cannot have hooks on comma-separated property",
                     parser.current_span(),
                 );
@@ -2321,7 +2321,7 @@ pub(super) fn parse_interface<'arena, 'src>(
     if let Some(text) = name.as_str() {
         if is_reserved_class_name(text, parser.version) || name_is_reserved_kw {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::KeywordAsDeclarationName,
                 format!("cannot use '{}' as interface name", text),
                 name_span,
             );
@@ -2385,7 +2385,7 @@ pub(super) fn parse_trait<'arena, 'src>(
     let name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
         if name_is_reserved_kw {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::KeywordAsDeclarationName,
                 format!("cannot use '{}' as trait name", text),
                 span,
             );

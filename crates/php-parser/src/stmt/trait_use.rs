@@ -154,17 +154,23 @@ fn parse_alias_rhs<'arena, 'src>(
     // Other member modifiers parse here but cannot apply to an alias.
     let mut has_modifier = is_final || new_modifier.is_some();
     if !has_modifier {
-        let message = match parser.current_kind() {
-            TokenKind::Static | TokenKind::Abstract => Some(format!(
-                "Cannot use \"{}\" as method modifier in trait alias",
-                parser.current_text().to_ascii_lowercase()
+        let error = match parser.current_kind() {
+            TokenKind::Static | TokenKind::Abstract => Some((
+                ForbiddenRule::Other,
+                format!(
+                    "Cannot use \"{}\" as method modifier in trait alias",
+                    parser.current_text().to_ascii_lowercase()
+                ),
             )),
-            TokenKind::Readonly => Some("Cannot use the readonly modifier on a method".into()),
+            TokenKind::Readonly => Some((
+                ForbiddenRule::ModifierNotAllowed,
+                "Cannot use the readonly modifier on a method".into(),
+            )),
             _ => None,
         };
-        if let Some(message) = message {
+        if let Some((rule, message)) = error {
             let span = parser.advance().span;
-            parser.forbid(ForbiddenRule::Other, message, span);
+            parser.forbid(rule, message, span);
             has_modifier = true;
         }
     }

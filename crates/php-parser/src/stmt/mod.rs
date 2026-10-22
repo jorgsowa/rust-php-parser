@@ -218,7 +218,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 // `abstract final class` — collect both modifiers and emit diagnostic
                 parser.advance(); // consume 'final'
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::AbstractFinalConflict,
                     "cannot use 'abstract' and 'final' together on a class",
                     Span::new(start, parser.previous_end()),
                 );
@@ -262,7 +262,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 // `final abstract class` — collect both modifiers and emit diagnostic
                 parser.advance(); // consume 'abstract'
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::AbstractFinalConflict,
                     "cannot use 'abstract' and 'final' together on a class",
                     Span::new(start, parser.previous_end()),
                 );
@@ -373,7 +373,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 let start = parser.start_span();
                 let token = parser.advance(); // consume 'static'
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::StaticStandaloneExpression,
                     "Cannot use 'static' as a standalone expression",
                     token.span,
                 );
@@ -501,7 +501,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             } else if parser.check(TokenKind::Final) {
                 parser.advance();
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::AbstractFinalConflict,
                     "cannot use 'abstract' and 'final' together on a class",
                     Span::new(start, parser.previous_end()),
                 );
@@ -531,7 +531,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             } else if parser.check(TokenKind::Abstract) {
                 parser.advance();
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::AbstractFinalConflict,
                     "cannot use 'abstract' and 'final' together on a class",
                     Span::new(start, parser.previous_end()),
                 );
@@ -1201,7 +1201,7 @@ fn parse_function<'arena, 'src>(
         ) && !(name_token_kind == TokenKind::Match_ && parser.version < PhpVersion::Php80)
         {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::KeywordAsDeclarationName,
                 format!("cannot use '{}' as function name; it is reserved", text),
                 span,
             );
@@ -1557,7 +1557,7 @@ pub fn parse_param_list<'arena, 'src>(
                         parser.require_version(PhpVersion::Php84, "asymmetric visibility", span);
                         if set_visibility.is_some() {
                             parser.forbid(
-                                ForbiddenRule::Other,
+                                ForbiddenRule::MultipleSetVisibilityModifiers,
                                 "cannot use multiple set-visibility modifiers",
                                 Span::new(param_start, parser.previous_end()),
                             );
@@ -1576,7 +1576,7 @@ pub fn parse_param_list<'arena, 'src>(
                         );
                         if visibility.is_some() {
                             parser.forbid(
-                                ForbiddenRule::Other,
+                                ForbiddenRule::MultipleVisibilityModifiers,
                                 "cannot use multiple visibility modifiers",
                                 Span::new(param_start, parser.previous_end()),
                             );
@@ -1594,7 +1594,7 @@ pub fn parse_param_list<'arena, 'src>(
                     );
                     if is_final {
                         parser.forbid(
-                            ForbiddenRule::Other,
+                            ForbiddenRule::DuplicateModifier,
                             "duplicate modifier 'final'",
                             current_span,
                         );
@@ -1607,7 +1607,7 @@ pub fn parse_param_list<'arena, 'src>(
                     parser.require_version(PhpVersion::Php81, "readonly parameters", current_span);
                     if is_readonly {
                         parser.forbid(
-                            ForbiddenRule::Other,
+                            ForbiddenRule::DuplicateModifier,
                             "duplicate modifier 'readonly'",
                             current_span,
                         );
@@ -1620,7 +1620,7 @@ pub fn parse_param_list<'arena, 'src>(
                 // so subsequent type-hint / variable parsing isn't derailed.
                 TokenKind::Static => {
                     parser.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::ModifierNotAllowed,
                         "Cannot use the static modifier on a parameter",
                         current_span,
                     );
@@ -2071,7 +2071,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
         }
         if seen_separator {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::SwitchLeadingSemicolons,
                 "Only one ';' may precede the first case of a switch",
                 separator_span,
             );
@@ -3030,7 +3030,7 @@ fn parse_const_with_attrs<'arena, 'src>(
         let const_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
             if name_is_reserved_kw {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::KeywordAsDeclarationName,
                     format!("cannot use '{}' as constant name as it is reserved", text),
                     span,
                 );
@@ -3080,7 +3080,7 @@ fn parse_const_with_attrs<'arena, 'src>(
 fn check_top_level(parser: &mut Parser<'_, '_>, what: &str) {
     if parser.stmt_depth > 1 {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::OutermostScopeOnly,
             format!("{what} can only be used at the outermost scope"),
             parser.current_span(),
         );
@@ -3750,7 +3750,7 @@ pub(crate) fn check_void_casts<'arena, 'src>(
     }
     for span in finder.misused {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::VoidCastInExpression,
             "(void) cast cannot be used in an expression context",
             span,
         );
