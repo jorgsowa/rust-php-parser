@@ -132,665 +132,450 @@ impl ParseError {
     }
 }
 
-/// The PHP compile-time rule a [`ParseError::Forbidden`] reports.
-///
-/// Rules are stable API; message wording is not.
+/// When PHP reports an error, which `php -l` prints as a parse error or a fatal error.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[non_exhaustive]
-pub enum ForbiddenRule {
-    /// `self`, `static` or `parent` used outside a class.
-    ClassKeywordOutsideClass,
-    /// `parent` used in a class that has no parent.
-    ParentWithoutParentClass,
-    /// `__toString()` declares a return type other than `string`.
-    ToStringReturnType,
-    /// A magic method other than `__toString()` declares a return type it may not have.
-    MagicMethodReturnType,
-    /// An internal attribute is applied to a target it does not allow.
-    AttributeTargetMismatch,
-    /// `#[Attribute]` is applied to an interface, trait, enum or abstract class.
-    AttributeOnInvalidClass,
-    /// `#[Deprecated]` is applied to a class-like declaration.
-    DeprecatedOnInvalidTarget,
-    /// `#[AllowDynamicProperties]` is applied to an interface, trait, enum or readonly class.
-    AllowDynamicPropertiesOnInvalidClass,
-    /// A bare `return;` in a function that declares a return type.
-    MissingReturnValue,
-    /// A generator declares a return type that `Generator` does not satisfy.
-    GeneratorReturnType,
-    /// A readonly property has a default value.
-    ReadonlyPropertyDefault,
-    /// Two parameters share a name.
-    DuplicateParameter,
-    /// `$this` is assigned or used as a `catch` variable.
-    ReassignThis,
-    /// A `[`, `{` or `${` in an interpolated string is never closed.
-    UnclosedInterpolation,
-    /// An interpolated array index is empty.
-    EmptyInterpolationIndex,
-    /// A `${}` interpolation names no variable.
-    EmptyInterpolationVariableName,
-    /// The index in a `${name[...]}` interpolation is not closed.
-    UnclosedInterpolationIndex,
-    /// A class constant is interpolated with `{$...}`.
-    ClassConstantInterpolation,
-    /// A simple interpolation `"$a[...]"` has an invalid offset.
-    InvalidInterpolationOffset,
-    /// A numeric literal has invalid digits, e.g. `08`.
-    InvalidNumericLiteral,
-    /// A `\u{...}` escape is empty or out of range.
-    InvalidCodepointEscape,
-    /// A heredoc's closing indentation mixes tabs and spaces.
-    MixedHeredocIndentation,
-    /// A heredoc line is indented less than its closing marker.
-    HeredocBodyIndentation,
-    /// A namespaced name contains whitespace.
-    WhitespaceInNamespacedName,
-    /// A member has more than one visibility modifier.
-    MultipleVisibilityModifiers,
-    /// A property has more than one set-visibility modifier.
-    MultipleSetVisibilityModifiers,
-    /// A modifier is repeated.
-    DuplicateModifier,
-    /// A declaration is both `abstract` and `final`.
-    AbstractFinalConflict,
-    /// A class constant has a modifier constants cannot have.
-    InvalidConstantModifier,
-    /// A modifier is used where it cannot apply, e.g. `static` on a parameter.
-    ModifierNotAllowed,
-    /// A reserved keyword names a declaration.
-    KeywordAsDeclarationName,
-    /// A reserved type name names a class.
-    ReservedClassName,
-    /// A statement that must be at the outermost scope is nested.
-    OutermostScopeOnly,
-    /// An intersection type is used in a union without parentheses.
-    UnparenthesizedIntersectionInUnion,
-    /// A parenthesized intersection type is not part of a union.
-    ParenthesizedIntersectionOutsideUnion,
-    /// `static` is used as a type where it cannot be.
-    StaticTypePosition,
-    /// An attribute group `#[]` is empty.
-    EmptyAttributeList,
-    /// An argument is passed as `&$x`.
-    CallTimePassByReference,
-    /// An offset is read with curly braces, `$a{0}`.
-    CurlyOffsetAccess,
-    /// A `(void)` cast is used as an expression.
-    VoidCastInExpression,
-    /// A `(real)` cast is used.
-    RealCast,
-    /// Non-associative operators are chained, e.g. `1 < 2 < 3`.
-    NonAssociativeChain,
-    /// An increment or decrement is assigned to.
-    IncDecAsAssignTarget,
-    /// An expression that cannot be assigned to is assigned to.
-    InvalidAssignTarget,
-    /// A destructuring pattern is used with a compound assignment.
-    CompoundAssignToDestructuring,
-    /// A destructuring pattern is assigned by reference.
-    ReferenceAssignToDestructuring,
-    /// `++` or `--` is applied to something other than a variable.
-    IncDecNonVariable,
-    /// An expression that cannot be dereferenced is dereferenced.
-    InvalidDereference,
-    /// An expression that cannot be written to is written to.
-    InvalidWriteContext,
-    /// `list()` is used outside an assignment or `foreach` target.
-    ListOutsideDestructuring,
-    /// An array literal has an empty element outside destructuring.
-    EmptyArrayElement,
-    /// A `new` expression is assigned by reference.
-    ReferenceAssignNew,
-    /// A comma-separated property declaration has hooks.
-    HooksOnPropertyList,
-    /// The right side of `instanceof` is not a class name, variable or parenthesized expression.
-    InvalidInstanceofOperand,
-    /// More than one `;` precedes a switch's first case.
-    SwitchLeadingSemicolons,
-    /// Partial function application is used in a `new` expression.
-    PartialApplicationInNew,
-    /// `new A()` is dereferenced without parentheses before PHP 8.4.
-    UnparenthesizedNewDereference,
-    /// `static` is used as a standalone expression.
-    StaticStandaloneExpression,
-    /// A parenthesized expression is assigned by reference.
-    ReferenceToParenthesized,
-    /// A value that has no reference is assigned by reference.
-    ReferenceToNonReferenceable,
-    /// `self`, `parent` or `static` is written fully qualified, e.g. `\self`.
-    QualifiedClassKeyword,
-    /// A reserved name is extended, implemented or used as a trait.
-    ReservedClassReference,
-    /// A reserved type name names an enum.
-    ReservedEnumName,
-    /// An interface uses a trait.
-    TraitInInterface,
-    /// A class that is not abstract has an abstract method or hook.
-    AbstractMemberInConcreteClass,
-    /// A class declares a property twice.
-    DuplicateProperty,
-    /// A class declares a method twice.
-    DuplicateMethod,
-    /// A class declares a constant or enum case twice.
-    DuplicateClassConstant,
-    /// A class constant is named `class`.
-    ClassConstantNamedClass,
-    /// A typed class constant's value does not match its type.
-    ClassConstantValueType,
-    /// A private class constant is `final`.
-    PrivateFinalConstant,
-    /// An interface constant is not public.
-    InvalidInterfaceConstantModifier,
-    /// An interface method is not public, or is `final` or `abstract`.
-    InvalidInterfaceMethodModifier,
-    /// An interface property is `abstract`, `final`, protected or private.
-    InvalidInterfacePropertyModifier,
-    /// An interface method has a body.
-    InterfaceMethodBody,
-    /// A method that is not abstract has no body.
-    MissingMethodBody,
-    /// An abstract method has a body.
-    AbstractMethodBody,
-    /// An abstract method is private.
-    PrivateAbstractMethod,
-    /// An anonymous class method is abstract.
-    AbstractAnonymousClassMethod,
-    /// An enum method is abstract.
-    AbstractEnumMethod,
-    /// A magic method takes the wrong number of parameters.
-    MagicMethodArgumentCount,
-    /// A magic method takes a parameter by reference.
-    MagicMethodByReference,
-    /// A magic method is static when it must not be, or the reverse.
-    MagicMethodStatic,
-    /// A magic method declares a parameter type it may not have.
-    MagicMethodParameterType,
-    /// A static property is readonly.
-    StaticReadonlyProperty,
-    /// A readonly property has no type.
-    UntypedReadonlyProperty,
-    /// A readonly property has hooks.
-    ReadonlyPropertyHooks,
-    /// A property with set visibility has no type.
-    UntypedAsymmetricProperty,
-    /// A property's set visibility is wider than its visibility.
-    SetVisibilityWiderThanVisibility,
-    /// A private property is `final`.
-    PrivateFinalProperty,
-    /// An abstract property has no abstract hook.
-    AbstractPropertyWithoutAbstractHook,
-    /// An interface declares a property without hooks.
-    InterfacePropertyWithoutHooks,
-    /// A static property has hooks.
-    StaticPropertyHooks,
-    /// A virtual hooked property has a default value.
-    VirtualPropertyDefault,
-    /// A virtual property has set visibility.
-    VirtualPropertyAsymmetricVisibility,
-    /// A property hook list is empty.
-    EmptyHookList,
-    /// A property declares the same hook twice.
-    DuplicateHook,
-    /// A `get` hook has a parameter list.
-    GetHookParameters,
-    /// A `set` hook does not have exactly one parameter.
-    SetHookParameterCount,
-    /// A `set` hook parameter is by reference.
-    SetHookParameterByReference,
-    /// A `set` hook parameter is variadic.
-    SetHookParameterVariadic,
-    /// A `set` hook parameter's type does not accept the property's type.
-    SetHookParameterType,
-    /// A backed property with a `set` hook has a by-reference `get` hook.
-    ByReferenceGetHookWithSet,
-    /// A hook of a property that is not abstract has no body.
-    MissingHookBody,
-    /// An interface property hook has a body.
-    AbstractHookBody,
-    /// An abstract property hook is `final`.
-    AbstractFinalHook,
-    /// An abstract property hook is private.
-    PrivateAbstractHook,
-    /// A parameter outside a constructor is promoted.
-    PromotedPropertyOutsideConstructor,
-    /// A parameter of an abstract constructor is promoted.
-    PromotedPropertyInAbstractConstructor,
-    /// A promoted parameter is variadic.
-    VariadicPromotedProperty,
-    /// An enum's backing type is not `int` or `string`.
-    InvalidEnumBackingType,
-    /// An enum case is named `class`.
-    EnumCaseNamedClass,
-    /// A case of a backed enum has no value.
-    MissingEnumCaseValue,
-    /// A case of a pure enum has a value.
-    PureEnumCaseValue,
-    /// A trait alias is `static` or `abstract`.
-    InvalidTraitAliasModifier,
-    /// A `/*` comment is never closed.
-    UnterminatedComment,
-    /// A named class-like is declared inside a class member.
-    NestedClassDeclaration,
-    /// Braced and unbraced namespace declarations are mixed.
-    MixedNamespaceStyles,
-    /// Code other than `declare` precedes the first namespace declaration.
-    NamespaceNotFirst,
-    /// Code follows a braced namespace declaration.
-    CodeOutsideNamespace,
-    /// A namespace declaration is nested.
-    NestedNamespace,
-    /// A `use` import reuses a name already imported.
-    UseNameConflict,
-    /// A `use` import is aliased to a reserved class name.
-    SpecialClassNameAlias,
-    /// `strict_types` or `encoding` is not declared first.
-    DeclareNotFirstStatement,
-    /// A `declare` directive's value is not a literal.
-    NonLiteralDeclareValue,
-    /// `strict_types` uses block mode or a value other than 0 or 1.
-    InvalidStrictTypes,
-    /// Attributes apply to a `const` statement declaring several constants.
-    AttributesOnMultipleConstants,
-    /// An attribute argument list unpacks with `...`.
-    AttributeArgumentUnpacking,
-    /// An attribute argument list is a first-class callable `(...)`.
-    AttributeArgumentClosure,
-    /// A `void` function returns a value.
-    VoidReturnValue,
-    /// A `never` function returns.
-    NeverReturn,
-    /// A variadic parameter has a default value.
-    VariadicParameterDefault,
-    /// A parameter follows a variadic one.
-    VariadicParameterNotLast,
-    /// `$this` is declared as a parameter, closure `use`, global or static variable.
-    ThisAsDeclaredVariable,
-    /// A superglobal is declared as a parameter or closure `use` variable.
-    SuperglobalAsDeclaredVariable,
-    /// A static variable is declared twice in one function.
-    DuplicateStaticVariable,
-    /// `break` or `continue` names more loop levels than enclose it.
-    BreakOutOfLoop,
-    /// `break` or `continue` has an operand that is not a positive integer literal.
-    InvalidBreakOperand,
-    /// `break`, `continue` or `goto` jumps into or out of a `finally` block.
-    JumpAcrossFinally,
-    /// A `goto` label is defined twice.
-    DuplicateLabel,
-    /// `goto` names an undefined label.
-    UndefinedGotoLabel,
-    /// `goto` jumps into a loop or `switch`.
-    GotoIntoLoop,
-    /// A `switch` has more than one `default`.
-    DuplicateSwitchDefault,
-    /// A `match` has more than one `default` arm.
-    DuplicateMatchDefault,
-    /// A `foreach` key is taken by reference.
-    ReferenceKey,
-    /// `catch` names `self`, `parent` or `static`.
-    ClassKeywordInCatch,
-    /// `parent::$x::get()` or `::set()` is called outside the matching hook.
-    InvalidParentHookCall,
-    /// `static::class` is used in a constant expression.
-    StaticClassInConstantExpression,
-    /// `$a[]` is read or unset.
-    AppendOutsideWrite,
-    /// `$GLOBALS` is written to as a whole, appended to or referenced.
-    InvalidGlobalsWrite,
-    /// `mixed` or `null` is marked nullable.
-    InvalidNullableType,
-    /// `void`, `never` or `mixed` is part of a nullable or union type.
-    StandaloneTypeInComposite,
-    /// A builtin type is part of an intersection type.
-    BuiltinTypeInIntersection,
-    /// A type is redundant with another in the same declaration.
-    RedundantType,
-    /// A type appears twice in a union or intersection type.
-    DuplicateType,
-    /// A parameter is typed `void` or `never`.
-    InvalidParameterType,
-    /// A property or constant has a type it may not have, e.g. `callable`.
-    InvalidMemberType,
-    /// A builtin type is written with a namespace, e.g. `\int`.
-    QualifiedBuiltinType,
-    /// A qualified type name ends in a reserved name.
-    ReservedTypeName,
-    /// `isset()` is applied to the result of an expression.
-    IssetOnExpression,
-    /// A `new` expression is turned into a first-class callable `(...)`.
-    ClosureForNew,
-    /// `yield` is used outside a function.
-    YieldOutsideFunction,
-    /// `yield from` is used in a by-reference generator.
-    YieldFromInByReferenceGenerator,
-    /// A positional argument follows a named one.
-    PositionalAfterNamedArgument,
-    /// An `(unset)` cast is used.
-    UnsetCast,
-    /// The result of a builtin such as `clone` is written to.
-    BuiltinResultWrite,
-    /// A temporary value is written to, e.g. `(1)[0] = 2`.
-    TemporaryExpressionWrite,
-    /// A nullsafe chain is written to.
-    NullsafeWrite,
-    /// A nullsafe chain is taken by reference.
-    ReferenceToNullsafe,
-    /// A nullsafe call is turned into a first-class callable `(...)`.
-    NullsafeClosureCreation,
-    /// A destructuring element cannot be assigned to.
-    UnwritableDestructuringElement,
-    /// `$this` is unset.
-    UnsetThis,
-    /// A closure `use` variable has the name of a parameter.
-    ClosureUseShadowsParameter,
-    /// A closure `use` list names a variable twice.
-    DuplicateClosureUseVariable,
-    /// A numeric literal is used as a class name, e.g. `(1)::A`.
-    LiteralClassName,
-    /// `::class` is applied to `true`, `false`, `null` or an array literal.
-    ClassFetchOnLiteral,
-    /// `::class` is applied to a dynamic class name before PHP 8.0.
-    DynamicClassFetch,
-    /// A constant expression contains something PHP cannot evaluate at compile time.
-    InvalidConstantExpression,
-    /// A destructuring list is empty.
-    EmptyList,
-    /// A keyed destructuring list has an empty entry.
-    EmptyKeyedArrayEntry,
-    /// A destructuring list mixes keyed and unkeyed entries.
-    MixedKeyedEntries,
-    /// A destructuring pattern mixes `[]` and `list()`.
-    MixedListSyntax,
-    /// A destructuring list uses `...`.
-    SpreadInDestructuring,
-    /// Nested ternaries are not parenthesized, e.g. `a ? b : c ? d : e`.
-    UnparenthesizedNestedTernary,
-    /// An arrow function on the right of `|>` is not parenthesized.
-    UnparenthesizedArrowInPipe,
-    /// A `{$...}` interpolation is not a variable, property, index or call.
-    InvalidCurlyInterpolation,
-    /// A non-repeatable attribute is applied twice.
-    RepeatedAttribute,
-    /// `#[\NoDiscard]` is applied to a property hook or a method it cannot apply to.
-    NoDiscardOnInvalidTarget,
-    /// `#[\NoDiscard]` is applied to a function that returns no value.
-    NoDiscardWithoutReturnValue,
-    /// Not yet classified.
-    Other,
+pub enum Phase {
+    /// While lexing or parsing.
+    Parse,
+    /// While compiling.
+    Compile,
 }
 
-impl ForbiddenRule {
-    /// Stable kebab-case identifier, e.g. `"reassign-this"`.
-    pub fn as_str(self) -> &'static str {
-        match self {
-            ForbiddenRule::ClassKeywordOutsideClass => "class-keyword-outside-class",
-            ForbiddenRule::ParentWithoutParentClass => "parent-without-parent-class",
-            ForbiddenRule::ToStringReturnType => "to-string-return-type",
-            ForbiddenRule::MagicMethodReturnType => "magic-method-return-type",
-            ForbiddenRule::AttributeTargetMismatch => "attribute-target-mismatch",
-            ForbiddenRule::AttributeOnInvalidClass => "attribute-on-invalid-class",
-            ForbiddenRule::DeprecatedOnInvalidTarget => "deprecated-on-invalid-target",
-            ForbiddenRule::AllowDynamicPropertiesOnInvalidClass => {
-                "allow-dynamic-properties-on-invalid-class"
-            }
-            ForbiddenRule::MissingReturnValue => "missing-return-value",
-            ForbiddenRule::GeneratorReturnType => "generator-return-type",
-            ForbiddenRule::ReadonlyPropertyDefault => "readonly-property-default",
-            ForbiddenRule::DuplicateParameter => "duplicate-parameter",
-            ForbiddenRule::ReassignThis => "reassign-this",
-            ForbiddenRule::UnclosedInterpolation => "unclosed-interpolation",
-            ForbiddenRule::EmptyInterpolationIndex => "empty-interpolation-index",
-            ForbiddenRule::EmptyInterpolationVariableName => "empty-interpolation-variable-name",
-            ForbiddenRule::UnclosedInterpolationIndex => "unclosed-interpolation-index",
-            ForbiddenRule::ClassConstantInterpolation => "class-constant-interpolation",
-            ForbiddenRule::InvalidInterpolationOffset => "invalid-interpolation-offset",
-            ForbiddenRule::InvalidNumericLiteral => "invalid-numeric-literal",
-            ForbiddenRule::InvalidCodepointEscape => "invalid-codepoint-escape",
-            ForbiddenRule::MixedHeredocIndentation => "mixed-heredoc-indentation",
-            ForbiddenRule::HeredocBodyIndentation => "heredoc-body-indentation",
-            ForbiddenRule::WhitespaceInNamespacedName => "whitespace-in-namespaced-name",
-            ForbiddenRule::MultipleVisibilityModifiers => "multiple-visibility-modifiers",
-            ForbiddenRule::MultipleSetVisibilityModifiers => "multiple-set-visibility-modifiers",
-            ForbiddenRule::DuplicateModifier => "duplicate-modifier",
-            ForbiddenRule::AbstractFinalConflict => "abstract-final-conflict",
-            ForbiddenRule::InvalidConstantModifier => "invalid-constant-modifier",
-            ForbiddenRule::ModifierNotAllowed => "modifier-not-allowed",
-            ForbiddenRule::KeywordAsDeclarationName => "keyword-as-declaration-name",
-            ForbiddenRule::ReservedClassName => "reserved-class-name",
-            ForbiddenRule::OutermostScopeOnly => "outermost-scope-only",
-            ForbiddenRule::UnparenthesizedIntersectionInUnion => {
-                "unparenthesized-intersection-in-union"
-            }
-            ForbiddenRule::ParenthesizedIntersectionOutsideUnion => {
-                "parenthesized-intersection-outside-union"
-            }
-            ForbiddenRule::StaticTypePosition => "static-type-position",
-            ForbiddenRule::EmptyAttributeList => "empty-attribute-list",
-            ForbiddenRule::CallTimePassByReference => "call-time-pass-by-reference",
-            ForbiddenRule::CurlyOffsetAccess => "curly-offset-access",
-            ForbiddenRule::VoidCastInExpression => "void-cast-in-expression",
-            ForbiddenRule::RealCast => "real-cast",
-            ForbiddenRule::NonAssociativeChain => "non-associative-chain",
-            ForbiddenRule::IncDecAsAssignTarget => "inc-dec-as-assign-target",
-            ForbiddenRule::InvalidAssignTarget => "invalid-assign-target",
-            ForbiddenRule::CompoundAssignToDestructuring => "compound-assign-to-destructuring",
-            ForbiddenRule::ReferenceAssignToDestructuring => "reference-assign-to-destructuring",
-            ForbiddenRule::IncDecNonVariable => "inc-dec-non-variable",
-            ForbiddenRule::InvalidDereference => "invalid-dereference",
-            ForbiddenRule::InvalidWriteContext => "invalid-write-context",
-            ForbiddenRule::ListOutsideDestructuring => "list-outside-destructuring",
-            ForbiddenRule::EmptyArrayElement => "empty-array-element",
-            ForbiddenRule::ReferenceAssignNew => "reference-assign-new",
-            ForbiddenRule::HooksOnPropertyList => "hooks-on-property-list",
-            ForbiddenRule::InvalidInstanceofOperand => "invalid-instanceof-operand",
-            ForbiddenRule::SwitchLeadingSemicolons => "switch-leading-semicolons",
-            ForbiddenRule::PartialApplicationInNew => "partial-application-in-new",
-            ForbiddenRule::UnparenthesizedNewDereference => "unparenthesized-new-dereference",
-            ForbiddenRule::StaticStandaloneExpression => "static-standalone-expression",
-            ForbiddenRule::ReferenceToParenthesized => "reference-to-parenthesized",
-            ForbiddenRule::ReferenceToNonReferenceable => "reference-to-non-referenceable",
-            ForbiddenRule::QualifiedClassKeyword => "qualified-class-keyword",
-            ForbiddenRule::ReservedClassReference => "reserved-class-reference",
-            ForbiddenRule::ReservedEnumName => "reserved-enum-name",
-            ForbiddenRule::TraitInInterface => "trait-in-interface",
-            ForbiddenRule::AbstractMemberInConcreteClass => "abstract-member-in-concrete-class",
-            ForbiddenRule::DuplicateProperty => "duplicate-property",
-            ForbiddenRule::DuplicateMethod => "duplicate-method",
-            ForbiddenRule::DuplicateClassConstant => "duplicate-class-constant",
-            ForbiddenRule::ClassConstantNamedClass => "class-constant-named-class",
-            ForbiddenRule::ClassConstantValueType => "class-constant-value-type",
-            ForbiddenRule::PrivateFinalConstant => "private-final-constant",
-            ForbiddenRule::InvalidInterfaceConstantModifier => {
-                "invalid-interface-constant-modifier"
-            }
-            ForbiddenRule::InvalidInterfaceMethodModifier => "invalid-interface-method-modifier",
-            ForbiddenRule::InvalidInterfacePropertyModifier => {
-                "invalid-interface-property-modifier"
-            }
-            ForbiddenRule::InterfaceMethodBody => "interface-method-body",
-            ForbiddenRule::MissingMethodBody => "missing-method-body",
-            ForbiddenRule::AbstractMethodBody => "abstract-method-body",
-            ForbiddenRule::PrivateAbstractMethod => "private-abstract-method",
-            ForbiddenRule::AbstractAnonymousClassMethod => "abstract-anonymous-class-method",
-            ForbiddenRule::AbstractEnumMethod => "abstract-enum-method",
-            ForbiddenRule::MagicMethodArgumentCount => "magic-method-argument-count",
-            ForbiddenRule::MagicMethodByReference => "magic-method-by-reference",
-            ForbiddenRule::MagicMethodStatic => "magic-method-static",
-            ForbiddenRule::MagicMethodParameterType => "magic-method-parameter-type",
-            ForbiddenRule::StaticReadonlyProperty => "static-readonly-property",
-            ForbiddenRule::UntypedReadonlyProperty => "untyped-readonly-property",
-            ForbiddenRule::ReadonlyPropertyHooks => "readonly-property-hooks",
-            ForbiddenRule::UntypedAsymmetricProperty => "untyped-asymmetric-property",
-            ForbiddenRule::SetVisibilityWiderThanVisibility => {
-                "set-visibility-wider-than-visibility"
-            }
-            ForbiddenRule::PrivateFinalProperty => "private-final-property",
-            ForbiddenRule::AbstractPropertyWithoutAbstractHook => {
-                "abstract-property-without-abstract-hook"
-            }
-            ForbiddenRule::InterfacePropertyWithoutHooks => "interface-property-without-hooks",
-            ForbiddenRule::StaticPropertyHooks => "static-property-hooks",
-            ForbiddenRule::VirtualPropertyDefault => "virtual-property-default",
-            ForbiddenRule::VirtualPropertyAsymmetricVisibility => {
-                "virtual-property-asymmetric-visibility"
-            }
-            ForbiddenRule::EmptyHookList => "empty-hook-list",
-            ForbiddenRule::DuplicateHook => "duplicate-hook",
-            ForbiddenRule::GetHookParameters => "get-hook-parameters",
-            ForbiddenRule::SetHookParameterCount => "set-hook-parameter-count",
-            ForbiddenRule::SetHookParameterByReference => "set-hook-parameter-by-reference",
-            ForbiddenRule::SetHookParameterVariadic => "set-hook-parameter-variadic",
-            ForbiddenRule::SetHookParameterType => "set-hook-parameter-type",
-            ForbiddenRule::ByReferenceGetHookWithSet => "by-reference-get-hook-with-set",
-            ForbiddenRule::MissingHookBody => "missing-hook-body",
-            ForbiddenRule::AbstractHookBody => "abstract-hook-body",
-            ForbiddenRule::AbstractFinalHook => "abstract-final-hook",
-            ForbiddenRule::PrivateAbstractHook => "private-abstract-hook",
-            ForbiddenRule::PromotedPropertyOutsideConstructor => {
-                "promoted-property-outside-constructor"
-            }
-            ForbiddenRule::PromotedPropertyInAbstractConstructor => {
-                "promoted-property-in-abstract-constructor"
-            }
-            ForbiddenRule::VariadicPromotedProperty => "variadic-promoted-property",
-            ForbiddenRule::InvalidEnumBackingType => "invalid-enum-backing-type",
-            ForbiddenRule::EnumCaseNamedClass => "enum-case-named-class",
-            ForbiddenRule::MissingEnumCaseValue => "missing-enum-case-value",
-            ForbiddenRule::PureEnumCaseValue => "pure-enum-case-value",
-            ForbiddenRule::InvalidTraitAliasModifier => "invalid-trait-alias-modifier",
-            ForbiddenRule::UnterminatedComment => "unterminated-comment",
-            ForbiddenRule::NestedClassDeclaration => "nested-class-declaration",
-            ForbiddenRule::MixedNamespaceStyles => "mixed-namespace-styles",
-            ForbiddenRule::NamespaceNotFirst => "namespace-not-first",
-            ForbiddenRule::CodeOutsideNamespace => "code-outside-namespace",
-            ForbiddenRule::NestedNamespace => "nested-namespace",
-            ForbiddenRule::UseNameConflict => "use-name-conflict",
-            ForbiddenRule::SpecialClassNameAlias => "special-class-name-alias",
-            ForbiddenRule::DeclareNotFirstStatement => "declare-not-first-statement",
-            ForbiddenRule::NonLiteralDeclareValue => "non-literal-declare-value",
-            ForbiddenRule::InvalidStrictTypes => "invalid-strict-types",
-            ForbiddenRule::AttributesOnMultipleConstants => "attributes-on-multiple-constants",
-            ForbiddenRule::AttributeArgumentUnpacking => "attribute-argument-unpacking",
-            ForbiddenRule::AttributeArgumentClosure => "attribute-argument-closure",
-            ForbiddenRule::VoidReturnValue => "void-return-value",
-            ForbiddenRule::NeverReturn => "never-return",
-            ForbiddenRule::VariadicParameterDefault => "variadic-parameter-default",
-            ForbiddenRule::VariadicParameterNotLast => "variadic-parameter-not-last",
-            ForbiddenRule::ThisAsDeclaredVariable => "this-as-declared-variable",
-            ForbiddenRule::SuperglobalAsDeclaredVariable => "superglobal-as-declared-variable",
-            ForbiddenRule::DuplicateStaticVariable => "duplicate-static-variable",
-            ForbiddenRule::BreakOutOfLoop => "break-out-of-loop",
-            ForbiddenRule::InvalidBreakOperand => "invalid-break-operand",
-            ForbiddenRule::JumpAcrossFinally => "jump-across-finally",
-            ForbiddenRule::DuplicateLabel => "duplicate-label",
-            ForbiddenRule::UndefinedGotoLabel => "undefined-goto-label",
-            ForbiddenRule::GotoIntoLoop => "goto-into-loop",
-            ForbiddenRule::DuplicateSwitchDefault => "duplicate-switch-default",
-            ForbiddenRule::DuplicateMatchDefault => "duplicate-match-default",
-            ForbiddenRule::ReferenceKey => "reference-key",
-            ForbiddenRule::ClassKeywordInCatch => "class-keyword-in-catch",
-            ForbiddenRule::InvalidParentHookCall => "invalid-parent-hook-call",
-            ForbiddenRule::StaticClassInConstantExpression => "static-class-in-constant-expression",
-            ForbiddenRule::AppendOutsideWrite => "append-outside-write",
-            ForbiddenRule::InvalidGlobalsWrite => "invalid-globals-write",
-            ForbiddenRule::InvalidNullableType => "invalid-nullable-type",
-            ForbiddenRule::StandaloneTypeInComposite => "standalone-type-in-composite",
-            ForbiddenRule::BuiltinTypeInIntersection => "builtin-type-in-intersection",
-            ForbiddenRule::RedundantType => "redundant-type",
-            ForbiddenRule::DuplicateType => "duplicate-type",
-            ForbiddenRule::InvalidParameterType => "invalid-parameter-type",
-            ForbiddenRule::InvalidMemberType => "invalid-member-type",
-            ForbiddenRule::QualifiedBuiltinType => "qualified-builtin-type",
-            ForbiddenRule::ReservedTypeName => "reserved-type-name",
-            ForbiddenRule::IssetOnExpression => "isset-on-expression",
-            ForbiddenRule::ClosureForNew => "closure-for-new",
-            ForbiddenRule::YieldOutsideFunction => "yield-outside-function",
-            ForbiddenRule::YieldFromInByReferenceGenerator => {
-                "yield-from-in-by-reference-generator"
-            }
-            ForbiddenRule::PositionalAfterNamedArgument => "positional-after-named-argument",
-            ForbiddenRule::UnsetCast => "unset-cast",
-            ForbiddenRule::BuiltinResultWrite => "builtin-result-write",
-            ForbiddenRule::TemporaryExpressionWrite => "temporary-expression-write",
-            ForbiddenRule::NullsafeWrite => "nullsafe-write",
-            ForbiddenRule::ReferenceToNullsafe => "reference-to-nullsafe",
-            ForbiddenRule::NullsafeClosureCreation => "nullsafe-closure-creation",
-            ForbiddenRule::UnwritableDestructuringElement => "unwritable-destructuring-element",
-            ForbiddenRule::UnsetThis => "unset-this",
-            ForbiddenRule::ClosureUseShadowsParameter => "closure-use-shadows-parameter",
-            ForbiddenRule::DuplicateClosureUseVariable => "duplicate-closure-use-variable",
-            ForbiddenRule::LiteralClassName => "literal-class-name",
-            ForbiddenRule::ClassFetchOnLiteral => "class-fetch-on-literal",
-            ForbiddenRule::DynamicClassFetch => "dynamic-class-fetch",
-            ForbiddenRule::InvalidConstantExpression => "invalid-constant-expression",
-            ForbiddenRule::EmptyList => "empty-list",
-            ForbiddenRule::EmptyKeyedArrayEntry => "empty-keyed-array-entry",
-            ForbiddenRule::MixedKeyedEntries => "mixed-keyed-entries",
-            ForbiddenRule::MixedListSyntax => "mixed-list-syntax",
-            ForbiddenRule::SpreadInDestructuring => "spread-in-destructuring",
-            ForbiddenRule::UnparenthesizedNestedTernary => "unparenthesized-nested-ternary",
-            ForbiddenRule::UnparenthesizedArrowInPipe => "unparenthesized-arrow-in-pipe",
-            ForbiddenRule::InvalidCurlyInterpolation => "invalid-curly-interpolation",
-            ForbiddenRule::RepeatedAttribute => "repeated-attribute",
-            ForbiddenRule::NoDiscardOnInvalidTarget => "no-discard-on-invalid-target",
-            ForbiddenRule::NoDiscardWithoutReturnValue => "no-discard-without-return-value",
-            ForbiddenRule::Other => "other",
-        }
-    }
+/// The identifier given to `ForbiddenRule::from_str` names no rule.
+#[derive(Debug, Clone, PartialEq, Eq, Error)]
+#[error("unknown forbidden rule")]
+pub struct UnknownForbiddenRule;
 
-    /// Whether PHP reports the rule while lexing or parsing, as opposed to while compiling.
-    pub(crate) fn raised_by_php_parser(self) -> bool {
-        matches!(
-            self,
-            ForbiddenRule::UnterminatedComment
-                | ForbiddenRule::UnclosedInterpolation
-                | ForbiddenRule::EmptyInterpolationIndex
-                | ForbiddenRule::EmptyInterpolationVariableName
-                | ForbiddenRule::UnclosedInterpolationIndex
-                | ForbiddenRule::ClassConstantInterpolation
-                | ForbiddenRule::InvalidInterpolationOffset
-                | ForbiddenRule::InvalidNumericLiteral
-                | ForbiddenRule::InvalidCodepointEscape
-                | ForbiddenRule::MixedHeredocIndentation
-                | ForbiddenRule::HeredocBodyIndentation
-                | ForbiddenRule::WhitespaceInNamespacedName
-                | ForbiddenRule::MultipleVisibilityModifiers
-                | ForbiddenRule::MultipleSetVisibilityModifiers
-                | ForbiddenRule::DuplicateModifier
-                | ForbiddenRule::AbstractFinalConflict
-                | ForbiddenRule::InvalidConstantModifier
-                | ForbiddenRule::ModifierNotAllowed
-                | ForbiddenRule::KeywordAsDeclarationName
-                | ForbiddenRule::ReservedClassName
-                | ForbiddenRule::OutermostScopeOnly
-                | ForbiddenRule::UnparenthesizedIntersectionInUnion
-                | ForbiddenRule::ParenthesizedIntersectionOutsideUnion
-                | ForbiddenRule::StaticTypePosition
-                | ForbiddenRule::EmptyAttributeList
-                | ForbiddenRule::CallTimePassByReference
-                | ForbiddenRule::CurlyOffsetAccess
-                | ForbiddenRule::VoidCastInExpression
-                | ForbiddenRule::RealCast
-                | ForbiddenRule::NonAssociativeChain
-                | ForbiddenRule::IncDecAsAssignTarget
-                | ForbiddenRule::InvalidAssignTarget
-                | ForbiddenRule::CompoundAssignToDestructuring
-                | ForbiddenRule::ReferenceAssignToDestructuring
-                | ForbiddenRule::IncDecNonVariable
-                | ForbiddenRule::InvalidDereference
-                | ForbiddenRule::InvalidWriteContext
-                | ForbiddenRule::ListOutsideDestructuring
-                | ForbiddenRule::ReferenceAssignNew
-                | ForbiddenRule::HooksOnPropertyList
-                | ForbiddenRule::InvalidInstanceofOperand
-                | ForbiddenRule::SwitchLeadingSemicolons
-                | ForbiddenRule::PartialApplicationInNew
-                | ForbiddenRule::UnparenthesizedNewDereference
-                | ForbiddenRule::StaticStandaloneExpression
-                | ForbiddenRule::ReferenceToParenthesized
-                | ForbiddenRule::ReferenceToNonReferenceable
-        )
+macro_rules! forbidden_rules {
+    ($($(#[$doc:meta])* $rule:ident = $id:literal, $phase:ident;)*) => {
+        /// The PHP rule a [`ParseError::Forbidden`] reports.
+        ///
+        /// Rules and their identifiers are stable API; message wording is not.
+        #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+        #[non_exhaustive]
+        pub enum ForbiddenRule {
+            $($(#[$doc])* $rule,)*
+        }
+
+        impl ForbiddenRule {
+            /// Every rule, in declaration order.
+            pub const ALL: &'static [ForbiddenRule] = &[$(ForbiddenRule::$rule),*];
+
+            /// Stable kebab-case identifier, e.g. `"reassign-this"`.
+            pub fn as_str(self) -> &'static str {
+                match self {
+                    $(ForbiddenRule::$rule => $id,)*
+                }
+            }
+
+            /// When PHP reports the rule.
+            pub fn phase(self) -> Phase {
+                match self {
+                    $(ForbiddenRule::$rule => Phase::$phase,)*
+                }
+            }
+        }
+    };
+}
+
+forbidden_rules! {
+    /// `self`, `static` or `parent` used outside a class.
+    ClassKeywordOutsideClass = "class-keyword-outside-class", Compile;
+    /// `parent` used in a class that has no parent.
+    ParentWithoutParentClass = "parent-without-parent-class", Compile;
+    /// `__toString()` declares a return type other than `string`.
+    ToStringReturnType = "to-string-return-type", Compile;
+    /// A magic method other than `__toString()` declares a return type it may not have.
+    MagicMethodReturnType = "magic-method-return-type", Compile;
+    /// An internal attribute is applied to a target it does not allow.
+    AttributeTargetMismatch = "attribute-target-mismatch", Compile;
+    /// `#[Attribute]` is applied to an interface, trait, enum or abstract class.
+    AttributeOnInvalidClass = "attribute-on-invalid-class", Compile;
+    /// `#[Deprecated]` is applied to a class-like declaration.
+    DeprecatedOnInvalidTarget = "deprecated-on-invalid-target", Compile;
+    /// `#[AllowDynamicProperties]` is applied to an interface, trait, enum or readonly class.
+    AllowDynamicPropertiesOnInvalidClass = "allow-dynamic-properties-on-invalid-class", Compile;
+    /// A bare `return;` in a function that declares a return type.
+    MissingReturnValue = "missing-return-value", Compile;
+    /// A generator declares a return type that `Generator` does not satisfy.
+    GeneratorReturnType = "generator-return-type", Compile;
+    /// A readonly property has a default value.
+    ReadonlyPropertyDefault = "readonly-property-default", Compile;
+    /// Two parameters share a name.
+    DuplicateParameter = "duplicate-parameter", Compile;
+    /// `$this` is assigned or used as a `catch` variable.
+    ReassignThis = "reassign-this", Compile;
+    /// A `[`, `{` or `${` in an interpolated string is never closed.
+    UnclosedInterpolation = "unclosed-interpolation", Parse;
+    /// An interpolated array index is empty.
+    EmptyInterpolationIndex = "empty-interpolation-index", Parse;
+    /// A `${}` interpolation names no variable.
+    EmptyInterpolationVariableName = "empty-interpolation-variable-name", Parse;
+    /// The index in a `${name[...]}` interpolation is not closed.
+    UnclosedInterpolationIndex = "unclosed-interpolation-index", Parse;
+    /// A class constant is interpolated with `{$...}`.
+    ClassConstantInterpolation = "class-constant-interpolation", Parse;
+    /// A simple interpolation `"$a[...]"` has an invalid offset.
+    InvalidInterpolationOffset = "invalid-interpolation-offset", Parse;
+    /// A numeric literal has invalid digits, e.g. `08`.
+    InvalidNumericLiteral = "invalid-numeric-literal", Parse;
+    /// A `\u{...}` escape is empty or out of range.
+    InvalidCodepointEscape = "invalid-codepoint-escape", Parse;
+    /// A heredoc's closing indentation mixes tabs and spaces.
+    MixedHeredocIndentation = "mixed-heredoc-indentation", Parse;
+    /// A heredoc line is indented less than its closing marker.
+    HeredocBodyIndentation = "heredoc-body-indentation", Parse;
+    /// A namespaced name contains whitespace.
+    WhitespaceInNamespacedName = "whitespace-in-namespaced-name", Parse;
+    /// A member has more than one visibility modifier.
+    MultipleVisibilityModifiers = "multiple-visibility-modifiers", Parse;
+    /// A property has more than one set-visibility modifier.
+    MultipleSetVisibilityModifiers = "multiple-set-visibility-modifiers", Parse;
+    /// A modifier is repeated.
+    DuplicateModifier = "duplicate-modifier", Parse;
+    /// A declaration is both `abstract` and `final`.
+    AbstractFinalConflict = "abstract-final-conflict", Parse;
+    /// A class constant has a modifier constants cannot have.
+    InvalidConstantModifier = "invalid-constant-modifier", Parse;
+    /// A modifier is used where it cannot apply, e.g. `static` on a parameter.
+    ModifierNotAllowed = "modifier-not-allowed", Parse;
+    /// A reserved keyword names a declaration.
+    KeywordAsDeclarationName = "keyword-as-declaration-name", Parse;
+    /// A reserved type name names a class.
+    ReservedClassName = "reserved-class-name", Parse;
+    /// A statement that must be at the outermost scope is nested.
+    OutermostScopeOnly = "outermost-scope-only", Parse;
+    /// An intersection type is used in a union without parentheses.
+    UnparenthesizedIntersectionInUnion = "unparenthesized-intersection-in-union", Parse;
+    /// A parenthesized intersection type is not part of a union.
+    ParenthesizedIntersectionOutsideUnion = "parenthesized-intersection-outside-union", Parse;
+    /// `static` is used as a type where it cannot be.
+    StaticTypePosition = "static-type-position", Parse;
+    /// An attribute group `#[]` is empty.
+    EmptyAttributeList = "empty-attribute-list", Parse;
+    /// An argument is passed as `&$x`.
+    CallTimePassByReference = "call-time-pass-by-reference", Parse;
+    /// An offset is read with curly braces, `$a{0}`.
+    CurlyOffsetAccess = "curly-offset-access", Parse;
+    /// A `(void)` cast is used as an expression.
+    VoidCastInExpression = "void-cast-in-expression", Parse;
+    /// A `(real)` cast is used.
+    RealCast = "real-cast", Parse;
+    /// Non-associative operators are chained, e.g. `1 < 2 < 3`.
+    NonAssociativeChain = "non-associative-chain", Parse;
+    /// An increment or decrement is assigned to.
+    IncDecAsAssignTarget = "inc-dec-as-assign-target", Parse;
+    /// An expression that cannot be assigned to is assigned to.
+    InvalidAssignTarget = "invalid-assign-target", Parse;
+    /// A destructuring pattern is used with a compound assignment.
+    CompoundAssignToDestructuring = "compound-assign-to-destructuring", Parse;
+    /// A destructuring pattern is assigned by reference.
+    ReferenceAssignToDestructuring = "reference-assign-to-destructuring", Parse;
+    /// `++` or `--` is applied to something other than a variable.
+    IncDecNonVariable = "inc-dec-non-variable", Parse;
+    /// An expression that cannot be dereferenced is dereferenced.
+    InvalidDereference = "invalid-dereference", Parse;
+    /// An expression that cannot be written to is written to.
+    InvalidWriteContext = "invalid-write-context", Parse;
+    /// `list()` is used outside an assignment or `foreach` target.
+    ListOutsideDestructuring = "list-outside-destructuring", Parse;
+    /// An array literal has an empty element outside destructuring.
+    EmptyArrayElement = "empty-array-element", Compile;
+    /// A `new` expression is assigned by reference.
+    ReferenceAssignNew = "reference-assign-new", Parse;
+    /// A comma-separated property declaration has hooks.
+    HooksOnPropertyList = "hooks-on-property-list", Parse;
+    /// The right side of `instanceof` is not a class name, variable or parenthesized expression.
+    InvalidInstanceofOperand = "invalid-instanceof-operand", Parse;
+    /// More than one `;` precedes a switch's first case.
+    SwitchLeadingSemicolons = "switch-leading-semicolons", Parse;
+    /// Partial function application is used in a `new` expression.
+    PartialApplicationInNew = "partial-application-in-new", Parse;
+    /// `new A()` is dereferenced without parentheses before PHP 8.4.
+    UnparenthesizedNewDereference = "unparenthesized-new-dereference", Parse;
+    /// `static` is used as a standalone expression.
+    StaticStandaloneExpression = "static-standalone-expression", Parse;
+    /// A parenthesized expression is assigned by reference.
+    ReferenceToParenthesized = "reference-to-parenthesized", Parse;
+    /// A value that has no reference is assigned by reference.
+    ReferenceToNonReferenceable = "reference-to-non-referenceable", Parse;
+    /// `self`, `parent` or `static` is written fully qualified, e.g. `\self`.
+    QualifiedClassKeyword = "qualified-class-keyword", Compile;
+    /// A reserved name is extended, implemented or used as a trait.
+    ReservedClassReference = "reserved-class-reference", Compile;
+    /// A reserved type name names an enum.
+    ReservedEnumName = "reserved-enum-name", Compile;
+    /// An interface uses a trait.
+    TraitInInterface = "trait-in-interface", Compile;
+    /// A class that is not abstract has an abstract method or hook.
+    AbstractMemberInConcreteClass = "abstract-member-in-concrete-class", Compile;
+    /// A class declares a property twice.
+    DuplicateProperty = "duplicate-property", Compile;
+    /// A class declares a method twice.
+    DuplicateMethod = "duplicate-method", Compile;
+    /// A class declares a constant or enum case twice.
+    DuplicateClassConstant = "duplicate-class-constant", Compile;
+    /// A class constant is named `class`.
+    ClassConstantNamedClass = "class-constant-named-class", Compile;
+    /// A typed class constant's value does not match its type.
+    ClassConstantValueType = "class-constant-value-type", Compile;
+    /// A private class constant is `final`.
+    PrivateFinalConstant = "private-final-constant", Compile;
+    /// An interface constant is not public.
+    InvalidInterfaceConstantModifier = "invalid-interface-constant-modifier", Compile;
+    /// An interface method is not public, or is `final` or `abstract`.
+    InvalidInterfaceMethodModifier = "invalid-interface-method-modifier", Compile;
+    /// An interface property is `abstract`, `final`, protected or private.
+    InvalidInterfacePropertyModifier = "invalid-interface-property-modifier", Compile;
+    /// An interface method has a body.
+    InterfaceMethodBody = "interface-method-body", Compile;
+    /// A method that is not abstract has no body.
+    MissingMethodBody = "missing-method-body", Compile;
+    /// An abstract method has a body.
+    AbstractMethodBody = "abstract-method-body", Compile;
+    /// An abstract method is private.
+    PrivateAbstractMethod = "private-abstract-method", Compile;
+    /// An anonymous class method is abstract.
+    AbstractAnonymousClassMethod = "abstract-anonymous-class-method", Compile;
+    /// An enum method is abstract.
+    AbstractEnumMethod = "abstract-enum-method", Compile;
+    /// A magic method takes the wrong number of parameters.
+    MagicMethodArgumentCount = "magic-method-argument-count", Compile;
+    /// A magic method takes a parameter by reference.
+    MagicMethodByReference = "magic-method-by-reference", Compile;
+    /// A magic method is static when it must not be, or the reverse.
+    MagicMethodStatic = "magic-method-static", Compile;
+    /// A magic method declares a parameter type it may not have.
+    MagicMethodParameterType = "magic-method-parameter-type", Compile;
+    /// A static property is readonly.
+    StaticReadonlyProperty = "static-readonly-property", Compile;
+    /// A readonly property has no type.
+    UntypedReadonlyProperty = "untyped-readonly-property", Compile;
+    /// A readonly property has hooks.
+    ReadonlyPropertyHooks = "readonly-property-hooks", Compile;
+    /// A property with set visibility has no type.
+    UntypedAsymmetricProperty = "untyped-asymmetric-property", Compile;
+    /// A property's set visibility is wider than its visibility.
+    SetVisibilityWiderThanVisibility = "set-visibility-wider-than-visibility", Compile;
+    /// A private property is `final`.
+    PrivateFinalProperty = "private-final-property", Compile;
+    /// An abstract property has no abstract hook.
+    AbstractPropertyWithoutAbstractHook = "abstract-property-without-abstract-hook", Compile;
+    /// An interface declares a property without hooks.
+    InterfacePropertyWithoutHooks = "interface-property-without-hooks", Compile;
+    /// A static property has hooks.
+    StaticPropertyHooks = "static-property-hooks", Compile;
+    /// A virtual hooked property has a default value.
+    VirtualPropertyDefault = "virtual-property-default", Compile;
+    /// A virtual property has set visibility.
+    VirtualPropertyAsymmetricVisibility = "virtual-property-asymmetric-visibility", Compile;
+    /// A property hook list is empty.
+    EmptyHookList = "empty-hook-list", Compile;
+    /// A property declares the same hook twice.
+    DuplicateHook = "duplicate-hook", Compile;
+    /// A `get` hook has a parameter list.
+    GetHookParameters = "get-hook-parameters", Compile;
+    /// A `set` hook does not have exactly one parameter.
+    SetHookParameterCount = "set-hook-parameter-count", Compile;
+    /// A `set` hook parameter is by reference.
+    SetHookParameterByReference = "set-hook-parameter-by-reference", Compile;
+    /// A `set` hook parameter is variadic.
+    SetHookParameterVariadic = "set-hook-parameter-variadic", Compile;
+    /// A `set` hook parameter's type does not accept the property's type.
+    SetHookParameterType = "set-hook-parameter-type", Compile;
+    /// A backed property with a `set` hook has a by-reference `get` hook.
+    ByReferenceGetHookWithSet = "by-reference-get-hook-with-set", Compile;
+    /// A hook of a property that is not abstract has no body.
+    MissingHookBody = "missing-hook-body", Compile;
+    /// An interface property hook has a body.
+    AbstractHookBody = "abstract-hook-body", Compile;
+    /// An abstract property hook is `final`.
+    AbstractFinalHook = "abstract-final-hook", Compile;
+    /// An abstract property hook is private.
+    PrivateAbstractHook = "private-abstract-hook", Compile;
+    /// A parameter outside a constructor is promoted.
+    PromotedPropertyOutsideConstructor = "promoted-property-outside-constructor", Compile;
+    /// A parameter of an abstract constructor is promoted.
+    PromotedPropertyInAbstractConstructor = "promoted-property-in-abstract-constructor", Compile;
+    /// A promoted parameter is variadic.
+    VariadicPromotedProperty = "variadic-promoted-property", Compile;
+    /// An enum's backing type is not `int` or `string`.
+    InvalidEnumBackingType = "invalid-enum-backing-type", Compile;
+    /// An enum case is named `class`.
+    EnumCaseNamedClass = "enum-case-named-class", Compile;
+    /// A case of a backed enum has no value.
+    MissingEnumCaseValue = "missing-enum-case-value", Compile;
+    /// A case of a pure enum has a value.
+    PureEnumCaseValue = "pure-enum-case-value", Compile;
+    /// A trait alias is `static` or `abstract`.
+    InvalidTraitAliasModifier = "invalid-trait-alias-modifier", Compile;
+    /// A `/*` comment is never closed.
+    UnterminatedComment = "unterminated-comment", Parse;
+    /// A named class-like is declared inside a class member.
+    NestedClassDeclaration = "nested-class-declaration", Compile;
+    /// Braced and unbraced namespace declarations are mixed.
+    MixedNamespaceStyles = "mixed-namespace-styles", Compile;
+    /// Code other than `declare` precedes the first namespace declaration.
+    NamespaceNotFirst = "namespace-not-first", Compile;
+    /// Code follows a braced namespace declaration.
+    CodeOutsideNamespace = "code-outside-namespace", Compile;
+    /// A namespace declaration is nested.
+    NestedNamespace = "nested-namespace", Compile;
+    /// A `use` import reuses a name already imported.
+    UseNameConflict = "use-name-conflict", Compile;
+    /// A `use` import is aliased to a reserved class name.
+    SpecialClassNameAlias = "special-class-name-alias", Compile;
+    /// `strict_types` or `encoding` is not declared first.
+    DeclareNotFirstStatement = "declare-not-first-statement", Compile;
+    /// A `declare` directive's value is not a literal.
+    NonLiteralDeclareValue = "non-literal-declare-value", Compile;
+    /// `strict_types` uses block mode or a value other than 0 or 1.
+    InvalidStrictTypes = "invalid-strict-types", Compile;
+    /// Attributes apply to a `const` statement declaring several constants.
+    AttributesOnMultipleConstants = "attributes-on-multiple-constants", Compile;
+    /// An attribute argument list unpacks with `...`.
+    AttributeArgumentUnpacking = "attribute-argument-unpacking", Compile;
+    /// An attribute argument list is a first-class callable `(...)`.
+    AttributeArgumentClosure = "attribute-argument-closure", Compile;
+    /// A `void` function returns a value.
+    VoidReturnValue = "void-return-value", Compile;
+    /// A `never` function returns.
+    NeverReturn = "never-return", Compile;
+    /// A variadic parameter has a default value.
+    VariadicParameterDefault = "variadic-parameter-default", Compile;
+    /// A parameter follows a variadic one.
+    VariadicParameterNotLast = "variadic-parameter-not-last", Compile;
+    /// `$this` is declared as a parameter, closure `use`, global or static variable.
+    ThisAsDeclaredVariable = "this-as-declared-variable", Compile;
+    /// A superglobal is declared as a parameter or closure `use` variable.
+    SuperglobalAsDeclaredVariable = "superglobal-as-declared-variable", Compile;
+    /// A static variable is declared twice in one function.
+    DuplicateStaticVariable = "duplicate-static-variable", Compile;
+    /// `break` or `continue` names more loop levels than enclose it.
+    BreakOutOfLoop = "break-out-of-loop", Compile;
+    /// `break` or `continue` has an operand that is not a positive integer literal.
+    InvalidBreakOperand = "invalid-break-operand", Compile;
+    /// `break`, `continue` or `goto` jumps into or out of a `finally` block.
+    JumpAcrossFinally = "jump-across-finally", Compile;
+    /// A `goto` label is defined twice.
+    DuplicateLabel = "duplicate-label", Compile;
+    /// `goto` names an undefined label.
+    UndefinedGotoLabel = "undefined-goto-label", Compile;
+    /// `goto` jumps into a loop or `switch`.
+    GotoIntoLoop = "goto-into-loop", Compile;
+    /// A `switch` has more than one `default`.
+    DuplicateSwitchDefault = "duplicate-switch-default", Compile;
+    /// A `match` has more than one `default` arm.
+    DuplicateMatchDefault = "duplicate-match-default", Compile;
+    /// A `foreach` key is taken by reference.
+    ReferenceKey = "reference-key", Compile;
+    /// `catch` names `self`, `parent` or `static`.
+    ClassKeywordInCatch = "class-keyword-in-catch", Compile;
+    /// `parent::$x::get()` or `::set()` is called outside the matching hook.
+    InvalidParentHookCall = "invalid-parent-hook-call", Compile;
+    /// `static::class` is used in a constant expression.
+    StaticClassInConstantExpression = "static-class-in-constant-expression", Compile;
+    /// `$a[]` is read or unset.
+    AppendOutsideWrite = "append-outside-write", Compile;
+    /// `$GLOBALS` is written to as a whole, appended to or referenced.
+    InvalidGlobalsWrite = "invalid-globals-write", Compile;
+    /// `mixed` or `null` is marked nullable.
+    InvalidNullableType = "invalid-nullable-type", Compile;
+    /// `void`, `never` or `mixed` is part of a nullable or union type.
+    StandaloneTypeInComposite = "standalone-type-in-composite", Compile;
+    /// A builtin type is part of an intersection type.
+    BuiltinTypeInIntersection = "builtin-type-in-intersection", Compile;
+    /// A type is redundant with another in the same declaration.
+    RedundantType = "redundant-type", Compile;
+    /// A type appears twice in a union or intersection type.
+    DuplicateType = "duplicate-type", Compile;
+    /// A parameter is typed `void` or `never`.
+    InvalidParameterType = "invalid-parameter-type", Compile;
+    /// A property or constant has a type it may not have, e.g. `callable`.
+    InvalidMemberType = "invalid-member-type", Compile;
+    /// A builtin type is written with a namespace, e.g. `\int`.
+    QualifiedBuiltinType = "qualified-builtin-type", Compile;
+    /// A qualified type name ends in a reserved name.
+    ReservedTypeName = "reserved-type-name", Compile;
+    /// `isset()` is applied to the result of an expression.
+    IssetOnExpression = "isset-on-expression", Compile;
+    /// A `new` expression is turned into a first-class callable `(...)`.
+    ClosureForNew = "closure-for-new", Compile;
+    /// `yield` is used outside a function.
+    YieldOutsideFunction = "yield-outside-function", Compile;
+    /// `yield from` is used in a by-reference generator.
+    YieldFromInByReferenceGenerator = "yield-from-in-by-reference-generator", Compile;
+    /// A positional argument follows a named one.
+    PositionalAfterNamedArgument = "positional-after-named-argument", Compile;
+    /// An `(unset)` cast is used.
+    UnsetCast = "unset-cast", Compile;
+    /// The result of a builtin such as `clone` is written to.
+    BuiltinResultWrite = "builtin-result-write", Compile;
+    /// A temporary value is written to, e.g. `(1)[0] = 2`.
+    TemporaryExpressionWrite = "temporary-expression-write", Compile;
+    /// A nullsafe chain is written to.
+    NullsafeWrite = "nullsafe-write", Compile;
+    /// A nullsafe chain is taken by reference.
+    ReferenceToNullsafe = "reference-to-nullsafe", Compile;
+    /// A nullsafe call is turned into a first-class callable `(...)`.
+    NullsafeClosureCreation = "nullsafe-closure-creation", Compile;
+    /// A destructuring element cannot be assigned to.
+    UnwritableDestructuringElement = "unwritable-destructuring-element", Compile;
+    /// `$this` is unset.
+    UnsetThis = "unset-this", Compile;
+    /// A closure `use` variable has the name of a parameter.
+    ClosureUseShadowsParameter = "closure-use-shadows-parameter", Compile;
+    /// A closure `use` list names a variable twice.
+    DuplicateClosureUseVariable = "duplicate-closure-use-variable", Compile;
+    /// A numeric literal is used as a class name, e.g. `(1)::A`.
+    LiteralClassName = "literal-class-name", Compile;
+    /// `::class` is applied to `true`, `false`, `null` or an array literal.
+    ClassFetchOnLiteral = "class-fetch-on-literal", Compile;
+    /// `::class` is applied to a dynamic class name before PHP 8.0.
+    DynamicClassFetch = "dynamic-class-fetch", Compile;
+    /// A constant expression contains something PHP cannot evaluate at compile time.
+    InvalidConstantExpression = "invalid-constant-expression", Compile;
+    /// A destructuring list is empty.
+    EmptyList = "empty-list", Compile;
+    /// A keyed destructuring list has an empty entry.
+    EmptyKeyedArrayEntry = "empty-keyed-array-entry", Compile;
+    /// A destructuring list mixes keyed and unkeyed entries.
+    MixedKeyedEntries = "mixed-keyed-entries", Compile;
+    /// A destructuring pattern mixes `[]` and `list()`.
+    MixedListSyntax = "mixed-list-syntax", Compile;
+    /// A destructuring list uses `...`.
+    SpreadInDestructuring = "spread-in-destructuring", Compile;
+    /// Nested ternaries are not parenthesized, e.g. `a ? b : c ? d : e`.
+    UnparenthesizedNestedTernary = "unparenthesized-nested-ternary", Compile;
+    /// An arrow function on the right of `|>` is not parenthesized.
+    UnparenthesizedArrowInPipe = "unparenthesized-arrow-in-pipe", Compile;
+    /// A `{$...}` interpolation is not a variable, property, index or call.
+    InvalidCurlyInterpolation = "invalid-curly-interpolation", Compile;
+    /// A non-repeatable attribute is applied twice.
+    RepeatedAttribute = "repeated-attribute", Compile;
+    /// `#[\NoDiscard]` is applied to a property hook or a method it cannot apply to.
+    NoDiscardOnInvalidTarget = "no-discard-on-invalid-target", Compile;
+    /// `#[\NoDiscard]` is applied to a function that returns no value.
+    NoDiscardWithoutReturnValue = "no-discard-without-return-value", Compile;
+    /// Not yet classified.
+    Other = "other", Compile;
+}
+
+impl std::fmt::Display for ForbiddenRule {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+impl std::str::FromStr for ForbiddenRule {
+    type Err = UnknownForbiddenRule;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        ForbiddenRule::ALL
+            .iter()
+            .copied()
+            .find(|rule| rule.as_str() == s)
+            .ok_or(UnknownForbiddenRule)
     }
 }
 
@@ -798,198 +583,6 @@ impl ForbiddenRule {
 mod tests {
     use super::{ForbiddenRule, ParseError};
     use crate::PhpVersion;
-
-    const RULES: &[ForbiddenRule] = &[
-        ForbiddenRule::ClassKeywordOutsideClass,
-        ForbiddenRule::ParentWithoutParentClass,
-        ForbiddenRule::ToStringReturnType,
-        ForbiddenRule::MagicMethodReturnType,
-        ForbiddenRule::AttributeTargetMismatch,
-        ForbiddenRule::AttributeOnInvalidClass,
-        ForbiddenRule::DeprecatedOnInvalidTarget,
-        ForbiddenRule::AllowDynamicPropertiesOnInvalidClass,
-        ForbiddenRule::MissingReturnValue,
-        ForbiddenRule::GeneratorReturnType,
-        ForbiddenRule::ReadonlyPropertyDefault,
-        ForbiddenRule::DuplicateParameter,
-        ForbiddenRule::ReassignThis,
-        ForbiddenRule::UnclosedInterpolation,
-        ForbiddenRule::EmptyInterpolationIndex,
-        ForbiddenRule::EmptyInterpolationVariableName,
-        ForbiddenRule::UnclosedInterpolationIndex,
-        ForbiddenRule::ClassConstantInterpolation,
-        ForbiddenRule::InvalidInterpolationOffset,
-        ForbiddenRule::InvalidNumericLiteral,
-        ForbiddenRule::InvalidCodepointEscape,
-        ForbiddenRule::MixedHeredocIndentation,
-        ForbiddenRule::HeredocBodyIndentation,
-        ForbiddenRule::WhitespaceInNamespacedName,
-        ForbiddenRule::MultipleVisibilityModifiers,
-        ForbiddenRule::MultipleSetVisibilityModifiers,
-        ForbiddenRule::DuplicateModifier,
-        ForbiddenRule::AbstractFinalConflict,
-        ForbiddenRule::InvalidConstantModifier,
-        ForbiddenRule::ModifierNotAllowed,
-        ForbiddenRule::KeywordAsDeclarationName,
-        ForbiddenRule::ReservedClassName,
-        ForbiddenRule::OutermostScopeOnly,
-        ForbiddenRule::UnparenthesizedIntersectionInUnion,
-        ForbiddenRule::ParenthesizedIntersectionOutsideUnion,
-        ForbiddenRule::StaticTypePosition,
-        ForbiddenRule::EmptyAttributeList,
-        ForbiddenRule::CallTimePassByReference,
-        ForbiddenRule::CurlyOffsetAccess,
-        ForbiddenRule::VoidCastInExpression,
-        ForbiddenRule::RealCast,
-        ForbiddenRule::NonAssociativeChain,
-        ForbiddenRule::IncDecAsAssignTarget,
-        ForbiddenRule::InvalidAssignTarget,
-        ForbiddenRule::CompoundAssignToDestructuring,
-        ForbiddenRule::ReferenceAssignToDestructuring,
-        ForbiddenRule::IncDecNonVariable,
-        ForbiddenRule::InvalidDereference,
-        ForbiddenRule::InvalidWriteContext,
-        ForbiddenRule::ListOutsideDestructuring,
-        ForbiddenRule::EmptyArrayElement,
-        ForbiddenRule::ReferenceAssignNew,
-        ForbiddenRule::HooksOnPropertyList,
-        ForbiddenRule::InvalidInstanceofOperand,
-        ForbiddenRule::SwitchLeadingSemicolons,
-        ForbiddenRule::PartialApplicationInNew,
-        ForbiddenRule::UnparenthesizedNewDereference,
-        ForbiddenRule::StaticStandaloneExpression,
-        ForbiddenRule::ReferenceToParenthesized,
-        ForbiddenRule::ReferenceToNonReferenceable,
-        ForbiddenRule::QualifiedClassKeyword,
-        ForbiddenRule::ReservedClassReference,
-        ForbiddenRule::ReservedEnumName,
-        ForbiddenRule::TraitInInterface,
-        ForbiddenRule::AbstractMemberInConcreteClass,
-        ForbiddenRule::DuplicateProperty,
-        ForbiddenRule::DuplicateMethod,
-        ForbiddenRule::DuplicateClassConstant,
-        ForbiddenRule::ClassConstantNamedClass,
-        ForbiddenRule::ClassConstantValueType,
-        ForbiddenRule::PrivateFinalConstant,
-        ForbiddenRule::InvalidInterfaceConstantModifier,
-        ForbiddenRule::InvalidInterfaceMethodModifier,
-        ForbiddenRule::InvalidInterfacePropertyModifier,
-        ForbiddenRule::InterfaceMethodBody,
-        ForbiddenRule::MissingMethodBody,
-        ForbiddenRule::AbstractMethodBody,
-        ForbiddenRule::PrivateAbstractMethod,
-        ForbiddenRule::AbstractAnonymousClassMethod,
-        ForbiddenRule::AbstractEnumMethod,
-        ForbiddenRule::MagicMethodArgumentCount,
-        ForbiddenRule::MagicMethodByReference,
-        ForbiddenRule::MagicMethodStatic,
-        ForbiddenRule::MagicMethodParameterType,
-        ForbiddenRule::StaticReadonlyProperty,
-        ForbiddenRule::UntypedReadonlyProperty,
-        ForbiddenRule::ReadonlyPropertyHooks,
-        ForbiddenRule::UntypedAsymmetricProperty,
-        ForbiddenRule::SetVisibilityWiderThanVisibility,
-        ForbiddenRule::PrivateFinalProperty,
-        ForbiddenRule::AbstractPropertyWithoutAbstractHook,
-        ForbiddenRule::InterfacePropertyWithoutHooks,
-        ForbiddenRule::StaticPropertyHooks,
-        ForbiddenRule::VirtualPropertyDefault,
-        ForbiddenRule::VirtualPropertyAsymmetricVisibility,
-        ForbiddenRule::EmptyHookList,
-        ForbiddenRule::DuplicateHook,
-        ForbiddenRule::GetHookParameters,
-        ForbiddenRule::SetHookParameterCount,
-        ForbiddenRule::SetHookParameterByReference,
-        ForbiddenRule::SetHookParameterVariadic,
-        ForbiddenRule::SetHookParameterType,
-        ForbiddenRule::ByReferenceGetHookWithSet,
-        ForbiddenRule::MissingHookBody,
-        ForbiddenRule::AbstractHookBody,
-        ForbiddenRule::AbstractFinalHook,
-        ForbiddenRule::PrivateAbstractHook,
-        ForbiddenRule::PromotedPropertyOutsideConstructor,
-        ForbiddenRule::PromotedPropertyInAbstractConstructor,
-        ForbiddenRule::VariadicPromotedProperty,
-        ForbiddenRule::InvalidEnumBackingType,
-        ForbiddenRule::EnumCaseNamedClass,
-        ForbiddenRule::MissingEnumCaseValue,
-        ForbiddenRule::PureEnumCaseValue,
-        ForbiddenRule::InvalidTraitAliasModifier,
-        ForbiddenRule::UnterminatedComment,
-        ForbiddenRule::NestedClassDeclaration,
-        ForbiddenRule::MixedNamespaceStyles,
-        ForbiddenRule::NamespaceNotFirst,
-        ForbiddenRule::CodeOutsideNamespace,
-        ForbiddenRule::NestedNamespace,
-        ForbiddenRule::UseNameConflict,
-        ForbiddenRule::SpecialClassNameAlias,
-        ForbiddenRule::DeclareNotFirstStatement,
-        ForbiddenRule::NonLiteralDeclareValue,
-        ForbiddenRule::InvalidStrictTypes,
-        ForbiddenRule::AttributesOnMultipleConstants,
-        ForbiddenRule::AttributeArgumentUnpacking,
-        ForbiddenRule::AttributeArgumentClosure,
-        ForbiddenRule::VoidReturnValue,
-        ForbiddenRule::NeverReturn,
-        ForbiddenRule::VariadicParameterDefault,
-        ForbiddenRule::VariadicParameterNotLast,
-        ForbiddenRule::ThisAsDeclaredVariable,
-        ForbiddenRule::SuperglobalAsDeclaredVariable,
-        ForbiddenRule::DuplicateStaticVariable,
-        ForbiddenRule::BreakOutOfLoop,
-        ForbiddenRule::InvalidBreakOperand,
-        ForbiddenRule::JumpAcrossFinally,
-        ForbiddenRule::DuplicateLabel,
-        ForbiddenRule::UndefinedGotoLabel,
-        ForbiddenRule::GotoIntoLoop,
-        ForbiddenRule::DuplicateSwitchDefault,
-        ForbiddenRule::DuplicateMatchDefault,
-        ForbiddenRule::ReferenceKey,
-        ForbiddenRule::ClassKeywordInCatch,
-        ForbiddenRule::InvalidParentHookCall,
-        ForbiddenRule::StaticClassInConstantExpression,
-        ForbiddenRule::AppendOutsideWrite,
-        ForbiddenRule::InvalidGlobalsWrite,
-        ForbiddenRule::InvalidNullableType,
-        ForbiddenRule::StandaloneTypeInComposite,
-        ForbiddenRule::BuiltinTypeInIntersection,
-        ForbiddenRule::RedundantType,
-        ForbiddenRule::DuplicateType,
-        ForbiddenRule::InvalidParameterType,
-        ForbiddenRule::InvalidMemberType,
-        ForbiddenRule::QualifiedBuiltinType,
-        ForbiddenRule::ReservedTypeName,
-        ForbiddenRule::IssetOnExpression,
-        ForbiddenRule::ClosureForNew,
-        ForbiddenRule::YieldOutsideFunction,
-        ForbiddenRule::YieldFromInByReferenceGenerator,
-        ForbiddenRule::PositionalAfterNamedArgument,
-        ForbiddenRule::UnsetCast,
-        ForbiddenRule::BuiltinResultWrite,
-        ForbiddenRule::TemporaryExpressionWrite,
-        ForbiddenRule::NullsafeWrite,
-        ForbiddenRule::ReferenceToNullsafe,
-        ForbiddenRule::NullsafeClosureCreation,
-        ForbiddenRule::UnwritableDestructuringElement,
-        ForbiddenRule::UnsetThis,
-        ForbiddenRule::ClosureUseShadowsParameter,
-        ForbiddenRule::DuplicateClosureUseVariable,
-        ForbiddenRule::LiteralClassName,
-        ForbiddenRule::ClassFetchOnLiteral,
-        ForbiddenRule::DynamicClassFetch,
-        ForbiddenRule::InvalidConstantExpression,
-        ForbiddenRule::EmptyList,
-        ForbiddenRule::EmptyKeyedArrayEntry,
-        ForbiddenRule::MixedKeyedEntries,
-        ForbiddenRule::MixedListSyntax,
-        ForbiddenRule::SpreadInDestructuring,
-        ForbiddenRule::UnparenthesizedNestedTernary,
-        ForbiddenRule::UnparenthesizedArrowInPipe,
-        ForbiddenRule::InvalidCurlyInterpolation,
-        ForbiddenRule::RepeatedAttribute,
-        ForbiddenRule::NoDiscardOnInvalidTarget,
-        ForbiddenRule::NoDiscardWithoutReturnValue,
-    ];
 
     /// `(rule, version, source, reported span text)` for sites that report only at some versions.
     const VERSION_GATED: &[(ForbiddenRule, PhpVersion, &str, &str)] = &[
@@ -1246,7 +839,10 @@ mod tests {
 
     #[test]
     fn each_rule_reports_its_span() {
-        for &rule in RULES {
+        for &rule in ForbiddenRule::ALL {
+            if rule == ForbiddenRule::Other {
+                continue;
+            }
             let gated = VERSION_GATED.iter().any(|&(r, ..)| r == rule);
             assert!(gated || !samples(rule).is_empty(), "{rule:?} has no sample");
             for &(src, text) in samples(rule) {
@@ -1276,12 +872,18 @@ mod tests {
     }
 
     #[test]
-    fn identifiers_are_unique() {
-        let mut ids: Vec<&str> = RULES.iter().map(|r| r.as_str()).collect();
-        ids.push(ForbiddenRule::Other.as_str());
+    fn identifiers_are_unique_and_parse_back() {
+        let mut ids: Vec<&str> = ForbiddenRule::ALL.iter().map(|r| r.as_str()).collect();
         ids.sort_unstable();
         ids.dedup();
-        assert_eq!(ids.len(), RULES.len() + 1);
+        assert_eq!(ids.len(), ForbiddenRule::ALL.len());
+        for &rule in ForbiddenRule::ALL {
+            assert_eq!(rule.as_str().parse(), Ok(rule));
+        }
+        assert_eq!(
+            "no-such-rule".parse::<ForbiddenRule>(),
+            Err(super::UnknownForbiddenRule)
+        );
     }
 
     #[test]

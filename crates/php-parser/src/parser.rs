@@ -1,7 +1,7 @@
 use php_ast::*;
 use php_lexer::{Lexer, LexerError, LexerErrorKind, Token, TokenKind};
 
-use crate::diagnostics::{ForbiddenRule, ParseError};
+use crate::diagnostics::{ForbiddenRule, ParseError, Phase};
 use crate::expr;
 use crate::instrument;
 use crate::stmt;
@@ -781,7 +781,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
         let spans = std::mem::take(&mut self.uncompiled_spans);
         self.errors.retain(|e| match e {
-            ParseError::Forbidden { rule, span, .. } if !rule.raised_by_php_parser() => !spans
+            ParseError::Forbidden { rule, span, .. } if rule.phase() == Phase::Compile => !spans
                 .iter()
                 .any(|s| span.start >= s.start && span.end <= s.end),
             _ => true,
