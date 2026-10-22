@@ -1343,8 +1343,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         match &ty.kind {
             TypeHintKind::Named(name) => self.resolve_class_name(name),
             TypeHintKind::Keyword(builtin @ (BuiltinType::Self_ | BuiltinType::Parent_), span) => {
-                // PHP resolves `self` and `parent` in types from 8.5 on.
-                let scope = scope.filter(|_| self.version >= PhpVersion::Php85);
+                // PHP resolves `self` and `parent` in types from 8.5 on, but not in an
+                // anonymous class, whose name is generated later.
+                let scope = scope.filter(|s| self.version >= PhpVersion::Php85 && !s.is_anonymous);
                 let resolved = scope.and_then(|s| match builtin {
                     BuiltinType::Self_ => s.self_name.clone(),
                     _ => s.parent_name.clone(),
@@ -1489,7 +1490,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             if let BuiltinType::Self_ | BuiltinType::Parent_ = builtin {
                 // Outside any class the class scope walk reports them instead.
                 let unresolved = self.class_scope.as_ref().is_some_and(|scope| {
-                    scope.self_name.is_none()
+                    scope.is_anonymous
+                        || scope.self_name.is_none()
                         || *builtin == BuiltinType::Parent_ && scope.parent_name.is_none()
                 });
                 if !unresolved && self.version >= PhpVersion::Php85 {
