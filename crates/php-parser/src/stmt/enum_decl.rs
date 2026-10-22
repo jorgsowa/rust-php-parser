@@ -72,6 +72,7 @@ pub(super) fn parse_enum<'arena, 'src>(
     let mut seen_methods = std::collections::HashSet::new();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         if parser.check(TokenKind::Semicolon) {
+            parser.error_expected("class member");
             parser.advance();
             continue;
         }
