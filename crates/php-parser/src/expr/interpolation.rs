@@ -1,5 +1,8 @@
 use php_ast::*;
 
+use php_lexer::lexer::interpolation_end;
+use php_lexer::{Lexer, TokenKind};
+
 use crate::diagnostics::ParseError;
 use crate::parser::{INTERPOLATION_NESTING_COST, MAX_NESTING_DEPTH};
 use crate::version::PhpVersion;
@@ -197,52 +200,13 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 }
 
                 let brace_offset = base_offset + i as u32;
-                i += 1; // skip {
-                        // Find matching }
-                let expr_start = i;
-                let mut depth = 1;
-                while i < len && depth > 0 {
-                    match bytes[i] {
-                        b'{' => depth += 1,
-                        b'}' => depth -= 1,
-                        b'\'' | b'"' => {
-                            // Skip string literals inside complex expression
-                            let quote = bytes[i];
-                            i += 1;
-                            while i < len && bytes[i] != quote {
-                                if bytes[i] == b'\\' {
-                                    i += 1; // skip backslash
-                                            // Skip the escaped character, which may be multi-byte UTF-8
-                                    if i < len {
-                                        if bytes[i] < 0x80 {
-                                            i += 1;
-                                        } else {
-                                            i += 1; // skip first byte of multi-byte
-                                            while i < len && is_utf8_continuation(bytes[i]) {
-                                                i += 1;
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    i += 1;
-                                }
-                            }
-                            if i < len {
-                                i += 1; // skip closing quote
-                            }
-                            continue;
-                        }
-                        _ => {}
-                    }
-                    if depth > 0 {
-                        i += 1;
-                    }
-                }
-
-                let expr_end = i; // position of } or end of string
-                if depth == 0 {
-                    i += 1; // skip }
-                } else {
+                let close = interpolation_end(bytes, i);
+                let closed = close.is_some();
+                let expr_start = i + 1;
+                // position of } or end of string
+                let expr_end = close.map_or(len, |after| after - 1);
+                i = close.unwrap_or(len);
+                if !closed {
                     errors.push(ParseError::Forbidden {
                         message: "unclosed '{' in string interpolation".into(),
                         span: Span::new(brace_offset, base_offset + expr_end as u32),
@@ -258,10 +222,10 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                     Span::new(expr_offset, end_offset),
                     version,
                     nesting_depth,
-                    depth == 0,
+                    closed,
                     errors,
                 );
-                if depth == 0 {
+                if closed {
                     check_curly_interpolation(&expr, errors);
                 }
                 parts.push(StringPart::Expr(expr));
@@ -482,37 +446,12 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                     literal.clear();
                 }
                 let brace_offset = body_offset + i as u32;
-                i += 1; // skip {
-                let expr_start = i;
-                let mut depth = 1;
-                while i < len && depth > 0 {
-                    match bytes[i] {
-                        b'{' => depth += 1,
-                        b'}' => depth -= 1,
-                        b'\'' | b'"' => {
-                            let quote = bytes[i];
-                            i += 1;
-                            while i < len && bytes[i] != quote {
-                                if bytes[i] == b'\\' {
-                                    i += 1;
-                                }
-                                i += 1;
-                            }
-                            if i < len {
-                                i += 1;
-                            }
-                            continue;
-                        }
-                        _ => {}
-                    }
-                    if depth > 0 {
-                        i += 1;
-                    }
-                }
-                let expr_end = i;
-                if depth == 0 {
-                    i += 1; // skip }
-                } else {
+                let close = interpolation_end(bytes, i);
+                let closed = close.is_some();
+                let expr_start = i + 1;
+                let expr_end = close.map_or(len, |after| after - 1);
+                i = close.unwrap_or(len);
+                if !closed {
                     errors.push(ParseError::Forbidden {
                         message: "unclosed '{' in string interpolation".into(),
                         span: Span::new(brace_offset, body_offset + expr_end as u32),
@@ -528,10 +467,10 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                     Span::new(expr_offset, end_offset),
                     version,
                     nesting_depth,
-                    depth == 0,
+                    closed,
                     errors,
                 );
-                if depth == 0 {
+                if closed {
                     check_curly_interpolation(&expr, errors);
                 }
                 parts.push(StringPart::Expr(expr));
@@ -952,7 +891,10 @@ fn parse_dollar_brace<'arena, 'src>(
 ) -> (Expr<'arena, 'src>, usize) {
     let bytes = text.as_bytes();
     let content_start = dollar + 2;
-    let (close, closed) = find_closing_brace(bytes, content_start);
+    let (close, closed) = match interpolation_end(bytes, dollar + 1) {
+        Some(after) => (after - 1, true),
+        None => (bytes.len(), false),
+    };
     let after = if closed { close + 1 } else { close };
     let span = Span::new(offset + dollar as u32, offset + after as u32);
     if !closed {
@@ -984,10 +926,12 @@ fn parse_dollar_brace<'arena, 'src>(
             }
         }
     }
-    // Whitespace may separate the closing `]` from the `}`.
-    let bracket_end = text[..close]
-        .trim_end_matches([' ', '\t', '\n', '\r'])
-        .len();
+    // Whitespace and comments may separate the closing `]` from the `}`.
+    let bracket_end = if name_end < close && bytes[name_end] == b'[' {
+        last_token_end(&text[..close], name_end)
+    } else {
+        close
+    };
     let is_name = name_end > content_start
         && (name_end == close || (bytes[name_end] == b'[' && bytes[bracket_end - 1] == b']'));
     if !is_name {
@@ -1037,30 +981,18 @@ fn parse_dollar_brace<'arena, 'src>(
     (expr, after)
 }
 
-/// Find the `}` closing an interpolation whose body starts at `i`, skipping quoted strings.
-/// Returns its position and whether it was found; otherwise the position is the end of `bytes`.
-fn find_closing_brace(bytes: &[u8], mut i: usize) -> (usize, bool) {
-    let mut depth = 1usize;
-    while i < bytes.len() {
-        match bytes[i] {
-            b'{' => depth += 1,
-            b'}' => {
-                depth -= 1;
-                if depth == 0 {
-                    return (i, true);
-                }
-            }
-            quote @ (b'\'' | b'"') => {
-                i += 1;
-                while i < bytes.len() && bytes[i] != quote {
-                    i += if bytes[i] == b'\\' { 2 } else { 1 };
-                }
-            }
-            _ => {}
+/// End of the last token in `code` after `from`, ignoring comments; `from` when there is none.
+fn last_token_end(code: &str, from: usize) -> usize {
+    let mut lexer = Lexer::new_at(code, from);
+    let mut end = from;
+    loop {
+        let token = lexer.next_token();
+        match token.kind {
+            TokenKind::Eof => return end,
+            kind if kind.is_comment() => {}
+            _ => end = token.span.end as usize,
         }
-        i += 1;
     }
-    (bytes.len(), false)
 }
 
 /// Report a `{$...}` interpolation that is not a variable, fetch or call, which PHP rejects.
@@ -1106,7 +1038,7 @@ fn parse_complex_interpolation<'arena, 'src>(
     if sub.empty_dim_count > 0 {
         crate::stmt::check_empty_dims(&mut sub, &[], &[&expr]);
     }
-    if report_syntax_errors && !sub.check(php_lexer::TokenKind::Eof) {
+    if report_syntax_errors && !sub.check(TokenKind::Eof) {
         sub.error(ParseError::Expected {
             expected: "'}'".into(),
             found: sub.current_kind().description().into(),

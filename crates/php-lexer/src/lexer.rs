@@ -147,72 +147,160 @@ fn label_len(s: &str) -> usize {
 /// heredocs, where the expression body may itself contain nested strings.
 /// Returns the byte index immediately after the matching `}`; on EOF returns
 /// `bytes.len()` so the caller's unterminated-string branch fires.
-///
-/// Nested strings and interpolations (`"{$a["{$b}"]}"`) are tracked with an
-/// explicit stack rather than recursion, because their depth is controlled by
-/// the input and would otherwise overflow the native stack.
-fn skip_complex_interp(bytes: &[u8], mut p: usize) -> usize {
+fn skip_complex_interp(bytes: &[u8], p: usize) -> usize {
+    interpolation_end(bytes, p).unwrap_or(bytes.len())
+}
+
+/// What the scan in [`interpolation_end`] is inside of.
+enum InterpFrame<'a> {
+    /// Code, with the number of unclosed `{`.
+    Code(u32),
+    /// A string ending at this quote byte (`"` or `` ` ``).
+    Quoted(u8),
+    /// A heredoc body ending at this label.
+    Heredoc(&'a [u8]),
+}
+
+/// Position after the `}` matching the `{` at `p` that opens a `{$...}` or `${...}`
+/// interpolation, or `None` when the input ends first. The code inside is scanned the way PHP
+/// lexes it: strings, comments and heredocs may contain braces, and strings may nest further
+/// interpolations. Nesting is tracked with an explicit stack rather than recursion, because its
+/// depth is controlled by the input and would otherwise overflow the native stack.
+/// Public for the parser crate; outside semver.
+#[doc(hidden)]
+pub fn interpolation_end(bytes: &[u8], mut p: usize) -> Option<usize> {
     debug_assert!(bytes.get(p) == Some(&b'{'));
-    // Interpolations and double-quoted strings strictly alternate, so the state
-    // is the innermost frame plus the brace depths of the suspended
-    // interpolations, one per enclosing nested string.
-    let mut in_dquote = false;
-    let mut depth = 0i32;
-    let mut suspended: Vec<i32> = Vec::new();
+    let mut stack = vec![InterpFrame::Code(0)];
     while p < bytes.len() {
-        match bytes[p] {
-            b'\\' => {
-                p += 1;
-                if p < bytes.len() {
-                    p += 1;
-                }
-            }
-            b'"' if in_dquote => {
-                p += 1;
-                depth = suspended
-                    .pop()
-                    .expect("a nested string is entered from an interpolation");
-                in_dquote = false;
-            }
-            b'{' if in_dquote => {
-                if bytes.get(p + 1) == Some(&b'$') {
-                    // Re-scanned below as the opening brace of the new interpolation.
-                    in_dquote = false;
-                    depth = 0;
-                } else {
-                    p += 1;
-                }
-            }
-            b'$' if in_dquote && bytes.get(p + 1) == Some(&b'{') => {
-                p += 1;
-                in_dquote = false;
-                depth = 0;
-            }
-            _ if in_dquote => p += 1,
-            b'{' => {
-                depth += 1;
-                p += 1;
-            }
-            b'}' => {
-                depth -= 1;
-                p += 1;
-                if depth == 0 {
-                    if suspended.is_empty() {
-                        return p;
+        let b = bytes[p];
+        let (quote, heredoc) = match stack
+            .last_mut()
+            .expect("the scan returns when the stack empties")
+        {
+            InterpFrame::Code(depth) => {
+                match b {
+                    b'{' => {
+                        *depth += 1;
+                        p += 1;
                     }
-                    in_dquote = true;
+                    b'}' => {
+                        *depth -= 1;
+                        p += 1;
+                        if *depth == 0 {
+                            stack.pop();
+                            if stack.is_empty() {
+                                return Some(p);
+                            }
+                        }
+                    }
+                    b'"' | b'`' => {
+                        stack.push(InterpFrame::Quoted(b));
+                        p += 1;
+                    }
+                    b'\'' => p = skip_nested_squoted(bytes, p),
+                    b'#' if bytes.get(p + 1) != Some(&b'[') => {
+                        p += 1;
+                        Lexer::skip_line_comment_body(bytes, &mut p);
+                    }
+                    b'/' if bytes.get(p + 1) == Some(&b'/') => {
+                        p += 2;
+                        Lexer::skip_line_comment_body(bytes, &mut p);
+                    }
+                    b'/' if bytes.get(p + 1) == Some(&b'*') => {
+                        p = memmem::find(&bytes[p + 2..], b"*/").map_or(bytes.len(), |e| p + e + 4);
+                    }
+                    b'<' if bytes[p..].starts_with(b"<<<") => match heredoc_header(bytes, p + 3) {
+                        Some((label, true, body)) => p = nowdoc_end(bytes, body, label),
+                        Some((label, false, body)) => {
+                            p = body;
+                            match closing_label_end(bytes, p, label) {
+                                Some(end) => p = end,
+                                None => stack.push(InterpFrame::Heredoc(label)),
+                            }
+                        }
+                        None => p += 3,
+                    },
+                    _ => p += 1,
+                }
+                continue;
+            }
+            InterpFrame::Quoted(q) => (Some(*q), None),
+            InterpFrame::Heredoc(label) => (None, Some(*label)),
+        };
+        match b {
+            b'\\' if heredoc.is_none() || newline_len(&bytes[p + 1..]).is_none() => {
+                p += 2;
+            }
+            b'{' if bytes.get(p + 1) == Some(&b'$') => stack.push(InterpFrame::Code(0)),
+            b'$' if bytes.get(p + 1) == Some(&b'{') => {
+                p += 1;
+                stack.push(InterpFrame::Code(0));
+            }
+            b'\n' | b'\r' if heredoc.is_some() => {
+                p += newline_len(&bytes[p..]).unwrap_or(1);
+                if let Some(end) = heredoc.and_then(|l| closing_label_end(bytes, p, l)) {
+                    stack.pop();
+                    p = end;
                 }
             }
-            b'"' => {
-                suspended.push(depth);
-                in_dquote = true;
+            _ if quote == Some(b) => {
+                stack.pop();
                 p += 1;
             }
-            b'\'' => p = skip_nested_squoted(bytes, p),
             _ => p += 1,
         }
     }
-    p
+    None
+}
+
+/// The label, nowdoc flag and body start of a heredoc whose `<<<` ends at `p`.
+fn heredoc_header(bytes: &[u8], mut p: usize) -> Option<(&[u8], bool, usize)> {
+    while matches!(bytes.get(p), Some(b' ' | b'\t')) {
+        p += 1;
+    }
+    let quote = bytes.get(p).copied().filter(|q| matches!(q, b'\'' | b'"'));
+    if quote.is_some() {
+        p += 1;
+    }
+    let label_start = p;
+    if !bytes.get(p).copied().is_some_and(is_ident_start) {
+        return None;
+    }
+    while bytes.get(p).copied().is_some_and(is_ident_continue) {
+        p += 1;
+    }
+    let label = &bytes[label_start..p];
+    if let Some(q) = quote {
+        if bytes.get(p) != Some(&q) {
+            return None;
+        }
+        p += 1;
+    }
+    let body = p + newline_len(&bytes[p..])?;
+    Some((label, quote == Some(b'\''), body))
+}
+
+/// Position after `label` when the line starting at `p` is a heredoc closing marker.
+fn closing_label_end(bytes: &[u8], mut p: usize, label: &[u8]) -> Option<usize> {
+    while matches!(bytes.get(p), Some(b' ' | b'\t')) {
+        p += 1;
+    }
+    let end = p + label.len();
+    (bytes[p..].starts_with(label) && !bytes.get(end).copied().is_some_and(is_ident_continue))
+        .then_some(end)
+}
+
+/// Position after the closing label of a nowdoc whose body starts at `p`.
+fn nowdoc_end(bytes: &[u8], mut p: usize, label: &[u8]) -> usize {
+    while p < bytes.len() {
+        if let Some(end) = closing_label_end(bytes, p, label) {
+            return end;
+        }
+        p = memchr2(b'\n', b'\r', &bytes[p..]).map_or(bytes.len(), |e| {
+            p + e + newline_len(&bytes[p + e..]).unwrap_or(1)
+        });
+    }
+    bytes.len()
 }
 
 /// Length of the `\n`, `\r\n` or `\r` that `bytes` starts with.
@@ -1028,7 +1116,8 @@ impl<'src> Lexer<'src> {
         let mut p = self.pos;
         p += 1; // skip opening `
         loop {
-            match memchr2(b'\\', b'`', &bytes[p..]) {
+            let segment = p;
+            match memchr::memchr3(b'\\', b'`', b'$', &bytes[p..]) {
                 None => {
                     self.errors.push(LexerError {
                         kind: LexerErrorKind::UnterminatedString,
@@ -1047,6 +1136,13 @@ impl<'src> Lexer<'src> {
                                 p += 1;
                             }
                         }
+                        b'$' if p > segment && bytes[p - 1] == b'{' => {
+                            p = skip_complex_interp(bytes, p - 1);
+                        }
+                        b'$' if bytes.get(p + 1) == Some(&b'{') => {
+                            p = skip_complex_interp(bytes, p + 1);
+                        }
+                        b'$' => p += 1,
                         _ => {
                             // b'`'
                             p += 1;
