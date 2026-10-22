@@ -102,12 +102,12 @@ PHP Parse error:  syntax error, unexpected token "{" in Standard input code on l
       "kind": "Error",
       "span": {
         "start": 37,
-        "end": 36
+        "end": 37
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 36
+    "end": 37
   }
 }

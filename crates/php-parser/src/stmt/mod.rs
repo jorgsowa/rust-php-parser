@@ -3306,7 +3306,7 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
         parser.synchronize();
         return Stmt {
             kind: StmtKind::Error,
-            span: Span::new(start, parser.previous_end()),
+            span: parser.span_from(start),
             doc_comment: None,
         };
     }
@@ -3328,7 +3328,7 @@ fn parse_expression_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         parser.synchronize();
         return Stmt {
             kind: StmtKind::Error,
-            span: Span::new(start, parser.previous_end()),
+            span: parser.span_from(start),
             doc_comment: None,
         };
     }

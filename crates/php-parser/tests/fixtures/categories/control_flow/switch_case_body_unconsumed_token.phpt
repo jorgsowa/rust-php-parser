@@ -41,7 +41,7 @@ PHP Parse error:  syntax error, unexpected token "endfor", expecting "case" or "
                   "kind": "Error",
                   "span": {
                     "start": 36,
-                    "end": 31
+                    "end": 36
                   }
                 }
               ],

@@ -103,12 +103,12 @@ PHP Parse error:  syntax error, unexpected integer "2", expecting "}" in Standar
       "kind": "Error",
       "span": {
         "start": 36,
-        "end": 35
+        "end": 36
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 35
+    "end": 36
   }
 }

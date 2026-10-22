@@ -517,6 +517,12 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         self.previous_end
     }
 
+    /// Span from `start` to [`previous_end`](Self::previous_end), empty when nothing was consumed since `start`.
+    #[inline]
+    pub fn span_from(&self, start: u32) -> Span {
+        Span::new(start, self.previous_end.max(start))
+    }
+
     /// Strip the `$` prefix from a Variable token and return the bare name.
     ///
     /// For all tokens produced by the lexer `span.end >= span.start + 2` is an
