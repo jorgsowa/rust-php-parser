@@ -1,4 +1,5 @@
 use php_ast::*;
+use php_lexer::lexer::interpolation_end;
 use php_lexer::TokenKind;
 
 use crate::attributes::{AttrSite, AttrTarget, ClassKind};
@@ -517,6 +518,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let indent_span = Span::new(indent_end - indent.len() as u32, indent_end);
             validate_heredoc_indentation(
                 raw_body,
+                true,
                 &indent,
                 indent_span,
                 body_offset,
@@ -598,6 +600,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let indent_span = Span::new(indent_end - indent.len() as u32, indent_end);
             validate_heredoc_indentation(
                 raw_body,
+                false,
                 &indent,
                 indent_span,
                 body_offset,
@@ -2559,10 +2562,12 @@ fn strip_heredoc_indent(raw_body: &str, indent_len: usize) -> String {
     }
 }
 
-/// Validate that every body line of an indented heredoc/nowdoc starts with `indent`, as PHP does.
+/// Validate that every body line of an indented heredoc (`interpolated`) or nowdoc starts with
+/// `indent`, as PHP does.
 /// Emits `ParseError::Forbidden` for each line that violates the indentation requirement.
 fn validate_heredoc_indentation(
     raw_body: &str,
+    interpolated: bool,
     indent: &str,
     indent_span: Span,
     body_offset: u32,
@@ -2578,10 +2583,9 @@ fn validate_heredoc_indentation(
         });
         return;
     }
-    let mut offset = body_offset as usize;
-    // `\r\n` yields an extra empty line, which needs no indentation.
-    for line in raw_body.split(['\n', '\r']) {
-        let span = Span::new(offset as u32, (offset + line.len()) as u32);
+    let check_line = |start: usize, end: usize, errors: &mut Vec<ParseError>| {
+        let line = &raw_body[start..end];
+        let span = Span::new(body_offset + start as u32, body_offset + end as u32);
         let leading = heredoc_indent_len(line.as_bytes(), indent.len());
         if line[..leading].bytes().any(|b| b != indent.as_bytes()[0]) {
             errors.push(ParseError::Forbidden {
@@ -2595,8 +2599,31 @@ fn validate_heredoc_indentation(
                 span,
             });
         }
-        offset += line.len() + 1; // +1 for the line break byte
+    };
+    // `\r\n` yields an extra empty line, which needs no indentation. A line break inside an
+    // interpolation does not start a body line.
+    let bytes = raw_body.as_bytes();
+    let mut line_start = 0;
+    let mut i = 0;
+    while i < bytes.len() {
+        i = match bytes[i] {
+            b'\n' | b'\r' => {
+                check_line(line_start, i, errors);
+                line_start = i + 1;
+                i + 1
+            }
+            b'\\' if interpolated && !matches!(bytes.get(i + 1), Some(b'\n' | b'\r')) => i + 2,
+            b'{' if interpolated && bytes.get(i + 1) == Some(&b'$') => {
+                interpolation_end(bytes, i).unwrap_or(bytes.len())
+            }
+            b'$' if interpolated && bytes.get(i + 1) == Some(&b'{') => {
+                interpolation_end(bytes, i + 1).unwrap_or(bytes.len())
+            }
+            _ => i + 1,
+        }
+        .min(bytes.len());
     }
+    check_line(line_start, bytes.len(), errors);
 }
 
 /// Parse an integer literal from raw bytes, skipping underscores, without heap allocation.
