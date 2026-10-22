@@ -1749,6 +1749,9 @@ pub fn parse_param_list<'arena, 'src>(
                 span: hook.span,
             });
         }
+        if let Some(name) = name.as_str() {
+            class::check_backed_by_ref_get(parser, name, &hooks);
+        }
         if let Some(name) = name.as_str().filter(|name| {
             set_visibility.is_some()
                 && !hooks.is_empty()

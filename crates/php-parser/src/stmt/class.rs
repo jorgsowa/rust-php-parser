@@ -435,6 +435,29 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
     hooks
 }
 
+/// Report a by-reference `get` hook of a backed property that also has a `set` hook.
+pub(super) fn check_backed_by_ref_get(
+    parser: &mut Parser<'_, '_>,
+    name: &str,
+    hooks: &[PropertyHook<'_, '_>],
+) {
+    let by_ref_get = hooks
+        .iter()
+        .find(|h| h.kind == PropertyHookKind::Get && h.by_ref);
+    let has_set = hooks.iter().any(|h| h.kind == PropertyHookKind::Set);
+    let Some(get) = by_ref_get.filter(|_| has_set && !is_virtual_property(name, hooks)) else {
+        return;
+    };
+    let class = parser.class_scope.as_ref().map_or("", |scope| &scope.name);
+    let message = format!(
+        "Get hook of backed property {class}::{name} with set hook may not return by reference"
+    );
+    parser.error(ParseError::Forbidden {
+        message: message.into(),
+        span: get.span,
+    });
+}
+
 /// Whether no hook body accesses `$this->{name}`, which makes the property virtual (no backing store).
 pub(super) fn is_virtual_property(name: &str, hooks: &[PropertyHook<'_, '_>]) -> bool {
     use php_ast::visitor::{walk_expr, walk_stmt, Visitor};
@@ -2091,6 +2114,9 @@ fn parse_property_member<'arena, 'src>(
             .into(),
             span: Span::new(member_start, parser.previous_end()),
         });
+    }
+    if let Some(name) = prop_name.as_str() {
+        check_backed_by_ref_get(parser, name, &hooks);
     }
     if let Some(name) = prop_name
         .as_str()
