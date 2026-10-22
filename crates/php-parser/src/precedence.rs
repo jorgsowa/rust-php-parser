@@ -116,8 +116,9 @@ const fn build_bp_table() -> [Option<(u8, u8)>; 256] {
     table[TokenKind::Slash as u8 as usize] = Some((37, 38));
     table[TokenKind::Percent as u8 as usize] = Some((37, 38));
 
-    // instanceof (nonassoc) — above `!` (41), below high-tier prefix unary (47)
-    table[TokenKind::Instanceof as u8 as usize] = Some((45, 46));
+    // instanceof (nonassoc) — above `!` (41), below high-tier prefix unary (47). Its right
+    // side is a class name reference, which takes no binary operator, not even `**`.
+    table[TokenKind::Instanceof as u8 as usize] = Some((45, 61));
 
     // Exponentiation (right-associative) — highest binary precedence
     table[TokenKind::StarStar as u8 as usize] = Some((60, 59));
@@ -337,6 +338,14 @@ mod tests {
         let (_, pow_right) = infix_binding_power(TokenKind::StarStar).unwrap();
         let (inst_left, _) = infix_binding_power(TokenKind::Instanceof).unwrap();
         assert!(pow_right > inst_left);
+    }
+
+    #[test]
+    fn test_instanceof_operand_excludes_pow() {
+        // PHP: `$a instanceof B ** 2` → `($a instanceof B) ** 2`
+        let (_, inst_right) = infix_binding_power(TokenKind::Instanceof).unwrap();
+        let (pow_left, _) = infix_binding_power(TokenKind::StarStar).unwrap();
+        assert!(inst_right > pow_left);
     }
 
     #[test]
