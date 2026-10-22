@@ -1,11 +1,12 @@
 use php_ast::*;
 use php_lexer::{Lexer, LexerError, LexerErrorKind, Token, TokenKind};
 
-use crate::diagnostics::ParseError;
+use crate::diagnostics::{ForbiddenRule, ParseError};
 use crate::expr;
 use crate::instrument;
 use crate::stmt;
 use crate::version::PhpVersion;
+use std::borrow::Cow;
 
 const MAX_ERRORS: usize = 100;
 /// Maximum recursion depth shared by statements, expressions and the
@@ -43,6 +44,7 @@ fn lex_error_to_parse_error(e: LexerError) -> ParseError {
         ParseError::UnterminatedString { span: e.span }
     } else {
         ParseError::Forbidden {
+            rule: ForbiddenRule::Other,
             message: e.message.into(),
             span: e.span,
         }
@@ -771,6 +773,19 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
+    pub(crate) fn forbid(
+        &mut self,
+        rule: ForbiddenRule,
+        message: impl Into<Cow<'static, str>>,
+        span: Span,
+    ) {
+        self.error(ParseError::Forbidden {
+            rule,
+            message: message.into(),
+            span,
+        });
+    }
+
     /// Enter one level of statement/expression recursion. Returns `false`, after
     /// reporting [`ParseError::NestingTooDeep`], when the shared budget is used
     /// up; the caller must then return without recursing and without calling
@@ -801,7 +816,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// such a target is recognized (assignment LHS / foreach).
     pub fn retract_destructuring_errors_within(&mut self, within: Span) {
         self.errors.retain(|e| {
-            !matches!(e, ParseError::Forbidden { message, span }
+            !matches!(e, ParseError::Forbidden { message, span, .. }
                 if (message.as_ref() == "Cannot use empty array elements in arrays"
                     || message.as_ref() == LIST_OUTSIDE_DESTRUCTURING)
                     && span.start >= within.start
@@ -817,9 +832,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
         let spans = std::mem::take(&mut self.uncompiled_spans);
         self.errors.retain(|e| match e {
-            ParseError::Forbidden { message, span } if !is_raised_by_php_parser(message) => !spans
-                .iter()
-                .any(|s| span.start >= s.start && span.end <= s.end),
+            ParseError::Forbidden { message, span, .. } if !is_raised_by_php_parser(message) => {
+                !spans
+                    .iter()
+                    .any(|s| span.start >= s.start && span.end <= s.end)
+            }
             _ => true,
         });
     }
@@ -1267,10 +1284,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         let span = Span::new(start, last_end);
         self.check_name_parts_before_80(&parts, span);
         if separated_at.is_some() && self.version >= PhpVersion::Php80 {
-            self.error(ParseError::Forbidden {
-                message: "A namespaced name cannot contain whitespace".into(),
+            self.forbid(
+                ForbiddenRule::Other,
+                "A namespaced name cannot contain whitespace",
                 span,
-            });
+            );
         }
 
         let kind = if fully_qualified {
@@ -1295,10 +1313,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     pub(crate) fn reject_static_type(&mut self, type_hint: &TypeHint<'_, '_>, position: &str) {
         match &type_hint.kind {
             TypeHintKind::Keyword(BuiltinType::Static, span) => {
-                self.error(ParseError::Forbidden {
-                    message: format!("static cannot be used as a {position} type").into(),
-                    span: *span,
-                });
+                self.forbid(
+                    ForbiddenRule::Other,
+                    format!("static cannot be used as a {position} type"),
+                    *span,
+                );
             }
             TypeHintKind::Nullable(inner) => self.reject_static_type(inner, position),
             TypeHintKind::Union(types) | TypeHintKind::Intersection(types) => {
@@ -1329,10 +1348,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// Report a named class-like declaration inside a class member body.
     pub(crate) fn check_class_nesting(&mut self, name_span: Span) {
         if self.class_scope.is_some() {
-            self.error(ParseError::Forbidden {
-                message: "Class declarations may not be nested".into(),
-                span: name_span,
-            });
+            self.forbid(
+                ForbiddenRule::Other,
+                "Class declarations may not be nested",
+                name_span,
+            );
         }
     }
 
@@ -1522,20 +1542,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         None => return,
                     },
                 };
-                self.error(ParseError::Forbidden {
-                    message: message.into(),
-                    span: *span,
-                });
+                self.forbid(ForbiddenRule::Other, message, *span);
             }
             TypeHintKind::Union(types) => {
                 for ty in types.iter() {
                     match &ty.kind {
                         TypeHintKind::Keyword(builtin, span) => {
                             if let Some(message) = standalone_type_message(*builtin) {
-                                self.error(ParseError::Forbidden {
-                                    message: message.into(),
-                                    span: *span,
-                                });
+                                self.forbid(ForbiddenRule::Other, message, *span);
                             }
                         }
                         TypeHintKind::Intersection(members) => {
@@ -1577,10 +1591,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 _ => self.type_display(ty),
             };
             let message = format!("Type {shown} cannot be part of an intersection type");
-            self.error(ParseError::Forbidden {
-                message: message.into(),
-                span: *span,
-            });
+            self.forbid(ForbiddenRule::Other, message, *span);
         }
     }
 
@@ -1609,10 +1620,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 "Type {} contains both object and a class type, which is redundant",
                 self.type_display(type_hint)
             );
-            self.error(ParseError::Forbidden {
-                message: message.into(),
-                span: type_hint.span,
-            });
+            self.forbid(ForbiddenRule::Other, message, type_hint.span);
         }
     }
 
@@ -1666,10 +1674,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         self.type_display(smaller)
                     )
                 };
-                self.error(ParseError::Forbidden {
-                    message: message.into(),
-                    span: ty.span,
-                });
+                self.forbid(ForbiddenRule::Other, message, ty.span);
                 break;
             }
         }
@@ -1682,10 +1687,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         else {
             return false;
         };
-        self.error(ParseError::Forbidden {
-            message: format!("{} cannot be used as a parameter type", builtin.as_str()).into(),
-            span: *span,
-        });
+        self.forbid(
+            ForbiddenRule::Other,
+            format!("{} cannot be used as a parameter type", builtin.as_str()),
+            *span,
+        );
         true
     }
 
@@ -1717,10 +1723,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             "{subject} {class}{member} cannot have type {}",
             self.type_display(type_hint)
         );
-        self.error(ParseError::Forbidden {
-            message: message.into(),
-            span: type_hint.span,
-        });
+        self.forbid(ForbiddenRule::Other, message, type_hint.span);
     }
 
     /// Report a builtin type or class keyword written with a namespace, as in `\int`, `\self`,
@@ -1729,10 +1732,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         match &type_hint.kind {
             TypeHintKind::Named(name @ Name::Complex { parts, span, .. }) => {
                 if let Some(text) = crate::stmt::fully_qualified_class_keyword(name) {
-                    self.error(ParseError::Forbidden {
-                        message: format!("'\\{text}' is an invalid class name").into(),
-                        span: *span,
-                    });
+                    self.forbid(
+                        ForbiddenRule::Other,
+                        format!("'\\{text}' is an invalid class name"),
+                        *span,
+                    );
                     return;
                 }
                 let Some(last) = parts.last() else { return };
@@ -1742,10 +1746,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     && parts.len() == 1
                     && last.eq_ignore_ascii_case("static");
                 if unqualified_static {
-                    self.error(ParseError::Forbidden {
-                        message: "Type declaration 'static' must be unqualified".into(),
-                        span: *span,
-                    });
+                    self.forbid(
+                        ForbiddenRule::Other,
+                        "Type declaration 'static' must be unqualified",
+                        *span,
+                    );
                     return;
                 }
                 if relative && parts.len() == 1 && crate::stmt::class_keyword(last).is_some() {
@@ -1786,10 +1791,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 } else {
                     return;
                 };
-                self.error(ParseError::Forbidden {
-                    message: message.into(),
-                    span: *span,
-                });
+                self.forbid(ForbiddenRule::Other, message, *span);
             }
             TypeHintKind::Nullable(inner) => self.check_qualified_type_names(inner),
             TypeHintKind::Union(types) | TypeHintKind::Intersection(types) => {
@@ -1819,10 +1821,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 || has_iterable && matches!(key.as_str(), "array" | "\\traversable");
             if !seen.insert(key.clone()) || covered {
                 let text = &self.source[ty.span.start as usize..ty.span.end as usize];
-                self.error(ParseError::Forbidden {
-                    message: format!("Duplicate type '{text}' in {kind} type").into(),
-                    span: ty.span,
-                });
+                self.forbid(
+                    ForbiddenRule::Other,
+                    format!("Duplicate type '{text}' in {kind} type"),
+                    ty.span,
+                );
             }
         }
         for ty in types.iter() {
@@ -1877,10 +1880,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 .iter()
                 .any(|t| matches!(t.kind, TypeHintKind::Keyword(BuiltinType::False, _)));
             if has_true && has_false {
-                self.error(ParseError::Forbidden {
-                    message: "Type contains both true and false, bool must be used instead".into(),
+                self.forbid(
+                    ForbiddenRule::Other,
+                    "Type contains both true and false, bool must be used instead",
                     span,
-                });
+                );
             }
             // DNF types (parenthesized intersection in union) require PHP 8.2
             let has_dnf = types
@@ -1905,10 +1909,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
                 // Check for invalid outer-form DNF: (A|B)&C
                 if let TypeHintKind::Union(_) = &first.kind {
-                    self.error(ParseError::Forbidden {
-                        message: "Type declarations cannot be union types, use DNF syntax (A&B)|C instead".into(),
-                        span: first.span,
-                    });
+                    self.forbid(
+                        ForbiddenRule::Other,
+                        "Type declarations cannot be union types, use DNF syntax (A&B)|C instead",
+                        first.span,
+                    );
                 }
 
                 let mut end = first.span.end;
@@ -2001,12 +2006,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // If `first` is an Intersection here, it must have come from `parse_type_element`'s
         // parenthesized branch (parse_simple_type never produces Intersection).
         if let TypeHintKind::Intersection(_) = &first.kind {
-            self.error(ParseError::Forbidden {
-                message:
-                    "A parenthesized intersection type can only be used as part of a union type"
-                        .into(),
-                span: first.span,
-            });
+            self.forbid(
+                ForbiddenRule::Other,
+                "A parenthesized intersection type can only be used as part of a union type",
+                first.span,
+            );
         }
 
         first
@@ -2372,11 +2376,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         crate::expr::ArgListResult::Args(args) => {
                             for arg in args.iter() {
                                 if arg.is_spread() {
-                                    self.error(ParseError::Forbidden {
-                                        message: "Cannot use unpacking in attribute argument list"
-                                            .into(),
-                                        span: arg.span,
-                                    });
+                                    self.forbid(
+                                        ForbiddenRule::Other,
+                                        "Cannot use unpacking in attribute argument list",
+                                        arg.span,
+                                    );
                                 } else if let Some(value) = arg.value() {
                                     crate::expr::check_const_expr(self, value, true);
                                 }
@@ -2385,10 +2389,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         }
                         crate::expr::ArgListResult::CallableMarker => {
                             // PHP: "Cannot create Closure as attribute argument".
-                            self.error(ParseError::Forbidden {
-                                message: "Cannot create Closure as attribute argument".into(),
-                                span: Span::new(paren_start, self.previous_end()),
-                            });
+                            self.forbid(
+                                ForbiddenRule::Other,
+                                "Cannot create Closure as attribute argument",
+                                Span::new(paren_start, self.previous_end()),
+                            );
                             self.alloc_vec()
                         }
                     }
@@ -2409,10 +2414,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
 
             if attributes.len() == group_len_before {
-                self.error(ParseError::Forbidden {
-                    message: "Attribute list cannot be empty".into(),
-                    span: Span::new(group_start, self.current_span().end),
-                });
+                self.forbid(
+                    ForbiddenRule::Other,
+                    "Attribute list cannot be empty",
+                    Span::new(group_start, self.current_span().end),
+                );
             }
             self.expect(TokenKind::RightBracket);
             // Before 8.0 `#[` starts a comment, so only the version error applies.
@@ -2613,19 +2619,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 };
                 if let Some((prev_kind, prev_span)) = first_ns {
                     if prev_kind != kind {
-                        self.error(ParseError::Forbidden {
-                            message: "Cannot mix bracketed namespace declarations with unbracketed namespace declarations".into(),
-                            span: stmt.span,
-                        });
+                        self.forbid(ForbiddenRule::Other, "Cannot mix bracketed namespace declarations with unbracketed namespace declarations", stmt.span);
                         let _ = prev_span;
                     }
                 } else {
                     first_ns = Some((kind, stmt.span));
                     if let Some(noncode_span) = saw_non_ns_before_first_ns {
-                        self.error(ParseError::Forbidden {
-                            message: "Namespace declaration statement has to be the very first statement or after any declare call in the script".into(),
-                            span: noncode_span,
-                        });
+                        self.forbid(ForbiddenRule::Other, "Namespace declaration statement has to be the very first statement or after any declare call in the script", noncode_span);
                     }
                 }
             } else if !is_skippable {
@@ -2641,10 +2641,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
 
         if let Some(span) = saw_code_after_braced {
-            self.error(ParseError::Forbidden {
-                message: "No code may exist outside of namespace {}".into(),
+            self.forbid(
+                ForbiddenRule::Other,
+                "No code may exist outside of namespace {}",
                 span,
-            });
+            );
         }
 
         // Pass 2: nested namespace inside any braced body.
@@ -2653,10 +2654,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 if let php_ast::NamespaceBody::Braced(inner) = decl.body {
                     for s in inner.stmts.iter() {
                         if matches!(s.kind, StmtKind::Namespace(_)) {
-                            self.error(ParseError::Forbidden {
-                                message: "Namespace declarations cannot be nested".into(),
-                                span: s.span,
-                            });
+                            self.forbid(
+                                ForbiddenRule::Other,
+                                "Namespace declarations cannot be nested",
+                                s.span,
+                            );
                         }
                     }
                 }
@@ -2715,14 +2717,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         UseKind::Const => "const ",
                         _ => "",
                     };
-                    self.error(ParseError::Forbidden {
-                        message: format!(
+                    self.forbid(
+                        ForbiddenRule::Other,
+                        format!(
                             "Cannot use {prefix}{} as {alias} because the name is already in use",
                             parts.join("\\")
-                        )
-                        .into(),
-                        span: item.span,
-                    });
+                        ),
+                        item.span,
+                    );
                 }
             }
         }

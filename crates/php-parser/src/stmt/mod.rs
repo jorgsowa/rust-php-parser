@@ -2,7 +2,7 @@ use php_ast::*;
 use php_lexer::TokenKind;
 
 use crate::attributes::{AttrSite, AttrTarget};
-use crate::diagnostics::ParseError;
+use crate::diagnostics::{ForbiddenRule, ParseError};
 use crate::expr;
 use crate::instrument;
 use crate::parser::Parser;
@@ -217,10 +217,11 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             } else if parser.check(TokenKind::Final) {
                 // `abstract final class` — collect both modifiers and emit diagnostic
                 parser.advance(); // consume 'final'
-                parser.error(ParseError::Forbidden {
-                    message: "cannot use 'abstract' and 'final' together on a class".into(),
-                    span: Span::new(start, parser.previous_end()),
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "cannot use 'abstract' and 'final' together on a class",
+                    Span::new(start, parser.previous_end()),
+                );
                 if parser.check(TokenKind::Class) {
                     class::parse_class(
                         parser,
@@ -260,10 +261,11 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             } else if parser.check(TokenKind::Abstract) {
                 // `final abstract class` — collect both modifiers and emit diagnostic
                 parser.advance(); // consume 'abstract'
-                parser.error(ParseError::Forbidden {
-                    message: "cannot use 'abstract' and 'final' together on a class".into(),
-                    span: Span::new(start, parser.previous_end()),
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "cannot use 'abstract' and 'final' together on a class",
+                    Span::new(start, parser.previous_end()),
+                );
                 if parser.check(TokenKind::Class) {
                     class::parse_class(
                         parser,
@@ -370,10 +372,11 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 // `static;` is not valid — PHP expects `::` after standalone `static`.
                 let start = parser.start_span();
                 let token = parser.advance(); // consume 'static'
-                parser.error(ParseError::Forbidden {
-                    message: "Cannot use 'static' as a standalone expression".into(),
-                    span: token.span,
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "Cannot use 'static' as a standalone expression",
+                    token.span,
+                );
                 parser.expect_semicolon("expression");
                 let span = Span::new(start, parser.previous_end());
                 Stmt {
@@ -497,10 +500,11 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 return class::parse_class(parser, class_modifiers(true, false, true), attributes);
             } else if parser.check(TokenKind::Final) {
                 parser.advance();
-                parser.error(ParseError::Forbidden {
-                    message: "cannot use 'abstract' and 'final' together on a class".into(),
-                    span: Span::new(start, parser.previous_end()),
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "cannot use 'abstract' and 'final' together on a class",
+                    Span::new(start, parser.previous_end()),
+                );
                 if parser.check(TokenKind::Class) {
                     return class::parse_class(
                         parser,
@@ -526,10 +530,11 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 class::parse_class(parser, class_modifiers(false, true, true), attributes)
             } else if parser.check(TokenKind::Abstract) {
                 parser.advance();
-                parser.error(ParseError::Forbidden {
-                    message: "cannot use 'abstract' and 'final' together on a class".into(),
-                    span: Span::new(start, parser.previous_end()),
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "cannot use 'abstract' and 'final' together on a class",
+                    Span::new(start, parser.previous_end()),
+                );
                 if parser.check(TokenKind::Class) {
                     class::parse_class(parser, class_modifiers(true, true, false), attributes)
                 } else {
@@ -589,10 +594,11 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             if let StmtKind::Const(ref items) = stmt.kind {
                 // PHP 7.4 reads `#[` as a comment, so the attribute is only a version gate there.
                 if items.len() > 1 && parser.version >= PhpVersion::Php80 {
-                    parser.error(ParseError::Forbidden {
-                        message: "Cannot apply attributes to multiple constants at once".into(),
-                        span: stmt.span,
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "Cannot apply attributes to multiple constants at once",
+                        stmt.span,
+                    );
                 }
                 if let Some(first) = items.first() {
                     parser.check_attributes(&first.attributes, &AttrSite::new(AttrTarget::Const));
@@ -1085,10 +1091,11 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
 
     let (key, value, by_ref) = if parser.eat(TokenKind::FatArrow).is_some() {
         if let Some(amp) = first_ref {
-            parser.error(ParseError::Forbidden {
-                message: "Key element cannot be a reference".into(),
-                span: amp.span.merge(first.span),
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                "Key element cannot be a reference",
+                amp.span.merge(first.span),
+            );
         }
         let by_ref = parser.eat(TokenKind::Ampersand).is_some();
         let value = expr::parse_expr(parser);
@@ -1193,10 +1200,11 @@ fn parse_function<'arena, 'src>(
                 | TokenKind::Parent_
         ) && !(name_token_kind == TokenKind::Match_ && parser.version < PhpVersion::Php80)
         {
-            parser.error(ParseError::Forbidden {
-                message: format!("cannot use '{}' as function name; it is reserved", text).into(),
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("cannot use '{}' as function name; it is reserved", text),
                 span,
-            });
+            );
         }
         Ident::new(text, span)
     } else {
@@ -1331,14 +1339,14 @@ pub(crate) fn check_generator_return_type(
         _ => false,
     });
     if !admits_generator {
-        parser.error(ParseError::Forbidden {
-            message: format!(
+        parser.forbid(
+            ForbiddenRule::Other,
+            format!(
                 "Generator return type must be a supertype of Generator, {} given",
                 parser.type_display(return_type)
-            )
-            .into(),
-            span: return_type.span,
-        });
+            ),
+            return_type.span,
+        );
     }
 }
 
@@ -1409,10 +1417,7 @@ pub(crate) fn check_returns_against_type<'arena, 'src>(
                         (ReturnRule::Value(message), None) => message.clone(),
                         _ => continue,
                     };
-                    parser.error(ParseError::Forbidden {
-                        message,
-                        span: stmt.span,
-                    });
+                    parser.forbid(ForbiddenRule::Other, message, stmt.span);
                 }
                 StmtKind::Block(b) => walk(parser, &b.stmts, rule),
                 StmtKind::If(if_) => {
@@ -1465,10 +1470,7 @@ fn check_param_name(
         }
         _ => return,
     };
-    parser.error(ParseError::Forbidden {
-        message,
-        span: name.span,
-    });
+    parser.forbid(ForbiddenRule::Other, message, name.span);
 }
 
 pub fn parse_param_list<'arena, 'src>(
@@ -1548,10 +1550,11 @@ pub fn parse_param_list<'arena, 'src>(
                         let span = Span::new(param_start, parser.previous_end());
                         parser.require_version(PhpVersion::Php84, "asymmetric visibility", span);
                         if set_visibility.is_some() {
-                            parser.error(ParseError::Forbidden {
-                                message: "cannot use multiple set-visibility modifiers".into(),
-                                span: Span::new(param_start, parser.previous_end()),
-                            });
+                            parser.forbid(
+                                ForbiddenRule::Other,
+                                "cannot use multiple set-visibility modifiers",
+                                Span::new(param_start, parser.previous_end()),
+                            );
                         }
                         parser.advance(); // consume visibility keyword
                         parser.advance(); // consume (
@@ -1566,10 +1569,11 @@ pub fn parse_param_list<'arena, 'src>(
                             span,
                         );
                         if visibility.is_some() {
-                            parser.error(ParseError::Forbidden {
-                                message: "cannot use multiple visibility modifiers".into(),
-                                span: Span::new(param_start, parser.previous_end()),
-                            });
+                            parser.forbid(
+                                ForbiddenRule::Other,
+                                "cannot use multiple visibility modifiers",
+                                Span::new(param_start, parser.previous_end()),
+                            );
                         }
                         parser.advance();
                         visibility = Some(vis);
@@ -1583,10 +1587,11 @@ pub fn parse_param_list<'arena, 'src>(
                         current_span,
                     );
                     if is_final {
-                        parser.error(ParseError::Forbidden {
-                            message: "duplicate modifier 'final'".into(),
-                            span: current_span,
-                        });
+                        parser.forbid(
+                            ForbiddenRule::Other,
+                            "duplicate modifier 'final'",
+                            current_span,
+                        );
                     }
                     parser.advance();
                     is_final = true;
@@ -1595,10 +1600,11 @@ pub fn parse_param_list<'arena, 'src>(
                     first_modifier_span.get_or_insert(current_span);
                     parser.require_version(PhpVersion::Php81, "readonly parameters", current_span);
                     if is_readonly {
-                        parser.error(ParseError::Forbidden {
-                            message: "duplicate modifier 'readonly'".into(),
-                            span: current_span,
-                        });
+                        parser.forbid(
+                            ForbiddenRule::Other,
+                            "duplicate modifier 'readonly'",
+                            current_span,
+                        );
                     }
                     parser.advance();
                     is_readonly = true;
@@ -1607,10 +1613,11 @@ pub fn parse_param_list<'arena, 'src>(
                 // "Cannot use the static modifier on a parameter". Consume it
                 // so subsequent type-hint / variable parsing isn't derailed.
                 TokenKind::Static => {
-                    parser.error(ParseError::Forbidden {
-                        message: "Cannot use the static modifier on a parameter".into(),
-                        span: current_span,
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "Cannot use the static modifier on a parameter",
+                        current_span,
+                    );
                     parser.advance();
                 }
                 _ => break,
@@ -1619,10 +1626,11 @@ pub fn parse_param_list<'arena, 'src>(
 
         if let (Some(get), Some(set)) = (visibility, set_visibility) {
             if class::visibility_rank(set) > class::visibility_rank(get) {
-                parser.error(ParseError::Forbidden {
-                    message: "Visibility of property must not be weaker than set visibility".into(),
-                    span: Span::new(param_start, parser.previous_end()),
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "Visibility of property must not be weaker than set visibility",
+                    Span::new(param_start, parser.previous_end()),
+                );
             }
         }
 
@@ -1631,10 +1639,11 @@ pub fn parse_param_list<'arena, 'src>(
         // "Cannot declare promoted property outside a constructor".
         if let Some(span) = first_modifier_span {
             if !parser.in_constructor {
-                parser.error(ParseError::Forbidden {
-                    message: "Cannot declare promoted property outside a constructor".into(),
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "Cannot declare promoted property outside a constructor",
                     span,
-                });
+                );
             }
         }
 
@@ -1654,10 +1663,11 @@ pub fn parse_param_list<'arena, 'src>(
 
         // Before 8.1 `readonly` is reported as a version gate; PHP 8.0 reads it as a class type.
         if is_readonly && type_hint.is_none() && parser.version >= PhpVersion::Php81 {
-            parser.error(ParseError::Forbidden {
-                message: "readonly promoted property must have type".into(),
-                span: Span::new(param_start, parser.previous_end()),
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                "readonly promoted property must have type",
+                Span::new(param_start, parser.previous_end()),
+            );
         }
         // by-ref
         let by_ref = parser.eat(TokenKind::Ampersand).is_some();
@@ -1673,13 +1683,11 @@ pub fn parse_param_list<'arena, 'src>(
         check_param_name(parser, name, &params);
         if let (Some(_), None, Some(name)) = (set_visibility, &type_hint, name.as_str()) {
             let class = parser.class_member_prefix();
-            parser.error(ParseError::Forbidden {
-                message: format!(
-                    "Property with asymmetric visibility {class}${name} must have type"
-                )
-                .into(),
-                span: Span::new(param_start, parser.previous_end()),
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("Property with asymmetric visibility {class}${name} must have type"),
+                Span::new(param_start, parser.previous_end()),
+            );
         }
         if let Some(type_hint) = &type_hint {
             let reported = parser.reject_return_only_param_type(type_hint);
@@ -1701,10 +1709,11 @@ pub fn parse_param_list<'arena, 'src>(
         // PHP rejects variadic parameters with default values:
         // "Variadic parameter cannot have a default value".
         if variadic && default.is_some() {
-            parser.error(ParseError::Forbidden {
-                message: "Variadic parameter cannot have a default value".into(),
-                span: Span::new(param_start, parser.previous_end()),
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                "Variadic parameter cannot have a default value",
+                Span::new(param_start, parser.previous_end()),
+            );
         }
 
         let param_end = default
@@ -1735,10 +1744,11 @@ pub fn parse_param_list<'arena, 'src>(
                 parser.require_version(PhpVersion::Php84, "property hooks", span);
             }
             if first_modifier_span.is_none() && !parser.in_constructor {
-                parser.error(ParseError::Forbidden {
-                    message: "Cannot declare promoted property outside a constructor".into(),
-                    span: parser.current_span(),
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "Cannot declare promoted property outside a constructor",
+                    parser.current_span(),
+                );
             }
             class::parse_property_hooks(parser, type_hint.as_ref(), name.as_str())
         } else {
@@ -1747,10 +1757,11 @@ pub fn parse_param_list<'arena, 'src>(
         class::check_hook_bodies(parser, &hooks, false, false, false);
 
         if let Some(hook) = hooks.first().filter(|_| is_readonly) {
-            parser.error(ParseError::Forbidden {
-                message: "A readonly property cannot declare hooks".into(),
-                span: hook.span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                "A readonly property cannot declare hooks",
+                hook.span,
+            );
         }
         if let Some(name) = name.as_str() {
             class::check_backed_by_ref_get(parser, name, &hooks);
@@ -1817,10 +1828,11 @@ pub fn parse_param_list<'arena, 'src>(
         // A variadic parameter must be last: a trailing comma is fine, but
         // another parameter after it is an error.
         if variadic && !parser.check(TokenKind::RightParen) {
-            parser.error(ParseError::Forbidden {
-                message: "Only the last parameter can be variadic".into(),
-                span: parser.current_span(),
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                "Only the last parameter can be variadic",
+                parser.current_span(),
+            );
         }
     }
 
@@ -1931,10 +1943,11 @@ fn validate_break_continue<'arena, 'src>(
         None => {
             // Implicit level 1
             if loop_depth == 0 {
-                parser.error(ParseError::Forbidden {
-                    message: format!("Cannot '{}' 1 level", kw).into(),
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    format!("Cannot '{}' 1 level", kw),
                     span,
-                });
+                );
                 return;
             }
             1
@@ -1949,21 +1962,20 @@ fn validate_break_continue<'arena, 'src>(
                 ExprKind::Float(_) | ExprKind::String(_) => 0,
                 ExprKind::Error => return,
                 _ => {
-                    parser.error(ParseError::Forbidden {
-                        message: format!(
-                            "'{kw}' operator with non-integer operand is no longer supported"
-                        )
-                        .into(),
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        format!("'{kw}' operator with non-integer operand is no longer supported"),
                         span,
-                    });
+                    );
                     return;
                 }
             };
             if n <= 0 {
-                parser.error(ParseError::Forbidden {
-                    message: format!("'{}' operator accepts only positive integers", kw).into(),
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    format!("'{}' operator accepts only positive integers", kw),
                     span,
-                });
+                );
                 return;
             }
             if n as u64 > loop_depth as u64 {
@@ -1972,10 +1984,11 @@ fn validate_break_continue<'arena, 'src>(
                 } else {
                     format!("{} levels", n)
                 };
-                parser.error(ParseError::Forbidden {
-                    message: format!("Cannot '{}' {}", kw, levels).into(),
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    format!("Cannot '{}' {}", kw, levels),
                     span,
-                });
+                );
                 return;
             }
             n as u32
@@ -1983,10 +1996,11 @@ fn validate_break_continue<'arena, 'src>(
     };
     if let Some(finally_loop_depth) = parser.finally_loop_depth {
         if levels > loop_depth - finally_loop_depth {
-            parser.error(ParseError::Forbidden {
-                message: "jump out of a finally block is disallowed".into(),
+            parser.forbid(
+                ForbiddenRule::Other,
+                "jump out of a finally block is disallowed",
                 span,
-            });
+            );
         }
     }
 }
@@ -2050,10 +2064,11 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
             break;
         }
         if seen_separator {
-            parser.error(ParseError::Forbidden {
-                message: "Only one ';' may precede the first case of a switch".into(),
-                span: separator_span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                "Only one ';' may precede the first case of a switch",
+                separator_span,
+            );
         }
         seen_separator = true;
     }
@@ -2076,10 +2091,11 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
         } else if let Some(default_tok) = parser.eat(TokenKind::Default) {
             // PHP rejects "Switch statements may only contain one default clause".
             if seen_default_span.is_some() {
-                parser.error(ParseError::Forbidden {
-                    message: "Switch statements may only contain one default clause".into(),
-                    span: default_tok.span,
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "Switch statements may only contain one default clause",
+                    default_tok.span,
+                );
             } else {
                 seen_default_span = Some(default_tok.span);
             }
@@ -2193,20 +2209,14 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             } else {
                 continue;
             };
-            parser.error(ParseError::Forbidden {
-                message: message.into(),
-                span: name.span(),
-            });
+            parser.forbid(ForbiddenRule::Other, message, name.span());
         }
 
         let var = if parser.check(TokenKind::Variable) {
             let t = parser.advance();
             let var = parser.variable_ident(t);
             if var.as_str() == Some("this") {
-                parser.error(ParseError::Forbidden {
-                    message: "Cannot re-assign $this".into(),
-                    span: var.span,
-                });
+                parser.forbid(ForbiddenRule::Other, "Cannot re-assign $this", var.span);
             }
             Some(var)
         } else {
@@ -2440,17 +2450,19 @@ pub(crate) fn check_gotos<'arena, 'src>(
     let mut collector = Collector::default();
     collector.walk(stmts);
     for (name, span) in collector.duplicates {
-        parser.error(ParseError::Forbidden {
-            message: format!("Label '{name}' already defined").into(),
+        parser.forbid(
+            ForbiddenRule::Other,
+            format!("Label '{name}' already defined"),
             span,
-        });
+        );
     }
     for goto in &collector.gotos {
         let Some(label) = collector.labels.iter().find(|l| l.name == goto.name) else {
-            parser.error(ParseError::Forbidden {
-                message: format!("'goto' to undefined label '{}'", goto.name).into(),
-                span: goto.span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("'goto' to undefined label '{}'", goto.name),
+                goto.span,
+            );
             continue;
         };
         let label_loop = label
@@ -2459,10 +2471,11 @@ pub(crate) fn check_gotos<'arena, 'src>(
             .rev()
             .find(|f| matches!(f, Frame::LoopOrSwitch(_)));
         if label_loop.is_some_and(|f| !goto.frames.contains(f)) {
-            parser.error(ParseError::Forbidden {
-                message: "'goto' into loop or switch statement is disallowed".into(),
-                span: goto.span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                "'goto' into loop or switch statement is disallowed",
+                goto.span,
+            );
             continue;
         }
         let crossed_finally = |from: &Jump, to: &Jump| {
@@ -2481,10 +2494,7 @@ pub(crate) fn check_gotos<'arena, 'src>(
             (_, Some(_)) => "jump out of a finally block is disallowed",
             _ => continue,
         };
-        parser.error(ParseError::Forbidden {
-            message: message.into(),
-            span: goto.span,
-        });
+        parser.forbid(ForbiddenRule::Other, message, goto.span);
     }
 }
 
@@ -2609,10 +2619,7 @@ fn check_declare_directive(
         None
     };
     if let Some(message) = message {
-        parser.error(ParseError::Forbidden {
-            message: message.into(),
-            span,
-        });
+        parser.forbid(ForbiddenRule::Other, message, span);
     }
 }
 
@@ -2673,10 +2680,11 @@ fn check_global_variable(parser: &mut Parser<'_, '_>, e: &Expr<'_, '_>) {
             span: e.span,
         });
     } else if matches!(&e.kind, ExprKind::Variable(n) if n.as_str() == "this") {
-        parser.error(ParseError::Forbidden {
-            message: "Cannot use $this as global variable".into(),
-            span: e.span,
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "Cannot use $this as global variable",
+            e.span,
+        );
     }
 }
 
@@ -2959,13 +2967,13 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
         if let Some(alias) = item.alias.and_then(|a| a.as_str()) {
             if class::is_reserved_class_name(alias, parser.version) {
                 let name = item.name.parts_slice().join("\\");
-                parser.error(ParseError::Forbidden {
-                    message: format!(
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    format!(
                         "Cannot use {name} as {alias} because '{alias}' is a special class name"
-                    )
-                    .into(),
-                    span: item.span,
-                });
+                    ),
+                    item.span,
+                );
             }
         }
         let local = match &item.alias {
@@ -3011,11 +3019,11 @@ fn parse_const_with_attrs<'arena, 'src>(
             && !parser.check(TokenKind::Parent_);
         let const_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
             if name_is_reserved_kw {
-                parser.error(ParseError::Forbidden {
-                    message: format!("cannot use '{}' as constant name as it is reserved", text)
-                        .into(),
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    format!("cannot use '{}' as constant name as it is reserved", text),
                     span,
-                });
+                );
             }
             Ident::new(text, span)
         } else {
@@ -3061,10 +3069,11 @@ fn parse_const_with_attrs<'arena, 'src>(
 /// Report `what` when the current statement is nested in a block or function body.
 fn check_top_level(parser: &mut Parser<'_, '_>, what: &str) {
     if parser.stmt_depth > 1 {
-        parser.error(ParseError::Forbidden {
-            message: format!("{what} can only be used at the outermost scope").into(),
-            span: parser.current_span(),
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            format!("{what} can only be used at the outermost scope"),
+            parser.current_span(),
+        );
     }
 }
 
@@ -3124,16 +3133,18 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             .map(|t| parser.variable_ident(t))
             .unwrap_or(parser.missing_ident());
         match name.as_str() {
-            Some("this") => parser.error(ParseError::Forbidden {
-                message: "Cannot use $this as static variable".into(),
-                span: name.span,
-            }),
+            Some("this") => parser.forbid(
+                ForbiddenRule::Other,
+                "Cannot use $this as static variable",
+                name.span,
+            ),
             // Before 8.3 a later declaration replaces an earlier one.
             Some(n) if parser.static_vars.contains(&n) && parser.version >= PhpVersion::Php83 => {
-                parser.error(ParseError::Forbidden {
-                    message: format!("Duplicate declaration of static variable ${n}").into(),
-                    span: name.span,
-                })
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    format!("Duplicate declaration of static variable ${n}"),
+                    name.span,
+                )
             }
             Some(n) => parser.static_vars.push(n),
             None => {}
@@ -3653,10 +3664,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         (finder.globals_append, "Cannot append to $GLOBALS"),
     ] {
         for span in spans {
-            parser.error(ParseError::Forbidden {
-                message: message.into(),
-                span,
-            });
+            parser.forbid(ForbiddenRule::Other, message, span);
         }
     }
 }
@@ -3731,10 +3739,11 @@ pub(crate) fn check_void_casts<'arena, 'src>(
         let _ = finder.visit_stmt(stmt);
     }
     for span in finder.misused {
-        parser.error(ParseError::Forbidden {
-            message: "(void) cast cannot be used in an expression context".into(),
+        parser.forbid(
+            ForbiddenRule::Other,
+            "(void) cast cannot be used in an expression context",
             span,
-        });
+        );
     }
 }
 
@@ -4239,9 +4248,6 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
     // An anonymous class body is walked before its constructor arguments.
     finder.errors.sort_by_key(|(_, span)| span.start);
     for (message, span) in finder.errors {
-        parser.error(ParseError::Forbidden {
-            message: message.into(),
-            span,
-        });
+        parser.forbid(ForbiddenRule::Other, message, span);
     }
 }

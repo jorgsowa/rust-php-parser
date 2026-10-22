@@ -86,6 +86,8 @@ pub enum ParseError {
     #[error("{message}")]
     #[non_exhaustive]
     Forbidden {
+        /// Rule violated.
+        rule: ForbiddenRule,
         /// Error message.
         message: Cow<'static, str>,
         /// Source range of the error.
@@ -145,6 +147,33 @@ impl ParseError {
             | ParseError::NestingTooDeep { span }
             | ParseError::SourceTooLarge { span, .. }
             | ParseError::VersionTooLow { span, .. } => *span,
+        }
+    }
+
+    /// Rule violated, for [`ParseError::Forbidden`].
+    pub fn forbidden_rule(&self) -> Option<ForbiddenRule> {
+        match self {
+            ParseError::Forbidden { rule, .. } => Some(*rule),
+            _ => None,
+        }
+    }
+}
+
+/// The PHP compile-time rule a [`ParseError::Forbidden`] reports.
+///
+/// Rules are stable API; message wording is not.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[non_exhaustive]
+pub enum ForbiddenRule {
+    /// Not yet classified.
+    Other,
+}
+
+impl ForbiddenRule {
+    /// Stable kebab-case identifier, e.g. `"reassign-this"`.
+    pub fn as_str(self) -> &'static str {
+        match self {
+            ForbiddenRule::Other => "other",
         }
     }
 }

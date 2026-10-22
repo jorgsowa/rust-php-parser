@@ -3,7 +3,7 @@ use php_ast::*;
 use php_lexer::lexer::interpolation_end;
 use php_lexer::{Lexer, TokenKind};
 
-use crate::diagnostics::ParseError;
+use crate::diagnostics::{ForbiddenRule, ParseError};
 use crate::parser::{INTERPOLATION_NESTING_COST, MAX_NESTING_DEPTH};
 use crate::version::PhpVersion;
 
@@ -138,6 +138,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
 
                             if idx_str.is_empty() {
                                 errors.push(ParseError::Forbidden {
+                                    rule: ForbiddenRule::Other,
                                     message: "empty index in string interpolation".into(),
                                     span: Span::new(
                                         base_offset + bracket_start as u32,
@@ -167,6 +168,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             }
                         } else {
                             errors.push(ParseError::Forbidden {
+                                rule: ForbiddenRule::Other,
                                 message: "unclosed '[' in string interpolation".into(),
                                 span: Span::new(
                                     base_offset + bracket_start as u32,
@@ -208,6 +210,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 i = close.unwrap_or(len);
                 if !closed {
                     errors.push(ParseError::Forbidden {
+                        rule: ForbiddenRule::Other,
                         message: "unclosed '{' in string interpolation".into(),
                         span: Span::new(brace_offset, base_offset + expr_end as u32),
                     });
@@ -398,6 +401,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                             i += 1; // skip ]
                             if idx_str.is_empty() {
                                 errors.push(ParseError::Forbidden {
+                                    rule: ForbiddenRule::Other,
                                     message: "empty index in string interpolation".into(),
                                     span: Span::new(
                                         body_offset + bracket_start as u32,
@@ -425,6 +429,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                             }
                         } else {
                             errors.push(ParseError::Forbidden {
+                                rule: ForbiddenRule::Other,
                                 message: "unclosed '[' in string interpolation".into(),
                                 span: Span::new(
                                     body_offset + bracket_start as u32,
@@ -453,6 +458,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                 i = close.unwrap_or(len);
                 if !closed {
                     errors.push(ParseError::Forbidden {
+                        rule: ForbiddenRule::Other,
                         message: "unclosed '{' in string interpolation".into(),
                         span: Span::new(brace_offset, body_offset + expr_end as u32),
                     });
@@ -584,6 +590,7 @@ fn decode_escape_at(
                     let span = Span::new(span_base + escape_start as u32, span_base + j as u32);
                     if hex.is_empty() {
                         errors.push(ParseError::Forbidden {
+                            rule: ForbiddenRule::Other,
                             message: "Invalid UTF-8 codepoint escape sequence: empty code point"
                                 .into(),
                             span,
@@ -600,6 +607,7 @@ fn decode_escape_at(
                             out.push((0x80 | (codepoint & 0x3F)) as u8);
                         } else {
                             errors.push(ParseError::Forbidden {
+                                rule: ForbiddenRule::Other,
                                 message:
                                     "Invalid UTF-8 codepoint escape sequence: Codepoint too large"
                                         .into(),
@@ -609,6 +617,7 @@ fn decode_escape_at(
                     } else {
                         // hex value overflows u32 (e.g. \u{FFFFFFFFFFFFFFFF})
                         errors.push(ParseError::Forbidden {
+                            rule: ForbiddenRule::Other,
                             message: "Invalid UTF-8 codepoint escape sequence: Codepoint too large"
                                 .into(),
                             span,
@@ -626,6 +635,7 @@ fn decode_escape_at(
                         j += 1;
                     }
                     errors.push(ParseError::Forbidden {
+                        rule: ForbiddenRule::Other,
                         message: "Invalid UTF-8 codepoint escape sequence".into(),
                         span: Span::new(span_base + escape_start as u32, span_base + j as u32),
                     });
@@ -796,6 +806,7 @@ fn check_simple_offset(idx: &str, span: Span, errors: &mut Vec<ParseError>) {
     let valid = is_number || is_name(bytes) || bytes.strip_prefix(b"$").is_some_and(is_name);
     if !valid {
         errors.push(ParseError::Forbidden {
+            rule: ForbiddenRule::Other,
             message: "invalid offset in simple string interpolation".into(),
             span,
         });
@@ -899,6 +910,7 @@ fn parse_dollar_brace<'arena, 'src>(
     let span = Span::new(offset + dollar as u32, offset + after as u32);
     if !closed {
         errors.push(ParseError::Forbidden {
+            rule: ForbiddenRule::Other,
             message: "unclosed '${' in string interpolation".into(),
             span,
         });
@@ -939,11 +951,13 @@ fn parse_dollar_brace<'arena, 'src>(
         // A name followed by `[` takes an index, so anything after the closing `]` is a syntax error.
         if closed && name_end > content_start && name_end < close && bytes[name_end] == b'[' {
             errors.push(ParseError::Forbidden {
+                rule: ForbiddenRule::Other,
                 message: "expected ']' to close the index in '${...}' string interpolation".into(),
                 span,
             });
         } else if empty {
             errors.push(ParseError::Forbidden {
+                rule: ForbiddenRule::Other,
                 message: "empty variable name in '${...}' string interpolation".into(),
                 span,
             });
@@ -966,6 +980,7 @@ fn parse_dollar_brace<'arena, 'src>(
     let empty = text[name_end + 1..bracket_end - 1].trim().is_empty();
     if empty {
         errors.push(ParseError::Forbidden {
+            rule: ForbiddenRule::Other,
             message: "empty index in string interpolation".into(),
             span: Span::new(offset + name_end as u32, offset + close as u32),
         });
@@ -1005,6 +1020,7 @@ fn check_curly_interpolation(expr: &Expr<'_, '_>, errors: &mut Vec<ParseError>) 
         _ => "only a variable, property, index or call can be interpolated with '{$...}'",
     };
     errors.push(ParseError::Forbidden {
+        rule: ForbiddenRule::Other,
         message: message.into(),
         span: expr.span,
     });

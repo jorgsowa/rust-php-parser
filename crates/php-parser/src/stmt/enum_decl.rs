@@ -2,7 +2,7 @@ use php_ast::*;
 use php_lexer::TokenKind;
 
 use crate::attributes::{AttrSite, AttrTarget, ClassKind};
-use crate::diagnostics::ParseError;
+use crate::diagnostics::{ForbiddenRule, ParseError};
 use crate::expr;
 use crate::parser::Parser;
 use crate::version::PhpVersion;
@@ -17,15 +17,17 @@ pub(super) fn parse_enum<'arena, 'src>(
     let name_is_reserved_kw = parser.is_reserved_keyword_as_decl_name();
     let name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
         if name_is_reserved_kw {
-            parser.error(ParseError::Forbidden {
-                message: format!("cannot use '{}' as enum name", text).into(),
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("cannot use '{}' as enum name", text),
                 span,
-            });
+            );
         } else if super::class::is_reserved_class_name(text, parser.version) {
-            parser.error(ParseError::Forbidden {
-                message: format!("Cannot use \"{text}\" as an enum name as it is reserved").into(),
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("Cannot use \"{text}\" as an enum name as it is reserved"),
                 span,
-            });
+            );
         }
         Ident::new(text, span)
     } else {
@@ -43,10 +45,11 @@ pub(super) fn parse_enum<'arena, 'src>(
         let is_int_or_string = matches!(ty, Name::Simple { value, .. }
             if value.eq_ignore_ascii_case("int") || value.eq_ignore_ascii_case("string"));
         if !is_int_or_string {
-            parser.error(ParseError::Forbidden {
-                message: "Enum backing type must be int or string".into(),
-                span: ty.span(),
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                "Enum backing type must be int or string",
+                ty.span(),
+            );
         }
         Some(ty)
     } else {
@@ -103,10 +106,11 @@ pub(super) fn parse_enum<'arena, 'src>(
             parser.advance();
             if parser.check(TokenKind::Class) {
                 let span = parser.current_span();
-                parser.error(ParseError::Forbidden {
-                    message: "'class' cannot be used as an enum case name".into(),
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "'class' cannot be used as an enum case name",
                     span,
-                });
+                );
             }
             let (case_name, case_name_span) =
                 if let Some((text, span)) = parser.eat_identifier_or_keyword() {
@@ -129,27 +133,27 @@ pub(super) fn parse_enum<'arena, 'src>(
                 None
             };
             if scalar_type.is_some() && value.is_none() {
-                parser.error(ParseError::Forbidden {
-                    message: format!(
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    format!(
                         "Case {} of backed enum {} must have a value",
                         case_name, name
-                    )
-                    .into(),
-                    span: case_name_span,
-                });
+                    ),
+                    case_name_span,
+                );
             } else if scalar_type.is_none() && value.is_some() {
                 // If value.is_some(), then equals_token must be Some since value is only set when equals_token.is_some()
                 let span = equals_token
                     .expect("value.is_some() guarantees equals_token.is_some()")
                     .span;
-                parser.error(ParseError::Forbidden {
-                    message: format!(
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    format!(
                         "Case {} of pure enum {} must not have a value",
                         case_name, name
-                    )
-                    .into(),
+                    ),
                     span,
-                });
+                );
             }
             parser.expect_member_end();
             let span = Span::new(member_start, parser.previous_end());
@@ -211,30 +215,32 @@ pub(super) fn parse_enum<'arena, 'src>(
         // Const
         if parser.check(TokenKind::Const) {
             if is_static {
-                parser.error(ParseError::Forbidden {
-                    message: "cannot use 'static' as constant modifier".into(),
-                    span: parser.current_span(),
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "cannot use 'static' as constant modifier",
+                    parser.current_span(),
+                );
             }
             if is_abstract {
-                parser.error(ParseError::Forbidden {
-                    message: "cannot use 'abstract' as constant modifier".into(),
-                    span: parser.current_span(),
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "cannot use 'abstract' as constant modifier",
+                    parser.current_span(),
+                );
             }
             if is_readonly {
-                parser.error(ParseError::Forbidden {
-                    message: "cannot use 'readonly' as constant modifier".into(),
-                    span: parser.current_span(),
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "cannot use 'readonly' as constant modifier",
+                    parser.current_span(),
+                );
             }
             if is_final && visibility == Some(Visibility::Private) {
-                parser.error(ParseError::Forbidden {
-                    message:
-                        "Private constant cannot be final as it is not visible to other classes"
-                            .into(),
-                    span: parser.current_span(),
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "Private constant cannot be final as it is not visible to other classes",
+                    parser.current_span(),
+                );
             }
             parser.advance();
 
@@ -317,10 +323,11 @@ pub(super) fn parse_enum<'arena, 'src>(
         // Method
         if parser.check(TokenKind::Function) {
             if is_abstract {
-                parser.error(ParseError::Forbidden {
-                    message: "enum methods cannot be abstract".into(),
-                    span: Span::new(member_start, parser.previous_end()),
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "enum methods cannot be abstract",
+                    Span::new(member_start, parser.previous_end()),
+                );
             }
 
             let mut mods = php_ast::Modifiers::new();

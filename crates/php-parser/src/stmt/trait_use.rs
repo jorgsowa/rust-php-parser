@@ -1,7 +1,7 @@
 use php_ast::*;
 use php_lexer::TokenKind;
 
-use crate::diagnostics::ParseError;
+use crate::diagnostics::{ForbiddenRule, ParseError};
 use crate::parser::Parser;
 use crate::version::PhpVersion;
 
@@ -164,10 +164,7 @@ fn parse_alias_rhs<'arena, 'src>(
         };
         if let Some(message) = message {
             let span = parser.advance().span;
-            parser.error(ParseError::Forbidden {
-                message: message.into(),
-                span,
-            });
+            parser.forbid(ForbiddenRule::Other, message, span);
             has_modifier = true;
         }
     }

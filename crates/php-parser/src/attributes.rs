@@ -2,7 +2,7 @@
 
 use php_ast::{Attribute, BuiltinType, Span, TypeHint, TypeHintKind};
 
-use crate::diagnostics::ParseError;
+use crate::diagnostics::ForbiddenRule;
 use crate::parser::Parser;
 use crate::version::PhpVersion;
 
@@ -366,9 +366,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     }
 
     fn attribute_error(&mut self, message: String, span: Span) {
-        self.error(ParseError::Forbidden {
-            message: message.into(),
-            span,
-        });
+        self.forbid(ForbiddenRule::Other, message, span);
     }
 }

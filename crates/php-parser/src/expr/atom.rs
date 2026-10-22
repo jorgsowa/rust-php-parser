@@ -3,7 +3,7 @@ use php_lexer::lexer::interpolation_end;
 use php_lexer::TokenKind;
 
 use crate::attributes::{AttrSite, AttrTarget, ClassKind};
-use crate::diagnostics::ParseError;
+use crate::diagnostics::{ForbiddenRule, ParseError};
 use crate::instrument;
 use crate::parser::Parser;
 use crate::precedence::{self, ASSIGNMENT_BP};
@@ -238,10 +238,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let token = parser.advance();
             let text = &parser.source()[token.span.start as usize..token.span.end as usize];
             if text.as_bytes()[1..].iter().any(|&b| b == b'8' || b == b'9') {
-                parser.error(ParseError::Forbidden {
-                    message: "Invalid numeric literal".into(),
-                    span: token.span,
-                });
+                parser.forbid(ForbiddenRule::Other, "Invalid numeric literal", token.span);
             }
             match parse_int_no_alloc(&text.as_bytes()[1..], 8) {
                 Some(value) => Expr {
@@ -715,10 +712,11 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 return parse_arrow_function(parser, true, token.span.start, parser.alloc_vec());
             }
             if !parser.check(TokenKind::DoubleColon) {
-                parser.error(ParseError::Forbidden {
-                    message: "Cannot use 'static' as a standalone expression".into(),
-                    span: token.span,
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "Cannot use 'static' as a standalone expression",
+                    token.span,
+                );
             }
             parser.has_class_keyword_ref = true;
             simple_name_expr("static", token.span)
@@ -823,12 +821,12 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             // Parenthesised variables are allowed (e.g. isset(($a))).
             for e in exprs.iter() {
                 if !isset_target_valid(&e.kind) {
-                    parser.error(ParseError::Forbidden {
-                        message: "Cannot use isset() on the result of an expression \
-                                  (you can use \"null !== expression\" instead)"
-                            .into(),
-                        span: e.span,
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "Cannot use isset() on the result of an expression \
+                                  (you can use \"null !== expression\" instead)",
+                        e.span,
+                    );
                 }
             }
             Expr {
@@ -1302,10 +1300,11 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                     args
                 }
                 ArgListResult::CallableMarker => {
-                    parser.error(ParseError::Forbidden {
-                        message: "Cannot create Closure for new expression".into(),
-                        span: Span::new(paren_start, parser.previous_end()),
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "Cannot create Closure for new expression",
+                        Span::new(paren_start, parser.previous_end()),
+                    );
                     parser.alloc_vec()
                 }
             }
@@ -1476,10 +1475,11 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                 args
             }
             ArgListResult::CallableMarker => {
-                parser.error(ParseError::Forbidden {
-                    message: "Cannot create Closure for new expression".into(),
-                    span: Span::new(paren_start, parser.previous_end()),
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "Cannot create Closure for new expression",
+                    Span::new(paren_start, parser.previous_end()),
+                );
                 parser.alloc_vec()
             }
         }
@@ -1508,10 +1508,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             // `Name::$prop` was already consumed above). A parenless `new` with a
             // class name cannot be dereferenced — `new Foo->bar`, `new Foo::class`,
             // `new Foo[0]`, `new self::C` are all rejected by PHP.
-            parser.error(ParseError::Forbidden {
-                message: "Cannot use a new expression with a class name as a dereferenceable expression without parentheses".into(),
-                span: parser.current_span(),
-            });
+            parser.forbid(ForbiddenRule::Other, "Cannot use a new expression with a class name as a dereferenceable expression without parentheses", parser.current_span());
         }
     }
 
@@ -1667,10 +1664,7 @@ fn parse_closure_use_list<'arena, 'src>(
                 _ => None,
             };
             if let Some(message) = message {
-                parser.error(ParseError::Forbidden {
-                    message,
-                    span: name.span,
-                });
+                parser.forbid(ForbiddenRule::Other, message, name.span);
             }
             vars.push(ClosureUseVar { name, by_ref, span });
         }
@@ -1723,17 +1717,19 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
     if let (true, Some(rt)) = (is_generator, &return_type) {
         stmt::check_generator_return_type(parser, rt);
     } else if return_type.as_ref().is_some_and(stmt::is_void_type) {
-        parser.error(ParseError::Forbidden {
-            message: "A void function must not return a value".into(),
-            span: body.span,
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "A void function must not return a value",
+            body.span,
+        );
     }
     // PHP 8.1 treats the arrow body as a `return` even when it is a `throw`.
     if parser.version < PhpVersion::Php82 && return_type.as_ref().is_some_and(stmt::is_never_type) {
-        parser.error(ParseError::Forbidden {
-            message: "A never-returning function must not return".into(),
-            span: body.span,
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "A never-returning function must not return",
+            body.span,
+        );
     }
     parser.check_attributes(
         &attributes,
@@ -1776,10 +1772,11 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
 
         let conditions = if let Some(tok) = parser.eat(TokenKind::Default) {
             if seen_default {
-                parser.error(ParseError::Forbidden {
-                    message: "match expression may only contain one default arm".into(),
-                    span: tok.span,
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "match expression may only contain one default arm",
+                    tok.span,
+                );
             }
             seen_default = true;
             // Allow trailing comma after default: `default, => ...`
@@ -1832,10 +1829,11 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     parser.has_yield = true;
 
     if parser.function_depth == 0 {
-        parser.error(ParseError::Forbidden {
-            message: "'yield' can only be used inside a function".into(),
-            span: Span::new(start, parser.previous_end()),
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "'yield' can only be used inside a function",
+            Span::new(start, parser.previous_end()),
+        );
     }
 
     // `from` is an ordinary name everywhere else, so the lexer has no keyword for it.
@@ -1844,10 +1842,11 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
         let value = parse_expr_bp(parser, precedence::YIELD_OPERAND_BP);
         let span = Span::new(start, value.span.end);
         if parser.by_ref_function {
-            parser.error(ParseError::Forbidden {
-                message: "Cannot use \"yield from\" inside a by-reference generator".into(),
+            parser.forbid(
+                ForbiddenRule::Other,
+                "Cannot use \"yield from\" inside a by-reference generator",
                 span,
-            });
+            );
         }
         return Expr {
             kind: ExprKind::Yield(YieldExpr {
@@ -1944,7 +1943,7 @@ fn allow_curly_offsets(parser: &mut Parser<'_, '_>, operand: &Expr<'_, '_>) {
         return;
     }
     parser.errors_mut().retain(|e| match e {
-        ParseError::Forbidden { message, span } if message == super::CURLY_OFFSET_REMOVED => {
+        ParseError::Forbidden { message, span, .. } if message == super::CURLY_OFFSET_REMOVED => {
             !brackets
                 .iter()
                 .any(|b| span.start >= b.start && span.end <= b.end)
@@ -2014,10 +2013,11 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
                 }
             } else if seen_named && !is_rest_placeholder {
                 // Positional argument (including spread) after a named argument
-                parser.error(ParseError::Forbidden {
-                    message: "cannot use positional argument after named argument".into(),
-                    span: arg.span,
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "cannot use positional argument after named argument",
+                    arg.span,
+                );
             }
 
             seen_spread |= arg.is_spread();
@@ -2036,10 +2036,11 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
 fn reject_pfa_placeholders_in_new(parser: &mut Parser<'_, '_>, args: &[Arg]) {
     for arg in args {
         if arg.is_placeholder() {
-            parser.error(ParseError::Forbidden {
-                message: "Cannot use partial function application in new expression".into(),
-                span: arg.span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                "Cannot use partial function application in new expression",
+                arg.span,
+            );
         }
     }
 }
@@ -2138,10 +2139,11 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
     let by_ref_span = parser.current_span();
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
     if by_ref {
-        parser.error(ParseError::Forbidden {
-            message: "call-time pass-by-reference is not allowed".into(),
-            span: by_ref_span,
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "call-time pass-by-reference is not allowed",
+            by_ref_span,
+        );
     }
 
     let value = parse_expr(parser);
@@ -2262,10 +2264,11 @@ fn parse_array_literal<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Ex
                 // value array PHP rejects them ("Cannot use empty array elements in
                 // arrays"). We emit the error eagerly here and retract it at the
                 // destructuring sites (assignment LHS, `foreach as`) where it is legal.
-                parser.error(crate::diagnostics::ParseError::Forbidden {
-                    message: "Cannot use empty array elements in arrays".into(),
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "Cannot use empty array elements in arrays",
                     span,
-                });
+                );
                 elements.push(ArrayElement {
                     key: None,
                     kind: ArrayElementKind::Value(Expr {
@@ -2420,10 +2423,11 @@ fn parse_list_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'
     let end = parser.previous_end();
     let span = Span::new(start, end);
 
-    parser.error(ParseError::Forbidden {
-        message: crate::parser::LIST_OUTSIDE_DESTRUCTURING.into(),
+    parser.forbid(
+        ForbiddenRule::Other,
+        crate::parser::LIST_OUTSIDE_DESTRUCTURING,
         span,
-    });
+    );
 
     Expr {
         kind: ExprKind::Array(elements),
@@ -2568,10 +2572,11 @@ fn try_parse_cast<'arena, 'src>(
     }
 
     if cast_kind == CastKind::Unset && parser.version >= PhpVersion::Php80 {
-        parser.error(ParseError::Forbidden {
-            message: "the (unset) cast is no longer supported".into(),
-            span: kw_span,
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "the (unset) cast is no longer supported",
+            kw_span,
+        );
     }
     if cast_kind == CastKind::Void {
         parser.require_version(PhpVersion::Php85, "void cast", kw_span);
@@ -2582,10 +2587,11 @@ fn try_parse_cast<'arena, 'src>(
     // (real) was removed in PHP 8.0
     let kw_text = &parser.source[kw_span.start as usize..kw_span.end as usize];
     if kw_text.eq_ignore_ascii_case("real") && parser.version >= PhpVersion::Php80 {
-        parser.error(ParseError::Forbidden {
-            message: "the (real) cast is no longer supported, use (float) instead".into(),
-            span: kw_span,
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "the (real) cast is no longer supported, use (float) instead",
+            kw_span,
+        );
     }
 
     // `(void)` is a statement prefix, not an operator: its operand is the whole expression.
@@ -2697,6 +2703,7 @@ fn validate_heredoc_indentation(
     }
     if indent.contains(' ') && indent.contains('\t') {
         errors.push(ParseError::Forbidden {
+            rule: ForbiddenRule::Other,
             message: "Invalid indentation - tabs and spaces cannot be mixed".into(),
             span: indent_span,
         });
@@ -2708,12 +2715,14 @@ fn validate_heredoc_indentation(
         let leading = heredoc_indent_len(line.as_bytes(), indent.len());
         if line[..leading].bytes().any(|b| b != indent.as_bytes()[0]) {
             errors.push(ParseError::Forbidden {
+                rule: ForbiddenRule::Other,
                 message: "Invalid indentation - tabs and spaces cannot be mixed".into(),
                 span,
             });
         } else if leading < indent.len() && leading < line.len() {
             // A whitespace-only line may be shorter than the indentation.
             errors.push(ParseError::Forbidden {
+                rule: ForbiddenRule::Other,
                 message: "Invalid body indentation level".into(),
                 span,
             });

@@ -3,7 +3,7 @@ use php_ast::*;
 use php_lexer::TokenKind;
 
 use crate::attributes::{AttrSite, AttrTarget, ClassKind};
-use crate::diagnostics::ParseError;
+use crate::diagnostics::{ForbiddenRule, ParseError};
 use crate::expr;
 use crate::instrument;
 use crate::parser::{ClassScope, Parser};
@@ -66,10 +66,7 @@ pub(crate) fn validate_class_ref<'arena, 'src>(
     } else {
         return;
     };
-    parser.error(ParseError::Forbidden {
-        message: message.into(),
-        span: name.span(),
-    });
+    parser.forbid(ForbiddenRule::Other, message, name.span());
 }
 
 pub(super) fn parse_class<'arena, 'src>(
@@ -96,11 +93,11 @@ pub(super) fn parse_class<'arena, 'src>(
 
     if let Some(text) = name.as_str() {
         if is_reserved_class_name(text, parser.version) || name_is_reserved_kw {
-            parser.error(ParseError::Forbidden {
-                message: format!("Cannot use \"{}\" as a class name as it is reserved", text)
-                    .into(),
-                span: name_span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("Cannot use \"{}\" as a class name as it is reserved", text),
+                name_span,
+            );
         }
     }
 
@@ -212,10 +209,11 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                     let span = parser.current_span();
                     parser.advance();
                     if is_final {
-                        parser.error(ParseError::Forbidden {
-                            message: "Multiple final modifiers are not allowed".into(),
+                        parser.forbid(
+                            ForbiddenRule::Other,
+                            "Multiple final modifiers are not allowed",
                             span,
-                        });
+                        );
                     }
                     is_final = true;
                 }
@@ -244,11 +242,11 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                         } else {
                             keyword
                         };
-                    parser.error(ParseError::Forbidden {
-                        message: format!("Cannot use the {modifier} modifier on a property hook")
-                            .into(),
-                        span: Span::new(start, parser.previous_end()),
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        format!("Cannot use the {modifier} modifier on a property hook"),
+                        Span::new(start, parser.previous_end()),
+                    );
                 }
                 _ => break,
             }
@@ -315,16 +313,18 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
             // `get()` is fatal — and requires exactly one parameter for `set`.
             match kind {
                 PropertyHookKind::Get => {
-                    parser.error(ParseError::Forbidden {
-                        message: "get hook of property must not have a parameter list".into(),
-                        span: paren_span,
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "get hook of property must not have a parameter list",
+                        paren_span,
+                    );
                 }
                 PropertyHookKind::Set if p.len() != 1 => {
-                    parser.error(ParseError::Forbidden {
-                        message: "set hook must have exactly one parameter".into(),
-                        span: paren_span,
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "set hook must have exactly one parameter",
+                        paren_span,
+                    );
                 }
                 _ => {}
             }
@@ -384,19 +384,21 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
         match kind {
             PropertyHookKind::Get => {
                 if seen_get {
-                    parser.error(ParseError::Forbidden {
-                        message: "duplicate 'get' hook".into(),
-                        span: Span::new(hook_start, parser.previous_end()),
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "duplicate 'get' hook",
+                        Span::new(hook_start, parser.previous_end()),
+                    );
                 }
                 seen_get = true;
             }
             PropertyHookKind::Set => {
                 if seen_set {
-                    parser.error(ParseError::Forbidden {
-                        message: "duplicate 'set' hook".into(),
-                        span: Span::new(hook_start, parser.previous_end()),
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "duplicate 'set' hook",
+                        Span::new(hook_start, parser.previous_end()),
+                    );
                 }
                 seen_set = true;
             }
@@ -428,10 +430,11 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
 
     parser.expect_closing(TokenKind::RightBrace, open_span);
     if hooks.is_empty() {
-        parser.error(ParseError::Forbidden {
-            message: "Property hook list must not be empty".into(),
-            span: open_span,
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "Property hook list must not be empty",
+            open_span,
+        );
     }
     hooks
 }
@@ -453,10 +456,7 @@ pub(super) fn check_backed_by_ref_get(
     let message = format!(
         "Get hook of backed property {class}::{name} with set hook may not return by reference"
     );
-    parser.error(ParseError::Forbidden {
-        message: message.into(),
-        span: get.span,
-    });
+    parser.forbid(ForbiddenRule::Other, message, get.span);
 }
 
 /// Whether no hook body accesses `$this->{name}`, which makes the property virtual (no backing store).
@@ -559,13 +559,11 @@ pub(super) fn check_virtual_set_visibility(
         return;
     };
     let class = parser.class_member_prefix();
-    parser.error(ParseError::Forbidden {
-        message: format!(
-            "{access} virtual property {class}${name} must not specify asymmetric visibility"
-        )
-        .into(),
+    parser.forbid(
+        ForbiddenRule::Other,
+        format!("{access} virtual property {class}${name} must not specify asymmetric visibility"),
         span,
-    });
+    );
 }
 
 /// A member of a type, as compared between a set hook parameter and its property.
@@ -676,19 +674,16 @@ fn check_hook_signature(
         }
     }
     for (message, span) in messages {
-        parser.error(ParseError::Forbidden {
-            message: message.into(),
-            span,
-        });
+        parser.forbid(ForbiddenRule::Other, message, span);
     }
     if is_generator {
         match (kind, property_type) {
             (PropertyHookKind::Get, Some(ty)) => super::check_generator_return_type(parser, ty),
-            (PropertyHookKind::Set, _) => parser.error(ParseError::Forbidden {
-                message: "Generator return type must be a supertype of Generator, void given"
-                    .into(),
-                span: hook_span,
-            }),
+            (PropertyHookKind::Set, _) => parser.forbid(
+                ForbiddenRule::Other,
+                "Generator return type must be a supertype of Generator, void given",
+                hook_span,
+            ),
             _ => {}
         }
     }
@@ -718,10 +713,7 @@ pub(super) fn check_hook_bodies(
         } else {
             continue;
         };
-        parser.error(ParseError::Forbidden {
-            message: message.into(),
-            span: hook.span,
-        });
+        parser.forbid(ForbiddenRule::Other, message, hook.span);
     }
 }
 
@@ -760,10 +752,7 @@ fn check_abstract_methods(
             if count > 3 { ", ..." } else { "" }
         )
     };
-    parser.error(ParseError::Forbidden {
-        message: message.into(),
-        span,
-    });
+    parser.forbid(ForbiddenRule::Other, message, span);
 }
 
 /// Report abstract property hooks in a class that is not declared abstract.
@@ -800,6 +789,7 @@ pub(crate) fn check_abstract_hooks(
         .map(|(name, kind)| format!("{class_name}::${name}::{kind}"))
         .collect();
     parser.error(ParseError::Forbidden {
+        rule: ForbiddenRule::Other,
         message: format!(
             "Class {class_name} contains {count} abstract method{} and must therefore be declared abstract or implement the remaining method{} ({}{})",
             if count == 1 { "" } else { "s" },
@@ -849,10 +839,7 @@ pub fn parse_class_members<'arena, 'src>(
                         parser.resolve_class_name(first),
                         parser.class_scope.as_ref().map_or("", |scope| &scope.name)
                     );
-                    parser.error(ParseError::Forbidden {
-                        message: message.into(),
-                        span: member.span,
-                    });
+                    parser.forbid(ForbiddenRule::Other, message, member.span);
                 }
             }
             members.push(member);
@@ -923,14 +910,11 @@ pub fn parse_class_members<'arena, 'src>(
                             continue;
                         };
                         if params_seen.insert(name) && !seen_properties.insert(name.to_string()) {
-                            parser.error(ParseError::Forbidden {
-                                message: format!(
-                                    "Cannot redeclare {}${name}",
-                                    parser.class_member_prefix()
-                                )
-                                .into(),
-                                span: param.span,
-                            });
+                            parser.forbid(
+                                ForbiddenRule::Other,
+                                format!("Cannot redeclare {}${name}", parser.class_member_prefix()),
+                                param.span,
+                            );
                         }
                     }
                 }
@@ -985,14 +969,11 @@ pub fn parse_class_members<'arena, 'src>(
                 if let ClassMemberKind::Property(decl) = &m.kind {
                     if let Some(name) = decl.name.as_str() {
                         if !seen_properties.insert(name.to_string()) {
-                            parser.error(ParseError::Forbidden {
-                                message: format!(
-                                    "Cannot redeclare {}${name}",
-                                    parser.class_member_prefix()
-                                )
-                                .into(),
-                                span: m.span,
-                            });
+                            parser.forbid(
+                                ForbiddenRule::Other,
+                                format!("Cannot redeclare {}${name}", parser.class_member_prefix()),
+                                m.span,
+                            );
                         }
                     }
                 }
@@ -1021,10 +1002,11 @@ fn report_readonly_default(parser: &mut Parser<'_, '_>, span: Span) {
     if parser.version >= PhpVersion::Php86 {
         return;
     }
-    parser.error(ParseError::Forbidden {
-        message: "Readonly property cannot have default value".into(),
+    parser.forbid(
+        ForbiddenRule::Other,
+        "Readonly property cannot have default value",
         span,
-    });
+    );
 }
 
 /// Report a property of a `readonly` class, declared or promoted, that breaks a readonly
@@ -1035,22 +1017,25 @@ pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[Clas
             // An explicitly readonly property was already checked where it was declared.
             ClassMemberKind::Property(p) if !p.modifiers.is_readonly => {
                 if p.modifiers.is_static {
-                    parser.error(ParseError::Forbidden {
-                        message: "static properties cannot be readonly".into(),
-                        span: member.span,
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "static properties cannot be readonly",
+                        member.span,
+                    );
                 }
                 if p.type_hint.is_none() {
-                    parser.error(ParseError::Forbidden {
-                        message: "readonly property must have type".into(),
-                        span: member.span,
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "readonly property must have type",
+                        member.span,
+                    );
                 }
                 if let Some(hook) = p.hooks.first() {
-                    parser.error(ParseError::Forbidden {
-                        message: "A readonly property cannot declare hooks".into(),
-                        span: hook.span,
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "A readonly property cannot declare hooks",
+                        hook.span,
+                    );
                 }
                 if let Some(default) = &p.default {
                     report_readonly_default(parser, default.span);
@@ -1066,16 +1051,18 @@ pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[Clas
                         continue;
                     }
                     if param.type_hint.is_none() {
-                        parser.error(ParseError::Forbidden {
-                            message: "readonly property must have type".into(),
-                            span: param.span,
-                        });
+                        parser.forbid(
+                            ForbiddenRule::Other,
+                            "readonly property must have type",
+                            param.span,
+                        );
                     }
                     if let Some(hook) = param.hooks.first() {
-                        parser.error(ParseError::Forbidden {
-                            message: "A readonly property cannot declare hooks".into(),
-                            span: hook.span,
-                        });
+                        parser.forbid(
+                            ForbiddenRule::Other,
+                            "A readonly property cannot declare hooks",
+                            hook.span,
+                        );
                     }
                 }
             }
@@ -1094,11 +1081,11 @@ pub(super) fn report_redeclared_method(
 ) {
     if let Some(name) = decl.name.as_str() {
         if !seen_methods.insert(name.to_ascii_lowercase()) {
-            parser.error(ParseError::Forbidden {
-                message: format!("Cannot redeclare {}{name}()", parser.class_member_prefix())
-                    .into(),
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("Cannot redeclare {}{name}()", parser.class_member_prefix()),
                 span,
-            });
+            );
         }
     }
 }
@@ -1125,10 +1112,7 @@ pub(super) fn report_redefined_constants<'a, 'src: 'a>(
                 Some(scope) => format!("Cannot redefine class constant {}::{text}", scope.name),
                 None => format!("Cannot redefine class constant {text}"),
             };
-            parser.error(ParseError::Forbidden {
-                message: message.into(),
-                span: name.span,
-            });
+            parser.forbid(ForbiddenRule::Other, message, name.span);
         }
     }
 }
@@ -1231,10 +1215,11 @@ fn parse_class_member_modifiers<'arena, 'src>(
                         // Single-keyword asymmetric visibility: e.g. private(set)
                         // Get visibility is implicitly public (visibility stays None).
                         if set_visibility.is_some() {
-                            parser.error(ParseError::Forbidden {
-                                message: "cannot use multiple set-visibility modifiers".into(),
-                                span: Span::new(member_start, parser.previous_end()),
-                            });
+                            parser.forbid(
+                                ForbiddenRule::Other,
+                                "cannot use multiple set-visibility modifiers",
+                                Span::new(member_start, parser.previous_end()),
+                            );
                         }
                         asym_vis_span = Some(Span::new(member_start, parser.previous_end()));
                         parser.advance(); // consume (
@@ -1268,10 +1253,11 @@ fn parse_class_member_modifiers<'arena, 'src>(
                     // e.g. the second modifier in `public private(set)` when the first
                     // iteration didn't consume it via the two-keyword lookahead.
                     if set_visibility.is_some() {
-                        parser.error(ParseError::Forbidden {
-                            message: "cannot use multiple set-visibility modifiers".into(),
-                            span: Span::new(member_start, parser.previous_end()),
-                        });
+                        parser.forbid(
+                            ForbiddenRule::Other,
+                            "cannot use multiple set-visibility modifiers",
+                            Span::new(member_start, parser.previous_end()),
+                        );
                     }
                     // Save span for deferred version check after is_static is known.
                     asym_vis_span = Some(Span::new(member_start, parser.previous_end()));
@@ -1280,48 +1266,53 @@ fn parse_class_member_modifiers<'arena, 'src>(
                     parser.expect(TokenKind::RightParen);
                     set_visibility = Some(vis);
                 } else {
-                    parser.error(ParseError::Forbidden {
-                        message: "cannot use multiple visibility modifiers".into(),
-                        span: Span::new(member_start, parser.previous_end()),
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "cannot use multiple visibility modifiers",
+                        Span::new(member_start, parser.previous_end()),
+                    );
                 }
             }
             TokenKind::Static => {
                 if is_static {
-                    parser.error(ParseError::Forbidden {
-                        message: "duplicate modifier 'static'".into(),
-                        span: Span::new(member_start, parser.previous_end()),
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "duplicate modifier 'static'",
+                        Span::new(member_start, parser.previous_end()),
+                    );
                 }
                 parser.advance();
                 is_static = true;
             }
             TokenKind::Abstract => {
                 if is_abstract {
-                    parser.error(ParseError::Forbidden {
-                        message: "duplicate modifier 'abstract'".into(),
-                        span: Span::new(member_start, parser.previous_end()),
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "duplicate modifier 'abstract'",
+                        Span::new(member_start, parser.previous_end()),
+                    );
                 }
                 parser.advance();
                 is_abstract = true;
             }
             TokenKind::Final => {
                 if is_final {
-                    parser.error(ParseError::Forbidden {
-                        message: "duplicate modifier 'final'".into(),
-                        span: Span::new(member_start, parser.previous_end()),
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "duplicate modifier 'final'",
+                        Span::new(member_start, parser.previous_end()),
+                    );
                 }
                 parser.advance();
                 is_final = true;
             }
             TokenKind::Readonly => {
                 if is_readonly {
-                    parser.error(ParseError::Forbidden {
-                        message: "duplicate modifier 'readonly'".into(),
-                        span: Span::new(member_start, parser.previous_end()),
-                    });
+                    parser.forbid(
+                        ForbiddenRule::Other,
+                        "duplicate modifier 'readonly'",
+                        Span::new(member_start, parser.previous_end()),
+                    );
                 }
                 let span = parser.current_span();
                 parser.require_version(PhpVersion::Php81, "readonly properties", span);
@@ -1340,16 +1331,18 @@ fn parse_class_member_modifiers<'arena, 'src>(
     }
 
     if is_abstract && is_final {
-        parser.error(ParseError::Forbidden {
-            message: "cannot use 'abstract' and 'final' together".into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "cannot use 'abstract' and 'final' together",
+            Span::new(member_start, parser.previous_end()),
+        );
     }
     if is_static && is_readonly {
-        parser.error(ParseError::Forbidden {
-            message: "static properties cannot be readonly".into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "static properties cannot be readonly",
+            Span::new(member_start, parser.previous_end()),
+        );
     }
 
     // Emit version check now that is_static is known.
@@ -1453,10 +1446,7 @@ pub(super) fn check_typed_const_value(
         "Cannot use {value_type} as value for class constant {class_name}::{name} of type {}",
         parser.type_display(ty)
     );
-    parser.error(ParseError::Forbidden {
-        message: message.into(),
-        span: value.span,
-    });
+    parser.forbid(ForbiddenRule::Other, message, value.span);
 }
 
 fn parse_class_const_member<'arena, 'src>(
@@ -1468,22 +1458,25 @@ fn parse_class_const_member<'arena, 'src>(
     in_interface: bool,
 ) {
     if mods.is_static {
-        parser.error(ParseError::Forbidden {
-            message: "cannot use 'static' as constant modifier".into(),
-            span: parser.current_span(),
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "cannot use 'static' as constant modifier",
+            parser.current_span(),
+        );
     }
     if mods.is_abstract {
-        parser.error(ParseError::Forbidden {
-            message: "cannot use 'abstract' as constant modifier".into(),
-            span: parser.current_span(),
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "cannot use 'abstract' as constant modifier",
+            parser.current_span(),
+        );
     }
     if mods.is_readonly {
-        parser.error(ParseError::Forbidden {
-            message: "cannot use 'readonly' as constant modifier".into(),
-            span: parser.current_span(),
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "cannot use 'readonly' as constant modifier",
+            parser.current_span(),
+        );
     }
     if mods.is_final {
         let span = Span::new(member_start, parser.previous_end());
@@ -1522,10 +1515,7 @@ fn parse_class_const_member<'arena, 'src>(
             .as_str()
             .is_some_and(|name| name.eq_ignore_ascii_case("class"))
         {
-            parser.error(ParseError::Forbidden {
-                message: "A class constant must not be called 'class'; it is reserved for class name fetching".into(),
-                span: const_name.span,
-            });
+            parser.forbid(ForbiddenRule::Other, "A class constant must not be called 'class'; it is reserved for class name fetching", const_name.span);
         }
         if let (Some(ty), Some(name), true) =
             (&const_type, const_name.as_str(), const_items.is_empty())
@@ -1553,23 +1543,19 @@ fn parse_class_const_member<'arena, 'src>(
         (mods.is_final, mods.visibility, const_items.first())
     {
         let class = parser.class_member_prefix();
-        parser.error(ParseError::Forbidden {
-            message: format!(
+        parser.forbid(ForbiddenRule::Other, format!(
                 "Private constant {class}{name} cannot be final as it is not visible to other classes"
-            )
-            .into(),
-            span,
-        });
+            ), span);
     }
     if let (true, Some(Visibility::Protected | Visibility::Private), Some((name, _))) =
         (in_interface, mods.visibility, const_items.first())
     {
         let class = parser.class_member_prefix();
-        parser.error(ParseError::Forbidden {
-            message: format!("Access type for interface constant {class}{name} must be public")
-                .into(),
+        parser.forbid(
+            ForbiddenRule::Other,
+            format!("Access type for interface constant {class}{name} must be public"),
             span,
-        });
+        );
     }
     // Allocate the type hint into the arena so all items can share a reference
     let shared_type_hint: Option<&'arena _> = const_type.map(|th| parser.alloc(th));
@@ -1638,18 +1624,20 @@ pub(super) fn parse_method_member<'arena, 'src>(
     parser.in_constructor = was_in_constructor;
     if is_constructor && (mods.is_abstract || in_interface) {
         for param in params.iter().filter(|p| is_promoted_param(p)) {
-            parser.error(ParseError::Forbidden {
-                message: "Cannot declare promoted property in an abstract constructor".into(),
-                span: param.span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                "Cannot declare promoted property in an abstract constructor",
+                param.span,
+            );
         }
     }
     if is_constructor {
         for param in params.iter().filter(|p| p.variadic && is_promoted_param(p)) {
-            parser.error(ParseError::Forbidden {
-                message: "Cannot declare variadic promoted property".into(),
-                span: param.span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                "Cannot declare variadic promoted property",
+                param.span,
+            );
         }
     }
     parser.expect(TokenKind::RightParen);
@@ -1711,63 +1699,69 @@ pub(super) fn parse_method_member<'arena, 'src>(
             mods.visibility,
             Some(Visibility::Protected | Visibility::Private)
         ) {
-            parser.error(ParseError::Forbidden {
-                message: format!("Access type for interface method {method_label} must be public")
-                    .into(),
-                span: member_span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("Access type for interface method {method_label} must be public"),
+                member_span,
+            );
         }
         // `abstract final` is already reported by the modifier parser.
         if mods.is_final && !mods.is_abstract {
-            parser.error(ParseError::Forbidden {
-                message: format!("Interface method {method_label} must not be final").into(),
-                span: member_span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("Interface method {method_label} must not be final"),
+                member_span,
+            );
         }
         if mods.is_abstract {
-            parser.error(ParseError::Forbidden {
-                message: format!("Interface method {method_label} must not be abstract").into(),
-                span: member_span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("Interface method {method_label} must not be abstract"),
+                member_span,
+            );
         } else if body.is_some() {
-            parser.error(ParseError::Forbidden {
-                message: format!("Interface function {method_label} cannot contain body").into(),
-                span: member_span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("Interface function {method_label} cannot contain body"),
+                member_span,
+            );
         }
     } else if !mods.is_abstract && terminated_without_body {
-        parser.error(ParseError::Forbidden {
-            message: format!("Non-abstract method {method_label} must contain body").into(),
-            span: member_span,
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            format!("Non-abstract method {method_label} must contain body"),
+            member_span,
+        );
     } else if mods.is_abstract {
         if parser.class_scope.as_ref().is_some_and(|s| s.is_anonymous) {
-            parser.error(ParseError::Forbidden {
-                message: format!("Anonymous class method {method_name}() must not be abstract")
-                    .into(),
-                span: member_span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("Anonymous class method {method_name}() must not be abstract"),
+                member_span,
+            );
         }
         // Traits may declare abstract private methods.
         if mods.visibility == Some(Visibility::Private) && !in_trait {
-            parser.error(ParseError::Forbidden {
-                message: format!("Abstract function {method_label} cannot be declared private")
-                    .into(),
-                span: member_span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("Abstract function {method_label} cannot be declared private"),
+                member_span,
+            );
         }
         if body.is_some() {
-            parser.error(ParseError::Forbidden {
-                message: format!("Abstract function {method_label} cannot contain body").into(),
-                span: member_span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("Abstract function {method_label} cannot contain body"),
+                member_span,
+            );
         }
     }
     if mods.is_readonly {
-        parser.error(ParseError::Forbidden {
-            message: "Cannot use the readonly modifier on a method".into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "Cannot use the readonly modifier on a method",
+            Span::new(member_start, parser.previous_end()),
+        );
     }
 
     if let (Some(rt), Some(b)) = (&return_type, body) {
@@ -1938,15 +1932,13 @@ fn check_magic_method(
                 1 => format!("Method {method_label} must take exactly 1 argument"),
                 n => format!("Method {method_label} must take exactly {n} arguments"),
             };
-            parser.error(ParseError::Forbidden {
-                message: message.into(),
-                span: member_span,
-            });
+            parser.forbid(ForbiddenRule::Other, message, member_span);
         } else if let Some(param) = fixed_params.iter().find(|p| p.by_ref) {
-            parser.error(ParseError::Forbidden {
-                message: format!("Method {method_label} cannot take arguments by reference").into(),
-                span: param.span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("Method {method_label} cannot take arguments by reference"),
+                param.span,
+            );
         }
     }
 
@@ -1962,10 +1954,11 @@ fn check_magic_method(
         } else {
             "cannot be static"
         };
-        parser.error(ParseError::Forbidden {
-            message: format!("Method {method_label} {requirement}").into(),
-            span: member_span,
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            format!("Method {method_label} {requirement}"),
+            member_span,
+        );
     }
 
     for (i, ((required, required_name), param)) in
@@ -1977,15 +1970,11 @@ fn check_magic_method(
         let mut builtins = Vec::new();
         type_members(ty, &mut builtins);
         if !builtins.contains(required) && !builtins.contains(&BuiltinType::Mixed) {
-            parser.error(ParseError::Forbidden {
-                message: format!(
+            parser.forbid(ForbiddenRule::Other, format!(
                     "{method_label}: Parameter #{} (${}) must be of type {required_name} when declared",
                     i + 1,
                     param.name
-                )
-                .into(),
-                span: ty.span,
-            });
+                ), ty.span);
         }
     }
 
@@ -1994,10 +1983,11 @@ fn check_magic_method(
     };
     match signature.return_type {
         MagicReturn::Any => {}
-        MagicReturn::Forbidden => parser.error(ParseError::Forbidden {
-            message: format!("Method {method_label} cannot declare a return type").into(),
-            span: rt.span,
-        }),
+        MagicReturn::Forbidden => parser.forbid(
+            ForbiddenRule::Other,
+            format!("Method {method_label} cannot declare a return type"),
+            rt.span,
+        ),
         MagicReturn::Within(allowed, allowed_name) => {
             let mut builtins = Vec::new();
             let has_class = type_members(rt, &mut builtins);
@@ -2005,13 +1995,11 @@ fn check_magic_method(
                 || builtins.iter().all(|b| allowed.contains(b))
                     && (!has_class || allowed == [BuiltinType::Object]);
             if !fits {
-                parser.error(ParseError::Forbidden {
-                    message: format!(
-                        "{method_label}: Return type must be {allowed_name} when declared"
-                    )
-                    .into(),
-                    span: rt.span,
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    format!("{method_label}: Return type must be {allowed_name} when declared"),
+                    rt.span,
+                );
             }
         }
     }
@@ -2057,12 +2045,7 @@ fn parse_property_member<'arena, 'src>(
     let had_hooks_block = parser.check(TokenKind::LeftBrace);
     if in_interface {
         let span = Span::new(member_start, parser.previous_end());
-        let mut report = |message: &'static str| {
-            parser.error(ParseError::Forbidden {
-                message: message.into(),
-                span,
-            })
-        };
+        let mut report = |message: &'static str| parser.forbid(ForbiddenRule::Other, message, span);
         if mods.is_abstract {
             report("Property in interface cannot be explicitly abstract. All interface members are implicitly abstract");
         }
@@ -2077,10 +2060,11 @@ fn parse_property_member<'arena, 'src>(
         }
     } else if mods.is_abstract && !had_hooks_block {
         // abstract is only valid on properties with hooks (abstract property hooks, PHP 8.4+)
-        parser.error(ParseError::Forbidden {
-            message: "properties cannot be abstract".into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "properties cannot be abstract",
+            Span::new(member_start, parser.previous_end()),
+        );
     }
     let hooks = if had_hooks_block {
         let span = parser.current_span();
@@ -2105,23 +2089,19 @@ fn parse_property_member<'arena, 'src>(
         prop_name.as_str(),
     ) {
         let class = parser.class_member_prefix();
-        parser.error(ParseError::Forbidden {
-            message: format!(
-                "Abstract property {class}${name} must specify at least one abstract hook"
-            )
-            .into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            format!("Abstract property {class}${name} must specify at least one abstract hook"),
+            Span::new(member_start, parser.previous_end()),
+        );
     }
     if mods.set_visibility.is_some() && type_hint.is_none() {
         let class = parser.class_member_prefix();
-        parser.error(ParseError::Forbidden {
-            message: format!(
-                "Property with asymmetric visibility {class}${prop_name} must have type"
-            )
-            .into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            format!("Property with asymmetric visibility {class}${prop_name} must have type"),
+            Span::new(member_start, parser.previous_end()),
+        );
     }
     if let Some(name) = prop_name.as_str() {
         check_backed_by_ref_get(parser, name, &hooks);
@@ -2138,13 +2118,11 @@ fn parse_property_member<'arena, 'src>(
         // With a parent, PHP defers the check to inheritance.
         if default.is_some() && !has_parent {
             let class = parser.class_member_prefix();
-            parser.error(ParseError::Forbidden {
-                message: format!(
-                    "Cannot specify default value for virtual hooked property {class}${name}"
-                )
-                .into(),
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("Cannot specify default value for virtual hooked property {class}${name}"),
                 span,
-            });
+            );
         }
         if mods.set_visibility.is_some() {
             check_virtual_set_visibility(parser, name, &hooks, span);
@@ -2154,10 +2132,11 @@ fn parse_property_member<'arena, 'src>(
     // `private public(set)` is invalid because public-set widens beyond private-get.
     if let (Some(get_vis), Some(set_vis)) = (mods.visibility, mods.set_visibility) {
         if visibility_rank(set_vis) > visibility_rank(get_vis) {
-            parser.error(ParseError::Forbidden {
-                message: "Visibility of property must not be weaker than set visibility".into(),
-                span: Span::new(member_start, parser.previous_end()),
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                "Visibility of property must not be weaker than set visibility",
+                Span::new(member_start, parser.previous_end()),
+            );
         }
     }
     // Set-hook parameter type must be compatible with property type.
@@ -2168,36 +2147,35 @@ fn parse_property_member<'arena, 'src>(
                 if let Some(param) = hook.params.first() {
                     if param.type_hint.is_some() {
                         let class = parser.class_member_prefix();
-                        parser.error(ParseError::Forbidden {
-                            message: format!(
+                        parser.forbid(ForbiddenRule::Other, format!(
                                 "Type of parameter ${} of hook {class}${}::set must be compatible with property type",
                                 param.name, prop_name
-                            )
-                            .into(),
-                            span: hook.span,
-                        });
+                            ), hook.span);
                     }
                 }
             }
         }
     }
     if mods.is_static && !hooks.is_empty() {
-        parser.error(ParseError::Forbidden {
-            message: "Cannot declare hooks for static property".into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "Cannot declare hooks for static property",
+            Span::new(member_start, parser.previous_end()),
+        );
     }
     if in_interface && hooks.is_empty() {
-        parser.error(ParseError::Forbidden {
-            message: "Interfaces may only include hooked properties".into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "Interfaces may only include hooked properties",
+            Span::new(member_start, parser.previous_end()),
+        );
     }
     if mods.is_final && mods.visibility == Some(Visibility::Private) {
-        parser.error(ParseError::Forbidden {
-            message: "Property cannot be both final and private".into(),
-            span: Span::new(member_start, parser.previous_end()),
-        });
+        parser.forbid(
+            ForbiddenRule::Other,
+            "Property cannot be both final and private",
+            Span::new(member_start, parser.previous_end()),
+        );
     }
     if mods.is_final {
         // `final` properties became valid in PHP 8.4; older targets reject them.
@@ -2209,16 +2187,18 @@ fn parse_property_member<'arena, 'src>(
     }
     if mods.is_readonly {
         if type_hint.is_none() {
-            parser.error(ParseError::Forbidden {
-                message: "readonly property must have type".into(),
-                span: Span::new(member_start, parser.previous_end()),
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                "readonly property must have type",
+                Span::new(member_start, parser.previous_end()),
+            );
         }
         if let Some(hook) = hooks.first() {
-            parser.error(ParseError::Forbidden {
-                message: "A readonly property cannot declare hooks".into(),
-                span: hook.span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                "A readonly property cannot declare hooks",
+                hook.span,
+            );
         }
         if let Some(default) = &default {
             report_readonly_default(parser, default.span);
@@ -2264,10 +2244,11 @@ fn parse_property_member<'arena, 'src>(
             }
 
             let phooks = if parser.check(TokenKind::LeftBrace) {
-                parser.error(ParseError::Forbidden {
-                    message: "cannot have hooks on comma-separated property".into(),
-                    span: parser.current_span(),
-                });
+                parser.forbid(
+                    ForbiddenRule::Other,
+                    "cannot have hooks on comma-separated property",
+                    parser.current_span(),
+                );
                 parse_property_hooks(parser, None, pname.as_str())
             } else {
                 parser.alloc_vec()
@@ -2334,10 +2315,11 @@ pub(super) fn parse_interface<'arena, 'src>(
 
     if let Some(text) = name.as_str() {
         if is_reserved_class_name(text, parser.version) || name_is_reserved_kw {
-            parser.error(ParseError::Forbidden {
-                message: format!("cannot use '{}' as interface name", text).into(),
-                span: name_span,
-            });
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("cannot use '{}' as interface name", text),
+                name_span,
+            );
         }
     }
 
@@ -2397,10 +2379,11 @@ pub(super) fn parse_trait<'arena, 'src>(
     let name_is_reserved_kw = parser.is_reserved_keyword_as_decl_name();
     let name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
         if name_is_reserved_kw {
-            parser.error(ParseError::Forbidden {
-                message: format!("cannot use '{}' as trait name", text).into(),
+            parser.forbid(
+                ForbiddenRule::Other,
+                format!("cannot use '{}' as trait name", text),
                 span,
-            });
+            );
         }
         Ident::new(text, span)
     } else {
