@@ -259,7 +259,11 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 .iter()
                 .any(|(_, other)| other.is_some_and(|o| o.lower_name == internal.lower_name));
             if repeated {
-                self.attribute_error(format!("Attribute \"{name}\" must not be repeated"), span);
+                self.forbid(
+                    ForbiddenRule::RepeatedAttribute,
+                    format!("Attribute \"{name}\" must not be repeated"),
+                    span,
+                );
             }
             if target_matches {
                 self.validate_internal_attribute(
@@ -333,8 +337,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             "nodiscard" => {
                 if site.is_hook {
                     if !delayed_validation {
-                        self.attribute_error(
-                            "#[\\NoDiscard] is not supported for property hooks".into(),
+                        self.forbid(
+                            ForbiddenRule::NoDiscardOnInvalidTarget,
+                            "#[\\NoDiscard] is not supported for property hooks",
                             span,
                         );
                     }
@@ -342,7 +347,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 }
                 if let Some(name) = site.method_name {
                     if name.eq_ignore_ascii_case("__construct") {
-                        self.attribute_error(
+                        self.forbid(
+                            ForbiddenRule::NoDiscardOnInvalidTarget,
                             format!("Method {}::{name} cannot be #[\\NoDiscard]", site.member_of),
                             span,
                         );
@@ -359,7 +365,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 } else {
                     "function"
                 };
-                self.attribute_error(
+                self.forbid(
+                    ForbiddenRule::NoDiscardWithoutReturnValue,
                     format!(
                         "A {kind} {callable} does not return a value, but #[\\NoDiscard] requires a return value"
                     ),
@@ -368,9 +375,5 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
             _ => {}
         }
-    }
-
-    fn attribute_error(&mut self, message: String, span: Span) {
-        self.forbid(ForbiddenRule::Other, message, span);
     }
 }

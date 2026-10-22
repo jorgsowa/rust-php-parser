@@ -431,10 +431,10 @@ pub enum ForbiddenRule {
     VariadicParameterDefault,
     /// A parameter follows a variadic one.
     VariadicParameterNotLast,
-    /// `$this` is declared as a parameter, global or static variable.
+    /// `$this` is declared as a parameter, closure `use`, global or static variable.
     ThisAsDeclaredVariable,
-    /// A superglobal is used as a parameter name.
-    SuperglobalAsParameter,
+    /// A superglobal is declared as a parameter or closure `use` variable.
+    SuperglobalAsDeclaredVariable,
     /// A static variable is declared twice in one function.
     DuplicateStaticVariable,
     /// `break` or `continue` names more loop levels than enclose it.
@@ -483,6 +483,66 @@ pub enum ForbiddenRule {
     QualifiedBuiltinType,
     /// A qualified type name ends in a reserved name.
     ReservedTypeName,
+    /// `isset()` is applied to the result of an expression.
+    IssetOnExpression,
+    /// A `new` expression is turned into a first-class callable `(...)`.
+    ClosureForNew,
+    /// `yield` is used outside a function.
+    YieldOutsideFunction,
+    /// `yield from` is used in a by-reference generator.
+    YieldFromInByReferenceGenerator,
+    /// A positional argument follows a named one.
+    PositionalAfterNamedArgument,
+    /// An `(unset)` cast is used.
+    UnsetCast,
+    /// The result of a builtin such as `clone` is written to.
+    BuiltinResultWrite,
+    /// A temporary value is written to, e.g. `(1)[0] = 2`.
+    TemporaryExpressionWrite,
+    /// A nullsafe chain is written to.
+    NullsafeWrite,
+    /// A nullsafe chain is taken by reference.
+    ReferenceToNullsafe,
+    /// A nullsafe call is turned into a first-class callable `(...)`.
+    NullsafeClosureCreation,
+    /// A destructuring element cannot be assigned to.
+    UnwritableDestructuringElement,
+    /// `$this` is unset.
+    UnsetThis,
+    /// A closure `use` variable has the name of a parameter.
+    ClosureUseShadowsParameter,
+    /// A closure `use` list names a variable twice.
+    DuplicateClosureUseVariable,
+    /// A numeric literal is used as a class name, e.g. `(1)::A`.
+    LiteralClassName,
+    /// `::class` is applied to `true`, `false`, `null` or an array literal.
+    ClassFetchOnLiteral,
+    /// `::class` is applied to a dynamic class name before PHP 8.0.
+    DynamicClassFetch,
+    /// A constant expression contains something PHP cannot evaluate at compile time.
+    InvalidConstantExpression,
+    /// A destructuring list is empty.
+    EmptyList,
+    /// A keyed destructuring list has an empty entry.
+    EmptyKeyedArrayEntry,
+    /// A destructuring list mixes keyed and unkeyed entries.
+    MixedKeyedEntries,
+    /// A destructuring pattern mixes `[]` and `list()`.
+    MixedListSyntax,
+    /// A destructuring list uses `...`.
+    SpreadInDestructuring,
+    /// Nested ternaries are not parenthesized, e.g. `a ? b : c ? d : e`.
+    UnparenthesizedNestedTernary,
+    /// An arrow function on the right of `|>` is not parenthesized.
+    UnparenthesizedArrowInPipe,
+    /// A `{$...}` interpolation is not a variable, property, index or call.
+    InvalidCurlyInterpolation,
+    /// A non-repeatable attribute is applied twice.
+    RepeatedAttribute,
+    /// `#[\NoDiscard]` is applied to a property hook or a method it cannot apply to.
+    NoDiscardOnInvalidTarget,
+    /// `#[\NoDiscard]` is applied to a function that returns no value.
+    NoDiscardWithoutReturnValue,
     /// Not yet classified.
     Other,
 }
@@ -645,7 +705,7 @@ impl ForbiddenRule {
             ForbiddenRule::VariadicParameterDefault => "variadic-parameter-default",
             ForbiddenRule::VariadicParameterNotLast => "variadic-parameter-not-last",
             ForbiddenRule::ThisAsDeclaredVariable => "this-as-declared-variable",
-            ForbiddenRule::SuperglobalAsParameter => "superglobal-as-parameter",
+            ForbiddenRule::SuperglobalAsDeclaredVariable => "superglobal-as-declared-variable",
             ForbiddenRule::DuplicateStaticVariable => "duplicate-static-variable",
             ForbiddenRule::BreakOutOfLoop => "break-out-of-loop",
             ForbiddenRule::InvalidBreakOperand => "invalid-break-operand",
@@ -670,6 +730,38 @@ impl ForbiddenRule {
             ForbiddenRule::InvalidMemberType => "invalid-member-type",
             ForbiddenRule::QualifiedBuiltinType => "qualified-builtin-type",
             ForbiddenRule::ReservedTypeName => "reserved-type-name",
+            ForbiddenRule::IssetOnExpression => "isset-on-expression",
+            ForbiddenRule::ClosureForNew => "closure-for-new",
+            ForbiddenRule::YieldOutsideFunction => "yield-outside-function",
+            ForbiddenRule::YieldFromInByReferenceGenerator => {
+                "yield-from-in-by-reference-generator"
+            }
+            ForbiddenRule::PositionalAfterNamedArgument => "positional-after-named-argument",
+            ForbiddenRule::UnsetCast => "unset-cast",
+            ForbiddenRule::BuiltinResultWrite => "builtin-result-write",
+            ForbiddenRule::TemporaryExpressionWrite => "temporary-expression-write",
+            ForbiddenRule::NullsafeWrite => "nullsafe-write",
+            ForbiddenRule::ReferenceToNullsafe => "reference-to-nullsafe",
+            ForbiddenRule::NullsafeClosureCreation => "nullsafe-closure-creation",
+            ForbiddenRule::UnwritableDestructuringElement => "unwritable-destructuring-element",
+            ForbiddenRule::UnsetThis => "unset-this",
+            ForbiddenRule::ClosureUseShadowsParameter => "closure-use-shadows-parameter",
+            ForbiddenRule::DuplicateClosureUseVariable => "duplicate-closure-use-variable",
+            ForbiddenRule::LiteralClassName => "literal-class-name",
+            ForbiddenRule::ClassFetchOnLiteral => "class-fetch-on-literal",
+            ForbiddenRule::DynamicClassFetch => "dynamic-class-fetch",
+            ForbiddenRule::InvalidConstantExpression => "invalid-constant-expression",
+            ForbiddenRule::EmptyList => "empty-list",
+            ForbiddenRule::EmptyKeyedArrayEntry => "empty-keyed-array-entry",
+            ForbiddenRule::MixedKeyedEntries => "mixed-keyed-entries",
+            ForbiddenRule::MixedListSyntax => "mixed-list-syntax",
+            ForbiddenRule::SpreadInDestructuring => "spread-in-destructuring",
+            ForbiddenRule::UnparenthesizedNestedTernary => "unparenthesized-nested-ternary",
+            ForbiddenRule::UnparenthesizedArrowInPipe => "unparenthesized-arrow-in-pipe",
+            ForbiddenRule::InvalidCurlyInterpolation => "invalid-curly-interpolation",
+            ForbiddenRule::RepeatedAttribute => "repeated-attribute",
+            ForbiddenRule::NoDiscardOnInvalidTarget => "no-discard-on-invalid-target",
+            ForbiddenRule::NoDiscardWithoutReturnValue => "no-discard-without-return-value",
             ForbiddenRule::Other => "other",
         }
     }
@@ -869,7 +961,7 @@ mod tests {
         ForbiddenRule::VariadicParameterDefault,
         ForbiddenRule::VariadicParameterNotLast,
         ForbiddenRule::ThisAsDeclaredVariable,
-        ForbiddenRule::SuperglobalAsParameter,
+        ForbiddenRule::SuperglobalAsDeclaredVariable,
         ForbiddenRule::DuplicateStaticVariable,
         ForbiddenRule::BreakOutOfLoop,
         ForbiddenRule::InvalidBreakOperand,
@@ -894,6 +986,58 @@ mod tests {
         ForbiddenRule::InvalidMemberType,
         ForbiddenRule::QualifiedBuiltinType,
         ForbiddenRule::ReservedTypeName,
+        ForbiddenRule::IssetOnExpression,
+        ForbiddenRule::ClosureForNew,
+        ForbiddenRule::YieldOutsideFunction,
+        ForbiddenRule::YieldFromInByReferenceGenerator,
+        ForbiddenRule::PositionalAfterNamedArgument,
+        ForbiddenRule::UnsetCast,
+        ForbiddenRule::BuiltinResultWrite,
+        ForbiddenRule::TemporaryExpressionWrite,
+        ForbiddenRule::NullsafeWrite,
+        ForbiddenRule::ReferenceToNullsafe,
+        ForbiddenRule::NullsafeClosureCreation,
+        ForbiddenRule::UnwritableDestructuringElement,
+        ForbiddenRule::UnsetThis,
+        ForbiddenRule::ClosureUseShadowsParameter,
+        ForbiddenRule::DuplicateClosureUseVariable,
+        ForbiddenRule::LiteralClassName,
+        ForbiddenRule::ClassFetchOnLiteral,
+        ForbiddenRule::DynamicClassFetch,
+        ForbiddenRule::InvalidConstantExpression,
+        ForbiddenRule::EmptyList,
+        ForbiddenRule::EmptyKeyedArrayEntry,
+        ForbiddenRule::MixedKeyedEntries,
+        ForbiddenRule::MixedListSyntax,
+        ForbiddenRule::SpreadInDestructuring,
+        ForbiddenRule::UnparenthesizedNestedTernary,
+        ForbiddenRule::UnparenthesizedArrowInPipe,
+        ForbiddenRule::InvalidCurlyInterpolation,
+        ForbiddenRule::RepeatedAttribute,
+        ForbiddenRule::NoDiscardOnInvalidTarget,
+        ForbiddenRule::NoDiscardWithoutReturnValue,
+    ];
+
+    /// `(rule, version, source, reported span text)` for sites that report only at some versions.
+    const VERSION_GATED: &[(ForbiddenRule, PhpVersion, &str, &str)] = &[
+        (
+            ForbiddenRule::NeverReturn,
+            PhpVersion::Php81,
+            "<?php $f = fn(): never => 1;",
+            "1",
+        ),
+        (
+            ForbiddenRule::DynamicClassFetch,
+            PhpVersion::Php74,
+            "<?php $a::class;",
+            "$a",
+        ),
+        (
+            ForbiddenRule::QualifiedBuiltinType,
+            PhpVersion::Php86,
+            "<?php function f(namespace\\static $x) {}",
+            "namespace\\static",
+        ),
     ];
 
     /// `(source, reported span text)` for each site that reports `rule`.
@@ -1068,8 +1212,8 @@ mod tests {
             ForbiddenRule::NeverReturn => &[("<?php function f(): never { return; }", "return;"),],
             ForbiddenRule::VariadicParameterDefault => &[("<?php function f(...$a = []) {}", "...$a = []"),],
             ForbiddenRule::VariadicParameterNotLast => &[("<?php function f(...$a, $b) {}", "$b"),],
-            ForbiddenRule::ThisAsDeclaredVariable => &[("<?php function f($this) {}", "$this"), ("<?php function f() { global $this; }", "$this"), ("<?php function f() { static $this; }", "$this"),],
-            ForbiddenRule::SuperglobalAsParameter => &[("<?php function f($_GET) {}", "$_GET"),],
+            ForbiddenRule::ThisAsDeclaredVariable => &[("<?php $f = function () use ($this) {};", "$this"), ("<?php function f($this) {}", "$this"), ("<?php function f() { global $this; }", "$this"), ("<?php function f() { static $this; }", "$this"),],
+            ForbiddenRule::SuperglobalAsDeclaredVariable => &[("<?php $f = function () use ($_GET) {};", "$_GET"), ("<?php function f($_GET) {}", "$_GET"),],
             ForbiddenRule::DuplicateStaticVariable => &[("<?php function f() { static $a; static $a; }", "$a"),],
             ForbiddenRule::BreakOutOfLoop => &[("<?php break;", "break"), ("<?php while (1) { break 2; }", "break"),],
             ForbiddenRule::InvalidBreakOperand => &[("<?php while (1) { break $a; }", "break"), ("<?php while (1) { break 0; }", "break"),],
@@ -1094,14 +1238,44 @@ mod tests {
             ForbiddenRule::InvalidMemberType => &[("<?php class A { public callable $x; }", "callable"),],
             ForbiddenRule::QualifiedBuiltinType => &[("<?php function f(\\int $x) {}", "\\int"),],
             ForbiddenRule::ReservedTypeName => &[("<?php function f(A\\int $x) {}", "A\\int"),],
-            ForbiddenRule::Other => &[],
+            ForbiddenRule::IssetOnExpression => &[("<?php isset(f());", "f()"),],
+            ForbiddenRule::ClosureForNew => &[("<?php new A(...);", "(...)"), ("<?php new class(...) {};", "(...)"),],
+            ForbiddenRule::YieldOutsideFunction => &[("<?php yield 1;", "yield"),],
+            ForbiddenRule::YieldFromInByReferenceGenerator => &[("<?php function &f() { yield from g(); }", "yield from g()"),],
+            ForbiddenRule::PositionalAfterNamedArgument => &[("<?php f(a: 1, 2);", "2"),],
+            ForbiddenRule::UnsetCast => &[("<?php $x = (unset) 1;", "unset"),],
+            ForbiddenRule::BuiltinResultWrite => &[("<?php (clone $a)->b = 1;", "(clone $a)->b"), ("<?php $x = &f(...);", "f(...)"),],
+            ForbiddenRule::TemporaryExpressionWrite => &[("<?php (1)[0] = 2;", "(1)[0]"), ("<?php (1)[0]++;", "(1)[0]"), ("<?php unset((1)[0]);", "(1)[0]"), ("<?php $x = &(1)[0];", "(1)[0]"),],
+            ForbiddenRule::NullsafeWrite => &[("<?php $a?->b = 1;", "$a?->b"), ("<?php $a?->b++;", "$a?->b"), ("<?php unset($a?->b);", "$a?->b"),],
+            ForbiddenRule::ReferenceToNullsafe => &[("<?php $x = &$a?->b;", "$a?->b"), ("<?php [&$x] = $a?->b;", "$a?->b"), ("<?php function &f() { return $a?->b; }", "$a?->b"),],
+            ForbiddenRule::NullsafeClosureCreation => &[("<?php $a?->b(...);", "$a?->b(...)"),],
+            ForbiddenRule::UnwritableDestructuringElement => &[("<?php [f()] = $a;", "f()"), ("<?php foreach ($a as [f()]) {}", "[f()]"),],
+            ForbiddenRule::UnsetThis => &[("<?php function f() { unset($this); }", "$this"),],
+            ForbiddenRule::ClosureUseShadowsParameter => &[("<?php $f = function ($a) use ($a) {};", "$a"),],
+            ForbiddenRule::DuplicateClosureUseVariable => &[("<?php $f = function () use ($a, $a) {};", "$a"),],
+            ForbiddenRule::LiteralClassName => &[("<?php (1)::A;", "(1)"), ("<?php (1)::class;", "(1)"),],
+            ForbiddenRule::ClassFetchOnLiteral => &[("<?php (null)::class;", "(null)"),],
+            ForbiddenRule::InvalidConstantExpression => &[("<?php const X = $a;", "$a"),],
+            ForbiddenRule::EmptyList => &[("<?php [] = $a;", "[]"),],
+            ForbiddenRule::EmptyKeyedArrayEntry => &[("<?php ['a' => $y, , 'b' => $z] = $a;", ","),],
+            ForbiddenRule::MixedKeyedEntries => &[("<?php ['a' => $x, $y] = $a;", "$y"),],
+            ForbiddenRule::MixedListSyntax => &[("<?php [list($a)] = $b;", "list($a)"),],
+            ForbiddenRule::SpreadInDestructuring => &[("<?php [...$a] = $b;", "...$a"),],
+            ForbiddenRule::UnparenthesizedNestedTernary => &[("<?php $x = 1 ? 2 : 3 ? 4 : 5;", "?"),],
+            ForbiddenRule::UnparenthesizedArrowInPipe => &[("<?php $x = 1 |> fn($a) => $a;", "fn($a) => $a"),],
+            ForbiddenRule::InvalidCurlyInterpolation => &[("<?php echo \"{$a + 1}\";", "$a + 1"),],
+            ForbiddenRule::RepeatedAttribute => &[("<?php #[Override, Override] function f() {}", "Override"),],
+            ForbiddenRule::NoDiscardOnInvalidTarget => &[("<?php class A { public $x { #[NoDiscard] get => 1; } }", "NoDiscard"), ("<?php class A { #[NoDiscard] function __construct() {} }", "NoDiscard"),],
+            ForbiddenRule::NoDiscardWithoutReturnValue => &[("<?php #[NoDiscard] function f(): void {}", "NoDiscard"),],
+            ForbiddenRule::DynamicClassFetch | ForbiddenRule::Other => &[],
         }
     }
 
     #[test]
     fn each_rule_reports_its_span() {
         for &rule in RULES {
-            assert!(!samples(rule).is_empty(), "{rule:?} has no sample");
+            let gated = VERSION_GATED.iter().any(|&(r, ..)| r == rule);
+            assert!(gated || !samples(rule).is_empty(), "{rule:?} has no sample");
             for &(src, text) in samples(rule) {
                 let errors = crate::parse(src).errors;
                 let spans: Vec<&str> = errors
@@ -1116,21 +1290,7 @@ mod tests {
 
     #[test]
     fn version_gated_rules_report_their_span() {
-        let samples = [
-            (
-                ForbiddenRule::NeverReturn,
-                PhpVersion::Php81,
-                "<?php $f = fn(): never => 1;",
-                "1",
-            ),
-            (
-                ForbiddenRule::QualifiedBuiltinType,
-                PhpVersion::Php86,
-                "<?php function f(namespace\\static $x) {}",
-                "namespace\\static",
-            ),
-        ];
-        for (rule, version, src, text) in samples {
+        for &(rule, version, src, text) in VERSION_GATED {
             let options = crate::ParseOptions::default().version(version);
             let errors = crate::parse_with(src, &options).errors;
             let spans: Vec<&str> = errors

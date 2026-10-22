@@ -826,7 +826,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             for e in exprs.iter() {
                 if !isset_target_valid(&e.kind) {
                     parser.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::IssetOnExpression,
                         "Cannot use isset() on the result of an expression \
                                   (you can use \"null !== expression\" instead)",
                         e.span,
@@ -1305,7 +1305,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                 }
                 ArgListResult::CallableMarker => {
                     parser.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::ClosureForNew,
                         "Cannot create Closure for new expression",
                         Span::new(paren_start, parser.previous_end()),
                     );
@@ -1480,7 +1480,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             }
             ArgListResult::CallableMarker => {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::ClosureForNew,
                     "Cannot create Closure for new expression",
                     Span::new(paren_start, parser.previous_end()),
                 );
@@ -1650,25 +1650,33 @@ fn parse_closure_use_list<'arena, 'src>(
         if let Some(token) = parser.eat(TokenKind::Variable) {
             let name = parser.variable_ident(token);
             let span = Span::new(var_start, token.span.end);
-            let message: Option<std::borrow::Cow<'static, str>> = match name.as_str() {
-                Some("this") => Some("Cannot use $this as lexical variable".into()),
-                Some(n) if super::is_superglobal(n) => {
-                    Some("Cannot use auto-global as lexical variable".into())
-                }
-                Some(n) if params.iter().any(|p| p.name.as_str() == Some(n)) => {
-                    Some(format!("Cannot use lexical variable ${n} as a parameter name").into())
-                }
+            let error: Option<(_, std::borrow::Cow<'static, str>)> = match name.as_str() {
+                Some("this") => Some((
+                    ForbiddenRule::ThisAsDeclaredVariable,
+                    "Cannot use $this as lexical variable".into(),
+                )),
+                Some(n) if super::is_superglobal(n) => Some((
+                    ForbiddenRule::SuperglobalAsDeclaredVariable,
+                    "Cannot use auto-global as lexical variable".into(),
+                )),
+                Some(n) if params.iter().any(|p| p.name.as_str() == Some(n)) => Some((
+                    ForbiddenRule::ClosureUseShadowsParameter,
+                    format!("Cannot use lexical variable ${n} as a parameter name").into(),
+                )),
                 Some(n)
                     if vars
                         .iter()
                         .any(|v: &ClosureUseVar<'_>| v.name.as_str() == Some(n)) =>
                 {
-                    Some(format!("Cannot use variable ${n} twice").into())
+                    Some((
+                        ForbiddenRule::DuplicateClosureUseVariable,
+                        format!("Cannot use variable ${n} twice").into(),
+                    ))
                 }
                 _ => None,
             };
-            if let Some(message) = message {
-                parser.forbid(ForbiddenRule::Other, message, name.span);
+            if let Some((rule, message)) = error {
+                parser.forbid(rule, message, name.span);
             }
             vars.push(ClosureUseVar { name, by_ref, span });
         }
@@ -1834,7 +1842,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
 
     if parser.function_depth == 0 {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::YieldOutsideFunction,
             "'yield' can only be used inside a function",
             Span::new(start, parser.previous_end()),
         );
@@ -1847,7 +1855,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
         let span = Span::new(start, value.span.end);
         if parser.by_ref_function {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::YieldFromInByReferenceGenerator,
                 "Cannot use \"yield from\" inside a by-reference generator",
                 span,
             );
@@ -2020,7 +2028,7 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
             } else if seen_named && !is_rest_placeholder {
                 // Positional argument (including spread) after a named argument
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::PositionalAfterNamedArgument,
                     "cannot use positional argument after named argument",
                     arg.span,
                 );
@@ -2579,7 +2587,7 @@ fn try_parse_cast<'arena, 'src>(
 
     if cast_kind == CastKind::Unset && parser.version >= PhpVersion::Php80 {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::UnsetCast,
             "the (unset) cast is no longer supported",
             kw_span,
         );

@@ -1470,7 +1470,7 @@ fn check_param_name(
             "Cannot use $this as parameter".into(),
         ),
         Some(n) if expr::is_superglobal(n) => (
-            ForbiddenRule::SuperglobalAsParameter,
+            ForbiddenRule::SuperglobalAsDeclaredVariable,
             format!("Cannot re-assign auto-global variable {n}").into(),
         ),
         Some(n) if earlier.iter().any(|p| p.name.as_str() == Some(n)) => (

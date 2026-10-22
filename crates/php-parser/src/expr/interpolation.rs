@@ -1019,7 +1019,7 @@ fn check_curly_interpolation(expr: &Expr<'_, '_>, errors: &mut Vec<ParseError>) 
         ),
         _ if crate::expr::is_variable_or_call(&expr.kind) => return,
         _ => (
-            ForbiddenRule::Other,
+            ForbiddenRule::InvalidCurlyInterpolation,
             "only a variable, property, index or call can be interpolated with '{$...}'",
         ),
     };
