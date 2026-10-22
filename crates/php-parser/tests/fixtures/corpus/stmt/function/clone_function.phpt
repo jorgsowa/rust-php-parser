@@ -28,7 +28,7 @@ cannot use 'clone' as function name; it is reserved
 'named arguments' requires PHP 8.0 or higher
 'clone function call' requires PHP 8.5 or higher
 'named arguments' requires PHP 8.0 or higher
-cannot use positional argument after named argument
+Cannot use positional argument after named argument
 'clone function call' requires PHP 8.5 or higher
 'clone function call' requires PHP 8.5 or higher
 'first-class callable syntax' requires PHP 8.1 or higher
@@ -42,7 +42,7 @@ cannot use 'clone' as function name; it is reserved
 'clone function call' requires PHP 8.5 or higher
 'clone function call' requires PHP 8.5 or higher
 'clone function call' requires PHP 8.5 or higher
-cannot use positional argument after named argument
+Cannot use positional argument after named argument
 'clone function call' requires PHP 8.5 or higher
 'clone function call' requires PHP 8.5 or higher
 'first-class callable syntax' requires PHP 8.1 or higher
@@ -56,13 +56,13 @@ cannot use 'clone' as function name; it is reserved
 'clone function call' requires PHP 8.5 or higher
 'clone function call' requires PHP 8.5 or higher
 'clone function call' requires PHP 8.5 or higher
-cannot use positional argument after named argument
+Cannot use positional argument after named argument
 'clone function call' requires PHP 8.5 or higher
 'clone function call' requires PHP 8.5 or higher
 'clone(...) first-class callable' requires PHP 8.5 or higher
 ===errors >=8.5===
 cannot use 'clone' as function name; it is reserved
-cannot use positional argument after named argument
+Cannot use positional argument after named argument
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'clone' (T_CLONE), expecting '(' in Standard input code on line 3
 ===php_error >=8.0===

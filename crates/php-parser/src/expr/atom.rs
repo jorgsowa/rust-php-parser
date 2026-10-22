@@ -2026,12 +2026,14 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
                     );
                 }
             } else if seen_named && !is_rest_placeholder {
-                // Positional argument (including spread) after a named argument
-                parser.forbid(
-                    ForbiddenRule::PositionalAfterNamedArgument,
-                    "cannot use positional argument after named argument",
-                    arg.span,
-                );
+                let message = if !arg.is_spread() {
+                    "Cannot use positional argument after named argument"
+                } else if parser.version == PhpVersion::Php80 {
+                    "Cannot combine named arguments and argument unpacking"
+                } else {
+                    "Cannot use argument unpacking after named arguments"
+                };
+                parser.forbid(ForbiddenRule::PositionalAfterNamedArgument, message, arg.span);
             }
 
             seen_spread |= arg.is_spread();

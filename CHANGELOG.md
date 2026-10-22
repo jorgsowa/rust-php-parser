@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The messages for a positional or unpacked argument after a named one, an unparenthesized nested ternary and an unparenthesized arrow function after `|>` match PHP's (`php-rs-parser`).
+
 ### Fixed
 
 - An enum property with a fully qualified type, such as `public \Foo\Bar $a;`, reports `Enum E cannot include properties` instead of a syntax error (`php-rs-parser`).

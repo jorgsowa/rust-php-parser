@@ -1573,7 +1573,7 @@ fn parse_expr_rest<'arena, 'src>(
                             parser.forbid(
                                 ForbiddenRule::UnparenthesizedNestedTernary,
                                 "Unparenthesized `a ? b : c ? d : e` is not supported. \
-                                          Use parentheses to make the order explicit.",
+                                 Use either `(a ? b : c) ? d : e` or `a ? b : (c ? d : e)`",
                                 span,
                             );
                         }
@@ -2121,7 +2121,7 @@ fn parse_expr_rest<'arena, 'src>(
             if op == BinaryOp::Pipe && matches!(rhs.kind, ExprKind::ArrowFunction(_)) {
                 parser.forbid(
                     ForbiddenRule::UnparenthesizedArrowInPipe,
-                    "arrow function on the right side of pipe operator must be parenthesized",
+                    "Arrow functions on the right hand side of |> must be parenthesized",
                     rhs.span,
                 );
             }

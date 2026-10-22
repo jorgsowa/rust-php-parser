@@ -2,9 +2,11 @@
 <?php func(a: 1, ...['b' => 2]);
 ===errors <=7.4===
 'named arguments' requires PHP 8.0 or higher
-cannot use positional argument after named argument
-===errors >=8.0===
-cannot use positional argument after named argument
+Cannot use argument unpacking after named arguments
+===errors 8.0===
+Cannot combine named arguments and argument unpacking
+===errors >=8.1===
+Cannot use argument unpacking after named arguments
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ':', expecting ')' in Standard input code on line 1
 ===php_error 8.0===
