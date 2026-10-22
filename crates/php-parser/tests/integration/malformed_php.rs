@@ -357,8 +357,9 @@ fn very_long_chains_owned() {
     let methods = format!("<?php $a{};", "->b()".repeat(20_000));
     let mixed = format!("<?php $a{};", "?->b[0]::C->d(...)".repeat(5_000));
     let prefix = format!("<?php $a = {}$b;", "~-!+".repeat(5_000));
+    let logical = format!("<?php (true{}) && $a;", " && !0".repeat(20_000));
     with_stack(256 * 1024, move || {
-        for code in [concat, methods, mixed, prefix] {
+        for code in [concat, methods, mixed, prefix, logical] {
             let result = php_rs_parser::parse(&code);
             assert!(result.errors.is_empty(), "{:?}", result.errors);
             drop(result);

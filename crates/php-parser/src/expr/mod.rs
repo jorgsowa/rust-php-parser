@@ -639,7 +639,7 @@ impl ConstExprChecker {
             ExprKind::Binary(b) if !matches!(b.op, BinaryOp::Instanceof | BinaryOp::Pipe) => {
                 self.check(b.left)?;
                 // PHP folds `false && $x` before checking, dropping the right operand.
-                let folded_away = match (b.op, literal_truth(b.left)) {
+                let folded_away = match (b.op, folded_truth(b.left)) {
                     (BinaryOp::BooleanAnd | BinaryOp::LogicalAnd, Some(truth)) => !truth,
                     (BinaryOp::BooleanOr | BinaryOp::LogicalOr, Some(truth)) => truth,
                     (
@@ -658,7 +658,7 @@ impl ConstExprChecker {
             }
             ExprKind::Ternary(t) => {
                 self.check(t.condition)?;
-                match literal_truth(t.condition) {
+                match folded_truth(t.condition) {
                     Some(true) => t
                         .then_expr
                         .map_or(Ok(()), |then_expr| self.check(then_expr)),
@@ -879,6 +879,11 @@ impl ConstExprChecker {
     }
 }
 
+fn is_class_keyword_name(name: &Name<'_, '_>) -> bool {
+    matches!(name, Name::Simple { value, .. }
+        if ["self", "parent", "static"].iter().any(|k| value.eq_ignore_ascii_case(k)))
+}
+
 fn is_static_name(name: &Name<'_, '_>) -> bool {
     matches!(name, Name::Simple { value, .. } if value.eq_ignore_ascii_case("static"))
 }
@@ -906,15 +911,63 @@ fn unparenthesized<'e, 'arena, 'src>(mut expr: &'e Expr<'arena, 'src>) -> &'e Ex
     expr
 }
 
-/// The truthiness of a scalar literal, which PHP uses to fold `?:`, `&&` and `||`.
-fn literal_truth(expr: &Expr<'_, '_>) -> Option<bool> {
-    match &unparenthesized(expr).kind {
+fn is_short_circuit(op: BinaryOp) -> bool {
+    matches!(
+        op,
+        BinaryOp::BooleanAnd | BinaryOp::BooleanOr | BinaryOp::LogicalAnd | BinaryOp::LogicalOr
+    )
+}
+
+/// The truthiness PHP gives `expr` when it folds `?:`, `&&` and `||` at compile time.
+fn folded_truth(expr: &Expr<'_, '_>) -> Option<bool> {
+    let expr = unparenthesized(expr);
+    match &expr.kind {
         ExprKind::Int(n) => Some(*n != 0),
         ExprKind::Float(f) => Some(*f != 0.0),
         ExprKind::String(s) => Some(!matches!(s.as_bytes(), b"" | b"0")),
         ExprKind::Nowdoc { value, .. } => Some(!matches!(*value, "" | "0")),
         ExprKind::Bool(b) => Some(*b),
         ExprKind::Null => Some(false),
+        ExprKind::UnaryPrefix(u) if u.op == UnaryPrefixOp::BooleanNot => {
+            folded_truth(u.operand).map(|truth| !truth)
+        }
+        ExprKind::Array(elements) if is_literal(expr) => {
+            let mut truth = false;
+            for el in elements.iter() {
+                match &el.kind {
+                    ArrayElementKind::Spread(inner) => truth |= folded_truth(inner)?,
+                    _ => return Some(true),
+                }
+            }
+            Some(truth)
+        }
+        // `A::class` is resolved at compile time unless it names `self`, `parent` or `static`.
+        ExprKind::ClassConstAccess(access) => {
+            let resolved = matches!(&access.member.kind, ExprKind::Identifier(m) if m.eq_ignore_ascii_case("class"))
+                && matches!(&access.class.kind, ExprKind::Name(name) if !is_class_keyword_name(name));
+            resolved.then_some(true)
+        }
+        ExprKind::Binary(b) if is_short_circuit(b.op) => {
+            // Walk the left spine iteratively: chains are built in a loop and can be very long.
+            let mut spine = vec![b];
+            while let ExprKind::Binary(inner) = &unparenthesized(spine[spine.len() - 1].left).kind {
+                if !is_short_circuit(inner.op) {
+                    break;
+                }
+                spine.push(inner);
+            }
+            let mut truth = folded_truth(spine[spine.len() - 1].left)?;
+            for link in spine.iter().rev() {
+                let decided = match link.op {
+                    BinaryOp::BooleanAnd | BinaryOp::LogicalAnd => !truth,
+                    _ => truth,
+                };
+                if !decided {
+                    truth = folded_truth(link.right)?;
+                }
+            }
+            Some(truth)
+        }
         _ => None,
     }
 }
@@ -1330,6 +1383,8 @@ fn parse_expr_rest<'arena, 'src>(
     mut lhs: Expr<'arena, 'src>,
     min_bp: u8,
 ) -> Expr<'arena, 'src> {
+    // The folded truth of the last `&&`/`||` built here, so a long chain is not re-walked per link.
+    let mut chain_truth: Option<(Span, Option<bool>)> = None;
     loop {
         let kind = parser.current_kind();
 
@@ -1877,7 +1932,12 @@ fn parse_expr_rest<'arena, 'src>(
             //      `$a + $b + $c = 5` → `$a + $b + ($c = 5)`
             // parse_expr_bp with right_bp > ASSIGNMENT_BP won't consume the assignment,
             // so we explicitly apply it here (same pattern as the `??` branch above).
-            let short_circuits = match (op, literal_truth(&lhs)) {
+            let lhs_truth = match chain_truth {
+                _ if !is_short_circuit(op) => None,
+                Some((span, truth)) if span == lhs.span => truth,
+                _ => folded_truth(&lhs),
+            };
+            let short_circuits = match (op, lhs_truth) {
                 (BinaryOp::BooleanAnd | BinaryOp::LogicalAnd, Some(truth)) => !truth,
                 (BinaryOp::BooleanOr | BinaryOp::LogicalOr, Some(truth)) => truth,
                 _ => false,
@@ -1919,6 +1979,14 @@ fn parse_expr_rest<'arena, 'src>(
                 });
             }
             let span = lhs.span.merge(rhs.span);
+            if is_short_circuit(op) {
+                let truth = match lhs_truth {
+                    Some(truth) if short_circuits => Some(truth),
+                    Some(_) => folded_truth(&rhs),
+                    None => None,
+                };
+                chain_truth = Some((span, truth));
+            }
             lhs = Expr {
                 kind: ExprKind::Binary(BinaryExpr {
                     left: parser.alloc(lhs),
