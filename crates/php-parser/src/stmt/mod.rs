@@ -3125,8 +3125,12 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
         }
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
-            // Static-variable initializers DO permit `new` (PHP 8.1+).
-            Some(expr::parse_expr(parser))
+            let value = expr::parse_expr(parser);
+            // Before 8.3 the initializer is a constant expression, which permits `new` from 8.1.
+            if parser.version < PhpVersion::Php83 {
+                expr::check_const_expr(parser, &value, true);
+            }
+            Some(value)
         } else {
             None
         };
@@ -3832,6 +3836,8 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
     }
     struct ClassRefs<'src> {
         scope: Scope<'src>,
+        /// Before PHP 8.3 a static variable's initializer is a constant expression.
+        static_init_is_const_expr: bool,
         errors: Vec<(String, Span)>,
     }
     impl<'src> ClassRefs<'src> {
@@ -4042,6 +4048,11 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
                         self.const_expr(&item.value);
                     }
                 }
+                StmtKind::StaticVar(vars) if self.static_init_is_const_expr => {
+                    for default in vars.iter().filter_map(|var| var.default.as_ref()) {
+                        self.const_expr(default);
+                    }
+                }
                 _ => {
                     let _ = walk_stmt(self, stmt);
                 }
@@ -4204,6 +4215,7 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
             hook: None,
             const_expr: false,
         },
+        static_init_is_const_expr: parser.version < PhpVersion::Php83,
         errors: Vec::new(),
     };
     for stmt in stmts {
