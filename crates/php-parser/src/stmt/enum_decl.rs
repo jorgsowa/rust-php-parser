@@ -21,6 +21,11 @@ pub(super) fn parse_enum<'arena, 'src>(
                 message: format!("cannot use '{}' as enum name", text).into(),
                 span,
             });
+        } else if super::class::is_reserved_class_name(text, parser.version) {
+            parser.error(ParseError::Forbidden {
+                message: format!("Cannot use \"{text}\" as an enum name as it is reserved").into(),
+                span,
+            });
         }
         Ident::new(text, span)
     } else {
