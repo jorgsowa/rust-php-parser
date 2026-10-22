@@ -269,6 +269,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 let Some((kind, name)) = site.class else {
                     return;
                 };
+                // PHP checks the targets of `#[Attribute]` from 8.5 on.
+                if lower_name == "attribute" && self.version < PhpVersion::Php85 {
+                    return;
+                }
                 let attribute = match lower_name {
                     "attribute" => "Attribute",
                     "allowdynamicproperties" => "AllowDynamicProperties",
