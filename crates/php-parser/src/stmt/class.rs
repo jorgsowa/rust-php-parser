@@ -1176,6 +1176,19 @@ fn parse_class_member_modifiers<'arena, 'src>(
     if parser.check(TokenKind::Identifier) && parser.current_text().eq_ignore_ascii_case("var") {
         parser.advance();
         visibility = Some(Visibility::Public);
+        // `var` takes no other modifier.
+        if matches!(
+            parser.current_kind(),
+            TokenKind::Public
+                | TokenKind::Protected
+                | TokenKind::Private
+                | TokenKind::Static
+                | TokenKind::Abstract
+                | TokenKind::Final
+                | TokenKind::Readonly
+        ) {
+            parser.error_expected("variable");
+        }
     }
 
     loop {
@@ -1292,6 +1305,13 @@ fn parse_class_member_modifiers<'arena, 'src>(
             }
             _ => break,
         }
+    }
+    // `var` is a keyword in PHP, so it cannot follow other modifiers as a type name.
+    if parser.previous_end() > member_start
+        && parser.check(TokenKind::Identifier)
+        && parser.current_text().eq_ignore_ascii_case("var")
+    {
+        parser.error_expected("variable");
     }
 
     if is_abstract && is_final {
