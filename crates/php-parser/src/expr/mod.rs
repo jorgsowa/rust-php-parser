@@ -821,47 +821,92 @@ impl ConstExprChecker {
                     expr.span,
                 )?;
                 match &cc.kind {
-                    CallableCreateKind::Function(name) => {
-                        if matches!(name.kind, ExprKind::Name(_)) || is_literal(name) {
-                            Ok(())
-                        } else {
-                            Err(Forbidden(
-                                "Cannot use dynamic function name in constant expression",
-                                name.span,
-                            ))
-                        }
-                    }
+                    CallableCreateKind::Function(name) => self.callable_function(name),
                     CallableCreateKind::StaticMethod { class, method } => {
-                        match &class.kind {
-                            ExprKind::Name(name) if is_static_name(name) => {
-                                return Err(Forbidden(
-                                    "\"static\" is not allowed in compile-time constants",
-                                    class.span,
-                                ))
-                            }
-                            ExprKind::Name(_) => {}
-                            _ if may_fold(class) => {}
-                            _ => {
-                                return Err(Forbidden(
-                                    "Cannot use dynamic class name in constant expression",
-                                    class.span,
-                                ))
-                            }
-                        }
-                        if matches!(method.kind, ExprKind::Identifier(_)) || is_literal(method) {
-                            Ok(())
-                        } else {
-                            Err(Forbidden(
-                                "Cannot use dynamic method name in constant expression",
-                                method.span,
-                            ))
-                        }
+                        self.callable_static_method(class, method)
                     }
                     _ => Err(Forbidden(INVALID_CONST_EXPR, expr.span)),
                 }
             }
+            // PHP 8.6 partial function application.
+            ExprKind::FunctionCall(call)
+                if self.version >= PhpVersion::Php86
+                    && call.args.iter().any(Arg::is_placeholder) =>
+            {
+                self.callable_function(call.name)?;
+                self.partial_args(&call.args)
+            }
+            ExprKind::StaticMethodCall(call)
+                if self.version >= PhpVersion::Php86
+                    && call.args.iter().any(Arg::is_placeholder) =>
+            {
+                self.callable_static_method(call.class, call.method)?;
+                self.partial_args(&call.args)
+            }
             _ => Err(Forbidden(INVALID_CONST_EXPR, expr.span)),
         }
+    }
+
+    /// The function a constant expression makes a closure of.
+    fn callable_function(&self, name: &Expr<'_, '_>) -> Result<(), ConstExprError> {
+        if matches!(name.kind, ExprKind::Name(_)) || is_literal(name) {
+            Ok(())
+        } else {
+            Err(ConstExprError::Forbidden(
+                "Cannot use dynamic function name in constant expression",
+                name.span,
+            ))
+        }
+    }
+
+    /// The static method a constant expression makes a closure of.
+    fn callable_static_method(
+        &self,
+        class: &Expr<'_, '_>,
+        method: &Expr<'_, '_>,
+    ) -> Result<(), ConstExprError> {
+        match &class.kind {
+            ExprKind::Name(name) if is_static_name(name) => {
+                return Err(ConstExprError::Forbidden(
+                    "\"static\" is not allowed in compile-time constants",
+                    class.span,
+                ))
+            }
+            ExprKind::Name(_) => {}
+            _ if may_fold(class) => {}
+            _ => {
+                return Err(ConstExprError::Forbidden(
+                    "Cannot use dynamic class name in constant expression",
+                    class.span,
+                ))
+            }
+        }
+        if matches!(method.kind, ExprKind::Identifier(_)) || is_literal(method) {
+            Ok(())
+        } else {
+            Err(ConstExprError::Forbidden(
+                "Cannot use dynamic method name in constant expression",
+                method.span,
+            ))
+        }
+    }
+
+    /// The arguments of a partial application in a constant expression.
+    fn partial_args(&self, args: &[Arg<'_, '_>]) -> Result<(), ConstExprError> {
+        for arg in args {
+            match &arg.kind {
+                ArgKind::Value(value) => self.check(value)?,
+                ArgKind::Placeholder | ArgKind::SpreadPlaceholder => {}
+                ArgKind::Spread(_) => {
+                    return Err(ConstExprError::Forbidden(
+                        "Argument unpacking in constant expressions is not supported",
+                        arg.span,
+                    ))
+                }
+                _ => return Err(ConstExprError::Forbidden(INVALID_CONST_EXPR, arg.span)),
+            }
+        }
+        Ok(())
     }
 
     /// The class of `X::C` or `X::{expr}`.
