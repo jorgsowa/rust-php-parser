@@ -532,16 +532,46 @@ pub(super) fn check_virtual_set_visibility(
     });
 }
 
+/// A member of a type, as compared between a set hook parameter and its property.
+#[derive(Clone, Copy, PartialEq)]
+enum HookTypeMember {
+    /// A class type; only a single named class may be a `Closure`, which `callable` accepts.
+    Class {
+        named: bool,
+    },
+    Builtin(BuiltinType),
+}
+
 /// The members of a type for comparing a set hook parameter with its property: a union's
-/// members, with `?T` as `T|null`.
-fn hook_type_members<'a, 'arena, 'src>(
-    ty: &'a TypeHint<'arena, 'src>,
-) -> Vec<&'a TypeHint<'arena, 'src>> {
-    match &ty.kind {
-        TypeHintKind::Nullable(inner) => vec![*inner, ty],
-        TypeHintKind::Union(types) => types.iter().collect(),
-        _ => vec![ty],
+/// members, with `?T` as `T|null` and `iterable` as `Traversable|array`.
+fn hook_type_members(ty: &TypeHint<'_, '_>) -> Vec<HookTypeMember> {
+    let types = match &ty.kind {
+        TypeHintKind::Nullable(inner) => {
+            let mut members = hook_type_members(inner);
+            members.push(HookTypeMember::Builtin(BuiltinType::Null));
+            return members;
+        }
+        TypeHintKind::Union(types) => &types[..],
+        _ => std::slice::from_ref(ty),
+    };
+    let mut members = Vec::new();
+    for ty in types {
+        match &ty.kind {
+            TypeHintKind::Named(_) => members.push(HookTypeMember::Class { named: true }),
+            TypeHintKind::Keyword(BuiltinType::Iterable, _) => {
+                members.push(HookTypeMember::Class { named: false });
+                members.push(HookTypeMember::Builtin(BuiltinType::Array));
+            }
+            TypeHintKind::Keyword(
+                BuiltinType::Self_ | BuiltinType::Parent_ | BuiltinType::Static,
+                _,
+            )
+            | TypeHintKind::Intersection(_) => members.push(HookTypeMember::Class { named: false }),
+            TypeHintKind::Keyword(builtin, _) => members.push(HookTypeMember::Builtin(*builtin)),
+            _ => members.extend(hook_type_members(ty)),
+        }
     }
+    members
 }
 
 /// Whether PHP can tell at compile time that `param` accepts every value of `property`. Class
@@ -549,49 +579,25 @@ fn hook_type_members<'a, 'arena, 'src>(
 fn hook_param_accepts(
     property: Option<&TypeHint<'_, '_>>,
     param: Option<&TypeHint<'_, '_>>,
+    version: PhpVersion,
 ) -> bool {
+    use HookTypeMember::{Builtin, Class};
     let (property, param) = match (property, param) {
         (None, None) => return true,
         (Some(property), Some(param)) => (property, param),
         _ => return false,
     };
-    let is_class = |ty: &TypeHint<'_, '_>| {
-        matches!(
-            ty.kind,
-            TypeHintKind::Named(_)
-                | TypeHintKind::Intersection(_)
-                | TypeHintKind::Keyword(
-                    BuiltinType::Self_ | BuiltinType::Parent_ | BuiltinType::Static,
-                    _
-                )
-        )
-    };
-    let builtin = |ty: &TypeHint<'_, '_>| match ty.kind {
-        TypeHintKind::Keyword(builtin, _) => Some(builtin),
-        // The `?T` entry of `hook_type_members` stands for `null`.
-        TypeHintKind::Nullable(_) => Some(BuiltinType::Null),
-        _ => None,
-    };
     let accepted = hook_type_members(param);
-    if accepted
-        .iter()
-        .any(|q| builtin(q) == Some(BuiltinType::Mixed))
-    {
+    if accepted.contains(&Builtin(BuiltinType::Mixed)) {
         return true;
     }
     hook_type_members(property).iter().all(|p| {
-        accepted.iter().any(|q| match (builtin(p), builtin(q)) {
-            _ if is_class(p) => {
-                is_class(q)
-                    || matches!(
-                        builtin(q),
-                        Some(BuiltinType::Object | BuiltinType::Iterable)
-                    )
-            }
-            (Some(p), Some(q)) => {
+        accepted.iter().any(|q| match (*p, *q) {
+            (Class { .. }, Class { .. } | Builtin(BuiltinType::Object)) => true,
+            (Class { named: true }, Builtin(BuiltinType::Callable)) => version >= PhpVersion::Php85,
+            (Builtin(p), Builtin(q)) => {
                 p == q
                     || q == BuiltinType::Bool && matches!(p, BuiltinType::True | BuiltinType::False)
-                    || q == BuiltinType::Iterable && p == BuiltinType::Array
             }
             _ => false,
         })
@@ -626,7 +632,7 @@ fn check_hook_signature(
                 param.span,
             ));
         }
-        if !hook_param_accepts(property_type, param.type_hint.as_ref()) {
+        if !hook_param_accepts(property_type, param.type_hint.as_ref(), parser.version) {
             messages.push((
                 format!("Type of parameter ${name} of hook {property}::set must be compatible with property type"),
                 param.span,
