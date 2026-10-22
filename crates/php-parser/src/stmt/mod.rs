@@ -2990,7 +2990,10 @@ fn parse_const_with_attrs<'arena, 'src>(
     let mut pending_doc = parser.take_doc_comment(start);
     loop {
         let item_start = parser.start_span();
-        let name_is_reserved_kw = parser.is_reserved_keyword_as_decl_name();
+        // PHP lexes `self` and `parent` as plain names, which a constant may take.
+        let name_is_reserved_kw = parser.is_reserved_keyword_as_decl_name()
+            && !parser.check(TokenKind::Self_)
+            && !parser.check(TokenKind::Parent_);
         let const_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
             if name_is_reserved_kw {
                 parser.error(ParseError::Forbidden {
