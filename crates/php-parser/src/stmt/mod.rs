@@ -1727,6 +1727,10 @@ pub fn parse_param_list<'arena, 'src>(
                     _ => false,
                 });
         let hooks = if starts_hooks {
+            if first_modifier_span.is_some() || parser.in_constructor {
+                let span = parser.current_span();
+                parser.require_version(PhpVersion::Php84, "property hooks", span);
+            }
             if first_modifier_span.is_none() && !parser.in_constructor {
                 parser.error(ParseError::Forbidden {
                     message: "Cannot declare promoted property outside a constructor".into(),
