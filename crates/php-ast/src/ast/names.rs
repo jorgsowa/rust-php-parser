@@ -187,28 +187,48 @@ impl<'arena, 'src> Name<'arena, 'src> {
     #[inline]
     pub fn to_string_repr(&self) -> Cow<'src, str> {
         match self {
-            Self::Simple { value, .. } => Cow::Borrowed(value),
-            Self::Complex { parts, kind, .. } => {
-                let joined = parts.join("\\");
-                if *kind == NameKind::FullyQualified {
-                    Cow::Owned(format!("\\{}", joined))
-                } else {
-                    Cow::Owned(joined)
-                }
-            }
-            Self::Error { .. } => Cow::Borrowed(""),
+            Self::Complex {
+                parts,
+                kind: NameKind::FullyQualified,
+                ..
+            } => Cow::Owned(format!("\\{}", parts.join("\\"))),
+            _ => self.join_parts(),
         }
     }
 
     /// Joins all parts with `\` without any leading backslash.
-    /// Returns `Cow::Borrowed` for simple names (zero allocation).
+    /// Returns `Cow::Borrowed` for single-part names (zero allocation).
     /// Returns an empty `Cow::Borrowed("")` for `Name::Error`.
+    ///
+    /// Prefer [`Name::join_parts_in`] when the source is at hand: it also
+    /// borrows multi-part names.
     #[inline]
     pub fn join_parts(&self) -> Cow<'src, str> {
         match self {
             Self::Simple { value, .. } => Cow::Borrowed(value),
+            Self::Complex { parts, .. } if parts.len() == 1 => Cow::Borrowed(parts[0]),
             Self::Complex { parts, .. } => Cow::Owned(parts.join("\\")),
             Self::Error { .. } => Cow::Borrowed(""),
+        }
+    }
+
+    /// Same result as [`Name::join_parts`], but borrows from `src` (the source
+    /// the name was parsed from) whenever the name is written there without
+    /// whitespace or comments, which avoids allocating for multi-part names.
+    ///
+    /// Falls back to joining for names that are not contiguous in the source,
+    /// such as `Foo \ Bar` (valid before PHP 8.0) or `A\B` built from the
+    /// group use `use A\{B}`.
+    pub fn join_parts_in(&self, src: &'src str) -> Cow<'src, str> {
+        let Self::Complex { parts, .. } = self else {
+            return self.join_parts();
+        };
+        if parts.len() == 1 {
+            return Cow::Borrowed(parts[0]);
+        }
+        match contiguous_in(parts, src) {
+            Some(joined) => Cow::Borrowed(joined),
+            None => Cow::Owned(parts.join("\\")),
         }
     }
 
@@ -222,6 +242,30 @@ impl<'arena, 'src> Name<'arena, 'src> {
             Self::Error { .. } => &[],
         }
     }
+}
+
+/// The slice of `src` that reads `parts` joined with `\`, if the parts sit there back to back.
+fn contiguous_in<'src>(parts: &[&'src str], src: &'src str) -> Option<&'src str> {
+    let base = src.as_ptr() as usize;
+    let start = (parts.first()?.as_ptr() as usize).checked_sub(base)?;
+    let len = parts.iter().map(|p| p.len()).sum::<usize>() + parts.len() - 1;
+    let joined = src.get(start..start.checked_add(len)?)?;
+    let bytes = joined.as_bytes();
+    let mut offset = 0;
+    for (i, part) in parts.iter().enumerate() {
+        // Pointer identity, not text equality: a part at this exact offset is these bytes.
+        if part.as_ptr() as usize != base + start + offset {
+            return None;
+        }
+        offset += part.len();
+        if i + 1 < parts.len() {
+            if bytes[offset] != b'\\' {
+                return None;
+            }
+            offset += 1;
+        }
+    }
+    Some(joined)
 }
 
 impl<'arena, 'src> std::fmt::Debug for Name<'arena, 'src> {

@@ -4,6 +4,7 @@ mod fixtures;
 mod fold;
 mod line_endings;
 mod malformed_php;
+mod names;
 mod redeclarations;
 mod string_bytes;
 mod visitor;

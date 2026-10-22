@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `LexerErrorKind::UnterminatedComment` for a `/*` or `/**` comment without its `*/` (`php-lexer`).
+- `Name::join_parts_in(src)`, which borrows a multi-part name from the source instead of allocating when it is written without whitespace or comments (`php-ast`).
+
+### Changed
+
+- `Name::join_parts` and `Name::to_string_repr` borrow single-part names such as `\strlen` and `namespace\foo` instead of allocating, except `to_string_repr` of a fully qualified name (`php-ast`).
 
 ### Fixed
 
