@@ -3,6 +3,7 @@ mod parser_common;
 
 use parser_common::{collect_phpt_files, php_version, Fixture, SUPPORTED};
 use php_printer::{PrettyPrinter, PrinterConfig};
+use php_rs_parser::diagnostics::{ParseError, Phase};
 use rayon::prelude::*;
 use std::sync::Mutex;
 
@@ -15,7 +16,7 @@ use std::sync::Mutex;
 /// no_source=true
 /// strip_parens=true
 /// min_php=8.6           (skip php -l validation on older PHP)
-/// skip_php_validate=1   (skip php -l validation, e.g. for compile errors)
+/// php_error=<message>   (compile_errors/ only: the error php -l must report)
 /// ===source===
 /// <?php ...
 /// ===print===
@@ -32,6 +33,7 @@ struct PrinterFixture {
     /// When true, `Parenthesized` nodes are removed before printing, as in a
     /// hand-built tree, so the printer must supply every parenthesis itself.
     strip_parens: bool,
+    php_error: Option<String>,
 }
 
 fn parse_printer_fixture(content: &str) -> Result<PrinterFixture, String> {
@@ -64,6 +66,7 @@ fn parse_printer_fixture(content: &str) -> Result<PrinterFixture, String> {
     let mut config = PrinterConfig::default();
     let mut no_source = false;
     let mut strip_parens = false;
+    let mut php_error = None;
     for line in raw_config.lines() {
         if let Some(val) = line.strip_prefix("blank_lines_upper_bound=") {
             config.blank_lines_upper_bound = val.parse().expect("invalid blank_lines_upper_bound");
@@ -71,8 +74,10 @@ fn parse_printer_fixture(content: &str) -> Result<PrinterFixture, String> {
             no_source = true;
         } else if line == "strip_parens=true" {
             strip_parens = true;
-        } else if line.starts_with("min_php=") || line == "skip_php_validate=1" {
+        } else if line.starts_with("min_php=") {
             // consumed by scripts/validate-printer-output.sh
+        } else if let Some(message) = line.strip_prefix("php_error=") {
+            php_error = Some(message.to_string());
         } else {
             return Err(format!("unknown config line `{line}`"));
         }
@@ -85,6 +90,7 @@ fn parse_printer_fixture(content: &str) -> Result<PrinterFixture, String> {
         config,
         no_source,
         strip_parens,
+        php_error,
     })
 }
 
@@ -113,8 +119,8 @@ fn shape(program: &php_ast::ast::Program) -> u64 {
 }
 
 /// Print `source` the way `fixture` asks, returning the output and the shape
-/// of the parsed source.
-fn print_fixture(fixture: &PrinterFixture, source: &str) -> (String, u64) {
+/// and errors of the parsed source.
+fn print_fixture(fixture: &PrinterFixture, source: &str) -> (String, u64, Vec<ParseError>) {
     let arena = bumpalo::Bump::new();
     let result = php_rs_parser::parse_arena(&arena, source);
     let mut printer = PrettyPrinter::new().config(fixture.config.clone());
@@ -127,13 +133,50 @@ fn print_fixture(fixture: &PrinterFixture, source: &str) -> (String, u64) {
     } else {
         printer.print(&result.program)
     };
-    (printed, shape(&result.program))
+    (printed, shape(&result.program), result.errors)
+}
+
+/// Distinct messages, since printing `var $a, $b;` as two declarations repeats theirs.
+fn messages(errors: &[ParseError]) -> std::collections::BTreeSet<String> {
+    errors.iter().map(ToString::to_string).collect()
+}
+
+/// Why a `compile_errors/` fixture is invalid, if it is: its source must have
+/// only compile-phase errors, and its output must re-parse to the same tree
+/// with the same errors.
+fn compile_error_problem(
+    fixture: &PrinterFixture,
+    source_errors: &[ParseError],
+    printed_errors: &[ParseError],
+    same_shape: bool,
+) -> Option<String> {
+    if fixture.php_error.is_none() {
+        return Some("missing php_error= config line".to_string());
+    }
+    if source_errors.is_empty() {
+        return Some("source has no errors".to_string());
+    }
+    if let Some(error) = source_errors
+        .iter()
+        .find(|e| e.forbidden_rule().map(|rule| rule.phase()) != Some(Phase::Compile))
+    {
+        return Some(format!("source has a non-compile error `{error}`"));
+    }
+    let source_messages = messages(source_errors);
+    let printed_messages = messages(printed_errors);
+    if printed_messages != source_messages {
+        return Some(format!(
+            "output errors {printed_messages:?} differ from source errors {source_messages:?}"
+        ));
+    }
+    (!same_shape).then(|| "meaning changed".to_string())
 }
 
 /// Run all printer fixture tests from `.phpt` files.
 ///
 /// Every fixture must print stably. Fixtures under `edge_cases/` must also
-/// re-parse without errors to the same tree, spans and parentheses aside.
+/// re-parse without errors to the same tree, spans and parentheses aside, and
+/// those under `compile_errors/` to the same tree with the same errors.
 ///
 /// Set `UPDATE_FIXTURES=1` to regenerate expected output.
 #[test]
@@ -163,7 +206,7 @@ fn fixtures() {
             }
         };
 
-        let (actual, source_shape) = print_fixture(&fixture, &fixture.source);
+        let (actual, source_shape, source_errors) = print_fixture(&fixture, &fixture.source);
 
         if update {
             let config_block = if fixture.raw_config.is_empty() {
@@ -184,16 +227,31 @@ fn fixtures() {
             return;
         }
 
-        let reparsed = {
-            let arena = bumpalo::Bump::new();
-            let result = php_rs_parser::parse_arena(&arena, &actual);
-            (!result.errors.is_empty()).then(|| format!("{:?}", result.errors))
-        };
-        let (second, printed_shape) = print_fixture(&fixture, &actual);
+        let (second, printed_shape, printed_errors) = print_fixture(&fixture, &actual);
+        if rel.starts_with("compile_errors") {
+            if let Some(problem) = compile_error_problem(
+                &fixture,
+                &source_errors,
+                &printed_errors,
+                printed_shape == source_shape,
+            ) {
+                failures
+                    .lock()
+                    .unwrap()
+                    .push(format!("{problem} in {rel}\n{actual}"));
+                return;
+            }
+        } else if fixture.php_error.is_some() {
+            failures
+                .lock()
+                .unwrap()
+                .push(format!("php_error= outside compile_errors/ in {rel}"));
+            return;
+        }
         if rel.starts_with("edge_cases") {
-            if let Some(errors) = reparsed {
+            if !printed_errors.is_empty() {
                 failures.lock().unwrap().push(format!(
-                    "output of {rel} does not parse: {errors}\n{actual}"
+                    "output of {rel} does not parse: {printed_errors:?}\n{actual}"
                 ));
                 return;
             }

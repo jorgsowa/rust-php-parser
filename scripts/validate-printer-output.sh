@@ -10,43 +10,44 @@ failed=0
 # Get installed PHP version
 PHP_VERSION=$(php --version | head -1 | grep -oE '[0-9]+\.[0-9]+' | head -1)
 
-for fixture in "$FIXTURES_DIR"/*.phpt; do
-    # Check for skip marker in config
-    if grep -q "^skip_php_validate=1" "$fixture" 2>/dev/null; then
-        echo "⊘ $(basename "$fixture") (skipped per config)"
-        continue
-    fi
+while IFS= read -r fixture; do
+    name="${fixture#"$FIXTURES_DIR"/}"
+    config=$(sed -n '/^===config===/,/^===source===/p' "$fixture")
 
     # Extract min_php from config section if present
-    min_php=$(sed -n '/^===config===/,/^===/p' "$fixture" | grep "^min_php=" | head -1 | cut -d= -f2)
+    min_php=$(echo "$config" | grep "^min_php=" | head -1 | cut -d= -f2)
     if [ -n "$min_php" ]; then
         # Compare versions: skip if installed version is older than min_php
         if [ "$(printf '%s\n' "$min_php" "$PHP_VERSION" | sort -V | head -n1)" = "$PHP_VERSION" ] && [ "$min_php" != "$PHP_VERSION" ]; then
-            echo "⊘ $(basename "$fixture") (requires PHP $min_php, have $PHP_VERSION)"
+            echo "⊘ $name (requires PHP $min_php, have $PHP_VERSION)"
             continue
         fi
     fi
+    php_error=$(echo "$config" | grep "^php_error=" | head -1 | cut -d= -f2-)
 
-    # Extract the ===print=== section
-    output=$(awk '/^===print===/{flag=1;next}/^===/{flag=0}flag' "$fixture")
-    if [ -z "$output" ]; then
-        echo "⚠ Warning: empty ===print=== section in $(basename "$fixture"), skipping"
+    # Perl keeps NUL bytes that awk and command substitution drop
+    temp_file="$TEMP_DIR/$(basename "$fixture" .phpt).php"
+    perl -0777 -ne 'print $1 if /^===print===\n(.*?)\n?(?=^===|\z)/ms' "$fixture" > "$temp_file"
+    if [ ! -s "$temp_file" ]; then
+        echo "⚠ Warning: empty ===print=== section in $name, skipping"
         continue
     fi
 
-    # Create temp file; the print section already includes <?php
-    temp_file="$TEMP_DIR/$(basename "$fixture" .phpt).php"
-    echo "$output" > "$temp_file"
-
-    # Run php -l
-    if ! php -l "$temp_file" > /dev/null 2>&1; then
-        echo "✗ FAIL (PHP $PHP_VERSION): $(basename "$fixture")"
-        php -l "$temp_file" || true
-        failed=$((failed + 1))
+    if output=$(php -l "$temp_file" 2>&1); then
+        if [ -n "$php_error" ]; then
+            echo "✗ FAIL (PHP $PHP_VERSION): $name passes php -l, expected: $php_error"
+            failed=$((failed + 1))
+        else
+            echo "✓ $name"
+        fi
+    elif [ -n "$php_error" ] && echo "$output" | grep -qF "PHP Fatal error:  $php_error in "; then
+        echo "✓ $name (fails with the expected error)"
     else
-        echo "✓ $(basename "$fixture")"
+        echo "✗ FAIL (PHP $PHP_VERSION): $name"
+        echo "$output"
+        failed=$((failed + 1))
     fi
-done
+done < <(find "$FIXTURES_DIR" -name '*.phpt' | sort)
 
 if [ $failed -gt 0 ]; then
     echo ""

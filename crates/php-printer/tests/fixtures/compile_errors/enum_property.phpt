@@ -1,5 +1,5 @@
 ===config===
-skip_php_validate=1
+php_error=Enum E cannot include properties
 ===source===
 <?php enum E { case A; /** Name */ public string $name = "a"; var $b, $c; }
 ===print===
