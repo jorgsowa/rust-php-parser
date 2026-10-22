@@ -156,7 +156,7 @@ fn parse_alias_rhs<'arena, 'src>(
     if !has_modifier {
         let error = match parser.current_kind() {
             TokenKind::Static | TokenKind::Abstract => Some((
-                ForbiddenRule::Other,
+                ForbiddenRule::InvalidTraitAliasModifier,
                 format!(
                     "Cannot use \"{}\" as method modifier in trait alias",
                     parser.current_text().to_ascii_lowercase()

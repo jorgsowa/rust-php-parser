@@ -1633,7 +1633,7 @@ pub fn parse_param_list<'arena, 'src>(
         if let (Some(get), Some(set)) = (visibility, set_visibility) {
             if class::visibility_rank(set) > class::visibility_rank(get) {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::SetVisibilityWiderThanVisibility,
                     "Visibility of property must not be weaker than set visibility",
                     Span::new(param_start, parser.previous_end()),
                 );
@@ -1646,7 +1646,7 @@ pub fn parse_param_list<'arena, 'src>(
         if let Some(span) = first_modifier_span {
             if !parser.in_constructor {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::PromotedPropertyOutsideConstructor,
                     "Cannot declare promoted property outside a constructor",
                     span,
                 );
@@ -1670,7 +1670,7 @@ pub fn parse_param_list<'arena, 'src>(
         // Before 8.1 `readonly` is reported as a version gate; PHP 8.0 reads it as a class type.
         if is_readonly && type_hint.is_none() && parser.version >= PhpVersion::Php81 {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::UntypedReadonlyProperty,
                 "readonly promoted property must have type",
                 Span::new(param_start, parser.previous_end()),
             );
@@ -1690,7 +1690,7 @@ pub fn parse_param_list<'arena, 'src>(
         if let (Some(_), None, Some(name)) = (set_visibility, &type_hint, name.as_str()) {
             let class = parser.class_member_prefix();
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::UntypedAsymmetricProperty,
                 format!("Property with asymmetric visibility {class}${name} must have type"),
                 Span::new(param_start, parser.previous_end()),
             );
@@ -1751,7 +1751,7 @@ pub fn parse_param_list<'arena, 'src>(
             }
             if first_modifier_span.is_none() && !parser.in_constructor {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::PromotedPropertyOutsideConstructor,
                     "Cannot declare promoted property outside a constructor",
                     parser.current_span(),
                 );
@@ -1764,7 +1764,7 @@ pub fn parse_param_list<'arena, 'src>(
 
         if let Some(hook) = hooks.first().filter(|_| is_readonly) {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::ReadonlyPropertyHooks,
                 "A readonly property cannot declare hooks",
                 hook.span,
             );

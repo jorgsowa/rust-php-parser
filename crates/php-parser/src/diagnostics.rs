@@ -285,6 +285,116 @@ pub enum ForbiddenRule {
     ReferenceToParenthesized,
     /// A value that has no reference is assigned by reference.
     ReferenceToNonReferenceable,
+    /// `self`, `parent` or `static` is written fully qualified, e.g. `\self`.
+    QualifiedClassKeyword,
+    /// A reserved name is extended, implemented or used as a trait.
+    ReservedClassReference,
+    /// A reserved type name names an enum.
+    ReservedEnumName,
+    /// An interface uses a trait.
+    TraitInInterface,
+    /// A class that is not abstract has an abstract method or hook.
+    AbstractMemberInConcreteClass,
+    /// A class declares a property twice.
+    DuplicateProperty,
+    /// A class declares a method twice.
+    DuplicateMethod,
+    /// A class declares a constant or enum case twice.
+    DuplicateClassConstant,
+    /// A class constant is named `class`.
+    ClassConstantNamedClass,
+    /// A typed class constant's value does not match its type.
+    ClassConstantValueType,
+    /// A private class constant is `final`.
+    PrivateFinalConstant,
+    /// An interface constant is not public.
+    InvalidInterfaceConstantModifier,
+    /// An interface method is not public, or is `final` or `abstract`.
+    InvalidInterfaceMethodModifier,
+    /// An interface property is `abstract`, `final`, protected or private.
+    InvalidInterfacePropertyModifier,
+    /// An interface method has a body.
+    InterfaceMethodBody,
+    /// A method that is not abstract has no body.
+    MissingMethodBody,
+    /// An abstract method has a body.
+    AbstractMethodBody,
+    /// An abstract method is private.
+    PrivateAbstractMethod,
+    /// An anonymous class method is abstract.
+    AbstractAnonymousClassMethod,
+    /// An enum method is abstract.
+    AbstractEnumMethod,
+    /// A magic method takes the wrong number of parameters.
+    MagicMethodArgumentCount,
+    /// A magic method takes a parameter by reference.
+    MagicMethodByReference,
+    /// A magic method is static when it must not be, or the reverse.
+    MagicMethodStatic,
+    /// A magic method declares a parameter type it may not have.
+    MagicMethodParameterType,
+    /// A static property is readonly.
+    StaticReadonlyProperty,
+    /// A readonly property has no type.
+    UntypedReadonlyProperty,
+    /// A readonly property has hooks.
+    ReadonlyPropertyHooks,
+    /// A property with set visibility has no type.
+    UntypedAsymmetricProperty,
+    /// A property's set visibility is wider than its visibility.
+    SetVisibilityWiderThanVisibility,
+    /// A private property is `final`.
+    PrivateFinalProperty,
+    /// An abstract property has no abstract hook.
+    AbstractPropertyWithoutAbstractHook,
+    /// An interface declares a property without hooks.
+    InterfacePropertyWithoutHooks,
+    /// A static property has hooks.
+    StaticPropertyHooks,
+    /// A virtual hooked property has a default value.
+    VirtualPropertyDefault,
+    /// A virtual property has set visibility.
+    VirtualPropertyAsymmetricVisibility,
+    /// A property hook list is empty.
+    EmptyHookList,
+    /// A property declares the same hook twice.
+    DuplicateHook,
+    /// A `get` hook has a parameter list.
+    GetHookParameters,
+    /// A `set` hook does not have exactly one parameter.
+    SetHookParameterCount,
+    /// A `set` hook parameter is by reference.
+    SetHookParameterByReference,
+    /// A `set` hook parameter is variadic.
+    SetHookParameterVariadic,
+    /// A `set` hook parameter's type does not accept the property's type.
+    SetHookParameterType,
+    /// A backed property with a `set` hook has a by-reference `get` hook.
+    ByReferenceGetHookWithSet,
+    /// A hook of a property that is not abstract has no body.
+    MissingHookBody,
+    /// An interface property hook has a body.
+    AbstractHookBody,
+    /// An abstract property hook is `final`.
+    AbstractFinalHook,
+    /// An abstract property hook is private.
+    PrivateAbstractHook,
+    /// A parameter outside a constructor is promoted.
+    PromotedPropertyOutsideConstructor,
+    /// A parameter of an abstract constructor is promoted.
+    PromotedPropertyInAbstractConstructor,
+    /// A promoted parameter is variadic.
+    VariadicPromotedProperty,
+    /// An enum's backing type is not `int` or `string`.
+    InvalidEnumBackingType,
+    /// An enum case is named `class`.
+    EnumCaseNamedClass,
+    /// A case of a backed enum has no value.
+    MissingEnumCaseValue,
+    /// A case of a pure enum has a value.
+    PureEnumCaseValue,
+    /// A trait alias is `static` or `abstract`.
+    InvalidTraitAliasModifier,
     /// Not yet classified.
     Other,
 }
@@ -359,6 +469,75 @@ impl ForbiddenRule {
             ForbiddenRule::StaticStandaloneExpression => "static-standalone-expression",
             ForbiddenRule::ReferenceToParenthesized => "reference-to-parenthesized",
             ForbiddenRule::ReferenceToNonReferenceable => "reference-to-non-referenceable",
+            ForbiddenRule::QualifiedClassKeyword => "qualified-class-keyword",
+            ForbiddenRule::ReservedClassReference => "reserved-class-reference",
+            ForbiddenRule::ReservedEnumName => "reserved-enum-name",
+            ForbiddenRule::TraitInInterface => "trait-in-interface",
+            ForbiddenRule::AbstractMemberInConcreteClass => "abstract-member-in-concrete-class",
+            ForbiddenRule::DuplicateProperty => "duplicate-property",
+            ForbiddenRule::DuplicateMethod => "duplicate-method",
+            ForbiddenRule::DuplicateClassConstant => "duplicate-class-constant",
+            ForbiddenRule::ClassConstantNamedClass => "class-constant-named-class",
+            ForbiddenRule::ClassConstantValueType => "class-constant-value-type",
+            ForbiddenRule::PrivateFinalConstant => "private-final-constant",
+            ForbiddenRule::InvalidInterfaceConstantModifier => {
+                "invalid-interface-constant-modifier"
+            }
+            ForbiddenRule::InvalidInterfaceMethodModifier => "invalid-interface-method-modifier",
+            ForbiddenRule::InvalidInterfacePropertyModifier => {
+                "invalid-interface-property-modifier"
+            }
+            ForbiddenRule::InterfaceMethodBody => "interface-method-body",
+            ForbiddenRule::MissingMethodBody => "missing-method-body",
+            ForbiddenRule::AbstractMethodBody => "abstract-method-body",
+            ForbiddenRule::PrivateAbstractMethod => "private-abstract-method",
+            ForbiddenRule::AbstractAnonymousClassMethod => "abstract-anonymous-class-method",
+            ForbiddenRule::AbstractEnumMethod => "abstract-enum-method",
+            ForbiddenRule::MagicMethodArgumentCount => "magic-method-argument-count",
+            ForbiddenRule::MagicMethodByReference => "magic-method-by-reference",
+            ForbiddenRule::MagicMethodStatic => "magic-method-static",
+            ForbiddenRule::MagicMethodParameterType => "magic-method-parameter-type",
+            ForbiddenRule::StaticReadonlyProperty => "static-readonly-property",
+            ForbiddenRule::UntypedReadonlyProperty => "untyped-readonly-property",
+            ForbiddenRule::ReadonlyPropertyHooks => "readonly-property-hooks",
+            ForbiddenRule::UntypedAsymmetricProperty => "untyped-asymmetric-property",
+            ForbiddenRule::SetVisibilityWiderThanVisibility => {
+                "set-visibility-wider-than-visibility"
+            }
+            ForbiddenRule::PrivateFinalProperty => "private-final-property",
+            ForbiddenRule::AbstractPropertyWithoutAbstractHook => {
+                "abstract-property-without-abstract-hook"
+            }
+            ForbiddenRule::InterfacePropertyWithoutHooks => "interface-property-without-hooks",
+            ForbiddenRule::StaticPropertyHooks => "static-property-hooks",
+            ForbiddenRule::VirtualPropertyDefault => "virtual-property-default",
+            ForbiddenRule::VirtualPropertyAsymmetricVisibility => {
+                "virtual-property-asymmetric-visibility"
+            }
+            ForbiddenRule::EmptyHookList => "empty-hook-list",
+            ForbiddenRule::DuplicateHook => "duplicate-hook",
+            ForbiddenRule::GetHookParameters => "get-hook-parameters",
+            ForbiddenRule::SetHookParameterCount => "set-hook-parameter-count",
+            ForbiddenRule::SetHookParameterByReference => "set-hook-parameter-by-reference",
+            ForbiddenRule::SetHookParameterVariadic => "set-hook-parameter-variadic",
+            ForbiddenRule::SetHookParameterType => "set-hook-parameter-type",
+            ForbiddenRule::ByReferenceGetHookWithSet => "by-reference-get-hook-with-set",
+            ForbiddenRule::MissingHookBody => "missing-hook-body",
+            ForbiddenRule::AbstractHookBody => "abstract-hook-body",
+            ForbiddenRule::AbstractFinalHook => "abstract-final-hook",
+            ForbiddenRule::PrivateAbstractHook => "private-abstract-hook",
+            ForbiddenRule::PromotedPropertyOutsideConstructor => {
+                "promoted-property-outside-constructor"
+            }
+            ForbiddenRule::PromotedPropertyInAbstractConstructor => {
+                "promoted-property-in-abstract-constructor"
+            }
+            ForbiddenRule::VariadicPromotedProperty => "variadic-promoted-property",
+            ForbiddenRule::InvalidEnumBackingType => "invalid-enum-backing-type",
+            ForbiddenRule::EnumCaseNamedClass => "enum-case-named-class",
+            ForbiddenRule::MissingEnumCaseValue => "missing-enum-case-value",
+            ForbiddenRule::PureEnumCaseValue => "pure-enum-case-value",
+            ForbiddenRule::InvalidTraitAliasModifier => "invalid-trait-alias-modifier",
             ForbiddenRule::Other => "other",
         }
     }
@@ -482,6 +661,61 @@ mod tests {
         ForbiddenRule::StaticStandaloneExpression,
         ForbiddenRule::ReferenceToParenthesized,
         ForbiddenRule::ReferenceToNonReferenceable,
+        ForbiddenRule::QualifiedClassKeyword,
+        ForbiddenRule::ReservedClassReference,
+        ForbiddenRule::ReservedEnumName,
+        ForbiddenRule::TraitInInterface,
+        ForbiddenRule::AbstractMemberInConcreteClass,
+        ForbiddenRule::DuplicateProperty,
+        ForbiddenRule::DuplicateMethod,
+        ForbiddenRule::DuplicateClassConstant,
+        ForbiddenRule::ClassConstantNamedClass,
+        ForbiddenRule::ClassConstantValueType,
+        ForbiddenRule::PrivateFinalConstant,
+        ForbiddenRule::InvalidInterfaceConstantModifier,
+        ForbiddenRule::InvalidInterfaceMethodModifier,
+        ForbiddenRule::InvalidInterfacePropertyModifier,
+        ForbiddenRule::InterfaceMethodBody,
+        ForbiddenRule::MissingMethodBody,
+        ForbiddenRule::AbstractMethodBody,
+        ForbiddenRule::PrivateAbstractMethod,
+        ForbiddenRule::AbstractAnonymousClassMethod,
+        ForbiddenRule::AbstractEnumMethod,
+        ForbiddenRule::MagicMethodArgumentCount,
+        ForbiddenRule::MagicMethodByReference,
+        ForbiddenRule::MagicMethodStatic,
+        ForbiddenRule::MagicMethodParameterType,
+        ForbiddenRule::StaticReadonlyProperty,
+        ForbiddenRule::UntypedReadonlyProperty,
+        ForbiddenRule::ReadonlyPropertyHooks,
+        ForbiddenRule::UntypedAsymmetricProperty,
+        ForbiddenRule::SetVisibilityWiderThanVisibility,
+        ForbiddenRule::PrivateFinalProperty,
+        ForbiddenRule::AbstractPropertyWithoutAbstractHook,
+        ForbiddenRule::InterfacePropertyWithoutHooks,
+        ForbiddenRule::StaticPropertyHooks,
+        ForbiddenRule::VirtualPropertyDefault,
+        ForbiddenRule::VirtualPropertyAsymmetricVisibility,
+        ForbiddenRule::EmptyHookList,
+        ForbiddenRule::DuplicateHook,
+        ForbiddenRule::GetHookParameters,
+        ForbiddenRule::SetHookParameterCount,
+        ForbiddenRule::SetHookParameterByReference,
+        ForbiddenRule::SetHookParameterVariadic,
+        ForbiddenRule::SetHookParameterType,
+        ForbiddenRule::ByReferenceGetHookWithSet,
+        ForbiddenRule::MissingHookBody,
+        ForbiddenRule::AbstractHookBody,
+        ForbiddenRule::AbstractFinalHook,
+        ForbiddenRule::PrivateAbstractHook,
+        ForbiddenRule::PromotedPropertyOutsideConstructor,
+        ForbiddenRule::PromotedPropertyInAbstractConstructor,
+        ForbiddenRule::VariadicPromotedProperty,
+        ForbiddenRule::InvalidEnumBackingType,
+        ForbiddenRule::EnumCaseNamedClass,
+        ForbiddenRule::MissingEnumCaseValue,
+        ForbiddenRule::PureEnumCaseValue,
+        ForbiddenRule::InvalidTraitAliasModifier,
     ];
 
     /// `(source, reported span text)` for each site that reports `rule`.
@@ -498,10 +732,13 @@ mod tests {
                 "<?php class A { function __toString(): int { return 1; } }",
                 "int",
             )],
-            ForbiddenRule::MagicMethodReturnType => &[(
-                "<?php class A { function __isset($n): int { return 1; } }",
-                "int",
-            )],
+            ForbiddenRule::MagicMethodReturnType => &[
+                (
+                    "<?php class A { function __isset($n): int { return 1; } }",
+                    "int",
+                ),
+                ("<?php class A { function __construct(): void {} }", "void"),
+            ],
             ForbiddenRule::AttributeTargetMismatch => {
                 &[("<?php #[Override] class A {}", "Override")]
             }
@@ -580,6 +817,61 @@ mod tests {
             ForbiddenRule::StaticStandaloneExpression => &[("<?php static;", "static"),],
             ForbiddenRule::ReferenceToParenthesized => &[("<?php $x = &($y);", "($y)"),],
             ForbiddenRule::ReferenceToNonReferenceable => &[("<?php $x = &1;", "1"), ("<?php [&$a] = 1;", "1"),],
+            ForbiddenRule::QualifiedClassKeyword => &[("<?php class A extends \\self {}", "\\self"),],
+            ForbiddenRule::ReservedClassReference => &[("<?php class A extends self {}", "self"),],
+            ForbiddenRule::ReservedEnumName => &[("<?php enum int {}", "int"),],
+            ForbiddenRule::TraitInInterface => &[("<?php interface I { use T; }", "use T;"),],
+            ForbiddenRule::AbstractMemberInConcreteClass => &[("<?php class A { abstract function f(); }", "abstract function f();"), ("<?php class A { abstract public $x { get; } }", "abstract public $x { get; }"),],
+            ForbiddenRule::DuplicateProperty => &[("<?php class A { public $x; public $x; }", "public $x"), ("<?php class A { public $x; function __construct(public $x) {} }", "public $x"),],
+            ForbiddenRule::DuplicateMethod => &[("<?php class A { function f() {} function F() {} }", "function F() {}"),],
+            ForbiddenRule::DuplicateClassConstant => &[("<?php class A { const X = 1; const X = 2; }", "X"),],
+            ForbiddenRule::ClassConstantNamedClass => &[("<?php class A { const class = 1; }", "class"),],
+            ForbiddenRule::ClassConstantValueType => &[("<?php class A { const int X = \"a\"; }", "\"a\""),],
+            ForbiddenRule::PrivateFinalConstant => &[("<?php class A { final private const X = 1; }", "final private const X = 1;"), ("<?php enum E { final private const X = 1; }", "const"),],
+            ForbiddenRule::InvalidInterfaceConstantModifier => &[("<?php interface I { private const X = 1; }", "private const X = 1;"),],
+            ForbiddenRule::InvalidInterfaceMethodModifier => &[("<?php interface I { private function f(); }", "private function f();"), ("<?php interface I { final function f(); }", "final function f();"), ("<?php interface I { abstract function f(); }", "abstract function f();"),],
+            ForbiddenRule::InvalidInterfacePropertyModifier => &[("<?php interface I { final public $x { get; } }", "final public $x"),],
+            ForbiddenRule::InterfaceMethodBody => &[("<?php interface I { function f() {} }", "function f() {}"),],
+            ForbiddenRule::MissingMethodBody => &[("<?php class A { function f(); }", "function f();"),],
+            ForbiddenRule::AbstractMethodBody => &[("<?php abstract class A { abstract function f() {} }", "abstract function f() {}"),],
+            ForbiddenRule::PrivateAbstractMethod => &[("<?php abstract class A { abstract private function f(); }", "abstract private function f();"),],
+            ForbiddenRule::AbstractAnonymousClassMethod => &[("<?php new class { abstract function f(); };", "abstract function f();"),],
+            ForbiddenRule::AbstractEnumMethod => &[("<?php enum E { abstract function f(); }", "abstract"),],
+            ForbiddenRule::MagicMethodArgumentCount => &[("<?php class A { function __get() {} }", "function __get() {}"),],
+            ForbiddenRule::MagicMethodByReference => &[("<?php class A { function __get(&$n) {} }", "&$n"),],
+            ForbiddenRule::MagicMethodStatic => &[("<?php class A { static function __get($n) {} }", "static function __get($n) {}"),],
+            ForbiddenRule::MagicMethodParameterType => &[("<?php class A { function __get(int $n) {} }", "int"),],
+            ForbiddenRule::StaticReadonlyProperty => &[("<?php class A { public static readonly int $x; }", "public static readonly"), ("<?php class A { public readonly static int $x; }", "public readonly static"),],
+            ForbiddenRule::UntypedReadonlyProperty => &[("<?php class A { public readonly $x; }", "public readonly $x"), ("<?php class A { function __construct(public readonly $x) {} }", "public readonly"),],
+            ForbiddenRule::ReadonlyPropertyHooks => &[("<?php class A { public readonly int $x { get => 1; } }", "get => 1;"), ("<?php class A { function __construct(public readonly int $x { get => 1; }) {} }", "get => 1;"),],
+            ForbiddenRule::UntypedAsymmetricProperty => &[("<?php class A { public private(set) $x; }", "public private(set) $x"), ("<?php class A { function __construct(public private(set) $x) {} }", "public private(set) $x"),],
+            ForbiddenRule::SetVisibilityWiderThanVisibility => &[("<?php class A { private public(set) int $x; }", "private public(set) int $x"), ("<?php class A { function __construct(private public(set) int $x) {} }", "private public(set)"),],
+            ForbiddenRule::PrivateFinalProperty => &[("<?php class A { final private $x; }", "final private $x"),],
+            ForbiddenRule::AbstractPropertyWithoutAbstractHook => &[("<?php abstract class A { abstract public $x; }", "abstract public $x"), ("<?php abstract class A { abstract public $x { get => 1; } }", "abstract public $x { get => 1; }"),],
+            ForbiddenRule::InterfacePropertyWithoutHooks => &[("<?php interface I { public $x; }", "public $x"),],
+            ForbiddenRule::StaticPropertyHooks => &[("<?php class A { public static $x { get => 1; } }", "public static $x { get => 1; }"),],
+            ForbiddenRule::VirtualPropertyDefault => &[("<?php class A { public int $x = 1 { get => 2; } }", "public int $x = 1 { get => 2; }"),],
+            ForbiddenRule::VirtualPropertyAsymmetricVisibility => &[("<?php class A { public private(set) int $x { get => 1; } }", "public private(set) int $x { get => 1; }"),],
+            ForbiddenRule::EmptyHookList => &[("<?php class A { public $x {} }", "{"),],
+            ForbiddenRule::DuplicateHook => &[("<?php class A { public $x { get => 1; get => 2; } }", "get => 2;"), ("<?php class A { public $x { set {} set {} } }", "set {}"),],
+            ForbiddenRule::GetHookParameters => &[("<?php class A { public $x { get() => 1; } }", "("),],
+            ForbiddenRule::SetHookParameterCount => &[("<?php class A { public $x { set($a, $b) {} } }", "("),],
+            ForbiddenRule::SetHookParameterByReference => &[("<?php class A { public $x { set(&$v) {} } }", "&$v"),],
+            ForbiddenRule::SetHookParameterVariadic => &[("<?php class A { public $x { set(...$v) {} } }", "...$v"),],
+            ForbiddenRule::SetHookParameterType => &[("<?php class A { public int $x { set(string $v) {} } }", "string $v"),],
+            ForbiddenRule::ByReferenceGetHookWithSet => &[("<?php class A { public $x { &get => $this->x; set { $this->x = $value; } } }", "&get => $this->x;"),],
+            ForbiddenRule::MissingHookBody => &[("<?php class A { public $x { get; } }", "get;"),],
+            ForbiddenRule::AbstractHookBody => &[("<?php interface I { public $x { get => 1; } }", "get => 1;"),],
+            ForbiddenRule::AbstractFinalHook => &[("<?php abstract class A { abstract public $x { final get; } }", "final get;"),],
+            ForbiddenRule::PrivateAbstractHook => &[("<?php abstract class A { abstract private $x { get; } }", "get;"),],
+            ForbiddenRule::PromotedPropertyOutsideConstructor => &[("<?php function f(public $x) {}", "public"), ("<?php class A { function f(public $x) {} }", "public"),],
+            ForbiddenRule::PromotedPropertyInAbstractConstructor => &[("<?php abstract class A { abstract function __construct(public $x); }", "public $x"),],
+            ForbiddenRule::VariadicPromotedProperty => &[("<?php class A { function __construct(public ...$x) {} }", "public ...$x"),],
+            ForbiddenRule::InvalidEnumBackingType => &[("<?php enum E: float {}", "float"),],
+            ForbiddenRule::EnumCaseNamedClass => &[("<?php enum E { case class; }", "class"),],
+            ForbiddenRule::MissingEnumCaseValue => &[("<?php enum E: int { case A; }", "A"),],
+            ForbiddenRule::PureEnumCaseValue => &[("<?php enum E { case A = 1; }", "="),],
+            ForbiddenRule::InvalidTraitAliasModifier => &[("<?php class A { use T { f as static g; } }", "static"),],
             ForbiddenRule::Other => &[],
         }
     }

@@ -24,7 +24,7 @@ pub(super) fn parse_enum<'arena, 'src>(
             );
         } else if super::class::is_reserved_class_name(text, parser.version) {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::ReservedEnumName,
                 format!("Cannot use \"{text}\" as an enum name as it is reserved"),
                 span,
             );
@@ -46,7 +46,7 @@ pub(super) fn parse_enum<'arena, 'src>(
             if value.eq_ignore_ascii_case("int") || value.eq_ignore_ascii_case("string"));
         if !is_int_or_string {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::InvalidEnumBackingType,
                 "Enum backing type must be int or string",
                 ty.span(),
             );
@@ -107,7 +107,7 @@ pub(super) fn parse_enum<'arena, 'src>(
             if parser.check(TokenKind::Class) {
                 let span = parser.current_span();
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::EnumCaseNamedClass,
                     "'class' cannot be used as an enum case name",
                     span,
                 );
@@ -134,7 +134,7 @@ pub(super) fn parse_enum<'arena, 'src>(
             };
             if scalar_type.is_some() && value.is_none() {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::MissingEnumCaseValue,
                     format!(
                         "Case {} of backed enum {} must have a value",
                         case_name, name
@@ -147,7 +147,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                     .expect("value.is_some() guarantees equals_token.is_some()")
                     .span;
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::PureEnumCaseValue,
                     format!(
                         "Case {} of pure enum {} must not have a value",
                         case_name, name
@@ -237,7 +237,7 @@ pub(super) fn parse_enum<'arena, 'src>(
             }
             if is_final && visibility == Some(Visibility::Private) {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::PrivateFinalConstant,
                     "Private constant cannot be final as it is not visible to other classes",
                     parser.current_span(),
                 );
@@ -324,7 +324,7 @@ pub(super) fn parse_enum<'arena, 'src>(
         if parser.check(TokenKind::Function) {
             if is_abstract {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::AbstractEnumMethod,
                     "enum methods cannot be abstract",
                     Span::new(member_start, parser.previous_end()),
                 );
