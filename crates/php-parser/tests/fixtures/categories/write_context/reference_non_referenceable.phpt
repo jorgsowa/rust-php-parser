@@ -11,7 +11,6 @@ list(&$a) = FOO;
 ===errors===
 Cannot assign reference to non referenceable value
 Cannot assign reference to non referenceable value
-Cannot use temporary expression in write context
 Cannot assign reference to non referenceable value
 Cannot assign reference to non referenceable value
 Cannot assign reference to non referenceable value

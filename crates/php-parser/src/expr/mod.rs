@@ -95,7 +95,7 @@ pub(crate) fn check_increment_operand(parser: &mut Parser<'_, '_>, operand: &Exp
             | ExprKind::Error
     ) {
         "Cannot increment or decrement an expression that is not a variable"
-    } else if let Some(message) = temporary_write_message(&operand.kind) {
+    } else if let Some(message) = temporary_write_message(&operand.kind, parser.version) {
         message
     } else if has_nullsafe_link(&operand.kind) {
         "Can't use nullsafe operator in write context"
@@ -116,7 +116,7 @@ pub(crate) fn check_write_target(
     target: &Expr<'_, '_>,
     allow_list: bool,
 ) {
-    let message = if let Some(message) = temporary_write_message(&target.kind) {
+    let message = if let Some(message) = temporary_write_message(&target.kind, parser.version) {
         message
     } else if has_nullsafe_link(&target.kind) {
         "Can't use nullsafe operator in write context"
@@ -124,7 +124,7 @@ pub(crate) fn check_write_target(
         || !allow_list && matches!(target.kind, ExprKind::Array(_))
     {
         "Can't use this expression in write context"
-    } else if !is_valid_destructure_element(&target.kind) {
+    } else if !is_valid_destructure_element(&target.kind, parser.version) {
         "Assignments can only happen to writable values"
     } else {
         return;
@@ -499,18 +499,18 @@ fn nullsafe_link(kind: &ExprKind<'_, '_>, this_is_exempt: bool) -> bool {
 /// True if a destructuring-element value is itself a writable target.
 /// `Omit` (the gap slot in `[$a, , $c]`) is allowed; nested destructuring
 /// (`Array`) recurses; everything else falls back to the lvalue rule.
-fn is_valid_destructure_element(kind: &ExprKind<'_, '_>) -> bool {
+fn is_valid_destructure_element(kind: &ExprKind<'_, '_>, version: PhpVersion) -> bool {
     match kind {
         ExprKind::Omit => true,
         ExprKind::Array(elems) => elems
             .iter()
-            .all(|el| !el.is_spread() && is_valid_destructure_element(&el.value().kind)),
+            .all(|el| !el.is_spread() && is_valid_destructure_element(&el.value().kind, version)),
         // PHP rejects `($a) = …` but accepts `[($a)] = …`.
-        ExprKind::Parenthesized(inner) => is_valid_destructure_element(&inner.kind),
+        ExprKind::Parenthesized(inner) => is_valid_destructure_element(&inner.kind, version),
         _ => {
             is_valid_assignment_target(kind)
                 && !has_nullsafe_link(kind)
-                && temporary_write_message(kind).is_none()
+                && temporary_write_message(kind, version).is_none()
         }
     }
 }
@@ -1154,9 +1154,10 @@ fn check_mixed_list_short_syntax<'arena, 'src>(
 /// call, such as `[0, 1][0]`, `FOO->a` or `(new A)->b`. PHP rejects writes to these with
 /// "Cannot use temporary expression in write context"; for `clone $a` and `f(...)` bases the
 /// message is "Cannot use result of built-in function in write context".
-fn temporary_write_message(kind: &ExprKind<'_, '_>) -> Option<&'static str> {
+fn temporary_write_message(kind: &ExprKind<'_, '_>, version: PhpVersion) -> Option<&'static str> {
     let mut cur = kind;
     let mut saw_access = false;
+    let mut saw_property = false;
     loop {
         match cur {
             ExprKind::ArrayAccess(a) => {
@@ -1165,6 +1166,7 @@ fn temporary_write_message(kind: &ExprKind<'_, '_>) -> Option<&'static str> {
             }
             ExprKind::PropertyAccess(p) => {
                 saw_access = true;
+                saw_property = true;
                 cur = &p.object.kind;
             }
             // Reported as a nullsafe write instead.
@@ -1174,6 +1176,19 @@ fn temporary_write_message(kind: &ExprKind<'_, '_>) -> Option<&'static str> {
         }
     }
     if !saw_access {
+        return None;
+    }
+    // From 8.6 PHP fetches a constant's object to write one of its properties.
+    let constant = match cur {
+        ExprKind::Name(_) | ExprKind::Bool(_) | ExprKind::Null => true,
+        ExprKind::ClassConstAccess(access) => !matches!(
+            &access.member.kind,
+            ExprKind::Identifier(m) if m.eq_ignore_ascii_case("class")
+        ),
+        ExprKind::ClassConstAccessDynamic { .. } => true,
+        _ => false,
+    };
+    if constant && saw_property && version >= PhpVersion::Php86 {
         return None;
     }
     match cur {
@@ -1232,7 +1247,7 @@ fn parse_assign_continuation<'arena, 'src>(
             message: "Cannot use increment/decrement as an assignment target.".into(),
             span,
         });
-    } else if let Some(message) = temporary_write_message(&lhs.kind) {
+    } else if let Some(message) = temporary_write_message(&lhs.kind, parser.version) {
         parser.error(ParseError::Forbidden {
             message: message.into(),
             span: lhs.span,
@@ -1269,7 +1284,7 @@ fn parse_assign_continuation<'arena, 'src>(
                         message: "Spread operator is not supported in assignments".into(),
                         span: el.span,
                     });
-                } else if !is_valid_destructure_element(&el.value().kind) {
+                } else if !is_valid_destructure_element(&el.value().kind, parser.version) {
                     parser.error(ParseError::Forbidden {
                         message: "Assignments can only happen to writable values".into(),
                         span: el.value().span,
@@ -1348,7 +1363,10 @@ fn parse_assign_continuation<'arena, 'src>(
             message: "Cannot use result of built-in function in write context".into(),
             span: rhs.span,
         });
-    } else if let Some(message) = by_ref.then(|| temporary_write_message(&rhs.kind)).flatten() {
+    } else if let Some(message) = by_ref
+        .then(|| temporary_write_message(&rhs.kind, parser.version))
+        .flatten()
+    {
         parser.error(ParseError::Forbidden {
             message: message.into(),
             span: rhs.span,

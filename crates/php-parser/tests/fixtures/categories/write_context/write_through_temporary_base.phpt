@@ -16,14 +16,6 @@ OBJ?->a = 1;
 Cannot use temporary expression in write context
 Cannot use temporary expression in write context
 Cannot use temporary expression in write context
-Cannot use temporary expression in write context
-Cannot use temporary expression in write context
-Cannot use temporary expression in write context
-Cannot use temporary expression in write context
-Cannot use temporary expression in write context
-Cannot use temporary expression in write context
-Cannot use temporary expression in write context
-Assignments can only happen to writable values
 Can't use nullsafe operator in write context
 ===php_error <=8.5===
 PHP Fatal error:  Cannot use temporary expression in write context in Standard input code on line 2
