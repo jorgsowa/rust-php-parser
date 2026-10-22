@@ -15,7 +15,7 @@ use std::sync::Mutex;
 /// blank_lines_upper_bound=0
 /// no_source=true
 /// strip_parens=true
-/// min_php=8.6           (skip php -l validation on older PHP)
+/// min_php=8.6           (parse at this version; skip php -l validation on older PHP)
 /// php_error=<message>   (compile_errors/ only: the error php -l must report)
 /// ===source===
 /// <?php ...
@@ -34,6 +34,7 @@ struct PrinterFixture {
     /// hand-built tree, so the printer must supply every parenthesis itself.
     strip_parens: bool,
     php_error: Option<String>,
+    version: php_rs_parser::PhpVersion,
 }
 
 fn parse_printer_fixture(content: &str) -> Result<PrinterFixture, String> {
@@ -67,6 +68,7 @@ fn parse_printer_fixture(content: &str) -> Result<PrinterFixture, String> {
     let mut no_source = false;
     let mut strip_parens = false;
     let mut php_error = None;
+    let mut version = php_rs_parser::PhpVersion::default();
     for line in raw_config.lines() {
         if let Some(val) = line.strip_prefix("blank_lines_upper_bound=") {
             config.blank_lines_upper_bound = val.parse().expect("invalid blank_lines_upper_bound");
@@ -74,8 +76,14 @@ fn parse_printer_fixture(content: &str) -> Result<PrinterFixture, String> {
             no_source = true;
         } else if line == "strip_parens=true" {
             strip_parens = true;
-        } else if line.starts_with("min_php=") {
-            // consumed by scripts/validate-printer-output.sh
+        } else if let Some(val) = line.strip_prefix("min_php=") {
+            let parsed = val
+                .split_once('.')
+                .and_then(|(major, minor)| Some((major.parse().ok()?, minor.parse().ok()?)));
+            let Some(min) = parsed.filter(|v| SUPPORTED.contains(v)) else {
+                return Err(format!("unsupported min_php `{val}`"));
+            };
+            version = php_version(min);
         } else if let Some(message) = line.strip_prefix("php_error=") {
             php_error = Some(message.to_string());
         } else {
@@ -91,6 +99,7 @@ fn parse_printer_fixture(content: &str) -> Result<PrinterFixture, String> {
         no_source,
         strip_parens,
         php_error,
+        version,
     })
 }
 
@@ -122,7 +131,8 @@ fn shape(program: &php_ast::ast::Program) -> u64 {
 /// and errors of the parsed source.
 fn print_fixture(fixture: &PrinterFixture, source: &str) -> (String, u64, Vec<ParseError>) {
     let arena = bumpalo::Bump::new();
-    let result = php_rs_parser::parse_arena(&arena, source);
+    let options = php_rs_parser::ParseOptions::default().version(fixture.version);
+    let result = php_rs_parser::parse_arena_with(&arena, source, &options);
     let mut printer = PrettyPrinter::new().config(fixture.config.clone());
     if !fixture.no_source {
         printer = printer.comments(result.source, &result.comments);
@@ -246,6 +256,12 @@ fn fixtures() {
                 .lock()
                 .unwrap()
                 .push(format!("php_error= outside compile_errors/ in {rel}"));
+            return;
+        } else if !rel.starts_with("edge_cases") && !source_errors.is_empty() {
+            failures.lock().unwrap().push(format!(
+                "source of {rel} does not parse: {:?}",
+                messages(&source_errors)
+            ));
             return;
         }
         if rel.starts_with("edge_cases") {
