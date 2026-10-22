@@ -296,32 +296,162 @@ fn check_class_name_fetch_literal(parser: &mut Parser<'_, '_>, class: &Expr<'_, 
 
 /// Whether a literal expression folds to a string, when that is known without evaluating it.
 fn literal_is_string(expr: &Expr<'_, '_>) -> Option<bool> {
-    match &expr.kind {
-        ExprKind::String(_) | ExprKind::Nowdoc { .. } | ExprKind::Heredoc { .. } => Some(true),
-        ExprKind::Int(_)
-        | ExprKind::Float(_)
-        | ExprKind::Bool(_)
-        | ExprKind::Null
-        | ExprKind::Array(_) => Some(false),
-        ExprKind::Parenthesized(inner) => literal_is_string(inner),
-        ExprKind::UnaryPrefix(u) => match u.op {
-            UnaryPrefixOp::BitwiseNot => literal_is_string(u.operand),
-            _ => Some(false),
-        },
-        ExprKind::Binary(b) => match b.op {
-            BinaryOp::Concat => Some(true),
-            // Folding fails on a zero divisor.
-            BinaryOp::Div | BinaryOp::Mod => None,
-            BinaryOp::BitwiseAnd | BinaryOp::BitwiseOr | BinaryOp::BitwiseXor => {
-                match (literal_is_string(b.left), literal_is_string(b.right)) {
-                    (Some(left), Some(right)) if left == right => Some(left),
-                    _ => None,
-                }
-            }
-            _ => Some(false),
-        },
-        _ => None,
+    folded_type(expr).map(|t| matches!(t, Folded::Str { .. }))
+}
+
+/// The type PHP folds a literal expression to.
+#[derive(Clone, Copy)]
+enum Folded {
+    Int,
+    /// A float, or a number of either type.
+    Number,
+    Bool,
+    Null,
+    Str {
+        numeric: bool,
+    },
+    Array,
+}
+
+impl Folded {
+    /// Whether arithmetic on this operand folds without a TypeError.
+    fn is_arithmetic(self) -> bool {
+        !matches!(self, Folded::Array | Folded::Str { numeric: false })
     }
+
+    /// Whether integer operations on this operand fold without a deprecation for a lost fraction.
+    fn is_integral(self) -> bool {
+        matches!(self, Folded::Int | Folded::Bool | Folded::Null)
+    }
+}
+
+/// The folded type of `expr`, or `None` when it is unknown or PHP leaves the expression to run
+/// time because folding it would raise an error or a diagnostic.
+fn folded_type(expr: &Expr<'_, '_>) -> Option<Folded> {
+    let non_negative_int =
+        |e: &Expr<'_, '_>| matches!(unparenthesized(e).kind, ExprKind::Int(n) if n >= 0);
+    let folded = match &expr.kind {
+        ExprKind::String(s) => Folded::Str {
+            numeric: is_numeric_string(s.as_bytes()),
+        },
+        ExprKind::Nowdoc { value, .. } => Folded::Str {
+            numeric: is_numeric_string(value.as_bytes()),
+        },
+        ExprKind::Heredoc { .. } => Folded::Str { numeric: false },
+        ExprKind::Int(_) => Folded::Int,
+        ExprKind::Float(_) => Folded::Number,
+        ExprKind::Bool(_) => Folded::Bool,
+        ExprKind::Null => Folded::Null,
+        ExprKind::Array(_) => Folded::Array,
+        ExprKind::Parenthesized(inner) => return folded_type(inner),
+        ExprKind::UnaryPrefix(u) => {
+            let operand = folded_type(u.operand)?;
+            match u.op {
+                UnaryPrefixOp::BooleanNot => Folded::Bool,
+                UnaryPrefixOp::Negate | UnaryPrefixOp::Plus if operand.is_arithmetic() => {
+                    Folded::Number
+                }
+                UnaryPrefixOp::BitwiseNot => match operand {
+                    Folded::Str { .. } => Folded::Str { numeric: false },
+                    Folded::Int => Folded::Int,
+                    _ => return None,
+                },
+                _ => return None,
+            }
+        }
+        ExprKind::Binary(b) => {
+            let (left, right) = (folded_type(b.left)?, folded_type(b.right)?);
+            match b.op {
+                BinaryOp::Concat
+                    if !matches!(left, Folded::Array) && !matches!(right, Folded::Array) =>
+                {
+                    Folded::Str { numeric: false }
+                }
+                BinaryOp::Add if matches!((left, right), (Folded::Array, Folded::Array)) => {
+                    Folded::Array
+                }
+                BinaryOp::Add | BinaryOp::Sub | BinaryOp::Mul
+                    if left.is_arithmetic() && right.is_arithmetic() =>
+                {
+                    Folded::Number
+                }
+                // `0 ** -1` is deprecated, so only a non-negative exponent always folds.
+                BinaryOp::Pow
+                    if left.is_arithmetic()
+                        && right.is_arithmetic()
+                        && non_negative_int(b.right) =>
+                {
+                    Folded::Number
+                }
+                BinaryOp::ShiftLeft | BinaryOp::ShiftRight
+                    if left.is_integral() && non_negative_int(b.right) =>
+                {
+                    Folded::Int
+                }
+                BinaryOp::BitwiseAnd | BinaryOp::BitwiseOr | BinaryOp::BitwiseXor => {
+                    match (left, right) {
+                        (Folded::Str { .. }, Folded::Str { .. }) => Folded::Str { numeric: false },
+                        _ if left.is_integral() && right.is_integral() => Folded::Int,
+                        _ => return None,
+                    }
+                }
+                BinaryOp::Equal
+                | BinaryOp::NotEqual
+                | BinaryOp::Identical
+                | BinaryOp::NotIdentical
+                | BinaryOp::Less
+                | BinaryOp::Greater
+                | BinaryOp::LessOrEqual
+                | BinaryOp::GreaterOrEqual
+                | BinaryOp::BooleanAnd
+                | BinaryOp::BooleanOr
+                | BinaryOp::LogicalAnd
+                | BinaryOp::LogicalOr
+                | BinaryOp::LogicalXor => Folded::Bool,
+                BinaryOp::Spaceship => Folded::Int,
+                _ => return None,
+            }
+        }
+        _ => return None,
+    };
+    Some(folded)
+}
+
+/// PHP's numeric string: optional surrounding whitespace around a decimal integer or float.
+fn is_numeric_string(s: &[u8]) -> bool {
+    let is_space = |b: &u8| matches!(b, b' ' | b'\t' | b'\n' | b'\r' | b'\x0B' | b'\x0C');
+    let start = s.iter().position(|b| !is_space(b)).unwrap_or(s.len());
+    let end = s
+        .iter()
+        .rposition(|b| !is_space(b))
+        .map_or(start, |p| p + 1);
+    let mut rest = s[start..end]
+        .strip_prefix(b"-")
+        .or_else(|| s[start..end].strip_prefix(b"+"))
+        .unwrap_or(&s[start..end]);
+    let digits = |rest: &mut &[u8]| {
+        let n = rest.iter().take_while(|b| b.is_ascii_digit()).count();
+        *rest = &rest[n..];
+        n
+    };
+    let mut mantissa = digits(&mut rest);
+    if let Some(after) = rest.strip_prefix(b".") {
+        rest = after;
+        mantissa += digits(&mut rest);
+    }
+    if mantissa == 0 {
+        return false;
+    }
+    if let Some(after) = rest.strip_prefix(b"e").or_else(|| rest.strip_prefix(b"E")) {
+        rest = after
+            .strip_prefix(b"-")
+            .or_else(|| after.strip_prefix(b"+"))
+            .unwrap_or(after);
+        if digits(&mut rest) == 0 {
+            return false;
+        }
+    }
+    rest.is_empty()
 }
 
 /// True if the fetch chain ending in `kind` passes through `?->`. Like PHP's
