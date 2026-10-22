@@ -1197,8 +1197,8 @@ fn check_mixed_list_short_syntax<'arena, 'src>(
 
 /// True if `kind` is an index or property fetch chain whose base is not a variable or a
 /// call, such as `[0, 1][0]`, `FOO->a` or `(new A)->b`. PHP rejects writes to these with
-/// "Cannot use temporary expression in write context"; for `clone $a` and `f(...)` bases the
-/// message is "Cannot use result of built-in function in write context".
+/// "Cannot use temporary expression in write context"; for `f(...)` bases, and `clone $a`
+/// from 8.5, the message is "Cannot use result of built-in function in write context".
 fn temporary_write_message(
     kind: &ExprKind<'_, '_>,
     version: PhpVersion,
@@ -1240,6 +1240,11 @@ fn temporary_write_message(
         return None;
     }
     match cur {
+        // Before 8.5 `clone` is an expression, not a function call.
+        ExprKind::Clone(_) if version < PhpVersion::Php85 => Some((
+            ForbiddenRule::TemporaryExpressionWrite,
+            "Cannot use temporary expression in write context",
+        )),
         ExprKind::Clone(_) | ExprKind::CallableCreate(_) => Some((
             ForbiddenRule::BuiltinResultWrite,
             "Cannot use result of built-in function in write context",

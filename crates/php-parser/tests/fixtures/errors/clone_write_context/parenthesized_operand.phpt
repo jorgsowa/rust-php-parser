@@ -1,7 +1,9 @@
 ===source===
 <?php
 (clone($a))->c = 1;
-===errors===
+===errors <=8.4===
+Cannot use temporary expression in write context
+===errors >=8.5===
 Cannot use result of built-in function in write context
 ===php_error <=8.4===
 PHP Fatal error:  Cannot use temporary expression in write context in Standard input code on line 2

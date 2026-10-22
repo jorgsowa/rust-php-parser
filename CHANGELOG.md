@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Writing to a property or element of `clone $a` reports `Cannot use temporary expression in write context` before PHP 8.5 (`php-rs-parser`).
+
 ## [0.25.0] - 2026-10-22
 
 Errors are now machine-readable: every `ParseError` has a stable code, and every compile-time error names the rule it breaks. Version-targeted parsing follows each PHP version from 7.4 to 8.6 much more closely.

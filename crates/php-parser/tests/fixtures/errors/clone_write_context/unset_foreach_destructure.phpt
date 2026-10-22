@@ -4,7 +4,12 @@ unset((clone $a)->b);
 foreach ($x as (clone $a)->b) {}
 foreach ($x as &(clone $a)[0]) {}
 [(clone $a)->b] = $x;
-===errors===
+===errors <=8.4===
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Assignments can only happen to writable values
+===errors >=8.5===
 Cannot use result of built-in function in write context
 Cannot use result of built-in function in write context
 Cannot use result of built-in function in write context

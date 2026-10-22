@@ -2,7 +2,10 @@
 <?php
 (clone $a)->b++;
 --(clone $a)[0];
-===errors===
+===errors <=8.4===
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+===errors >=8.5===
 Cannot use result of built-in function in write context
 Cannot use result of built-in function in write context
 ===php_error <=8.4===
