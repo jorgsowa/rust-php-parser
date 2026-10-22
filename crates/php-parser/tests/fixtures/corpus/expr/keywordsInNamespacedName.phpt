@@ -18,10 +18,10 @@ expected '(', found '\'
 expected variable, found '('
 expected ')', found '('
 expected '=>', found '('
-expected expression
+expected expression, found ')'
 'reserved keyword in namespaced name' requires PHP 8.0 or higher
 'reserved keyword in namespaced name' requires PHP 8.0 or higher
-expected expression
+expected expression, found 'private'
 expected 'class', found '\'
 expected 'class', found '('
 ===php_error <=7.4===

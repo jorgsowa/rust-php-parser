@@ -398,7 +398,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
         TokenKind::Identifier => parse_expression_stmt_or_label(parser),
         TokenKind::Eof => {
             let span = parser.current_span();
-            parser.error(ParseError::ExpectedStatement { span });
+            parser.error_expected("statement");
             Stmt {
                 kind: StmtKind::Error,
                 span,

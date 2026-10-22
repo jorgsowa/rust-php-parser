@@ -3,7 +3,7 @@
     echo 1;
 } endif;
 ===errors===
-expected expression
+expected expression, found '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '}', expecting elseif (T_ELSEIF) or else (T_ELSE) or endif (T_ENDIF) in Standard input code on line 3
 ===php_error >=8.0===

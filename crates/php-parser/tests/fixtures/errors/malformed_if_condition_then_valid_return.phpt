@@ -1,7 +1,7 @@
 ===source===
 <?php function f() { if () { return 1; } return 2; }
 ===errors===
-expected expression
+expected expression, found ')'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ')' in Standard input code on line 1
 ===php_error >=8.0===

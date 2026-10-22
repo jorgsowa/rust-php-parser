@@ -2,8 +2,8 @@
 <?php $x = <<<EOT
 hello
 ===errors===
-expected expression
-expected expression
+expected expression, found '<<'
+expected expression, found '<'
 expected ';' after expression
 expected ';' after expression
 ===php_error <=7.4===

@@ -5,7 +5,7 @@
 array(1, , 2);
 ===errors===
 Cannot use empty array elements in arrays
-expected expression
+expected expression, found ','
 ===php_error===
 PHP Fatal error:  Cannot use empty array elements in arrays in Standard input code on line 3
 ===ast===

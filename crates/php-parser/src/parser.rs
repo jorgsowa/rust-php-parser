@@ -2393,9 +2393,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// Parse `<?= expr ?>` — the short echo tag produces an implicit echo statement.
     pub(crate) fn parse_short_echo(&mut self) -> Option<Stmt<'arena, 'src>> {
         if self.check(TokenKind::Eof) || self.check(TokenKind::CloseTag) {
-            self.error(ParseError::ExpectedExpression {
-                span: self.current_span(),
-            });
+            self.error_expected("expression");
             return None;
         }
         let start = self.start_span();
@@ -2447,9 +2445,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 }
             }
         } else if self.current_kind() != TokenKind::Eof {
-            self.error(ParseError::ExpectedOpenTag {
-                span: self.current_span(),
-            });
+            self.error_expected("opening PHP tag");
         }
 
         self.top_level_code_seen = !stmts.is_empty();

@@ -18,7 +18,7 @@ expected ')' to close the delimiter opened at byte 237
 expected '{', found '__PROPERTY__'
 expected ';' after expression
 expected ';' after expression
-expected expression
+expected expression, found ')'
 ===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token "__PROPERTY__", expecting identifier in Standard input code on line 3
 ===ast <=8.3===

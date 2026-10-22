@@ -2,13 +2,13 @@
 <?php switch { }
 ===errors <=7.4===
 expected '(', found '{'
-expected expression
+expected expression, found '{'
 expected ')' to close the delimiter opened at byte 13
 expected '{', found end of file
 expected '}', found end of file
 ===errors >=8.0===
 expected '(', found '{'
-expected expression
+expected expression, found '{'
 Array and string offset access syntax with curly braces is no longer supported
 expected ')' to close the delimiter opened at byte 13
 expected '{', found end of file

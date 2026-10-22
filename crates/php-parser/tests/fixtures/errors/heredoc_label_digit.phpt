@@ -4,8 +4,8 @@ $a = <<<1X
 a
 1X;
 ===errors===
-expected expression
-expected expression
+expected expression, found '<<'
+expected expression, found '<'
 expected ';' after expression
 expected ';' after expression
 expected ';' after expression

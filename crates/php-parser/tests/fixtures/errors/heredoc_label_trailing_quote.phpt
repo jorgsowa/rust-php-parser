@@ -5,8 +5,8 @@ a
 X;
 ===errors===
 unterminated string literal
-expected expression
-expected expression
+expected expression, found '<<'
+expected expression, found '<'
 expected ';' after expression
 expected ';' after expression
 ===php_error <=7.4===

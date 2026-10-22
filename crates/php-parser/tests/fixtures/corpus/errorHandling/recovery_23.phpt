@@ -13,15 +13,15 @@ $array = [
 expected ']', found variable
 expected ';' after expression
 expected ';' after expression
-expected expression
+expected expression, found ']'
 expected ']', found variable
 expected ';' after expression
 expected ';' after expression
-expected expression
+expected expression, found ']'
 expected ']', found variable
 expected ';' after expression
 expected ';' after expression
-expected expression
+expected expression, found ']'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '$oopsAnotherValue' (T_VARIABLE), expecting ']' in Standard input code on line 3
 ===php_error >=8.0===

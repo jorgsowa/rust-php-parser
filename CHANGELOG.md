@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A malformed numeric literal is reported as `LexerErrorKind::InvalidNumericLiteral` instead of `LexerErrorKind::Other` (`php-lexer`).
 - `Name::join_parts` and `Name::to_string_repr` borrow single-part names such as `\strlen` and `namespace\foo` instead of allocating, except `to_string_repr` of a fully qualified name (`php-ast`).
 
+### Removed
+
+- `ParseError::ExpectedExpression`, `ParseError::ExpectedStatement` and `ParseError::ExpectedOpenTag`; these are reported as `ParseError::Expected`, whose message also names the token found (`php-rs-parser`).
+
 ### Fixed
 
 - Errors that PHP versions older than the latest report but the parser missed (`php-rs-parser`):

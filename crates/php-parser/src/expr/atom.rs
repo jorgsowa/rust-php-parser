@@ -1156,7 +1156,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         }
         TokenKind::Namespace => {
             let span = parser.current_span();
-            parser.error(ParseError::ExpectedExpression { span });
+            parser.error_expected("expression");
             Expr {
                 kind: ExprKind::Error,
                 span,
@@ -1172,7 +1172,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         // Error: unexpected token
         _ => {
             let span = parser.current_span();
-            parser.error(ParseError::ExpectedExpression { span });
+            parser.error_expected("expression");
             Expr {
                 kind: ExprKind::Error,
                 span,

@@ -38,14 +38,14 @@ readonly promoted property must have type
 expected variable, found '|'
 expected ')' to close the delimiter opened at byte 284
 expected '{', found '|'
-expected expression
+expected expression, found '|'
 expected ';' after expression
 expected ';' after expression
-expected expression
+expected expression, found ','
 Cannot use the readonly modifier on a method
 readonly property must have type
 expected ';' after expression
-expected expression
+expected expression, found ':'
 expected identifier, found 'readonly'
 expected ';', found 'readonly'
 ===php_error <=7.4===

@@ -12,13 +12,13 @@ $x = (void)->a;
 ===errors <=7.4===
 Cannot use ::class with dynamic class name
 ===errors >=8.5===
-expected expression
-expected expression
-expected expression
-expected expression
-expected expression
-expected expression
-expected expression
+expected expression, found ';'
+expected expression, found ','
+expected expression, found ')'
+expected expression, found '::'
+expected expression, found '??'
+expected expression, found '.'
+expected expression, found '->'
 (void) cast cannot be used in an expression context
 (void) cast cannot be used in an expression context
 (void) cast cannot be used in an expression context

@@ -2,7 +2,7 @@
 <?php
 $x = array(1, 2,
 ===errors===
-expected expression
+expected expression, found end of file
 expected ')', found end of file
 expected ';' after expression
 ===php_error <=7.4===

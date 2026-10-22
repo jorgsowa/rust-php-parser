@@ -25,30 +25,6 @@ pub enum ParseError {
         span: Span,
     },
 
-    /// An expression was expected but not found (e.g. empty parentheses).
-    #[error("expected expression")]
-    #[non_exhaustive]
-    ExpectedExpression {
-        /// Source range of the error.
-        span: Span,
-    },
-
-    /// A statement was expected but not found.
-    #[error("expected statement")]
-    #[non_exhaustive]
-    ExpectedStatement {
-        /// Source range of the error.
-        span: Span,
-    },
-
-    /// PHP source must start with `<?php` or `<?`.
-    #[error("expected opening PHP tag")]
-    #[non_exhaustive]
-    ExpectedOpenTag {
-        /// Source range of the error.
-        span: Span,
-    },
-
     /// A string literal was opened but never closed.
     #[error("unterminated string literal")]
     #[non_exhaustive]
@@ -137,9 +113,6 @@ impl ParseError {
     pub fn span(&self) -> Span {
         match self {
             ParseError::Expected { span, .. }
-            | ParseError::ExpectedExpression { span }
-            | ParseError::ExpectedStatement { span }
-            | ParseError::ExpectedOpenTag { span }
             | ParseError::UnterminatedString { span }
             | ParseError::ExpectedAfter { span, .. }
             | ParseError::UnclosedDelimiter { span, .. }

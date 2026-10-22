@@ -3,7 +3,7 @@
 $a = 1 + * 2;
 $b = 3;
 ===errors===
-expected expression
+expected expression, found '*'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '*' in Standard input code on line 2
 ===php_error >=8.0===

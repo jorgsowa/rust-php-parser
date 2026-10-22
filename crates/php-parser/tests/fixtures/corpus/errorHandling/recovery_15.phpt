@@ -3,7 +3,7 @@
 Foo::$
 ===errors===
 expected variable, found end of file
-expected expression
+expected expression, found end of file
 expected ';' after expression
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected end of file, expecting variable (T_VARIABLE) or '{' or '$' in Standard input code on line 2
