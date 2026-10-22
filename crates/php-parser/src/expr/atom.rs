@@ -2063,7 +2063,9 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
     // Check for unpack: ...expr, or a bare `...` (PHP 8.6 "rest" placeholder).
     let ellipsis_span = parser.current_span();
     let unpack = parser.eat(TokenKind::Ellipsis).is_some();
-    if unpack && parser.check(TokenKind::RightParen) {
+    let ends_args = parser.check(TokenKind::RightParen)
+        || (parser.check(TokenKind::Comma) && parser.peek_kind() == Some(TokenKind::RightParen));
+    if unpack && ends_args {
         parser.require_version(
             PhpVersion::Php86,
             "partial function application",
