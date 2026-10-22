@@ -165,6 +165,32 @@ impl ParseError {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[non_exhaustive]
 pub enum ForbiddenRule {
+    /// `self`, `static` or `parent` used outside a class.
+    ClassKeywordOutsideClass,
+    /// `parent` used in a class that has no parent.
+    ParentWithoutParentClass,
+    /// `__toString()` declares a return type other than `string`.
+    ToStringReturnType,
+    /// A magic method other than `__toString()` declares a return type it may not have.
+    MagicMethodReturnType,
+    /// An internal attribute is applied to a target it does not allow.
+    AttributeTargetMismatch,
+    /// `#[Attribute]` is applied to an interface, trait, enum or abstract class.
+    AttributeOnInvalidClass,
+    /// `#[Deprecated]` is applied to a class-like declaration.
+    DeprecatedOnInvalidTarget,
+    /// `#[AllowDynamicProperties]` is applied to an interface, trait, enum or readonly class.
+    AllowDynamicPropertiesOnInvalidClass,
+    /// A bare `return;` in a function that declares a return type.
+    MissingReturnValue,
+    /// A generator declares a return type that `Generator` does not satisfy.
+    GeneratorReturnType,
+    /// A readonly property has a default value.
+    ReadonlyPropertyDefault,
+    /// Two parameters share a name.
+    DuplicateParameter,
+    /// `$this` is assigned or used as a `catch` variable.
+    ReassignThis,
     /// Not yet classified.
     Other,
 }
@@ -173,7 +199,126 @@ impl ForbiddenRule {
     /// Stable kebab-case identifier, e.g. `"reassign-this"`.
     pub fn as_str(self) -> &'static str {
         match self {
+            ForbiddenRule::ClassKeywordOutsideClass => "class-keyword-outside-class",
+            ForbiddenRule::ParentWithoutParentClass => "parent-without-parent-class",
+            ForbiddenRule::ToStringReturnType => "to-string-return-type",
+            ForbiddenRule::MagicMethodReturnType => "magic-method-return-type",
+            ForbiddenRule::AttributeTargetMismatch => "attribute-target-mismatch",
+            ForbiddenRule::AttributeOnInvalidClass => "attribute-on-invalid-class",
+            ForbiddenRule::DeprecatedOnInvalidTarget => "deprecated-on-invalid-target",
+            ForbiddenRule::AllowDynamicPropertiesOnInvalidClass => {
+                "allow-dynamic-properties-on-invalid-class"
+            }
+            ForbiddenRule::MissingReturnValue => "missing-return-value",
+            ForbiddenRule::GeneratorReturnType => "generator-return-type",
+            ForbiddenRule::ReadonlyPropertyDefault => "readonly-property-default",
+            ForbiddenRule::DuplicateParameter => "duplicate-parameter",
+            ForbiddenRule::ReassignThis => "reassign-this",
             ForbiddenRule::Other => "other",
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{ForbiddenRule, ParseError};
+
+    const RULES: &[ForbiddenRule] = &[
+        ForbiddenRule::ClassKeywordOutsideClass,
+        ForbiddenRule::ParentWithoutParentClass,
+        ForbiddenRule::ToStringReturnType,
+        ForbiddenRule::MagicMethodReturnType,
+        ForbiddenRule::AttributeTargetMismatch,
+        ForbiddenRule::AttributeOnInvalidClass,
+        ForbiddenRule::DeprecatedOnInvalidTarget,
+        ForbiddenRule::AllowDynamicPropertiesOnInvalidClass,
+        ForbiddenRule::MissingReturnValue,
+        ForbiddenRule::GeneratorReturnType,
+        ForbiddenRule::ReadonlyPropertyDefault,
+        ForbiddenRule::DuplicateParameter,
+        ForbiddenRule::ReassignThis,
+    ];
+
+    /// `(source, reported span text)` for each site that reports `rule`.
+    fn samples(rule: ForbiddenRule) -> &'static [(&'static str, &'static str)] {
+        match rule {
+            ForbiddenRule::ClassKeywordOutsideClass => &[
+                ("<?php function f() { self::g(); }", "self"),
+                ("<?php function f() { return parent::$x::get(); }", "parent"),
+            ],
+            ForbiddenRule::ParentWithoutParentClass => {
+                &[("<?php class A { function f() { parent::f(); } }", "parent")]
+            }
+            ForbiddenRule::ToStringReturnType => &[(
+                "<?php class A { function __toString(): int { return 1; } }",
+                "int",
+            )],
+            ForbiddenRule::MagicMethodReturnType => &[(
+                "<?php class A { function __isset($n): int { return 1; } }",
+                "int",
+            )],
+            ForbiddenRule::AttributeTargetMismatch => {
+                &[("<?php #[Override] class A {}", "Override")]
+            }
+            ForbiddenRule::AttributeOnInvalidClass => {
+                &[("<?php #[Attribute] trait T {}", "Attribute")]
+            }
+            ForbiddenRule::DeprecatedOnInvalidTarget => {
+                &[("<?php #[Deprecated] class A {}", "Deprecated")]
+            }
+            ForbiddenRule::AllowDynamicPropertiesOnInvalidClass => &[(
+                "<?php #[AllowDynamicProperties] interface I {}",
+                "AllowDynamicProperties",
+            )],
+            ForbiddenRule::MissingReturnValue => {
+                &[("<?php function f(): int { return; }", "return;")]
+            }
+            ForbiddenRule::GeneratorReturnType => &[
+                ("<?php function f(): int { yield 1; }", "int"),
+                (
+                    "<?php class A { public int $x { set { yield 1; } } }",
+                    "set { yield 1; }",
+                ),
+            ],
+            ForbiddenRule::ReadonlyPropertyDefault => {
+                &[("<?php class A { public readonly int $x = 1; }", "1")]
+            }
+            ForbiddenRule::DuplicateParameter => &[("<?php function f($a, $a) {}", "$a")],
+            ForbiddenRule::ReassignThis => &[
+                ("<?php function f() { $this = 1; }", "$this"),
+                ("<?php try {} catch (E $this) {}", "$this"),
+            ],
+            ForbiddenRule::Other => &[],
+        }
+    }
+
+    #[test]
+    fn each_rule_reports_its_span() {
+        for &rule in RULES {
+            assert!(!samples(rule).is_empty(), "{rule:?} has no sample");
+            for &(src, text) in samples(rule) {
+                let errors = crate::parse(src).errors;
+                let spans: Vec<&str> = errors
+                    .iter()
+                    .filter(|e| e.forbidden_rule() == Some(rule))
+                    .map(|e| &src[e.span().start as usize..e.span().end as usize])
+                    .collect();
+                assert_eq!(spans, [text], "{rule:?} in {src:?}: {errors:?}");
+            }
+        }
+    }
+
+    #[test]
+    fn identifiers_are_unique() {
+        let mut ids: Vec<&str> = RULES.iter().map(|r| r.as_str()).collect();
+        ids.push(ForbiddenRule::Other.as_str());
+        ids.sort_unstable();
+        ids.dedup();
+        assert_eq!(ids.len(), RULES.len() + 1);
+    }
+
+    #[test]
+    fn rule_adds_no_size() {
+        assert_eq!(std::mem::size_of::<ParseError>(), 64);
     }
 }

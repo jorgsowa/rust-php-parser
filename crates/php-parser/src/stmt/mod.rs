@@ -1340,7 +1340,7 @@ pub(crate) fn check_generator_return_type(
     });
     if !admits_generator {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::GeneratorReturnType,
             format!(
                 "Generator return type must be a supertype of Generator, {} given",
                 parser.type_display(return_type)
@@ -1407,17 +1407,21 @@ pub(crate) fn check_returns_against_type<'arena, 'src>(
         for stmt in stmts {
             match &stmt.kind {
                 StmtKind::Return(value) => {
-                    let message = match (rule, value) {
-                        (ReturnRule::Void, Some(_)) => {
-                            "A void function must not return a value".into()
+                    let (rule, message) = match (rule, value) {
+                        (ReturnRule::Void, Some(_)) => (
+                            ForbiddenRule::Other,
+                            "A void function must not return a value".into(),
+                        ),
+                        (ReturnRule::Never, _) => (
+                            ForbiddenRule::Other,
+                            "A never-returning function must not return".into(),
+                        ),
+                        (ReturnRule::Value(message), None) => {
+                            (ForbiddenRule::MissingReturnValue, message.clone())
                         }
-                        (ReturnRule::Never, _) => {
-                            "A never-returning function must not return".into()
-                        }
-                        (ReturnRule::Value(message), None) => message.clone(),
                         _ => continue,
                     };
-                    parser.forbid(ForbiddenRule::Other, message, stmt.span);
+                    parser.forbid(rule, message, stmt.span);
                 }
                 StmtKind::Block(b) => walk(parser, &b.stmts, rule),
                 StmtKind::If(if_) => {
@@ -1460,17 +1464,19 @@ fn check_param_name(
     name: php_ast::Ident<'_>,
     earlier: &[Param<'_, '_>],
 ) {
-    let message: std::borrow::Cow<'static, str> = match name.as_str() {
-        Some("this") => "Cannot use $this as parameter".into(),
-        Some(n) if expr::is_superglobal(n) => {
-            format!("Cannot re-assign auto-global variable {n}").into()
-        }
-        Some(n) if earlier.iter().any(|p| p.name.as_str() == Some(n)) => {
-            format!("Redefinition of parameter ${n}").into()
-        }
+    let (rule, message): (_, std::borrow::Cow<'static, str>) = match name.as_str() {
+        Some("this") => (ForbiddenRule::Other, "Cannot use $this as parameter".into()),
+        Some(n) if expr::is_superglobal(n) => (
+            ForbiddenRule::Other,
+            format!("Cannot re-assign auto-global variable {n}").into(),
+        ),
+        Some(n) if earlier.iter().any(|p| p.name.as_str() == Some(n)) => (
+            ForbiddenRule::DuplicateParameter,
+            format!("Redefinition of parameter ${n}").into(),
+        ),
         _ => return,
     };
-    parser.forbid(ForbiddenRule::Other, message, name.span);
+    parser.forbid(rule, message, name.span);
 }
 
 pub fn parse_param_list<'arena, 'src>(
@@ -2216,7 +2222,11 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             let t = parser.advance();
             let var = parser.variable_ident(t);
             if var.as_str() == Some("this") {
-                parser.forbid(ForbiddenRule::Other, "Cannot re-assign $this", var.span);
+                parser.forbid(
+                    ForbiddenRule::ReassignThis,
+                    "Cannot re-assign $this",
+                    var.span,
+                );
             }
             Some(var)
         } else {
@@ -3862,7 +3872,7 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
         scope: Scope<'src>,
         /// Before PHP 8.3 a static variable's initializer is a constant expression.
         static_init_is_const_expr: bool,
-        errors: Vec<(String, Span)>,
+        errors: Vec<(ForbiddenRule, String, Span)>,
     }
     impl<'src> ClassRefs<'src> {
         fn scoped(&mut self, scope: Scope<'src>, walk: impl FnOnce(&mut Self)) {
@@ -3959,6 +3969,7 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
             let message = match self.scope.hook {
                 _ if self.scope.class.is_none() => {
                     self.errors.push((
+                        ForbiddenRule::ClassKeywordOutsideClass,
                         "Cannot use \"parent\" when no class scope is active".to_string(),
                         parent.span(),
                     ));
@@ -3981,7 +3992,7 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
                 ),
                 Some(_) => return true,
             };
-            self.errors.push((message, span));
+            self.errors.push((ForbiddenRule::Other, message, span));
             true
         }
 
@@ -4011,14 +4022,18 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
             if !scope_known {
                 return;
             }
-            let message = match scope.class {
-                None => format!("Cannot use \"{keyword}\" when no class scope is active"),
-                Some(class) if keyword == "parent" && !class.has_parent => {
-                    "Cannot use \"parent\" when current class scope has no parent".to_string()
-                }
+            let (rule, message) = match scope.class {
+                None => (
+                    ForbiddenRule::ClassKeywordOutsideClass,
+                    format!("Cannot use \"{keyword}\" when no class scope is active"),
+                ),
+                Some(class) if keyword == "parent" && !class.has_parent => (
+                    ForbiddenRule::ParentWithoutParentClass,
+                    "Cannot use \"parent\" when current class scope has no parent".to_string(),
+                ),
                 Some(_) => return,
             };
-            self.errors.push((message, span));
+            self.errors.push((rule, message, span));
         }
 
         fn class_ref(&mut self, class: &Expr<'_, '_>, class_name_fetch: bool) {
@@ -4028,8 +4043,11 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
             if let Some(text) = fully_qualified_class_keyword(name) {
                 // `\self::class` resolves like `self::class`.
                 if !class_name_fetch {
-                    self.errors
-                        .push((format!("'\\{text}' is an invalid class name"), name.span()));
+                    self.errors.push((
+                        ForbiddenRule::Other,
+                        format!("'\\{text}' is an invalid class name"),
+                        name.span(),
+                    ));
                     return;
                 }
             } else if !matches!(name, Name::Simple { .. })
@@ -4042,6 +4060,7 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
                 self.keyword(keyword, name.span());
                 if keyword == "static" && self.scope.const_expr && self.errors.len() == reported {
                     self.errors.push((
+                        ForbiddenRule::Other,
                         "static::class cannot be used for compile-time class name resolution"
                             .to_string(),
                         name.span(),
@@ -4246,8 +4265,8 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
         let _ = finder.visit_stmt(stmt);
     }
     // An anonymous class body is walked before its constructor arguments.
-    finder.errors.sort_by_key(|(_, span)| span.start);
-    for (message, span) in finder.errors {
-        parser.forbid(ForbiddenRule::Other, message, span);
+    finder.errors.sort_by_key(|(_, _, span)| span.start);
+    for (rule, message, span) in finder.errors {
+        parser.forbid(rule, message, span);
     }
 }

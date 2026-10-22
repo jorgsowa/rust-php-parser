@@ -680,7 +680,7 @@ fn check_hook_signature(
         match (kind, property_type) {
             (PropertyHookKind::Get, Some(ty)) => super::check_generator_return_type(parser, ty),
             (PropertyHookKind::Set, _) => parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::GeneratorReturnType,
                 "Generator return type must be a supertype of Generator, void given",
                 hook_span,
             ),
@@ -1003,7 +1003,7 @@ fn report_readonly_default(parser: &mut Parser<'_, '_>, span: Span) {
         return;
     }
     parser.forbid(
-        ForbiddenRule::Other,
+        ForbiddenRule::ReadonlyPropertyDefault,
         "Readonly property cannot have default value",
         span,
     );
@@ -1995,8 +1995,13 @@ fn check_magic_method(
                 || builtins.iter().all(|b| allowed.contains(b))
                     && (!has_class || allowed == [BuiltinType::Object]);
             if !fits {
+                let rule = if lower_label.ends_with("::__tostring()") {
+                    ForbiddenRule::ToStringReturnType
+                } else {
+                    ForbiddenRule::MagicMethodReturnType
+                };
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    rule,
                     format!("{method_label}: Return type must be {allowed_name} when declared"),
                     rt.span,
                 );

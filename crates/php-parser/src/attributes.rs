@@ -245,7 +245,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             let targets = internal.targets_for(self.version);
             let target_matches = targets & site_targets != 0;
             if !target_matches && !delayed_validation {
-                self.attribute_error(
+                self.forbid(
+                    ForbiddenRule::AttributeTargetMismatch,
                     format!(
                         "Attribute \"{name}\" cannot target {} (allowed targets: {})",
                         site.target.label(),
@@ -290,10 +291,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 if lower_name == "attribute" && self.version < PhpVersion::Php85 {
                     return;
                 }
-                let attribute = match lower_name {
-                    "attribute" => "Attribute",
-                    "allowdynamicproperties" => "AllowDynamicProperties",
-                    _ => "Deprecated",
+                let (attribute, rule) = match lower_name {
+                    "attribute" => ("Attribute", ForbiddenRule::AttributeOnInvalidClass),
+                    "allowdynamicproperties" => (
+                        "AllowDynamicProperties",
+                        ForbiddenRule::AllowDynamicPropertiesOnInvalidClass,
+                    ),
+                    _ => ("Deprecated", ForbiddenRule::DeprecatedOnInvalidTarget),
                 };
                 let described = match (lower_name, kind) {
                     (_, ClassKind::Interface) => "interface",
@@ -320,7 +324,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     ("deprecated", ClassKind::Class { .. }) => "class",
                     _ => return,
                 };
-                self.attribute_error(
+                self.forbid(
+                    rule,
                     format!("Cannot apply #[\\{attribute}] to {described} {name}"),
                     span,
                 );

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `LexerErrorKind::UnterminatedComment` for a `/*` or `/**` comment without its `*/` (`php-lexer`).
 - `Name::join_parts_in(src)`, which borrows a multi-part name from the source instead of allocating when it is written without whitespace or comments (`php-ast`).
+- `ForbiddenRule`, carried as `rule` on `ParseError::Forbidden` and returned by `ParseError::forbidden_rule()`, so tools can match a compile-time error by rule instead of by message (`php-rs-parser`). Covers `self`/`static`/`parent` outside a class or without a parent, magic method return types, `#[Attribute]`, `#[Deprecated]` and `#[AllowDynamicProperties]` targets, a bare `return;` with a return type, generator return types, readonly property defaults, duplicate parameters and reassigning `$this`; every other error is `ForbiddenRule::Other`.
 
 ### Changed
 

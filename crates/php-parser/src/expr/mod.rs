@@ -147,7 +147,7 @@ pub(crate) fn check_special_variable_write(
     target: &Expr<'_, '_>,
     kind: WriteKind,
 ) {
-    let message = match &target.kind {
+    let (rule, message) = match &target.kind {
         ExprKind::Array(elems) if kind == WriteKind::Assign => {
             for el in elems.iter() {
                 let mut value = el.value();
@@ -162,18 +162,21 @@ pub(crate) fn check_special_variable_write(
             return;
         }
         ExprKind::Variable(name) => match (name.as_str(), kind) {
-            ("this", WriteKind::Assign) => "Cannot re-assign $this",
-            ("this", WriteKind::Unset) => "Cannot unset $this",
+            ("this", WriteKind::Assign) => (ForbiddenRule::ReassignThis, "Cannot re-assign $this"),
+            ("this", WriteKind::Unset) => (ForbiddenRule::Other, "Cannot unset $this"),
             ("GLOBALS", _) if parser.version < PhpVersion::Php81 => return,
-            ("GLOBALS", WriteKind::Reference) => "Cannot acquire reference to $GLOBALS",
-            ("GLOBALS", _) => {
-                "$GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax"
+            ("GLOBALS", WriteKind::Reference) => {
+                (ForbiddenRule::Other, "Cannot acquire reference to $GLOBALS")
             }
+            ("GLOBALS", _) => (
+                ForbiddenRule::Other,
+                "$GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax",
+            ),
             _ => return,
         },
         _ => return,
     };
-    parser.forbid(ForbiddenRule::Other, message, target.span);
+    parser.forbid(rule, message, target.span);
 }
 
 fn is_variable_named(expr: &Expr<'_, '_>, name: &str) -> bool {
