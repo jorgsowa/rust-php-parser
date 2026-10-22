@@ -280,6 +280,12 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 };
                 let described = match (lower_name, kind) {
                     (_, ClassKind::Interface) => "interface",
+                    // PHP 8.2 and 8.3 allow dynamic properties on an enum.
+                    ("allowdynamicproperties", ClassKind::Enum)
+                        if self.version < PhpVersion::Php84 =>
+                    {
+                        return;
+                    }
                     (_, ClassKind::Enum) => "enum",
                     ("attribute" | "allowdynamicproperties", ClassKind::Trait) => "trait",
                     (
