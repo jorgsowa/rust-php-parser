@@ -1450,9 +1450,7 @@ impl<'src> Lexer<'src> {
             label = &after_quote[..closing];
             is_nowdoc = true;
             let after_label = &after_arrows_trimmed[2 + closing..];
-            let Some(nl) = newline_len(after_label.as_bytes()) else {
-                return None;
-            };
+            let nl = newline_len(after_label.as_bytes())?;
             label_line_end = arrows_offset + 2 + closing + nl - 1;
         } else {
             // Heredoc: <<<LABEL or <<<"LABEL"
@@ -1469,9 +1467,7 @@ impl<'src> Lexer<'src> {
                 &after_arrows_trimmed[end..]
             };
             // PHP requires the newline right after the label.
-            let Some(nl) = newline_len(s.as_bytes()) else {
-                return None;
-            };
+            let nl = newline_len(s.as_bytes())?;
             is_nowdoc = false;
             label_line_end = arrows_offset + (after_arrows_trimmed.len() - s.len()) + nl - 1;
         };
