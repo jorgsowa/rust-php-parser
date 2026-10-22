@@ -103,3 +103,23 @@ fn join_parts_borrows_single_part_names() {
     let _ = walk_program(&mut Check(&mut seen), &result.program);
     assert_eq!(seen, 2);
 }
+
+#[test]
+fn to_string_repr_prefixes_fully_qualified_names() {
+    let arena = bumpalo::Bump::new();
+    let result = php_rs_parser::parse_arena(
+        &arena,
+        "<?php \\strlen(); \\Foo\\Bar\\baz(); Foo\\bar(); foo();",
+    );
+    struct Reprs(Vec<String>);
+    impl<'arena, 'src> Visitor<'arena, 'src> for Reprs {
+        type Break = ();
+        fn visit_name(&mut self, name: &Name<'arena, 'src>) -> ControlFlow<()> {
+            self.0.push(name.to_string_repr().into_owned());
+            ControlFlow::Continue(())
+        }
+    }
+    let mut reprs = Reprs(Vec::new());
+    let _ = walk_program(&mut reprs, &result.program);
+    assert_eq!(reprs.0, ["\\strlen", "\\Foo\\Bar\\baz", "Foo\\bar", "foo"]);
+}

@@ -171,11 +171,10 @@ impl Name {
 
     /// Joins all parts with `\` and prepends `\` if fully qualified; empty for an error name.
     pub fn to_string_repr(&self) -> String {
-        let joined = self.join_parts();
         if self.kind == NameKind::FullyQualified {
-            format!("\\{joined}")
+            crate::ast::fully_qualified(&self.parts)
         } else {
-            joined
+            self.join_parts()
         }
     }
 

@@ -191,7 +191,7 @@ impl<'arena, 'src> Name<'arena, 'src> {
                 parts,
                 kind: NameKind::FullyQualified,
                 ..
-            } => Cow::Owned(format!("\\{}", parts.join("\\"))),
+            } => Cow::Owned(fully_qualified(parts)),
             _ => self.join_parts(),
         }
     }
@@ -242,6 +242,20 @@ impl<'arena, 'src> Name<'arena, 'src> {
             Self::Error { .. } => &[],
         }
     }
+}
+
+/// `parts` joined with `\` behind a leading `\`, in one allocation.
+pub(crate) fn fully_qualified<S: AsRef<str>>(parts: &[S]) -> String {
+    let mut s =
+        String::with_capacity(parts.iter().map(|p| p.as_ref().len() + 1).sum::<usize>() + 1);
+    s.push('\\');
+    for (i, part) in parts.iter().enumerate() {
+        if i > 0 {
+            s.push('\\');
+        }
+        s.push_str(part.as_ref());
+    }
+    s
 }
 
 /// The slice of `src` that reads `parts` joined with `\`, if the parts sit there back to back.

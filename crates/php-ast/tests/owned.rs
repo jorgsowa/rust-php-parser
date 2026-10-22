@@ -20,6 +20,11 @@ fn name_helpers_match_the_arena_name() {
     let fully_qualified = name(&["Foo", "Bar"], NameKind::FullyQualified);
     assert_eq!(fully_qualified.to_string_repr(), "\\Foo\\Bar");
     assert_eq!(fully_qualified.join_parts(), "Foo\\Bar");
+    assert_eq!(
+        name(&["strlen"], NameKind::FullyQualified).to_string_repr(),
+        "\\strlen"
+    );
+    assert_eq!(name(&[], NameKind::FullyQualified).to_string_repr(), "\\");
 
     let error = name(&[], NameKind::Error);
     assert_eq!(error.to_string_repr(), "");

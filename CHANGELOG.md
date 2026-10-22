@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Lexer::with_attributes`, which lexes `#[` as a `#` comment when disabled (`php-lexer`).
 - `EnumMemberKind::Property`, for a property declared in an enum (`php-ast`), and `ForbiddenRule::EnumProperty` (`php-rs-parser`).
 
+### Changed
+
+- `Name::to_string_repr` builds a fully qualified name in one allocation instead of two, for both the arena and the owned `Name` (`php-ast`).
+
 ### Fixed
 
 - Before PHP 8.0, `#[` starts a `#` comment instead of an attribute, so `#[\ReturnTypeWillChange]` and other single-line attributes are accepted (`php-rs-parser`).
