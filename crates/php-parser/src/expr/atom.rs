@@ -2033,7 +2033,11 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
                 } else {
                     "Cannot use argument unpacking after named arguments"
                 };
-                parser.forbid(ForbiddenRule::PositionalAfterNamedArgument, message, arg.span);
+                parser.forbid(
+                    ForbiddenRule::PositionalAfterNamedArgument,
+                    message,
+                    arg.span,
+                );
             }
 
             seen_spread |= arg.is_spread();
