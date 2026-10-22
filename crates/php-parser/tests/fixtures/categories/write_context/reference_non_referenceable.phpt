@@ -11,6 +11,7 @@ list(&$a) = FOO;
 ===errors <=7.4===
 Cannot assign reference to non referenceable value
 Cannot assign reference to non referenceable value
+'object access on a constant' requires PHP 8.0 or higher
 Cannot use temporary expression in write context
 Cannot assign reference to non referenceable value
 Cannot assign reference to non referenceable value

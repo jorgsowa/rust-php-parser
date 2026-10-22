@@ -2,14 +2,6 @@
 <?php
 
 namespace {
-    class C {}
-}
-
-namespace Ns {
-    class C {}
-}
-
-namespace {
     use Ns\C;
 }
 
@@ -24,8 +16,6 @@ namespace {
 namespace Ns {
     use Ns\C;
 }
-===php_error <=8.3===
-PHP Fatal error:  Cannot use Ns\C as C because the name is already in use in Standard input code on line 12
 ===ast===
 {
   "stmts": [
@@ -37,28 +27,33 @@ PHP Fatal error:  Cannot use Ns\C as C because the name is already in use in Sta
             "Braced": [
               {
                 "kind": {
-                  "Class": {
-                    "name": {
-                      "name": "C",
-                      "span": {
-                        "start": 29,
-                        "end": 30
+                  "Use": {
+                    "kind": "Normal",
+                    "uses": [
+                      {
+                        "name": {
+                          "parts": [
+                            "Ns",
+                            "C"
+                          ],
+                          "kind": "Qualified",
+                          "span": {
+                            "start": 27,
+                            "end": 31
+                          }
+                        },
+                        "alias": null,
+                        "span": {
+                          "start": 27,
+                          "end": 31
+                        }
                       }
-                    },
-                    "modifiers": {
-                      "is_abstract": false,
-                      "is_final": false,
-                      "is_readonly": false
-                    },
-                    "extends": null,
-                    "implements": [],
-                    "members": [],
-                    "attributes": []
+                    ]
                   }
                 },
                 "span": {
                   "start": 23,
-                  "end": 33
+                  "end": 32
                 }
               }
             ]
@@ -67,7 +62,7 @@ PHP Fatal error:  Cannot use Ns\C as C because the name is already in use in Sta
       },
       "span": {
         "start": 7,
-        "end": 35
+        "end": 34
       }
     },
     {
@@ -79,104 +74,8 @@ PHP Fatal error:  Cannot use Ns\C as C because the name is already in use in Sta
             ],
             "kind": "Unqualified",
             "span": {
-              "start": 47,
-              "end": 49
-            }
-          },
-          "body": {
-            "Braced": [
-              {
-                "kind": {
-                  "Class": {
-                    "name": {
-                      "name": "C",
-                      "span": {
-                        "start": 62,
-                        "end": 63
-                      }
-                    },
-                    "modifiers": {
-                      "is_abstract": false,
-                      "is_final": false,
-                      "is_readonly": false
-                    },
-                    "extends": null,
-                    "implements": [],
-                    "members": [],
-                    "attributes": []
-                  }
-                },
-                "span": {
-                  "start": 56,
-                  "end": 66
-                }
-              }
-            ]
-          }
-        }
-      },
-      "span": {
-        "start": 37,
-        "end": 68
-      }
-    },
-    {
-      "kind": {
-        "Namespace": {
-          "name": null,
-          "body": {
-            "Braced": [
-              {
-                "kind": {
-                  "Use": {
-                    "kind": "Normal",
-                    "uses": [
-                      {
-                        "name": {
-                          "parts": [
-                            "Ns",
-                            "C"
-                          ],
-                          "kind": "Qualified",
-                          "span": {
-                            "start": 90,
-                            "end": 94
-                          }
-                        },
-                        "alias": null,
-                        "span": {
-                          "start": 90,
-                          "end": 94
-                        }
-                      }
-                    ]
-                  }
-                },
-                "span": {
-                  "start": 86,
-                  "end": 95
-                }
-              }
-            ]
-          }
-        }
-      },
-      "span": {
-        "start": 70,
-        "end": 97
-      }
-    },
-    {
-      "kind": {
-        "Namespace": {
-          "name": {
-            "parts": [
-              "Ns"
-            ],
-            "kind": "Unqualified",
-            "span": {
-              "start": 109,
-              "end": 111
+              "start": 46,
+              "end": 48
             }
           },
           "body": {
@@ -193,22 +92,22 @@ PHP Fatal error:  Cannot use Ns\C as C because the name is already in use in Sta
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 122,
-                            "end": 123
+                            "start": 59,
+                            "end": 60
                           }
                         },
                         "alias": null,
                         "span": {
-                          "start": 122,
-                          "end": 123
+                          "start": 59,
+                          "end": 60
                         }
                       }
                     ]
                   }
                 },
                 "span": {
-                  "start": 118,
-                  "end": 124
+                  "start": 55,
+                  "end": 61
                 }
               }
             ]
@@ -216,8 +115,8 @@ PHP Fatal error:  Cannot use Ns\C as C because the name is already in use in Sta
         }
       },
       "span": {
-        "start": 99,
-        "end": 126
+        "start": 36,
+        "end": 63
       }
     },
     {
@@ -238,22 +137,22 @@ PHP Fatal error:  Cannot use Ns\C as C because the name is already in use in Sta
                           ],
                           "kind": "Unqualified",
                           "span": {
-                            "start": 148,
-                            "end": 149
+                            "start": 85,
+                            "end": 86
                           }
                         },
                         "alias": null,
                         "span": {
-                          "start": 148,
-                          "end": 149
+                          "start": 85,
+                          "end": 86
                         }
                       }
                     ]
                   }
                 },
                 "span": {
-                  "start": 144,
-                  "end": 150
+                  "start": 81,
+                  "end": 87
                 }
               }
             ]
@@ -261,8 +160,8 @@ PHP Fatal error:  Cannot use Ns\C as C because the name is already in use in Sta
         }
       },
       "span": {
-        "start": 128,
-        "end": 152
+        "start": 65,
+        "end": 89
       }
     },
     {
@@ -274,8 +173,8 @@ PHP Fatal error:  Cannot use Ns\C as C because the name is already in use in Sta
             ],
             "kind": "Unqualified",
             "span": {
-              "start": 164,
-              "end": 166
+              "start": 101,
+              "end": 103
             }
           },
           "body": {
@@ -293,22 +192,22 @@ PHP Fatal error:  Cannot use Ns\C as C because the name is already in use in Sta
                           ],
                           "kind": "Qualified",
                           "span": {
-                            "start": 177,
-                            "end": 181
+                            "start": 114,
+                            "end": 118
                           }
                         },
                         "alias": null,
                         "span": {
-                          "start": 177,
-                          "end": 181
+                          "start": 114,
+                          "end": 118
                         }
                       }
                     ]
                   }
                 },
                 "span": {
-                  "start": 173,
-                  "end": 182
+                  "start": 110,
+                  "end": 119
                 }
               }
             ]
@@ -316,13 +215,13 @@ PHP Fatal error:  Cannot use Ns\C as C because the name is already in use in Sta
         }
       },
       "span": {
-        "start": 154,
-        "end": 184
+        "start": 91,
+        "end": 121
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 184
+    "end": 121
   }
 }

@@ -7,10 +7,13 @@ class C {
 }
 function f(static $x) {}
 ===errors <=7.4===
+'static type' requires PHP 8.0 or higher
 static cannot be used as a property type
 'constructor property promotion' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
+'static type' requires PHP 8.0 or higher
 static cannot be used as a parameter type
+'static type' requires PHP 8.0 or higher
 Cannot use the static modifier on a parameter
 ===errors >=8.0===
 static cannot be used as a property type

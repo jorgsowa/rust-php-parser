@@ -21,6 +21,7 @@ $x = $GLOBALS[]::A;
 unset($GLOBALS[]);
 ===errors <=7.4===
 'named arguments' requires PHP 8.0 or higher
+Cannot use ::class with dynamic class name
 cannot use [] for reading
 cannot use [] for reading
 cannot use [] for reading

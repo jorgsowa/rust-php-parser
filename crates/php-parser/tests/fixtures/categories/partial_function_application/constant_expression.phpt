@@ -30,8 +30,6 @@ Constant expression contains invalid operations
 'partial function application' requires PHP 8.6 or higher
 Constant expression contains invalid operations
 'attributes' requires PHP 8.0 or higher
-'partial function application' requires PHP 8.6 or higher
-Constant expression contains invalid operations
 ===errors 8.0-8.5===
 'partial function application' requires PHP 8.6 or higher
 Constant expression contains invalid operations

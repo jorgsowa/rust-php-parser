@@ -6,6 +6,8 @@ A::B;
 A::class;
 $a::B;
 $a::class;
+===errors <=7.4===
+Cannot use ::class with dynamic class name
 ===php_error <=7.4===
 PHP Fatal error:  Cannot use ::class with dynamic class name in Standard input code on line 7
 ===ast===

@@ -22,22 +22,31 @@ namespace\clone($a)->b;
 ===errors <=7.4===
 'nullsafe operator (?->)' requires PHP 8.0 or higher
 'clone with property overrides' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
 'first-class callable syntax' requires PHP 8.1 or higher
 'clone(...) first-class callable' requires PHP 8.5 or higher
 'clone with property overrides' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
 'clone with property overrides' requires PHP 8.5 or higher
 'clone with property overrides' requires PHP 8.5 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
 ===errors 8.0===
 'clone with property overrides' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
 'first-class callable syntax' requires PHP 8.1 or higher
 'clone(...) first-class callable' requires PHP 8.5 or higher
 'clone with property overrides' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
 'clone with property overrides' requires PHP 8.5 or higher
 'clone with property overrides' requires PHP 8.5 or higher
 ===errors 8.1-8.4===
 'clone with property overrides' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
 'clone(...) first-class callable' requires PHP 8.5 or higher
 'clone with property overrides' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
 'clone with property overrides' requires PHP 8.5 or higher
 'clone with property overrides' requires PHP 8.5 or higher
 ===php_error <=7.4===

@@ -1,7 +1,7 @@
 ===source===
 <?php
 use A as mixed;
-===errors===
+===errors >=8.0===
 Cannot use A as mixed because 'mixed' is a special class name
 ===php_error >=8.0===
 PHP Fatal error:  Cannot use A as mixed because 'mixed' is a special class name in Standard input code on line 2

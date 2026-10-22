@@ -12,13 +12,20 @@ $x = new readonly class { public $f; };
 'constructor property promotion' requires PHP 8.0 or higher
 readonly property must have type
 readonly property must have type
+'readonly anonymous classes' requires PHP 8.3 or higher
 readonly property must have type
 ===errors 8.0-8.1===
 'readonly class' requires PHP 8.2 or higher
 readonly property must have type
 readonly property must have type
+'readonly anonymous classes' requires PHP 8.3 or higher
 readonly property must have type
-===errors >=8.2===
+===errors 8.2===
+readonly property must have type
+readonly property must have type
+'readonly anonymous classes' requires PHP 8.3 or higher
+readonly property must have type
+===errors >=8.3===
 readonly property must have type
 readonly property must have type
 readonly property must have type

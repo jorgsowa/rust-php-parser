@@ -6,7 +6,11 @@
 "foo$bar"->length();
 (clone $obj)->b[0](1);
 [0, 1][0] = 1;
-===errors===
+===errors <=7.4===
+'interpolated string dereferencing' requires PHP 8.0 or higher
+'interpolated string dereferencing' requires PHP 8.0 or higher
+Cannot use temporary expression in write context
+===errors >=8.0===
 Cannot use temporary expression in write context
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '[' in Standard input code on line 4

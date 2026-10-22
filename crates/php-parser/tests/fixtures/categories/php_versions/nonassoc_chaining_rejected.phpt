@@ -3,7 +3,7 @@
 $a = 1 < 2 < 3;
 $b = 1 == 1 == 1;
 $c = $x <=> $y <=> $z;
-===errors >=8.0===
+===errors===
 Chaining non-associative operators requires explicit parentheses.
 Chaining non-associative operators requires explicit parentheses.
 Chaining non-associative operators requires explicit parentheses.

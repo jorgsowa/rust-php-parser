@@ -9,6 +9,8 @@ $x = (void) ?? 1;
 $x = (void) . 'a';
 $x = (void) - $y;
 $x = (void)->a;
+===errors <=7.4===
+Cannot use ::class with dynamic class name
 ===errors >=8.5===
 expected expression
 expected expression

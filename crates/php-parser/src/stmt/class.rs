@@ -28,8 +28,9 @@ pub(super) fn visibility_rank(v: php_ast::Visibility) -> u8 {
 
 pub(crate) fn is_reserved_class_name(name: &str, version: PhpVersion) -> bool {
     let name = name.to_ascii_lowercase();
-    // `readonly` is a keyword and `never` a type from PHP 8.1 on.
-    (matches!(name.as_str(), "readonly" | "never") && version >= PhpVersion::Php81)
+    // `mixed` is a type from PHP 8.0 on, `readonly` a keyword and `never` a type from 8.1 on.
+    (name == "mixed" && version >= PhpVersion::Php80)
+        || (matches!(name.as_str(), "readonly" | "never") && version >= PhpVersion::Php81)
         || matches!(
             name.as_str(),
             // self / parent / static: meta-names that PHP rejects as
@@ -38,7 +39,7 @@ pub(crate) fn is_reserved_class_name(name: &str, version: PhpVersion) -> bool {
             // PHP's reserved type names — invalid as class names anywhere
             // ("Cannot use 'string' as a class name as it is reserved").
             | "int" | "float" | "bool" | "string" | "true" | "false" | "null"
-            | "void" | "iterable" | "object" | "mixed" | "array"
+            | "void" | "iterable" | "object" | "array"
             // A keyword in PHP, lexed as a name here.
             | "callable"
         )
@@ -1949,7 +1950,13 @@ fn check_magic_method(
         }
     }
 
-    if mods.is_static != signature.is_static {
+    // PHP 7.4 rejects only a static constructor, destructor or `__clone`; it warns about the rest.
+    let lower_label = method_label.to_ascii_lowercase();
+    let static_checked = parser.version >= PhpVersion::Php80
+        || ["::__construct()", "::__destruct()", "::__clone()"]
+            .iter()
+            .any(|m| lower_label.ends_with(m));
+    if mods.is_static != signature.is_static && static_checked {
         let requirement = if signature.is_static {
             "must be static"
         } else {

@@ -17,7 +17,6 @@ class Bar {
 'new in initializers' requires PHP 8.1 or higher
 'new in initializers' requires PHP 8.1 or higher
 'attributes' requires PHP 8.0 or higher
-'new in initializers' requires PHP 8.1 or higher
 New expressions are not supported in this context
 New expressions are not supported in this context
 ===errors 8.0===

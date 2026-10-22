@@ -36,6 +36,7 @@ $h = function () {
     }
 };
 ===errors <=7.4===
+'static type' requires PHP 8.0 or higher
 'new in initializers' requires PHP 8.1 or higher
 'attributes' requires PHP 8.0 or higher
 'constants in traits' requires PHP 8.2 or higher

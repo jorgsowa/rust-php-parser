@@ -14,6 +14,16 @@ $x instanceof (~[]);
 (0 ** -1)::foo();
 ('0x1A' * 1)::foo();
 ('inf' * 1)::foo();
+===errors <=7.4===
+'new with an expression' requires PHP 8.0 or higher
+'instanceof with an expression' requires PHP 8.0 or higher
+Illegal class name
+Illegal class name
+===errors 8.0===
+Illegal class name
+Illegal class name
+===errors 8.1-8.3===
+Illegal class name
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '(' in Standard input code on line 2
 ===php_error 8.0===

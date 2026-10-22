@@ -3,7 +3,6 @@
 #[\App\] function f() {}
 ===errors <=7.4===
 'attributes' requires PHP 8.0 or higher
-expected identifier, found ']'
 ===errors >=8.0===
 expected identifier, found ']'
 ===php_error >=8.0===

@@ -31,6 +31,7 @@ Read-only virtual property A::$e must not specify asymmetric visibility
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
 Write-only virtual property A::$f must not specify asymmetric visibility
+'trailing comma in parameter list' requires PHP 8.0 or higher
 ===errors 8.0-8.3===
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher

@@ -1191,7 +1191,8 @@ fn parse_function<'arena, 'src>(
                 | TokenKind::Enum_
                 | TokenKind::Self_
                 | TokenKind::Parent_
-        ) {
+        ) && !(name_token_kind == TokenKind::Match_ && parser.version < PhpVersion::Php80)
+        {
             parser.error(ParseError::Forbidden {
                 message: format!("cannot use '{}' as function name; it is reserved", text).into(),
                 span,
@@ -1485,6 +1486,8 @@ pub fn parse_param_list<'arena, 'src>(
 
     loop {
         if parser.check(TokenKind::RightParen) {
+            let span = Span::new(param_list_floor - 1, param_list_floor);
+            parser.require_version(PhpVersion::Php80, "trailing comma in parameter list", span);
             break;
         }
         let param_start = parser.start_span();
@@ -2591,7 +2594,9 @@ fn check_declare_directive(
     } else if !is_literal {
         Some(format!("declare({name}) value must be a literal"))
     } else if name.eq_ignore_ascii_case("strict_types") {
-        if !first_stmt {
+        // Before 8.5 an empty statement before it is not allowed either.
+        let nop_before = parser.top_level_nop_seen && parser.version < PhpVersion::Php85;
+        if !first_stmt || nop_before {
             Some("strict_types declaration must be the very first statement in the script".into())
         } else if has_body {
             Some("strict_types declaration must not use block mode".into())
@@ -2725,6 +2730,9 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
     }
 
     let name = parser.parse_name();
+    if let Name::Simple { value, span } = &name {
+        parser.check_name_parts_before_80(&[*value], *span);
+    }
     if name.kind() == NameKind::Relative {
         parser.error(ParseError::Expected {
             expected: "namespace name".into(),

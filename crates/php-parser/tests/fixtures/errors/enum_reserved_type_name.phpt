@@ -4,7 +4,14 @@ enum Mixed {}
 enum int {}
 enum Iterable {}
 enum Never {}
-===errors <=8.0===
+===errors <=7.4===
+'enums' requires PHP 8.1 or higher
+'enums' requires PHP 8.1 or higher
+Cannot use "int" as an enum name as it is reserved
+'enums' requires PHP 8.1 or higher
+Cannot use "Iterable" as an enum name as it is reserved
+'enums' requires PHP 8.1 or higher
+===errors 8.0===
 'enums' requires PHP 8.1 or higher
 Cannot use "Mixed" as an enum name as it is reserved
 'enums' requires PHP 8.1 or higher

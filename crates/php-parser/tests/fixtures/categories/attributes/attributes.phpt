@@ -52,7 +52,6 @@ enum Color {
 ===errors <=7.4===
 'attributes' requires PHP 8.0 or higher
 'attributes' requires PHP 8.0 or higher
-'named arguments' requires PHP 8.0 or higher
 'attributes' requires PHP 8.0 or higher
 'attributes' requires PHP 8.0 or higher
 'attributes' requires PHP 8.0 or higher

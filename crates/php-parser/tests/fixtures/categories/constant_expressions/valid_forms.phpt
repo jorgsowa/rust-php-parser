@@ -47,16 +47,22 @@ function f($a = new Foo(new Bar)) {
 'dynamic class constant fetch' requires PHP 8.3 or higher
 'dynamic class constant fetch' requires PHP 8.3 or higher
 'dynamic class constant fetch' requires PHP 8.3 or higher
+Cannot use ::class with dynamic class name
+'class constant dereferencing' requires PHP 8.0 or higher
 'property fetch in constant expressions' requires PHP 8.2 or higher
+'class constant dereferencing' requires PHP 8.0 or higher
 'nullsafe operator (?->)' requires PHP 8.0 or higher
 'property fetch in constant expressions' requires PHP 8.2 or higher
+'class constant dereferencing' requires PHP 8.0 or higher
 'property fetch in constant expressions' requires PHP 8.2 or higher
 'property fetch in constant expressions' requires PHP 8.2 or higher
 'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
 'property fetch in constant expressions' requires PHP 8.2 or higher
 'named arguments' requires PHP 8.0 or higher
 'new in initializers' requires PHP 8.1 or higher
+'new with an expression' requires PHP 8.0 or higher
 'new in initializers' requires PHP 8.1 or higher
+'new with an expression' requires PHP 8.0 or higher
 'new in initializers' requires PHP 8.1 or higher
 'closures in constant expressions' requires PHP 8.5 or higher
 'first-class callable syntax' requires PHP 8.1 or higher
@@ -78,9 +84,6 @@ function f($a = new Foo(new Bar)) {
 'new in initializers' requires PHP 8.1 or higher
 'casts in constant expressions' requires PHP 8.5 or higher
 'attributes' requires PHP 8.0 or higher
-'named arguments' requires PHP 8.0 or higher
-'new in initializers' requires PHP 8.1 or higher
-'closures in constant expressions' requires PHP 8.5 or higher
 'new in initializers' requires PHP 8.1 or higher
 Constant expression contains invalid operations
 'new in initializers' requires PHP 8.1 or higher

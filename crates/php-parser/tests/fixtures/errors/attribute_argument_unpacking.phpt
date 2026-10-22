@@ -6,9 +6,7 @@ function f() {}
 class C {}
 ===errors <=7.4===
 'attributes' requires PHP 8.0 or higher
-Cannot use unpacking in attribute argument list
 'attributes' requires PHP 8.0 or higher
-Cannot use unpacking in attribute argument list
 ===errors >=8.0===
 Cannot use unpacking in attribute argument list
 Cannot use unpacking in attribute argument list

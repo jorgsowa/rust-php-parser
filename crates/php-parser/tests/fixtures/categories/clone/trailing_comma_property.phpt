@@ -1,7 +1,10 @@
 ===source===
 <?php
 clone($a, )->b;
-===errors===
+===errors <=8.4===
+'clone function call' requires PHP 8.5 or higher
+Cannot dereference this expression
+===errors >=8.5===
 Cannot dereference this expression
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ',' in Standard input code on line 2

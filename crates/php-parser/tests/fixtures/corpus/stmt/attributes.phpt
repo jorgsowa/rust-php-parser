@@ -31,10 +31,10 @@ $a = #[A12] static function() {};
 $b = #[A13] static fn() => 0;
 ===errors <=7.4===
 'attributes' requires PHP 8.0 or higher
-'named arguments' requires PHP 8.0 or higher
 'attributes' requires PHP 8.0 or higher
 'attributes' requires PHP 8.0 or higher
 'attributes' requires PHP 8.0 or higher
+'trailing comma in parameter list' requires PHP 8.0 or higher
 'attributes' requires PHP 8.0 or higher
 'attributes' requires PHP 8.0 or higher
 'attributes' requires PHP 8.0 or higher

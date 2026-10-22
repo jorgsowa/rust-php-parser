@@ -29,6 +29,7 @@ Visibility of property must not be weaker than set visibility
 Property with asymmetric visibility Test::$e must have type
 'asymmetric visibility' requires PHP 8.4 or higher
 Property with asymmetric visibility Test::$f must have type
+'trailing comma in parameter list' requires PHP 8.0 or higher
 ===errors 8.0-8.3===
 'asymmetric visibility' requires PHP 8.4 or higher
 Property with asymmetric visibility Test::$a must have type

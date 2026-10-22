@@ -14,7 +14,24 @@ class A {
         function g(): static {}
     }
 }
-===errors <=8.0===
+===errors <=7.4===
+'dynamic class constant fetch' requires PHP 8.3 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'static type' requires PHP 8.0 or higher
+Cannot use "self" when no class scope is active
+Cannot use "static" when no class scope is active
+Cannot use "parent" when no class scope is active
+Cannot use "self" when no class scope is active
+Cannot use "static" when no class scope is active
+Cannot use "parent" when no class scope is active
+Cannot use "self" when no class scope is active
+Cannot use "self" when no class scope is active
+Cannot use "static" when no class scope is active
+Cannot use "self" when no class scope is active
+Cannot use "parent" when no class scope is active
+Cannot use "self" when no class scope is active
+Cannot use "static" when no class scope is active
+===errors 8.0===
 'dynamic class constant fetch' requires PHP 8.3 or higher
 'first-class callable syntax' requires PHP 8.1 or higher
 Cannot use "self" when no class scope is active

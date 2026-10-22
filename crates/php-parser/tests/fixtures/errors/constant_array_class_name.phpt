@@ -4,7 +4,13 @@
 [1]::C;
 array(1)::$x;
 [1]::class;
-===errors===
+===errors <=7.4===
+Illegal class name
+Illegal class name
+Illegal class name
+Cannot use "::class" on array
+Cannot use ::class with dynamic class name
+===errors >=8.0===
 Illegal class name
 Illegal class name
 Illegal class name

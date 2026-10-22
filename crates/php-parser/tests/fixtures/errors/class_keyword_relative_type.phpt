@@ -6,6 +6,7 @@ class A {
     function m(): namespace\parent {}
 }
 ===errors <=7.4===
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
 Cannot use "self" when no class scope is active
 Cannot use "static" when no class scope is active

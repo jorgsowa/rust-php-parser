@@ -10,7 +10,20 @@ class A {
     const X = \self::Y;
     function m($a = \self::X) {}
 }
-===errors===
+===errors <=7.4===
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'\self' is an invalid class name
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'\static' is an invalid class name
+'\parent' is an invalid class name
+'\self' is an invalid class name
+'\parent' is an invalid class name
+'\static' is an invalid class name
+'\self' is an invalid class name
+'\parent' is an invalid class name
+'\self' is an invalid class name
+'\self' is an invalid class name
+===errors >=8.0===
 '\self' is an invalid class name
 '\static' is an invalid class name
 '\parent' is an invalid class name

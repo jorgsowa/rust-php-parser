@@ -3,6 +3,9 @@
 ===errors <=7.4===
 'named arguments' requires PHP 8.0 or higher
 'named arguments' requires PHP 8.0 or higher
+'clone function call' requires PHP 8.5 or higher
+===errors 8.0-8.4===
+'clone function call' requires PHP 8.5 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ':' in Standard input code on line 1
 ===php_error 8.0-8.4===

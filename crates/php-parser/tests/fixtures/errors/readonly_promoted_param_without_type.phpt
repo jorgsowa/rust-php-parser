@@ -7,6 +7,7 @@ class Foo {
 }
 ===errors <=7.4===
 'constructor property promotion' requires PHP 8.0 or higher
+'trailing comma in parameter list' requires PHP 8.0 or higher
 ===errors >=8.1===
 readonly promoted property must have type
 ===php_error <=7.4===

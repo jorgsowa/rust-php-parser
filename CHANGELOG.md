@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `LexerErrorKind::UnterminatedComment` for a `/*` or `/**` comment without its `*/` (`php-lexer`).
+
+### Fixed
+
+- Errors that PHP versions older than the latest report but the parser missed (`php-rs-parser`):
+  - PHP 8.0: trailing commas in parameter and closure `use` lists, the `static` type, reserved keywords in namespaced names, `::class` on a non-name, `new (expr)`, `instanceof (expr)`, `->` on constants, `->`/`::` on class constants, and dereferencing magic constants or interpolated strings.
+  - PHP 7.4: chained non-associative comparisons such as `1 < 2 < 3`.
+  - PHP 8.1: a named argument after argument unpacking.
+  - PHP 8.2: `?false` and `false|null`.
+  - PHP 8.3: `new readonly class`.
+  - PHP 8.4: `exit` called with named arguments, unpacking, several arguments, a trailing comma or `...`, and an empty statement before `declare(strict_types=1)`.
+  - PHP 8.5: `clone` called with named arguments, unpacking, more than two arguments or a trailing comma.
+  - Before 8.1, `~1.5` folds to an integer, and before 8.4 `0 ** -1` folds, so both are illegal class names (`(~1.5)::foo()`).
+- Valid PHP 7.4 that the parser rejected (`php-rs-parser`): whitespace inside namespaced names, `implements\A`, `mixed` as a class name, `function match()`, a static magic method other than the constructor, destructor and `__clone`, an unterminated comment, `<?=` as an identifier, and errors inside `#[...]`, which PHP 7.4 reads as a comment.
+
 ## [0.24.1] - 2026-10-21
 
 ### Fixed

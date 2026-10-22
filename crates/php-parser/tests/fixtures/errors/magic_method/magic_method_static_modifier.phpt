@@ -10,7 +10,7 @@ class D {
     static function __callStatic($a, $b) {}
     static function __set_state($a) {}
 }
-===errors===
+===errors >=8.0===
 Method C::__get() cannot be static
 Method C::__invoke() cannot be static
 Method C::__callStatic() must be static

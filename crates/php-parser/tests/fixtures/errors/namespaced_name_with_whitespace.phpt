@@ -5,7 +5,7 @@ Foo \ Bar \ Baz;
 namespace \ Foo();
 new Foo\ Bar;
 function f(): \ A {}
-===errors===
+===errors >=8.0===
 A namespaced name cannot contain whitespace
 A namespaced name cannot contain whitespace
 A namespaced name cannot contain whitespace

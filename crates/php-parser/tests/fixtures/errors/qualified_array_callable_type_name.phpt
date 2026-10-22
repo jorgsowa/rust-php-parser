@@ -3,6 +3,13 @@
 function a(Foo\array $x): Foo\callable {}
 function b(\Foo\array $x, namespace\array $y, namespace\callable $z) {}
 function c(\array $x) {}
+===errors <=7.4===
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
 ===errors >=8.5===
 Cannot use "Foo\array" as a type name as it is reserved
 Cannot use "Foo\callable" as a type name as it is reserved

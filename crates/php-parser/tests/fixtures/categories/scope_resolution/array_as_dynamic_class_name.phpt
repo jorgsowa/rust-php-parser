@@ -7,6 +7,8 @@ array($a)::C;
 [...$a]::foo();
 [A::B]::foo();
 [$a]::{'foo'}();
+===errors <=7.4===
+Cannot use ::class with dynamic class name
 ===php_error <=7.4===
 PHP Fatal error:  Cannot use ::class with dynamic class name in Standard input code on line 5
 ===ast===

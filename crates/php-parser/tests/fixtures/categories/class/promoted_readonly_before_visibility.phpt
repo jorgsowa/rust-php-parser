@@ -14,6 +14,7 @@ class Foo {
 'constructor property promotion' requires PHP 8.0 or higher
 'constructor property promotion' requires PHP 8.0 or higher
 'readonly parameters' requires PHP 8.1 or higher
+'trailing comma in parameter list' requires PHP 8.0 or higher
 ===errors 8.0===
 'readonly parameters' requires PHP 8.1 or higher
 'readonly parameters' requires PHP 8.1 or higher

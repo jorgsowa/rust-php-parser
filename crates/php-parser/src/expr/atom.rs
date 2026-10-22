@@ -916,6 +916,8 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 match parse_arg_list_or_callable(parser) {
                     ArgListResult::CallableMarker => {
                         // exit(...) - first class callable
+                        let span = Span::new(token.span.start, parser.previous_end());
+                        parser.require_version(PhpVersion::Php84, "exit function call", span);
                         let callee = Expr {
                             kind: ExprKind::Name(name_text),
                             span: token.span,
@@ -943,12 +945,20 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                                     .next()
                                     .expect("args.len() == 1 checked above"),
                             );
+                            if has_trailing_comma(src, value.span.end, parser.previous_end()) {
+                                parser.require_version(
+                                    PhpVersion::Php84,
+                                    "exit function call",
+                                    span,
+                                );
+                            }
                             Expr {
                                 kind: ExprKind::Exit(Some(parser.alloc(value))),
                                 span,
                             }
                         } else {
                             // exit(status: 42), exit(...$args), exit($a, $b) - function call form
+                            parser.require_version(PhpVersion::Php84, "exit function call", span);
                             let callee = Expr {
                                 kind: ExprKind::Name(name_text),
                                 span: token.span,
@@ -1019,6 +1029,14 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                                     .next()
                                     .expect("is_simple: args.len() == 1 checked above"),
                             );
+                            // Before 8.5 `clone(...)` is `clone` of a parenthesized expression.
+                            if has_trailing_comma(src, object.span.end, parser.previous_end()) {
+                                parser.require_version(
+                                    PhpVersion::Php85,
+                                    "clone function call",
+                                    span,
+                                );
+                            }
                             if matches!(
                                 parser.current_kind(),
                                 TokenKind::Arrow
@@ -1073,6 +1091,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                             }
                         } else {
                             // 3+ args, named args, or spread — user-defined function named "clone"
+                            parser.require_version(PhpVersion::Php85, "clone function call", span);
                             let callee = Expr {
                                 kind: ExprKind::Name(name_text),
                                 span: token.span,
@@ -1264,7 +1283,12 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
     }
     if parser.check(TokenKind::Class) || anon_readonly {
         if anon_readonly {
-            parser.advance(); // consume 'readonly'
+            let readonly = parser.advance();
+            parser.require_version(
+                PhpVersion::Php83,
+                "readonly anonymous classes",
+                readonly.span,
+            );
         }
         parser.advance(); // consume 'class'
 
@@ -1409,9 +1433,10 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             }
         }
         TokenKind::LeftParen => {
-            // new (expr)() - dynamic class name from expression (PHP 8.1+)
+            // new (expr)() - dynamic class name from expression (PHP 8.0+)
             let paren_start = parser.start_span();
             let open = parser.advance(); // consume (
+            parser.require_version(PhpVersion::Php80, "new with an expression", open.span);
             let inner = parse_expr(parser);
             parser.expect_closing(TokenKind::RightParen, open.span);
             let paren_span = Span::new(paren_start, parser.previous_end());
@@ -1608,6 +1633,12 @@ fn parse_closure_use_list<'arena, 'src>(
     loop {
         // Only a trailing comma may precede `)`; the list itself must not be empty.
         if parser.check(TokenKind::RightParen) && !vars.is_empty() {
+            let comma = Span::new(parser.previous_end() - 1, parser.previous_end());
+            parser.require_version(
+                PhpVersion::Php80,
+                "trailing comma in closure use list",
+                comma,
+            );
             break;
         }
         let var_start = parser.start_span();
@@ -1960,6 +1991,7 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
 
     let mut args = parser.alloc_vec_with_capacity(4);
     let mut seen_named = false;
+    let mut seen_spread = false;
 
     if !parser.check(TokenKind::RightParen) {
         loop {
@@ -1973,6 +2005,13 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
 
             if arg.name.is_some() {
                 seen_named = true;
+                if seen_spread {
+                    parser.require_version(
+                        PhpVersion::Php81,
+                        "named argument after argument unpacking",
+                        arg.span,
+                    );
+                }
             } else if seen_named && !is_rest_placeholder {
                 // Positional argument (including spread) after a named argument
                 parser.error(ParseError::Forbidden {
@@ -1981,6 +2020,7 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
                 });
             }
 
+            seen_spread |= arg.is_spread();
             args.push(arg);
             if parser.eat(TokenKind::Comma).is_none() {
                 break;

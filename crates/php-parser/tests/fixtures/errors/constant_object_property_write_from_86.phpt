@@ -18,7 +18,37 @@ E::A[0] = 1;
 E::class->p = 1;
 __CLASS__->p = 1;
 (new A)->p = 1;
-===errors <=8.2===
+===errors <=7.4===
+'class constant dereferencing' requires PHP 8.0 or higher
+Cannot use temporary expression in write context
+'class constant dereferencing' requires PHP 8.0 or higher
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+'dynamic class constant fetch' requires PHP 8.3 or higher
+Cannot use temporary expression in write context
+'class constant dereferencing' requires PHP 8.0 or higher
+Cannot use temporary expression in write context
+'class constant dereferencing' requires PHP 8.0 or higher
+Cannot use temporary expression in write context
+'class constant dereferencing' requires PHP 8.0 or higher
+Cannot use temporary expression in write context
+'class constant dereferencing' requires PHP 8.0 or higher
+Cannot use temporary expression in write context
+'class constant dereferencing' requires PHP 8.0 or higher
+Assignments can only happen to writable values
+'object access on a constant' requires PHP 8.0 or higher
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+'class constant dereferencing' requires PHP 8.0 or higher
+Cannot use temporary expression in write context
+'magic constant dereferencing' requires PHP 8.0 or higher
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+===errors 8.0-8.2===
 Cannot use temporary expression in write context
 Cannot use temporary expression in write context
 Cannot use temporary expression in write context

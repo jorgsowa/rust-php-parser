@@ -4,6 +4,9 @@
 'false type' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
 'null type' requires PHP 8.0 or higher
+'false as standalone type' requires PHP 8.2 or higher
+===errors 8.0-8.1===
+'false as standalone type' requires PHP 8.2 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '|', expecting '{' in Standard input code on line 1
 ===php_error 8.0-8.1===

@@ -233,6 +233,21 @@ fn starts_intersection_member(kind: TokenKind) -> bool {
     )
 }
 
+/// `?false` or `false|null`, which PHP before 8.2 treats as a standalone `false`.
+fn is_nullable_false(type_hint: &TypeHint<'_, '_>) -> bool {
+    let is = |t: &TypeHint<'_, '_>, b: BuiltinType| matches!(t.kind, TypeHintKind::Keyword(k, _) if k == b);
+    match &type_hint.kind {
+        TypeHintKind::Nullable(inner) => is(inner, BuiltinType::False),
+        TypeHintKind::Union(types) => {
+            types.iter().any(|t| is(t, BuiltinType::False))
+                && types
+                    .iter()
+                    .all(|t| is(t, BuiltinType::False) || is(t, BuiltinType::Null))
+        }
+        _ => false,
+    }
+}
+
 /// PHP's message for a builtin type that must be used alone, as in `?void` or `never|null`.
 fn standalone_type_message(builtin: BuiltinType) -> Option<&'static str> {
     match builtin {
@@ -469,7 +484,22 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         ) {
             self.next.kind = self.versioned_kind(self.next.kind, self.next2.kind);
         }
+        if self.next2.kind == TokenKind::Backslash && self.version < PhpVersion::Php80 {
+            self.next.kind = self.unqualified_kind_before_80(self.next);
+        }
         prev
+    }
+
+    /// Before PHP 8.0 a name is lexed per segment, so the lexer's `keyword\` name segment is a keyword.
+    fn unqualified_kind_before_80(&self, token: Token) -> TokenKind {
+        if token.kind != TokenKind::Identifier {
+            return token.kind;
+        }
+        let text = &self.source[token.span.start as usize..token.span.end as usize];
+        match php_lexer::token::resolve_keyword(text) {
+            Some(kind) if kind != TokenKind::Namespace && is_reserved_before_80(text) => kind,
+            _ => token.kind,
+        }
     }
 
     /// The kind of a keyword token that is a plain name in older versions.
@@ -518,6 +548,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     fn demote_initial_keywords(&mut self) {
         self.current.kind = self.versioned_kind(self.current.kind, self.next.kind);
         self.next.kind = self.versioned_kind(self.next.kind, self.next2.kind);
+        if self.version < PhpVersion::Php80 {
+            if self.next.kind == TokenKind::Backslash {
+                self.current.kind = self.unqualified_kind_before_80(self.current);
+            }
+            if self.next2.kind == TokenKind::Backslash {
+                self.next.kind = self.unqualified_kind_before_80(self.next);
+            }
+        }
     }
 
     /// End offset of the most recently consumed token.
@@ -792,10 +830,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
     pub fn into_errors(mut self) -> Vec<ParseError> {
         self.retract_uncompiled_errors();
+        // PHP 7.4 only warns about an unterminated comment.
+        let comment_error_allowed = self.version >= PhpVersion::Php80;
         let mut errors: Vec<ParseError> = self
             .lexer
             .into_errors()
             .into_iter()
+            .filter(|e| e.kind != LexerErrorKind::UnterminatedComment || comment_error_allowed)
             .map(lex_error_to_parse_error)
             .collect();
         errors.extend(self.errors);
@@ -1098,13 +1139,23 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// Consume the current token as an identifier string, accepting both
     /// Identifier tokens and semi-reserved keywords.
     pub fn eat_identifier_or_keyword(&mut self) -> Option<(&'src str, Span)> {
-        if self.check(TokenKind::Identifier) || self.is_semi_reserved_keyword() {
+        if self.check(TokenKind::Identifier)
+            || self.is_semi_reserved_keyword()
+            || self.short_echo_is_identifier()
+        {
             let token = self.advance();
             let text = &self.source[token.span.start as usize..token.span.end as usize];
             Some((text, token.span))
         } else {
             None
         }
+    }
+
+    /// PHP 7.4 lexes `<?=` as `echo`, a semi-reserved keyword.
+    fn short_echo_is_identifier(&self) -> bool {
+        self.version < PhpVersion::Php80
+            && self.check(TokenKind::OpenTag)
+            && self.source.as_bytes()[self.current.span.start as usize..].starts_with(b"<?=")
     }
 
     /// A name segment after `\`: `__halt_compiler` is only a keyword as a whole token.
@@ -1131,6 +1182,17 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     // =========================================================================
     // Name parsing
     // =========================================================================
+
+    /// Before PHP 8.0 every part of a namespaced name must be a non-reserved word.
+    pub(crate) fn check_name_parts_before_80(&mut self, parts: &[&str], span: Span) {
+        if self.version < PhpVersion::Php80 && parts.iter().any(|p| is_reserved_before_80(p)) {
+            self.require_version(
+                PhpVersion::Php80,
+                "reserved keyword in namespaced name",
+                span,
+            );
+        }
+    }
 
     /// Parse a name: qualified, fully-qualified, relative, or unqualified.
     /// e.g., `Foo`, `Foo\Bar`, `\Foo\Bar`, `namespace\Foo\Bar`
@@ -1203,7 +1265,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
 
         let span = Span::new(start, last_end);
-        if separated_at.is_some() {
+        self.check_name_parts_before_80(&parts, span);
+        if separated_at.is_some() && self.version >= PhpVersion::Php80 {
             self.error(ParseError::Forbidden {
                 message: "A namespaced name cannot contain whitespace".into(),
                 span,
@@ -1250,6 +1313,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// Parse a type hint: `?T`, `A|B`, `A&B`, `(A&B)|C` (DNF), or simple type.
     pub fn parse_type_hint(&mut self) -> TypeHint<'arena, 'src> {
         let type_hint = self.parse_type_hint_unchecked();
+        if self.version < PhpVersion::Php82 && is_nullable_false(&type_hint) {
+            self.require_version(
+                PhpVersion::Php82,
+                "false as standalone type",
+                type_hint.span,
+            );
+        }
         self.check_type_composition(&type_hint);
         self.check_duplicate_types(&type_hint);
         self.check_qualified_type_names(&type_hint);
@@ -1441,6 +1511,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     return;
                 };
                 let message = match builtin {
+                    // Before 8.0 `mixed` is a class name; its version error is enough.
+                    BuiltinType::Mixed if self.version < PhpVersion::Php80 => return,
                     BuiltinType::Mixed => {
                         "Type mixed cannot be marked as nullable since mixed already includes null"
                     }
@@ -2197,6 +2269,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
             TokenKind::Static => {
                 let token = self.advance();
+                self.require_version(PhpVersion::Php80, "static type", token.span);
                 self.has_class_keyword_ref = true;
                 TypeHint {
                     kind: TypeHintKind::Keyword(BuiltinType::Static, token.span),
@@ -2281,6 +2354,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 "attributes",
                 attr_kw_span,
             );
+            let errors_before = self.errors.len();
             let group_len_before = attributes.len();
 
             // Parse comma-separated attributes within this group
@@ -2341,6 +2415,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 });
             }
             self.expect(TokenKind::RightBracket);
+            // Before 8.0 `#[` starts a comment, so only the version error applies.
+            if self.version < PhpVersion::Php80 {
+                self.errors.truncate(errors_before);
+            }
         }
         attributes
     }
@@ -2648,5 +2726,27 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 }
             }
         }
+    }
+}
+
+/// Whether PHP 7.4 lexes `word` as a keyword rather than a name.
+fn is_reserved_before_80(word: &str) -> bool {
+    use php_lexer::token::resolve_keyword;
+    match resolve_keyword(word) {
+        Some(
+            TokenKind::True
+            | TokenKind::False
+            | TokenKind::Null
+            | TokenKind::Self_
+            | TokenKind::Parent_
+            | TokenKind::Enum_
+            | TokenKind::Match_
+            | TokenKind::Readonly
+            | TokenKind::MagicProperty,
+        ) => false,
+        Some(_) => true,
+        None => ["callable", "insteadof", "var"]
+            .iter()
+            .any(|k| word.eq_ignore_ascii_case(k)),
     }
 }

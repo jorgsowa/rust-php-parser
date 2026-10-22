@@ -33,10 +33,7 @@ Constant expression contains invalid operations
 Constant expression contains invalid operations
 'attributes' requires PHP 8.0 or higher
 Constant expression contains invalid operations
-Constant expression contains invalid operations
 'attributes' requires PHP 8.0 or higher
-'named arguments' requires PHP 8.0 or higher
-Constant expression contains invalid operations
 Constant expression contains invalid operations
 Constant expression contains invalid operations
 ===errors 8.0===

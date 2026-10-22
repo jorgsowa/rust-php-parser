@@ -15,8 +15,6 @@ function foo() {}
 'nullsafe operator (?->)' requires PHP 8.0 or higher
 'first-class callable syntax' requires PHP 8.1 or higher
 'attributes' requires PHP 8.0 or higher
-'first-class callable syntax' requires PHP 8.1 or higher
-Cannot create Closure as attribute argument
 ===errors 8.0===
 'first-class callable syntax' requires PHP 8.1 or higher
 'first-class callable syntax' requires PHP 8.1 or higher

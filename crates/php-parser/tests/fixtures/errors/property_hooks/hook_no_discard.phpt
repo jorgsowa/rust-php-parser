@@ -8,7 +8,7 @@ namespace N {
     class A {
         public $b { #[\nodiscard] get => 1; }
         public int $c { #[Keep] set { } }
-        public $d { #[\Override, \NoDiscard] get => 1; }
+        public $d { #[\Deprecated, \NoDiscard] get => 1; }
         public function __construct(public $e { #[\NoDiscard] get => 1; }) {}
     }
 }
@@ -49,8 +49,6 @@ namespace {
 PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 5
 ===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 5
-===php_error 8.4===
-PHP Fatal error:  N\A::$d::get() has #[\Override] attribute, but no matching parent method exists in Standard input code on line 10
 ===php_error >=8.5===
 PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard input code on line 5
 ===ast===
@@ -362,8 +360,8 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                       "Int": 1
                                     },
                                     "span": {
-                                      "start": 266,
-                                      "end": 267
+                                      "start": 268,
+                                      "end": 269
                                     }
                                   }
                                 },
@@ -373,18 +371,18 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                   {
                                     "name": {
                                       "parts": [
-                                        "Override"
+                                        "Deprecated"
                                       ],
                                       "kind": "FullyQualified",
                                       "span": {
                                         "start": 236,
-                                        "end": 245
+                                        "end": 247
                                       }
                                     },
                                     "args": [],
                                     "span": {
                                       "start": 236,
-                                      "end": 245
+                                      "end": 247
                                     }
                                   },
                                   {
@@ -394,20 +392,20 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                       ],
                                       "kind": "FullyQualified",
                                       "span": {
-                                        "start": 247,
-                                        "end": 257
+                                        "start": 249,
+                                        "end": 259
                                       }
                                     },
                                     "args": [],
                                     "span": {
-                                      "start": 247,
-                                      "end": 257
+                                      "start": 249,
+                                      "end": 259
                                     }
                                   }
                                 ],
                                 "span": {
                                   "start": 234,
-                                  "end": 268
+                                  "end": 270
                                 }
                               }
                             ]
@@ -415,7 +413,7 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                         },
                         "span": {
                           "start": 222,
-                          "end": 270
+                          "end": 272
                         }
                       },
                       {
@@ -424,8 +422,8 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                             "name": {
                               "name": "__construct",
                               "span": {
-                                "start": 295,
-                                "end": 306
+                                "start": 297,
+                                "end": 308
                               }
                             },
                             "modifiers": {
@@ -437,8 +435,8 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                 "name": {
                                   "name": "e",
                                   "span": {
-                                    "start": 314,
-                                    "end": 316
+                                    "start": 316,
+                                    "end": 318
                                   }
                                 },
                                 "type_hint": null,
@@ -458,8 +456,8 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                           "Int": 1
                                         },
                                         "span": {
-                                          "start": 340,
-                                          "end": 341
+                                          "start": 342,
+                                          "end": 343
                                         }
                                       }
                                     },
@@ -473,26 +471,26 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                           ],
                                           "kind": "FullyQualified",
                                           "span": {
-                                            "start": 321,
-                                            "end": 331
+                                            "start": 323,
+                                            "end": 333
                                           }
                                         },
                                         "args": [],
                                         "span": {
-                                          "start": 321,
-                                          "end": 331
+                                          "start": 323,
+                                          "end": 333
                                         }
                                       }
                                     ],
                                     "span": {
-                                      "start": 319,
-                                      "end": 342
+                                      "start": 321,
+                                      "end": 344
                                     }
                                   }
                                 ],
                                 "span": {
-                                  "start": 307,
-                                  "end": 344
+                                  "start": 309,
+                                  "end": 346
                                 }
                               }
                             ],
@@ -502,8 +500,8 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                           }
                         },
                         "span": {
-                          "start": 279,
-                          "end": 348
+                          "start": 281,
+                          "end": 350
                         }
                       }
                     ],
@@ -512,7 +510,7 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                 },
                 "span": {
                   "start": 116,
-                  "end": 354
+                  "end": 356
                 }
               }
             ]
@@ -521,7 +519,7 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
       },
       "span": {
         "start": 6,
-        "end": 356
+        "end": 358
       }
     },
     {
@@ -536,8 +534,8 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                     "name": {
                       "name": "B",
                       "span": {
-                        "start": 379,
-                        "end": 380
+                        "start": 381,
+                        "end": 382
                       }
                     },
                     "modifiers": {
@@ -554,8 +552,8 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                             "name": {
                               "name": "f",
                               "span": {
-                                "start": 398,
-                                "end": 400
+                                "start": 400,
+                                "end": 402
                               }
                             },
                             "modifiers": {
@@ -573,8 +571,8 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                       "Int": 1
                                     },
                                     "span": {
-                                      "start": 423,
-                                      "end": 424
+                                      "start": 425,
+                                      "end": 426
                                     }
                                   }
                                 },
@@ -588,28 +586,28 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                       ],
                                       "kind": "Unqualified",
                                       "span": {
-                                        "start": 405,
-                                        "end": 414
+                                        "start": 407,
+                                        "end": 416
                                       }
                                     },
                                     "args": [],
                                     "span": {
-                                      "start": 405,
-                                      "end": 414
+                                      "start": 407,
+                                      "end": 416
                                     }
                                   }
                                 ],
                                 "span": {
-                                  "start": 403,
-                                  "end": 425
+                                  "start": 405,
+                                  "end": 427
                                 }
                               }
                             ]
                           }
                         },
                         "span": {
-                          "start": 391,
-                          "end": 427
+                          "start": 393,
+                          "end": 429
                         }
                       }
                     ],
@@ -617,8 +615,8 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                   }
                 },
                 "span": {
-                  "start": 373,
-                  "end": 433
+                  "start": 375,
+                  "end": 435
                 }
               }
             ]
@@ -626,13 +624,13 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
         }
       },
       "span": {
-        "start": 357,
-        "end": 435
+        "start": 359,
+        "end": 437
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 435
+    "end": 437
   }
 }

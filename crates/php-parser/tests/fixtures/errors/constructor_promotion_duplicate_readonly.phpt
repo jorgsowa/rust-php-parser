@@ -10,6 +10,7 @@ class Foo {
 'readonly parameters' requires PHP 8.1 or higher
 'readonly parameters' requires PHP 8.1 or higher
 duplicate modifier 'readonly'
+'trailing comma in parameter list' requires PHP 8.0 or higher
 ===errors 8.0===
 'readonly parameters' requires PHP 8.1 or higher
 'readonly parameters' requires PHP 8.1 or higher

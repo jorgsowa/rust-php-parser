@@ -1,5 +1,7 @@
 ===source===
 <?php new readonly class {};
+===errors <=8.2===
+'readonly anonymous classes' requires PHP 8.3 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'class' (T_CLASS) in Standard input code on line 1
 ===php_error 8.0===

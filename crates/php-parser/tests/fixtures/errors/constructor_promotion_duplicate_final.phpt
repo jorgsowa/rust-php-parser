@@ -10,6 +10,7 @@ class Foo {
 'final promoted properties' requires PHP 8.5 or higher
 'final promoted properties' requires PHP 8.5 or higher
 duplicate modifier 'final'
+'trailing comma in parameter list' requires PHP 8.0 or higher
 ===errors 8.0-8.4===
 'final promoted properties' requires PHP 8.5 or higher
 'final promoted properties' requires PHP 8.5 or higher

@@ -1,7 +1,10 @@
 ===source===
 <?php
 $a = function() use ($a,,) {};
-===errors===
+===errors <=7.4===
+expected variable, found ','
+'trailing comma in closure use list' requires PHP 8.0 or higher
+===errors >=8.0===
 expected variable, found ','
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ',', expecting '&' or variable (T_VARIABLE) in Standard input code on line 2

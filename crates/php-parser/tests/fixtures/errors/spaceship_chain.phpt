@@ -1,6 +1,6 @@
 ===source===
 <?php $a <=> $b <=> $c;
-===errors >=8.0===
+===errors===
 Chaining non-associative operators requires explicit parentheses.
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '<=>' (T_SPACESHIP) in Standard input code on line 1

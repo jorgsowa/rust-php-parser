@@ -37,6 +37,7 @@ namespace {
 'union types' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
 'false type' requires PHP 8.0 or higher
+'false as standalone type' requires PHP 8.2 or higher
 'true type' requires PHP 8.2 or higher
 'union types' requires PHP 8.0 or higher
 'null type' requires PHP 8.0 or higher
@@ -45,6 +46,7 @@ namespace {
 'intersection types' requires PHP 8.1 or higher
 'intersection types' requires PHP 8.1 or higher
 'DNF types' requires PHP 8.2 or higher
+'static type' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
 'null type' requires PHP 8.0 or higher
 'typed class constants' requires PHP 8.3 or higher
@@ -66,6 +68,7 @@ Type parent cannot be part of an intersection type
 'union types' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
 ===errors 8.0===
+'false as standalone type' requires PHP 8.2 or higher
 'true type' requires PHP 8.2 or higher
 'intersection types' requires PHP 8.1 or higher
 'intersection types' requires PHP 8.1 or higher
@@ -81,6 +84,7 @@ Type self cannot be part of an intersection type
 Type self cannot be part of an intersection type
 Type parent cannot be part of an intersection type
 ===errors 8.1===
+'false as standalone type' requires PHP 8.2 or higher
 'true type' requires PHP 8.2 or higher
 'DNF types' requires PHP 8.2 or higher
 'typed class constants' requires PHP 8.3 or higher

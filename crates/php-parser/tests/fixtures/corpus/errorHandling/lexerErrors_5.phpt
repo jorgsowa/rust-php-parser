@@ -5,7 +5,9 @@ if ($b) {
     $a = 1;
     /* unterminated
 }
-===errors===
+===errors <=7.4===
+expected '}' to close the delimiter opened at byte 15
+===errors >=8.0===
 unterminated block comment
 expected '}' to close the delimiter opened at byte 15
 ===php_error <=7.4===

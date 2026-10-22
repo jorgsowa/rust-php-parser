@@ -35,14 +35,23 @@ $b = new #[AllowDynamicProperties] readonly class {};
 'enums' requires PHP 8.1 or higher
 'attributes' requires PHP 8.0 or higher
 'attributes' requires PHP 8.0 or higher
+'readonly anonymous classes' requires PHP 8.3 or higher
 ===errors 8.0===
 'enums' requires PHP 8.1 or higher
 'enums' requires PHP 8.1 or higher
 'readonly class' requires PHP 8.2 or higher
 'enums' requires PHP 8.1 or higher
+'readonly anonymous classes' requires PHP 8.3 or higher
 ===errors 8.1===
 'readonly class' requires PHP 8.2 or higher
-===errors 8.2-8.3===
+'readonly anonymous classes' requires PHP 8.3 or higher
+===errors 8.2===
+Cannot apply #[\AllowDynamicProperties] to interface J
+Cannot apply #[\AllowDynamicProperties] to trait U
+Cannot apply #[\AllowDynamicProperties] to readonly class R
+'readonly anonymous classes' requires PHP 8.3 or higher
+Cannot apply #[\AllowDynamicProperties] to readonly class class@anonymous
+===errors 8.3===
 Cannot apply #[\AllowDynamicProperties] to interface J
 Cannot apply #[\AllowDynamicProperties] to trait U
 Cannot apply #[\AllowDynamicProperties] to readonly class R

@@ -241,6 +241,18 @@ fn check_dereferencable(parser: &mut Parser<'_, '_>, lhs: &Expr<'_, '_>, op: Tok
             message: "Cannot dereference this expression".into(),
             span: lhs.span,
         });
+    } else if parser.version < PhpVersion::Php80 {
+        let object_access = matches!(op, TokenKind::Arrow | TokenKind::NullsafeArrow);
+        let feature = match lhs.kind {
+            ExprKind::Name(_) if object_access => "object access on a constant",
+            ExprKind::ClassConstAccess(_) if object_access || op == TokenKind::DoubleColon => {
+                "class constant dereferencing"
+            }
+            ExprKind::MagicConst(_) => "magic constant dereferencing",
+            ExprKind::InterpolatedString(_) => "interpolated string dereferencing",
+            _ => return,
+        };
+        parser.require_version(PhpVersion::Php80, feature, lhs.span);
     }
 }
 
@@ -272,7 +284,7 @@ fn is_new_variable(expr: &Expr<'_, '_>) -> bool {
 
 /// Report a class reference PHP folds to a value that is not a string, such as `(1)::A`.
 pub(crate) fn check_class_name_literal(parser: &mut Parser<'_, '_>, class: &Expr<'_, '_>) {
-    if is_literal(class) && literal_is_string(class) == Some(false) {
+    if is_literal(class) && literal_is_string(class, parser.version) == Some(false) {
         parser.error(ParseError::Forbidden {
             message: "Illegal class name".into(),
             span: class.span,
@@ -297,8 +309,8 @@ fn check_class_name_fetch_literal(parser: &mut Parser<'_, '_>, class: &Expr<'_, 
 }
 
 /// Whether a literal expression folds to a string, when that is known without evaluating it.
-fn literal_is_string(expr: &Expr<'_, '_>) -> Option<bool> {
-    folded_type(expr).map(|t| matches!(t, Folded::Str { .. }))
+fn literal_is_string(expr: &Expr<'_, '_>, version: PhpVersion) -> Option<bool> {
+    folded_type(expr, version).map(|t| matches!(t, Folded::Str { .. }))
 }
 
 /// The type PHP folds a literal expression to.
@@ -322,14 +334,15 @@ impl Folded {
     }
 
     /// Whether integer operations on this operand fold without a deprecation for a lost fraction.
-    fn is_integral(self) -> bool {
+    fn is_integral(self, version: PhpVersion) -> bool {
         matches!(self, Folded::Int | Folded::Bool | Folded::Null)
+            || (matches!(self, Folded::Number) && version < PhpVersion::Php81)
     }
 }
 
 /// The folded type of `expr`, or `None` when it is unknown or PHP leaves the expression to run
 /// time because folding it would raise an error or a diagnostic.
-fn folded_type(expr: &Expr<'_, '_>) -> Option<Folded> {
+fn folded_type(expr: &Expr<'_, '_>, version: PhpVersion) -> Option<Folded> {
     let non_negative_int =
         |e: &Expr<'_, '_>| matches!(unparenthesized(e).kind, ExprKind::Int(n) if n >= 0);
     let folded = match &expr.kind {
@@ -345,9 +358,9 @@ fn folded_type(expr: &Expr<'_, '_>) -> Option<Folded> {
         ExprKind::Bool(_) => Folded::Bool,
         ExprKind::Null => Folded::Null,
         ExprKind::Array(_) => Folded::Array,
-        ExprKind::Parenthesized(inner) => return folded_type(inner),
+        ExprKind::Parenthesized(inner) => return folded_type(inner, version),
         ExprKind::UnaryPrefix(u) => {
-            let operand = folded_type(u.operand)?;
+            let operand = folded_type(u.operand, version)?;
             match u.op {
                 UnaryPrefixOp::BooleanNot => Folded::Bool,
                 UnaryPrefixOp::Negate | UnaryPrefixOp::Plus if operand.is_arithmetic() => {
@@ -356,13 +369,17 @@ fn folded_type(expr: &Expr<'_, '_>) -> Option<Folded> {
                 UnaryPrefixOp::BitwiseNot => match operand {
                     Folded::Str { .. } => Folded::Str { numeric: false },
                     Folded::Int => Folded::Int,
+                    Folded::Number if version < PhpVersion::Php81 => Folded::Int,
                     _ => return None,
                 },
                 _ => return None,
             }
         }
         ExprKind::Binary(b) => {
-            let (left, right) = (folded_type(b.left)?, folded_type(b.right)?);
+            let (left, right) = (
+                folded_type(b.left, version)?,
+                folded_type(b.right, version)?,
+            );
             match b.op {
                 BinaryOp::Concat
                     if !matches!(left, Folded::Array) && !matches!(right, Folded::Array) =>
@@ -377,23 +394,23 @@ fn folded_type(expr: &Expr<'_, '_>) -> Option<Folded> {
                 {
                     Folded::Number
                 }
-                // `0 ** -1` is deprecated, so only a non-negative exponent always folds.
+                // Since 8.4 `0 ** -1` is deprecated, so only a non-negative exponent always folds.
                 BinaryOp::Pow
                     if left.is_arithmetic()
                         && right.is_arithmetic()
-                        && non_negative_int(b.right) =>
+                        && (version < PhpVersion::Php84 || non_negative_int(b.right)) =>
                 {
                     Folded::Number
                 }
                 BinaryOp::ShiftLeft | BinaryOp::ShiftRight
-                    if left.is_integral() && non_negative_int(b.right) =>
+                    if left.is_integral(version) && non_negative_int(b.right) =>
                 {
                     Folded::Int
                 }
                 BinaryOp::BitwiseAnd | BinaryOp::BitwiseOr | BinaryOp::BitwiseXor => {
                     match (left, right) {
                         (Folded::Str { .. }, Folded::Str { .. }) => Folded::Str { numeric: false },
-                        _ if left.is_integral() && right.is_integral() => Folded::Int,
+                        _ if left.is_integral(version) && right.is_integral(version) => Folded::Int,
                         _ => return None,
                     }
                 }
@@ -1809,6 +1826,12 @@ fn parse_expr_rest<'arena, 'src>(
                 }
             } else if parser.check(TokenKind::Class) {
                 // Special: Class::class (class name resolution)
+                if parser.version < PhpVersion::Php80 && !matches!(lhs.kind, ExprKind::Name(_)) {
+                    parser.error(ParseError::Forbidden {
+                        message: "Cannot use ::class with dynamic class name".into(),
+                        span: lhs.span,
+                    });
+                }
                 let token = parser.advance();
                 let span = Span::new(lhs.span.start, token.span.end);
                 lhs = Expr {
@@ -1940,7 +1963,10 @@ fn parse_expr_rest<'arena, 'src>(
                 });
             } else if matches!(
                 lhs.kind,
-                ExprKind::Name(_) | ExprKind::ClassConstAccess(_) | ExprKind::MagicConst(_)
+                ExprKind::Name(_)
+                    | ExprKind::ClassConstAccess(_)
+                    | ExprKind::MagicConst(_)
+                    | ExprKind::InterpolatedString(_)
             ) {
                 parser.error(ParseError::Expected {
                     expected: "';'".into(),
@@ -1974,22 +2000,20 @@ fn parse_expr_rest<'arena, 'src>(
             if left_bp < min_bp {
                 break;
             }
-            // PHP 8.0+: chaining non-associative operators within the same precedence group
-            // is a fatal error (e.g. `1 < 2 < 3`, `$a === $b == $c`).
+            // Chaining non-associative operators within the same precedence group
+            // is a syntax error (e.g. `1 < 2 < 3`, `$a === $b == $c`).
             // Cross-group chains (e.g. `$a > $b == $c`) and instanceof chains are
             // allowed by PHP and must not be flagged here.
-            if parser.version >= PhpVersion::Php80 {
-                if let Some(current_level) = nonassoc_chain_level_for_token(kind) {
-                    if matches!(&lhs.kind, ExprKind::Binary(b) if nonassoc_chain_level_for_op(b.op) == Some(current_level))
-                    {
-                        let span = parser.current_span();
-                        parser.error(ParseError::Forbidden {
-                            message:
-                                "Chaining non-associative operators requires explicit parentheses."
-                                    .into(),
-                            span,
-                        });
-                    }
+            if let Some(current_level) = nonassoc_chain_level_for_token(kind) {
+                if matches!(&lhs.kind, ExprKind::Binary(b) if nonassoc_chain_level_for_op(b.op) == Some(current_level))
+                {
+                    let span = parser.current_span();
+                    parser.error(ParseError::Forbidden {
+                        message:
+                            "Chaining non-associative operators requires explicit parentheses."
+                                .into(),
+                        span,
+                    });
                 }
             }
             let op_token = parser.advance();
@@ -2017,6 +2041,10 @@ fn parse_expr_rest<'arena, 'src>(
                 (BinaryOp::BooleanOr | BinaryOp::LogicalOr, Some(truth)) => truth,
                 _ => false,
             };
+            if op == BinaryOp::Instanceof && parser.check(TokenKind::LeftParen) {
+                let span = parser.current_span();
+                parser.require_version(PhpVersion::Php80, "instanceof with an expression", span);
+            }
             // `instanceof static` names the class; `static` is no expression on its own.
             let instanceof_static = op == BinaryOp::Instanceof
                 && parser.check(TokenKind::Static)

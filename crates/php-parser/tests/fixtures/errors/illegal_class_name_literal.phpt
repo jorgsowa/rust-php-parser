@@ -17,7 +17,33 @@ $a instanceof (1 . 2 + 3);
 (false)::class;
 ([])::class;
 const A = (1)::BAR;
-===errors===
+===errors <=7.4===
+Illegal class name
+Illegal class name
+Illegal class name
+Illegal class name
+Illegal class name
+Illegal class name
+Illegal class name
+'new with an expression' requires PHP 8.0 or higher
+Illegal class name
+'new with an expression' requires PHP 8.0 or higher
+Illegal class name
+'instanceof with an expression' requires PHP 8.0 or higher
+Illegal class name
+'instanceof with an expression' requires PHP 8.0 or higher
+Illegal class name
+Cannot use ::class with dynamic class name
+Cannot use "::class" on null
+Cannot use ::class with dynamic class name
+Cannot use "::class" on true
+Cannot use ::class with dynamic class name
+Cannot use "::class" on false
+Cannot use ::class with dynamic class name
+Cannot use "::class" on array
+Cannot use ::class with dynamic class name
+Illegal class name
+===errors >=8.0===
 Illegal class name
 Illegal class name
 Illegal class name

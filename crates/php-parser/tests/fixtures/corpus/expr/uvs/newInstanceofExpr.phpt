@@ -4,6 +4,10 @@
 new ('Foo' . $bar);
 new ('Foo' . $bar)($arg);
 $obj instanceof ('Foo' . $bar);
+===errors <=7.4===
+'new with an expression' requires PHP 8.0 or higher
+'new with an expression' requires PHP 8.0 or higher
+'instanceof with an expression' requires PHP 8.0 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '(' in Standard input code on line 3
 ===ast===

@@ -9,6 +9,9 @@ X)[0];
 $a = "a$b"[0];
 $a = "a"->b;
 $a = "a$b"::C;
+===errors <=7.4===
+'interpolated string dereferencing' requires PHP 8.0 or higher
+'interpolated string dereferencing' requires PHP 8.0 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '[' in Standard input code on line 8
 ===ast===

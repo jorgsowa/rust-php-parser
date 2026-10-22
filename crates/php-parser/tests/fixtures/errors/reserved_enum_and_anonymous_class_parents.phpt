@@ -5,7 +5,16 @@ enum F implements I, \parent {}
 new class extends self {};
 new class extends \static {};
 new class implements I, parent {};
-===errors <=8.0===
+===errors <=7.4===
+'enums' requires PHP 8.1 or higher
+Cannot use "self" as interface name, as it is reserved
+'enums' requires PHP 8.1 or higher
+'\parent' is an invalid class name
+Cannot use "self" as class name, as it is reserved
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'\static' is an invalid class name
+Cannot use "parent" as interface name, as it is reserved
+===errors 8.0===
 'enums' requires PHP 8.1 or higher
 Cannot use "self" as interface name, as it is reserved
 'enums' requires PHP 8.1 or higher

@@ -1,6 +1,6 @@
 ===source===
 <?php $x = 1; /* this comment is never closed
-===errors===
+===errors >=8.0===
 unterminated block comment
 ===php_error >=8.0===
 PHP Parse error:  Unterminated comment starting line 1 in Standard input code on line 1

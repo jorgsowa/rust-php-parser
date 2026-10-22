@@ -58,7 +58,9 @@ pub enum LexerErrorKind {
     UnterminatedString,
     /// The source file exceeds the maximum supported size (2^32 bytes).
     FileTooLarge,
-    /// Any other lexer-level error (e.g. unterminated block comment, invalid numeric literal).
+    /// The lexer reached end-of-file inside a `/* */` or `/** */` comment.
+    UnterminatedComment,
+    /// Any other lexer-level error (e.g. invalid numeric literal).
     Other,
 }
 
@@ -610,7 +612,7 @@ impl<'src> Lexer<'src> {
                 None => {
                     let span = Span::new(start as u32, self.source.len() as u32);
                     self.errors.push(LexerError {
-                        kind: LexerErrorKind::Other,
+                        kind: LexerErrorKind::UnterminatedComment,
                         message: "unterminated block comment".to_string(),
                         span,
                     });

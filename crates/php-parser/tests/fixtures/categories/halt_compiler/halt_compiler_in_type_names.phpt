@@ -5,8 +5,14 @@ function f(\__halt_compiler $a, X\__halt_compiler|null $b): \__halt_compiler\T {
 try {} catch (A\__halt_compiler $e) {}
 echo 1;
 ===errors <=7.4===
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
 'null type' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '__halt_compiler' (T_HALT_COMPILER), expecting identifier (T_STRING) in Standard input code on line 2
 ===ast===

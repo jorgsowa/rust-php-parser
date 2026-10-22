@@ -6,7 +6,12 @@ namespace M {
 namespace {
     function f(namespace\Foo\int $a, namespace\iterable $b) {}
 }
-===errors <=8.4===
+===errors <=7.4===
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+Cannot use "Foo\int" as a type name as it is reserved
+Type declaration 'iterable' must be unqualified
+Cannot use "self" when no class scope is active
+===errors 8.0-8.4===
 Cannot use "Foo\int" as a type name as it is reserved
 Type declaration 'iterable' must be unqualified
 Cannot use "self" when no class scope is active

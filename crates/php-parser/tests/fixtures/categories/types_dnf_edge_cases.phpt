@@ -140,6 +140,7 @@ function test25(iterable|A $x) {}
 'union types' requires PHP 8.0 or higher
 'intersection types' requires PHP 8.1 or higher
 'DNF types' requires PHP 8.2 or higher
+'static type' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher

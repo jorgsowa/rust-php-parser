@@ -13,17 +13,25 @@ foreach ($x as OBJ->a) {}
 [OBJ->a] = [1];
 OBJ?->a = 1;
 ===errors <=7.4===
+'object access on a constant' requires PHP 8.0 or higher
+Cannot use temporary expression in write context
+'class constant dereferencing' requires PHP 8.0 or higher
 Cannot use temporary expression in write context
 Cannot use temporary expression in write context
 Cannot use temporary expression in write context
 Cannot use temporary expression in write context
 Cannot use temporary expression in write context
+'object access on a constant' requires PHP 8.0 or higher
 Cannot use temporary expression in write context
+'object access on a constant' requires PHP 8.0 or higher
 Cannot use temporary expression in write context
+'object access on a constant' requires PHP 8.0 or higher
 Cannot use temporary expression in write context
+'object access on a constant' requires PHP 8.0 or higher
 Cannot use temporary expression in write context
-Cannot use temporary expression in write context
+'object access on a constant' requires PHP 8.0 or higher
 Assignments can only happen to writable values
+'object access on a constant' requires PHP 8.0 or higher
 'nullsafe operator (?->)' requires PHP 8.0 or higher
 Can't use nullsafe operator in write context
 ===errors 8.0-8.5===

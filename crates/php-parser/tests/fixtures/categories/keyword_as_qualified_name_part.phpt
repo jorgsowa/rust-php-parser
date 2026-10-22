@@ -4,9 +4,102 @@ class\Foo::x();
 function\bar();
 new list\Item;
 namespace\Foo::X;
+===errors <=7.4===
+expected class name, found '\'
+expected '{', found '\'
+expected class member, found '::'
+expected method name, found '\'
+expected '(', found '\'
+expected variable, found '('
+expected ')', found '('
+expected ';', found '('
+expected 'function' or 'const', found '('
+expected identifier, found ')'
+expected '&', found ')'
+expected class member, found ';'
+expected class member, found 'new'
+expected 'function' or 'const', found 'namespace'
+expected class member, found '::'
+expected '}', found end of file
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '\' (T_NS_SEPARATOR), expecting identifier (T_STRING) in Standard input code on line 2
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": null,
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": null,
+                  "by_ref": false,
+                  "params": [
+                    {
+                      "name": null,
+                      "type_hint": {
+                        "kind": {
+                          "Named": {
+                            "parts": [
+                              "bar"
+                            ],
+                            "kind": "FullyQualified",
+                            "span": {
+                              "start": 30,
+                              "end": 34
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 30,
+                          "end": 34
+                        }
+                      },
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "attributes": [],
+                      "span": {
+                        "start": 30,
+                        "end": 34
+                      }
+                    }
+                  ],
+                  "return_type": null,
+                  "body": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 22,
+                "end": 34
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 70
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 70
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

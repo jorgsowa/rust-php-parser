@@ -7,6 +7,8 @@ $x = $a instanceof B::$c[0] ** 2;
 $x = $a instanceof (B) ** 2;
 $x = $a instanceof B * 2;
 $x = 2 ** $a instanceof B;
+===errors <=7.4===
+'instanceof with an expression' requires PHP 8.0 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '(' in Standard input code on line 6
 ===ast===

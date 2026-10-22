@@ -2,8 +2,6 @@
 <?php #[Assert\Range(min: 1, max: 100)] class Foo {}
 ===errors <=7.4===
 'attributes' requires PHP 8.0 or higher
-'named arguments' requires PHP 8.0 or higher
-'named arguments' requires PHP 8.0 or higher
 ===ast===
 {
   "stmts": [

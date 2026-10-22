@@ -1,5 +1,7 @@
 ===source===
 <?php class Foo { public function bar(): static {} }
+===errors <=7.4===
+'static type' requires PHP 8.0 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'static' (T_STATIC) in Standard input code on line 1
 ===ast===

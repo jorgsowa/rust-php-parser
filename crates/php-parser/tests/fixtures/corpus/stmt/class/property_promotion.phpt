@@ -23,6 +23,7 @@ class Point {
 'constructor property promotion' requires PHP 8.0 or higher
 'property hooks' requires PHP 8.4 or higher
 'final promoted properties' requires PHP 8.5 or higher
+'trailing comma in parameter list' requires PHP 8.0 or higher
 ===errors 8.0===
 'readonly parameters' requires PHP 8.1 or higher
 'property hooks' requires PHP 8.4 or higher

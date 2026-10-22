@@ -1,7 +1,10 @@
 ===source===
 <?php
 __DIR__::class;
-===errors===
+===errors <=7.4===
+Cannot dereference this expression
+Cannot use ::class with dynamic class name
+===errors >=8.0===
 Cannot dereference this expression
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '::' (T_PAAMAYIM_NEKUDOTAYIM) in Standard input code on line 2

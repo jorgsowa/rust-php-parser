@@ -16,6 +16,7 @@ readonly class Value {
 'readonly class' requires PHP 8.2 or higher
 'constructor property promotion' requires PHP 8.0 or higher
 'constructor property promotion' requires PHP 8.0 or higher
+'trailing comma in parameter list' requires PHP 8.0 or higher
 ===errors 8.0-8.1===
 'readonly class' requires PHP 8.2 or higher
 ===php_error <=7.4===

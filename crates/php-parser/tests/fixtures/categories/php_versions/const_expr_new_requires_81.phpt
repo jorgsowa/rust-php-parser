@@ -6,7 +6,6 @@ function g() {}
 ===errors <=7.4===
 'new in initializers' requires PHP 8.1 or higher
 'attributes' requires PHP 8.0 or higher
-'new in initializers' requires PHP 8.1 or higher
 ===errors 8.0===
 'new in initializers' requires PHP 8.1 or higher
 'new in initializers' requires PHP 8.1 or higher

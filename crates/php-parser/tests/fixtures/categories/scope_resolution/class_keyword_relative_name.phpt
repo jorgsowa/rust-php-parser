@@ -12,6 +12,10 @@ class A extends B {
 trait T {
     function m(): namespace\parent {}
 }
+===errors <=7.4===
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
 ===errors >=8.6===
 Type declaration 'static' must be unqualified
 ===php_error <=7.4===

@@ -16,28 +16,49 @@ clone(...["object" => $x, "withProperties" => [ "foo" => $foo, "bar" => $bar ]])
 clone(...);
 ===errors <=7.4===
 cannot use 'clone' as function name; it is reserved
+'clone function call' requires PHP 8.5 or higher
 'clone with property overrides' requires PHP 8.5 or higher
 'clone with property overrides' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
 'named arguments' requires PHP 8.0 or higher
 'named arguments' requires PHP 8.0 or higher
+'clone function call' requires PHP 8.5 or higher
 'named arguments' requires PHP 8.0 or higher
+'clone function call' requires PHP 8.5 or higher
 'named arguments' requires PHP 8.0 or higher
+'clone function call' requires PHP 8.5 or higher
 'named arguments' requires PHP 8.0 or higher
 cannot use positional argument after named argument
+'clone function call' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
 'first-class callable syntax' requires PHP 8.1 or higher
 'clone(...) first-class callable' requires PHP 8.5 or higher
 ===errors 8.0===
 cannot use 'clone' as function name; it is reserved
+'clone function call' requires PHP 8.5 or higher
 'clone with property overrides' requires PHP 8.5 or higher
 'clone with property overrides' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
 cannot use positional argument after named argument
+'clone function call' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
 'first-class callable syntax' requires PHP 8.1 or higher
 'clone(...) first-class callable' requires PHP 8.5 or higher
 ===errors 8.1-8.4===
 cannot use 'clone' as function name; it is reserved
+'clone function call' requires PHP 8.5 or higher
 'clone with property overrides' requires PHP 8.5 or higher
 'clone with property overrides' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
 cannot use positional argument after named argument
+'clone function call' requires PHP 8.5 or higher
+'clone function call' requires PHP 8.5 or higher
 'clone(...) first-class callable' requires PHP 8.5 or higher
 ===errors >=8.5===
 cannot use 'clone' as function name; it is reserved

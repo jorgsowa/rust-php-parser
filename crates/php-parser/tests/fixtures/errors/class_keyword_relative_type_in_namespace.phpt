@@ -3,7 +3,12 @@
 namespace N;
 function f(): ?namespace\self {}
 function g(namespace\array $a, Foo\int $b, \Foo\Array $c) {}
-===errors <=8.4===
+===errors <=7.4===
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+Cannot use "N\Foo\int" as a type name as it is reserved
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+Cannot use "self" when no class scope is active
+===errors 8.0-8.4===
 Cannot use "N\Foo\int" as a type name as it is reserved
 Cannot use "self" when no class scope is active
 ===errors >=8.5===

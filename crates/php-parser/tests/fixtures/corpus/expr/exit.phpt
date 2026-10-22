@@ -15,9 +15,26 @@ exit(...);
 DIE($a, $b);
 ===errors <=7.4===
 'named arguments' requires PHP 8.0 or higher
+'exit function call' requires PHP 8.4 or higher
+'exit function call' requires PHP 8.4 or higher
+'exit function call' requires PHP 8.4 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
 'first-class callable syntax' requires PHP 8.1 or higher
+'exit function call' requires PHP 8.4 or higher
+'exit function call' requires PHP 8.4 or higher
 ===errors 8.0===
+'exit function call' requires PHP 8.4 or higher
+'exit function call' requires PHP 8.4 or higher
+'exit function call' requires PHP 8.4 or higher
 'first-class callable syntax' requires PHP 8.1 or higher
+'exit function call' requires PHP 8.4 or higher
+'exit function call' requires PHP 8.4 or higher
+===errors 8.1-8.3===
+'exit function call' requires PHP 8.4 or higher
+'exit function call' requires PHP 8.4 or higher
+'exit function call' requires PHP 8.4 or higher
+'exit function call' requires PHP 8.4 or higher
+'exit function call' requires PHP 8.4 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ':', expecting ')' in Standard input code on line 9
 ===php_error 8.0-8.3===

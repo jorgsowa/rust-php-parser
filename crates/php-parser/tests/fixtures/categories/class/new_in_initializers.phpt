@@ -28,7 +28,6 @@ New expressions are not supported in this context
 'attributes' requires PHP 8.0 or higher
 'new in initializers' requires PHP 8.1 or higher
 'new in initializers' requires PHP 8.1 or higher
-'new in initializers' requires PHP 8.1 or higher
 ===errors 8.0===
 'new in initializers' requires PHP 8.1 or higher
 'new in initializers' requires PHP 8.1 or higher

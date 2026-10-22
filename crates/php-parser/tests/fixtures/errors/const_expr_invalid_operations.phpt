@@ -36,6 +36,7 @@ Cannot use isset() on the result of an expression (you can use "null !== express
 Constant expression contains invalid operations
 'pipe operator (|>)' requires PHP 8.5 or higher
 Constant expression contains invalid operations
+'class constant dereferencing' requires PHP 8.0 or higher
 Constant expression contains invalid operations
 Constant expression contains invalid operations
 'match expressions' requires PHP 8.0 or higher
@@ -48,6 +49,7 @@ Constant expression contains invalid operations
 Constant expression contains invalid operations
 Constant expression contains invalid operations
 Constant expression contains invalid operations
+'class constant dereferencing' requires PHP 8.0 or higher
 'property fetch in constant expressions' requires PHP 8.2 or higher
 'first-class callable syntax' requires PHP 8.1 or higher
 'first-class callables in constant expressions' requires PHP 8.5 or higher

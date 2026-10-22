@@ -44,6 +44,7 @@ A::__set(): Return type must be void when declared
 'null type' requires PHP 8.0 or higher
 'null as standalone type' requires PHP 8.2 or higher
 'union types' requires PHP 8.0 or higher
+'static type' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
 'intersection types' requires PHP 8.1 or higher
 'DNF types' requires PHP 8.2 or higher

@@ -6,7 +6,11 @@ class C {
         int $x = 1 { get => 1; },
     ) {}
 }
-===errors <=8.3===
+===errors <=7.4===
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'trailing comma in parameter list' requires PHP 8.0 or higher
+===errors 8.0-8.3===
 'property hooks' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
 ===php_error <=7.4===

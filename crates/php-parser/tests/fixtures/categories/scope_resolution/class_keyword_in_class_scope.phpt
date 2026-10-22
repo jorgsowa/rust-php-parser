@@ -23,7 +23,11 @@ function f() {
         }
     };
 }
-===errors <=8.0===
+===errors <=7.4===
+'static type' requires PHP 8.0 or higher
+'static type' requires PHP 8.0 or higher
+'enums' requires PHP 8.1 or higher
+===errors 8.0===
 'enums' requires PHP 8.1 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'static' (T_STATIC) in Standard input code on line 5

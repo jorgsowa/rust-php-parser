@@ -8,6 +8,14 @@ $a = new \__halt_compiler;
 $b = \__halt_compiler\X::y;
 $c = $a instanceof Foo\__halt_compiler;
 echo 1;
+===errors <=7.4===
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '__halt_compiler' (T_HALT_COMPILER), expecting identifier (T_STRING) in Standard input code on line 2
 ===ast===

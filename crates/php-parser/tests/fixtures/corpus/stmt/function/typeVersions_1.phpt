@@ -15,6 +15,7 @@ function test2(): never {} // PHP 8.1
 'null as standalone type' requires PHP 8.2 or higher
 'false type' requires PHP 8.0 or higher
 'false as standalone type' requires PHP 8.2 or higher
+'trailing comma in parameter list' requires PHP 8.0 or higher
 ===errors 8.0-8.1===
 'null as standalone type' requires PHP 8.2 or higher
 'false as standalone type' requires PHP 8.2 or higher

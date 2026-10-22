@@ -26,6 +26,7 @@ Type self|object contains both object and a class type, which is redundant
 'union types' requires PHP 8.0 or higher
 Type parent|object contains both object and a class type, which is redundant
 'union types' requires PHP 8.0 or higher
+'static type' requires PHP 8.0 or higher
 Type static|object contains both object and a class type, which is redundant
 ===errors 8.0===
 Type A|object contains both object and a class type, which is redundant

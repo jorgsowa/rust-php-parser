@@ -36,7 +36,9 @@ A::__serialize(): Return type must be array when declared
 A::__unserialize(): Return type must be void when declared
 A::__set_state(): Return type must be object when declared
 A::__sleep(): Return type must be array when declared
+'static type' requires PHP 8.0 or higher
 A::__wakeup(): Return type must be void when declared
+'static type' requires PHP 8.0 or higher
 B::__toString(): Return type must be string when declared
 'union types' requires PHP 8.0 or higher
 C::__toString(): Return type must be string when declared

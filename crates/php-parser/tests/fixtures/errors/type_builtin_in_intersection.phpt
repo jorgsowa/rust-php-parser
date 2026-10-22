@@ -50,6 +50,7 @@ Type void cannot be part of an intersection type
 'intersection types' requires PHP 8.1 or higher
 'true type' requires PHP 8.2 or higher
 Type true cannot be part of an intersection type
+'static type' requires PHP 8.0 or higher
 'intersection types' requires PHP 8.1 or higher
 Type static cannot be part of an intersection type
 'intersection types' requires PHP 8.1 or higher

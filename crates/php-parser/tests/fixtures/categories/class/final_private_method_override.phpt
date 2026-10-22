@@ -1,15 +1,13 @@
 ===source===
 <?php
-class A {
-    private function normalPrivate() {}
-    final private function finalPrivate() {}
-}
 class B extends A {
     private function normalPrivate() {}
     final private function finalPrivate() {}
 }
-===php_error <=7.4===
-PHP Fatal error:  Cannot override final method A::finalPrivate() in Standard input code on line 8
+class A {
+    private function normalPrivate() {}
+    final private function finalPrivate() {}
+}
 ===ast===
 {
   "stmts": [
@@ -17,7 +15,7 @@ PHP Fatal error:  Cannot override final method A::finalPrivate() in Standard inp
       "kind": {
         "Class": {
           "name": {
-            "name": "A",
+            "name": "B",
             "span": {
               "start": 12,
               "end": 13
@@ -28,7 +26,16 @@ PHP Fatal error:  Cannot override final method A::finalPrivate() in Standard inp
             "is_final": false,
             "is_readonly": false
           },
-          "extends": null,
+          "extends": {
+            "parts": [
+              "A"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 22,
+              "end": 23
+            }
+          },
           "implements": [],
           "members": [
             {
@@ -37,8 +44,8 @@ PHP Fatal error:  Cannot override final method A::finalPrivate() in Standard inp
                   "name": {
                     "name": "normalPrivate",
                     "span": {
-                      "start": 37,
-                      "end": 50
+                      "start": 47,
+                      "end": 60
                     }
                   },
                   "modifiers": {
@@ -52,8 +59,8 @@ PHP Fatal error:  Cannot override final method A::finalPrivate() in Standard inp
                 }
               },
               "span": {
-                "start": 20,
-                "end": 55
+                "start": 30,
+                "end": 65
               }
             },
             {
@@ -62,8 +69,8 @@ PHP Fatal error:  Cannot override final method A::finalPrivate() in Standard inp
                   "name": {
                     "name": "finalPrivate",
                     "span": {
-                      "start": 83,
-                      "end": 95
+                      "start": 93,
+                      "end": 105
                     }
                   },
                   "modifiers": {
@@ -78,8 +85,8 @@ PHP Fatal error:  Cannot override final method A::finalPrivate() in Standard inp
                 }
               },
               "span": {
-                "start": 60,
-                "end": 100
+                "start": 70,
+                "end": 110
               }
             }
           ],
@@ -88,17 +95,17 @@ PHP Fatal error:  Cannot override final method A::finalPrivate() in Standard inp
       },
       "span": {
         "start": 6,
-        "end": 102
+        "end": 112
       }
     },
     {
       "kind": {
         "Class": {
           "name": {
-            "name": "B",
+            "name": "A",
             "span": {
-              "start": 109,
-              "end": 110
+              "start": 119,
+              "end": 120
             }
           },
           "modifiers": {
@@ -106,16 +113,7 @@ PHP Fatal error:  Cannot override final method A::finalPrivate() in Standard inp
             "is_final": false,
             "is_readonly": false
           },
-          "extends": {
-            "parts": [
-              "A"
-            ],
-            "kind": "Unqualified",
-            "span": {
-              "start": 119,
-              "end": 120
-            }
-          },
+          "extends": null,
           "implements": [],
           "members": [
             {
@@ -174,7 +172,7 @@ PHP Fatal error:  Cannot override final method A::finalPrivate() in Standard inp
         }
       },
       "span": {
-        "start": 103,
+        "start": 113,
         "end": 209
       }
     }

@@ -28,6 +28,7 @@ Readonly property cannot have default value
 'readonly parameters' requires PHP 8.1 or higher
 'property hooks' requires PHP 8.4 or higher
 A readonly property cannot declare hooks
+'trailing comma in parameter list' requires PHP 8.0 or higher
 'readonly class' requires PHP 8.2 or higher
 'property hooks' requires PHP 8.4 or higher
 'constructor property promotion' requires PHP 8.0 or higher
@@ -37,6 +38,7 @@ Readonly property cannot have default value
 static properties cannot be readonly
 A readonly property cannot declare hooks
 A readonly property cannot declare hooks
+'readonly anonymous classes' requires PHP 8.3 or higher
 Readonly property cannot have default value
 ===errors 8.0===
 'readonly properties' requires PHP 8.1 or higher
@@ -54,6 +56,7 @@ Readonly property cannot have default value
 static properties cannot be readonly
 A readonly property cannot declare hooks
 A readonly property cannot declare hooks
+'readonly anonymous classes' requires PHP 8.3 or higher
 Readonly property cannot have default value
 ===errors 8.1===
 Readonly property cannot have default value
@@ -70,8 +73,25 @@ Readonly property cannot have default value
 static properties cannot be readonly
 A readonly property cannot declare hooks
 A readonly property cannot declare hooks
+'readonly anonymous classes' requires PHP 8.3 or higher
 Readonly property cannot have default value
-===errors 8.2-8.3===
+===errors 8.2===
+Readonly property cannot have default value
+Readonly property cannot have default value
+readonly promoted property must have type
+'property hooks' requires PHP 8.4 or higher
+A readonly property cannot declare hooks
+'property hooks' requires PHP 8.4 or higher
+readonly property must have type
+'property hooks' requires PHP 8.4 or higher
+readonly promoted property must have type
+Readonly property cannot have default value
+static properties cannot be readonly
+A readonly property cannot declare hooks
+A readonly property cannot declare hooks
+'readonly anonymous classes' requires PHP 8.3 or higher
+Readonly property cannot have default value
+===errors 8.3===
 Readonly property cannot have default value
 Readonly property cannot have default value
 readonly promoted property must have type

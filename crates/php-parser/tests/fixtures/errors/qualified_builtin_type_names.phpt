@@ -8,6 +8,8 @@ Type declaration 'int' must be unqualified
 Type declaration 'string' must be unqualified
 Type declaration 'void' must be unqualified
 Cannot use "Foo\int" as a type name as it is reserved
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
 Type declaration 'iterable' must be unqualified

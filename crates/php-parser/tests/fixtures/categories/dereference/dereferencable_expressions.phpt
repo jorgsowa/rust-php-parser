@@ -12,6 +12,10 @@ A::B::C;
 print(1)[0];
 ===errors <=7.4===
 'match expressions' requires PHP 8.0 or higher
+'interpolated string dereferencing' requires PHP 8.0 or higher
+'magic constant dereferencing' requires PHP 8.0 or higher
+'object access on a constant' requires PHP 8.0 or higher
+'class constant dereferencing' requires PHP 8.0 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'default' (T_DEFAULT) in Standard input code on line 2
 ===ast===

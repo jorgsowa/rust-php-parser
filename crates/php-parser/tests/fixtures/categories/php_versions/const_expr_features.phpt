@@ -5,7 +5,15 @@ const B = strlen(...);
 const C = (int) "1";
 const D = E::A->value;
 function f($a = new Foo) {}
-===errors <=8.0===
+===errors <=7.4===
+'closures in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'class constant dereferencing' requires PHP 8.0 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'new in initializers' requires PHP 8.1 or higher
+===errors 8.0===
 'closures in constant expressions' requires PHP 8.5 or higher
 'first-class callable syntax' requires PHP 8.1 or higher
 'first-class callables in constant expressions' requires PHP 8.5 or higher

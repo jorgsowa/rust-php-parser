@@ -9,9 +9,12 @@ array_map(callback: fn($x) => $x * 2, array: $arr);
 'named arguments' requires PHP 8.0 or higher
 'named arguments' requires PHP 8.0 or higher
 'named arguments' requires PHP 8.0 or higher
+'named argument after argument unpacking' requires PHP 8.1 or higher
 'named arguments' requires PHP 8.0 or higher
 'named arguments' requires PHP 8.0 or higher
 'named arguments' requires PHP 8.0 or higher
+===errors 8.0===
+'named argument after argument unpacking' requires PHP 8.1 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ':', expecting ')' in Standard input code on line 2
 ===php_error 8.0===

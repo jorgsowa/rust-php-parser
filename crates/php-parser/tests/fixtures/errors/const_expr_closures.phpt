@@ -14,7 +14,6 @@ function f() {}
 'closures in constant expressions' requires PHP 8.5 or higher
 'closures in constant expressions' requires PHP 8.5 or higher
 'attributes' requires PHP 8.0 or higher
-'closures in constant expressions' requires PHP 8.5 or higher
 ===errors 8.0-8.4===
 'closures in constant expressions' requires PHP 8.5 or higher
 'closures in constant expressions' requires PHP 8.5 or higher

@@ -9,6 +9,7 @@ class Foo {
 'constructor property promotion' requires PHP 8.0 or higher
 'constructor property promotion' requires PHP 8.0 or higher
 cannot use multiple visibility modifiers
+'trailing comma in parameter list' requires PHP 8.0 or higher
 ===errors >=8.0===
 cannot use multiple visibility modifiers
 ===php_error <=7.4===

@@ -10,7 +10,19 @@ class Foo {
     public $g = static::BAR;
     public function m($h = static::class) {}
 }
-===errors <=8.2===
+===errors <=7.4===
+Dynamic class names are not allowed in compile-time class constant references
+'dynamic class constant fetch' requires PHP 8.3 or higher
+Dynamic class names are not allowed in compile-time class constant references
+Cannot use ::class with dynamic class name
+(expression)::class cannot be used in constant expressions
+"static::" is not allowed in compile-time constants
+'dynamic class constant fetch' requires PHP 8.3 or higher
+"static::" is not allowed in compile-time constants
+"static::" is not allowed in compile-time constants
+static::class cannot be used for compile-time class name resolution
+static::class cannot be used for compile-time class name resolution
+===errors 8.0-8.2===
 Dynamic class names are not allowed in compile-time class constant references
 'dynamic class constant fetch' requires PHP 8.3 or higher
 Dynamic class names are not allowed in compile-time class constant references

@@ -3,7 +3,9 @@
 const A = E::A->value;
 const B = E::A?->value;
 ===errors <=7.4===
+'class constant dereferencing' requires PHP 8.0 or higher
 'property fetch in constant expressions' requires PHP 8.2 or higher
+'class constant dereferencing' requires PHP 8.0 or higher
 'nullsafe operator (?->)' requires PHP 8.0 or higher
 'property fetch in constant expressions' requires PHP 8.2 or higher
 ===errors 8.0-8.1===
