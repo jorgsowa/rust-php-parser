@@ -170,6 +170,7 @@ pub(crate) fn check_special_variable_write(
         ExprKind::Variable(name) => match (name.as_str(), kind) {
             ("this", WriteKind::Assign) => "Cannot re-assign $this",
             ("this", WriteKind::Unset) => "Cannot unset $this",
+            ("GLOBALS", _) if parser.version < PhpVersion::Php81 => return,
             ("GLOBALS", WriteKind::Reference) => "Cannot acquire reference to $GLOBALS",
             ("GLOBALS", _) => {
                 "$GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax"

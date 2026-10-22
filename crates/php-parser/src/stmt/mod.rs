@@ -3289,11 +3289,17 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         read: Vec<Span>,
         unset: Vec<Span>,
         globals_append: Vec<Span>,
+        /// Whether `$GLOBALS` itself may not be written, as from PHP 8.1.
+        globals_read_only: bool,
         /// Whether each enclosing function returns by reference, which makes its
         /// `return` and `yield` values writes.
         by_ref: Vec<bool>,
     }
     impl EmptyDims {
+        fn is_globals(&self, expr: &Expr<'_, '_>) -> bool {
+            self.globals_read_only && is_globals(expr)
+        }
+
         fn returned(&mut self, value: &Expr<'_, '_>) {
             if self.by_ref.last() == Some(&true) {
                 self.write(value);
@@ -3305,7 +3311,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         fn write(&mut self, expr: &Expr<'_, '_>) {
             match &expr.kind {
                 ExprKind::ArrayAccess(a) => {
-                    if a.index.is_none() && is_globals(a.array) {
+                    if a.index.is_none() && self.is_globals(a.array) {
                         self.globals_append.push(expr.span);
                     }
                     self.write(a.array);
@@ -3429,7 +3435,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
                         Some(index) => {
                             let _ = self.visit_expr(index);
                         }
-                        None if !outermost && is_globals(a.array) => {
+                        None if !outermost && self.is_globals(a.array) => {
                             self.globals_append.push(expr.span)
                         }
                         None => self.unset.push(expr.span),
@@ -3506,7 +3512,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
                 | ExprKind::Heredoc { .. }
                 | ExprKind::ShellExec(_) => {}
                 ExprKind::ArrayAccess(a) if a.index.is_none() => {
-                    if is_globals(a.array) {
+                    if self.is_globals(a.array) {
                         self.globals_append.push(expr.span);
                     } else {
                         self.read.push(expr.span);
@@ -3610,6 +3616,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         read: Vec::new(),
         unset: Vec::new(),
         globals_append: Vec::new(),
+        globals_read_only: parser.version >= PhpVersion::Php81,
         by_ref: Vec::new(),
     };
     for stmt in stmts {
