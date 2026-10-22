@@ -1,15 +1,49 @@
 ===source===
 <?php class A { #[Attr] public private(set) ?int $a = 1, $b; }
 ===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'asymmetric visibility' requires PHP 8.4 or higher
+expected '}', found end of file
 ===errors 8.0-8.3===
 'asymmetric visibility' requires PHP 8.4 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 1
 ===php_error 8.0-8.3===
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 1
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 15
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 15
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

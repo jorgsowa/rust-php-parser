@@ -5,19 +5,6 @@
 #[DelayedTargetValidation] #[AllowDynamicProperties] readonly class R {}
 #[DelayedTargetValidation] #[Attribute] abstract class A {}
 #[DelayedTargetValidation] #[Deprecated] enum E {}
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'readonly class' requires PHP 8.2 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'enums' requires PHP 8.1 or higher
 ===errors 8.0===
 'readonly class' requires PHP 8.2 or higher
 'enums' requires PHP 8.1 or higher
@@ -37,7 +24,15 @@ PHP Parse error:  syntax error, unexpected token "readonly" in Standard input co
 PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to readonly class R in Standard input code on line 4
 ===php_error 8.4===
 PHP Fatal error:  Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant) in Standard input code on line 3
-===ast===
+===ast <=7.4===
+{
+  "stmts": [],
+  "span": {
+    "start": 0,
+    "end": 296
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

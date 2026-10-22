@@ -17,25 +17,9 @@
 $a = new #[Deprecated] class {};
 $b = new #[AllowDynamicProperties] readonly class {};
 ===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'enums' requires PHP 8.1 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'enums' requires PHP 8.1 or higher
-'attributes' requires PHP 8.0 or higher
-'readonly class' requires PHP 8.2 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'enums' requires PHP 8.1 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'readonly anonymous classes' requires PHP 8.3 or higher
+Cannot use expression as assignment target.
+expected identifier, found end of file
+expected ';' after expression
 ===errors 8.0===
 'enums' requires PHP 8.1 or higher
 'enums' requires PHP 8.1 or higher
@@ -96,7 +80,93 @@ PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to interface in Standar
 PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to interface J in Standard input code on line 6
 ===php_error >=8.5===
 PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input code on line 2
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "a"
+                },
+                "span": {
+                  "start": 386,
+                  "end": 388
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Assign": {
+                    "target": {
+                      "kind": {
+                        "New": {
+                          "class": {
+                            "kind": {
+                              "Variable": "b"
+                            },
+                            "span": {
+                              "start": 419,
+                              "end": 421
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 391,
+                        "end": 421
+                      }
+                    },
+                    "op": "Assign",
+                    "value": {
+                      "kind": {
+                        "New": {
+                          "class": {
+                            "kind": "Error",
+                            "span": {
+                              "start": 472,
+                              "end": 472
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 424,
+                        "end": 427
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 391,
+                  "end": 427
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 386,
+            "end": 427
+          }
+        }
+      },
+      "span": {
+        "start": 386,
+        "end": 427
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 427
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

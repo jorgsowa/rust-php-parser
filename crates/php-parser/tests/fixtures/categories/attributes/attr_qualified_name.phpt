@@ -1,8 +1,14 @@
 ===source===
 <?php #[\App\Attr] function foo() {}
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-===ast===
+===ast <=7.4===
+{
+  "stmts": [],
+  "span": {
+    "start": 0,
+    "end": 36
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

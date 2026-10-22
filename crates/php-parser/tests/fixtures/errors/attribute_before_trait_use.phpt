@@ -2,8 +2,7 @@
 <?php
 class C { #[A] use T; }
 ===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-expected 'function' or 'const', found 'use'
+expected '}', found end of file
 ===errors >=8.0===
 expected 'function' or 'const', found 'use'
 ===php_error <=7.4===
@@ -12,7 +11,42 @@ PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FU
 PHP Parse error:  syntax error, unexpected token "use", expecting "function" or "const" in Standard input code on line 2
 ===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected token "use", expecting "function" in Standard input code on line 2
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 15
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 15
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

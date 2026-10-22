@@ -2,14 +2,44 @@
 <?php enum Suit { #[Description('Hearts')] case Hearts; }
 ===errors <=7.4===
 'enums' requires PHP 8.1 or higher
-'attributes' requires PHP 8.0 or higher
+expected '}', found end of file
 ===errors 8.0===
 'enums' requires PHP 8.1 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'Suit' (T_STRING) in Standard input code on line 1
 ===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "Suit" in Standard input code on line 1
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Enum": {
+          "name": {
+            "name": "Suit",
+            "span": {
+              "start": 11,
+              "end": 15
+            }
+          },
+          "scalar_type": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 17
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 17
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

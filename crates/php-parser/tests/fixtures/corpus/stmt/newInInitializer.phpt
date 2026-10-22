@@ -16,7 +16,6 @@ class Bar {
 'new in initializers' requires PHP 8.1 or higher
 'new in initializers' requires PHP 8.1 or higher
 'new in initializers' requires PHP 8.1 or higher
-'attributes' requires PHP 8.0 or higher
 New expressions are not supported in this context
 New expressions are not supported in this context
 ===errors 8.0===
@@ -33,7 +32,316 @@ New expressions are not supported in this context
 PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 3
 ===php_error >=8.1===
 PHP Fatal error:  New expressions are not supported in this context in Standard input code on line 11
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": {
+              "name": "C",
+              "span": {
+                "start": 13,
+                "end": 14
+              }
+            },
+            "value": {
+              "kind": {
+                "New": {
+                  "class": {
+                    "kind": {
+                      "Name": {
+                        "parts": [
+                          "Foo"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 21,
+                          "end": 24
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 21,
+                      "end": 24
+                    }
+                  },
+                  "args": []
+                }
+              },
+              "span": {
+                "start": 17,
+                "end": 24
+              }
+            },
+            "attributes": [],
+            "span": {
+              "start": 13,
+              "end": 24
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 7,
+        "end": 25
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": {
+            "name": "a",
+            "span": {
+              "start": 36,
+              "end": 37
+            }
+          },
+          "params": [
+            {
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 38,
+                  "end": 40
+                }
+              },
+              "type_hint": null,
+              "default": {
+                "kind": {
+                  "New": {
+                    "class": {
+                      "kind": {
+                        "Name": {
+                          "parts": [
+                            "Foo"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 47,
+                            "end": 50
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 47,
+                        "end": 50
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 43,
+                  "end": 50
+                }
+              },
+              "by_ref": false,
+              "variadic": false,
+              "attributes": [],
+              "span": {
+                "start": 38,
+                "end": 50
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "StaticVar": [
+                  {
+                    "name": {
+                      "name": "y",
+                      "span": {
+                        "start": 65,
+                        "end": 67
+                      }
+                    },
+                    "default": {
+                      "kind": {
+                        "New": {
+                          "class": {
+                            "kind": {
+                              "Name": {
+                                "parts": [
+                                  "Foo"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 74,
+                                  "end": 77
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 74,
+                              "end": 77
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 70,
+                        "end": 77
+                      }
+                    },
+                    "span": {
+                      "start": 65,
+                      "end": 77
+                    }
+                  }
+                ]
+              },
+              "span": {
+                "start": 58,
+                "end": 78
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 27,
+        "end": 80
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "Bar",
+            "span": {
+              "start": 105,
+              "end": 108
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "ClassConst": {
+                  "name": {
+                    "name": "C",
+                    "span": {
+                      "start": 121,
+                      "end": 122
+                    }
+                  },
+                  "value": {
+                    "kind": {
+                      "New": {
+                        "class": {
+                          "kind": {
+                            "Name": {
+                              "parts": [
+                                "Foo"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 129,
+                                "end": 132
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 129,
+                            "end": 132
+                          }
+                        },
+                        "args": []
+                      }
+                    },
+                    "span": {
+                      "start": 125,
+                      "end": 132
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 115,
+                "end": 133
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 145,
+                      "end": 150
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "type_hint": null,
+                  "default": {
+                    "kind": {
+                      "New": {
+                        "class": {
+                          "kind": {
+                            "Name": {
+                              "parts": [
+                                "Foo"
+                              ],
+                              "kind": "Unqualified",
+                              "span": {
+                                "start": 157,
+                                "end": 160
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 157,
+                            "end": 160
+                          }
+                        },
+                        "args": []
+                      }
+                    },
+                    "span": {
+                      "start": 153,
+                      "end": 160
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 138,
+                "end": 160
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 99,
+        "end": 163
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 163
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

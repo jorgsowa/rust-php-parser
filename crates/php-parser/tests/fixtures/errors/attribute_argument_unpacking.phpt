@@ -4,15 +4,69 @@
 function f() {}
 #[Attr(1, ...[2])]
 class C {}
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
 ===errors >=8.0===
 Cannot use unpacking in attribute argument list
 Cannot use unpacking in attribute argument list
 ===php_error >=8.0===
 PHP Fatal error:  Cannot use unpacking in attribute argument list in Standard input code on line 3
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": {
+            "name": "f",
+            "span": {
+              "start": 30,
+              "end": 31
+            }
+          },
+          "params": [],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 21,
+        "end": 36
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 62,
+              "end": 63
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 56,
+        "end": 66
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 66
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

@@ -50,26 +50,551 @@ enum Color {
     case Blue;
 }
 ===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
+missing closing ')'
+expected '{', found ';'
 'enums' requires PHP 8.1 or higher
-'attributes' requires PHP 8.0 or higher
+missing closing '}'
 ===errors 8.0===
 'enums' requires PHP 8.1 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ';', expecting ')' in Standard input code on line 42
 ===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "enum" in Standard input code on line 46
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": {
+            "name": "add",
+            "span": {
+              "start": 56,
+              "end": 59
+            }
+          },
+          "params": [
+            {
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 64,
+                  "end": 66
+                }
+              },
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "int"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 60,
+                      "end": 63
+                    }
+                  }
+                },
+                "span": {
+                  "start": 60,
+                  "end": 63
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "attributes": [],
+              "span": {
+                "start": 60,
+                "end": 66
+              }
+            },
+            {
+              "name": {
+                "name": "b",
+                "span": {
+                  "start": 72,
+                  "end": 74
+                }
+              },
+              "type_hint": {
+                "kind": {
+                  "Named": {
+                    "parts": [
+                      "int"
+                    ],
+                    "kind": "Unqualified",
+                    "span": {
+                      "start": 68,
+                      "end": 71
+                    }
+                  }
+                },
+                "span": {
+                  "start": 68,
+                  "end": 71
+                }
+              },
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "attributes": [],
+              "span": {
+                "start": 68,
+                "end": 74
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "Return": {
+                  "kind": {
+                    "Binary": {
+                      "left": {
+                        "kind": {
+                          "Variable": "a"
+                        },
+                        "span": {
+                          "start": 94,
+                          "end": 96
+                        }
+                      },
+                      "op": "Add",
+                      "right": {
+                        "kind": {
+                          "Variable": "b"
+                        },
+                        "span": {
+                          "start": 99,
+                          "end": 101
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 94,
+                    "end": 101
+                  }
+                }
+              },
+              "span": {
+                "start": 87,
+                "end": 102
+              }
+            }
+          ],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "int"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 77,
+                  "end": 80
+                }
+              }
+            },
+            "span": {
+              "start": 77,
+              "end": 80
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 47,
+        "end": 104
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": {
+            "name": "listUsers",
+            "span": {
+              "start": 192,
+              "end": 201
+            }
+          },
+          "params": [],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 183,
+        "end": 206
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 253,
+              "end": 256
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 247,
+        "end": 259
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "Bar",
+            "span": {
+              "start": 317,
+              "end": 320
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 311,
+        "end": 323
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "User",
+            "span": {
+              "start": 362,
+              "end": 366
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 409,
+                      "end": 414
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "string"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 402,
+                          "end": 408
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 402,
+                      "end": 408
+                    }
+                  },
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 395,
+                "end": 414
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": {
+                    "name": "id",
+                    "span": {
+                      "start": 465,
+                      "end": 468
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Private"
+                  },
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "int"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 461,
+                          "end": 464
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 461,
+                      "end": 464
+                    }
+                  },
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 453,
+                "end": 468
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 534,
+                      "end": 538
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "string"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 542,
+                          "end": 548
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 542,
+                      "end": 548
+                    }
+                  },
+                  "body": [
+                    {
+                      "kind": {
+                        "Return": {
+                          "kind": {
+                            "PropertyAccess": {
+                              "object": {
+                                "kind": {
+                                  "Variable": "this"
+                                },
+                                "span": {
+                                  "start": 566,
+                                  "end": 571
+                                }
+                              },
+                              "property": {
+                                "kind": {
+                                  "Identifier": "name"
+                                },
+                                "span": {
+                                  "start": 573,
+                                  "end": 577
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 566,
+                            "end": 577
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 559,
+                        "end": 578
+                      }
+                    }
+                  ],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 518,
+                "end": 584
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 356,
+        "end": 586
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": {
+            "name": "greet",
+            "span": {
+              "start": 623,
+              "end": 628
+            }
+          },
+          "params": [
+            {
+              "name": {
+                "name": "x",
+                "span": {
+                  "start": 708,
+                  "end": 710
+                }
+              },
+              "type_hint": null,
+              "default": {
+                "kind": {
+                  "Int": 1
+                },
+                "span": {
+                  "start": 713,
+                  "end": 714
+                }
+              },
+              "by_ref": false,
+              "variadic": false,
+              "attributes": [],
+              "span": {
+                "start": 708,
+                "end": 714
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": "Nop",
+              "span": {
+                "start": 714,
+                "end": 715
+              }
+            },
+            {
+              "kind": {
+                "Enum": {
+                  "name": {
+                    "name": "Color",
+                    "span": {
+                      "start": 755,
+                      "end": 760
+                    }
+                  },
+                  "scalar_type": null,
+                  "implements": [],
+                  "members": [
+                    {
+                      "kind": {
+                        "Case": {
+                          "name": {
+                            "name": "Red",
+                            "span": {
+                              "start": 788,
+                              "end": 791
+                            }
+                          },
+                          "value": null,
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 783,
+                        "end": 792
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Case": {
+                          "name": {
+                            "name": "Blue",
+                            "span": {
+                              "start": 802,
+                              "end": 806
+                            }
+                          },
+                          "value": null,
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 797,
+                        "end": 807
+                      }
+                    }
+                  ],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 750,
+                "end": 809
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 614,
+        "end": 809
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 809
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

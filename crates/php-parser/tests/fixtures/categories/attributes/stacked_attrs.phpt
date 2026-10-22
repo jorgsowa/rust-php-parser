@@ -1,10 +1,14 @@
 ===source===
 <?php #[A] #[B] #[C] class Foo {}
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-===ast===
+===ast <=7.4===
+{
+  "stmts": [],
+  "span": {
+    "start": 0,
+    "end": 33
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

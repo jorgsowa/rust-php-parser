@@ -8,17 +8,90 @@ class C {
 }
 ===errors <=7.4===
 'property hooks' requires PHP 8.4 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
+Property hook list must not be empty
 ===errors 8.0-8.3===
 'property hooks' requires PHP 8.4 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 3
 ===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": {
+                    "name": "h",
+                    "span": {
+                      "start": 34,
+                      "end": 36
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "string"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 27,
+                          "end": 33
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 27,
+                      "end": 33
+                    }
+                  },
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 20,
+                "end": 173
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 175
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 175
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

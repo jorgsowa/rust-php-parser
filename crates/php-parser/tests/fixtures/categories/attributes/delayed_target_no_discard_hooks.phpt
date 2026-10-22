@@ -13,21 +13,314 @@ class DemoClass {
 }
 
 $hook = new ReflectionProperty('DemoClass', 'hooked')->getHook(PropertyHookType::Get);
-===errors <=7.4===
-'property hooks' requires PHP 8.4 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
-===errors 8.0-8.3===
+===errors <=8.3===
 'property hooks' requires PHP 8.4 or higher
 'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 4
 ===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 4
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "DemoClass",
+            "span": {
+              "start": 13,
+              "end": 22
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": {
+                    "name": "hooked",
+                    "span": {
+                      "start": 40,
+                      "end": 47
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "string"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 33,
+                          "end": 39
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 33,
+                      "end": 39
+                    }
+                  },
+                  "default": null,
+                  "attributes": [],
+                  "hooks": [
+                    {
+                      "kind": "Get",
+                      "body": {
+                        "Expression": {
+                          "kind": {
+                            "PropertyAccess": {
+                              "object": {
+                                "kind": {
+                                  "Variable": "this"
+                                },
+                                "span": {
+                                  "start": 124,
+                                  "end": 129
+                                }
+                              },
+                              "property": {
+                                "kind": {
+                                  "Identifier": "hooked"
+                                },
+                                "span": {
+                                  "start": 131,
+                                  "end": 137
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 124,
+                            "end": 137
+                          }
+                        }
+                      },
+                      "by_ref": false,
+                      "params": [],
+                      "attributes": [],
+                      "span": {
+                        "start": 117,
+                        "end": 138
+                      }
+                    },
+                    {
+                      "kind": "Set",
+                      "body": {
+                        "Expression": {
+                          "kind": {
+                            "Variable": "value"
+                          },
+                          "span": {
+                            "start": 213,
+                            "end": 219
+                          }
+                        }
+                      },
+                      "by_ref": false,
+                      "params": [],
+                      "attributes": [],
+                      "span": {
+                        "start": 206,
+                        "end": 220
+                      }
+                    }
+                  ]
+                }
+              },
+              "span": {
+                "start": 26,
+                "end": 223
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 7,
+        "end": 225
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "hook"
+                },
+                "span": {
+                  "start": 227,
+                  "end": 232
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "MethodCall": {
+                    "object": {
+                      "kind": {
+                        "New": {
+                          "class": {
+                            "kind": {
+                              "Name": {
+                                "parts": [
+                                  "ReflectionProperty"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 239,
+                                  "end": 257
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 239,
+                              "end": 257
+                            }
+                          },
+                          "args": [
+                            {
+                              "name": null,
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "String": "DemoClass"
+                                  },
+                                  "span": {
+                                    "start": 258,
+                                    "end": 269
+                                  }
+                                }
+                              },
+                              "span": {
+                                "start": 258,
+                                "end": 269
+                              }
+                            },
+                            {
+                              "name": null,
+                              "kind": {
+                                "Value": {
+                                  "kind": {
+                                    "String": "hooked"
+                                  },
+                                  "span": {
+                                    "start": 271,
+                                    "end": 279
+                                  }
+                                }
+                              },
+                              "span": {
+                                "start": 271,
+                                "end": 279
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "span": {
+                        "start": 235,
+                        "end": 280
+                      }
+                    },
+                    "method": {
+                      "kind": {
+                        "Identifier": "getHook"
+                      },
+                      "span": {
+                        "start": 282,
+                        "end": 289
+                      }
+                    },
+                    "args": [
+                      {
+                        "name": null,
+                        "kind": {
+                          "Value": {
+                            "kind": {
+                              "ClassConstAccess": {
+                                "class": {
+                                  "kind": {
+                                    "Name": {
+                                      "parts": [
+                                        "PropertyHookType"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 290,
+                                        "end": 306
+                                      }
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 290,
+                                    "end": 306
+                                  }
+                                },
+                                "member": {
+                                  "kind": {
+                                    "Identifier": "Get"
+                                  },
+                                  "span": {
+                                    "start": 308,
+                                    "end": 311
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 290,
+                              "end": 311
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 290,
+                          "end": 311
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 235,
+                  "end": 312
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 227,
+            "end": 312
+          }
+        }
+      },
+      "span": {
+        "start": 227,
+        "end": 313
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 313
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

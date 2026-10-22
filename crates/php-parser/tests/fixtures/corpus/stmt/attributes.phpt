@@ -30,21 +30,286 @@ $y = #[A11] fn() => 0;
 $a = #[A12] static function() {};
 $b = #[A13] static fn() => 0;
 ===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'trailing comma in parameter list' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
+expected ';' after expression
+expected expression, found ','
+expected expression, found end of file
+expected ';' after expression
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ',' in Standard input code on line 4
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Name": {
+              "parts": [
+                "A1"
+              ],
+              "kind": "Unqualified",
+              "span": {
+                "start": 14,
+                "end": 16
+              }
+            }
+          },
+          "span": {
+            "start": 14,
+            "end": 16
+          }
+        }
+      },
+      "span": {
+        "start": 14,
+        "end": 16
+      }
+    },
+    {
+      "kind": "Error",
+      "span": {
+        "start": 16,
+        "end": 54
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": {
+            "name": "a",
+            "span": {
+              "start": 64,
+              "end": 65
+            }
+          },
+          "params": [],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 55,
+        "end": 71
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 85,
+              "end": 86
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": {
+                    "name": "m",
+                    "span": {
+                      "start": 119,
+                      "end": 120
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": null,
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 103,
+                "end": 152
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": {
+                    "name": "prop",
+                    "span": {
+                      "start": 175,
+                      "end": 180
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "type_hint": null,
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 168,
+                "end": 180
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 79,
+        "end": 183
+      }
+    },
+    {
+      "kind": {
+        "Interface": {
+          "name": {
+            "name": "I",
+            "span": {
+              "start": 201,
+              "end": 202
+            }
+          },
+          "extends": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 191,
+        "end": 205
+      }
+    },
+    {
+      "kind": {
+        "Trait": {
+          "name": {
+            "name": "T",
+            "span": {
+              "start": 218,
+              "end": 219
+            }
+          },
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 212,
+        "end": 222
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 224,
+                  "end": 226
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Assign": {
+                    "target": {
+                      "kind": {
+                        "Variable": "y"
+                      },
+                      "span": {
+                        "start": 251,
+                        "end": 253
+                      }
+                    },
+                    "op": "Assign",
+                    "value": {
+                      "kind": {
+                        "Assign": {
+                          "target": {
+                            "kind": {
+                              "Variable": "a"
+                            },
+                            "span": {
+                              "start": 274,
+                              "end": 276
+                            }
+                          },
+                          "op": "Assign",
+                          "value": {
+                            "kind": {
+                              "Assign": {
+                                "target": {
+                                  "kind": {
+                                    "Variable": "b"
+                                  },
+                                  "span": {
+                                    "start": 308,
+                                    "end": 310
+                                  }
+                                },
+                                "op": "Assign",
+                                "value": {
+                                  "kind": "Error",
+                                  "span": {
+                                    "start": 337,
+                                    "end": 337
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 308,
+                              "end": 337
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 274,
+                        "end": 337
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 251,
+                  "end": 337
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 224,
+            "end": 337
+          }
+        }
+      },
+      "span": {
+        "start": 224,
+        "end": 312
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 312
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

@@ -13,19 +13,10 @@ class D {
 function h(#[SensitiveParameter, SensitiveParameter] $a) {}
 #[\Attribute, ATTRIBUTE] class E {}
 ===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
+expected variable, found end of file
+missing closing ')'
+expected '{', found end of file
+missing closing '}'
 ===errors 8.0===
 Attribute "Attribute" must not be repeated
 Attribute "Attribute" must not be repeated
@@ -66,7 +57,77 @@ Attribute "ATTRIBUTE" must not be repeated
 PHP Parse error:  syntax error, unexpected end of file, expecting variable (T_VARIABLE) in Standard input code on line 11
 ===php_error >=8.0===
 PHP Fatal error:  Attribute "Attribute" must not be repeated in Standard input code on line 2
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "D",
+            "span": {
+              "start": 257,
+              "end": 258
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 251,
+        "end": 383
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": {
+            "name": "h",
+            "span": {
+              "start": 393,
+              "end": 394
+            }
+          },
+          "params": [
+            {
+              "name": null,
+              "type_hint": null,
+              "default": null,
+              "by_ref": false,
+              "variadic": false,
+              "attributes": [],
+              "span": {
+                "start": 479,
+                "end": 395
+              }
+            }
+          ],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 384,
+        "end": 395
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 395
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

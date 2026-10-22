@@ -16,13 +16,7 @@ abstract class Foo {
         set(int $value) { $this->attr_prop = $value; }
     }
 }
-===errors <=7.4===
-'property hooks' requires PHP 8.4 or higher
-'property hooks' requires PHP 8.4 or higher
-'property hooks' requires PHP 8.4 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-===errors 8.0-8.3===
+===errors <=8.3===
 'property hooks' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
@@ -32,7 +26,492 @@ PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error 8.3===
 PHP Fatal error:  Cannot use the abstract modifier on a property in Standard input code on line 3
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 21,
+              "end": 24
+            }
+          },
+          "modifiers": {
+            "is_abstract": true,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": {
+                    "name": "abstract_prop",
+                    "span": {
+                      "start": 51,
+                      "end": 65
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public",
+                    "is_abstract": true
+                  },
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "int"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 47,
+                          "end": 50
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 47,
+                      "end": 50
+                    }
+                  },
+                  "default": null,
+                  "attributes": [],
+                  "hooks": [
+                    {
+                      "kind": "Get",
+                      "body": "Abstract",
+                      "by_ref": false,
+                      "params": [],
+                      "attributes": [],
+                      "span": {
+                        "start": 76,
+                        "end": 80
+                      }
+                    },
+                    {
+                      "kind": "Set",
+                      "body": "Abstract",
+                      "by_ref": false,
+                      "params": [],
+                      "attributes": [],
+                      "span": {
+                        "start": 89,
+                        "end": 93
+                      }
+                    }
+                  ]
+                }
+              },
+              "span": {
+                "start": 31,
+                "end": 99
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": {
+                    "name": "final_prop",
+                    "span": {
+                      "start": 115,
+                      "end": 126
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "int"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 111,
+                          "end": 114
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 111,
+                      "end": 114
+                    }
+                  },
+                  "default": null,
+                  "attributes": [],
+                  "hooks": [
+                    {
+                      "kind": "Get",
+                      "body": {
+                        "Block": [
+                          {
+                            "kind": {
+                              "Return": {
+                                "kind": {
+                                  "Int": 42
+                                },
+                                "span": {
+                                  "start": 156,
+                                  "end": 158
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 149,
+                              "end": 159
+                            }
+                          }
+                        ]
+                      },
+                      "modifiers": {
+                        "is_final": true
+                      },
+                      "by_ref": false,
+                      "params": [],
+                      "attributes": [],
+                      "span": {
+                        "start": 137,
+                        "end": 161
+                      }
+                    },
+                    {
+                      "kind": "Set",
+                      "body": {
+                        "Block": [
+                          {
+                            "kind": {
+                              "Expression": {
+                                "kind": {
+                                  "Assign": {
+                                    "target": {
+                                      "kind": {
+                                        "PropertyAccess": {
+                                          "object": {
+                                            "kind": {
+                                              "Variable": "this"
+                                            },
+                                            "span": {
+                                              "start": 194,
+                                              "end": 199
+                                            }
+                                          },
+                                          "property": {
+                                            "kind": {
+                                              "Identifier": "final_prop"
+                                            },
+                                            "span": {
+                                              "start": 201,
+                                              "end": 211
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "span": {
+                                        "start": 194,
+                                        "end": 211
+                                      }
+                                    },
+                                    "op": "Assign",
+                                    "value": {
+                                      "kind": {
+                                        "Variable": "value"
+                                      },
+                                      "span": {
+                                        "start": 214,
+                                        "end": 220
+                                      }
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 194,
+                                  "end": 220
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 194,
+                              "end": 221
+                            }
+                          }
+                        ]
+                      },
+                      "modifiers": {
+                        "is_final": true
+                      },
+                      "by_ref": false,
+                      "params": [
+                        {
+                          "name": {
+                            "name": "value",
+                            "span": {
+                              "start": 184,
+                              "end": 190
+                            }
+                          },
+                          "type_hint": {
+                            "kind": {
+                              "Named": {
+                                "parts": [
+                                  "int"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 180,
+                                  "end": 183
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 180,
+                              "end": 183
+                            }
+                          },
+                          "default": null,
+                          "by_ref": false,
+                          "variadic": false,
+                          "attributes": [],
+                          "span": {
+                            "start": 180,
+                            "end": 190
+                          }
+                        }
+                      ],
+                      "attributes": [],
+                      "span": {
+                        "start": 170,
+                        "end": 223
+                      }
+                    }
+                  ]
+                }
+              },
+              "span": {
+                "start": 104,
+                "end": 229
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": {
+                    "name": "attr_prop",
+                    "span": {
+                      "start": 245,
+                      "end": 255
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "int"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 241,
+                          "end": 244
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 241,
+                      "end": 244
+                    }
+                  },
+                  "default": null,
+                  "attributes": [],
+                  "hooks": [
+                    {
+                      "kind": "Get",
+                      "body": {
+                        "Block": [
+                          {
+                            "kind": {
+                              "Return": {
+                                "kind": {
+                                  "MethodCall": {
+                                    "object": {
+                                      "kind": {
+                                        "Variable": "this"
+                                      },
+                                      "span": {
+                                        "start": 296,
+                                        "end": 301
+                                      }
+                                    },
+                                    "method": {
+                                      "kind": {
+                                        "Identifier": "compute"
+                                      },
+                                      "span": {
+                                        "start": 303,
+                                        "end": 310
+                                      }
+                                    },
+                                    "args": []
+                                  }
+                                },
+                                "span": {
+                                  "start": 296,
+                                  "end": 312
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 289,
+                              "end": 313
+                            }
+                          }
+                        ]
+                      },
+                      "by_ref": false,
+                      "params": [],
+                      "attributes": [],
+                      "span": {
+                        "start": 283,
+                        "end": 315
+                      }
+                    },
+                    {
+                      "kind": "Set",
+                      "body": {
+                        "Block": [
+                          {
+                            "kind": {
+                              "Expression": {
+                                "kind": {
+                                  "Assign": {
+                                    "target": {
+                                      "kind": {
+                                        "PropertyAccess": {
+                                          "object": {
+                                            "kind": {
+                                              "Variable": "this"
+                                            },
+                                            "span": {
+                                              "start": 362,
+                                              "end": 367
+                                            }
+                                          },
+                                          "property": {
+                                            "kind": {
+                                              "Identifier": "attr_prop"
+                                            },
+                                            "span": {
+                                              "start": 369,
+                                              "end": 378
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "span": {
+                                        "start": 362,
+                                        "end": 378
+                                      }
+                                    },
+                                    "op": "Assign",
+                                    "value": {
+                                      "kind": {
+                                        "Variable": "value"
+                                      },
+                                      "span": {
+                                        "start": 381,
+                                        "end": 387
+                                      }
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 362,
+                                  "end": 387
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 362,
+                              "end": 388
+                            }
+                          }
+                        ]
+                      },
+                      "by_ref": false,
+                      "params": [
+                        {
+                          "name": {
+                            "name": "value",
+                            "span": {
+                              "start": 352,
+                              "end": 358
+                            }
+                          },
+                          "type_hint": {
+                            "kind": {
+                              "Named": {
+                                "parts": [
+                                  "int"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 348,
+                                  "end": 351
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 348,
+                              "end": 351
+                            }
+                          },
+                          "default": null,
+                          "by_ref": false,
+                          "variadic": false,
+                          "attributes": [],
+                          "span": {
+                            "start": 348,
+                            "end": 358
+                          }
+                        }
+                      ],
+                      "attributes": [],
+                      "span": {
+                        "start": 344,
+                        "end": 390
+                      }
+                    }
+                  ]
+                }
+              },
+              "span": {
+                "start": 234,
+                "end": 396
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 15,
+        "end": 398
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 398
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

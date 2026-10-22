@@ -26,31 +26,12 @@ enum E {
 #[Override] const K = 1;
 #[Attribute] const L = 1;
 ===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
+expected '{', found identifier
+expected class member, found '{'
 'property hooks' requires PHP 8.4 or higher
-'attributes' requires PHP 8.0 or higher
-'enums' requires PHP 8.1 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes on constants' requires PHP 8.5 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes on constants' requires PHP 8.5 or higher
+Property hook list must not be empty
+expected class member, found identifier
+expected ';' after expression
 ===errors 8.0===
 Attribute "Attribute" cannot target function (allowed targets: class)
 Attribute "Attribute" cannot target function (allowed targets: class)
@@ -185,7 +166,139 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
 PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 23
 ===php_error >=8.5===
 PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets: class) in Standard input code on line 2
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 201,
+                  "end": 203
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Assign": {
+                    "target": {
+                      "kind": {
+                        "Variable": "d"
+                      },
+                      "span": {
+                        "start": 235,
+                        "end": 237
+                      }
+                    },
+                    "op": "Assign",
+                    "value": {
+                      "kind": {
+                        "Assign": {
+                          "target": {
+                            "kind": {
+                              "Variable": "e"
+                            },
+                            "span": {
+                              "start": 263,
+                              "end": 265
+                            }
+                          },
+                          "op": "Assign",
+                          "value": {
+                            "kind": {
+                              "New": {
+                                "class": {
+                                  "kind": {
+                                    "AnonymousClass": {
+                                      "name": null,
+                                      "modifiers": {
+                                        "is_abstract": false,
+                                        "is_final": false,
+                                        "is_readonly": false
+                                      },
+                                      "extends": null,
+                                      "implements": [],
+                                      "members": [
+                                        {
+                                          "kind": {
+                                            "Property": {
+                                              "name": {
+                                                "name": "r",
+                                                "span": {
+                                                  "start": 504,
+                                                  "end": 506
+                                                }
+                                              },
+                                              "modifiers": {
+                                                "visibility": "Public"
+                                              },
+                                              "type_hint": null,
+                                              "default": null,
+                                              "attributes": []
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 497,
+                                            "end": 535
+                                          }
+                                        }
+                                      ],
+                                      "attributes": []
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 268,
+                                    "end": 595
+                                  }
+                                },
+                                "args": []
+                              }
+                            },
+                            "span": {
+                              "start": 268,
+                              "end": 595
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 263,
+                        "end": 595
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 235,
+                  "end": 595
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 201,
+            "end": 595
+          }
+        }
+      },
+      "span": {
+        "start": 201,
+        "end": 595
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 595
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

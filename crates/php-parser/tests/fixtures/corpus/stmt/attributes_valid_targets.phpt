@@ -32,37 +32,16 @@ class H {
     public function __construct(#[SensitiveParameter] public $r) {}
 }
 ===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'readonly class' requires PHP 8.2 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes on constants' requires PHP 8.5 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'enums' requires PHP 8.1 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'constructor property promotion' requires PHP 8.0 or higher
+Cannot use expression as assignment target.
+Constant expression contains invalid operations
+missing closing ')'
+expected '{', found identifier
+expected ';', found '{'
+expected ';' after expression
+expected variable, found '}'
+expected ')', found '}'
+expected ';', found '}'
+missing closing '}'
 ===errors 8.0===
 'readonly class' requires PHP 8.2 or higher
 'attributes on constants' requires PHP 8.5 or higher
@@ -90,7 +69,301 @@ PHP Parse error:  syntax error, unexpected identifier "readonly", expecting "abs
 PHP Parse error:  syntax error, unexpected token "readonly", expecting "abstract" or "final" or "class" in Standard input code on line 6
 ===php_error 8.2-8.4===
 PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 11
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "Attribute"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 10,
+                  "end": 19
+                }
+              },
+              "alias": {
+                "name": "Attr",
+                "span": {
+                  "start": 23,
+                  "end": 27
+                }
+              },
+              "span": {
+                "start": 10,
+                "end": 27
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 28
+      }
+    },
+    {
+      "kind": {
+        "Use": {
+          "kind": "Normal",
+          "uses": [
+            {
+              "name": {
+                "parts": [
+                  "Foo",
+                  "Bar"
+                ],
+                "kind": "Qualified",
+                "span": {
+                  "start": 33,
+                  "end": 40
+                }
+              },
+              "alias": {
+                "name": "Attribute2",
+                "span": {
+                  "start": 44,
+                  "end": 54
+                }
+              },
+              "span": {
+                "start": 33,
+                "end": 54
+              }
+            }
+          ]
+        }
+      },
+      "span": {
+        "start": 29,
+        "end": 55
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": {
+            "name": "h",
+            "span": {
+              "start": 358,
+              "end": 359
+            }
+          },
+          "params": [
+            {
+              "name": {
+                "name": "a",
+                "span": {
+                  "start": 597,
+                  "end": 599
+                }
+              },
+              "type_hint": null,
+              "default": {
+                "kind": {
+                  "Assign": {
+                    "target": {
+                      "kind": {
+                        "New": {
+                          "class": {
+                            "kind": {
+                              "Variable": "b"
+                            },
+                            "span": {
+                              "start": 629,
+                              "end": 631
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 602,
+                        "end": 631
+                      }
+                    },
+                    "op": "Assign",
+                    "value": {
+                      "kind": {
+                        "Assign": {
+                          "target": {
+                            "kind": {
+                              "Variable": "c"
+                            },
+                            "span": {
+                              "start": 675,
+                              "end": 677
+                            }
+                          },
+                          "op": "Assign",
+                          "value": {
+                            "kind": {
+                              "Name": {
+                                "parts": [
+                                  "enum"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 732,
+                                  "end": 736
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 732,
+                              "end": 736
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 675,
+                        "end": 736
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 602,
+                  "end": 736
+                }
+              },
+              "by_ref": false,
+              "variadic": false,
+              "attributes": [],
+              "span": {
+                "start": 597,
+                "end": 736
+              }
+            }
+          ],
+          "body": [
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "ArrayAccess": {
+                      "array": {
+                        "kind": {
+                          "Name": {
+                            "parts": [
+                              "G"
+                            ],
+                            "kind": "Unqualified",
+                            "span": {
+                              "start": 737,
+                              "end": 738
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 737,
+                          "end": 738
+                        }
+                      },
+                      "index": null
+                    }
+                  },
+                  "span": {
+                    "start": 737,
+                    "end": 799
+                  }
+                }
+              },
+              "span": {
+                "start": 737,
+                "end": 799
+              }
+            },
+            {
+              "kind": {
+                "Class": {
+                  "name": {
+                    "name": "H",
+                    "span": {
+                      "start": 806,
+                      "end": 807
+                    }
+                  },
+                  "modifiers": {
+                    "is_abstract": false,
+                    "is_final": false,
+                    "is_readonly": false
+                  },
+                  "extends": null,
+                  "implements": [],
+                  "members": [
+                    {
+                      "kind": {
+                        "Method": {
+                          "name": {
+                            "name": "__construct",
+                            "span": {
+                              "start": 1015,
+                              "end": 1026
+                            }
+                          },
+                          "modifiers": {
+                            "visibility": "Public"
+                          },
+                          "by_ref": false,
+                          "params": [
+                            {
+                              "name": null,
+                              "type_hint": null,
+                              "default": null,
+                              "by_ref": false,
+                              "variadic": false,
+                              "attributes": [],
+                              "span": {
+                                "start": 1063,
+                                "end": 1027
+                              }
+                            }
+                          ],
+                          "return_type": null,
+                          "body": null,
+                          "attributes": []
+                        }
+                      },
+                      "span": {
+                        "start": 999,
+                        "end": 1027
+                      }
+                    }
+                  ],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 800,
+                "end": 1064
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 349,
+        "end": 1064
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 1064
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

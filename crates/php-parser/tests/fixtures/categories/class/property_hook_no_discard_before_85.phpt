@@ -5,7 +5,8 @@ class A {
 }
 ===errors <=7.4===
 'property hooks' requires PHP 8.4 or higher
-'attributes' requires PHP 8.0 or higher
+Property hook list must not be empty
+expected '}', found end of file
 ===errors 8.0-8.3===
 'property hooks' requires PHP 8.4 or higher
 ===errors >=8.5===
@@ -16,7 +17,66 @@ PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error >=8.5===
 PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard input code on line 3
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": {
+                    "name": "a",
+                    "span": {
+                      "start": 27,
+                      "end": 29
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "type_hint": null,
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 20,
+                "end": 59
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 59
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 59
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

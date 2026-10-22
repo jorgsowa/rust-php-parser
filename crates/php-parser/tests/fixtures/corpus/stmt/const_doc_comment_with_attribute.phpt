@@ -4,14 +4,61 @@
 /** @api */
 #[SomeAttribute]
 const VERSION = '1.0.0';
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes on constants' requires PHP 8.5 or higher
 ===errors 8.0-8.4===
 'attributes on constants' requires PHP 8.5 or higher
 ===php_error 8.0-8.4===
 PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 5
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": {
+              "name": "VERSION",
+              "span": {
+                "start": 42,
+                "end": 49
+              }
+            },
+            "value": {
+              "kind": {
+                "String": "1.0.0"
+              },
+              "span": {
+                "start": 52,
+                "end": 59
+              }
+            },
+            "attributes": [],
+            "span": {
+              "start": 42,
+              "end": 59
+            },
+            "doc_comment": {
+              "kind": "Doc",
+              "text": "/** @api */",
+              "span": {
+                "start": 7,
+                "end": 18
+              }
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 36,
+        "end": 60
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 60
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

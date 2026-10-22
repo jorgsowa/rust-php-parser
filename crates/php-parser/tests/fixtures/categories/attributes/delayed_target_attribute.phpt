@@ -16,23 +16,108 @@ abstract class DemoAbstract {}
 #[DelayedTargetValidation]
 #[Attribute]
 enum DemoEnum {}
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'enums' requires PHP 8.1 or higher
-===errors 8.0===
+===errors <=8.0===
 'enums' requires PHP 8.1 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'DemoEnum' (T_STRING) in Standard input code on line 17
 ===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "enum" in Standard input code on line 17
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Trait": {
+          "name": {
+            "name": "DemoTrait",
+            "span": {
+              "start": 53,
+              "end": 62
+            }
+          },
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 47,
+        "end": 65
+      }
+    },
+    {
+      "kind": {
+        "Interface": {
+          "name": {
+            "name": "DemoInterface",
+            "span": {
+              "start": 117,
+              "end": 130
+            }
+          },
+          "extends": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 107,
+        "end": 133
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "DemoAbstract",
+            "span": {
+              "start": 190,
+              "end": 202
+            }
+          },
+          "modifiers": {
+            "is_abstract": true,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 184,
+        "end": 205
+      }
+    },
+    {
+      "kind": {
+        "Enum": {
+          "name": {
+            "name": "DemoEnum",
+            "span": {
+              "start": 252,
+              "end": 260
+            }
+          },
+          "scalar_type": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 247,
+        "end": 263
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 263
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

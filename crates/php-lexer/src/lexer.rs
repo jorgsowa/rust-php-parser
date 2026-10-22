@@ -121,6 +121,8 @@ pub struct Lexer<'src> {
     /// Index into `non_verbatim_strings` of the last lookup; strings are
     /// usually queried in source order, which makes lookups O(1).
     verbatim_cursor: usize,
+    /// Whether `#[` opens an attribute (PHP 8.0+) rather than a `#` comment.
+    attributes: bool,
     errors: Vec<LexerError>,
 }
 
@@ -393,6 +395,7 @@ impl<'src> Lexer<'src> {
             peeked2: None,
             non_verbatim_strings: Vec::new(),
             verbatim_cursor: 0,
+            attributes: true,
             errors: Vec::new(),
         }
     }
@@ -416,8 +419,16 @@ impl<'src> Lexer<'src> {
             peeked2: None,
             non_verbatim_strings: Vec::new(),
             verbatim_cursor: 0,
+            attributes: true,
             errors: Vec::new(),
         }
+    }
+
+    /// Sets whether `#[` opens an attribute, as from PHP 8.0, or starts a `#` comment.
+    /// Defaults to `true`; set it before the first token is read.
+    pub fn with_attributes(mut self, enabled: bool) -> Self {
+        self.attributes = enabled;
+        self
     }
 
     /// A lexer over an empty source when `source` does not fit `u32` spans;
@@ -434,6 +445,7 @@ impl<'src> Lexer<'src> {
             peeked2: None,
             non_verbatim_strings: Vec::new(),
             verbatim_cursor: 0,
+            attributes: true,
             errors: vec![LexerError {
                 kind: LexerErrorKind::FileTooLarge,
                 message: format!(
@@ -624,9 +636,9 @@ impl<'src> Lexer<'src> {
             return self.tok(kind, start);
         }
 
-        // Yield `#` hash comments as tokens (but not `#[` which starts an attribute).
+        // Yield `#` hash comments as tokens (but not `#[` when it starts an attribute).
         // Note: in PHP, ?> terminates a hash comment just like \n does.
-        if bytes[self.pos] == b'#' && !(self.pos + 1 < bytes.len() && bytes[self.pos + 1] == b'[') {
+        if bytes[self.pos] == b'#' && !(self.attributes && bytes.get(self.pos + 1) == Some(&b'[')) {
             self.pos += 1;
             Self::skip_line_comment_body(bytes, &mut self.pos);
             return self.tok(TokenKind::HashComment, start);

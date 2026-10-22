@@ -57,28 +57,7 @@ function demoFn() {
 #[Deprecated] // Does something here
 const GLOBAL_CONST = 'BAR';
 ===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
 'property hooks' requires PHP 8.4 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes on constants' requires PHP 8.5 or higher
 ===errors 8.0-8.3===
 'property hooks' requires PHP 8.4 or higher
 'attributes on constants' requires PHP 8.5 or higher
@@ -93,7 +72,639 @@ PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 10
 ===php_error 8.4===
 PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 57
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "DemoClass",
+            "span": {
+              "start": 75,
+              "end": 84
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": {
+                    "name": "val",
+                    "span": {
+                      "start": 159,
+                      "end": 163
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "type_hint": null,
+                  "default": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 152,
+                "end": 163
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": {
+                    "name": "hooked",
+                    "span": {
+                      "start": 181,
+                      "end": 188
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "string"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 174,
+                          "end": 180
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 174,
+                      "end": 180
+                    }
+                  },
+                  "default": null,
+                  "attributes": [],
+                  "hooks": [
+                    {
+                      "kind": "Get",
+                      "body": {
+                        "Expression": {
+                          "kind": {
+                            "PropertyAccess": {
+                              "object": {
+                                "kind": {
+                                  "Variable": "this"
+                                },
+                                "span": {
+                                  "start": 268,
+                                  "end": 273
+                                }
+                              },
+                              "property": {
+                                "kind": {
+                                  "Identifier": "hooked"
+                                },
+                                "span": {
+                                  "start": 275,
+                                  "end": 281
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 268,
+                            "end": 281
+                          }
+                        }
+                      },
+                      "by_ref": false,
+                      "params": [],
+                      "attributes": [],
+                      "span": {
+                        "start": 261,
+                        "end": 282
+                      }
+                    },
+                    {
+                      "kind": "Set",
+                      "body": {
+                        "Expression": {
+                          "kind": {
+                            "Variable": "value"
+                          },
+                          "span": {
+                            "start": 360,
+                            "end": 366
+                          }
+                        }
+                      },
+                      "by_ref": false,
+                      "params": [],
+                      "attributes": [],
+                      "span": {
+                        "start": 353,
+                        "end": 367
+                      }
+                    }
+                  ]
+                }
+              },
+              "span": {
+                "start": 167,
+                "end": 370
+              }
+            },
+            {
+              "kind": {
+                "ClassConst": {
+                  "name": {
+                    "name": "CLASS_CONST",
+                    "span": {
+                      "start": 452,
+                      "end": 463
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "value": {
+                    "kind": {
+                      "String": "FOO"
+                    },
+                    "span": {
+                      "start": 466,
+                      "end": 471
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 439,
+                "end": 472
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": {
+                    "name": "__construct",
+                    "span": {
+                      "start": 491,
+                      "end": 502
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "by_ref": false,
+                  "params": [
+                    {
+                      "name": {
+                        "name": "str",
+                        "span": {
+                          "start": 572,
+                          "end": 576
+                        }
+                      },
+                      "type_hint": null,
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "attributes": [],
+                      "span": {
+                        "start": 572,
+                        "end": 576
+                      }
+                    }
+                  ],
+                  "return_type": null,
+                  "body": [
+                    {
+                      "kind": {
+                        "Echo": [
+                          {
+                            "kind": {
+                              "InterpolatedString": [
+                                {
+                                  "Literal": "Got: "
+                                },
+                                {
+                                  "Expr": {
+                                    "kind": {
+                                      "Variable": "str"
+                                    },
+                                    "span": {
+                                      "start": 595,
+                                      "end": 599
+                                    }
+                                  }
+                                },
+                                {
+                                  "Literal": "\n"
+                                }
+                              ]
+                            },
+                            "span": {
+                              "start": 589,
+                              "end": 602
+                            }
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 584,
+                        "end": 603
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Expression": {
+                          "kind": {
+                            "Assign": {
+                              "target": {
+                                "kind": {
+                                  "PropertyAccess": {
+                                    "object": {
+                                      "kind": {
+                                        "Variable": "this"
+                                      },
+                                      "span": {
+                                        "start": 606,
+                                        "end": 611
+                                      }
+                                    },
+                                    "property": {
+                                      "kind": {
+                                        "Identifier": "val"
+                                      },
+                                      "span": {
+                                        "start": 613,
+                                        "end": 616
+                                      }
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 606,
+                                  "end": 616
+                                }
+                              },
+                              "op": "Assign",
+                              "value": {
+                                "kind": {
+                                  "Variable": "str"
+                                },
+                                "span": {
+                                  "start": 619,
+                                  "end": 623
+                                }
+                              }
+                            }
+                          },
+                          "span": {
+                            "start": 606,
+                            "end": 623
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 606,
+                        "end": 624
+                      }
+                    }
+                  ],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 475,
+                "end": 627
+              }
+            },
+            {
+              "kind": {
+                "Method": {
+                  "name": {
+                    "name": "printVal",
+                    "span": {
+                      "start": 712,
+                      "end": 720
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": null,
+                  "body": [
+                    {
+                      "kind": {
+                        "Echo": [
+                          {
+                            "kind": {
+                              "Binary": {
+                                "left": {
+                                  "kind": {
+                                    "Binary": {
+                                      "left": {
+                                        "kind": {
+                                          "String": "Value is: "
+                                        },
+                                        "span": {
+                                          "start": 732,
+                                          "end": 744
+                                        }
+                                      },
+                                      "op": "Concat",
+                                      "right": {
+                                        "kind": {
+                                          "PropertyAccess": {
+                                            "object": {
+                                              "kind": {
+                                                "Variable": "this"
+                                              },
+                                              "span": {
+                                                "start": 747,
+                                                "end": 752
+                                              }
+                                            },
+                                            "property": {
+                                              "kind": {
+                                                "Identifier": "val"
+                                              },
+                                              "span": {
+                                                "start": 754,
+                                                "end": 757
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "span": {
+                                          "start": 747,
+                                          "end": 757
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 732,
+                                    "end": 757
+                                  }
+                                },
+                                "op": "Concat",
+                                "right": {
+                                  "kind": {
+                                    "String": "\n"
+                                  },
+                                  "span": {
+                                    "start": 760,
+                                    "end": 764
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 732,
+                              "end": 764
+                            }
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 727,
+                        "end": 765
+                      }
+                    },
+                    {
+                      "kind": {
+                        "Return": {
+                          "kind": {
+                            "Int": 123
+                          },
+                          "span": {
+                            "start": 775,
+                            "end": 778
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 768,
+                        "end": 779
+                      }
+                    }
+                  ],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 696,
+                "end": 782
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 69,
+        "end": 784
+      }
+    },
+    {
+      "kind": {
+        "Trait": {
+          "name": {
+            "name": "DeprecatedTrait",
+            "span": {
+              "start": 856,
+              "end": 871
+            }
+          },
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 850,
+        "end": 874
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "WithDeprecatedTrait",
+            "span": {
+              "start": 882,
+              "end": 901
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "TraitUse": {
+                  "traits": [
+                    {
+                      "parts": [
+                        "DeprecatedTrait"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 909,
+                        "end": 924
+                      }
+                    }
+                  ],
+                  "adaptations": []
+                }
+              },
+              "span": {
+                "start": 905,
+                "end": 925
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 876,
+        "end": 927
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": {
+            "name": "demoFn",
+            "span": {
+              "start": 1002,
+              "end": 1008
+            }
+          },
+          "params": [],
+          "body": [
+            {
+              "kind": {
+                "Echo": [
+                  {
+                    "kind": {
+                      "Binary": {
+                        "left": {
+                          "kind": {
+                            "MagicConst": "Function"
+                          },
+                          "span": {
+                            "start": 1019,
+                            "end": 1031
+                          }
+                        },
+                        "op": "Concat",
+                        "right": {
+                          "kind": {
+                            "String": "\n"
+                          },
+                          "span": {
+                            "start": 1034,
+                            "end": 1038
+                          }
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 1019,
+                      "end": 1038
+                    }
+                  }
+                ]
+              },
+              "span": {
+                "start": 1014,
+                "end": 1039
+              }
+            },
+            {
+              "kind": {
+                "Return": {
+                  "kind": {
+                    "Int": 456
+                  },
+                  "span": {
+                    "start": 1048,
+                    "end": 1051
+                  }
+                }
+              },
+              "span": {
+                "start": 1041,
+                "end": 1052
+              }
+            }
+          ],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 993,
+        "end": 1054
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": {
+              "name": "GLOBAL_CONST",
+              "span": {
+                "start": 1126,
+                "end": 1138
+              }
+            },
+            "value": {
+              "kind": {
+                "String": "BAR"
+              },
+              "span": {
+                "start": 1141,
+                "end": 1146
+              }
+            },
+            "attributes": [],
+            "span": {
+              "start": 1126,
+              "end": 1146
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 1120,
+        "end": 1147
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 1147
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

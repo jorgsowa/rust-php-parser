@@ -5,15 +5,26 @@
     #[DelayedTargetValidation] #[NoDiscard] const X = 1;
 }
 ===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
+expected expression, found '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '}', expecting end of file in Standard input code on line 5
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": "Error",
+      "span": {
+        "start": 168,
+        "end": 5
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 5
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

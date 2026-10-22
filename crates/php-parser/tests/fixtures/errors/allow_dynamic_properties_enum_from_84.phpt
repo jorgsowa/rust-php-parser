@@ -2,10 +2,7 @@
 <?php
 #[AllowDynamicProperties]
 enum E {}
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'enums' requires PHP 8.1 or higher
-===errors 8.0===
+===errors <=8.0===
 'enums' requires PHP 8.1 or higher
 ===errors >=8.4===
 Cannot apply #[\AllowDynamicProperties] to enum E
@@ -17,7 +14,37 @@ PHP Parse error:  syntax error, unexpected identifier "enum" in Standard input c
 PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to enum E in Standard input code on line 3
 ===php_error >=8.5===
 PHP Fatal error:  Cannot apply #[\AllowDynamicProperties] to enum E in Standard input code on line 3
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Enum": {
+          "name": {
+            "name": "E",
+            "span": {
+              "start": 37,
+              "end": 38
+            }
+          },
+          "scalar_type": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 32,
+        "end": 41
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 41
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

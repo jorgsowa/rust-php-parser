@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `Lexer::with_attributes`, which lexes `#[` as a `#` comment when disabled (`php-lexer`).
+
 ### Fixed
 
+- Before PHP 8.0, `#[` starts a `#` comment instead of an attribute, so `#[\ReturnTypeWillChange]` and other single-line attributes are accepted (`php-rs-parser`).
 - Writing to a property or element of `clone $a` reports `Cannot use temporary expression in write context` before PHP 8.5 (`php-rs-parser`).
 
 ## [0.25.0] - 2026-10-22

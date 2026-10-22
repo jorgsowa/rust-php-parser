@@ -13,7 +13,6 @@ function f() {}
 'closures in constant expressions' requires PHP 8.5 or higher
 'closures in constant expressions' requires PHP 8.5 or higher
 'closures in constant expressions' requires PHP 8.5 or higher
-'attributes' requires PHP 8.0 or higher
 ===errors 8.0-8.4===
 'closures in constant expressions' requires PHP 8.5 or higher
 'closures in constant expressions' requires PHP 8.5 or higher
@@ -30,7 +29,251 @@ Closures in constant expressions must be static
 PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 2
 ===php_error >=8.5===
 PHP Fatal error:  Closures in constant expressions must be static in Standard input code on line 2
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": {
+              "name": "A",
+              "span": {
+                "start": 12,
+                "end": 13
+              }
+            },
+            "value": {
+              "kind": {
+                "Closure": {
+                  "is_static": false,
+                  "by_ref": false,
+                  "params": [],
+                  "use_vars": [],
+                  "return_type": null,
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 16,
+                "end": 30
+              }
+            },
+            "attributes": [],
+            "span": {
+              "start": 12,
+              "end": 30
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 6,
+        "end": 31
+      }
+    },
+    {
+      "kind": {
+        "Const": [
+          {
+            "name": {
+              "name": "B",
+              "span": {
+                "start": 38,
+                "end": 39
+              }
+            },
+            "value": {
+              "kind": {
+                "Closure": {
+                  "is_static": true,
+                  "by_ref": false,
+                  "params": [],
+                  "use_vars": [
+                    {
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 66,
+                          "end": 68
+                        }
+                      },
+                      "by_ref": false,
+                      "span": {
+                        "start": 66,
+                        "end": 68
+                      }
+                    }
+                  ],
+                  "return_type": null,
+                  "body": [],
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 42,
+                "end": 72
+              }
+            },
+            "attributes": [],
+            "span": {
+              "start": 38,
+              "end": 72
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 32,
+        "end": 73
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 80,
+              "end": 81
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "ClassConst": {
+                  "name": {
+                    "name": "D",
+                    "span": {
+                      "start": 94,
+                      "end": 95
+                    }
+                  },
+                  "value": {
+                    "kind": {
+                      "Closure": {
+                        "is_static": false,
+                        "by_ref": false,
+                        "params": [],
+                        "use_vars": [],
+                        "return_type": null,
+                        "body": [],
+                        "attributes": []
+                      }
+                    },
+                    "span": {
+                      "start": 98,
+                      "end": 112
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 88,
+                "end": 113
+              }
+            },
+            {
+              "kind": {
+                "Property": {
+                  "name": {
+                    "name": "e",
+                    "span": {
+                      "start": 125,
+                      "end": 127
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "type_hint": null,
+                  "default": {
+                    "kind": {
+                      "Closure": {
+                        "is_static": true,
+                        "by_ref": false,
+                        "params": [],
+                        "use_vars": [
+                          {
+                            "name": {
+                              "name": "y",
+                              "span": {
+                                "start": 155,
+                                "end": 157
+                              }
+                            },
+                            "by_ref": true,
+                            "span": {
+                              "start": 154,
+                              "end": 157
+                            }
+                          }
+                        ],
+                        "return_type": null,
+                        "body": [],
+                        "attributes": []
+                      }
+                    },
+                    "span": {
+                      "start": 130,
+                      "end": 161
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 118,
+                "end": 161
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 74,
+        "end": 164
+      }
+    },
+    {
+      "kind": {
+        "Function": {
+          "name": {
+            "name": "f",
+            "span": {
+              "start": 198,
+              "end": 199
+            }
+          },
+          "params": [],
+          "body": [],
+          "return_type": null,
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 189,
+        "end": 204
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 204
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

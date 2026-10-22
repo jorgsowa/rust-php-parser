@@ -1,8 +1,14 @@
 ===source===
 <?php #[Assert\Range(min: 1, max: 100)] class Foo {}
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-===ast===
+===ast <=7.4===
+{
+  "stmts": [],
+  "span": {
+    "start": 0,
+    "end": 52
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

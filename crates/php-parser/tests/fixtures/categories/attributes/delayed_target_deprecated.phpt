@@ -12,15 +12,7 @@ class DemoClass {}
 #[DelayedTargetValidation]
 #[Deprecated]
 enum DemoEnum {}
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'enums' requires PHP 8.1 or higher
-===errors 8.0===
+===errors <=8.0===
 'enums' requires PHP 8.1 or higher
 ===errors 8.4===
 Cannot apply #[\Deprecated] to interface DemoInterface
@@ -32,7 +24,83 @@ PHP Parse error:  syntax error, unexpected 'DemoEnum' (T_STRING) in Standard inp
 PHP Parse error:  syntax error, unexpected identifier "enum" in Standard input code on line 13
 ===php_error 8.4===
 PHP Fatal error:  Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant) in Standard input code on line 5
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Interface": {
+          "name": {
+            "name": "DemoInterface",
+            "span": {
+              "start": 58,
+              "end": 71
+            }
+          },
+          "extends": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 48,
+        "end": 74
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "DemoClass",
+            "span": {
+              "start": 123,
+              "end": 132
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 117,
+        "end": 135
+      }
+    },
+    {
+      "kind": {
+        "Enum": {
+          "name": {
+            "name": "DemoEnum",
+            "span": {
+              "start": 183,
+              "end": 191
+            }
+          },
+          "scalar_type": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 178,
+        "end": 194
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 194
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

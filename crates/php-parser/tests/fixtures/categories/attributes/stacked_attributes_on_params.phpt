@@ -5,14 +5,55 @@ function f(
     #[Attr1] #[Attr2] int $x,
     #[Attr3] string $y
 ): void {}
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": {
+            "name": "f",
+            "span": {
+              "start": 30,
+              "end": 31
+            }
+          },
+          "params": [],
+          "body": [],
+          "return_type": {
+            "kind": {
+              "Named": {
+                "parts": [
+                  "void"
+                ],
+                "kind": "Unqualified",
+                "span": {
+                  "start": 89,
+                  "end": 93
+                }
+              }
+            },
+            "span": {
+              "start": 89,
+              "end": 93
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 21,
+        "end": 96
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 96
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

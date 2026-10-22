@@ -1,12 +1,18 @@
 ===source===
 <?php #[Attr(new Config(debug: false))] function f() {}
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
 ===errors 8.0===
 'new in initializers' requires PHP 8.1 or higher
 ===php_error 8.0===
 PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 1
-===ast===
+===ast <=7.4===
+{
+  "stmts": [],
+  "span": {
+    "start": 0,
+    "end": 55
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

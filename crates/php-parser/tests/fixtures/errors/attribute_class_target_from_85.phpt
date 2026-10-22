@@ -4,12 +4,6 @@
 #[Attribute] interface I {}
 #[Attribute] trait T {}
 #[Attribute] enum E {}
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'enums' requires PHP 8.1 or higher
 ===errors 8.0===
 'enums' requires PHP 8.1 or higher
 ===errors >=8.5===
@@ -21,7 +15,15 @@ Cannot apply #[\Attribute] to enum E
 PHP Parse error:  syntax error, unexpected identifier "enum" in Standard input code on line 5
 ===php_error >=8.5===
 PHP Fatal error:  Cannot apply #[\Attribute] to abstract class A in Standard input code on line 2
-===ast===
+===ast <=7.4===
+{
+  "stmts": [],
+  "span": {
+    "start": 0,
+    "end": 113
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

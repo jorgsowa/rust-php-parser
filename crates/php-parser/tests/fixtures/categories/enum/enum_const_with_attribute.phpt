@@ -2,14 +2,44 @@
 <?php enum Status { #[SomeAttr] const X = 1; }
 ===errors <=7.4===
 'enums' requires PHP 8.1 or higher
-'attributes' requires PHP 8.0 or higher
+expected '}', found end of file
 ===errors 8.0===
 'enums' requires PHP 8.1 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'Status' (T_STRING) in Standard input code on line 1
 ===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 1
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Enum": {
+          "name": {
+            "name": "Status",
+            "span": {
+              "start": 11,
+              "end": 17
+            }
+          },
+          "scalar_type": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 19
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 19
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

@@ -229,7 +229,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         version: PhpVersion,
     ) -> Self {
         let mut comments: Vec<Comment<'src>> = Vec::new();
-        let mut lexer = Lexer::new(source);
+        let mut lexer = Lexer::new(source).with_attributes(version >= PhpVersion::Php80);
         let current = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
         let next = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
         let next2 = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
@@ -286,7 +286,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         nesting_depth: u32,
     ) -> Self {
         let mut comments: Vec<Comment<'src>> = Vec::new();
-        let mut lexer = Lexer::new_at(source, offset);
+        let mut lexer = Lexer::new_at(source, offset).with_attributes(version >= PhpVersion::Php80);
         let current = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
         let next = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
         let next2 = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
@@ -2314,14 +2314,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         while self.check(TokenKind::HashBracket) {
             instrument::record_parse_attribute();
             let group_start = self.start_span();
-            let attr_kw_span = self.current_span();
             self.advance(); // consume #[
-            self.require_version(
-                crate::version::PhpVersion::Php80,
-                "attributes",
-                attr_kw_span,
-            );
-            let errors_before = self.errors.len();
             let group_len_before = attributes.len();
 
             // Parse comma-separated attributes within this group
@@ -2384,10 +2377,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 );
             }
             self.expect(TokenKind::RightBracket);
-            // Before 8.0 `#[` starts a comment, so only the version error applies.
-            if self.version < PhpVersion::Php80 {
-                self.errors.truncate(errors_before);
-            }
         }
         attributes
     }

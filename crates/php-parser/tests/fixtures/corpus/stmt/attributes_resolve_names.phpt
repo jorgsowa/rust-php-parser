@@ -13,14 +13,108 @@ namespace A {
     #[\A\Attribute] function i() {}
     #[Foo\Attribute] function j() {}
 }
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "A"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 16,
+              "end": 17
+            }
+          },
+          "body": {
+            "Braced": [
+              {
+                "kind": {
+                  "Use": {
+                    "kind": "Normal",
+                    "uses": [
+                      {
+                        "name": {
+                          "parts": [
+                            "Foo",
+                            "Attribute"
+                          ],
+                          "kind": "Qualified",
+                          "span": {
+                            "start": 28,
+                            "end": 41
+                          }
+                        },
+                        "alias": {
+                          "name": "Local",
+                          "span": {
+                            "start": 45,
+                            "end": 50
+                          }
+                        },
+                        "span": {
+                          "start": 28,
+                          "end": 50
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 24,
+                  "end": 51
+                }
+              },
+              {
+                "kind": {
+                  "Use": {
+                    "kind": "Normal",
+                    "uses": [
+                      {
+                        "name": {
+                          "parts": [
+                            "Foo",
+                            "Override"
+                          ],
+                          "kind": "Qualified",
+                          "span": {
+                            "start": 60,
+                            "end": 72
+                          }
+                        },
+                        "alias": null,
+                        "span": {
+                          "start": 60,
+                          "end": 72
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 56,
+                  "end": 73
+                }
+              }
+            ]
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 281
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 281
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

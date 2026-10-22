@@ -19,18 +19,19 @@ namespace {
 }
 ===errors <=7.4===
 'property hooks' requires PHP 8.4 or higher
-'attributes' requires PHP 8.0 or higher
+Property hook list must not be empty
+Interfaces may only include hooked properties
+expected class member, found 'class'
 'property hooks' requires PHP 8.4 or higher
-'attributes' requires PHP 8.0 or higher
+Cannot use the public modifier on a property hook
+expected 'get' or 'set', found identifier
+Property hook list must not be empty
+Interfaces may only include hooked properties
 'property hooks' requires PHP 8.4 or higher
-'attributes' requires PHP 8.0 or higher
-'property hooks' requires PHP 8.4 or higher
-'attributes' requires PHP 8.0 or higher
-'constructor property promotion' requires PHP 8.0 or higher
-'property hooks' requires PHP 8.4 or higher
-'attributes' requires PHP 8.0 or higher
-'property hooks' requires PHP 8.4 or higher
-'attributes' requires PHP 8.0 or higher
+Property hook list must not be empty
+expected '}', found end of file
+expected '}', found end of file
+Namespace declarations cannot be nested
 ===errors 8.0-8.3===
 'property hooks' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
@@ -51,7 +52,208 @@ PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 5
 ===php_error >=8.5===
 PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard input code on line 5
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "N"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 16,
+              "end": 17
+            }
+          },
+          "body": {
+            "Braced": [
+              {
+                "kind": {
+                  "Use": {
+                    "kind": "Normal",
+                    "uses": [
+                      {
+                        "name": {
+                          "parts": [
+                            "NoDiscard"
+                          ],
+                          "kind": "Unqualified",
+                          "span": {
+                            "start": 28,
+                            "end": 37
+                          }
+                        },
+                        "alias": {
+                          "name": "Keep",
+                          "span": {
+                            "start": 41,
+                            "end": 45
+                          }
+                        },
+                        "span": {
+                          "start": 28,
+                          "end": 45
+                        }
+                      }
+                    ]
+                  }
+                },
+                "span": {
+                  "start": 24,
+                  "end": 46
+                }
+              },
+              {
+                "kind": {
+                  "Interface": {
+                    "name": {
+                      "name": "I",
+                      "span": {
+                        "start": 61,
+                        "end": 62
+                      }
+                    },
+                    "extends": [],
+                    "members": [
+                      {
+                        "kind": {
+                          "Property": {
+                            "name": {
+                              "name": "a",
+                              "span": {
+                                "start": 80,
+                                "end": 82
+                              }
+                            },
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
+                            "type_hint": null,
+                            "default": null,
+                            "attributes": []
+                          }
+                        },
+                        "span": {
+                          "start": 73,
+                          "end": 111
+                        }
+                      },
+                      {
+                        "kind": {
+                          "Property": {
+                            "name": {
+                              "name": "b",
+                              "span": {
+                                "start": 141,
+                                "end": 143
+                              }
+                            },
+                            "modifiers": {
+                              "visibility": "Public"
+                            },
+                            "type_hint": null,
+                            "default": null,
+                            "attributes": []
+                          }
+                        },
+                        "span": {
+                          "start": 134,
+                          "end": 356
+                        }
+                      }
+                    ],
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 51,
+                  "end": 358
+                }
+              },
+              {
+                "kind": {
+                  "Namespace": {
+                    "name": null,
+                    "body": {
+                      "Braced": [
+                        {
+                          "kind": {
+                            "Class": {
+                              "name": {
+                                "name": "B",
+                                "span": {
+                                  "start": 381,
+                                  "end": 382
+                                }
+                              },
+                              "modifiers": {
+                                "is_abstract": false,
+                                "is_final": false,
+                                "is_readonly": false
+                              },
+                              "extends": null,
+                              "implements": [],
+                              "members": [
+                                {
+                                  "kind": {
+                                    "Property": {
+                                      "name": {
+                                        "name": "f",
+                                        "span": {
+                                          "start": 400,
+                                          "end": 402
+                                        }
+                                      },
+                                      "modifiers": {
+                                        "visibility": "Public"
+                                      },
+                                      "type_hint": null,
+                                      "default": null,
+                                      "attributes": []
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 393,
+                                    "end": 435
+                                  }
+                                }
+                              ],
+                              "attributes": []
+                            }
+                          },
+                          "span": {
+                            "start": 375,
+                            "end": 437
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "span": {
+                  "start": 359,
+                  "end": 437
+                }
+              }
+            ]
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 437
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 437
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

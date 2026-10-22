@@ -17,16 +17,8 @@ class B {
     #[nodiscard] public function __Construct() {}
 }
 ===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
+expected expression, found 'class'
+expected ';' after expression
 ===errors 8.1===
 A never-returning function must not return
 ===errors >=8.5===
@@ -44,7 +36,123 @@ PHP Parse error:  syntax error, unexpected 'class' (T_CLASS) in Standard input c
 PHP Fatal error:  A never-returning function must not return in Standard input code on line 5
 ===php_error >=8.5===
 PHP Fatal error:  A void function does not return a value, but #[\NoDiscard] requires a return value in Standard input code on line 2
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "c"
+                },
+                "span": {
+                  "start": 84,
+                  "end": 86
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Assign": {
+                    "target": {
+                      "kind": {
+                        "Variable": "d"
+                      },
+                      "span": {
+                        "start": 124,
+                        "end": 126
+                      }
+                    },
+                    "op": "Assign",
+                    "value": {
+                      "kind": "Error",
+                      "span": {
+                        "start": 163,
+                        "end": 168
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 124,
+                  "end": 168
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 84,
+            "end": 168
+          }
+        }
+      },
+      "span": {
+        "start": 84,
+        "end": 128
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 169,
+              "end": 170
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 163,
+        "end": 432
+      }
+    },
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "B",
+            "span": {
+              "start": 439,
+              "end": 440
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 433,
+        "end": 494
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 494
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

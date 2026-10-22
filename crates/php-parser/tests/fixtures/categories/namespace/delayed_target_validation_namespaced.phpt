@@ -2,10 +2,37 @@
 <?php
 namespace N;
 #[\DelayedTargetValidation] #[\Attribute] trait T {}
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Namespace": {
+          "name": {
+            "parts": [
+              "N"
+            ],
+            "kind": "Unqualified",
+            "span": {
+              "start": 16,
+              "end": 17
+            }
+          },
+          "body": "Simple"
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 18
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 18
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

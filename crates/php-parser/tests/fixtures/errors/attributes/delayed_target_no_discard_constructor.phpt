@@ -3,14 +3,46 @@
 class A {
     #[DelayedTargetValidation] #[NoDiscard] public function __construct() {}
 }
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
 ===errors >=8.5===
 Method A::__construct cannot be #[\NoDiscard]
 ===php_error >=8.5===
 PHP Fatal error:  Method A::__construct cannot be #[\NoDiscard] in Standard input code on line 3
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 94
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 94
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

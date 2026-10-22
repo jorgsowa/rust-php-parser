@@ -7,13 +7,6 @@ Attributes added after the target version are ordinary classes, so they are not 
 #[NoDiscard] class C {}
 #[Deprecated] #[Deprecated] function f() {}
 #[DelayedTargetValidation] interface I {}
-===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
 ===errors 8.3===
 Attribute "Override" cannot target class (allowed targets: method)
 ===errors 8.4===
@@ -36,7 +29,15 @@ PHP Fatal error:  Attribute "Override" cannot target class (allowed targets: met
 PHP Fatal error:  Attribute "Override" cannot target class (allowed targets: method, property) in Standard input code on line 2
 ===php_error >=8.6===
 PHP Fatal error:  Attribute "Override" cannot target class (allowed targets: method, property, class constant) in Standard input code on line 2
-===ast===
+===ast <=7.4===
+{
+  "stmts": [],
+  "span": {
+    "start": 0,
+    "end": 163
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

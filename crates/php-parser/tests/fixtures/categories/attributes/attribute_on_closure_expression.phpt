@@ -1,10 +1,55 @@
 ===source===
 <?php $x = #[Attr] function() { return 1; };
 ===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
+expected expression, found end of file
+expected ';' after expression
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected end of file in Standard input code on line 1
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "x"
+                },
+                "span": {
+                  "start": 6,
+                  "end": 8
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": "Error",
+                "span": {
+                  "start": 44,
+                  "end": 44
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 44
+          }
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 10
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 10
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

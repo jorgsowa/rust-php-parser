@@ -6,11 +6,126 @@ class C {
 }
 interface I { #[A] const X = 1, Y = 2; }
 ===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
-'attributes' requires PHP 8.0 or higher
+expected '}', found end of file
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 6
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "C",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "ClassConst": {
+                  "name": {
+                    "name": "A",
+                    "span": {
+                      "start": 48,
+                      "end": 49
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "value": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 52,
+                      "end": 53
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 35,
+                "end": 61
+              }
+            },
+            {
+              "kind": {
+                "ClassConst": {
+                  "name": {
+                    "name": "B",
+                    "span": {
+                      "start": 55,
+                      "end": 56
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "value": {
+                    "kind": {
+                      "Int": 2
+                    },
+                    "span": {
+                      "start": 59,
+                      "end": 60
+                    }
+                  },
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 35,
+                "end": 61
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 63
+      }
+    },
+    {
+      "kind": {
+        "Interface": {
+          "name": {
+            "name": "I",
+            "span": {
+              "start": 74,
+              "end": 75
+            }
+          },
+          "extends": [],
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 64,
+        "end": 77
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 77
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {

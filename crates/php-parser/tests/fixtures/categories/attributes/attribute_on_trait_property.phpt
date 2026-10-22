@@ -1,10 +1,38 @@
 ===source===
 <?php trait T { #[Inject] public string $dep; }
 ===errors <=7.4===
-'attributes' requires PHP 8.0 or higher
+expected '}', found end of file
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 1
-===ast===
+===ast <=7.4===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Trait": {
+          "name": {
+            "name": "T",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
+          "members": [],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 15
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 15
+  }
+}
+===ast >=8.0===
 {
   "stmts": [
     {
