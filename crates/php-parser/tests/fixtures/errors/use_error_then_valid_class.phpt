@@ -26,7 +26,7 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
               "alias": null,
               "span": {
                 "start": 10,
-                "end": 9
+                "end": 10
               }
             }
           ]

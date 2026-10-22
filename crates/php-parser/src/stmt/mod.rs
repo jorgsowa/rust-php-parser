@@ -2939,7 +2939,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                 }
                 cp
             };
-            let sub_span = Span::new(item_start, parser.previous_end());
+            let sub_span = parser.span_from(item_start);
             let combined_name = Name::Complex {
                 parts: combined_parts,
                 kind: if first_name.kind() == NameKind::FullyQualified {
@@ -2952,7 +2952,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
 
             let alias = parse_use_alias(parser);
 
-            let use_span = Span::new(sub_start, parser.previous_end());
+            let use_span = parser.span_from(sub_start);
             uses.push(UseItem {
                 name: combined_name,
                 alias,
@@ -2969,7 +2969,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
         // Regular use (possibly comma-separated)
         let alias = parse_use_alias(parser);
 
-        let item_span = Span::new(item_start, parser.previous_end());
+        let item_span = parser.span_from(item_start);
         uses.push(UseItem {
             name: first_name,
             alias,
@@ -2988,7 +2988,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
 
             let alias = parse_use_alias(parser);
 
-            let next_span = Span::new(next_start, parser.previous_end());
+            let next_span = parser.span_from(next_start);
             uses.push(UseItem {
                 name,
                 alias,
