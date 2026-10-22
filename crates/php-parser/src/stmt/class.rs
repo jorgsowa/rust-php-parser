@@ -444,6 +444,15 @@ pub(super) fn is_virtual_property(name: &str, hooks: &[PropertyHook<'_, '_>]) ->
     fn folded_str(expr: &Expr<'_, '_>) -> Option<String> {
         match &expr.kind {
             ExprKind::String(s) => Some(s.to_string_lossy().into_owned()),
+            ExprKind::Nowdoc { value, .. } => Some(value.to_string()),
+            ExprKind::Heredoc { parts, .. } => {
+                parts
+                    .iter()
+                    .try_fold(String::new(), |acc, part| match part {
+                        StringPart::Literal(s) => Some(acc + &s.to_string_lossy()),
+                        _ => None,
+                    })
+            }
             ExprKind::Parenthesized(inner) => folded_str(inner),
             ExprKind::Binary(b) if b.op == BinaryOp::Concat => {
                 Some(folded_str(b.left)? + &folded_str(b.right)?)
