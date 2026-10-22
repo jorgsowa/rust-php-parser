@@ -2201,7 +2201,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
     });
 
     let mut catches = parser.alloc_vec_with_capacity(2);
-    while parser.eat(TokenKind::Catch).is_some() {
+    while let Some(catch_token) = parser.eat(TokenKind::Catch) {
         let catch_start = parser.start_span();
         parser.expect(TokenKind::LeftParen);
 
@@ -2247,7 +2247,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             parser.require_version(
                 PhpVersion::Php80,
                 "non-capturing catch",
-                Span::new(catch_start, parser.previous_end()),
+                Span::new(catch_token.span.start, parser.previous_end()),
             );
         }
 
