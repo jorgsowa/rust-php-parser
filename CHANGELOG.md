@@ -7,39 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.25.0] - 2026-10-22
+
+Errors are now machine-readable: every `ParseError` has a stable code, and every compile-time error names the rule it breaks. Version-targeted parsing follows each PHP version from 7.4 to 8.6 much more closely.
+
 ### Added
 
-- `LexerErrorKind::UnterminatedComment` for a `/*` or `/**` comment without its `*/` (`php-lexer`).
-- `LexerErrorKind::InvalidNumericLiteral` for a malformed numeric literal such as `1_` (`php-lexer`).
-- `Name::join_parts_in(src)`, which borrows a multi-part name from the source instead of allocating when it is written without whitespace or comments (`php-ast`).
-- `ForbiddenRule`, carried as `rule` on `ParseError::Forbidden` and returned by `ParseError::forbidden_rule()`, so tools can match a compile-time error by rule instead of by message (`php-rs-parser`). Covers `self`/`static`/`parent` outside a class or without a parent, magic method return types, `#[Attribute]`, `#[Deprecated]` and `#[AllowDynamicProperties]` targets, a bare `return;` with a return type, generator return types, readonly property defaults, duplicate parameters, reassigning `$this`, and every error PHP raises while parsing rather than compiling: string interpolation and escapes, numeric literals, heredoc indentation, modifiers, reserved names, type syntax, casts, assignment and write targets, references and `list()`, and the class, interface, trait and enum checks on members, modifiers, property hooks, promoted properties, magic methods and enum cases, and the checks on statements, namespaces, `declare`, `goto` and `break`, parameters, `$this` and `$GLOBALS`, type declarations, expressions, write and reference targets, destructuring, closures, constant expressions and attributes; only lexer errors without a rule are `ForbiddenRule::Other`.
-- `ForbiddenRule::ALL`, `ForbiddenRule::phase()` with `Phase::Parse` or `Phase::Compile` for whether `php -l` reports a rule as a parse error or a fatal error, and `FromStr` and `Display` for the rule identifiers (`php-rs-parser`).
-- `ParseError::code()`, a stable identifier for every error, and `ParseError::leaves_ast_incomplete()`, false for `Forbidden` and `VersionTooLow` errors whose nodes are fully built (`php-rs-parser`).
-- A `code` on each error returned by `parse` (`php-wasm`).
+- `ForbiddenRule` on `ParseError::Forbidden` (`rule`, `forbidden_rule()`), so tools can match errors by rule instead of by message. Includes `ForbiddenRule::ALL`, `phase()` (`Phase::Parse` or `Phase::Compile`, as `php -l` reports it), `FromStr` and `Display` (`php-rs-parser`).
+- `ParseError::code()`, a stable identifier for every error, and `ParseError::leaves_ast_incomplete()` (`php-rs-parser`). Errors returned by `parse` carry the `code` (`php-wasm`).
+- `LexerErrorKind::UnterminatedComment` and `LexerErrorKind::InvalidNumericLiteral`, which replaces `Other` for literals such as `1_` (`php-lexer`).
+- `Name::join_parts_in(src)`, which borrows a multi-part name from the source when possible (`php-ast`).
 
 ### Changed
 
-- `ParseError::UnclosedDelimiter` reads `missing closing ')'` instead of naming the byte offset where the delimiter opened, which stays in `opened_at` (`php-rs-parser`).
-- A malformed numeric literal is reported as `LexerErrorKind::InvalidNumericLiteral` instead of `LexerErrorKind::Other` (`php-lexer`).
-- `Name::join_parts` and `Name::to_string_repr` borrow single-part names such as `\strlen` and `namespace\foo` instead of allocating, except `to_string_repr` of a fully qualified name (`php-ast`).
+- `ParseError::UnclosedDelimiter` reads `missing closing ')'`; the opening offset stays in `opened_at` (`php-rs-parser`).
+- `Name::join_parts` and `Name::to_string_repr` borrow single-part names instead of allocating (`php-ast`).
 
 ### Removed
 
-- `ParseError::ExpectedExpression`, `ParseError::ExpectedStatement` and `ParseError::ExpectedOpenTag`; these are reported as `ParseError::Expected`, whose message also names the token found (`php-rs-parser`).
+- **Breaking:** `ParseError::ExpectedExpression`, `ExpectedStatement` and `ExpectedOpenTag`; use `ParseError::Expected`, whose message also names the token found (`php-rs-parser`).
 
 ### Fixed
 
-- `\static` and `namespace\static` in a type are reported as `Type declaration 'static' must be unqualified` from PHP 8.5, as PHP 8.5.12 does, instead of from 8.6 and as an invalid class name; `namespace\static` inside a class stays valid before 8.5 (`php-rs-parser`).
-- Errors that PHP versions older than the latest report but the parser missed (`php-rs-parser`):
-  - PHP 8.0: trailing commas in parameter and closure `use` lists, the `static` type, reserved keywords in namespaced names, `::class` on a non-name, `new (expr)`, `instanceof (expr)`, `->` on constants, `->`/`::` on class constants, and dereferencing magic constants or interpolated strings.
-  - PHP 7.4: chained non-associative comparisons such as `1 < 2 < 3`.
-  - PHP 8.1: a named argument after argument unpacking.
-  - PHP 8.2: `?false` and `false|null`.
-  - PHP 8.3: `new readonly class`.
-  - PHP 8.4: `exit` called with named arguments, unpacking, several arguments, a trailing comma or `...`, and an empty statement before `declare(strict_types=1)`.
-  - PHP 8.5: `clone` called with named arguments, unpacking, more than two arguments or a trailing comma.
-  - Before 8.1, `~1.5` folds to an integer, and before 8.4 `0 ** -1` folds, so both are illegal class names (`(~1.5)::foo()`).
-- Valid PHP 7.4 that the parser rejected (`php-rs-parser`): whitespace inside namespaced names, `implements\A`, `mixed` as a class name, `function match()`, a static magic method other than the constructor, destructor and `__clone`, an unterminated comment, `<?=` as an identifier, and errors inside `#[...]`, which PHP 7.4 reads as a comment.
+- Version gates follow PHP from 7.4 to 8.6: errors that older versions report (trailing commas in parameter lists before 8.0, `?false` before 8.2, `new readonly class` before 8.3, `exit` and `clone` argument forms, …), valid PHP 7.4 that was rejected (`mixed` as a class name, `function match()`, `#[...]` as a comment, …), keywords such as `readonly`, `never` and `__PROPERTY__` read as names before they were introduced, and PHP 8.6 features (readonly property defaults, partial function application in constant expressions, property writes through constant objects). `\static` and `namespace\static` in types are rejected from PHP 8.5 (`php-rs-parser`).
+- Lexing: nothing after `__halt_compiler()` is lexed, casts need only spaces or tabs around the keyword, a lone `\r` is a line break, and interpolations are scanned correctly past comments, backticks, heredocs and nested strings (`php-lexer`, `php-rs-parser`).
+- Parsing: bare `yield` before `?`, `??`, `:`, `=>` and `as`; `var`, `insteadof` and hook names match case-insensitively; `**` stays out of an `instanceof` operand; `::` works on non-constant array expressions; `self` and `parent` are valid global constant names and stay unresolved in anonymous class types (`php-rs-parser`).
+- Compile-time checks no longer reject valid code (`Enum` in intersection types, foldable class names, short-circuit folding, set hook parameter types, heredoc indentation inside interpolations) and now catch stray semicolons in class bodies, `var` with other modifiers, `final private` and pre-8.1 `final` constants, reserved enum names, invalid typed enum constants, by-reference `get` hooks with a `set` hook and `<?=` without an expression (`php-rs-parser`).
+- A parenthesized constant named like a cast keyword, such as `(int)`, no longer prints as a cast (`php-printer`).
 
 ## [0.24.1] - 2026-10-21
 
