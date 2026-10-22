@@ -429,6 +429,16 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     }
 
     #[inline]
+    /// Treats everything from `offset` on as raw data: no tokens, comments or lexer errors.
+    pub(crate) fn halt_at(&mut self, offset: usize) {
+        self.lexer.halt_at(offset);
+        self.comments.retain(|c| (c.span.start as usize) < offset);
+        let eof = Token::eof(self.source.len() as u32);
+        self.current = eof;
+        self.next = eof;
+        self.next2 = eof;
+    }
+
     fn next_non_comment(&mut self) -> Token {
         advance_lexer_skip_comments(&mut self.lexer, self.source, &mut self.comments)
     }

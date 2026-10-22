@@ -3084,13 +3084,9 @@ fn parse_halt_compiler<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> St
         };
     }
     let remaining = &parser.source[current_pos..];
+    parser.halt_at(current_pos);
 
-    // Advance to EOF so the parser stops
-    while !parser.check(TokenKind::Eof) {
-        parser.advance();
-    }
-
-    let span = Span::new(start, parser.previous_end());
+    let span = Span::new(start, parser.source.len() as u32);
     Stmt {
         kind: StmtKind::HaltCompiler(remaining),
         span,

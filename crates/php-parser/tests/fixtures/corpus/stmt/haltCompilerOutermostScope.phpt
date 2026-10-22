@@ -39,7 +39,7 @@ PHP Fatal error:  __HALT_COMPILER() can only be used from the outermost scope in
             },
             "span": {
               "start": 16,
-              "end": 42
+              "end": 40
             }
           },
           "elseif_branches": [],
@@ -48,12 +48,12 @@ PHP Fatal error:  __HALT_COMPILER() can only be used from the outermost scope in
       },
       "span": {
         "start": 6,
-        "end": 42
+        "end": 40
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 42
+    "end": 40
   }
 }

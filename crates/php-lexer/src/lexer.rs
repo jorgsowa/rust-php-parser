@@ -385,6 +385,16 @@ impl<'src> Lexer<'src> {
         list.get(i) != Some(&start)
     }
 
+    /// Stops lexing at `offset`, as `__halt_compiler();` does: every later token is `Eof` and
+    /// errors from bytes at or after `offset` are dropped. Public for the parser crate; outside semver.
+    #[doc(hidden)]
+    pub fn halt_at(&mut self, offset: usize) {
+        self.peeked = None;
+        self.peeked2 = None;
+        self.pos = self.source.len();
+        self.errors.retain(|e| (e.span.start as usize) < offset);
+    }
+
     /// The source text being lexed.
     pub fn source(&self) -> &'src str {
         self.source

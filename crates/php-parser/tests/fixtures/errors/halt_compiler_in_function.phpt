@@ -37,12 +37,12 @@ PHP Fatal error:  __HALT_COMPILER() can only be used from the outermost scope in
       },
       "span": {
         "start": 6,
-        "end": 41
+        "end": 39
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 41
+    "end": 39
   }
 }
