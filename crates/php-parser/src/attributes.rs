@@ -123,6 +123,21 @@ struct InternalAttribute {
     since: PhpVersion,
 }
 
+impl InternalAttribute {
+    fn targets_for(&self, version: PhpVersion) -> u8 {
+        let mut targets = self.targets;
+        if self.lower_name == "override" {
+            if version >= PhpVersion::Php85 {
+                targets |= AttrTarget::Property.bit();
+            }
+            if version >= PhpVersion::Php86 {
+                targets |= AttrTarget::ClassConst.bit();
+            }
+        }
+        targets
+    }
+}
+
 const fn bits(targets: &[AttrTarget]) -> u8 {
     let mut mask = 0;
     let mut i = 0;
@@ -156,9 +171,10 @@ const INTERNAL_ATTRIBUTES: [InternalAttribute; 8] = [
         targets: bits(&[AttrTarget::Parameter]),
         since: PhpVersion::Php82,
     },
+    // Properties from 8.5 and class constants from 8.6 are added by `targets_for`.
     InternalAttribute {
         lower_name: "override",
-        targets: bits(&[AttrTarget::Method, AttrTarget::Property]),
+        targets: bits(&[AttrTarget::Method]),
         since: PhpVersion::Php83,
     },
     InternalAttribute {
@@ -226,13 +242,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         for (i, (attribute, (name, internal))) in attributes.iter().zip(&resolved).enumerate() {
             let Some(internal) = internal else { continue };
             let span = attribute.span;
-            let target_matches = internal.targets & site_targets != 0;
+            let targets = internal.targets_for(self.version);
+            let target_matches = targets & site_targets != 0;
             if !target_matches && !delayed_validation {
                 self.attribute_error(
                     format!(
                         "Attribute \"{name}\" cannot target {} (allowed targets: {})",
                         site.target.label(),
-                        allowed_targets(internal.targets)
+                        allowed_targets(targets)
                     ),
                     span,
                 );

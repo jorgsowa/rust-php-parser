@@ -25,7 +25,7 @@ enum E {
 }
 #[Override] const K = 1;
 #[Attribute] const L = 1;
-===errors >=8.5===
+===errors 8.5===
 Attribute "Attribute" cannot target function (allowed targets: class)
 Attribute "Override" cannot target class (allowed targets: method, property)
 Attribute "ReturnTypeWillChange" cannot target class (allowed targets: method)
@@ -46,6 +46,26 @@ Attribute "Attribute" cannot target method (allowed targets: class)
 Attribute "Attribute" cannot target class constant (allowed targets: class)
 Attribute "Override" cannot target class constant (allowed targets: method, property)
 Attribute "Override" cannot target constant (allowed targets: method, property)
+Attribute "Attribute" cannot target constant (allowed targets: class)
+===errors >=8.6===
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "Override" cannot target class (allowed targets: method, property, class constant)
+Attribute "ReturnTypeWillChange" cannot target class (allowed targets: method)
+Attribute "SensitiveParameter" cannot target function (allowed targets: parameter)
+Attribute "NoDiscard" cannot target class (allowed targets: function, method)
+Attribute "AllowDynamicProperties" cannot target function (allowed targets: class)
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "Override" cannot target function (allowed targets: method, property, class constant)
+Attribute "NoDiscard" cannot target class (allowed targets: function, method)
+Attribute "Attribute" cannot target property (allowed targets: class)
+Attribute "Attribute" cannot target class constant (allowed targets: class)
+Attribute "Override" cannot target parameter (allowed targets: method, property, class constant)
+Attribute "Deprecated" cannot target parameter (allowed targets: class, function, method, class constant, constant)
+Attribute "Attribute" cannot target method (allowed targets: class)
+Attribute "Deprecated" cannot target property (allowed targets: class, function, method, class constant, constant)
+Attribute "Attribute" cannot target method (allowed targets: class)
+Attribute "Attribute" cannot target class constant (allowed targets: class)
+Attribute "Override" cannot target constant (allowed targets: method, property, class constant)
 Attribute "Attribute" cannot target constant (allowed targets: class)
 ===php_error <=8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 17
