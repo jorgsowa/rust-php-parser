@@ -9,6 +9,43 @@ class C extends P {
     public function f(): parent|object {}
     public function g(): object|static {}
 }
+===errors <=7.4===
+'union types' requires PHP 8.0 or higher
+Type A|object contains both object and a class type, which is redundant
+'union types' requires PHP 8.0 or higher
+'null type' requires PHP 8.0 or higher
+Type A|object|int|null contains both object and a class type, which is redundant
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'DNF types' requires PHP 8.2 or higher
+Type (A&B)|object contains both object and a class type, which is redundant
+'union types' requires PHP 8.0 or higher
+Type Traversable|Closure|object|array contains both object and a class type, which is redundant
+'union types' requires PHP 8.0 or higher
+Type self|object contains both object and a class type, which is redundant
+'union types' requires PHP 8.0 or higher
+Type parent|object contains both object and a class type, which is redundant
+'union types' requires PHP 8.0 or higher
+Type static|object contains both object and a class type, which is redundant
+===errors 8.0===
+Type A|object contains both object and a class type, which is redundant
+Type A|object|int|null contains both object and a class type, which is redundant
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type (A&B)|object contains both object and a class type, which is redundant
+Type Traversable|Closure|object|array contains both object and a class type, which is redundant
+Type self|object contains both object and a class type, which is redundant
+Type parent|object contains both object and a class type, which is redundant
+Type static|object contains both object and a class type, which is redundant
+===errors 8.1===
+Type A|object contains both object and a class type, which is redundant
+Type A|object|int|null contains both object and a class type, which is redundant
+'DNF types' requires PHP 8.2 or higher
+Type (A&B)|object contains both object and a class type, which is redundant
+Type Traversable|Closure|object|array contains both object and a class type, which is redundant
+Type self|object contains both object and a class type, which is redundant
+Type parent|object contains both object and a class type, which is redundant
+Type static|object contains both object and a class type, which is redundant
 ===errors 8.2-8.4===
 Type A|object contains both object and a class type, which is redundant
 Type A|object|int|null contains both object and a class type, which is redundant
@@ -25,11 +62,13 @@ Type Traversable|Closure|object|array contains both object and a class type, whi
 Type C|object contains both object and a class type, which is redundant
 Type P|object contains both object and a class type, which is redundant
 Type static|object contains both object and a class type, which is redundant
-===php_error <=8.1===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting '{' in Standard input code on line 2
+===php_error 8.0-8.1===
 PHP Parse error:  syntax error, unexpected token "(" in Standard input code on line 4
 ===php_error >=8.2===
 PHP Fatal error:  Type A|object contains both object and a class type, which is redundant in Standard input code on line 2
-===ast >=8.2===
+===ast===
 {
   "stmts": [
     {

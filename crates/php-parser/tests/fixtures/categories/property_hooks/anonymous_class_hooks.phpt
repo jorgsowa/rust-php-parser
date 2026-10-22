@@ -15,9 +15,15 @@ assert(false && new class {
         get => 42;
     }
 });
-===php_error <=8.3===
+===errors <=8.3===
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 4
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 4
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

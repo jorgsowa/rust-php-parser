@@ -1,13 +1,13 @@
 ===source===
 <?php
 class A { function m() { return function(): void { return 1; }; } }
-===errors >=8.1===
+===errors===
 A void function must not return a value
 ===php_error <=8.3===
 PHP Fatal error:  A void function must not return a value in Standard input code on line 2
 ===php_error >=8.4===
 PHP Fatal error:  A void method must not return a value in Standard input code on line 2
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

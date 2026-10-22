@@ -5,6 +5,13 @@ function f(
     #[Attr1] #[Attr2] int $x,
     #[Attr3] string $y
 ): void {}
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
 ===ast===
 {
   "stmts": [

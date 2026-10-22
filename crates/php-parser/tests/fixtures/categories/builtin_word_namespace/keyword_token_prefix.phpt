@@ -1,6 +1,8 @@
 ===source===
 <?php
 function f(self\X $a, static\Y $b, null\Z $c, array\W $d) {}
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'static' (T_STATIC), expecting variable (T_VARIABLE) in Standard input code on line 2
 ===ast===
 {
   "stmts": [

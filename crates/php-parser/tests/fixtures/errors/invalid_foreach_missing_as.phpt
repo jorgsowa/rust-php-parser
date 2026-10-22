@@ -5,7 +5,9 @@ foreach ($items $item) {
 }
 ===errors===
 expected 'as', found variable
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '$item' (T_VARIABLE) in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected variable "$item" in Standard input code on line 2
 ===ast===
 {

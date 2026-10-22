@@ -17,6 +17,23 @@ namespace N {
 namespace {
     function i(): \Foo|Foo {}
 }
+===errors <=7.4===
+'union types' requires PHP 8.0 or higher
+Duplicate type 'F' in union type
+'union types' requires PHP 8.0 or higher
+Duplicate type 'G' in union type
+'union types' requires PHP 8.0 or higher
+Duplicate type 'B' in union type
+'union types' requires PHP 8.0 or higher
+Duplicate type '\X\C' in union type
+'union types' requires PHP 8.0 or higher
+Duplicate type 'E' in union type
+'union types' requires PHP 8.0 or higher
+Duplicate type '\Traversable' in union type
+'union types' requires PHP 8.0 or higher
+'union types' requires PHP 8.0 or higher
+'union types' requires PHP 8.0 or higher
+Duplicate type 'Foo' in union type
 ===errors 8.0-8.4===
 Duplicate type 'F' in union type
 Duplicate type 'G' in union type
@@ -35,9 +52,11 @@ Duplicate type '\Traversable' in union type
 Duplicate type 'self' in union type
 Duplicate type '\X\A' in union type
 Duplicate type 'Foo' in union type
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting '{' in Standard input code on line 5
+===php_error >=8.0===
 PHP Fatal error:  Duplicate type N\F is redundant in Standard input code on line 5
-===ast >=8.0===
+===ast===
 {
   "stmts": [
     {

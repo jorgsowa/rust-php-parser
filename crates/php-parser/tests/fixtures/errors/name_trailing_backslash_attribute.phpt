@@ -1,11 +1,14 @@
 ===source===
 <?php
 #[\App\] function f() {}
-===errors >=8.5===
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
 expected identifier, found ']'
-===php_error===
+===errors >=8.0===
+expected identifier, found ']'
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "\", expecting "]" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

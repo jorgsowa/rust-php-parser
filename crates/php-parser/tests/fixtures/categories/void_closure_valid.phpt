@@ -7,11 +7,15 @@ $d = fn(): never => throw new E;
 $e = fn(): int => 1;
 $f = function(): never { throw new E; };
 $g = function(): ?int { return 1; };
+===errors <=7.4===
+'throw expressions' requires PHP 8.0 or higher
 ===errors 8.1===
 A never-returning function must not return
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'throw' (T_THROW) in Standard input code on line 5
 ===php_error 8.1===
 PHP Fatal error:  A never-returning function must not return in Standard input code on line 5
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

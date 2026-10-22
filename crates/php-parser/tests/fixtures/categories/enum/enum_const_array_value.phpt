@@ -1,8 +1,12 @@
 ===source===
 <?php enum Lists { const EMPTY = []; const NUMS = [1, 2, 3]; const ASSOC = ['a' => 1, 'b' => 2]; }
-===php_error <=8.0===
+===errors <=8.0===
+'enums' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'Lists' (T_STRING) in Standard input code on line 1
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "Lists" in Standard input code on line 1
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

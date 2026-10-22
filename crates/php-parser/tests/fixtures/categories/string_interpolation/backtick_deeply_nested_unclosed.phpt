@@ -4,7 +4,9 @@
 unterminated string literal
 unclosed '{' in string interpolation
 expected ';' after expression
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '`', expecting variable (T_VARIABLE) or '{' or '$' in Standard input code on line 1
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "`", expecting variable or "{" or "$" in Standard input code on line 1
 ===ast===
 {

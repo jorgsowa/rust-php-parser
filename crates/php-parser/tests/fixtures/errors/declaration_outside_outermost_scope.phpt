@@ -8,14 +8,33 @@ function f() {
 }
 if (1) { const Z = 3; }
 declare(ticks=1) { use D; }
-===errors===
+===errors <=7.4===
+'const' declarations can only be used at the outermost scope
+'attributes' requires PHP 8.0 or higher
+'const' declarations can only be used at the outermost scope
+'attributes on constants' requires PHP 8.5 or higher
+'use' declarations can only be used at the outermost scope
+namespace declarations can only be used at the outermost scope
+'const' declarations can only be used at the outermost scope
+'use' declarations can only be used at the outermost scope
+===errors 8.0-8.4===
+'const' declarations can only be used at the outermost scope
+'const' declarations can only be used at the outermost scope
+'attributes on constants' requires PHP 8.5 or higher
+'use' declarations can only be used at the outermost scope
+namespace declarations can only be used at the outermost scope
+'const' declarations can only be used at the outermost scope
+'use' declarations can only be used at the outermost scope
+===errors >=8.5===
 'const' declarations can only be used at the outermost scope
 'const' declarations can only be used at the outermost scope
 'use' declarations can only be used at the outermost scope
 namespace declarations can only be used at the outermost scope
 'const' declarations can only be used at the outermost scope
 'use' declarations can only be used at the outermost scope
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'const' (T_CONST) in Standard input code on line 3
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 3
 ===ast===
 {

@@ -2,7 +2,9 @@
 <?php class A { static function __clone() {} }
 ===errors===
 Method A::__clone() cannot be static
-===php_error===
+===php_error <=7.4===
+PHP Fatal error:  Clone method A::__clone() cannot be static in Standard input code on line 1
+===php_error >=8.0===
 PHP Fatal error:  Method A::__clone() cannot be static in Standard input code on line 1
 ===ast===
 {

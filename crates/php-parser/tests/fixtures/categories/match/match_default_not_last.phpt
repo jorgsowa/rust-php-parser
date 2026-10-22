@@ -1,5 +1,9 @@
 ===source===
 <?php $r = match ($v) { default => 0, 1 => 1, 2 => 2 };
+===errors <=7.4===
+'match expressions' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'default' (T_DEFAULT) in Standard input code on line 1
 ===ast===
 {
   "stmts": [

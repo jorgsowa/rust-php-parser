@@ -19,9 +19,16 @@ class D {
 enum M { case Y; }
 interface I {}
 trait T {}
-===php_error <=8.0===
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'enums' requires PHP 8.1 or higher
+===errors 8.0===
+'enums' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 14
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "M" in Standard input code on line 16
-===ast >=8.3===
+===ast===
 {
   "stmts": [
     {

@@ -26,9 +26,38 @@ class B {
 class C {
     final private function __Construct() {}
 }
-===php_error <=8.3===
+===errors <=7.4===
+'final class constants' requires PHP 8.1 or higher
+'property hooks' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'readonly parameters' requires PHP 8.1 or higher
+===errors 8.0===
+'final class constants' requires PHP 8.1 or higher
+'property hooks' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'readonly parameters' requires PHP 8.1 or higher
+===errors 8.1-8.3===
+'property hooks' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 9
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 9
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

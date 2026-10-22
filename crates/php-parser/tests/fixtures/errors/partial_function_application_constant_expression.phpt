@@ -9,6 +9,22 @@ class K {
     const F = static::m(?);
     const G = $o->m(?);
 }
+===errors <=8.5===
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
 ===errors >=8.6===
 Constant expression contains invalid operations
 Constant expression contains invalid operations
@@ -17,11 +33,13 @@ Cannot use dynamic function name in constant expression
 Cannot use dynamic function name in constant expression
 "static" is not allowed in compile-time constants
 Constant expression contains invalid operations
-===php_error <=8.5===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '?' in Standard input code on line 2
+===php_error 8.0-8.5===
 PHP Parse error:  syntax error, unexpected token "?" in Standard input code on line 2
 ===php_error >=8.6===
 PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 2
-===ast >=8.6===
+===ast===
 {
   "stmts": [
     {

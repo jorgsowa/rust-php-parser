@@ -1,15 +1,20 @@
 ===source===
 <?php
 function f((A&B|C) $x) {}
-===errors >=8.5===
+===errors <=8.1===
 expected '&' or ')', found '|'
-===php_error <=8.1===
+'parenthesized union types' requires PHP 8.2 or higher
+===errors >=8.2===
+expected '&' or ')', found '|'
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '(', expecting variable (T_VARIABLE) in Standard input code on line 2
+===php_error 8.0-8.1===
 PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 2
 ===php_error 8.2-8.4===
 PHP Parse error:  syntax error, unexpected token "|", expecting amp or ")" in Standard input code on line 2
 ===php_error >=8.5===
 PHP Parse error:  syntax error, unexpected token "|", expecting token "&" or ")" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

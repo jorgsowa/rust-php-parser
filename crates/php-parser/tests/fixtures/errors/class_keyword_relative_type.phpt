@@ -5,13 +5,26 @@ function g(): namespace\parent|int {}
 class A {
     function m(): namespace\parent {}
 }
-===errors===
+===errors <=7.4===
+'union types' requires PHP 8.0 or higher
+Cannot use "self" when no class scope is active
+Cannot use "static" when no class scope is active
+Cannot use "parent" when no class scope is active
+Cannot use "parent" when current class scope has no parent
+===errors 8.0-8.5===
+Cannot use "self" when no class scope is active
+Cannot use "static" when no class scope is active
+Cannot use "parent" when no class scope is active
+Cannot use "parent" when current class scope has no parent
+===errors >=8.6===
 Type declaration 'static' must be unqualified
 Cannot use "self" when no class scope is active
 Cannot use "static" when no class scope is active
 Cannot use "parent" when no class scope is active
 Cannot use "parent" when current class scope has no parent
-===php_error <=8.5===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'static' (T_STATIC), expecting identifier (T_STRING) in Standard input code on line 2
+===php_error 8.0-8.5===
 PHP Fatal error:  Cannot use "static" when no class scope is active in Standard input code on line 2
 ===php_error >=8.6===
 PHP Fatal error:  Type declaration 'static' must be unqualified in Standard input code on line 2

@@ -6,7 +6,9 @@ unterminated string literal
 expected ';' after expression
 expected ';' after expression
 expected ';' after expression
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'hello' (T_STRING) in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected identifier "hello" in Standard input code on line 2
 ===ast===
 {

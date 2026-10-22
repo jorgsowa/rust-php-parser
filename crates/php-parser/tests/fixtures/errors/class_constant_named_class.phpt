@@ -1,11 +1,11 @@
 ===source===
 <?php
 class A { const class = 1; }
-===errors >=8.5===
+===errors===
 A class constant must not be called 'class'; it is reserved for class name fetching
 ===php_error===
 PHP Fatal error:  A class constant must not be called 'class'; it is reserved for class name fetching in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

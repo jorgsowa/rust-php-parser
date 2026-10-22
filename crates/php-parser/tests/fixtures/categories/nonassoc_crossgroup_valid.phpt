@@ -3,7 +3,7 @@
 $a > $b == $c;
 $a >= $b == $c;
 $a instanceof Foo == $c;
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

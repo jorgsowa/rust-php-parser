@@ -5,7 +5,9 @@ $x = `{$a[`]}`;
 unterminated string literal
 unclosed '{' in string interpolation
 expected ';' after expression
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ';', expecting ']' in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token ";", expecting "]" in Standard input code on line 2
 ===ast===
 {

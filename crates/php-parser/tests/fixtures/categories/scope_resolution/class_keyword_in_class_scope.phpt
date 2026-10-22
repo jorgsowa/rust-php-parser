@@ -23,7 +23,11 @@ function f() {
         }
     };
 }
-===php_error <=8.0===
+===errors <=8.0===
+'enums' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'static' (T_STATIC) in Standard input code on line 5
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 12
 ===ast===
 {

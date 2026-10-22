@@ -6,7 +6,9 @@ use function Foo\{a, function b, const C};
 expected name, found 'const'
 expected name, found 'function'
 expected name, found 'const'
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'const' (T_CONST), expecting '}' in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "const", expecting "}" in Standard input code on line 2
 ===ast===
 {

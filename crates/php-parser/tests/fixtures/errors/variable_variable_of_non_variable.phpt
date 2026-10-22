@@ -11,7 +11,9 @@ expected variable, found integer
 expected variable, found string
 expected variable, found string
 expected variable, found string
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '"abc"' (T_CONSTANT_ENCAPSED_STRING), expecting variable (T_VARIABLE) or '{' or '$' in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected double-quoted string "abc", expecting variable or "{" or "$" in Standard input code on line 2
 ===ast===
 {

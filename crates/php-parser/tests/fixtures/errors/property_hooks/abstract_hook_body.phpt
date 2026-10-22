@@ -17,6 +17,45 @@ class B {
 trait T {
     abstract private $i { get; }
 }
+===errors <=7.4===
+'property hooks' requires PHP 8.4 or higher
+Abstract property hook cannot have body
+'property hooks' requires PHP 8.4 or higher
+Abstract property hook cannot have body
+'property hooks' requires PHP 8.4 or higher
+Property hook cannot be both abstract and final
+'property hooks' requires PHP 8.4 or higher
+Non-abstract property hook must have a body
+'property hooks' requires PHP 8.4 or higher
+Abstract property A::$e must specify at least one abstract hook
+'property hooks' requires PHP 8.4 or higher
+Property hook cannot be both abstract and final
+'property hooks' requires PHP 8.4 or higher
+Property hook cannot be both abstract and private
+'constructor property promotion' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+Non-abstract property hook must have a body
+'property hooks' requires PHP 8.4 or higher
+Property hook cannot be both abstract and private
+===errors 8.0-8.3===
+'property hooks' requires PHP 8.4 or higher
+Abstract property hook cannot have body
+'property hooks' requires PHP 8.4 or higher
+Abstract property hook cannot have body
+'property hooks' requires PHP 8.4 or higher
+Property hook cannot be both abstract and final
+'property hooks' requires PHP 8.4 or higher
+Non-abstract property hook must have a body
+'property hooks' requires PHP 8.4 or higher
+Abstract property A::$e must specify at least one abstract hook
+'property hooks' requires PHP 8.4 or higher
+Property hook cannot be both abstract and final
+'property hooks' requires PHP 8.4 or higher
+Property hook cannot be both abstract and private
+'property hooks' requires PHP 8.4 or higher
+Non-abstract property hook must have a body
+'property hooks' requires PHP 8.4 or higher
+Property hook cannot be both abstract and private
 ===errors >=8.4===
 Abstract property hook cannot have body
 Abstract property hook cannot have body
@@ -27,11 +66,13 @@ Property hook cannot be both abstract and final
 Property hook cannot be both abstract and private
 Non-abstract property hook must have a body
 Property hook cannot be both abstract and private
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 3
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error >=8.4===
 PHP Fatal error:  Abstract property hook cannot have body in Standard input code on line 3
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

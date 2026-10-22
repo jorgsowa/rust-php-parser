@@ -7,7 +7,11 @@ function n(): never { return; }
 class A {
     public function m(): void { if (true) { return 1; } }
 }
-===errors===
+===errors <=8.0===
+A void function must not return a value
+A function with return type must return a value
+A void function must not return a value
+===errors >=8.1===
 A void function must not return a value
 A never-returning function must not return
 A void function must not return a value

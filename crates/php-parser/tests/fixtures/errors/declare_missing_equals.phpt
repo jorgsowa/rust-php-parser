@@ -2,7 +2,9 @@
 <?php declare(strict_types 1);
 ===errors===
 expected '=', found integer
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '1' (T_LNUMBER), expecting '=' in Standard input code on line 1
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected integer "1", expecting "=" in Standard input code on line 1
 ===ast===
 {

@@ -8,16 +8,30 @@ class A extends B {
     function c(): (A&X)|self {}
     function d(): B|parent {}
 }
+===errors <=7.4===
+'union types' requires PHP 8.0 or higher
+'union types' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'DNF types' requires PHP 8.2 or higher
+'union types' requires PHP 8.0 or higher
+===errors 8.0===
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+===errors 8.1===
+'DNF types' requires PHP 8.2 or higher
 ===errors >=8.5===
 Duplicate type 'self' in union type
 Duplicate type '\N\A' in union type
 Type N\A&N\X is redundant as it is more restrictive than type N\A
 Duplicate type 'parent' in union type
-===php_error <=8.1===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting ';' or '{' in Standard input code on line 5
+===php_error 8.0-8.1===
 PHP Parse error:  syntax error, unexpected token "(" in Standard input code on line 7
 ===php_error >=8.5===
 PHP Fatal error:  Duplicate type N\A is redundant in Standard input code on line 5
-===ast >=8.2===
+===ast===
 {
   "stmts": [
     {

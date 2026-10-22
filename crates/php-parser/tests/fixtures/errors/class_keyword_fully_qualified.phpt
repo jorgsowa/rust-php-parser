@@ -21,7 +21,9 @@ class A {
 '\parent' is an invalid class name
 '\self' is an invalid class name
 '\self' is an invalid class name
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'static' (T_STATIC), expecting identifier (T_STRING) in Standard input code on line 4
+===php_error >=8.0===
 PHP Fatal error:  '\self' is an invalid class name in Standard input code on line 2
 ===ast===
 {

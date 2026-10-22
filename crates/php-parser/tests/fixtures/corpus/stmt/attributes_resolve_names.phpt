@@ -13,7 +13,14 @@ namespace A {
     #[\A\Attribute] function i() {}
     #[Foo\Attribute] function j() {}
 }
-===ast >=8.5===
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+===ast===
 {
   "stmts": [
     {

@@ -12,13 +12,37 @@ class Point {
         final $i,
     ) {}
 }
-===php_error <=8.0===
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'readonly parameters' requires PHP 8.1 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+'final promoted properties' requires PHP 8.5 or higher
+===errors 8.0===
+'readonly parameters' requires PHP 8.1 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'final promoted properties' requires PHP 8.5 or higher
+===errors 8.1-8.3===
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'final promoted properties' requires PHP 8.5 or higher
+===errors 8.4===
+'final promoted properties' requires PHP 8.5 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 5
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "int", expecting variable in Standard input code on line 8
 ===php_error 8.1-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 9
 ===php_error 8.4===
 PHP Fatal error:  Cannot use the final modifier on a parameter in Standard input code on line 11
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

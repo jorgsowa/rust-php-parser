@@ -8,7 +8,20 @@ class C {
 }
 #[Attr(function () {})]
 function f() {}
-===errors===
+===errors <=7.4===
+'closures in constant expressions' requires PHP 8.5 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+'attributes' requires PHP 8.0 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+===errors 8.0-8.4===
+'closures in constant expressions' requires PHP 8.5 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+===errors >=8.5===
 Closures in constant expressions must be static
 Cannot use(...) variables in constant expression
 Closures in constant expressions must be static

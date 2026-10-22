@@ -6,12 +6,18 @@ namespace M {
 namespace {
     function f(namespace\Foo\int $a, namespace\iterable $b) {}
 }
-===errors===
+===errors <=8.4===
+Cannot use "Foo\int" as a type name as it is reserved
+Type declaration 'iterable' must be unqualified
+Cannot use "self" when no class scope is active
+===errors >=8.5===
 Cannot use "M\Foo\callable" as a type name as it is reserved
 Cannot use "Foo\int" as a type name as it is reserved
 Type declaration 'iterable' must be unqualified
 Cannot use "self" when no class scope is active
-===php_error <=8.4===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'callable' (T_CALLABLE), expecting identifier (T_STRING) in Standard input code on line 3
+===php_error 8.0-8.4===
 PHP Fatal error:  Cannot use "self" when no class scope is active in Standard input code on line 3
 ===php_error >=8.5===
 PHP Fatal error:  Cannot use "M\Foo\callable" as a type name as it is reserved in Standard input code on line 3

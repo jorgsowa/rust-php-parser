@@ -1,15 +1,17 @@
 ===source===
 <?php
 $a = function() use () {};
-===errors >=8.5===
+===errors===
 expected variable, found ')'
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ')', expecting '&' or variable (T_VARIABLE) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected token ")", expecting "&" or variable in Standard input code on line 2
 ===php_error 8.1-8.4===
 PHP Parse error:  syntax error, unexpected token ")", expecting variable or "&" or amp in Standard input code on line 2
 ===php_error >=8.5===
 PHP Parse error:  syntax error, unexpected token ")", expecting variable or "&" or token "&" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

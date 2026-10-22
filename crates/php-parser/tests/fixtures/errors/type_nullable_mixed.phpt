@@ -2,11 +2,14 @@
 <?php
 function foo(?mixed $x) { }
 
+===errors <=7.4===
+'mixed type' requires PHP 8.0 or higher
+Type mixed cannot be marked as nullable since mixed already includes null
 ===errors >=8.0===
 Type mixed cannot be marked as nullable since mixed already includes null
-===php_error===
+===php_error >=8.0===
 PHP Fatal error:  Type mixed cannot be marked as nullable since mixed already includes null in Standard input code on line 2
-===ast >=8.0===
+===ast===
 {
   "stmts": [
     {

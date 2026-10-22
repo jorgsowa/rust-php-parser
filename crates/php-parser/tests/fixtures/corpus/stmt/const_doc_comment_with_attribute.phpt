@@ -4,9 +4,14 @@
 /** @api */
 #[SomeAttribute]
 const VERSION = '1.0.0';
-===php_error <=8.4===
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes on constants' requires PHP 8.5 or higher
+===errors 8.0-8.4===
+'attributes on constants' requires PHP 8.5 or higher
+===php_error 8.0-8.4===
 PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 5
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

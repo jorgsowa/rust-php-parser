@@ -48,11 +48,39 @@ function demoFn() {
 #[DelayedTargetValidation]
 #[NoDiscard] // Does nothing here
 const GLOBAL_CONST = 'BAR';
-===php_error <=8.3===
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes on constants' requires PHP 8.5 or higher
+===errors 8.0-8.3===
+'property hooks' requires PHP 8.4 or higher
+'attributes on constants' requires PHP 8.5 or higher
+===errors 8.4===
+'attributes on constants' requires PHP 8.5 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 10
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 10
 ===php_error 8.4===
 PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 49
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

@@ -1,7 +1,7 @@
 ===source===
 <?php
 use A as enum;
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

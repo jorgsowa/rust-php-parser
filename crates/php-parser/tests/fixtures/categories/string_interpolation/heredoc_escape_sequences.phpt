@@ -12,7 +12,7 @@ EOT;
 $d = <<<EOT
 Mixed \n newline \u{41} unicode
 EOT;
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

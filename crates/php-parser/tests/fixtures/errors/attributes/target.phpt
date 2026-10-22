@@ -25,6 +25,116 @@ enum E {
 }
 #[Override] const K = 1;
 #[Attribute] const L = 1;
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+'attributes' requires PHP 8.0 or higher
+'enums' requires PHP 8.1 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes on constants' requires PHP 8.5 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes on constants' requires PHP 8.5 or higher
+===errors 8.0===
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "Attribute" cannot target property (allowed targets: class)
+Attribute "Attribute" cannot target class constant (allowed targets: class)
+Attribute "Attribute" cannot target method (allowed targets: class)
+'property hooks' requires PHP 8.4 or higher
+Attribute "Attribute" cannot target method (allowed targets: class)
+'enums' requires PHP 8.1 or higher
+Attribute "Attribute" cannot target class constant (allowed targets: class)
+'attributes on constants' requires PHP 8.5 or higher
+'attributes on constants' requires PHP 8.5 or higher
+Attribute "Attribute" cannot target constant (allowed targets: class)
+===errors 8.1===
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "ReturnTypeWillChange" cannot target class (allowed targets: method)
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "Attribute" cannot target property (allowed targets: class)
+Attribute "Attribute" cannot target class constant (allowed targets: class)
+Attribute "Attribute" cannot target method (allowed targets: class)
+'property hooks' requires PHP 8.4 or higher
+Attribute "Attribute" cannot target method (allowed targets: class)
+Attribute "Attribute" cannot target class constant (allowed targets: class)
+'attributes on constants' requires PHP 8.5 or higher
+'attributes on constants' requires PHP 8.5 or higher
+Attribute "Attribute" cannot target constant (allowed targets: class)
+===errors 8.2===
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "ReturnTypeWillChange" cannot target class (allowed targets: method)
+Attribute "SensitiveParameter" cannot target function (allowed targets: parameter)
+Attribute "AllowDynamicProperties" cannot target function (allowed targets: class)
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "Attribute" cannot target property (allowed targets: class)
+Attribute "Attribute" cannot target class constant (allowed targets: class)
+Attribute "Attribute" cannot target method (allowed targets: class)
+'property hooks' requires PHP 8.4 or higher
+Attribute "Attribute" cannot target method (allowed targets: class)
+Attribute "Attribute" cannot target class constant (allowed targets: class)
+'attributes on constants' requires PHP 8.5 or higher
+'attributes on constants' requires PHP 8.5 or higher
+Attribute "Attribute" cannot target constant (allowed targets: class)
+===errors 8.3===
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "Override" cannot target class (allowed targets: method)
+Attribute "ReturnTypeWillChange" cannot target class (allowed targets: method)
+Attribute "SensitiveParameter" cannot target function (allowed targets: parameter)
+Attribute "AllowDynamicProperties" cannot target function (allowed targets: class)
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "Override" cannot target function (allowed targets: method)
+Attribute "Attribute" cannot target property (allowed targets: class)
+Attribute "Attribute" cannot target class constant (allowed targets: class)
+Attribute "Override" cannot target parameter (allowed targets: method)
+Attribute "Attribute" cannot target method (allowed targets: class)
+Attribute "Override" cannot target class constant (allowed targets: method)
+'property hooks' requires PHP 8.4 or higher
+Attribute "Attribute" cannot target method (allowed targets: class)
+Attribute "Attribute" cannot target class constant (allowed targets: class)
+Attribute "Override" cannot target class constant (allowed targets: method)
+'attributes on constants' requires PHP 8.5 or higher
+Attribute "Override" cannot target constant (allowed targets: method)
+'attributes on constants' requires PHP 8.5 or higher
+Attribute "Attribute" cannot target constant (allowed targets: class)
+===errors 8.4===
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "Override" cannot target class (allowed targets: method)
+Attribute "ReturnTypeWillChange" cannot target class (allowed targets: method)
+Attribute "SensitiveParameter" cannot target function (allowed targets: parameter)
+Attribute "AllowDynamicProperties" cannot target function (allowed targets: class)
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "Override" cannot target function (allowed targets: method)
+Attribute "Attribute" cannot target property (allowed targets: class)
+Attribute "Attribute" cannot target class constant (allowed targets: class)
+Attribute "Override" cannot target parameter (allowed targets: method)
+Attribute "Deprecated" cannot target parameter (allowed targets: class, function, method, class constant, constant)
+Attribute "Attribute" cannot target method (allowed targets: class)
+Attribute "Deprecated" cannot target property (allowed targets: class, function, method, class constant, constant)
+Attribute "Override" cannot target class constant (allowed targets: method)
+Attribute "Attribute" cannot target method (allowed targets: class)
+Attribute "Attribute" cannot target class constant (allowed targets: class)
+Attribute "Override" cannot target class constant (allowed targets: method)
+'attributes on constants' requires PHP 8.5 or higher
+Attribute "Override" cannot target constant (allowed targets: method)
+'attributes on constants' requires PHP 8.5 or higher
+Attribute "Attribute" cannot target constant (allowed targets: class)
 ===errors 8.5===
 Attribute "Attribute" cannot target function (allowed targets: class)
 Attribute "Override" cannot target class (allowed targets: method, property)
@@ -67,13 +177,15 @@ Attribute "Attribute" cannot target method (allowed targets: class)
 Attribute "Attribute" cannot target class constant (allowed targets: class)
 Attribute "Override" cannot target constant (allowed targets: method, property, class constant)
 Attribute "Attribute" cannot target constant (allowed targets: class)
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'C' (T_STRING), expecting '{' in Standard input code on line 11
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 17
 ===php_error 8.4===
 PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 23
 ===php_error >=8.5===
 PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets: class) in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

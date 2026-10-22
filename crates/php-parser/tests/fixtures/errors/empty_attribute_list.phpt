@@ -1,11 +1,14 @@
 ===source===
 <?php
 #[] class C {}
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+Attribute list cannot be empty
 ===errors >=8.0===
 Attribute list cannot be empty
-===php_error===
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "]" in Standard input code on line 2
-===ast >=8.0===
+===ast===
 {
   "stmts": [
     {

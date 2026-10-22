@@ -8,9 +8,23 @@ function foo(
 class Config {
     const DEFAULT = new Settings(debug: false);
 }
-===errors===
+===errors <=7.4===
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'named arguments' requires PHP 8.0 or higher
+'new in initializers' requires PHP 8.1 or higher
+'named arguments' requires PHP 8.0 or higher
 New expressions are not supported in this context
-===php_error <=8.0===
+===errors 8.0===
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+New expressions are not supported in this context
+===errors >=8.1===
+New expressions are not supported in this context
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ':', expecting ')' in Standard input code on line 5
+===php_error 8.0===
 PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 2
 ===php_error >=8.1===
 PHP Fatal error:  New expressions are not supported in this context in Standard input code on line 8

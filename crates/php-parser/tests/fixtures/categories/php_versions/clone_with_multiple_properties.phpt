@@ -1,8 +1,12 @@
 ===source===
 <?php $b = clone($obj, ['a' => 1, 'b' => 2, 'c' => 3]);
-===php_error <=8.4===
+===errors <=8.4===
+'clone with property overrides' requires PHP 8.5 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ',' in Standard input code on line 1
+===php_error 8.0-8.4===
 PHP Parse error:  syntax error, unexpected token "," in Standard input code on line 1
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

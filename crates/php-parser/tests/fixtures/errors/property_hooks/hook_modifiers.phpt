@@ -13,6 +13,30 @@ abstract class A {
     public $j { final final get => 1; }
     public $k { final get => 1; final set { } }
 }
+===errors <=8.3===
+'property hooks' requires PHP 8.4 or higher
+Cannot use the public modifier on a property hook
+'property hooks' requires PHP 8.4 or higher
+Cannot use the protected modifier on a property hook
+'property hooks' requires PHP 8.4 or higher
+Cannot use the private modifier on a property hook
+'property hooks' requires PHP 8.4 or higher
+Cannot use the private(set) modifier on a property hook
+'property hooks' requires PHP 8.4 or higher
+Cannot use the private modifier on a property hook
+'property hooks' requires PHP 8.4 or higher
+Cannot use the abstract modifier on a property hook
+Non-abstract property hook must have a body
+'property hooks' requires PHP 8.4 or higher
+Cannot use the abstract modifier on a property hook
+Non-abstract property hook must have a body
+'property hooks' requires PHP 8.4 or higher
+Cannot use the static modifier on a property hook
+'property hooks' requires PHP 8.4 or higher
+Cannot use the readonly modifier on a property hook
+'property hooks' requires PHP 8.4 or higher
+Multiple final modifiers are not allowed
+'property hooks' requires PHP 8.4 or higher
 ===errors >=8.4===
 Cannot use the public modifier on a property hook
 Cannot use the protected modifier on a property hook
@@ -26,11 +50,13 @@ Non-abstract property hook must have a body
 Cannot use the static modifier on a property hook
 Cannot use the readonly modifier on a property hook
 Multiple final modifiers are not allowed
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 3
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error >=8.4===
 PHP Fatal error:  Cannot use the public modifier on a property hook in Standard input code on line 3
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

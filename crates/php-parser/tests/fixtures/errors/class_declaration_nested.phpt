@@ -14,6 +14,24 @@ class A {
 enum F {
     public function h() { class D {} }
 }
+===errors <=8.0===
+'property hooks' requires PHP 8.4 or higher
+Class declarations may not be nested
+Class declarations may not be nested
+Class declarations may not be nested
+'enums' requires PHP 8.1 or higher
+Class declarations may not be nested
+Class declarations may not be nested
+'enums' requires PHP 8.1 or higher
+Class declarations may not be nested
+===errors 8.1-8.3===
+'property hooks' requires PHP 8.4 or higher
+Class declarations may not be nested
+Class declarations may not be nested
+Class declarations may not be nested
+Class declarations may not be nested
+Class declarations may not be nested
+Class declarations may not be nested
 ===errors >=8.4===
 Class declarations may not be nested
 Class declarations may not be nested
@@ -21,11 +39,13 @@ Class declarations may not be nested
 Class declarations may not be nested
 Class declarations may not be nested
 Class declarations may not be nested
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 3
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error >=8.4===
 PHP Fatal error:  Class declarations may not be nested in Standard input code on line 3
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

@@ -13,7 +13,7 @@ echo $b();
 echo $b->__invoke();
 
 ?>
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

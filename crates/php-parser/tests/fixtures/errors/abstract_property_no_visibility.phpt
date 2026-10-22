@@ -1,6 +1,6 @@
 ===source===
 <?php class Foo { abstract string $bar; }
-===errors >=7.4===
+===errors===
 properties cannot be abstract
 ===php_error <=8.2===
 PHP Fatal error:  Properties cannot be declared abstract in Standard input code on line 1
@@ -8,7 +8,7 @@ PHP Fatal error:  Properties cannot be declared abstract in Standard input code 
 PHP Fatal error:  Cannot use the abstract modifier on a property in Standard input code on line 1
 ===php_error >=8.4===
 PHP Fatal error:  Only hooked properties may be declared abstract in Standard input code on line 1
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

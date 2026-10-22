@@ -16,7 +16,11 @@ enum Status: int {
      */
     case NOT_FOUND = 404;
 }
-===php_error <=8.0===
+===errors <=8.0===
+'enums' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'Status' (T_STRING) in Standard input code on line 7
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 7
 ===ast===
 {

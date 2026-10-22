@@ -1,9 +1,18 @@
 ===source===
 <?php
 class A { final private readonly int $x; }
+===errors <=8.0===
+'readonly properties' requires PHP 8.1 or higher
+Property cannot be both final and private
+'final properties' requires PHP 8.4 or higher
+===errors 8.1-8.3===
+Property cannot be both final and private
+'final properties' requires PHP 8.4 or higher
 ===errors >=8.4===
 Property cannot be both final and private
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'int' (T_STRING), expecting variable (T_VARIABLE) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "int", expecting variable in Standard input code on line 2
 ===php_error 8.1-8.2===
 PHP Fatal error:  Cannot declare property A::$x final, the final modifier is allowed only for methods, classes, and class constants in Standard input code on line 2
@@ -11,7 +20,7 @@ PHP Fatal error:  Cannot declare property A::$x final, the final modifier is all
 PHP Fatal error:  Cannot use the final modifier on a property in Standard input code on line 2
 ===php_error >=8.4===
 PHP Fatal error:  Property cannot be both final and private in Standard input code on line 2
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

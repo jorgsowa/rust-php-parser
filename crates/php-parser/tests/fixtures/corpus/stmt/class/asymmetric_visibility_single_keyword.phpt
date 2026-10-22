@@ -11,11 +11,19 @@ class Foo {
         protected(set) int $age,
     ) {}
 }
-===php_error <=8.1===
+===errors <=8.3===
+'asymmetric visibility' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '(', expecting variable (T_VARIABLE) in Standard input code on line 4
+===php_error 8.0-8.1===
 PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 4
 ===php_error 8.2-8.3===
 PHP Parse error:  syntax error, unexpected token ")", expecting amp in Standard input code on line 4
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

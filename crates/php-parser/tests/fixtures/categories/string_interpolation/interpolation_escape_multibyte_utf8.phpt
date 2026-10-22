@@ -2,7 +2,7 @@
 <?php
 $str = "test\è";
 $str = "{$x["key\è"]}";
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

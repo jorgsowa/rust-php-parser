@@ -2,7 +2,9 @@
 <?php $x = "$arr[]";
 ===errors===
 empty index in string interpolation
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ']', expecting '-' or identifier (T_STRING) or variable (T_VARIABLE) or number (T_NUM_STRING) in Standard input code on line 1
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "]", expecting "-" or identifier or variable or number in Standard input code on line 1
 ===ast===
 {

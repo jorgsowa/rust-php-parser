@@ -1,11 +1,11 @@
 ===source===
 <?php
 function f(): int { return; }
-===errors >=8.5===
+===errors===
 A function with return type must return a value
 ===php_error===
 PHP Fatal error:  A function with return type must return a value in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

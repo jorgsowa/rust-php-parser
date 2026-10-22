@@ -6,11 +6,19 @@ class C {
     public function f(): ?static {}
 }
 function f(static $x) {}
-===errors===
+===errors <=7.4===
+static cannot be used as a property type
+'constructor property promotion' requires PHP 8.0 or higher
+'union types' requires PHP 8.0 or higher
+static cannot be used as a parameter type
+Cannot use the static modifier on a parameter
+===errors >=8.0===
 static cannot be used as a property type
 static cannot be used as a parameter type
 Cannot use the static modifier on a parameter
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'static' (T_STATIC) in Standard input code on line 3
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "static" in Standard input code on line 3
 ===ast===
 {

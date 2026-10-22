@@ -5,13 +5,18 @@ PHP rejects `static` on a parameter with "Cannot use the static modifier on a pa
 class A {
     public function __construct(public static int $x) {}
 }
-===errors >=8.5===
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
 Cannot use the static modifier on a parameter
-===php_error <=8.2===
+===errors >=8.0===
+Cannot use the static modifier on a parameter
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 3
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected token "static", expecting variable in Standard input code on line 3
 ===php_error >=8.3===
 PHP Fatal error:  Cannot use the static modifier on a parameter in Standard input code on line 3
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

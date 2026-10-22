@@ -1,6 +1,12 @@
 ===source===
 <?php
 function f(?bool\X $a, array\Y|null $b, iterable\Z|callable\W $c) {}
+===errors <=7.4===
+'union types' requires PHP 8.0 or higher
+'null type' requires PHP 8.0 or higher
+'union types' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '\' (T_NS_SEPARATOR), expecting variable (T_VARIABLE) in Standard input code on line 2
 ===ast===
 {
   "stmts": [

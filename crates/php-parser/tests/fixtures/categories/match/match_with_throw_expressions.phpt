@@ -5,6 +5,12 @@ $x = match ($status) {
     404 => throw new NotFoundException(),
     default => throw new RuntimeException('Unexpected'),
 };
+===errors <=7.4===
+'match expressions' requires PHP 8.0 or higher
+'throw expressions' requires PHP 8.0 or higher
+'throw expressions' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in Standard input code on line 3
 ===ast===
 {
   "stmts": [

@@ -10,7 +10,18 @@ class Foo {
     public $g = static::BAR;
     public function m($h = static::class) {}
 }
-===errors===
+===errors <=8.2===
+Dynamic class names are not allowed in compile-time class constant references
+'dynamic class constant fetch' requires PHP 8.3 or higher
+Dynamic class names are not allowed in compile-time class constant references
+(expression)::class cannot be used in constant expressions
+"static::" is not allowed in compile-time constants
+'dynamic class constant fetch' requires PHP 8.3 or higher
+"static::" is not allowed in compile-time constants
+"static::" is not allowed in compile-time constants
+static::class cannot be used for compile-time class name resolution
+static::class cannot be used for compile-time class name resolution
+===errors >=8.3===
 Dynamic class names are not allowed in compile-time class constant references
 Dynamic class names are not allowed in compile-time class constant references
 (expression)::class cannot be used in constant expressions
@@ -19,7 +30,9 @@ Dynamic class names are not allowed in compile-time class constant references
 "static::" is not allowed in compile-time constants
 static::class cannot be used for compile-time class name resolution
 static::class cannot be used for compile-time class name resolution
-===php_error <=8.2===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ';', expecting '(' in Standard input code on line 3
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected token ";", expecting "(" in Standard input code on line 3
 ===php_error >=8.3===
 PHP Fatal error:  Dynamic class names are not allowed in compile-time class constant references in Standard input code on line 2

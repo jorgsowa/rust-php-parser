@@ -4,6 +4,8 @@ class\Foo::x();
 function\bar();
 new list\Item;
 namespace\Foo::X;
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '\' (T_NS_SEPARATOR), expecting identifier (T_STRING) in Standard input code on line 2
 ===ast===
 {
   "stmts": [

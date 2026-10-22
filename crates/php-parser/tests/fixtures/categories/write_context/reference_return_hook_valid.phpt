@@ -5,11 +5,18 @@ class C {
     public $r { get => $this?->q; }
     public $s { &get { return $this->q; } }
 }
-===php_error <=8.1===
-PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
-===php_error 8.2===
-PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
-===php_error 8.3===
+===errors <=7.4===
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+===errors 8.0-8.3===
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 3
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===ast===
 {

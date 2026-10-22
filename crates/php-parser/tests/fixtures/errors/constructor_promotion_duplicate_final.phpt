@@ -5,15 +5,26 @@ class Foo {
         public final final string $x,
     ) {}
 }
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'final promoted properties' requires PHP 8.5 or higher
+'final promoted properties' requires PHP 8.5 or higher
+duplicate modifier 'final'
+===errors 8.0-8.4===
+'final promoted properties' requires PHP 8.5 or higher
+'final promoted properties' requires PHP 8.5 or higher
+duplicate modifier 'final'
 ===errors >=8.5===
 duplicate modifier 'final'
-===php_error <=8.2===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 4
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected token "final", expecting variable in Standard input code on line 4
 ===php_error 8.3-8.4===
 PHP Fatal error:  Cannot use the final modifier on a parameter in Standard input code on line 4
 ===php_error >=8.5===
 PHP Fatal error:  Multiple final modifiers are not allowed in Standard input code on line 4
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

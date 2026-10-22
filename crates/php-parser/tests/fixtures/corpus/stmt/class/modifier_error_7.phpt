@@ -10,7 +10,7 @@ Class A declares abstract method a() and must therefore be declared abstract
 PHP Fatal error:  Cannot use the final modifier on an abstract class member in Standard input code on line 1
 ===php_error >=8.3===
 PHP Fatal error:  Cannot use the final modifier on an abstract method in Standard input code on line 1
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

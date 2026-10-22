@@ -8,7 +8,7 @@ class foo {
 }
 
 ?>
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

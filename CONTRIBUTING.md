@@ -102,24 +102,18 @@ PHP message from stderr
 { ... }
 ```
 
-A version range on a section marker (`===ast >=8.4===`, `===errors 8.1-8.2===`; also `8.3`) makes
-the fixture multi-version: the parser targets exactly the versions named by the `===ast===`
-sections. A fixture with no qualified `===ast===` has one target, the default PHP version. For a
-version, the matching qualified section applies, and an unqualified section is the fallback.
-`UPDATE_FIXTURES=1` regenerates `errors` and `ast` per target, one section per run of identical
-output.
+Every fixture is parsed with each PHP version in `SUPPORTED`. A version range on a section marker
+(`===ast >=8.4===`, `===errors 8.1-8.2===`; also `8.3`) limits the section to those versions, and an
+unqualified section is the fallback for the rest. `UPDATE_FIXTURES=1` regenerates `errors` and `ast`
+for every version, one section per run of identical output.
 
-`===php_error===` ranges name the PHP version running `php -l`, independent of the parse targets,
-so any fixture may qualify them (`===php_error <=8.3===`). CI runs `php -l` on every fixture with
-each PHP version from 8.0 up, and fails when its output has no matching section or differs from it.
-PHP 7.4 is linted only for fixtures that target it; for the rest it records the 8.0 output.
+`===php_error===` ranges name the PHP version running `php -l`. CI runs `php -l` on every fixture with
+each supported PHP version, and fails when its output has no matching section or differs from it.
 `UPDATE_FIXTURES=1 cargo test --test php_syntax` records the output of the `php` on `PATH` for that
 version alone, so run it once per PHP version. Do not split a fixture into `_php83`/`_v82` copies.
 
-Malformed fixtures fail the tests: unknown sections, ranges naming an unsupported
-version, overlapping ranges for one section, a qualified `errors`/`ast` section covering none of
-the `===ast===` versions, and qualified `errors` sections in a fixture without a qualified
-`===ast===`.
+Malformed fixtures fail the tests: unknown sections, ranges naming an unsupported version,
+overlapping ranges for one section, and more than one unqualified section of a kind.
 Adding a PHP version to `SUPPORTED` in `tests/integration/common.rs` extends every open-ended `>=`
 range to it.
 
@@ -151,7 +145,6 @@ crates/php-printer/tests/fixtures/
 2. Add `===source===` with the PHP code you want to test.
 3. Run `UPDATE_FIXTURES=1 cargo test` — this generates `===ast===`, `===errors===`, and `===php_error===` automatically.
 4. Review the generated output. If the AST looks correct, commit the fixture.
-5. For version-specific syntax, add a `===config===` section with `min_php=X.Y`.
 
 **Error vs categories decision:**
 

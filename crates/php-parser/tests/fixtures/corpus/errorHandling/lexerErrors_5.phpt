@@ -8,7 +8,10 @@ if ($b) {
 ===errors===
 unterminated block comment
 expected '}' to close the delimiter opened at byte 15
-===php_error===
+===php_error <=7.4===
+PHP Warning:  Unterminated comment starting line 5 in Standard input code on line 5
+PHP Parse error:  syntax error, unexpected end of file in Standard input code on line 6
+===php_error >=8.0===
 PHP Parse error:  Unterminated comment starting line 5 in Standard input code on line 5
 ===ast===
 {

@@ -43,7 +43,9 @@ expected expression, found ';'
 expected expression, found ';'
 expected expression, found ';'
 expected expression, found ')'
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ';', expecting identifier (T_STRING) or \\ (T_NS_SEPARATOR) in Standard input code on line 5
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fully qualified name or namespaced name in Standard input code on line 5
 ===ast===
 {

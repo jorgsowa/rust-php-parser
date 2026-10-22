@@ -1,12 +1,12 @@
 ===source===
 <?php class self {}
-===errors >=7.4===
+===errors===
 Cannot use "self" as a class name as it is reserved
 ===php_error <=8.3===
 PHP Fatal error:  Cannot use 'self' as class name as it is reserved in Standard input code on line 1
 ===php_error >=8.4===
 PHP Fatal error:  Cannot use "self" as a class name as it is reserved in Standard input code on line 1
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

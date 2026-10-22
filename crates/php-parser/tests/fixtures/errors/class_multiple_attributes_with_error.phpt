@@ -9,13 +9,20 @@ class Foo {
     #[Validate]
     public function baz() { return 2; }
 }
-===errors >=8.3===
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
 expected class member, found '@'
-===php_error <=8.2===
+'attributes' requires PHP 8.0 or higher
+===errors >=8.0===
+expected class member, found '@'
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '@', expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 5
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected token "@", expecting "function" or "const" in Standard input code on line 5
 ===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected token "@", expecting "function" in Standard input code on line 5
-===ast >=8.3===
+===ast===
 {
   "stmts": [
     {

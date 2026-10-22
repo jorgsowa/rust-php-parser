@@ -3,12 +3,17 @@
 namespace N;
 function f(): ?namespace\self {}
 function g(namespace\array $a, Foo\int $b, \Foo\Array $c) {}
-===errors===
+===errors <=8.4===
+Cannot use "N\Foo\int" as a type name as it is reserved
+Cannot use "self" when no class scope is active
+===errors >=8.5===
 Cannot use "N\array" as a type name as it is reserved
 Cannot use "N\Foo\int" as a type name as it is reserved
 Cannot use "Foo\Array" as a type name as it is reserved
 Cannot use "self" when no class scope is active
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'array' (T_ARRAY), expecting identifier (T_STRING) in Standard input code on line 4
+===php_error >=8.0===
 PHP Fatal error:  Cannot use "self" when no class scope is active in Standard input code on line 3
 ===ast===
 {

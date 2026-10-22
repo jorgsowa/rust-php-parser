@@ -1,13 +1,15 @@
 ===source===
 <?php
 class A { $val; }
-===errors >=8.5===
+===errors===
 expected 'function' or 'const', found variable
-===php_error <=8.2===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '$val' (T_VARIABLE), expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 2
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected variable "$val", expecting "function" or "const" in Standard input code on line 2
 ===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected variable "$val", expecting "function" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

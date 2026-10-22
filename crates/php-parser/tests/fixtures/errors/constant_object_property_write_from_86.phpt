@@ -18,7 +18,27 @@ E::A[0] = 1;
 E::class->p = 1;
 __CLASS__->p = 1;
 (new A)->p = 1;
-===errors 8.5===
+===errors <=8.2===
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+'dynamic class constant fetch' requires PHP 8.3 or higher
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Assignments can only happen to writable values
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+===errors 8.3-8.5===
 Cannot use temporary expression in write context
 Cannot use temporary expression in write context
 Cannot use temporary expression in write context
@@ -42,13 +62,15 @@ Cannot use temporary expression in write context
 Cannot use temporary expression in write context
 Cannot use temporary expression in write context
 Cannot use temporary expression in write context
-===php_error <=8.2===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard input code on line 2
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected token "->", expecting "(" in Standard input code on line 5
 ===php_error 8.3-8.5===
 PHP Fatal error:  Cannot use temporary expression in write context in Standard input code on line 2
 ===php_error >=8.6===
 PHP Fatal error:  Cannot use temporary expression in write context in Standard input code on line 16
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

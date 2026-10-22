@@ -3,13 +3,25 @@
 function a(): int|void {}
 function b(): int|never {}
 function c(): int|mixed {}
+===errors <=7.4===
+'union types' requires PHP 8.0 or higher
+Void can only be used as a standalone type
+'union types' requires PHP 8.0 or higher
+'union types' requires PHP 8.0 or higher
+'mixed type' requires PHP 8.0 or higher
+Type mixed can only be used as a standalone type
+===errors 8.0===
+Void can only be used as a standalone type
+Type mixed can only be used as a standalone type
 ===errors >=8.1===
 Void can only be used as a standalone type
 never can only be used as a standalone type
 Type mixed can only be used as a standalone type
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting '{' in Standard input code on line 2
+===php_error >=8.0===
 PHP Fatal error:  Void can only be used as a standalone type in Standard input code on line 2
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

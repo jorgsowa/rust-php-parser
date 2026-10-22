@@ -11,7 +11,7 @@ class A {
         static $x = parent::B;
     }
 }
-===errors 8.0===
+===errors <=8.0===
 "static::" is not allowed in compile-time constants
 Constant expression contains invalid operations
 'new in initializers' requires PHP 8.1 or higher
@@ -28,7 +28,7 @@ Cannot use "static" when no class scope is active
 Cannot use "parent" when current class scope has no parent
 ===php_error===
 PHP Fatal error:  Cannot use "self" when no class scope is active in Standard input code on line 3
-===ast >=8.0===
+===ast===
 {
   "stmts": [
     {

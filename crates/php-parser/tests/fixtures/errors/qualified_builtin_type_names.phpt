@@ -3,7 +3,21 @@
 function a(\int $a, namespace\string $b): \void {}
 function b(Foo\int $a, ?\array $b): \callable {}
 function c(\Foo\Bar|\Integer $a): \iterable|\Traversable {}
-===errors===
+===errors <=7.4===
+Type declaration 'int' must be unqualified
+Type declaration 'string' must be unqualified
+Type declaration 'void' must be unqualified
+Cannot use "Foo\int" as a type name as it is reserved
+'union types' requires PHP 8.0 or higher
+'union types' requires PHP 8.0 or higher
+Type declaration 'iterable' must be unqualified
+===errors 8.0-8.4===
+Type declaration 'int' must be unqualified
+Type declaration 'string' must be unqualified
+Type declaration 'void' must be unqualified
+Cannot use "Foo\int" as a type name as it is reserved
+Type declaration 'iterable' must be unqualified
+===errors >=8.5===
 Type declaration 'int' must be unqualified
 Type declaration 'string' must be unqualified
 Type declaration 'void' must be unqualified
@@ -11,7 +25,9 @@ Cannot use "Foo\int" as a type name as it is reserved
 Cannot use "array" as a type name as it is reserved
 Cannot use "callable" as a type name as it is reserved
 Type declaration 'iterable' must be unqualified
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'array' (T_ARRAY), expecting identifier (T_STRING) in Standard input code on line 3
+===php_error >=8.0===
 PHP Fatal error:  Type declaration 'void' must be unqualified in Standard input code on line 2
 ===ast===
 {

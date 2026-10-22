@@ -5,6 +5,8 @@ function search(
     string $query,
     string $filter,
 ) {}
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ')', expecting variable (T_VARIABLE) in Standard input code on line 6
 ===ast===
 {
   "stmts": [

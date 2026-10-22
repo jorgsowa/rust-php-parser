@@ -48,7 +48,11 @@ list($x) = $y;
 (boolean) $boolean;
 (string) $string;
 (binary) $binary;
-===php_error <=8.0===
+===errors <=8.0===
+'explicit octal literals (0o)' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'o14' (T_STRING) in Standard input code on line 4
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "o14" in Standard input code on line 4
 ===ast===
 {

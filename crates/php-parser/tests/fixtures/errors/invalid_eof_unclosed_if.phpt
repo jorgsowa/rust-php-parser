@@ -4,7 +4,9 @@ if ($x > 1) {
     echo "hello";
 ===errors===
 expected '}' to close the delimiter opened at byte 18
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected end of file in Standard input code on line 3
+===php_error >=8.0===
 PHP Parse error:  Unclosed '{' on line 2 in Standard input code on line 3
 ===ast===
 {

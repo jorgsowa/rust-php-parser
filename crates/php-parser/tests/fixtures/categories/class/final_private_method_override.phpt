@@ -8,7 +8,9 @@ class B extends A {
     private function normalPrivate() {}
     final private function finalPrivate() {}
 }
-===ast >=8.5===
+===php_error <=7.4===
+PHP Fatal error:  Cannot override final method A::finalPrivate() in Standard input code on line 8
+===ast===
 {
   "stmts": [
     {

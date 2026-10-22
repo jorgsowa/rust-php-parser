@@ -7,9 +7,14 @@ class A {
     private ?float $c;
     readonly static public ?int $d;
 }
-===errors===
+===errors <=8.0===
+'readonly properties' requires PHP 8.1 or higher
 static properties cannot be readonly
-===php_error <=8.0===
+===errors >=8.1===
+static properties cannot be readonly
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'readonly' (T_STRING), expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 7
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "readonly", expecting "function" or "const" in Standard input code on line 7
 ===php_error >=8.1===
 PHP Fatal error:  Static property A::$d cannot be readonly in Standard input code on line 7

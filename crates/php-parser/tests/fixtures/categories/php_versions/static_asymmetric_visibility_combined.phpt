@@ -4,11 +4,14 @@ class Foo {
     public static protected(set) int $count = 0;
     public static private(set) string $name = '';
 }
+===errors <=8.4===
+'asymmetric visibility on static properties' requires PHP 8.5 or higher
+'asymmetric visibility on static properties' requires PHP 8.5 or higher
 ===php_error <=8.3===
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 3
 ===php_error 8.4===
 PHP Fatal error:  Static property may not have asymmetric visibility in Standard input code on line 3
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

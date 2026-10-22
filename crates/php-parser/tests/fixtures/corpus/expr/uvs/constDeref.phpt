@@ -17,6 +17,8 @@ A::B::c();
 __FUNCTION__[0];
 __FUNCTION__->length;
 __FUNCIONT__->length();
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard input code on line 3
 ===ast===
 {
   "stmts": [

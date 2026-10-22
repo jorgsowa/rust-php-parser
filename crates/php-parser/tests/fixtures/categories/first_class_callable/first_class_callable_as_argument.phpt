@@ -1,6 +1,11 @@
 ===source===
 <?php array_map(strlen(...), array_filter($arr, is_string(...)));
-===php_error <=8.0===
+===errors <=8.0===
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ')' in Standard input code on line 1
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 1
 ===ast===
 {

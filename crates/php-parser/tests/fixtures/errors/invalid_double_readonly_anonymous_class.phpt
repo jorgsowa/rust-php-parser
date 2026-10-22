@@ -15,7 +15,7 @@ PHP Parse error:  syntax error, unexpected identifier "readonly" in Standard inp
 PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 1
 ===php_error >=8.3===
 PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input code on line 1
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

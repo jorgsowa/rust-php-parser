@@ -2,7 +2,9 @@
 <?php function () {} class Foo {}
 ===errors===
 expected ';' after expression
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'class' (T_CLASS) in Standard input code on line 1
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "class" in Standard input code on line 1
 ===ast===
 {

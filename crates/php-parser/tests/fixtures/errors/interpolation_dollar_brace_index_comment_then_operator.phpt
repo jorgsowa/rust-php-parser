@@ -3,7 +3,9 @@
 $x = "${a[0] /* c */ + 1}";
 ===errors===
 expected ']' to close the index in '${...}' string interpolation
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '+', expecting '}' in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "+", expecting "}" in Standard input code on line 2
 ===ast===
 {

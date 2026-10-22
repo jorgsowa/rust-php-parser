@@ -1,9 +1,15 @@
 ===source===
 <?php function f(int|string|int): int {}
-===errors===
+===errors <=7.4===
+'union types' requires PHP 8.0 or higher
 Duplicate type 'int' in union type
 expected variable, found ')'
-===php_error===
+===errors >=8.0===
+Duplicate type 'int' in union type
+expected variable, found ')'
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in Standard input code on line 1
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token ")", expecting variable in Standard input code on line 1
 ===ast===
 {

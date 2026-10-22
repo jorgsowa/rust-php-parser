@@ -9,9 +9,16 @@ enum B implements Bar, Baz {
 enum C: int implements Bar {
     case Foo = 1;
 }
-===errors===
+===errors <=8.0===
+'enums' requires PHP 8.1 or higher
 'class' cannot be used as an enum case name
-===php_error <=8.0===
+'enums' requires PHP 8.1 or higher
+'enums' requires PHP 8.1 or higher
+===errors >=8.1===
+'class' cannot be used as an enum case name
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'A' (T_STRING) in Standard input code on line 3
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "A" in Standard input code on line 3
 ===php_error >=8.1===
 PHP Fatal error:  A class constant must not be called 'class'; it is reserved for class name fetching in Standard input code on line 4

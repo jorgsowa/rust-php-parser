@@ -1,11 +1,11 @@
 ===source===
 <?php
 $a = "{$b[]}";
-===errors >=8.5===
+===errors===
 cannot use [] for reading
 ===php_error===
 PHP Fatal error:  Cannot use [] for reading in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

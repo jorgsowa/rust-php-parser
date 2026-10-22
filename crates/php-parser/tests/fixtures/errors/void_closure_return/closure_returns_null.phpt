@@ -1,11 +1,11 @@
 ===source===
 <?php
 $f = function(): void { return null; };
-===errors >=8.1===
+===errors===
 A void function must not return a value
 ===php_error===
 PHP Fatal error:  A void function must not return a value (did you mean "return;" instead of "return null;"?) in Standard input code on line 2
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

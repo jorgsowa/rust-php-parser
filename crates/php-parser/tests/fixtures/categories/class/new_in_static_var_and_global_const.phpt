@@ -7,9 +7,15 @@ function f() {
     static $a = new Cache();
     static $b = new Store(), $c = new Other();
 }
+===errors <=8.0===
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
 ===php_error <=8.0===
 PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 2
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

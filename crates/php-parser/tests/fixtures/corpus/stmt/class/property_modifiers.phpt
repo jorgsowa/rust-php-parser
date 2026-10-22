@@ -5,14 +5,21 @@ class Test {
     readonly int $prop;
     private static $prop;
 }
-===errors 8.2-8.3===
+===errors <=8.0===
+'final properties' requires PHP 8.4 or higher
+'readonly properties' requires PHP 8.1 or higher
+Cannot redeclare Test::$prop
+Cannot redeclare Test::$prop
+===errors 8.1-8.3===
 'final properties' requires PHP 8.4 or higher
 Cannot redeclare Test::$prop
 Cannot redeclare Test::$prop
 ===errors >=8.4===
 Cannot redeclare Test::$prop
 Cannot redeclare Test::$prop
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'readonly' (T_STRING), expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 4
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "readonly", expecting "function" or "const" in Standard input code on line 4
 ===php_error 8.1-8.2===
 PHP Fatal error:  Cannot declare property Test::$prop final, the final modifier is allowed only for methods, classes, and class constants in Standard input code on line 3
@@ -20,7 +27,7 @@ PHP Fatal error:  Cannot declare property Test::$prop final, the final modifier 
 PHP Fatal error:  Cannot use the final modifier on a property in Standard input code on line 3
 ===php_error >=8.4===
 PHP Fatal error:  Cannot redeclare Test::$prop in Standard input code on line 4
-===ast >=8.2===
+===ast===
 {
   "stmts": [
     {

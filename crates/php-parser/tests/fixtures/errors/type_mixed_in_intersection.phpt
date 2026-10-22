@@ -2,13 +2,22 @@
 <?php
 function foo(mixed&Foo $x) { }
 
+===errors <=7.4===
+'mixed type' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+Type mixed cannot be part of an intersection type
+===errors 8.0===
+'intersection types' requires PHP 8.1 or higher
+Type mixed cannot be part of an intersection type
 ===errors >=8.1===
 Type mixed cannot be part of an intersection type
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'Foo' (T_STRING), expecting variable (T_VARIABLE) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "Foo", expecting variable in Standard input code on line 2
 ===php_error >=8.1===
 PHP Fatal error:  Type mixed cannot be part of an intersection type in Standard input code on line 2
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

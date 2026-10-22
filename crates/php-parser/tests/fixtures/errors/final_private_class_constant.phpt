@@ -10,6 +10,16 @@ interface I {
 $o = new class {
     final private const X = 1;
 };
+===errors <=8.0===
+'final class constants' requires PHP 8.1 or higher
+Private constant A::X cannot be final as it is not visible to other classes
+'final class constants' requires PHP 8.1 or higher
+Private constant A::Y cannot be final as it is not visible to other classes
+'final class constants' requires PHP 8.1 or higher
+Private constant I::X cannot be final as it is not visible to other classes
+Access type for interface constant I::X must be public
+'final class constants' requires PHP 8.1 or higher
+Private constant class@anonymous::X cannot be final as it is not visible to other classes
 ===errors >=8.1===
 Private constant A::X cannot be final as it is not visible to other classes
 Private constant A::Y cannot be final as it is not visible to other classes
@@ -20,7 +30,7 @@ Private constant class@anonymous::X cannot be final as it is not visible to othe
 PHP Fatal error:  Cannot use 'final' as constant modifier in Standard input code on line 3
 ===php_error >=8.1===
 PHP Fatal error:  Private constant A::X cannot be final as it is not visible to other classes in Standard input code on line 3
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

@@ -4,10 +4,17 @@ class C {
     public iterable $a { set(array $v) {} }
     public iterable $b { set(Traversable $v) {} }
 }
-===errors===
+===errors <=8.3===
+'property hooks' requires PHP 8.4 or higher
+Type of parameter $v of hook C::$a::set must be compatible with property type
+'property hooks' requires PHP 8.4 or higher
+Type of parameter $v of hook C::$b::set must be compatible with property type
+===errors >=8.4===
 Type of parameter $v of hook C::$a::set must be compatible with property type
 Type of parameter $v of hook C::$b::set must be compatible with property type
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 3
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error >=8.4===
 PHP Fatal error:  Type of parameter $v of hook C::$a::set must be compatible with property type in Standard input code on line 3

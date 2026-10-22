@@ -6,11 +6,16 @@ $obj = new readonly class(1, 2) {
         public int $y,
     ) {}
 };
-===php_error <=8.0===
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'class' (T_CLASS) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected token "class" in Standard input code on line 2
 ===php_error 8.1-8.2===
 PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 2
-===ast >=8.3===
+===ast===
 {
   "stmts": [
     {

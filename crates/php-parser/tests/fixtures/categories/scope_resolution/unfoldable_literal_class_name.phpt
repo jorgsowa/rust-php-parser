@@ -14,7 +14,9 @@ $x instanceof (~[]);
 (0 ** -1)::foo();
 ('0x1A' * 1)::foo();
 ('inf' * 1)::foo();
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '(' in Standard input code on line 2
+===php_error 8.0===
 PHP Fatal error:  Illegal class name in Standard input code on line 8
 ===php_error 8.1-8.3===
 PHP Fatal error:  Illegal class name in Standard input code on line 13

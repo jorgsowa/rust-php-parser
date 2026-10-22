@@ -1,8 +1,12 @@
 ===source===
 <?php class Foo { public string $name = 'default' { get => $this->name; } }
-===php_error <=8.3===
+===errors <=8.3===
+'property hooks' requires PHP 8.4 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in Standard input code on line 1
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "=>" in Standard input code on line 1
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

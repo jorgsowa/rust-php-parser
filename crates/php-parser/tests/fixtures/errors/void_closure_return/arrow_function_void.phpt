@@ -4,14 +4,22 @@ fn(): void => 1;
 fn(): void => f();
 static fn(): void => null;
 fn(): void => throw new E;
-===errors >=8.1===
+===errors <=7.4===
+A void function must not return a value
+A void function must not return a value
+A void function must not return a value
+'throw expressions' requires PHP 8.0 or higher
+A void function must not return a value
+===errors >=8.0===
 A void function must not return a value
 A void function must not return a value
 A void function must not return a value
 A void function must not return a value
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'throw' (T_THROW) in Standard input code on line 5
+===php_error >=8.0===
 PHP Fatal error:  A void function must not return a value in Standard input code on line 2
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

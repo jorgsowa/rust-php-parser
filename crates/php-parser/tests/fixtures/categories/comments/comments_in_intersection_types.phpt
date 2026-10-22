@@ -15,13 +15,22 @@ class Test {
         return $param;
     }
 }
+===errors <=8.0===
+'intersection types' requires PHP 8.1 or higher
+A parenthesized intersection type can only be used as part of a union type
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
 ===errors >=8.1===
 A parenthesized intersection type can only be used as part of a union type
-===php_error <=8.1===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '(', expecting variable (T_VARIABLE) in Standard input code on line 3
+===php_error 8.0-8.1===
 PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 3
 ===php_error >=8.2===
 PHP Parse error:  syntax error, unexpected variable "$x", expecting "|" in Standard input code on line 3
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

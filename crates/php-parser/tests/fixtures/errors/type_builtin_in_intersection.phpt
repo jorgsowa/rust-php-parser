@@ -23,6 +23,95 @@ class D {
         return function (): (self&A)|B {};
     }
 }
+===errors <=7.4===
+'intersection types' requires PHP 8.1 or higher
+Type int cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type array cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type callable cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+'null type' requires PHP 8.0 or higher
+Type null cannot be part of an intersection type
+'false type' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+Type false cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'DNF types' requires PHP 8.2 or higher
+Type bool cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type Traversable|array cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type object cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type void cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'true type' requires PHP 8.2 or higher
+Type true cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type static cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type SELF cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type parent cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'DNF types' requires PHP 8.2 or higher
+Type self cannot be part of an intersection type
+===errors 8.0===
+'intersection types' requires PHP 8.1 or higher
+Type int cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type array cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type callable cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type null cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type false cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type bool cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type Traversable|array cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type object cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type void cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'true type' requires PHP 8.2 or higher
+Type true cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type static cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type SELF cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type parent cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type self cannot be part of an intersection type
+===errors 8.1===
+Type int cannot be part of an intersection type
+Type array cannot be part of an intersection type
+Type callable cannot be part of an intersection type
+Type null cannot be part of an intersection type
+Type false cannot be part of an intersection type
+'DNF types' requires PHP 8.2 or higher
+Type bool cannot be part of an intersection type
+Type Traversable|array cannot be part of an intersection type
+Type object cannot be part of an intersection type
+Type void cannot be part of an intersection type
+Type never cannot be part of an intersection type
+'true type' requires PHP 8.2 or higher
+Type true cannot be part of an intersection type
+Type static cannot be part of an intersection type
+Type SELF cannot be part of an intersection type
+Type parent cannot be part of an intersection type
+'DNF types' requires PHP 8.2 or higher
+Type self cannot be part of an intersection type
 ===errors >=8.2===
 Type int cannot be part of an intersection type
 Type array cannot be part of an intersection type
@@ -39,13 +128,15 @@ Type static cannot be part of an intersection type
 Type SELF cannot be part of an intersection type
 Type parent cannot be part of an intersection type
 Type self cannot be part of an intersection type
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '&', expecting '{' in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected token "&", expecting "{" in Standard input code on line 2
 ===php_error 8.1===
 PHP Parse error:  syntax error, unexpected token "(" in Standard input code on line 7
 ===php_error >=8.2===
 PHP Fatal error:  Type int cannot be part of an intersection type in Standard input code on line 2
-===ast >=8.2===
+===ast===
 {
   "stmts": [
     {

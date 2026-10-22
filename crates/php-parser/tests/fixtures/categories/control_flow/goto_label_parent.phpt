@@ -2,7 +2,7 @@
 <?php
 parent:
 __construct();
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

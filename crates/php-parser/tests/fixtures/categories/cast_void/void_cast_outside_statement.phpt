@@ -5,17 +5,30 @@ echo (void) f();
 for (; (void) f();) {}
 foreach ((void) $a as $b) {}
 function g() { return (void) f(); }
+===errors <=8.4===
+'void cast' requires PHP 8.5 or higher
+'void cast' requires PHP 8.5 or higher
+'void cast' requires PHP 8.5 or higher
+'void cast' requires PHP 8.5 or higher
+'void cast' requires PHP 8.5 or higher
+(void) cast cannot be used in an expression context
+(void) cast cannot be used in an expression context
+(void) cast cannot be used in an expression context
+(void) cast cannot be used in an expression context
+(void) cast cannot be used in an expression context
 ===errors >=8.5===
 (void) cast cannot be used in an expression context
 (void) cast cannot be used in an expression context
 (void) cast cannot be used in an expression context
 (void) cast cannot be used in an expression context
 (void) cast cannot be used in an expression context
-===php_error <=8.4===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'f' (T_STRING) in Standard input code on line 2
+===php_error 8.0-8.4===
 PHP Parse error:  syntax error, unexpected identifier "f" in Standard input code on line 2
 ===php_error >=8.5===
 PHP Parse error:  syntax error, unexpected token "(void)" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

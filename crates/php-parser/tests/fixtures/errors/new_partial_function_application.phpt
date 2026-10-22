@@ -1,13 +1,18 @@
 ===source===
 <?php
 new Foo(?);
+===errors <=8.5===
+'partial function application' requires PHP 8.6 or higher
+Cannot use partial function application in new expression
 ===errors >=8.6===
 Cannot use partial function application in new expression
-===php_error <=8.5===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '?' in Standard input code on line 2
+===php_error 8.0-8.5===
 PHP Parse error:  syntax error, unexpected token "?" in Standard input code on line 2
 ===php_error >=8.6===
 PHP Fatal error:  Cannot create Closure for new expression in Standard input code on line 2
-===ast >=8.6===
+===ast===
 {
   "stmts": [
     {

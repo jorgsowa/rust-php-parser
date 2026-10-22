@@ -1,13 +1,21 @@
 ===source===
 <?php cl[p1$x{`
-===errors===
+===errors <=7.4===
+unterminated string literal
+expected ']', found variable
+expected ';' after expression
+expected '}', found end of file
+expected ';' after expression
+===errors >=8.0===
 unterminated string literal
 expected ']', found variable
 expected ';' after expression
 expected '}', found end of file
 Array and string offset access syntax with curly braces is no longer supported
 expected ';' after expression
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '$x' (T_VARIABLE), expecting ']' in Standard input code on line 1
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected variable "$x", expecting "]" in Standard input code on line 1
 ===ast===
 {

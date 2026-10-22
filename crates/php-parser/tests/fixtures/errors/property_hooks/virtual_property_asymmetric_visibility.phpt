@@ -12,6 +12,43 @@ class A {
         private(set) int $f { set { } },
     ) {}
 }
+===errors <=7.4===
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+Read-only virtual property I::$a must not specify asymmetric visibility
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+Read-only virtual property A::$b must not specify asymmetric visibility
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+Write-only virtual property A::$c must not specify asymmetric visibility
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+Read-only virtual property A::$e must not specify asymmetric visibility
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+Write-only virtual property A::$f must not specify asymmetric visibility
+===errors 8.0-8.3===
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+Read-only virtual property I::$a must not specify asymmetric visibility
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+Read-only virtual property A::$b must not specify asymmetric visibility
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+Write-only virtual property A::$c must not specify asymmetric visibility
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+Read-only virtual property A::$e must not specify asymmetric visibility
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+Write-only virtual property A::$f must not specify asymmetric visibility
 ===errors >=8.4===
 Read-only virtual property I::$a must not specify asymmetric visibility
 Read-only virtual property A::$b must not specify asymmetric visibility
@@ -24,7 +61,7 @@ PHP Fatal error:  Multiple access type modifiers are not allowed in Standard inp
 PHP Fatal error:  Read-only virtual property I::$a must not specify asymmetric visibility in Standard input code on line 3
 ===php_error >=8.6===
 PHP Fatal error:  get-only virtual property I::$a must not specify asymmetric visibility in Standard input code on line 3
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

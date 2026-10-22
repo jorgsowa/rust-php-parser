@@ -1,11 +1,13 @@
 ===source===
 <?php
 $a === $b == $c;
-===errors >=8.1===
+===errors >=8.0===
 Chaining non-associative operators requires explicit parentheses.
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '==' (T_IS_EQUAL) in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "==" in Standard input code on line 2
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

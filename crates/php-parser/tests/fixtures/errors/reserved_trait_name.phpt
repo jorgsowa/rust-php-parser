@@ -15,7 +15,9 @@ Cannot use "self" as trait name, as it is reserved
 Cannot use "static" as trait name, as it is reserved
 Cannot use "self" as trait name, as it is reserved
 Cannot use "parent" as trait name, as it is reserved
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '::' (T_PAAMAYIM_NEKUDOTAYIM), expecting as (T_AS) in Standard input code on line 6
+===php_error >=8.0===
 PHP Fatal error:  Cannot use "self" as trait name, as it is reserved in Standard input code on line 3
 ===ast===
 {

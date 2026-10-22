@@ -27,9 +27,64 @@ abstract class A {
     public protected(set) int $t { set { $this->t = $value; } }
     public function __construct(public $u = 1 { get => 1; }) {}
 }
-===php_error <=8.3===
+===errors <=7.4===
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'attributes' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+===errors 8.0-8.3===
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 5
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 5
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

@@ -14,7 +14,26 @@ enum E: int {
 interface I {
     const A = new Foo;
 }
-===errors===
+===errors <=8.0===
+New expressions are not supported in this context
+New expressions are not supported in this context
+New expressions are not supported in this context
+'casts in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'enums' requires PHP 8.1 or higher
+New expressions are not supported in this context
+'casts in constant expressions' requires PHP 8.5 or higher
+New expressions are not supported in this context
+===errors 8.1-8.4===
+New expressions are not supported in this context
+New expressions are not supported in this context
+New expressions are not supported in this context
+'casts in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+New expressions are not supported in this context
+'casts in constant expressions' requires PHP 8.5 or higher
+New expressions are not supported in this context
+===errors >=8.5===
 New expressions are not supported in this context
 New expressions are not supported in this context
 New expressions are not supported in this context
@@ -23,7 +42,9 @@ Object casts are not supported in this context
 New expressions are not supported in this context
 Object casts are not supported in this context
 New expressions are not supported in this context
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'E' (T_STRING) in Standard input code on line 9
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 9
 ===php_error >=8.1===
 PHP Fatal error:  New expressions are not supported in this context in Standard input code on line 3

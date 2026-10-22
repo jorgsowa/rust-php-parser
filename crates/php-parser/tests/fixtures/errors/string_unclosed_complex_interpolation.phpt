@@ -1,14 +1,16 @@
 ===source===
 <?php $s = "text {$incomplete";
-===errors >=8.4===
+===errors===
 unterminated string literal
 unclosed '{' in string interpolation
 expected ';' after expression
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '"', expecting :: (T_PAAMAYIM_NEKUDOTAYIM) in Standard input code on line 1
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected double-quote mark, expecting "->" or "?->" or "{" or "[" in Standard input code on line 1
 ===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected double-quote mark, expecting "->" or "?->" or "[" in Standard input code on line 1
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

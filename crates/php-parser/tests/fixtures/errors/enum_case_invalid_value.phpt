@@ -4,13 +4,18 @@ enum Status: int {
     case Active = 1 +;
     case Inactive = 2;
 }
+===errors <=8.0===
+'enums' requires PHP 8.1 or higher
+expected expression
 ===errors >=8.1===
 expected expression
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'Status' (T_STRING) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 2
 ===php_error >=8.1===
 PHP Parse error:  syntax error, unexpected token ";" in Standard input code on line 3
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

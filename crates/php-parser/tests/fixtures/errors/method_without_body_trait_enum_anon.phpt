@@ -3,11 +3,18 @@
 trait T { function f(); abstract function g(); }
 enum E { function f(); }
 $o = new class { function f(); };
-===errors===
+===errors <=8.0===
+Non-abstract method T::f() must contain body
+'enums' requires PHP 8.1 or higher
+Non-abstract method E::f() must contain body
+Non-abstract method class@anonymous::f() must contain body
+===errors >=8.1===
 Non-abstract method T::f() must contain body
 Non-abstract method E::f() must contain body
 Non-abstract method class@anonymous::f() must contain body
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'E' (T_STRING) in Standard input code on line 3
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 3
 ===php_error >=8.1===
 PHP Fatal error:  Non-abstract method T::f() must contain body in Standard input code on line 2

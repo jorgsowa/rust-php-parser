@@ -1,9 +1,18 @@
 ===source===
 <?php
 clone(...)->b;
-===errors===
+===errors <=8.0===
+'first-class callable syntax' requires PHP 8.1 or higher
+'clone(...) first-class callable' requires PHP 8.5 or higher
 Cannot dereference this expression
-===php_error <=8.4===
+===errors 8.1-8.4===
+'clone(...) first-class callable' requires PHP 8.5 or higher
+Cannot dereference this expression
+===errors >=8.5===
+Cannot dereference this expression
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '...' (T_ELLIPSIS) in Standard input code on line 2
+===php_error 8.0-8.4===
 PHP Parse error:  syntax error, unexpected token "..." in Standard input code on line 2
 ===php_error >=8.5===
 PHP Parse error:  syntax error, unexpected token "->" in Standard input code on line 2

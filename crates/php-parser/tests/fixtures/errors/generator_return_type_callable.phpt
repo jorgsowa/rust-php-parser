@@ -1,11 +1,13 @@
 ===source===
 <?php
 function g(): callable { yield 1; }
-===errors >=8.5===
+===errors===
 Generator return type must be a supertype of Generator, callable given
-===php_error===
+===php_error <=7.4===
+PHP Fatal error:  Generators may only declare a return type of Generator, Iterator, Traversable, or iterable, callable is not permitted in Standard input code on line 2
+===php_error >=8.0===
 PHP Fatal error:  Generator return type must be a supertype of Generator, callable given in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

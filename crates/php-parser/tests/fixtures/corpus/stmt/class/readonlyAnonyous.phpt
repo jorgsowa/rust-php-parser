@@ -2,11 +2,13 @@
 <?php
 
 new readonly class {};
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'class' (T_CLASS) in Standard input code on line 3
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected token "class" in Standard input code on line 3
 ===php_error 8.1-8.2===
 PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 3
-===ast >=8.3===
+===ast===
 {
   "stmts": [
     {

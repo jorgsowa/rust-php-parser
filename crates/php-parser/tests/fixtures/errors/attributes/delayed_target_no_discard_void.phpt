@@ -1,11 +1,14 @@
 ===source===
 <?php
 #[DelayedTargetValidation] #[NoDiscard] function f(): void {}
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
 ===errors >=8.5===
 A void function does not return a value, but #[\NoDiscard] requires a return value
 ===php_error >=8.5===
 PHP Fatal error:  A void function does not return a value, but #[\NoDiscard] requires a return value in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

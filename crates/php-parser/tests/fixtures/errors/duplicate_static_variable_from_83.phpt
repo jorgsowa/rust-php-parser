@@ -11,7 +11,7 @@ Duplicate declaration of static variable $b
 Duplicate declaration of static variable $c
 ===php_error >=8.3===
 PHP Fatal error:  Duplicate declaration of static variable $a in Standard input code on line 4
-===ast >=8.2===
+===ast===
 {
   "stmts": [
     {

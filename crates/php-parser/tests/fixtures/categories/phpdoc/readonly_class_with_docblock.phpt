@@ -11,11 +11,18 @@ readonly class DataObject {
      */
     public function __construct(public string $data) {}
 }
-===php_error <=8.0===
+===errors <=7.4===
+'readonly class' requires PHP 8.2 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+===errors 8.0-8.1===
+'readonly class' requires PHP 8.2 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'class' (T_CLASS) in Standard input code on line 7
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected token "class" in Standard input code on line 7
 ===php_error 8.1===
 PHP Parse error:  syntax error, unexpected token "readonly", expecting end of file in Standard input code on line 7
-===ast >=8.2===
+===ast===
 {
   "stmts": [
     {

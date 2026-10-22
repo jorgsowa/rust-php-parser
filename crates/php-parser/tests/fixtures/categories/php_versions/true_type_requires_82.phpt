@@ -1,10 +1,10 @@
 ===source===
 <?php function f(true $x) {}
-===errors 8.1===
+===errors <=8.1===
 'true type' requires PHP 8.2 or higher
 ===php_error <=8.1===
 PHP Fatal error:  Cannot use 'true' as class name as it is reserved in Standard input code on line 1
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

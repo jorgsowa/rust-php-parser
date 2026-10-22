@@ -12,7 +12,7 @@ $b = <<<EOT
 $c = <<<'EOT'
     indented nowdoc \è literal
     EOT;
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

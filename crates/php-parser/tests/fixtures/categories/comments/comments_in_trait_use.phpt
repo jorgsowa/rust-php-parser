@@ -98,9 +98,12 @@ class Precedence {
     Trait2::other as Trait2Other;
   }
 }
+===errors <=8.1===
+'constants in traits' requires PHP 8.2 or higher
+'constants in traits' requires PHP 8.2 or higher
 ===php_error <=8.1===
 PHP Fatal error:  Traits cannot have constants in Standard input code on line 63
-===ast >=8.2===
+===ast===
 {
   "stmts": [
     {

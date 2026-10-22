@@ -8,7 +8,9 @@
 [0, 1][0] = 1;
 ===errors===
 Cannot use temporary expression in write context
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '[' in Standard input code on line 4
+===php_error >=8.0===
 PHP Fatal error:  Cannot use temporary expression in write context in Standard input code on line 7
 ===ast===
 {

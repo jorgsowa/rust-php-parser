@@ -15,7 +15,7 @@ Method C::__get() cannot be static
 Method C::__invoke() cannot be static
 Method C::__callStatic() must be static
 Method C::__set_state() must be static
-===php_error===
+===php_error >=8.0===
 PHP Fatal error:  Method C::__get() cannot be static in Standard input code on line 3
 ===ast===
 {

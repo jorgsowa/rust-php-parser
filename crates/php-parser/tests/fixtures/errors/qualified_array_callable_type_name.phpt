@@ -10,9 +10,11 @@ Cannot use "Foo\array" as a type name as it is reserved
 Cannot use "array" as a type name as it is reserved
 Cannot use "callable" as a type name as it is reserved
 Cannot use "array" as a type name as it is reserved
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'array' (T_ARRAY), expecting identifier (T_STRING) in Standard input code on line 2
 ===php_error >=8.5===
 PHP Fatal error:  Cannot use "Foo\callable" as a type name as it is reserved in Standard input code on line 2
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

@@ -3,7 +3,9 @@
 ===errors===
 expected ';' after expression
 expected ';' after expression
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '$y' (T_VARIABLE) in Standard input code on line 1
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected variable "$y" in Standard input code on line 1
 ===ast===
 {

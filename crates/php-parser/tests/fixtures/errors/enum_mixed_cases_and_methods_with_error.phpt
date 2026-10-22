@@ -6,15 +6,20 @@ enum Status {
     @invalid
     public function label(): string { return "Status"; }
 }
-===errors >=8.3===
+===errors <=8.0===
+'enums' requires PHP 8.1 or higher
 expected enum member, found '@'
-===php_error <=8.0===
+===errors >=8.1===
+expected enum member, found '@'
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'Status' (T_STRING) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 2
 ===php_error 8.1-8.2===
 PHP Parse error:  syntax error, unexpected token "@", expecting "function" or "const" in Standard input code on line 5
 ===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected token "@", expecting "function" in Standard input code on line 5
-===ast >=8.3===
+===ast===
 {
   "stmts": [
     {

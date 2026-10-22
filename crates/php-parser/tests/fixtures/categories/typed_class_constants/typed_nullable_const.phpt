@@ -1,8 +1,12 @@
 ===source===
 <?php class A { const ?string N = null; }
-===php_error <=8.2===
+===errors <=8.2===
+'typed class constants' requires PHP 8.3 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '?' in Standard input code on line 1
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected token "?" in Standard input code on line 1
-===ast >=8.3===
+===ast===
 {
   "stmts": [
     {

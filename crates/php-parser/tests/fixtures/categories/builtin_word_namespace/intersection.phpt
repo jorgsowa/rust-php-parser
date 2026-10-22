@@ -1,7 +1,11 @@
 ===source===
 <?php
 function f(mixed\X&object\Y $a) {}
-===php_error <=8.0===
+===errors <=8.0===
+'intersection types' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'object' (T_STRING), expecting variable (T_VARIABLE) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected namespaced name "object\Y", expecting variable in Standard input code on line 2
 ===ast===
 {

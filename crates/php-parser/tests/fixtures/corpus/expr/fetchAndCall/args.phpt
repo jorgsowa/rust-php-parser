@@ -8,7 +8,9 @@ f(&$a);
 f($a, ...$b);
 ===errors===
 call-time pass-by-reference is not allowed
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '&' in Standard input code on line 6
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "&" in Standard input code on line 6
 ===ast===
 {

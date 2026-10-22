@@ -6,6 +6,9 @@ class A {
         T::h as final;
     }
 }
+===errors <=8.2===
+'final trait method alias' requires PHP 8.3 or higher
+'final trait method alias' requires PHP 8.3 or higher
 ===php_error <=8.2===
 PHP Fatal error:  Cannot use 'final' as method modifier in Standard input code on line 3
 ===ast===

@@ -5,7 +5,9 @@ use Foo\{Bar}
 use Bar\{Foo};
 ===errors===
 expected ';', found 'use'
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'use' (T_USE), expecting ';' in Standard input code on line 4
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "use", expecting ";" in Standard input code on line 4
 ===ast===
 {

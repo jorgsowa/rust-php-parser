@@ -3,9 +3,14 @@
 echo <<<X
 a
 X?->b();
-===errors===
+===errors <=7.4===
 Cannot dereference this expression
-===php_error===
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+===errors >=8.0===
+Cannot dereference this expression
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard input code on line 4
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "?->", expecting "," or ";" in Standard input code on line 4
 ===ast===
 {

@@ -13,18 +13,29 @@ class C {
     public $d;
     function __construct(final $d) {}
 }
+===errors <=8.4===
+'final promoted properties' requires PHP 8.5 or higher
+Cannot declare promoted property in an abstract constructor
+'final promoted properties' requires PHP 8.5 or higher
+Cannot declare promoted property in an abstract constructor
+'final promoted properties' requires PHP 8.5 or higher
+Cannot declare variadic promoted property
+'final promoted properties' requires PHP 8.5 or higher
+Cannot redeclare C::$d
 ===errors >=8.5===
 Cannot declare promoted property in an abstract constructor
 Cannot declare promoted property in an abstract constructor
 Cannot declare variadic promoted property
 Cannot redeclare C::$d
-===php_error <=8.2===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'final' (T_FINAL), expecting variable (T_VARIABLE) in Standard input code on line 3
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected token "final", expecting variable in Standard input code on line 3
 ===php_error 8.3-8.4===
 PHP Fatal error:  Cannot use the final modifier on a parameter in Standard input code on line 3
 ===php_error >=8.5===
 PHP Fatal error:  Cannot declare promoted property in an abstract constructor in Standard input code on line 3
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

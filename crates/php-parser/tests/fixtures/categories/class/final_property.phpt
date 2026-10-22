@@ -5,13 +5,17 @@ class C {
     final protected string $y = "z";
     public final float $z = 1.0;
 }
+===errors <=8.3===
+'final properties' requires PHP 8.4 or higher
+'final properties' requires PHP 8.4 or higher
+'final properties' requires PHP 8.4 or higher
 ===php_error <=8.0===
 PHP Fatal error:  Cannot declare property C::$x final, the final modifier is allowed only for methods and classes in Standard input code on line 3
 ===php_error 8.1-8.2===
 PHP Fatal error:  Cannot declare property C::$x final, the final modifier is allowed only for methods, classes, and class constants in Standard input code on line 3
 ===php_error 8.3===
 PHP Fatal error:  Cannot use the final modifier on a property in Standard input code on line 3
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

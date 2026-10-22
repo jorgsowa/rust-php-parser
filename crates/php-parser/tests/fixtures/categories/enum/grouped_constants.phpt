@@ -5,7 +5,18 @@ enum E {
     #[A] const X = 1, Y = self::X;
     public const int P = 1, Q = 2;
 }
-===php_error <=8.0===
+===errors <=7.4===
+'enums' requires PHP 8.1 or higher
+'attributes' requires PHP 8.0 or higher
+'typed enum constants' requires PHP 8.3 or higher
+===errors 8.0===
+'enums' requires PHP 8.1 or higher
+'typed enum constants' requires PHP 8.3 or higher
+===errors 8.1-8.2===
+'typed enum constants' requires PHP 8.3 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'E' (T_STRING) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 2
 ===php_error 8.1-8.2===
 PHP Parse error:  syntax error, unexpected identifier "P", expecting "=" in Standard input code on line 5

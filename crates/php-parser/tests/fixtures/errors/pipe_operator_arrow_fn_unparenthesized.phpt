@@ -1,12 +1,17 @@
 ===source===
 <?php $r = $value |> fn($s) => trim($s);
+===errors <=8.4===
+'pipe operator (|>)' requires PHP 8.5 or higher
+arrow function on the right side of pipe operator must be parenthesized
 ===errors >=8.5===
 arrow function on the right side of pipe operator must be parenthesized
-===php_error <=8.4===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '>' in Standard input code on line 1
+===php_error 8.0-8.4===
 PHP Parse error:  syntax error, unexpected token ">" in Standard input code on line 1
 ===php_error >=8.5===
 PHP Fatal error:  Arrow functions on the right hand side of |> must be parenthesized in Standard input code on line 1
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

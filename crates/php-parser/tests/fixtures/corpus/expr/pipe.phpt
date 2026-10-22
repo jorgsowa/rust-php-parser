@@ -4,9 +4,17 @@ $a |> $b |> $c;
 $a . $b |> $c . $d;
 $a |> $b == $c;
 $c == $a |> $b;
-===php_error <=8.4===
+===errors <=8.4===
+'pipe operator (|>)' requires PHP 8.5 or higher
+'pipe operator (|>)' requires PHP 8.5 or higher
+'pipe operator (|>)' requires PHP 8.5 or higher
+'pipe operator (|>)' requires PHP 8.5 or higher
+'pipe operator (|>)' requires PHP 8.5 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '>' in Standard input code on line 2
+===php_error 8.0-8.4===
 PHP Parse error:  syntax error, unexpected token ">" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

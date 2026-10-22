@@ -1,11 +1,11 @@
 ===source===
 <?php
 $f = static function () use ($a): void { return $a; };
-===errors >=8.1===
+===errors===
 A void function must not return a value
 ===php_error===
 PHP Fatal error:  A void function must not return a value in Standard input code on line 2
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

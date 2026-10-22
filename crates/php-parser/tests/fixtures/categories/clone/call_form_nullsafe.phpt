@@ -1,9 +1,18 @@
 ===source===
 <?php
 clone($a, [])?->b;
-===errors===
+===errors <=7.4===
+'clone with property overrides' requires PHP 8.5 or higher
 Cannot dereference this expression
-===php_error <=8.4===
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+===errors 8.0-8.4===
+'clone with property overrides' requires PHP 8.5 or higher
+Cannot dereference this expression
+===errors >=8.5===
+Cannot dereference this expression
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ',' in Standard input code on line 2
+===php_error 8.0-8.4===
 PHP Parse error:  syntax error, unexpected token "," in Standard input code on line 2
 ===php_error >=8.5===
 PHP Parse error:  syntax error, unexpected token "?->" in Standard input code on line 2

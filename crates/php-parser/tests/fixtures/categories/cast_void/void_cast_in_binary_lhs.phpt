@@ -4,9 +4,24 @@
 (void) $x + 1;
 (void) $x && $y;
 (void) $a * $b + $c;
-===php_error <=8.4===
+===errors <=8.0===
+'void cast' requires PHP 8.5 or higher
+'pipe operator (|>)' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'void cast' requires PHP 8.5 or higher
+'void cast' requires PHP 8.5 or higher
+'void cast' requires PHP 8.5 or higher
+===errors 8.1-8.4===
+'void cast' requires PHP 8.5 or higher
+'pipe operator (|>)' requires PHP 8.5 or higher
+'void cast' requires PHP 8.5 or higher
+'void cast' requires PHP 8.5 or higher
+'void cast' requires PHP 8.5 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '5' (T_LNUMBER) in Standard input code on line 2
+===php_error 8.0-8.4===
 PHP Parse error:  syntax error, unexpected integer "5" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

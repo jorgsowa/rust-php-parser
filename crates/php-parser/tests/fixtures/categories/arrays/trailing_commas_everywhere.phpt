@@ -7,6 +7,10 @@ $g = fn($x,) => $x;
 [$a, $b,] = $arr;
 match ($x) { 1 => 'a', 2 => 'b', };
 use App\{A, B,};
+===errors <=7.4===
+'match expressions' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ')', expecting variable (T_VARIABLE) in Standard input code on line 2
 ===ast===
 {
   "stmts": [

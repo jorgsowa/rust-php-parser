@@ -13,10 +13,6 @@ pub const SUPPORTED: [Version; 8] = [
     (8, 6),
 ];
 
-/// Version the parser targets by default; the parse target of a fixture without version ranges.
-#[allow(dead_code)]
-pub const DEFAULT: Version = SUPPORTED[SUPPORTED.len() - 1];
-
 const SECTION_NAMES: [&str; 3] = ["errors", "php_error", "ast"];
 
 fn parse_version(val: &str) -> Option<Version> {
@@ -104,12 +100,10 @@ pub struct Section {
     pub body: String,
 }
 
-/// A parsed `.phpt` fixture.
+/// A parsed `.phpt` fixture, checked against every supported PHP version.
 ///
-/// A fixture with a version-qualified `===ast >=8.4===` section is checked against every
-/// PHP version the `ast` sections name. A section such as `===php_error <=8.3===` applies
-/// only to the versions it names and an unqualified section is the fallback. Without a
-/// qualified `ast` section the fixture has a single default parse target.
+/// A section such as `===errors <=8.3===` applies only to the versions it names and an
+/// unqualified section is the fallback.
 #[allow(dead_code)]
 #[derive(Debug)]
 pub struct Fixture {
@@ -164,7 +158,6 @@ impl Fixture {
     }
 
     fn check_sections(&self) -> Result<(), String> {
-        let versions = self.versions();
         for name in SECTION_NAMES {
             let named: Vec<&Section> = self.sections.iter().filter(|s| s.name == name).collect();
             let unqualified = named.iter().filter(|s| s.spec.is_none()).count();
@@ -172,29 +165,7 @@ impl Fixture {
                 return Err(format!("more than one ==={name}=== section"));
             }
             let qualified: Vec<VersionSpec> = named.iter().filter_map(|s| s.spec).collect();
-            // `php_error` ranges name `php -l` versions, which are independent of the parse targets.
-            let versions = if name == "php_error" {
-                Some(SUPPORTED.to_vec())
-            } else {
-                versions.clone()
-            };
-            let Some(versions) = &versions else {
-                if let Some(spec) = qualified.first() {
-                    return Err(format!(
-                        "==={name} {spec}=== needs a version-qualified ===ast=== section"
-                    ));
-                }
-                continue;
-            };
-            if name == "ast" && unqualified > 0 {
-                return Err("===ast=== is never used next to version-qualified ones".into());
-            }
             for (i, a) in qualified.iter().enumerate() {
-                if !versions.iter().any(|v| a.contains(*v)) {
-                    return Err(format!(
-                        "==={name} {a}=== covers none of the versions the ===ast=== sections name"
-                    ));
-                }
                 let overlap =
                     |b: &&VersionSpec| SUPPORTED.iter().any(|v| a.contains(*v) && b.contains(*v));
                 if let Some(b) = qualified[i + 1..].iter().find(overlap) {
@@ -213,31 +184,6 @@ impl Fixture {
             self.source_block
                 .strip_suffix('\n')
                 .unwrap_or(&self.source_block)
-        }
-    }
-
-    /// Versions a multi-version fixture covers; `None` for a single-target fixture.
-    pub fn versions(&self) -> Option<Vec<Version>> {
-        let specs: Vec<VersionSpec> = self
-            .sections
-            .iter()
-            .filter(|s| s.name == "ast")
-            .filter_map(|s| s.spec)
-            .collect();
-        (!specs.is_empty()).then(|| {
-            SUPPORTED
-                .iter()
-                .copied()
-                .filter(|v| specs.iter().any(|spec| spec.contains(*v)))
-                .collect()
-        })
-    }
-
-    /// Parse targets: one per covered version, or the single default target (`None`).
-    pub fn targets(&self) -> Vec<Option<Version>> {
-        match self.versions() {
-            Some(versions) => versions.into_iter().map(Some).collect(),
-            None => vec![None],
         }
     }
 
@@ -407,15 +353,14 @@ pub fn php_version(v: (u32, u32)) -> php_rs_parser::PhpVersion {
 
 /// Run the full `.phpt` fixture corpus through an arbitrary parse function.
 ///
-/// `parse_fn(source, version)` returns `(error_strings, ast_json)` for one parse target.
+/// `parse_fn(source, version)` returns `(error_strings, ast_json)` for one supported version.
 ///
 /// With `update`, the `===errors===` and `===ast===` sections are rewritten in place
-/// instead of compared. A multi-version fixture gets one qualified section per run of
-/// versions with identical output.
+/// instead of compared, one section per run of versions with identical output.
 #[allow(dead_code)]
 pub fn run_fixture_corpus<P>(parse_fn: P, update: bool)
 where
-    P: Fn(&str, Option<Version>) -> (Vec<String>, String) + Sync,
+    P: Fn(&str, Version) -> (Vec<String>, String) + Sync,
 {
     use rayon::prelude::*;
     use std::sync::Mutex;
@@ -443,26 +388,22 @@ where
                 return;
             }
         };
-        let targets = fixture.targets();
-        let results: Vec<(Vec<String>, String)> = targets
+        let results: Vec<(Vec<String>, String)> = SUPPORTED
             .iter()
             .map(|v| parse_fn(fixture.source(), *v))
             .collect();
 
         if update {
-            update_fixture(&mut fixture, &targets, &results);
+            update_fixture(&mut fixture, &results);
             std::fs::write(path, fixture.render())
                 .unwrap_or_else(|e| panic!("failed to write {}: {e}", path.display()));
             return;
         }
 
-        let multi = fixture.versions().is_some();
-        for (target, (errors, json)) in targets.iter().zip(&results) {
-            let at = match (multi, target) {
-                (true, Some((a, b))) => format!("{rel} (PHP {a}.{b})"),
-                _ => rel.clone(),
-            };
-            let expected_errors = fixture.section("errors", *target);
+        for (target, (errors, json)) in SUPPORTED.iter().zip(&results) {
+            let at = format!("{rel} (PHP {}.{})", target.0, target.1);
+            let target = Some(*target);
+            let expected_errors = fixture.section("errors", target);
             let fail = |msg: String| failures.lock().unwrap().push(msg);
 
             if expected_errors.is_some() && errors.is_empty() {
@@ -474,7 +415,7 @@ where
                 continue;
             }
             if errors.is_empty() {
-                let php_error = fixture.section("php_error", Some(target.unwrap_or(DEFAULT)));
+                let php_error = fixture.section("php_error", target);
                 if php_error.is_some_and(|s| !s.body.trim().is_empty()) {
                     fail(format!(
                         "closure-check failure in {at}: php -l rejects this input but the parser \
@@ -494,7 +435,7 @@ where
                     continue;
                 }
             }
-            match fixture.section("ast", *target) {
+            match fixture.section("ast", target) {
                 None => fail(format!("missing ===ast=== section in {at}")),
                 Some(expected) if expected.body != *json => fail(format!(
                     "AST mismatch in {at}\nexpected:\n{}\nactual:\n{json}",
@@ -509,61 +450,29 @@ where
     assert!(f.is_empty(), "fixture test failure(s):\n{}", f.join("\n\n"));
 }
 
-fn update_fixture(
-    fixture: &mut Fixture,
-    targets: &[Option<Version>],
-    results: &[(Vec<String>, String)],
-) {
-    let multi = fixture.versions().is_some();
-    let errors = targets
-        .iter()
-        .zip(results)
-        .map(|(v, (e, _))| (*v, e.join("\n")))
-        .collect();
-    let asts = targets
-        .iter()
-        .zip(results)
-        .map(|(v, (_, a))| (*v, a.clone()))
-        .collect();
-    fixture.replace_sections("errors", sections_for("errors", errors, multi, true));
-    fixture.replace_sections("ast", sections_for("ast", asts, multi, false));
+fn update_fixture(fixture: &mut Fixture, results: &[(Vec<String>, String)]) {
+    let errors: Vec<String> = results.iter().map(|(e, _)| e.join("\n")).collect();
+    let asts: Vec<String> = results.iter().map(|(_, a)| a.clone()).collect();
+    fixture.replace_sections("errors", sections_for("errors", &errors, true));
+    fixture.replace_sections("ast", sections_for("ast", &asts, false));
 }
 
-/// One section per run of consecutive versions with identical output.
-fn sections_for(
-    name: &str,
-    outputs: Vec<(Option<Version>, String)>,
-    multi: bool,
-    skip_empty: bool,
-) -> Vec<Section> {
-    let section = |spec, body: String| Section {
-        name: name.to_string(),
-        spec,
-        body,
-    };
-    if !multi {
-        let body = outputs
-            .into_iter()
-            .next()
-            .map(|(_, b)| b)
-            .unwrap_or_default();
-        return (!(skip_empty && body.is_empty()))
-            .then(|| section(None, body))
-            .into_iter()
-            .collect();
-    }
-    let domain: Vec<Version> = outputs.iter().map(|(v, _)| v.unwrap()).collect();
+/// One section per run of consecutive versions with identical output; `outputs` follows `SUPPORTED`.
+fn sections_for(name: &str, outputs: &[String], skip_empty: bool) -> Vec<Section> {
     let mut sections = Vec::new();
     let mut start = 0;
     while start < outputs.len() {
         let mut end = start + 1;
-        while end < outputs.len() && outputs[end].1 == outputs[start].1 {
+        while end < outputs.len() && outputs[end] == outputs[start] {
             end += 1;
         }
-        let body = outputs[start].1.clone();
-        if !(skip_empty && body.is_empty()) {
-            let spec = VersionSpec::for_run(&domain[start..end]);
-            sections.push(section(Some(spec), body));
+        if !(skip_empty && outputs[start].is_empty()) {
+            let whole = start == 0 && end == outputs.len();
+            sections.push(Section {
+                name: name.to_string(),
+                spec: (!whole).then(|| VersionSpec::for_run(&SUPPORTED[start..end])),
+                body: outputs[start].clone(),
+            });
         }
         start = end;
     }

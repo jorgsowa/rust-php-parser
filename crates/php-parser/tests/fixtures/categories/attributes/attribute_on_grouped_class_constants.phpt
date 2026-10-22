@@ -5,6 +5,11 @@ class C {
     public const A = 1, B = 2;
 }
 interface I { #[A] const X = 1, Y = 2; }
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 6
 ===ast===
 {
   "stmts": [

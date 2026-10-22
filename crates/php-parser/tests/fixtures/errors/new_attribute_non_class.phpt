@@ -1,13 +1,18 @@
 ===source===
 <?php
 $a = new #[A] B;
-===errors >=8.5===
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
 expected 'class', found identifier
-===php_error <=8.2===
+===errors >=8.0===
+expected 'class', found identifier
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected end of file in Standard input code on line 2
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected identifier "B", expecting "class" or "#[" in Standard input code on line 2
 ===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected identifier "B", expecting "class" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

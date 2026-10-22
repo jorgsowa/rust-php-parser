@@ -22,7 +22,7 @@ Array and string offset access syntax with curly braces is no longer supported
 PHP Fatal error:  Array and string offset access syntax with curly braces is no longer supported in Standard input code on line 4
 ===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 2
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

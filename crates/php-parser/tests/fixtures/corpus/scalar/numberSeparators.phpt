@@ -28,7 +28,9 @@ Invalid numeric literal
 Invalid numeric literal
 Invalid numeric literal
 Invalid numeric literal
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '_' (T_STRING) in Standard input code on line 13
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected identifier "_" in Standard input code on line 13
 ===ast===
 {

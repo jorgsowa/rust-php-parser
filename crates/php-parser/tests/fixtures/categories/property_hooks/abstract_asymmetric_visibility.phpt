@@ -6,11 +6,14 @@ abstract class Foo {
         set;
     }
 }
+===errors <=8.3===
+'asymmetric visibility' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
 ===php_error <=8.2===
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 3
 ===php_error 8.3===
 PHP Fatal error:  Cannot use the abstract modifier on a property in Standard input code on line 3
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

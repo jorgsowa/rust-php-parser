@@ -1,8 +1,13 @@
 ===source===
 <?php match ($a) { default => [] }[0];
-===errors===
+===errors <=7.4===
+'match expressions' requires PHP 8.0 or higher
 Cannot dereference this expression
-===php_error===
+===errors >=8.0===
+Cannot dereference this expression
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'default' (T_DEFAULT) in Standard input code on line 1
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "[" in Standard input code on line 1
 ===ast===
 {

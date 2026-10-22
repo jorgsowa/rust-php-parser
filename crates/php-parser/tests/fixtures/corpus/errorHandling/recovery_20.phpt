@@ -6,7 +6,7 @@ class Foo {
     publi $foo;
     public $bar;
 }
-===errors >=7.4===
+===errors===
 expected modifier, found identifier
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'publi' (T_STRING), expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 5
@@ -14,7 +14,7 @@ PHP Parse error:  syntax error, unexpected 'publi' (T_STRING), expecting functio
 PHP Parse error:  syntax error, unexpected identifier "publi", expecting "function" or "const" in Standard input code on line 5
 ===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected identifier "publi", expecting "function" in Standard input code on line 5
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

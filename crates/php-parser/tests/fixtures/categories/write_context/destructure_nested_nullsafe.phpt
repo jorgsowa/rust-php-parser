@@ -1,8 +1,13 @@
 ===source===
 <?php [$x, [$a?->b]] = $c;
-===errors===
+===errors <=7.4===
+'nullsafe operator (?->)' requires PHP 8.0 or higher
 Assignments can only happen to writable values
-===php_error===
+===errors >=8.0===
+Assignments can only happen to writable values
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard input code on line 1
+===php_error >=8.0===
 PHP Fatal error:  Assignments can only happen to writable values in Standard input code on line 1
 ===ast===
 {

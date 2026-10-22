@@ -15,7 +15,7 @@ class B extends A {
         parent::test4(1,'a');
     }
 }
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

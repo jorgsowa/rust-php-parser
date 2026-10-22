@@ -20,7 +20,7 @@ PHP Parse error:  syntax error, unexpected identifier "int", expecting variable 
 PHP Fatal error:  Readonly property Foo::$x cannot have default value in Standard input code on line 3
 ===php_error >=8.6===
 PHP Fatal error:  Static property Foo::$x cannot be readonly in Standard input code on line 3
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

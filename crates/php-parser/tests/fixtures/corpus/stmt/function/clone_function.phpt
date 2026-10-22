@@ -14,10 +14,37 @@ clone(object: $x);
 clone(object: $x, [ "foo" => $foo, "bar" => $bar ]);
 clone(...["object" => $x, "withProperties" => [ "foo" => $foo, "bar" => $bar ]]);
 clone(...);
-===errors===
+===errors <=7.4===
+cannot use 'clone' as function name; it is reserved
+'clone with property overrides' requires PHP 8.5 or higher
+'clone with property overrides' requires PHP 8.5 or higher
+'named arguments' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+cannot use positional argument after named argument
+'first-class callable syntax' requires PHP 8.1 or higher
+'clone(...) first-class callable' requires PHP 8.5 or higher
+===errors 8.0===
+cannot use 'clone' as function name; it is reserved
+'clone with property overrides' requires PHP 8.5 or higher
+'clone with property overrides' requires PHP 8.5 or higher
+cannot use positional argument after named argument
+'first-class callable syntax' requires PHP 8.1 or higher
+'clone(...) first-class callable' requires PHP 8.5 or higher
+===errors 8.1-8.4===
+cannot use 'clone' as function name; it is reserved
+'clone with property overrides' requires PHP 8.5 or higher
+'clone with property overrides' requires PHP 8.5 or higher
+cannot use positional argument after named argument
+'clone(...) first-class callable' requires PHP 8.5 or higher
+===errors >=8.5===
 cannot use 'clone' as function name; it is reserved
 cannot use positional argument after named argument
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'clone' (T_CLONE), expecting '(' in Standard input code on line 3
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "clone", expecting "(" in Standard input code on line 3
 ===ast===
 {

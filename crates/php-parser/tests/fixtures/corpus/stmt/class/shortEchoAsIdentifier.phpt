@@ -11,7 +11,7 @@ expected '::' or 'as', found '<?php'
 expected '::' or 'as', found identifier
 expected identifier, found ';'
 expected '::' or 'as', found ';'
-===php_error===
+===php_error >=8.0===
 PHP Parse error:  Cannot use "<?=" as an identifier in Standard input code on line 4
 ===ast===
 {

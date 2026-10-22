@@ -4,7 +4,9 @@
 use Foo\{\Bar};
 ===errors===
 expected non-fully-qualified name in group use, found '}'
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '\' (T_NS_SEPARATOR), expecting identifier (T_STRING) or function (T_FUNCTION) or const (T_CONST) in Standard input code on line 3
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected fully qualified name "\Bar", expecting identifier or namespaced name or "function" or "const" in Standard input code on line 3
 ===ast===
 {

@@ -1,6 +1,6 @@
 ===source===
 <?php $fiber->isStarted(); $fiber->isRunning(); $fiber->isSuspended();
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

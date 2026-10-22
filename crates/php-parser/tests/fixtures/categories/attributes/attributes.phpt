@@ -49,9 +49,28 @@ enum Color {
     case Red;
     case Blue;
 }
-===php_error <=8.0===
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'enums' requires PHP 8.1 or higher
+'attributes' requires PHP 8.0 or higher
+===errors 8.0===
+'enums' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ';', expecting ')' in Standard input code on line 42
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "enum" in Standard input code on line 46
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

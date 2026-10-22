@@ -21,7 +21,7 @@ Cannot append to $GLOBALS
 Cannot append to $GLOBALS
 ===php_error >=8.1===
 PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax in Standard input code on line 2
-===ast >=8.0===
+===ast===
 {
   "stmts": [
     {

@@ -26,7 +26,9 @@ class A extends B {
         }
     }
 }
-===errors===
+===errors <=8.0===
+'first-class callable syntax' requires PHP 8.1 or higher
+'property hooks' requires PHP 8.4 or higher
 Cannot use "parent" when no class scope is active
 Must not use parent::$a::set() outside a property hook
 Cannot create Closure for parent property hook call
@@ -43,7 +45,44 @@ Must not use parent::$1.0E+25::set() in a different property ($a)
 Must not use parent::$1.0E-7::set() in a different property ($a)
 Must not use parent::$9.2233720368548E+18::set() in a different property ($a)
 Must not use parent::$b::set() in a different property ($a)
-===php_error <=8.0===
+===errors 8.1-8.3===
+'property hooks' requires PHP 8.4 or higher
+Cannot use "parent" when no class scope is active
+Must not use parent::$a::set() outside a property hook
+Cannot create Closure for parent property hook call
+Must not use parent::$0::get() in a different property ($a)
+Must not use parent::$a::get() in a different property hook (set)
+Must not use parent::$b::set() in a different property ($a)
+Must not use parent::$bc::set() in a different property ($a)
+Must not use parent::$12::set() in a different property ($a)
+Must not use parent::$b::set() in a different property ($a)
+Must not use parent::$31::set() in a different property ($a)
+Must not use parent::$1.5::set() in a different property ($a)
+Must not use parent::$1::set() in a different property ($a)
+Must not use parent::$1.0E+25::set() in a different property ($a)
+Must not use parent::$1.0E-7::set() in a different property ($a)
+Must not use parent::$9.2233720368548E+18::set() in a different property ($a)
+Must not use parent::$b::set() in a different property ($a)
+===errors >=8.4===
+Cannot use "parent" when no class scope is active
+Must not use parent::$a::set() outside a property hook
+Cannot create Closure for parent property hook call
+Must not use parent::$0::get() in a different property ($a)
+Must not use parent::$a::get() in a different property hook (set)
+Must not use parent::$b::set() in a different property ($a)
+Must not use parent::$bc::set() in a different property ($a)
+Must not use parent::$12::set() in a different property ($a)
+Must not use parent::$b::set() in a different property ($a)
+Must not use parent::$31::set() in a different property ($a)
+Must not use parent::$1.5::set() in a different property ($a)
+Must not use parent::$1::set() in a different property ($a)
+Must not use parent::$1.0E+25::set() in a different property ($a)
+Must not use parent::$1.0E-7::set() in a different property ($a)
+Must not use parent::$9.2233720368548E+18::set() in a different property ($a)
+Must not use parent::$b::set() in a different property ($a)
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ')' in Standard input code on line 6
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 6
 ===php_error 8.1-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 8

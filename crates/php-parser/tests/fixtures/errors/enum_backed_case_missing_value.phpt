@@ -4,13 +4,18 @@ enum Status: string {
     case Active;
     case Inactive = 'inactive';
 }
+===errors <=8.0===
+'enums' requires PHP 8.1 or higher
+Case Active of backed enum Status must have a value
 ===errors >=8.1===
 Case Active of backed enum Status must have a value
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'Status' (T_STRING) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 2
 ===php_error >=8.1===
 PHP Fatal error:  Case Active of backed enum Status must have a value in Standard input code on line 3
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

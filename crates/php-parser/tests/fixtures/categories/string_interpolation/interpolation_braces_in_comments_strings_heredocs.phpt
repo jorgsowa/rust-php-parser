@@ -33,6 +33,10 @@ $x = "{$a[<<<EOT
 EOT]}";
 $x = "{$a[0 /* " */]}";
 $x = "{$a["{$b}" . '"']}";
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ';', expecting ')' in Standard input code on line 32
 ===ast===
 {
   "stmts": [

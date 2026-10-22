@@ -5,13 +5,22 @@ interface I { function f(); ; }
 trait T { public $x;; }
 enum E { case A; ; }
 $o = new class { function f() {}; };
-===errors===
+===errors <=8.0===
+expected class member, found ';'
+expected class member, found ';'
+expected class member, found ';'
+'enums' requires PHP 8.1 or higher
+expected class member, found ';'
+expected class member, found ';'
+===errors >=8.1===
 expected class member, found ';'
 expected class member, found ';'
 expected class member, found ';'
 expected class member, found ';'
 expected class member, found ';'
-===php_error <=8.2===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ';', expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 2
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected token ";", expecting "function" or "const" in Standard input code on line 2
 ===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected token ";", expecting "function" in Standard input code on line 2

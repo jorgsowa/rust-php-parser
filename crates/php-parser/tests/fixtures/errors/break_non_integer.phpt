@@ -1,11 +1,11 @@
 ===source===
 <?php
 while (1) { break $a; }
-===errors >=8.5===
+===errors===
 'break' operator with non-integer operand is no longer supported
 ===php_error===
 PHP Fatal error:  'break' operator with non-integer operand is no longer supported in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

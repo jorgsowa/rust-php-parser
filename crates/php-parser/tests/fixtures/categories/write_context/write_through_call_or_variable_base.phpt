@@ -11,6 +11,8 @@ $$a->b = 1;
 OBJ::$a = 1;
 $x = OBJ->a;
 isset(OBJ->a);
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard input code on line 11
 ===ast===
 {
   "stmts": [

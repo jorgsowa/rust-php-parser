@@ -9,13 +9,45 @@ interface I {
 trait T {
     abstract function __construct(public $a { get => 1; });
 }
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'readonly parameters' requires PHP 8.1 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+Cannot declare promoted property in an abstract constructor
+Cannot declare promoted property in an abstract constructor
+Cannot declare promoted property in an abstract constructor
+'constructor property promotion' requires PHP 8.0 or higher
+Cannot declare promoted property in an abstract constructor
+'constructor property promotion' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+Cannot declare promoted property in an abstract constructor
+===errors 8.0===
+'readonly parameters' requires PHP 8.1 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+Cannot declare promoted property in an abstract constructor
+Cannot declare promoted property in an abstract constructor
+Cannot declare promoted property in an abstract constructor
+Cannot declare promoted property in an abstract constructor
+'property hooks' requires PHP 8.4 or higher
+Cannot declare promoted property in an abstract constructor
+===errors 8.1-8.3===
+'asymmetric visibility' requires PHP 8.4 or higher
+Cannot declare promoted property in an abstract constructor
+Cannot declare promoted property in an abstract constructor
+Cannot declare promoted property in an abstract constructor
+Cannot declare promoted property in an abstract constructor
+'property hooks' requires PHP 8.4 or higher
+Cannot declare promoted property in an abstract constructor
 ===errors >=8.4===
 Cannot declare promoted property in an abstract constructor
 Cannot declare promoted property in an abstract constructor
 Cannot declare promoted property in an abstract constructor
 Cannot declare promoted property in an abstract constructor
 Cannot declare promoted property in an abstract constructor
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 3
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "int", expecting variable in Standard input code on line 3
 ===php_error 8.1===
 PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 3
@@ -23,7 +55,7 @@ PHP Parse error:  syntax error, unexpected token "(", expecting variable in Stan
 PHP Parse error:  syntax error, unexpected token ")", expecting amp in Standard input code on line 3
 ===php_error >=8.4===
 PHP Fatal error:  Cannot declare promoted property in an abstract constructor in Standard input code on line 3
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

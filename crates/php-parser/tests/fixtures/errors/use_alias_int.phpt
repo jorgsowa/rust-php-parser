@@ -1,11 +1,11 @@
 ===source===
 <?php
 use A as int;
-===errors >=8.5===
+===errors===
 Cannot use A as int because 'int' is a special class name
 ===php_error===
 PHP Fatal error:  Cannot use A as int because 'int' is a special class name in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

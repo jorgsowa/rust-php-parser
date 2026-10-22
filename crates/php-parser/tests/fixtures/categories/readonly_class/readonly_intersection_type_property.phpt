@@ -3,7 +3,12 @@
 class Foo {
     public readonly Countable&Traversable $prop;
 }
-===php_error <=8.0===
+===errors <=8.0===
+'readonly properties' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'Countable' (T_STRING), expecting variable (T_VARIABLE) in Standard input code on line 3
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "Countable", expecting variable in Standard input code on line 3
 ===ast===
 {

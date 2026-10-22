@@ -3,12 +3,16 @@
 function f($a = new Foo) {}
 #[Attr(new Foo)]
 function g() {}
+===errors <=7.4===
+'new in initializers' requires PHP 8.1 or higher
+'attributes' requires PHP 8.0 or higher
+'new in initializers' requires PHP 8.1 or higher
 ===errors 8.0===
 'new in initializers' requires PHP 8.1 or higher
 'new in initializers' requires PHP 8.1 or higher
 ===php_error <=8.0===
 PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 2
-===ast 8.0===
+===ast===
 {
   "stmts": [
     {

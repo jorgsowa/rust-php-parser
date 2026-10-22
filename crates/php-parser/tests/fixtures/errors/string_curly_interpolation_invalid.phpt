@@ -9,14 +9,23 @@ echo <<<EOT
   {$a->}
   EOT;
 echo "{$a->b()[0]?->c} {$a::$b} {$a::f()} {$$a} {${"x"}} ${a + 1}";
-===errors===
+===errors <=7.4===
+only a variable, property, index or call can be interpolated with '{$...}'
+expected '}', found variable
+only a variable, property, index or call can be interpolated with '{$...}'
+expected expression
+expected member name, found end of file
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+===errors >=8.0===
 only a variable, property, index or call can be interpolated with '{$...}'
 expected '}', found variable
 only a variable, property, index or call can be interpolated with '{$...}'
 Array and string offset access syntax with curly braces is no longer supported
 expected expression
 expected member name, found end of file
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '+', expecting :: (T_PAAMAYIM_NEKUDOTAYIM) in Standard input code on line 2
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "+", expecting "->" or "?->" or "{" or "[" in Standard input code on line 2
 ===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token "+", expecting "->" or "?->" or "[" in Standard input code on line 2

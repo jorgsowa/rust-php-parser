@@ -1,9 +1,15 @@
 ===source===
 <?php match($x) { 1 => }
-===errors===
+===errors <=7.4===
+'match expressions' requires PHP 8.0 or higher
 expected expression
 expected ';' after expression
-===php_error===
+===errors >=8.0===
+expected expression
+expected ';' after expression
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in Standard input code on line 1
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "}" in Standard input code on line 1
 ===ast===
 {

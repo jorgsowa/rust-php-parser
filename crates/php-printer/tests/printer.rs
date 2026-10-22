@@ -1,7 +1,7 @@
 #[path = "../../php-parser/tests/integration/common.rs"]
 mod parser_common;
 
-use parser_common::{collect_phpt_files, php_version, Fixture, DEFAULT};
+use parser_common::{collect_phpt_files, php_version, Fixture, SUPPORTED};
 use php_printer::{PrettyPrinter, PrinterConfig};
 use rayon::prelude::*;
 use std::sync::Mutex;
@@ -241,10 +241,9 @@ fn parser_corpus_round_trip() {
         let content = std::fs::read_to_string(path).unwrap();
         let fixture = Fixture::parse(&content)
             .unwrap_or_else(|e| panic!("malformed fixture {}: {e}", path.display()));
-        let targets: Vec<_> = fixture
-            .targets()
+        let targets: Vec<_> = SUPPORTED
             .into_iter()
-            .filter(|t| fixture.section("errors", *t).is_none())
+            .filter(|v| fixture.section("errors", Some(*v)).is_none())
             .collect();
         if targets.is_empty() {
             skipped.fetch_add(1, Ordering::Relaxed);
@@ -253,8 +252,7 @@ fn parser_corpus_round_trip() {
 
         let rel = path.strip_prefix(&parser_fixtures).unwrap();
         for target in targets {
-            let options = php_rs_parser::ParseOptions::default()
-                .version(php_version(target.unwrap_or(DEFAULT)));
+            let options = php_rs_parser::ParseOptions::default().version(php_version(target));
             let print = |source: &str| {
                 let arena = bumpalo::Bump::new();
                 let result = php_rs_parser::parse_arena_with(&arena, source, &options);

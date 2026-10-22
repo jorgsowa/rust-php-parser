@@ -1,8 +1,8 @@
 ===source===
 <?php (unset)$x;
-===errors===
+===errors >=8.0===
 the (unset) cast is no longer supported
-===php_error===
+===php_error >=8.0===
 PHP Fatal error:  The (unset) cast is no longer supported in Standard input code on line 1
 ===ast===
 {

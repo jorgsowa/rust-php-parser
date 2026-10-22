@@ -3,6 +3,8 @@
 class Test {
     public static function create(): static {}
 }
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'static' (T_STATIC) in Standard input code on line 3
 ===ast===
 {
   "stmts": [

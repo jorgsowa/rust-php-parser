@@ -4,6 +4,8 @@ class Builder {
     public function setName(string $name): self { return $this; }
     public static function create(): static { return new static(); }
 }
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'static' (T_STATIC) in Standard input code on line 4
 ===ast===
 {
   "stmts": [

@@ -5,13 +5,19 @@ class Foo {
         public public string $x,
     ) {}
 }
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+cannot use multiple visibility modifiers
 ===errors >=8.0===
 cannot use multiple visibility modifiers
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 4
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected token "public", expecting variable in Standard input code on line 4
 ===php_error >=8.1===
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 4
-===ast >=8.0===
+===ast===
 {
   "stmts": [
     {

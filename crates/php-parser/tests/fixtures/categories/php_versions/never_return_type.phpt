@@ -1,6 +1,6 @@
 ===source===
 <?php function f(): never { throw new \Exception(); }
-===ast >=8.0===
+===ast===
 {
   "stmts": [
     {

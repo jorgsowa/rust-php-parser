@@ -9,7 +9,17 @@ const F = 0 ? 1 : $x;
 const G = [1, $x][0];
 const H = 0 * $x;
 const I = (int) "0" ? 1 : $x;
-===errors===
+===errors <=8.4===
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+'casts in constant expressions' requires PHP 8.5 or higher
+===errors >=8.5===
 Constant expression contains invalid operations
 Constant expression contains invalid operations
 Constant expression contains invalid operations

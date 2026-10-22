@@ -7,6 +7,45 @@ class C {
     public A&B $d { set(callable $v) {} }
     public self $e { set(callable $v) {} }
 }
+===errors <=7.4===
+'property hooks' requires PHP 8.4 or higher
+Type of parameter $v of hook C::$a::set must be compatible with property type
+'property hooks' requires PHP 8.4 or higher
+'union types' requires PHP 8.0 or higher
+'null type' requires PHP 8.0 or higher
+Type of parameter $v of hook C::$b::set must be compatible with property type
+'union types' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+'union types' requires PHP 8.0 or higher
+Type of parameter $v of hook C::$c::set must be compatible with property type
+'intersection types' requires PHP 8.1 or higher
+'property hooks' requires PHP 8.4 or higher
+Type of parameter $v of hook C::$d::set must be compatible with property type
+'property hooks' requires PHP 8.4 or higher
+Type of parameter $v of hook C::$e::set must be compatible with property type
+===errors 8.0===
+'property hooks' requires PHP 8.4 or higher
+Type of parameter $v of hook C::$a::set must be compatible with property type
+'property hooks' requires PHP 8.4 or higher
+Type of parameter $v of hook C::$b::set must be compatible with property type
+'property hooks' requires PHP 8.4 or higher
+Type of parameter $v of hook C::$c::set must be compatible with property type
+'intersection types' requires PHP 8.1 or higher
+'property hooks' requires PHP 8.4 or higher
+Type of parameter $v of hook C::$d::set must be compatible with property type
+'property hooks' requires PHP 8.4 or higher
+Type of parameter $v of hook C::$e::set must be compatible with property type
+===errors 8.1-8.3===
+'property hooks' requires PHP 8.4 or higher
+Type of parameter $v of hook C::$a::set must be compatible with property type
+'property hooks' requires PHP 8.4 or higher
+Type of parameter $v of hook C::$b::set must be compatible with property type
+'property hooks' requires PHP 8.4 or higher
+Type of parameter $v of hook C::$c::set must be compatible with property type
+'property hooks' requires PHP 8.4 or higher
+Type of parameter $v of hook C::$d::set must be compatible with property type
+'property hooks' requires PHP 8.4 or higher
+Type of parameter $v of hook C::$e::set must be compatible with property type
 ===errors 8.4===
 Type of parameter $v of hook C::$a::set must be compatible with property type
 Type of parameter $v of hook C::$b::set must be compatible with property type
@@ -16,13 +55,15 @@ Type of parameter $v of hook C::$e::set must be compatible with property type
 ===errors >=8.5===
 Type of parameter $v of hook C::$d::set must be compatible with property type
 Type of parameter $v of hook C::$e::set must be compatible with property type
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 3
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error 8.4===
 PHP Fatal error:  Type of parameter $v of hook C::$a::set must be compatible with property type in Standard input code on line 3
 ===php_error >=8.5===
 PHP Fatal error:  Type of parameter $v of hook C::$d::set must be compatible with property type in Standard input code on line 6
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

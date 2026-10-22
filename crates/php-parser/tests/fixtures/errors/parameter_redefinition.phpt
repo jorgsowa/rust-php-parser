@@ -15,7 +15,40 @@ abstract class B { abstract public function m($a, $a); }
 trait T { public function m($a, $a, $a) {} }
 enum E { public function m($a, $a) {} }
 new class { public function m($a, $a) {} };
-===errors===
+===errors <=7.4===
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+'constructor property promotion' requires PHP 8.0 or higher
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+'enums' requires PHP 8.1 or higher
+Redefinition of parameter $a
+Redefinition of parameter $a
+===errors 8.0===
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+Redefinition of parameter $a
+'enums' requires PHP 8.1 or higher
+Redefinition of parameter $a
+Redefinition of parameter $a
+===errors >=8.1===
 Redefinition of parameter $a
 Redefinition of parameter $a
 Redefinition of parameter $a
@@ -30,7 +63,9 @@ Redefinition of parameter $a
 Redefinition of parameter $a
 Redefinition of parameter $a
 Redefinition of parameter $a
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 10
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 15
 ===php_error >=8.1===
 PHP Fatal error:  Redefinition of parameter $a in Standard input code on line 2

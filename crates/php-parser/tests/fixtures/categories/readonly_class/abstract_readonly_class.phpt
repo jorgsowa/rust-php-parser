@@ -1,10 +1,14 @@
 ===source===
 <?php abstract readonly class Foo {}
-===php_error <=8.0===
+===errors <=8.1===
+'abstract readonly class' requires PHP 8.2 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'readonly' (T_STRING), expecting abstract (T_ABSTRACT) or final (T_FINAL) or class (T_CLASS) in Standard input code on line 1
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "readonly", expecting "abstract" or "final" or "class" in Standard input code on line 1
 ===php_error 8.1===
 PHP Parse error:  syntax error, unexpected token "readonly", expecting "abstract" or "final" or "class" in Standard input code on line 1
-===ast >=8.2===
+===ast===
 {
   "stmts": [
     {

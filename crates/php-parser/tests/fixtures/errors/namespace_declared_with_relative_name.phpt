@@ -3,7 +3,9 @@
 namespace NAMEspace\xyz;
 ===errors===
 expected namespace name, found namespace-relative name
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'NAMEspace' (T_NAMESPACE), expecting '{' in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected namespace-relative name "NAMEspace\xyz", expecting "{" in Standard input code on line 2
 ===ast===
 {

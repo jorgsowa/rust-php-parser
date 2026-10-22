@@ -12,6 +12,46 @@ class D {
 }
 function h(#[SensitiveParameter, SensitiveParameter] $a) {}
 #[\Attribute, ATTRIBUTE] class E {}
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+===errors 8.0===
+Attribute "Attribute" must not be repeated
+Attribute "Attribute" must not be repeated
+Attribute "ATTRIBUTE" must not be repeated
+===errors 8.1===
+Attribute "Attribute" must not be repeated
+Attribute "Attribute" must not be repeated
+Attribute "ReturnTypeWillChange" must not be repeated
+Attribute "ATTRIBUTE" must not be repeated
+===errors 8.2-8.3===
+Attribute "Attribute" must not be repeated
+Attribute "Attribute" must not be repeated
+Attribute "AllowDynamicProperties" must not be repeated
+Attribute "SensitiveParameter" must not be repeated
+Attribute "ReturnTypeWillChange" must not be repeated
+Attribute "SensitiveParameter" must not be repeated
+Attribute "ATTRIBUTE" must not be repeated
+===errors 8.4===
+Attribute "Attribute" must not be repeated
+Attribute "Attribute" must not be repeated
+Attribute "AllowDynamicProperties" must not be repeated
+Attribute "Deprecated" must not be repeated
+Attribute "SensitiveParameter" must not be repeated
+Attribute "ReturnTypeWillChange" must not be repeated
+Attribute "SensitiveParameter" must not be repeated
+Attribute "ATTRIBUTE" must not be repeated
 ===errors >=8.5===
 Attribute "Attribute" must not be repeated
 Attribute "Attribute" must not be repeated
@@ -22,9 +62,11 @@ Attribute "SensitiveParameter" must not be repeated
 Attribute "ReturnTypeWillChange" must not be repeated
 Attribute "SensitiveParameter" must not be repeated
 Attribute "ATTRIBUTE" must not be repeated
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected end of file, expecting variable (T_VARIABLE) in Standard input code on line 11
+===php_error >=8.0===
 PHP Fatal error:  Attribute "Attribute" must not be repeated in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

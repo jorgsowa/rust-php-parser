@@ -13,7 +13,7 @@ PHP Parse error:  syntax error, unexpected identifier "readonly", expecting "fun
 PHP Fatal error:  Cannot use 'readonly' as method modifier in Standard input code on line 1
 ===php_error >=8.3===
 PHP Fatal error:  Cannot use the readonly modifier on a method in Standard input code on line 1
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

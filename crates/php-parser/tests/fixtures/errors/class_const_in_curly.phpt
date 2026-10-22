@@ -1,12 +1,14 @@
 ===source===
 <?php $x = "{$obj::CONST}";
-===errors >=8.4===
+===errors===
 class constant access is not valid as a standalone interpolation expression
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '}', expecting '[' in Standard input code on line 1
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "}", expecting "->" or "?->" or "{" or "[" in Standard input code on line 1
 ===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token "}", expecting "->" or "?->" or "[" in Standard input code on line 1
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

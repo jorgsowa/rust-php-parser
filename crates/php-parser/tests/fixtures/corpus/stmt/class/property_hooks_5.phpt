@@ -9,6 +9,24 @@ class Test {
         readonly get;
     }
 }
+===errors <=8.3===
+'property hooks' requires PHP 8.4 or higher
+Cannot use the public modifier on a property hook
+Cannot use the public modifier on a property hook
+Cannot use the protected modifier on a property hook
+duplicate 'get' hook
+Cannot use the private modifier on a property hook
+duplicate 'get' hook
+Cannot use the abstract modifier on a property hook
+Cannot use the static modifier on a property hook
+duplicate 'get' hook
+Cannot use the readonly modifier on a property hook
+duplicate 'get' hook
+Non-abstract property hook must have a body
+Non-abstract property hook must have a body
+Non-abstract property hook must have a body
+Non-abstract property hook must have a body
+Non-abstract property hook must have a body
 ===errors >=8.4===
 Cannot use the public modifier on a property hook
 Cannot use the public modifier on a property hook
@@ -26,11 +44,13 @@ Non-abstract property hook must have a body
 Non-abstract property hook must have a body
 Non-abstract property hook must have a body
 Non-abstract property hook must have a body
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 3
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error >=8.4===
 PHP Fatal error:  Cannot use the public modifier on a property hook in Standard input code on line 4
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

@@ -1,7 +1,7 @@
 ===source===
 <?php
 self: $x;
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

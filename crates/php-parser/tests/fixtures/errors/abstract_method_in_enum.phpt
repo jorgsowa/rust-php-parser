@@ -1,8 +1,13 @@
 ===source===
 <?php enum Status { abstract public function label(): string; }
-===errors >=8.4===
+===errors <=8.0===
+'enums' requires PHP 8.1 or higher
 enum methods cannot be abstract
-===php_error <=8.0===
+===errors >=8.1===
+enum methods cannot be abstract
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'Status' (T_STRING) in Standard input code on line 1
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 1
 ===php_error 8.1===
 PHP Fatal error:  Class Status contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (Status::label) in Standard input code on line 1
@@ -10,7 +15,7 @@ PHP Fatal error:  Class Status contains 1 abstract method and must therefore be 
 PHP Fatal error:  Enum Status must implement 1 abstract private method (Status::label) in Standard input code on line 1
 ===php_error >=8.5===
 PHP Fatal error:  Enum method Status::label() must not be abstract in Standard input code on line 1
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

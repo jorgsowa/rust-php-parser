@@ -1,11 +1,13 @@
 ===source===
 <?php
 $a = 1..2;
-===errors >=8.5===
+===errors===
 expected ';' after expression
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '.2' (T_DNUMBER) in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected floating-point number ".2" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

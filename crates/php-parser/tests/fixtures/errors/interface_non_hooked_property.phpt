@@ -5,7 +5,7 @@ PHP rejects a property without hooks in an interface with "Interfaces may only i
 interface I {
     public int $x;
 }
-===errors >=8.4===
+===errors===
 Interfaces may only include hooked properties
 ===php_error <=8.0===
 PHP Fatal error:  Interfaces may not include member variables in Standard input code on line 3
@@ -13,7 +13,7 @@ PHP Fatal error:  Interfaces may not include member variables in Standard input 
 PHP Fatal error:  Interfaces may not include properties in Standard input code on line 3
 ===php_error >=8.4===
 PHP Fatal error:  Interfaces may only include hooked properties in Standard input code on line 3
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

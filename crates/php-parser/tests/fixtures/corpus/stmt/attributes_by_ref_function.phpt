@@ -5,7 +5,11 @@
 #[A] function &f() {}
 #[A] function &(): int { return 1; };
 #[A] function g() {}
-===ast >=8.0===
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+===ast===
 {
   "stmts": [
     {

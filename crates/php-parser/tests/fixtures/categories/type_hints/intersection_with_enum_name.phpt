@@ -3,7 +3,16 @@
 function f(A&Enum $x, enum&A $y, A & Enum &$z): A&Enum {}
 class C { public A&Enum $p; }
 $f = fn(A&Enum ...$x) => 1;
-===php_error <=8.0===
+===errors <=8.0===
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'Enum' (T_STRING), expecting variable (T_VARIABLE) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "Enum", expecting variable in Standard input code on line 2
 ===ast===
 {

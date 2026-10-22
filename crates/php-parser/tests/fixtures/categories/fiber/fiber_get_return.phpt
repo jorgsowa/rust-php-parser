@@ -1,6 +1,6 @@
 ===source===
 <?php $result = $fiber->getReturn();
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

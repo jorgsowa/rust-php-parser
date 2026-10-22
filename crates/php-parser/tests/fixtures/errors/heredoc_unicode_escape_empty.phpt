@@ -3,11 +3,11 @@
 $a = <<<X
 \u{}
 X;
-===errors >=8.5===
+===errors===
 Invalid UTF-8 codepoint escape sequence: empty code point
 ===php_error===
 PHP Parse error:  Invalid UTF-8 codepoint escape sequence in Standard input code on line 3
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

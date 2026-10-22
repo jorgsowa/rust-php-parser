@@ -1,8 +1,12 @@
 ===source===
 <?php class A { private const string Y = 'a'; }
-===php_error <=8.2===
+===errors <=8.2===
+'typed class constants' requires PHP 8.3 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'Y' (T_STRING), expecting '=' in Standard input code on line 1
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected identifier "Y", expecting "=" in Standard input code on line 1
-===ast >=8.3===
+===ast===
 {
   "stmts": [
     {

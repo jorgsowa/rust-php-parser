@@ -16,6 +16,48 @@
 #[Deprecated] enum G {}
 $a = new #[Deprecated] class {};
 $b = new #[AllowDynamicProperties] readonly class {};
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'enums' requires PHP 8.1 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'enums' requires PHP 8.1 or higher
+'attributes' requires PHP 8.0 or higher
+'readonly class' requires PHP 8.2 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'enums' requires PHP 8.1 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+===errors 8.0===
+'enums' requires PHP 8.1 or higher
+'enums' requires PHP 8.1 or higher
+'readonly class' requires PHP 8.2 or higher
+'enums' requires PHP 8.1 or higher
+===errors 8.1===
+'readonly class' requires PHP 8.2 or higher
+===errors 8.2-8.3===
+Cannot apply #[\AllowDynamicProperties] to interface J
+Cannot apply #[\AllowDynamicProperties] to trait U
+Cannot apply #[\AllowDynamicProperties] to readonly class R
+Cannot apply #[\AllowDynamicProperties] to readonly class class@anonymous
+===errors 8.4===
+Cannot apply #[\AllowDynamicProperties] to interface J
+Cannot apply #[\AllowDynamicProperties] to trait U
+Cannot apply #[\AllowDynamicProperties] to enum F
+Cannot apply #[\AllowDynamicProperties] to readonly class R
+Cannot apply #[\Deprecated] to class C
+Cannot apply #[\Deprecated] to class D
+Cannot apply #[\Deprecated] to interface K
+Cannot apply #[\Deprecated] to enum G
+Cannot apply #[\Deprecated] to class class@anonymous
+Cannot apply #[\AllowDynamicProperties] to readonly class class@anonymous
 ===errors >=8.5===
 Cannot apply #[\Attribute] to interface I
 Cannot apply #[\Attribute] to trait T
@@ -31,7 +73,9 @@ Cannot apply #[\Deprecated] to interface K
 Cannot apply #[\Deprecated] to enum G
 Cannot apply #[\Deprecated] to class class@anonymous
 Cannot apply #[\AllowDynamicProperties] to readonly class class@anonymous
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '=' in Standard input code on line 15
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "enum" in Standard input code on line 4
 ===php_error 8.1===
 PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 9
@@ -43,7 +87,7 @@ PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to interface in Standar
 PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to interface J in Standard input code on line 6
 ===php_error >=8.5===
 PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

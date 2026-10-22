@@ -1,7 +1,7 @@
 #[path = "integration/common.rs"]
 mod common;
 
-use common::{collect_phpt_files, Fixture, Version, DEFAULT, SUPPORTED};
+use common::{collect_phpt_files, Fixture, Version, SUPPORTED};
 use rayon::prelude::*;
 use std::io::Write;
 use std::sync::Mutex;
@@ -53,11 +53,8 @@ fn php_lint(code: &str) -> std::process::Output {
 /// Errors `php -l` does not report: a fixture that lists errors must record a `php -l` failure.
 fn non_fatal_errors(fixture: &Fixture) -> Vec<String> {
     let mut found = Vec::new();
-    for target in fixture.targets() {
-        if fixture
-            .section("php_error", Some(target.unwrap_or(DEFAULT)))
-            .is_some()
-        {
+    for target in SUPPORTED.map(Some) {
+        if fixture.section("php_error", target).is_some() {
             continue;
         }
         let Some(errors) = fixture.section("errors", target) else {
@@ -76,28 +73,12 @@ fn non_fatal_errors(fixture: &Fixture) -> Vec<String> {
     found
 }
 
-/// Oldest PHP the CI matrix runs `php -l` with. Older versions are only linted for fixtures
-/// that target them; for the rest they record this version's output.
-const OLDEST_LINTED: Version = (8, 0);
-
-/// Whether `php -l` on `php` is checked against `fixture`.
-fn lints(fixture: &Fixture, php: Version) -> bool {
-    php >= OLDEST_LINTED || fixture.targets().contains(&Some(php))
-}
-
 fn update_fixture_php_error(path: &std::path::Path, php: Version, actual: Option<&str>) {
     let content = std::fs::read_to_string(path)
         .unwrap_or_else(|e| panic!("failed to read {}: {e}", path.display()));
     let mut fixture = Fixture::parse(&content)
         .unwrap_or_else(|e| panic!("malformed fixture {}: {e}", path.display()));
-    let follows = |v: Version| php == OLDEST_LINTED && v < php && !lints(&fixture, v);
-    let versions: Vec<Version> = SUPPORTED
-        .into_iter()
-        .filter(|v| *v == php || follows(*v))
-        .collect();
-    for v in versions {
-        fixture.set_section_for("php_error", v, actual);
-    }
+    fixture.set_section_for("php_error", php, actual);
     std::fs::write(path, fixture.render())
         .unwrap_or_else(|e| panic!("failed to write {}: {e}", path.display()));
 }
@@ -153,9 +134,6 @@ fn fixture_files_are_valid_php() {
             ));
         }
 
-        if !lints(&fixture, php) {
-            return;
-        }
         let expected = fixture
             .section("php_error", Some(php))
             .map(|s| strip_stack_trace(&s.body));

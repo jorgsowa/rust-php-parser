@@ -1,8 +1,12 @@
 ===source===
 <?php $fn = foo(1, ...);
-===php_error <=8.5===
+===errors <=8.5===
+'partial function application' requires PHP 8.6 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ')' in Standard input code on line 1
+===php_error 8.0-8.5===
 PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 1
-===ast >=8.6===
+===ast===
 {
   "stmts": [
     {

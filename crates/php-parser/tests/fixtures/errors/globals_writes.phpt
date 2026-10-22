@@ -21,7 +21,24 @@ function f($GLOBALS, &$_GET, ...$_SESSION) {}
 fn($_SERVER) => 1;
 function () use ($_POST, &$GLOBALS) {};
 class A { public function __construct(public $_ENV) {} }
-===errors===
+===errors <=7.4===
+Cannot re-assign auto-global variable GLOBALS
+Cannot re-assign auto-global variable _GET
+Cannot re-assign auto-global variable _SESSION
+Cannot re-assign auto-global variable _SERVER
+Cannot use auto-global as lexical variable
+Cannot use auto-global as lexical variable
+'constructor property promotion' requires PHP 8.0 or higher
+Cannot re-assign auto-global variable _ENV
+===errors 8.0===
+Cannot re-assign auto-global variable GLOBALS
+Cannot re-assign auto-global variable _GET
+Cannot re-assign auto-global variable _SESSION
+Cannot re-assign auto-global variable _SERVER
+Cannot use auto-global as lexical variable
+Cannot use auto-global as lexical variable
+Cannot re-assign auto-global variable _ENV
+===errors >=8.1===
 $GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax
 $GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax
 $GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax
@@ -47,7 +64,9 @@ Cannot append to $GLOBALS
 Cannot append to $GLOBALS
 Cannot append to $GLOBALS
 Cannot append to $GLOBALS
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 22
+===php_error 8.0===
 PHP Fatal error:  Cannot re-assign auto-global variable GLOBALS in Standard input code on line 19
 ===php_error >=8.1===
 PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax in Standard input code on line 2

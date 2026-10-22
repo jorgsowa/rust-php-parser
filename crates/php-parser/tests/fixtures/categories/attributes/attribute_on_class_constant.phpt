@@ -1,5 +1,9 @@
 ===source===
 <?php class A { #[Deprecated] const FOO = 1; }
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 1
 ===ast===
 {
   "stmts": [

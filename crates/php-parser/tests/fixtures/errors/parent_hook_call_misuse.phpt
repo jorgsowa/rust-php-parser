@@ -15,7 +15,9 @@ class A extends B {
         }
     }
 }
-===errors===
+===errors <=8.0===
+'property hooks' requires PHP 8.4 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
 Cannot use "parent" when no class scope is active
 Cannot use "parent" when no class scope is active
 Must not use parent::$a::get() outside a property hook
@@ -23,7 +25,26 @@ Must not use parent::$b::get() in a different property ($a)
 Must not use parent::$a::get() in a different property hook (set)
 Must not use parent::$a::set() outside a property hook
 Cannot create Closure for parent property hook call
-===php_error <=8.3===
+===errors 8.1-8.3===
+'property hooks' requires PHP 8.4 or higher
+Cannot use "parent" when no class scope is active
+Cannot use "parent" when no class scope is active
+Must not use parent::$a::get() outside a property hook
+Must not use parent::$b::get() in a different property ($a)
+Must not use parent::$a::get() in a different property hook (set)
+Must not use parent::$a::set() outside a property hook
+Cannot create Closure for parent property hook call
+===errors >=8.4===
+Cannot use "parent" when no class scope is active
+Cannot use "parent" when no class scope is active
+Must not use parent::$a::get() outside a property hook
+Must not use parent::$b::get() in a different property ($a)
+Must not use parent::$a::get() in a different property hook (set)
+Must not use parent::$a::set() outside a property hook
+Cannot create Closure for parent property hook call
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 8
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 8
 ===php_error >=8.4===
 PHP Fatal error:  Cannot use "parent" when no class scope is active in Standard input code on line 2

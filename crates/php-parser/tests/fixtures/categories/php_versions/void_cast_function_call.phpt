@@ -1,8 +1,12 @@
 ===source===
 <?php (void)someFn();
-===php_error <=8.4===
+===errors <=8.4===
+'void cast' requires PHP 8.5 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'someFn' (T_STRING) in Standard input code on line 1
+===php_error 8.0-8.4===
 PHP Parse error:  syntax error, unexpected identifier "someFn" in Standard input code on line 1
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

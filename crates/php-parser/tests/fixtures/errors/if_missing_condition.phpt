@@ -1,12 +1,19 @@
 ===source===
 <?php if { }
-===errors===
+===errors <=7.4===
+expected '(', found '{'
+expected expression
+expected ')' to close the delimiter opened at byte 9
+expected statement
+===errors >=8.0===
 expected '(', found '{'
 expected expression
 Array and string offset access syntax with curly braces is no longer supported
 expected ')' to close the delimiter opened at byte 9
 expected statement
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting '(' in Standard input code on line 1
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "{", expecting "(" in Standard input code on line 1
 ===ast===
 {

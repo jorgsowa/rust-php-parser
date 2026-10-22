@@ -8,15 +8,17 @@ class Foo {
     @invalid3
     public function qux(): int { return 3; }
 }
-===errors >=8.3===
+===errors===
 expected class member, found '@'
 expected class member, found '@'
 expected class member, found '@'
-===php_error <=8.2===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '@', expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 3
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected token "@", expecting "function" or "const" in Standard input code on line 3
 ===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected token "@", expecting "function" in Standard input code on line 3
-===ast >=8.3===
+===ast===
 {
   "stmts": [
     {

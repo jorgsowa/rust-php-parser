@@ -9,14 +9,28 @@ $b = new class extends A {
     function f(parent&B $x) {}
     function g(): A|parent {}
 };
-===errors >=8.5===
+===errors <=7.4===
+'intersection types' requires PHP 8.1 or higher
+Type self cannot be part of an intersection type
+'union types' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+Type parent cannot be part of an intersection type
+'union types' requires PHP 8.0 or higher
+===errors 8.0===
+'intersection types' requires PHP 8.1 or higher
+Type self cannot be part of an intersection type
+'intersection types' requires PHP 8.1 or higher
+Type parent cannot be part of an intersection type
+===errors >=8.1===
 Type self cannot be part of an intersection type
 Type parent cannot be part of an intersection type
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'B' (T_STRING), expecting variable (T_VARIABLE) in Standard input code on line 4
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "B", expecting variable in Standard input code on line 4
 ===php_error >=8.1===
 PHP Fatal error:  Type self cannot be part of an intersection type in Standard input code on line 4
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

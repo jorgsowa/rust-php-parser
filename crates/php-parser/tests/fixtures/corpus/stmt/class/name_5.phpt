@@ -2,7 +2,9 @@
 <?php class A extends PARENT {}
 ===errors===
 Cannot use "PARENT" as class name, as it is reserved
-===php_error===
+===php_error <=7.4===
+PHP Fatal error:  Cannot use 'PARENT' as class name as it is reserved in Standard input code on line 1
+===php_error >=8.0===
 PHP Fatal error:  Cannot use "PARENT" as class name, as it is reserved in Standard input code on line 1
 ===ast===
 {

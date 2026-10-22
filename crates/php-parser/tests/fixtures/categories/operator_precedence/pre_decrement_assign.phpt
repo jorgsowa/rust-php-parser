@@ -2,7 +2,9 @@
 <?php --$x -= 1;
 ===errors===
 Cannot use increment/decrement as an assignment target.
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '-=' (T_MINUS_EQUAL) in Standard input code on line 1
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "-=" in Standard input code on line 1
 ===ast===
 {

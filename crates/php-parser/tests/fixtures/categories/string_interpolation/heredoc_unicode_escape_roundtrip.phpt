@@ -9,7 +9,7 @@ EOT;
 $c = <<<EOT
 Normal text \u{41} with escape
 EOT;
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

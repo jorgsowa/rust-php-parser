@@ -14,6 +14,43 @@ interface I {
     private $c { set; }
     final $d { get; }
 }
+===errors <=8.0===
+Access type for interface constant I::A must be public
+Access type for interface constant I::B must be public
+'final class constants' requires PHP 8.1 or higher
+Access type for interface constant I::D must be public
+Access type for interface method I::f() must be public
+Access type for interface method I::g() must be public
+Interface method I::h() must not be final
+Interface method I::i() must not be abstract
+Interface function I::j() cannot contain body
+Property in interface cannot be explicitly abstract. All interface members are implicitly abstract
+'property hooks' requires PHP 8.4 or higher
+Property in interface cannot be protected or private
+'property hooks' requires PHP 8.4 or higher
+Property in interface cannot be protected or private
+'property hooks' requires PHP 8.4 or higher
+Property in interface cannot be final
+'property hooks' requires PHP 8.4 or higher
+'final properties' requires PHP 8.4 or higher
+===errors 8.1-8.3===
+Access type for interface constant I::A must be public
+Access type for interface constant I::B must be public
+Access type for interface constant I::D must be public
+Access type for interface method I::f() must be public
+Access type for interface method I::g() must be public
+Interface method I::h() must not be final
+Interface method I::i() must not be abstract
+Interface function I::j() cannot contain body
+Property in interface cannot be explicitly abstract. All interface members are implicitly abstract
+'property hooks' requires PHP 8.4 or higher
+Property in interface cannot be protected or private
+'property hooks' requires PHP 8.4 or higher
+Property in interface cannot be protected or private
+'property hooks' requires PHP 8.4 or higher
+Property in interface cannot be final
+'property hooks' requires PHP 8.4 or higher
+'final properties' requires PHP 8.4 or higher
 ===errors >=8.4===
 Access type for interface constant I::A must be public
 Access type for interface constant I::B must be public
@@ -27,13 +64,15 @@ Property in interface cannot be explicitly abstract. All interface members are i
 Property in interface cannot be protected or private
 Property in interface cannot be protected or private
 Property in interface cannot be final
-===php_error <=8.2===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 11
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 11
 ===php_error 8.3===
 PHP Fatal error:  Cannot use the abstract modifier on a property in Standard input code on line 11
 ===php_error >=8.4===
 PHP Fatal error:  Access type for interface constant I::A must be public in Standard input code on line 3
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

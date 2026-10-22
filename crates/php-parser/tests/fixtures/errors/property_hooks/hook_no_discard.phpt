@@ -17,6 +17,27 @@ namespace {
         public $f { #[NoDiscard] get => 1; }
     }
 }
+===errors <=7.4===
+'property hooks' requires PHP 8.4 or higher
+'attributes' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+'attributes' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+'attributes' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+'attributes' requires PHP 8.0 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+'attributes' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+'attributes' requires PHP 8.0 or higher
+===errors 8.0-8.3===
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
 ===errors >=8.5===
 #[\NoDiscard] is not supported for property hooks
 #[\NoDiscard] is not supported for property hooks
@@ -24,13 +45,15 @@ namespace {
 #[\NoDiscard] is not supported for property hooks
 #[\NoDiscard] is not supported for property hooks
 #[\NoDiscard] is not supported for property hooks
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 5
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 5
 ===php_error 8.4===
 PHP Fatal error:  N\A::$d::get() has #[\Override] attribute, but no matching parent method exists in Standard input code on line 10
 ===php_error >=8.5===
 PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard input code on line 5
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

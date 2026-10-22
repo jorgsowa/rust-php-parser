@@ -9,9 +9,20 @@ function test(
     false $a9, // PHP 8.0
 ): void {} // PHP 7.1
 function test2(): never {} // PHP 8.1
-===php_error <=8.1===
+===errors <=7.4===
+'mixed type' requires PHP 8.0 or higher
+'null type' requires PHP 8.0 or higher
+'null as standalone type' requires PHP 8.2 or higher
+'false type' requires PHP 8.0 or higher
+'false as standalone type' requires PHP 8.2 or higher
+===errors 8.0-8.1===
+'null as standalone type' requires PHP 8.2 or higher
+'false as standalone type' requires PHP 8.2 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ')', expecting variable (T_VARIABLE) in Standard input code on line 9
+===php_error 8.0-8.1===
 PHP Fatal error:  Null can not be used as a standalone type in Standard input code on line 2
-===ast >=8.2===
+===ast===
 {
   "stmts": [
     {

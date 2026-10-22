@@ -6,13 +6,18 @@ enum E {
     case A;
     case A;
 }
+===errors <=8.0===
+'enums' requires PHP 8.1 or higher
+Cannot redefine class constant E::A
 ===errors >=8.1===
 Cannot redefine class constant E::A
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'E' (T_STRING) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 2
 ===php_error >=8.1===
 PHP Fatal error:  Cannot redefine class constant E::A in Standard input code on line 4
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

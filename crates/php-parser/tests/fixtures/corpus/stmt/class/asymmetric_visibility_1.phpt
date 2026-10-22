@@ -57,7 +57,7 @@ Property with asymmetric visibility Test::$f must have type
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 4
 ===php_error >=8.4===
 PHP Fatal error:  Property with asymmetric visibility Test::$a must have type in Standard input code on line 4
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

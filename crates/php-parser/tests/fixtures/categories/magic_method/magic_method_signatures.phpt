@@ -36,7 +36,44 @@ enum E {
     function __call($n, $a) {}
 }
 function __get() {}
-===php_error <=8.1===
+===errors <=7.4===
+'union types' requires PHP 8.0 or higher
+'mixed type' requires PHP 8.0 or higher
+A::__set(): Return type must be void when declared
+'true type' requires PHP 8.2 or higher
+'null type' requires PHP 8.0 or higher
+'null as standalone type' requires PHP 8.2 or higher
+'union types' requires PHP 8.0 or higher
+'union types' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+A::__sleep(): Return type must be array when declared
+'false type' requires PHP 8.0 or higher
+'false as standalone type' requires PHP 8.2 or higher
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'DNF types' requires PHP 8.2 or higher
+'enums' requires PHP 8.1 or higher
+===errors 8.0===
+A::__set(): Return type must be void when declared
+'true type' requires PHP 8.2 or higher
+'null as standalone type' requires PHP 8.2 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+A::__sleep(): Return type must be array when declared
+'false as standalone type' requires PHP 8.2 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+'enums' requires PHP 8.1 or higher
+===errors 8.1===
+'true type' requires PHP 8.2 or higher
+'null as standalone type' requires PHP 8.2 or higher
+'DNF types' requires PHP 8.2 or higher
+'false as standalone type' requires PHP 8.2 or higher
+'DNF types' requires PHP 8.2 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in Standard input code on line 6
+===php_error 8.0-8.1===
 PHP Parse error:  syntax error, unexpected token "(" in Standard input code on line 16
 ===ast===
 {

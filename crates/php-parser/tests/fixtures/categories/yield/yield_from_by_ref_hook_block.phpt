@@ -1,13 +1,14 @@
 ===source===
 <?php
 class C { public $p { &get { yield from f(); } } }
-===errors===
+===errors <=8.3===
+'property hooks' requires PHP 8.4 or higher
 Cannot use "yield from" inside a by-reference generator
-===php_error <=8.1===
-PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
-===php_error 8.2===
-PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
-===php_error 8.3===
+===errors >=8.4===
+Cannot use "yield from" inside a by-reference generator
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 2
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
 ===php_error >=8.4===
 PHP Fatal error:  Cannot use "yield from" inside a by-reference generator in Standard input code on line 2

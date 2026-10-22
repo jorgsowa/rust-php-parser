@@ -3,15 +3,26 @@
 class C {
     public function __construct(private protected(set) string $a, protected(set) string $b) {}
 }
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+Visibility of property must not be weaker than set visibility
+'asymmetric visibility' requires PHP 8.4 or higher
+===errors 8.0-8.3===
+'asymmetric visibility' requires PHP 8.4 or higher
+Visibility of property must not be weaker than set visibility
+'asymmetric visibility' requires PHP 8.4 or higher
 ===errors >=8.4===
 Visibility of property must not be weaker than set visibility
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'private' (T_PRIVATE), expecting variable (T_VARIABLE) in Standard input code on line 3
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected token "protected", expecting variable in Standard input code on line 3
 ===php_error 8.1-8.3===
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 3
 ===php_error >=8.4===
 PHP Fatal error:  Visibility of property C::$a must not be weaker than set visibility in Standard input code on line 3
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

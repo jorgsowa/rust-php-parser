@@ -9,7 +9,9 @@ switch ($x) {
 }
 ===errors===
 expected ';', found 'echo'
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in Standard input code on line 4
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "echo" in Standard input code on line 4
 ===ast===
 {

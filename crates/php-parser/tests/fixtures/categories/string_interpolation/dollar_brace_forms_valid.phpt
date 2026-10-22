@@ -5,6 +5,8 @@
 "${a[0] }";
 "${a->b}";
 "${a . 1}";
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard input code on line 5
 ===ast===
 {
   "stmts": [

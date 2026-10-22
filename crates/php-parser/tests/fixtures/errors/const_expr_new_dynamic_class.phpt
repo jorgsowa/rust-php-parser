@@ -6,14 +6,31 @@ function c($a = new class {}) {}
 function d($a = new Foo(...$x)) {}
 function e($a = new Foo($x)) {}
 function f($a = new Foo(a: f())) {}
-===errors===
+===errors <=7.4===
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'named arguments' requires PHP 8.0 or higher
+'new in initializers' requires PHP 8.1 or higher
+===errors 8.0===
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+===errors >=8.1===
 "static" is not allowed in compile-time constants
 Cannot use dynamic class name in constant expression
 Cannot use anonymous class in constant expression
 Argument unpacking in constant expressions is not supported
 Constant expression contains invalid operations
 Constant expression contains invalid operations
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ':', expecting ')' in Standard input code on line 7
+===php_error 8.0===
 PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 2
 ===php_error >=8.1===
 PHP Fatal error:  "static" is not allowed in compile-time constants in Standard input code on line 2

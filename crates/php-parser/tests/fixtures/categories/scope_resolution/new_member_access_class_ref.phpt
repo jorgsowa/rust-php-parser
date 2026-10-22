@@ -4,7 +4,7 @@ $x = new $this->job();
 $y = new $obj->factory->type();
 $z = new $arr['cls']();
 $w = new $a::$b();
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

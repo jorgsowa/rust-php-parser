@@ -4,7 +4,9 @@
 <?php case 1: endswitch;
 ===errors===
 Only one ';' may precede the first case of a switch
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '?>', expecting endswitch (T_ENDSWITCH) or case (T_CASE) or default (T_DEFAULT) in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token ";", expecting "endswitch" or "case" or "default" in Standard input code on line 2
 ===ast===
 {

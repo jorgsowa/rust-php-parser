@@ -1,6 +1,6 @@
 ===source===
 <?php if ($fiber->isTerminated()) {}
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

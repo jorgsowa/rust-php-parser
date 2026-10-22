@@ -7,13 +7,13 @@ class A {
 interface I {
     final public const X = 1;
 }
-===errors 8.0===
+===errors <=8.0===
 'final class constants' requires PHP 8.1 or higher
 'final class constants' requires PHP 8.1 or higher
 'final class constants' requires PHP 8.1 or higher
 ===php_error <=8.0===
 PHP Fatal error:  Cannot use 'final' as constant modifier in Standard input code on line 3
-===ast >=8.0===
+===ast===
 {
   "stmts": [
     {

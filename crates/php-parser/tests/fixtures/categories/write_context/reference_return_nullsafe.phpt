@@ -12,13 +12,37 @@ class C {
     public $p { &get { return $this?->q; } }
 }
 $f = fn&($a) => $a?->b;
-===errors===
+===errors <=7.4===
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+Cannot take reference of a nullsafe chain
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+Cannot take reference of a nullsafe chain
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+Cannot take reference of a nullsafe chain
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+'property hooks' requires PHP 8.4 or higher
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+Cannot take reference of a nullsafe chain
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+Cannot take reference of a nullsafe chain
+===errors 8.0-8.3===
+Cannot take reference of a nullsafe chain
+Cannot take reference of a nullsafe chain
+Cannot take reference of a nullsafe chain
+'property hooks' requires PHP 8.4 or higher
+Cannot take reference of a nullsafe chain
+Cannot take reference of a nullsafe chain
+===errors >=8.4===
 Cannot take reference of a nullsafe chain
 Cannot take reference of a nullsafe chain
 Cannot take reference of a nullsafe chain
 Cannot take reference of a nullsafe chain
 Cannot take reference of a nullsafe chain
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard input code on line 3
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 11
 ===php_error >=8.4===
 PHP Fatal error:  Cannot take reference of a nullsafe chain in Standard input code on line 5

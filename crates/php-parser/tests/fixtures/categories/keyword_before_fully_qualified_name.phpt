@@ -7,6 +7,8 @@ private\protected\x();
 exit(\foo());
 require_once \A::B;
 $a = clone \foo();
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '\' (T_NS_SEPARATOR), expecting '(' in Standard input code on line 4
 ===ast===
 {
   "stmts": [

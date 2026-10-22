@@ -5,7 +5,9 @@ use B\__halt_compiler;
 use C\__halt_compiler as D;
 use function E\__halt_compiler;
 echo 1;
-===ast >=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '__halt_compiler' (T_HALT_COMPILER), expecting identifier (T_STRING) in Standard input code on line 2
+===ast===
 {
   "stmts": [
     {

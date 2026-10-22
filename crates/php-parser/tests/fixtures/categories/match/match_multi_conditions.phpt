@@ -1,5 +1,9 @@
 ===source===
 <?php $r = match($x) { 1, 2, 3 => 'low', 4, 5 => 'high' };
+===errors <=7.4===
+'match expressions' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ',' in Standard input code on line 1
 ===ast===
 {
   "stmts": [

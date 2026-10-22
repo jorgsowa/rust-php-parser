@@ -1,5 +1,7 @@
 ===source===
 <?php #[\App\Attr] function foo() {}
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
 ===ast===
 {
   "stmts": [

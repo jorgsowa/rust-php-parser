@@ -6,7 +6,9 @@ expected expression
 expected expression
 expected ';' after expression
 expected ';' after expression
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected end of file, expecting variable (T_VARIABLE) or heredoc end (T_END_HEREDOC) or ${ (T_DOLLAR_OPEN_CURLY_BRACES) or {$ (T_CURLY_OPEN) in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected end of file, expecting variable or heredoc end or "${" or "{$" in Standard input code on line 2
 ===ast===
 {

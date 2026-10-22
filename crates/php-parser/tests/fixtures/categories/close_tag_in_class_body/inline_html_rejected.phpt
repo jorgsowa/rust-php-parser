@@ -2,7 +2,9 @@
 <?php class A { const X = 1 ?>x<?php }
 ===errors===
 expected class member, found inline HTML
-===php_error <=8.2===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'x', expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 1
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected T_INLINE_HTML "x", expecting "function" or "const" in Standard input code on line 1
 ===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected T_INLINE_HTML "x", expecting "function" in Standard input code on line 1

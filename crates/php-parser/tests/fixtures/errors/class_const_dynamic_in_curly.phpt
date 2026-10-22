@@ -1,14 +1,19 @@
 ===source===
 <?php $x = "{$obj::{$name}}";
-===errors >=8.4===
+===errors <=8.2===
+'dynamic class constant fetch' requires PHP 8.3 or higher
 class constant access is not valid as a standalone interpolation expression
-===php_error <=8.2===
+===errors >=8.3===
+class constant access is not valid as a standalone interpolation expression
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '}', expecting '(' in Standard input code on line 1
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected token "}", expecting "(" in Standard input code on line 1
 ===php_error 8.3===
 PHP Parse error:  syntax error, unexpected token "}", expecting "->" or "?->" or "{" or "[" in Standard input code on line 1
 ===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token "}", expecting "->" or "?->" or "[" in Standard input code on line 1
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

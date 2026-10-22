@@ -2,7 +2,9 @@
 <?php switch ($a) { ;; case 1: }
 ===errors===
 Only one ';' may precede the first case of a switch
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ';', expecting case (T_CASE) or default (T_DEFAULT) or '}' in Standard input code on line 1
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token ";", expecting "case" or "default" or "}" in Standard input code on line 1
 ===ast===
 {

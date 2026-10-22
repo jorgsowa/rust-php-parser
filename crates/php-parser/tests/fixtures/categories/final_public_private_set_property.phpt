@@ -1,11 +1,14 @@
 ===source===
 <?php
 class A { final public private(set) int $x; }
+===errors <=8.3===
+'asymmetric visibility' requires PHP 8.4 or higher
+'final properties' requires PHP 8.4 or higher
 ===php_error <=8.2===
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 2
 ===php_error 8.3===
 PHP Fatal error:  Cannot use the final modifier on a property in Standard input code on line 2
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

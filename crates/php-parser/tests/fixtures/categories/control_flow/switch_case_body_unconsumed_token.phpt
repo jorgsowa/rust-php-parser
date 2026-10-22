@@ -6,7 +6,9 @@ switch ($a) {
 }
 ===errors===
 expected expression
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'endfor' (T_ENDFOR), expecting case (T_CASE) or default (T_DEFAULT) or '}' in Standard input code on line 4
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "endfor", expecting "case" or "default" or "}" in Standard input code on line 4
 ===ast===
 {

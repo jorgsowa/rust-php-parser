@@ -5,6 +5,10 @@ echo match (1) {
     0 => 'Foo',
     1 => 'Bar',
 };
+===errors <=7.4===
+'match expressions' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in Standard input code on line 4
 ===ast===
 {
   "stmts": [

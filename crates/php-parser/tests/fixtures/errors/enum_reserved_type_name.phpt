@@ -4,12 +4,22 @@ enum Mixed {}
 enum int {}
 enum Iterable {}
 enum Never {}
-===errors===
+===errors <=8.0===
+'enums' requires PHP 8.1 or higher
+Cannot use "Mixed" as an enum name as it is reserved
+'enums' requires PHP 8.1 or higher
+Cannot use "int" as an enum name as it is reserved
+'enums' requires PHP 8.1 or higher
+Cannot use "Iterable" as an enum name as it is reserved
+'enums' requires PHP 8.1 or higher
+===errors >=8.1===
 Cannot use "Mixed" as an enum name as it is reserved
 Cannot use "int" as an enum name as it is reserved
 Cannot use "Iterable" as an enum name as it is reserved
 Cannot use "Never" as an enum name as it is reserved
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'Mixed' (T_STRING) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "Mixed" in Standard input code on line 2
 ===php_error 8.1-8.3===
 PHP Fatal error:  Cannot use 'Mixed' as class name as it is reserved in Standard input code on line 2

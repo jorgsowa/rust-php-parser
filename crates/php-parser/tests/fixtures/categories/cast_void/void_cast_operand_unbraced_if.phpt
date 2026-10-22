@@ -1,9 +1,13 @@
 ===source===
 <?php
 if ($a) (void) f() . "x";
-===php_error <=8.4===
+===errors <=8.4===
+'void cast' requires PHP 8.5 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'f' (T_STRING) in Standard input code on line 2
+===php_error 8.0-8.4===
 PHP Parse error:  syntax error, unexpected identifier "f" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

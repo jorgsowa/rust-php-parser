@@ -24,7 +24,150 @@ const U = $o->m(...);
 const V = fn() => 1;
 const W = Foo::{$c};
 const X = -$x + 1;
-===errors===
+===errors <=7.4===
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Cannot use isset() on the result of an expression (you can use "null !== expression" instead)
+Constant expression contains invalid operations
+'pipe operator (|>)' requires PHP 8.5 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+'match expressions' requires PHP 8.0 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+'throw expressions' requires PHP 8.0 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+Constant expression contains invalid operations
+'dynamic class constant fetch' requires PHP 8.3 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+===errors 8.0===
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Cannot use isset() on the result of an expression (you can use "null !== expression" instead)
+Constant expression contains invalid operations
+'pipe operator (|>)' requires PHP 8.5 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+Constant expression contains invalid operations
+'dynamic class constant fetch' requires PHP 8.3 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+===errors 8.1===
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Cannot use isset() on the result of an expression (you can use "null !== expression" instead)
+Constant expression contains invalid operations
+'pipe operator (|>)' requires PHP 8.5 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+Constant expression contains invalid operations
+'dynamic class constant fetch' requires PHP 8.3 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+===errors 8.2===
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Cannot use isset() on the result of an expression (you can use "null !== expression" instead)
+Constant expression contains invalid operations
+'pipe operator (|>)' requires PHP 8.5 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+Constant expression contains invalid operations
+'dynamic class constant fetch' requires PHP 8.3 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+===errors 8.3-8.4===
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Cannot use isset() on the result of an expression (you can use "null !== expression" instead)
+Constant expression contains invalid operations
+'pipe operator (|>)' requires PHP 8.5 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+===errors >=8.5===
 Constant expression contains invalid operations
 Constant expression contains invalid operations
 Constant expression contains invalid operations
@@ -50,7 +193,9 @@ Constant expression contains invalid operations
 Constant expression contains invalid operations
 Constant expression contains invalid operations
 Constant expression contains invalid operations
-===php_error <=8.4===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '>' in Standard input code on line 10
+===php_error 8.0-8.4===
 PHP Parse error:  syntax error, unexpected token ">" in Standard input code on line 10
 ===php_error >=8.5===
 PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 2

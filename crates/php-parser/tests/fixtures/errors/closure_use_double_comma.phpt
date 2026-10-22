@@ -1,11 +1,13 @@
 ===source===
 <?php
 $a = function() use ($a,,) {};
-===errors >=8.5===
+===errors===
 expected variable, found ','
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ',', expecting '&' or variable (T_VARIABLE) in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token ",", expecting ")" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

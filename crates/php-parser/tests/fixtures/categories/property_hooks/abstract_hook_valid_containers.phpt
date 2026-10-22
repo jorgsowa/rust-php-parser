@@ -3,9 +3,13 @@
 abstract class C { abstract public $p { get; } }
 trait T { abstract public $p { get; } }
 interface I { public $p { get; } }
-===php_error <=8.1===
-PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
-===php_error 8.2===
+===errors <=8.3===
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 2
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
 ===php_error 8.3===
 PHP Fatal error:  Cannot use the abstract modifier on a property in Standard input code on line 2

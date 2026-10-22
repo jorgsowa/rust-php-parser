@@ -14,6 +14,28 @@ trait T {
 $i = new class {
     public callable $i;
 };
+===errors <=7.4===
+Property A::$a cannot have type void
+Property A::$c cannot have type callable
+Property A::$d cannot have type ?callable
+'union types' requires PHP 8.0 or higher
+'null type' requires PHP 8.0 or higher
+Property A::$e cannot have type callable|int|null
+'constructor property promotion' requires PHP 8.0 or higher
+Property A::$f cannot have type callable
+'constructor property promotion' requires PHP 8.0 or higher
+void cannot be used as a parameter type
+Property T::$h cannot have type void
+Property class@anonymous::$i cannot have type callable
+===errors 8.0===
+Property A::$a cannot have type void
+Property A::$c cannot have type callable
+Property A::$d cannot have type ?callable
+Property A::$e cannot have type callable|int|null
+Property A::$f cannot have type callable
+void cannot be used as a parameter type
+Property T::$h cannot have type void
+Property class@anonymous::$i cannot have type callable
 ===errors >=8.1===
 Property A::$a cannot have type void
 Property A::$b cannot have type never
@@ -24,9 +46,11 @@ Property A::$f cannot have type callable
 void cannot be used as a parameter type
 Property T::$h cannot have type void
 Property class@anonymous::$i cannot have type callable
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in Standard input code on line 7
+===php_error >=8.0===
 PHP Fatal error:  Property A::$a cannot have type void in Standard input code on line 3
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

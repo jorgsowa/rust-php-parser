@@ -5,15 +5,24 @@ class Foo {
         set(string $value) { $this->bar = $value; }
     }
 }
+===errors <=8.0===
+'readonly properties' requires PHP 8.1 or higher
+'property hooks' requires PHP 8.4 or higher
+A readonly property cannot declare hooks
+===errors 8.1-8.3===
+'property hooks' requires PHP 8.4 or higher
+A readonly property cannot declare hooks
 ===errors >=8.4===
 A readonly property cannot declare hooks
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'string' (T_STRING), expecting variable (T_VARIABLE) in Standard input code on line 3
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "string", expecting variable in Standard input code on line 3
 ===php_error 8.1-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error >=8.4===
 PHP Fatal error:  Hooked properties cannot be readonly in Standard input code on line 3
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

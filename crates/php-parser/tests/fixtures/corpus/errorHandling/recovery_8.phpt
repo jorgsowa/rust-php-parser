@@ -9,7 +9,9 @@ while (true) {
     $i = 2;
 ===errors===
 expected '}' to close the delimiter opened at byte 118
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected end of file in Standard input code on line 8
+===php_error >=8.0===
 PHP Parse error:  Unclosed '{' on line 6 in Standard input code on line 8
 ===ast===
 {

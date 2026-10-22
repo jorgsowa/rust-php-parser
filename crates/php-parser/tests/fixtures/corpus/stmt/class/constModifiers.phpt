@@ -8,6 +8,8 @@ class Foo {
     private const D = 4;
     final const E = 5;
 }
+===errors <=8.0===
+'final class constants' requires PHP 8.1 or higher
 ===php_error <=8.0===
 PHP Fatal error:  Cannot use 'final' as constant modifier in Standard input code on line 8
 ===ast===

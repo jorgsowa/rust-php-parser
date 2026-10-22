@@ -1,13 +1,18 @@
 ===source===
 <?php
 class C { #[A] use T; }
-===errors >=8.5===
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
 expected 'function' or 'const', found 'use'
-===php_error <=8.2===
+===errors >=8.0===
+expected 'function' or 'const', found 'use'
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 2
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected token "use", expecting "function" or "const" in Standard input code on line 2
 ===php_error >=8.3===
 PHP Parse error:  syntax error, unexpected token "use", expecting "function" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

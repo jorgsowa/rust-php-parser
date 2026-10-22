@@ -12,12 +12,31 @@ trait T {
     public function __construct(protected $x, protected $x) {}
     public $x;
 }
-===errors===
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'readonly parameters' requires PHP 8.1 or higher
+Cannot redeclare A::$a
+Cannot redeclare A::$c
+'constructor property promotion' requires PHP 8.0 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+Redefinition of parameter $x
+Cannot redeclare T::$x
+===errors 8.0===
+'readonly parameters' requires PHP 8.1 or higher
 Cannot redeclare A::$a
 Cannot redeclare A::$c
 Redefinition of parameter $x
 Cannot redeclare T::$x
-===php_error <=8.0===
+===errors >=8.1===
+Cannot redeclare A::$a
+Cannot redeclare A::$c
+Redefinition of parameter $x
+Cannot redeclare T::$x
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 5
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "int", expecting variable in Standard input code on line 5
 ===php_error >=8.1===
 PHP Fatal error:  Cannot redeclare A::$a in Standard input code on line 5

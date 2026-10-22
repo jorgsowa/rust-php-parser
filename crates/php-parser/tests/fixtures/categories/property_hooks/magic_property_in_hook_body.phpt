@@ -8,8 +8,168 @@ class Foo {
         }
     }
 }
-===php_error <=8.3===
+===errors <=8.3===
+'property hooks' requires PHP 8.4 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 3
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
+===ast <=8.3===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "Foo",
+            "span": {
+              "start": 12,
+              "end": 15
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Property": {
+                  "name": {
+                    "name": "name",
+                    "span": {
+                      "start": 36,
+                      "end": 41
+                    }
+                  },
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "type_hint": {
+                    "kind": {
+                      "Named": {
+                        "parts": [
+                          "string"
+                        ],
+                        "kind": "Unqualified",
+                        "span": {
+                          "start": 29,
+                          "end": 35
+                        }
+                      }
+                    },
+                    "span": {
+                      "start": 29,
+                      "end": 35
+                    }
+                  },
+                  "default": null,
+                  "attributes": [],
+                  "hooks": [
+                    {
+                      "kind": "Get",
+                      "body": {
+                        "Block": [
+                          {
+                            "kind": {
+                              "Echo": [
+                                {
+                                  "kind": {
+                                    "Name": {
+                                      "parts": [
+                                        "__PROPERTY__"
+                                      ],
+                                      "kind": "Unqualified",
+                                      "span": {
+                                        "start": 75,
+                                        "end": 87
+                                      }
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 75,
+                                    "end": 87
+                                  }
+                                }
+                              ]
+                            },
+                            "span": {
+                              "start": 70,
+                              "end": 88
+                            }
+                          },
+                          {
+                            "kind": {
+                              "Return": {
+                                "kind": {
+                                  "PropertyAccess": {
+                                    "object": {
+                                      "kind": {
+                                        "Variable": "this"
+                                      },
+                                      "span": {
+                                        "start": 108,
+                                        "end": 113
+                                      }
+                                    },
+                                    "property": {
+                                      "kind": {
+                                        "Identifier": "name"
+                                      },
+                                      "span": {
+                                        "start": 115,
+                                        "end": 119
+                                      }
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 108,
+                                  "end": 119
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 101,
+                              "end": 120
+                            }
+                          }
+                        ]
+                      },
+                      "by_ref": false,
+                      "params": [],
+                      "attributes": [],
+                      "span": {
+                        "start": 52,
+                        "end": 130
+                      }
+                    }
+                  ]
+                }
+              },
+              "span": {
+                "start": 22,
+                "end": 136
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 138
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 138
+  }
+}
 ===ast >=8.4===
 {
   "stmts": [

@@ -11,9 +11,51 @@ class K {
 }
 #[Attr(f(?))]
 function g() {}
-===php_error <=8.5===
+===errors <=7.4===
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'named arguments' requires PHP 8.0 or higher
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'attributes' requires PHP 8.0 or higher
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+===errors 8.0-8.5===
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+'partial function application' requires PHP 8.6 or higher
+Constant expression contains invalid operations
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '?' in Standard input code on line 2
+===php_error 8.0-8.5===
 PHP Parse error:  syntax error, unexpected token "?" in Standard input code on line 2
-===ast >=8.6===
+===ast===
 {
   "stmts": [
     {

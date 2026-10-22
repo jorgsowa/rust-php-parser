@@ -7,7 +7,7 @@ $b = "{$x["è\é"]}";
 $c = "test\è\é\ù";
 // Escaped backslash before multi-byte
 $d = "\\è";
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

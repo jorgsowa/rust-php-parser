@@ -7,13 +7,36 @@ Attributes added after the target version are ordinary classes, so they are not 
 #[NoDiscard] class C {}
 #[Deprecated] #[Deprecated] function f() {}
 #[DelayedTargetValidation] interface I {}
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+===errors 8.3===
+Attribute "Override" cannot target class (allowed targets: method)
+===errors 8.4===
+Attribute "Override" cannot target class (allowed targets: method)
+Cannot apply #[\Deprecated] to class B
+Attribute "Deprecated" must not be repeated
+===errors 8.5===
+Attribute "Override" cannot target class (allowed targets: method, property)
+Cannot apply #[\Deprecated] to class B
+Attribute "NoDiscard" cannot target class (allowed targets: function, method)
+Attribute "Deprecated" must not be repeated
+===errors >=8.6===
+Attribute "Override" cannot target class (allowed targets: method, property, class constant)
+Cannot apply #[\Deprecated] to class B
+Attribute "NoDiscard" cannot target class (allowed targets: function, method)
+Attribute "Deprecated" must not be repeated
 ===php_error 8.3-8.4===
 PHP Fatal error:  Attribute "Override" cannot target class (allowed targets: method) in Standard input code on line 2
 ===php_error 8.5===
 PHP Fatal error:  Attribute "Override" cannot target class (allowed targets: method, property) in Standard input code on line 2
 ===php_error >=8.6===
 PHP Fatal error:  Attribute "Override" cannot target class (allowed targets: method, property, class constant) in Standard input code on line 2
-===ast 8.2===
+===ast===
 {
   "stmts": [
     {

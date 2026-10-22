@@ -29,6 +29,21 @@ $x = #[A10] function() {};
 $y = #[A11] fn() => 0;
 $a = #[A12] static function() {};
 $b = #[A13] static fn() => 0;
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ',' in Standard input code on line 4
 ===ast===
 {
   "stmts": [

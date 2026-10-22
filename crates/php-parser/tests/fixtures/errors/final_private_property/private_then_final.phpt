@@ -1,6 +1,9 @@
 ===source===
 <?php
 class A { private final $x; }
+===errors <=8.3===
+Property cannot be both final and private
+'final properties' requires PHP 8.4 or higher
 ===errors >=8.4===
 Property cannot be both final and private
 ===php_error <=8.0===
@@ -11,7 +14,7 @@ PHP Fatal error:  Cannot declare property A::$x final, the final modifier is all
 PHP Fatal error:  Cannot use the final modifier on a property in Standard input code on line 2
 ===php_error >=8.4===
 PHP Fatal error:  Property cannot be both final and private in Standard input code on line 2
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

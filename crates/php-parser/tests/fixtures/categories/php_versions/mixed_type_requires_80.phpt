@@ -1,6 +1,8 @@
 ===source===
 <?php function f(mixed $x) {}
-===ast >=8.0===
+===errors <=7.4===
+'mixed type' requires PHP 8.0 or higher
+===ast===
 {
   "stmts": [
     {

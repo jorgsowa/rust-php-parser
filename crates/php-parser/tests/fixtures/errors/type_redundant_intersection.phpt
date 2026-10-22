@@ -10,6 +10,94 @@ function g(): A|B|(A&C)|(B&D) {}
 class K {
     public function h(): (self&B)|K {}
 }
+===errors <=7.4===
+'union types' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type A&B is redundant as it is more restrictive than type A
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'DNF types' requires PHP 8.2 or higher
+Type A&B is redundant as it is more restrictive than type A
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type A&B&C is redundant as it is more restrictive than type A&B
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type A&B&C is redundant as it is more restrictive than type B&A
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type b&a is redundant with type A&B
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type A&B is redundant with type A&B
+'union types' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type A&C is redundant as it is more restrictive than type A
+Type B&D is redundant as it is more restrictive than type B
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'DNF types' requires PHP 8.2 or higher
+Type self cannot be part of an intersection type
+===errors 8.0===
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type A&B is redundant as it is more restrictive than type A
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type A&B is redundant as it is more restrictive than type A
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type A&B&C is redundant as it is more restrictive than type A&B
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type A&B&C is redundant as it is more restrictive than type B&A
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type b&a is redundant with type A&B
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type A&B is redundant with type A&B
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type A&C is redundant as it is more restrictive than type A
+Type B&D is redundant as it is more restrictive than type B
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type self cannot be part of an intersection type
+===errors 8.1===
+'DNF types' requires PHP 8.2 or higher
+Type A&B is redundant as it is more restrictive than type A
+'DNF types' requires PHP 8.2 or higher
+Type A&B is redundant as it is more restrictive than type A
+'DNF types' requires PHP 8.2 or higher
+Type A&B&C is redundant as it is more restrictive than type A&B
+'DNF types' requires PHP 8.2 or higher
+Type A&B&C is redundant as it is more restrictive than type B&A
+'DNF types' requires PHP 8.2 or higher
+Type b&a is redundant with type A&B
+'DNF types' requires PHP 8.2 or higher
+Type A&B is redundant with type A&B
+'DNF types' requires PHP 8.2 or higher
+Type A&C is redundant as it is more restrictive than type A
+Type B&D is redundant as it is more restrictive than type B
+'DNF types' requires PHP 8.2 or higher
+Type self cannot be part of an intersection type
 ===errors 8.2-8.4===
 Type A&B is redundant as it is more restrictive than type A
 Type A&B is redundant as it is more restrictive than type A
@@ -30,11 +118,13 @@ Type A&B is redundant with type A&B
 Type A&C is redundant as it is more restrictive than type A
 Type B&D is redundant as it is more restrictive than type B
 Type K&B is redundant as it is more restrictive than type K
-===php_error <=8.1===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting '{' in Standard input code on line 2
+===php_error 8.0-8.1===
 PHP Parse error:  syntax error, unexpected token "(" in Standard input code on line 2
 ===php_error >=8.2===
 PHP Fatal error:  Type A&B is redundant as it is more restrictive than type A in Standard input code on line 2
-===ast >=8.2===
+===ast===
 {
   "stmts": [
     {

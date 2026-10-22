@@ -7,7 +7,9 @@ class A {
 }
 ===errors===
 Method A::__construct() cannot declare a return type
-===php_error===
+===php_error <=7.4===
+PHP Fatal error:  Constructor A::__construct() cannot declare a return type in Standard input code on line 2
+===php_error >=8.0===
 PHP Fatal error:  Method A::__construct() cannot declare a return type in Standard input code on line 3
 ===ast===
 {

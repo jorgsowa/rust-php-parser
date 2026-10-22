@@ -3,11 +3,20 @@
 class A {
     public $a { #[\NoDiscard] get => 1; }
 }
-===php_error <=8.3===
+===errors <=7.4===
+'property hooks' requires PHP 8.4 or higher
+'attributes' requires PHP 8.0 or higher
+===errors 8.0-8.3===
+'property hooks' requires PHP 8.4 or higher
+===errors >=8.5===
+#[\NoDiscard] is not supported for property hooks
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 3
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error >=8.5===
 PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard input code on line 3
-===ast 8.4===
+===ast===
 {
   "stmts": [
     {

@@ -1,12 +1,21 @@
 ===source===
 <?php class Foo { function bar(public readonly string $x) {} }
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'readonly parameters' requires PHP 8.1 or higher
+Cannot declare promoted property outside a constructor
+===errors 8.0===
+'readonly parameters' requires PHP 8.1 or higher
+Cannot declare promoted property outside a constructor
 ===errors >=8.1===
 Cannot declare promoted property outside a constructor
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 1
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "string", expecting variable in Standard input code on line 1
 ===php_error >=8.1===
 PHP Fatal error:  Cannot declare promoted property outside a constructor in Standard input code on line 1
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

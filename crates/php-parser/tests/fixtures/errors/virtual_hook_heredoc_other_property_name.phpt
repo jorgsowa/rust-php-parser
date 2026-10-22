@@ -3,9 +3,14 @@
 class C { public int $p = 1 { get => $this->{<<<X
 q
 X}; } }
-===errors===
+===errors <=8.3===
+'property hooks' requires PHP 8.4 or higher
 Cannot specify default value for virtual hooked property C::$p
-===php_error <=8.3===
+===errors >=8.4===
+Cannot specify default value for virtual hooked property C::$p
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 2
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
 ===php_error >=8.4===
 PHP Fatal error:  Cannot specify default value for virtual hooked property C::$p in Standard input code on line 4

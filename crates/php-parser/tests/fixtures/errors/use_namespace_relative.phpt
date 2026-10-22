@@ -1,11 +1,13 @@
 ===source===
 <?php
 use namespace\A;
-===errors >=8.5===
+===errors===
 expected name, found namespace-relative name
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'namespace' (T_NAMESPACE), expecting identifier (T_STRING) or function (T_FUNCTION) or const (T_CONST) or \\ (T_NS_SEPARATOR) in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected namespace-relative name "namespace\A" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

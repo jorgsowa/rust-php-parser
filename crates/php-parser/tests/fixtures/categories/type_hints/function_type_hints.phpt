@@ -3,7 +3,14 @@
 function process(?int $x, int|string $y, Countable&Traversable $z): ?string {
     return null;
 }
-===php_error <=8.0===
+===errors <=7.4===
+'union types' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+===errors 8.0===
+'intersection types' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "Traversable", expecting variable in Standard input code on line 2
 ===ast===
 {

@@ -1,11 +1,13 @@
 ===source===
 <?php
 try {} catch (A\ $e) {}
-===errors >=8.5===
+===errors===
 expected identifier, found variable
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '$e' (T_VARIABLE), expecting identifier (T_STRING) in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "\", expecting ")" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

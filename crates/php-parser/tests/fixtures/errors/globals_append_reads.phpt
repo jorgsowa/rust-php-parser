@@ -19,7 +19,60 @@ isset($GLOBALS[], $a);
 $x = empty($GLOBALS[]);
 $x = $GLOBALS[]::A;
 unset($GLOBALS[]);
-===errors===
+===errors <=7.4===
+'named arguments' requires PHP 8.0 or higher
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for unsetting
+cannot use [] for unsetting
+===errors 8.0===
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for reading
+cannot use [] for unsetting
+cannot use [] for unsetting
+===errors >=8.1===
 cannot use [] for reading
 cannot use [] for reading
 cannot use [] for reading
@@ -50,7 +103,9 @@ Cannot append to $GLOBALS
 Cannot append to $GLOBALS
 Cannot append to $GLOBALS
 Cannot append to $GLOBALS
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ':', expecting ')' in Standard input code on line 3
+===php_error 8.0===
 PHP Fatal error:  Cannot use [] for reading in Standard input code on line 2
 ===php_error >=8.1===
 PHP Fatal error:  Cannot append to $GLOBALS in Standard input code on line 2

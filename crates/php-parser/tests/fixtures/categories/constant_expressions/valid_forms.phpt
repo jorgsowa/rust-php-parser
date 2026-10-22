@@ -43,7 +43,159 @@ class Foo {
 function f($a = new Foo(new Bar)) {
     static $b = $x, $c = new Foo, $d = f();
 }
-===php_error <=8.2===
+===errors <=7.4===
+'dynamic class constant fetch' requires PHP 8.3 or higher
+'dynamic class constant fetch' requires PHP 8.3 or higher
+'dynamic class constant fetch' requires PHP 8.3 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'named arguments' requires PHP 8.0 or higher
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'new in initializers' requires PHP 8.1 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'attributes' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+'new in initializers' requires PHP 8.1 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+'new in initializers' requires PHP 8.1 or higher
+Constant expression contains invalid operations
+'new in initializers' requires PHP 8.1 or higher
+Constant expression contains invalid operations
+===errors 8.0===
+'dynamic class constant fetch' requires PHP 8.3 or higher
+'dynamic class constant fetch' requires PHP 8.3 or higher
+'dynamic class constant fetch' requires PHP 8.3 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'new in initializers' requires PHP 8.1 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'new in initializers' requires PHP 8.1 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'new in initializers' requires PHP 8.1 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+'new in initializers' requires PHP 8.1 or higher
+Constant expression contains invalid operations
+'new in initializers' requires PHP 8.1 or higher
+Constant expression contains invalid operations
+===errors 8.1===
+'dynamic class constant fetch' requires PHP 8.3 or higher
+'dynamic class constant fetch' requires PHP 8.3 or higher
+'dynamic class constant fetch' requires PHP 8.3 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'property fetch in constant expressions' requires PHP 8.2 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+===errors 8.2===
+'dynamic class constant fetch' requires PHP 8.3 or higher
+'dynamic class constant fetch' requires PHP 8.3 or higher
+'dynamic class constant fetch' requires PHP 8.3 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+===errors 8.3===
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+===errors 8.4===
+'closures in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'casts in constant expressions' requires PHP 8.5 or higher
+'closures in constant expressions' requires PHP 8.5 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ';', expecting '(' in Standard input code on line 2
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected token ";", expecting "(" in Standard input code on line 2
 ===php_error 8.3===
 PHP Parse error:  syntax error, unexpected token "->", expecting "," or ";" in Standard input code on line 12

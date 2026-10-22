@@ -5,7 +5,9 @@ a
 X[0];
 ===errors===
 Cannot dereference this expression
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '[', expecting ';' or ',' in Standard input code on line 4
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "[", expecting "," or ";" in Standard input code on line 4
 ===ast===
 {

@@ -16,9 +16,18 @@ new class {}::foo();
 new class {}::$foo;
 new class {}[0];
 new class {}();
-===php_error <=8.3===
+===errors <=8.3===
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard input code on line 3
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "->" in Standard input code on line 3
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

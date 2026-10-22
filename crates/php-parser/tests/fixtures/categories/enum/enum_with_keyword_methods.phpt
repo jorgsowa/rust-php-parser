@@ -8,9 +8,13 @@ enum Status {
     public function match(): string { return ''; }
     public function switch(): void {}
 }
-===php_error <=8.0===
+===errors <=8.0===
+'enums' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'Status' (T_STRING) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "Status" in Standard input code on line 2
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

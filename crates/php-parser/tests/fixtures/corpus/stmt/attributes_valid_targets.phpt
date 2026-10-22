@@ -31,13 +31,66 @@ class H {
     #[Foo] public $p, $q;
     public function __construct(#[SensitiveParameter] public $r) {}
 }
-===php_error <=8.0===
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'readonly class' requires PHP 8.2 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes on constants' requires PHP 8.5 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'enums' requires PHP 8.1 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+===errors 8.0===
+'readonly class' requires PHP 8.2 or higher
+'attributes on constants' requires PHP 8.5 or higher
+Attribute "Attribute" cannot target function (allowed targets: class)
+'enums' requires PHP 8.1 or higher
+===errors 8.1===
+'readonly class' requires PHP 8.2 or higher
+'attributes on constants' requires PHP 8.5 or higher
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "ReturnTypeWillChange" cannot target class (allowed targets: method)
+===errors 8.2===
+'attributes on constants' requires PHP 8.5 or higher
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "ReturnTypeWillChange" cannot target class (allowed targets: method)
+===errors 8.3-8.4===
+'attributes on constants' requires PHP 8.5 or higher
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "Override" cannot target function (allowed targets: method)
+Attribute "ReturnTypeWillChange" cannot target class (allowed targets: method)
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '=', expecting ')' in Standard input code on line 18
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "readonly", expecting "abstract" or "final" or "class" in Standard input code on line 6
 ===php_error 8.1===
 PHP Parse error:  syntax error, unexpected token "readonly", expecting "abstract" or "final" or "class" in Standard input code on line 6
 ===php_error 8.2-8.4===
 PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 11
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

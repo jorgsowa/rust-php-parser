@@ -12,7 +12,14 @@ X}->p; } }
 class C4 { public int $p = 1 { get => $this->{<<<X
   p
   X . ''}; } }
-===php_error <=8.3===
+===errors <=8.3===
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 2
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
 ===ast===
 {

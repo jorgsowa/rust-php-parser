@@ -1,9 +1,9 @@
 ===source===
 <?php
 $a = (real) 1.5;
-===errors===
+===errors >=8.0===
 the (real) cast is no longer supported, use (float) instead
-===php_error===
+===php_error >=8.0===
 PHP Parse error:  The (real) cast has been removed, use (float) instead in Standard input code on line 2
 ===ast===
 {

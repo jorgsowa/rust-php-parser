@@ -13,9 +13,30 @@ assert(false && $y = clone(object: $x));
 assert(false && $y = clone(object: $x, [ "foo" => $foo, "bar" => $bar ]));
 assert(false && $y = clone(...["object" => $x, "withProperties" => [ "foo" => $foo, "bar" => $bar ]]));
 assert(false && $y = clone(...));
-===php_error <=8.4===
+===errors <=7.4===
+'clone with property overrides' requires PHP 8.5 or higher
+'clone with property overrides' requires PHP 8.5 or higher
+'named arguments' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'clone(...) first-class callable' requires PHP 8.5 or higher
+===errors 8.0===
+'clone with property overrides' requires PHP 8.5 or higher
+'clone with property overrides' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'clone(...) first-class callable' requires PHP 8.5 or higher
+===errors 8.1-8.4===
+'clone with property overrides' requires PHP 8.5 or higher
+'clone with property overrides' requires PHP 8.5 or higher
+'clone(...) first-class callable' requires PHP 8.5 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ',' in Standard input code on line 5
+===php_error 8.0-8.4===
 PHP Parse error:  syntax error, unexpected token "," in Standard input code on line 5
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

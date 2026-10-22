@@ -11,9 +11,24 @@ namespace N2 {
     function g(): Foo\never {}
     function h(\never $a, namespace\never $b) {}
 }
+===errors <=7.4===
+'union types' requires PHP 8.0 or higher
+===errors >=8.1===
+Cannot use A\B as never because 'never' is a special class name
+Cannot use "never" as a class name as it is reserved
+cannot use 'Never' as interface name
+never cannot be used as a parameter type
+never can only be used as a standalone type
+never can only be used as a standalone type
+A never-returning function must not return
+Cannot use "N2\Foo\never" as a type name as it is reserved
+Type declaration 'never' must be unqualified
+Type declaration 'never' must be unqualified
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in Standard input code on line 9
 ===php_error >=8.1===
 PHP Fatal error:  Cannot use A\B as never because 'never' is a special class name in Standard input code on line 3
-===ast 8.0===
+===ast===
 {
   "stmts": [
     {

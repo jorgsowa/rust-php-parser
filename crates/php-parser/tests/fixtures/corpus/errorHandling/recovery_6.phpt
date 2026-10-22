@@ -9,7 +9,9 @@ $k = 2;
 ===errors===
 expected '(', found variable
 expected ')' to close the delimiter opened at byte 22
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '$j' (T_VARIABLE), expecting '(' in Standard input code on line 6
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected variable "$j", expecting "(" in Standard input code on line 6
 ===ast===
 {

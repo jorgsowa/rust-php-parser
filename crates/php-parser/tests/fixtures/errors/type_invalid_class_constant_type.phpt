@@ -14,6 +14,48 @@ enum E {
 $g = new class {
     const void G = 1;
 };
+===errors <=7.4===
+'typed class constants' requires PHP 8.3 or higher
+Class constant A::A cannot have type void
+'typed class constants' requires PHP 8.3 or higher
+Class constant A::C cannot have type ?callable
+'typed class constants' requires PHP 8.3 or higher
+'union types' requires PHP 8.0 or higher
+Class constant A::D cannot have type callable|int
+'typed class constants' requires PHP 8.3 or higher
+Cannot use int as value for class constant I::E of type never
+'enums' requires PHP 8.1 or higher
+'typed enum constants' requires PHP 8.3 or higher
+Class constant E::F cannot have type callable
+'typed class constants' requires PHP 8.3 or higher
+Class constant class@anonymous::G cannot have type void
+===errors 8.0===
+'typed class constants' requires PHP 8.3 or higher
+Class constant A::A cannot have type void
+'typed class constants' requires PHP 8.3 or higher
+Class constant A::C cannot have type ?callable
+'typed class constants' requires PHP 8.3 or higher
+Class constant A::D cannot have type callable|int
+'typed class constants' requires PHP 8.3 or higher
+Cannot use int as value for class constant I::E of type never
+'enums' requires PHP 8.1 or higher
+'typed enum constants' requires PHP 8.3 or higher
+Class constant E::F cannot have type callable
+'typed class constants' requires PHP 8.3 or higher
+Class constant class@anonymous::G cannot have type void
+===errors 8.1-8.2===
+'typed class constants' requires PHP 8.3 or higher
+Class constant A::A cannot have type void
+'typed class constants' requires PHP 8.3 or higher
+Class constant A::C cannot have type ?callable
+'typed class constants' requires PHP 8.3 or higher
+Class constant A::D cannot have type callable|int
+'typed class constants' requires PHP 8.3 or higher
+Class constant I::E cannot have type never
+'typed enum constants' requires PHP 8.3 or higher
+Class constant E::F cannot have type callable
+'typed class constants' requires PHP 8.3 or higher
+Class constant class@anonymous::G cannot have type void
 ===errors >=8.3===
 Class constant A::A cannot have type void
 Class constant A::C cannot have type ?callable
@@ -21,11 +63,13 @@ Class constant A::D cannot have type callable|int
 Class constant I::E cannot have type never
 Class constant E::F cannot have type callable
 Class constant class@anonymous::G cannot have type void
-===php_error <=8.2===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'A' (T_STRING), expecting '=' in Standard input code on line 3
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected identifier "A", expecting "=" in Standard input code on line 3
 ===php_error >=8.3===
 PHP Fatal error:  Class constant A::A cannot have type void in Standard input code on line 3
-===ast >=8.3===
+===ast===
 {
   "stmts": [
     {

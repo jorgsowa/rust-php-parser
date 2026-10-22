@@ -38,7 +38,7 @@ Cannot apply attributes to multiple constants at once
 PHP Parse error:  syntax error, unexpected token "const" in Standard input code on line 6
 ===php_error >=8.5===
 PHP Fatal error:  Cannot apply attributes to multiple constants at once in Standard input code on line 16
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

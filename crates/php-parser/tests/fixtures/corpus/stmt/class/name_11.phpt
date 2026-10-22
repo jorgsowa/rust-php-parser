@@ -1,12 +1,12 @@
 ===source===
 <?php interface PARENT {}
-===errors >=7.4===
+===errors===
 cannot use 'PARENT' as interface name
 ===php_error <=8.3===
 PHP Fatal error:  Cannot use 'PARENT' as class name as it is reserved in Standard input code on line 1
 ===php_error >=8.4===
 PHP Fatal error:  Cannot use "PARENT" as an interface name as it is reserved in Standard input code on line 1
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

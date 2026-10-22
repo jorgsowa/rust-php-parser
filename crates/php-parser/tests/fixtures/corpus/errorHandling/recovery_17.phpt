@@ -37,7 +37,9 @@ expected ';', found 'throw'
 expected ';' after throw statement
 expected ';', found end of file
 'goto' to undefined label 'label'
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'use' (T_USE), expecting '{' in Standard input code on line 3
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "use", expecting "{" in Standard input code on line 3
 ===ast===
 {

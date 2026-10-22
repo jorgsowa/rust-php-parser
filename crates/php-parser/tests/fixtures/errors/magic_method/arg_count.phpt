@@ -37,7 +37,9 @@ Method A::__set_state() must take exactly 1 argument
 Method A::__sleep() cannot take arguments
 Method A::__wakeup() cannot take arguments
 Method B::__GET() must take exactly 1 argument
-===php_error===
+===php_error <=7.4===
+PHP Fatal error:  Destructor A::__destruct() cannot take arguments in Standard input code on line 3
+===php_error >=8.0===
 PHP Fatal error:  Method A::__destruct() cannot take arguments in Standard input code on line 3
 ===ast===
 {

@@ -1,6 +1,10 @@
 ===source===
 <?php $r = match($status) { Status::Active, Status::Pending => 'live', Status::Inactive => 'off' };
-===ast >=8.1===
+===errors <=7.4===
+'match expressions' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ',' in Standard input code on line 1
+===ast===
 {
   "stmts": [
     {

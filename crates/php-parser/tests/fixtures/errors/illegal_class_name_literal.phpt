@@ -34,7 +34,9 @@ Cannot use "::class" on true
 Cannot use "::class" on false
 Cannot use "::class" on array
 Illegal class name
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '(' in Standard input code on line 9
+===php_error >=8.0===
 PHP Fatal error:  Illegal class name in Standard input code on line 2
 ===ast===
 {

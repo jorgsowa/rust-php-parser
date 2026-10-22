@@ -5,14 +5,14 @@ $f = function(): void {
     foreach ($b as $c) { return 2; }
     try { return 3; } finally { return 4; }
 };
-===errors >=8.1===
+===errors===
 A void function must not return a value
 A void function must not return a value
 A void function must not return a value
 A void function must not return a value
 ===php_error===
 PHP Fatal error:  A void function must not return a value in Standard input code on line 3
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

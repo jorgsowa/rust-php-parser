@@ -1,8 +1,14 @@
 ===source===
 <?php function f(): false|null { return null; }
-===php_error <=8.1===
+===errors <=7.4===
+'false type' requires PHP 8.0 or higher
+'union types' requires PHP 8.0 or higher
+'null type' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting '{' in Standard input code on line 1
+===php_error 8.0-8.1===
 PHP Fatal error:  False can not be used as a standalone type in Standard input code on line 1
-===ast >=8.2===
+===ast===
 {
   "stmts": [
     {

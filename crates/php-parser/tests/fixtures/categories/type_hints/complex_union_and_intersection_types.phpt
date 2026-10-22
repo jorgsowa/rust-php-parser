@@ -9,7 +9,22 @@ class Container {
         private string|int|float $value
     ) {}
 }
-===php_error <=8.0===
+===errors <=7.4===
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'null type' requires PHP 8.0 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'readonly parameters' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'union types' requires PHP 8.0 or higher
+===errors 8.0===
+'intersection types' requires PHP 8.1 or higher
+'readonly parameters' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'ArrayAccess' (T_STRING), expecting variable (T_VARIABLE) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "ArrayAccess", expecting variable in Standard input code on line 2
 ===ast===
 {

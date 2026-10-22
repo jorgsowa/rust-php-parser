@@ -1,13 +1,15 @@
 ===source===
 <?php
 foreach ($a as &[$b]) {}
-===errors >=8.5===
+===errors===
 expected variable, found array destructuring
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ')', expecting :: (T_PAAMAYIM_NEKUDOTAYIM) in Standard input code on line 2
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token ")", expecting "->" or "?->" or "{" or "[" in Standard input code on line 2
 ===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token ")", expecting "->" or "?->" or "[" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

@@ -14,7 +14,27 @@ function f($a, int &...$this) { global $b, $this; static $c, $this; }
 fn($this) => 1;
 function () use ($a, &$this) {};
 class A { public function __construct(public $this) {} }
-===errors===
+===errors <=7.4===
+Cannot re-assign $this
+Cannot re-assign $this
+Cannot re-assign $this
+Cannot re-assign $this
+Cannot re-assign $this
+Cannot re-assign $this
+Cannot re-assign $this
+Cannot re-assign $this
+Cannot re-assign $this
+Cannot re-assign $this
+Cannot unset $this
+Cannot re-assign $this
+Cannot use $this as parameter
+Cannot use $this as global variable
+Cannot use $this as static variable
+Cannot use $this as parameter
+Cannot use $this as lexical variable
+'constructor property promotion' requires PHP 8.0 or higher
+Cannot use $this as parameter
+===errors >=8.0===
 Cannot re-assign $this
 Cannot re-assign $this
 Cannot re-assign $this
@@ -33,7 +53,9 @@ Cannot use $this as static variable
 Cannot use $this as parameter
 Cannot use $this as lexical variable
 Cannot use $this as parameter
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 15
+===php_error >=8.0===
 PHP Fatal error:  Cannot re-assign $this in Standard input code on line 2
 ===ast===
 {

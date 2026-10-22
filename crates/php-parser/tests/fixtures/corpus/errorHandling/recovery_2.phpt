@@ -6,7 +6,9 @@ bar();
 baz();
 ===errors===
 expected ';' after expression
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'bar' (T_STRING) in Standard input code on line 4
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected identifier "bar" in Standard input code on line 4
 ===ast===
 {

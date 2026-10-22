@@ -1,13 +1,15 @@
 ===source===
 <?php
 class A { function f(): int { return; } }
-===errors >=8.5===
+===errors <=8.3===
+A function with return type must return a value
+===errors >=8.4===
 A method with return type must return a value
 ===php_error <=8.3===
 PHP Fatal error:  A function with return type must return a value in Standard input code on line 2
 ===php_error >=8.4===
 PHP Fatal error:  A method with return type must return a value in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

@@ -23,6 +23,8 @@ $i = $j **= 2 + 3;
 $k = $a and $b or $c;
 $l = $a && $b || $c;
 $m = $a && $b or $c;
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '(' in Standard input code on line 11
 ===ast===
 {
   "stmts": [

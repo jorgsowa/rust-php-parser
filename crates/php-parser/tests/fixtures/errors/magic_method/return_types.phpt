@@ -21,7 +21,28 @@ class C {
     static function __set_state(array $a): iterable {}
     function __debugInfo(): string {}
 }
-===errors===
+===errors <=7.4===
+A::__clone(): Return type must be void when declared
+'mixed type' requires PHP 8.0 or higher
+A::__set(): Return type must be void when declared
+A::__unset(): Return type must be void when declared
+'union types' requires PHP 8.0 or higher
+A::__isset(): Return type must be bool when declared
+A::__toString(): Return type must be string when declared
+'union types' requires PHP 8.0 or higher
+'null type' requires PHP 8.0 or higher
+A::__debugInfo(): Return type must be ?array when declared
+A::__serialize(): Return type must be array when declared
+A::__unserialize(): Return type must be void when declared
+A::__set_state(): Return type must be object when declared
+A::__sleep(): Return type must be array when declared
+A::__wakeup(): Return type must be void when declared
+B::__toString(): Return type must be string when declared
+'union types' requires PHP 8.0 or higher
+C::__toString(): Return type must be string when declared
+C::__set_state(): Return type must be object when declared
+C::__debugInfo(): Return type must be ?array when declared
+===errors >=8.0===
 A::__clone(): Return type must be void when declared
 A::__set(): Return type must be void when declared
 A::__unset(): Return type must be void when declared
@@ -37,7 +58,9 @@ B::__toString(): Return type must be string when declared
 C::__toString(): Return type must be string when declared
 C::__set_state(): Return type must be object when declared
 C::__debugInfo(): Return type must be ?array when declared
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting ';' or '{' in Standard input code on line 6
+===php_error >=8.0===
 PHP Fatal error:  A::__clone(): Return type must be void when declared in Standard input code on line 3
 ===ast===
 {

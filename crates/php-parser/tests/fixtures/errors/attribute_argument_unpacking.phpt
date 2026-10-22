@@ -4,10 +4,15 @@
 function f() {}
 #[Attr(1, ...[2])]
 class C {}
-===errors===
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+Cannot use unpacking in attribute argument list
+'attributes' requires PHP 8.0 or higher
+Cannot use unpacking in attribute argument list
+===errors >=8.0===
 Cannot use unpacking in attribute argument list
 Cannot use unpacking in attribute argument list
-===php_error===
+===php_error >=8.0===
 PHP Fatal error:  Cannot use unpacking in attribute argument list in Standard input code on line 3
 ===ast===
 {

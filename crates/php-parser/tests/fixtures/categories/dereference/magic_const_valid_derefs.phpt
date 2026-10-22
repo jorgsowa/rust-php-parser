@@ -9,6 +9,10 @@ __LINE__[0];
 (__CLASS__)::$a;
 __CLASS__ . "x";
 __CLASS__ instanceof A;
+===errors <=7.4===
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard input code on line 2
 ===ast===
 {
   "stmts": [

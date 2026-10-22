@@ -14,7 +14,9 @@ class B {
 ===errors===
 expected ';', found 'public'
 expected ';', found '}'
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting ';' or ',' in Standard input code on line 6
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "public", expecting "," or ";" in Standard input code on line 6
 ===ast===
 {

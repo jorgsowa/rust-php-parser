@@ -1,6 +1,10 @@
 ===source===
 <?php enum E: int { case A = 1 ?><?php case B = 2 ?><?php }
-===php_error <=8.0===
+===errors <=8.0===
+'enums' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'E' (T_STRING) in Standard input code on line 1
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 1
 ===ast===
 {

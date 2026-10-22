@@ -7,11 +7,20 @@ class A {
 }
 function f(public int $y) {}
 $cb = function(public int $z) {};
-===errors===
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+Cannot declare promoted property outside a constructor
+'constructor property promotion' requires PHP 8.0 or higher
+Cannot declare promoted property outside a constructor
+'constructor property promotion' requires PHP 8.0 or higher
+Cannot declare promoted property outside a constructor
+===errors >=8.0===
 Cannot declare promoted property outside a constructor
 Cannot declare promoted property outside a constructor
 Cannot declare promoted property outside a constructor
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 3
+===php_error >=8.0===
 PHP Fatal error:  Cannot declare promoted property outside a constructor in Standard input code on line 3
 ===ast===
 {

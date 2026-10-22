@@ -2,13 +2,28 @@
 <?php
 function foo((mixed&Foo)|Bar $x) { }
 
+===errors <=7.4===
+'mixed type' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'DNF types' requires PHP 8.2 or higher
+Type mixed cannot be part of an intersection type
+===errors 8.0===
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+Type mixed cannot be part of an intersection type
+===errors 8.1===
+'DNF types' requires PHP 8.2 or higher
+Type mixed cannot be part of an intersection type
 ===errors >=8.2===
 Type mixed cannot be part of an intersection type
-===php_error <=8.1===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '(', expecting variable (T_VARIABLE) in Standard input code on line 2
+===php_error 8.0-8.1===
 PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 2
 ===php_error >=8.2===
 PHP Fatal error:  Type mixed cannot be part of an intersection type in Standard input code on line 2
-===ast >=8.2===
+===ast===
 {
   "stmts": [
     {

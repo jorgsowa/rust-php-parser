@@ -1,11 +1,11 @@
 ===source===
 <?php
 use A\B; use A\b;
-===errors >=8.5===
+===errors===
 Cannot use A\b as b because the name is already in use
 ===php_error===
 PHP Fatal error:  Cannot use A\b as b because the name is already in use in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

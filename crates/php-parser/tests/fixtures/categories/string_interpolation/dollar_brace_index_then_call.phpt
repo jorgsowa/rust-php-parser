@@ -3,11 +3,9 @@
 "${a[0]()}";
 ===errors===
 expected ']' to close the index in '${...}' string interpolation
-===php_error <=8.1===
-PHP Parse error:  syntax error, unexpected token "(", expecting "}" in Standard input code on line 2
-===php_error 8.2===
-PHP Parse error:  syntax error, unexpected token "(", expecting "}" in Standard input code on line 2
-===php_error >=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '(', expecting '}' in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "(", expecting "}" in Standard input code on line 2
 ===ast===
 {

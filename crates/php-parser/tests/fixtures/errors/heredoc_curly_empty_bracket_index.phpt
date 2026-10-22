@@ -3,11 +3,11 @@
 $a = <<<X
 {$b[]}
 X;
-===errors >=8.5===
+===errors===
 cannot use [] for reading
 ===php_error===
 PHP Fatal error:  Cannot use [] for reading in Standard input code on line 3
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

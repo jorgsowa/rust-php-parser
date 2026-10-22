@@ -11,12 +11,12 @@
 (object)  $a;
 (string)  $a;
 (unset)   $a;
-===errors >=8.5===
+===errors >=8.0===
 the (real) cast is no longer supported, use (float) instead
 the (unset) cast is no longer supported
-===php_error===
+===php_error >=8.0===
 PHP Parse error:  The (real) cast has been removed, use (float) instead in Standard input code on line 4
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

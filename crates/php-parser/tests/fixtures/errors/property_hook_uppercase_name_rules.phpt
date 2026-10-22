@@ -5,13 +5,24 @@ class A {
     public $b { SET($x, $y) {} }
     public $c { get; GET; }
 }
-===errors===
+===errors <=8.3===
+'property hooks' requires PHP 8.4 or higher
+get hook of property must not have a parameter list
+'property hooks' requires PHP 8.4 or higher
+set hook must have exactly one parameter
+'property hooks' requires PHP 8.4 or higher
+duplicate 'get' hook
+Non-abstract property hook must have a body
+Non-abstract property hook must have a body
+===errors >=8.4===
 get hook of property must not have a parameter list
 set hook must have exactly one parameter
 duplicate 'get' hook
 Non-abstract property hook must have a body
 Non-abstract property hook must have a body
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 3
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error >=8.4===
 PHP Fatal error:  get hook of property A::$a must not have a parameter list in Standard input code on line 3

@@ -14,7 +14,10 @@ Method A::__set() must take exactly 2 arguments
 A::__set(): Return type must be void when declared
 Method A::__destruct() cannot take arguments
 Method A::__destruct() cannot declare a return type
-===php_error===
+===php_error <=7.4===
+PHP Warning:  The magic method __get() must have public visibility and cannot be static in Standard input code on line 3
+PHP Fatal error:  Method A::__set() must take exactly 2 arguments in Standard input code on line 4
+===php_error >=8.0===
 PHP Fatal error:  Method A::__get() cannot be static in Standard input code on line 3
 ===ast===
 {

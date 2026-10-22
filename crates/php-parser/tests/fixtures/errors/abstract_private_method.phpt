@@ -4,13 +4,13 @@ abstract class A {
     abstract private function f();
     abstract private static function g() {}
 }
-===errors >=8.4===
+===errors===
 Abstract function A::f() cannot be declared private
 Abstract function A::g() cannot be declared private
 Abstract function A::g() cannot contain body
 ===php_error===
 PHP Fatal error:  Abstract function A::f() cannot be declared private in Standard input code on line 3
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

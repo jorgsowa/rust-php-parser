@@ -1,13 +1,18 @@
 ===source===
 <?php
 class C { public $p { &get => $a?->b->c; } }
-===errors===
+===errors <=7.4===
+'property hooks' requires PHP 8.4 or higher
+'nullsafe operator (?->)' requires PHP 8.0 or higher
 Cannot take reference of a nullsafe chain
-===php_error <=8.1===
-PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
-===php_error 8.2===
-PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
-===php_error 8.3===
+===errors 8.0-8.3===
+'property hooks' requires PHP 8.4 or higher
+Cannot take reference of a nullsafe chain
+===errors >=8.4===
+Cannot take reference of a nullsafe chain
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 2
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
 ===php_error >=8.4===
 PHP Fatal error:  Cannot take reference of a nullsafe chain in Standard input code on line 2

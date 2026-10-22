@@ -2,6 +2,11 @@
 <?php
 test(throw $x);
 $a ?? throw new Exception;
+===errors <=7.4===
+'throw expressions' requires PHP 8.0 or higher
+'throw expressions' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'throw' (T_THROW) in Standard input code on line 2
 ===ast===
 {
   "stmts": [

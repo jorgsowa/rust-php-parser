@@ -1,8 +1,13 @@
 ===source===
 <?php class C { function __construct($a { }) {} }
-===errors===
+===errors <=8.3===
+'property hooks' requires PHP 8.4 or higher
 Property hook list must not be empty
-===php_error <=8.3===
+===errors >=8.4===
+Property hook list must not be empty
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ')' in Standard input code on line 1
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 1
 ===php_error >=8.4===
 PHP Fatal error:  Property hook list must not be empty in Standard input code on line 1

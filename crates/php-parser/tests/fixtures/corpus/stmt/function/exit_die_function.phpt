@@ -4,10 +4,17 @@
 function exit(string|int $status = 0): never {}
 
 function die(string|int $status = 0): never {}
-===errors===
+===errors <=7.4===
+cannot use 'exit' as function name; it is reserved
+'union types' requires PHP 8.0 or higher
+cannot use 'die' as function name; it is reserved
+'union types' requires PHP 8.0 or higher
+===errors >=8.0===
 cannot use 'exit' as function name; it is reserved
 cannot use 'die' as function name; it is reserved
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'exit' (T_EXIT), expecting '(' in Standard input code on line 3
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "exit", expecting "(" in Standard input code on line 3
 ===ast===
 {

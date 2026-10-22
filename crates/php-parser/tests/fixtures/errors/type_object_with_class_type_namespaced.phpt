@@ -7,15 +7,28 @@ function b(): Y|object {}
 function c(): object|W\V {}
 function d(): object|\G {}
 function e(): object|namespace\H {}
+===errors <=7.4===
+'union types' requires PHP 8.0 or higher
+Type N\A|object contains both object and a class type, which is redundant
+'union types' requires PHP 8.0 or higher
+Type X\Y|object contains both object and a class type, which is redundant
+'union types' requires PHP 8.0 or higher
+Type X\Z\V|object contains both object and a class type, which is redundant
+'union types' requires PHP 8.0 or higher
+Type G|object contains both object and a class type, which is redundant
+'union types' requires PHP 8.0 or higher
+Type N\H|object contains both object and a class type, which is redundant
 ===errors >=8.0===
 Type N\A|object contains both object and a class type, which is redundant
 Type X\Y|object contains both object and a class type, which is redundant
 Type X\Z\V|object contains both object and a class type, which is redundant
 Type G|object contains both object and a class type, which is redundant
 Type N\H|object contains both object and a class type, which is redundant
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting '{' in Standard input code on line 4
+===php_error >=8.0===
 PHP Fatal error:  Type N\A|object contains both object and a class type, which is redundant in Standard input code on line 4
-===ast >=8.0===
+===ast===
 {
   "stmts": [
     {

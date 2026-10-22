@@ -11,6 +11,8 @@ class EventDispatcher {
      */
     public function validate(mixed $value): bool {}
 }
+===errors <=7.4===
+'mixed type' requires PHP 8.0 or higher
 ===ast===
 {
   "stmts": [

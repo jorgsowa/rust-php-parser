@@ -8,7 +8,26 @@ $a = &FOO->b;
 list(&$a) = FOO;
 [&$a] = new A;
 [&$a] = $b?->c;
-===errors===
+===errors <=7.4===
+Cannot assign reference to non referenceable value
+Cannot assign reference to non referenceable value
+Cannot use temporary expression in write context
+Cannot assign reference to non referenceable value
+Cannot assign reference to non referenceable value
+Cannot assign reference to non referenceable value
+Cannot assign reference to non referenceable value
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+Cannot take reference of a nullsafe chain
+===errors 8.0-8.5===
+Cannot assign reference to non referenceable value
+Cannot assign reference to non referenceable value
+Cannot use temporary expression in write context
+Cannot assign reference to non referenceable value
+Cannot assign reference to non referenceable value
+Cannot assign reference to non referenceable value
+Cannot assign reference to non referenceable value
+Cannot take reference of a nullsafe chain
+===errors >=8.6===
 Cannot assign reference to non referenceable value
 Cannot assign reference to non referenceable value
 Cannot assign reference to non referenceable value
@@ -16,7 +35,9 @@ Cannot assign reference to non referenceable value
 Cannot assign reference to non referenceable value
 Cannot assign reference to non referenceable value
 Cannot take reference of a nullsafe chain
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ';', expecting '[' in Standard input code on line 2
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token ";", expecting "->" or "?->" or "{" or "[" in Standard input code on line 2
 ===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token ";", expecting "->" or "?->" or "[" in Standard input code on line 2

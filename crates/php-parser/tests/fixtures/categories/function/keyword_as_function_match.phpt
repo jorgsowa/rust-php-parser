@@ -2,7 +2,7 @@
 <?php function match() {}
 ===errors===
 cannot use 'match' as function name; it is reserved
-===php_error===
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "match", expecting "(" in Standard input code on line 1
 ===ast===
 {

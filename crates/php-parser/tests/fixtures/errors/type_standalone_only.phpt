@@ -10,6 +10,30 @@ class C {
     public function m(): void|false {}
 }
 $f = fn(): ?void => 1;
+===errors <=7.4===
+Void can only be used as a standalone type
+'union types' requires PHP 8.0 or higher
+'null type' requires PHP 8.0 or higher
+Void can only be used as a standalone type
+'union types' requires PHP 8.0 or higher
+'mixed type' requires PHP 8.0 or higher
+'union types' requires PHP 8.0 or higher
+Type mixed can only be used as a standalone type
+'null type' requires PHP 8.0 or higher
+null cannot be marked as nullable
+Void can only be used as a standalone type
+'union types' requires PHP 8.0 or higher
+'false type' requires PHP 8.0 or higher
+Void can only be used as a standalone type
+Void can only be used as a standalone type
+===errors 8.0===
+Void can only be used as a standalone type
+Void can only be used as a standalone type
+Type mixed can only be used as a standalone type
+null cannot be marked as nullable
+Void can only be used as a standalone type
+Void can only be used as a standalone type
+Void can only be used as a standalone type
 ===errors >=8.1===
 Void can only be used as a standalone type
 never can only be used as a standalone type
@@ -20,11 +44,13 @@ null cannot be marked as nullable
 Void can only be used as a standalone type
 Void can only be used as a standalone type
 Void can only be used as a standalone type
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting '{' in Standard input code on line 3
+===php_error 8.0===
 PHP Fatal error:  Void can only be used as a standalone type in Standard input code on line 2
 ===php_error >=8.1===
 PHP Fatal error:  never can only be used as a standalone type in Standard input code on line 2
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

@@ -7,18 +7,34 @@ class A {
 readonly class B {
     public array $d = [1];
 }
-===errors 8.5===
+===errors <=8.0===
+'readonly properties' requires PHP 8.1 or higher
+Readonly property cannot have default value
+'readonly properties' requires PHP 8.1 or higher
+Readonly property cannot have default value
+Readonly property cannot have default value
+'readonly class' requires PHP 8.2 or higher
+Readonly property cannot have default value
+===errors 8.1===
+Readonly property cannot have default value
+Readonly property cannot have default value
+Readonly property cannot have default value
+'readonly class' requires PHP 8.2 or higher
+Readonly property cannot have default value
+===errors 8.2-8.5===
 Readonly property cannot have default value
 Readonly property cannot have default value
 Readonly property cannot have default value
 Readonly property cannot have default value
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'int' (T_STRING), expecting variable (T_VARIABLE) in Standard input code on line 3
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "int", expecting variable in Standard input code on line 3
 ===php_error 8.1===
 PHP Parse error:  syntax error, unexpected token "readonly", expecting end of file in Standard input code on line 6
 ===php_error 8.2-8.5===
 PHP Fatal error:  Readonly property A::$a cannot have default value in Standard input code on line 3
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

@@ -87,7 +87,14 @@ class RateLimitMiddleware implements MiddlewareInterface
         return $counts[$key];
     }
 }
-===php_error <=8.0===
+===errors <=7.4===
+'readonly properties' requires PHP 8.1 or higher
+'match expressions' requires PHP 8.0 or higher
+===errors 8.0===
+'readonly properties' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'TokenValidator' (T_STRING), expecting variable (T_VARIABLE) in Standard input code on line 17
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "TokenValidator", expecting variable in Standard input code on line 17
 ===ast===
 {

@@ -12,12 +12,41 @@ unset(OBJ->a);
 foreach ($x as OBJ->a) {}
 [OBJ->a] = [1];
 OBJ?->a = 1;
-===errors===
+===errors <=7.4===
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Assignments can only happen to writable values
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+Can't use nullsafe operator in write context
+===errors 8.0-8.5===
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Cannot use temporary expression in write context
+Assignments can only happen to writable values
+Can't use nullsafe operator in write context
+===errors >=8.6===
 Cannot use temporary expression in write context
 Cannot use temporary expression in write context
 Cannot use temporary expression in write context
 Can't use nullsafe operator in write context
-===php_error <=8.5===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard input code on line 2
+===php_error 8.0-8.5===
 PHP Fatal error:  Cannot use temporary expression in write context in Standard input code on line 2
 ===php_error >=8.6===
 PHP Fatal error:  Cannot use temporary expression in write context in Standard input code on line 4

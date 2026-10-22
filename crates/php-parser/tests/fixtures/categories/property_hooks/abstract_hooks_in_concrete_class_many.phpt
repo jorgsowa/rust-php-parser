@@ -1,11 +1,15 @@
 ===source===
 <?php
 class C { abstract public string $p { get; set; } abstract public $q { get; } }
-===errors===
+===errors <=8.3===
+'property hooks' requires PHP 8.4 or higher
+'property hooks' requires PHP 8.4 or higher
 Class C contains 3 abstract methods and must therefore be declared abstract or implement the remaining methods (C::$p::get, C::$p::set, C::$q::get)
-===php_error <=8.1===
-PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
-===php_error 8.2===
+===errors >=8.4===
+Class C contains 3 abstract methods and must therefore be declared abstract or implement the remaining methods (C::$p::get, C::$p::set, C::$q::get)
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 2
+===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 2
 ===php_error 8.3===
 PHP Fatal error:  Cannot use the abstract modifier on a property in Standard input code on line 2

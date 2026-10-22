@@ -2,7 +2,9 @@
 <?php class A { static function __construct() {} }
 ===errors===
 Method A::__construct() cannot be static
-===php_error===
+===php_error <=7.4===
+PHP Fatal error:  Constructor A::__construct() cannot be static in Standard input code on line 1
+===php_error >=8.0===
 PHP Fatal error:  Method A::__construct() cannot be static in Standard input code on line 1
 ===ast===
 {

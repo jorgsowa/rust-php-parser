@@ -18,6 +18,35 @@ abstract class A {
     public $n = 1 { get { function n() { return $this->n; } return 1; } }
     public int $o = 1 { get => $this->p; }
 }
+===errors <=8.3===
+'property hooks' requires PHP 8.4 or higher
+Cannot specify default value for virtual hooked property I::$a
+'property hooks' requires PHP 8.4 or higher
+Cannot specify default value for virtual hooked property A::$b
+'property hooks' requires PHP 8.4 or higher
+Cannot specify default value for virtual hooked property A::$c
+'property hooks' requires PHP 8.4 or higher
+Cannot specify default value for virtual hooked property A::$d
+'property hooks' requires PHP 8.4 or higher
+Cannot specify default value for virtual hooked property A::$e
+'property hooks' requires PHP 8.4 or higher
+Cannot specify default value for virtual hooked property A::$f
+'property hooks' requires PHP 8.4 or higher
+Cannot specify default value for virtual hooked property A::$g
+'property hooks' requires PHP 8.4 or higher
+Cannot specify default value for virtual hooked property A::$h
+'property hooks' requires PHP 8.4 or higher
+Cannot specify default value for virtual hooked property A::$i
+'property hooks' requires PHP 8.4 or higher
+Cannot specify default value for virtual hooked property A::$j
+'property hooks' requires PHP 8.4 or higher
+Cannot specify default value for virtual hooked property A::$k
+'property hooks' requires PHP 8.4 or higher
+Cannot specify default value for virtual hooked property A::$l
+'property hooks' requires PHP 8.4 or higher
+Cannot specify default value for virtual hooked property A::$n
+'property hooks' requires PHP 8.4 or higher
+Cannot specify default value for virtual hooked property A::$o
 ===errors >=8.4===
 Cannot specify default value for virtual hooked property I::$a
 Cannot specify default value for virtual hooked property A::$b
@@ -33,11 +62,13 @@ Cannot specify default value for virtual hooked property A::$k
 Cannot specify default value for virtual hooked property A::$l
 Cannot specify default value for virtual hooked property A::$n
 Cannot specify default value for virtual hooked property A::$o
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 3
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error >=8.4===
 PHP Fatal error:  Cannot specify default value for virtual hooked property I::$a in Standard input code on line 3
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

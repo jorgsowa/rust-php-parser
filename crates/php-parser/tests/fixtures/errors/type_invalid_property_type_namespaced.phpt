@@ -5,11 +5,17 @@ use X\Y;
 class A {
     public callable|Y|B|null $a;
 }
+===errors <=7.4===
+'union types' requires PHP 8.0 or higher
+'null type' requires PHP 8.0 or higher
+Property N\A::$a cannot have type X\Y|N\B|callable|null
 ===errors >=8.0===
 Property N\A::$a cannot have type X\Y|N\B|callable|null
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in Standard input code on line 5
+===php_error >=8.0===
 PHP Fatal error:  Property N\A::$a cannot have type X\Y|N\B|callable|null in Standard input code on line 5
-===ast >=8.0===
+===ast===
 {
   "stmts": [
     {

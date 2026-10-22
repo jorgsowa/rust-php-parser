@@ -5,13 +5,23 @@ enum F implements I, \parent {}
 new class extends self {};
 new class extends \static {};
 new class implements I, parent {};
-===errors===
+===errors <=8.0===
+'enums' requires PHP 8.1 or higher
+Cannot use "self" as interface name, as it is reserved
+'enums' requires PHP 8.1 or higher
+'\parent' is an invalid class name
+Cannot use "self" as class name, as it is reserved
+'\static' is an invalid class name
+Cannot use "parent" as interface name, as it is reserved
+===errors >=8.1===
 Cannot use "self" as interface name, as it is reserved
 '\parent' is an invalid class name
 Cannot use "self" as class name, as it is reserved
 '\static' is an invalid class name
 Cannot use "parent" as interface name, as it is reserved
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'E' (T_STRING) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 2
 ===php_error >=8.1===
 PHP Fatal error:  Cannot use "self" as interface name, as it is reserved in Standard input code on line 2

@@ -1,6 +1,9 @@
 ===source===
 <?php class A { abstract abstract function a(); }
-===errors===
+===errors <=8.4===
+duplicate modifier 'abstract'
+Class A contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (A::a)
+===errors >=8.5===
 duplicate modifier 'abstract'
 Class A declares abstract method a() and must therefore be declared abstract
 ===php_error===

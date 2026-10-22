@@ -1,8 +1,18 @@
 ===source===
 <?php $fn = foo(s: ?, i: ?);
-===php_error <=8.5===
+===errors <=7.4===
+'named arguments' requires PHP 8.0 or higher
+'partial function application' requires PHP 8.6 or higher
+'named arguments' requires PHP 8.0 or higher
+'partial function application' requires PHP 8.6 or higher
+===errors 8.0-8.5===
+'partial function application' requires PHP 8.6 or higher
+'partial function application' requires PHP 8.6 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ':', expecting ')' in Standard input code on line 1
+===php_error 8.0-8.5===
 PHP Parse error:  syntax error, unexpected token "?" in Standard input code on line 1
-===ast >=8.6===
+===ast===
 {
   "stmts": [
     {

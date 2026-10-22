@@ -11,7 +11,7 @@ function f() {
         }
     }
 }
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

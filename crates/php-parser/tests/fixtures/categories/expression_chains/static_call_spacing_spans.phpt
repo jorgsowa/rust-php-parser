@@ -8,6 +8,10 @@ Math :: sqrt(4);
 
 // Bug #7: Nullsafe property access
 $obj?->prop;
+===errors <=7.4===
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard input code on line 9
 ===ast===
 {
   "stmts": [

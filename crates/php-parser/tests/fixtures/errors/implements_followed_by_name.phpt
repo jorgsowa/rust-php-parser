@@ -5,7 +5,7 @@ class B implements\A {}
 expected '{', found identifier
 expected 'function' or 'const', found identifier
 expected class member, found '{'
-===php_error===
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected namespaced name "implements\A", expecting "{" in Standard input code on line 2
 ===ast===
 {

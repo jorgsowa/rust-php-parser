@@ -16,7 +16,34 @@ readonly class DemoReadonly {}
 #[DelayedTargetValidation]
 #[AllowDynamicProperties]
 enum DemoEnum {}
-===php_error <=8.0===
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'readonly class' requires PHP 8.2 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'enums' requires PHP 8.1 or higher
+===errors 8.0===
+'readonly class' requires PHP 8.2 or higher
+'enums' requires PHP 8.1 or higher
+===errors 8.1===
+'readonly class' requires PHP 8.2 or higher
+===errors 8.2-8.3===
+Cannot apply #[\AllowDynamicProperties] to trait DemoTrait
+Cannot apply #[\AllowDynamicProperties] to interface DemoInterface
+Cannot apply #[\AllowDynamicProperties] to readonly class DemoReadonly
+===errors 8.4===
+Cannot apply #[\AllowDynamicProperties] to trait DemoTrait
+Cannot apply #[\AllowDynamicProperties] to interface DemoInterface
+Cannot apply #[\AllowDynamicProperties] to readonly class DemoReadonly
+Cannot apply #[\AllowDynamicProperties] to enum DemoEnum
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'class' (T_CLASS) in Standard input code on line 13
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "readonly" in Standard input code on line 13
 ===php_error 8.1===
 PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 13
@@ -24,7 +51,7 @@ PHP Parse error:  syntax error, unexpected token "readonly" in Standard input co
 PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to trait in Standard input code on line 5
 ===php_error 8.4===
 PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to trait DemoTrait in Standard input code on line 5
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

@@ -3,9 +3,31 @@
 function foo(
     (Countable&Traversable)|(ArrayAccess&Stringable)|null $x
 ): (A&B)|(C&D) {}
-===php_error <=8.1===
+===errors <=7.4===
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+'null type' requires PHP 8.0 or higher
+'DNF types' requires PHP 8.2 or higher
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+===errors 8.0===
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+===errors 8.1===
+'DNF types' requires PHP 8.2 or higher
+'DNF types' requires PHP 8.2 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '(', expecting variable (T_VARIABLE) in Standard input code on line 3
+===php_error 8.0-8.1===
 PHP Parse error:  syntax error, unexpected token "(", expecting variable in Standard input code on line 3
-===ast >=8.2===
+===ast===
 {
   "stmts": [
     {

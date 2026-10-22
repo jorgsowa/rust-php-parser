@@ -13,7 +13,9 @@ class Foo {
 ===errors===
 expected expression
 expected '}', found end of file
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC) in Standard input code on line 7
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "public" in Standard input code on line 7
 ===ast===
 {

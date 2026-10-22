@@ -4,7 +4,7 @@
 class C {}
 ===errors <=7.4===
 'attributes' requires PHP 8.0 or higher
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

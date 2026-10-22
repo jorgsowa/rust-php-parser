@@ -3,7 +3,7 @@
 use A;
 use \B;
 ?>
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

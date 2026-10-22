@@ -2,7 +2,9 @@
 <?php interface static {}
 ===errors===
 cannot use 'static' as interface name
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'static' (T_STATIC), expecting identifier (T_STRING) in Standard input code on line 1
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "static", expecting identifier in Standard input code on line 1
 ===ast===
 {

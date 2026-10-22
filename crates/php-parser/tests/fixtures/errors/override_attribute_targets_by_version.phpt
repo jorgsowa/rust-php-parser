@@ -10,6 +10,10 @@ class C extends P {
     #[\Override] const X = 2;
     #[\Override] function m() {}
 }
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
 ===errors 8.3-8.4===
 Attribute "Override" cannot target property (allowed targets: method)
 Attribute "Override" cannot target class constant (allowed targets: method)
@@ -19,7 +23,7 @@ Attribute "Override" cannot target class constant (allowed targets: method, prop
 PHP Fatal error:  Attribute "Override" cannot target property (allowed targets: method) in Standard input code on line 8
 ===php_error 8.5===
 PHP Fatal error:  Attribute "Override" cannot target class constant (allowed targets: method, property) in Standard input code on line 9
-===ast >=8.3===
+===ast===
 {
   "stmts": [
     {

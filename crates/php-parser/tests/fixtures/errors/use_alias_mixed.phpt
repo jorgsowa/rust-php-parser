@@ -1,11 +1,11 @@
 ===source===
 <?php
 use A as mixed;
-===errors >=8.5===
+===errors===
 Cannot use A as mixed because 'mixed' is a special class name
-===php_error===
+===php_error >=8.0===
 PHP Fatal error:  Cannot use A as mixed because 'mixed' is a special class name in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

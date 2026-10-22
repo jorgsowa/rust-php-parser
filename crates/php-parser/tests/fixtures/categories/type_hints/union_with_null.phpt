@@ -1,5 +1,10 @@
 ===source===
 <?php function f(int|string|null $x) {}
+===errors <=7.4===
+'union types' requires PHP 8.0 or higher
+'null type' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in Standard input code on line 1
 ===ast===
 {
   "stmts": [

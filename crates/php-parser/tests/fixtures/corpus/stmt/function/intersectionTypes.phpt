@@ -6,7 +6,13 @@ class Test {
 }
 
 function test(A&B $a): A&B {}
-===php_error <=8.0===
+===errors <=8.0===
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+'intersection types' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '&', expecting variable (T_VARIABLE) in Standard input code on line 4
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected token "&", expecting variable in Standard input code on line 4
 ===ast===
 {

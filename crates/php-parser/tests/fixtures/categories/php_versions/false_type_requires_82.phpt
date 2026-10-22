@@ -1,10 +1,15 @@
 ===source===
 <?php function f(): false {}
-===errors 8.1===
+===errors <=7.4===
+'false type' requires PHP 8.0 or higher
 'false as standalone type' requires PHP 8.2 or higher
-===php_error <=8.1===
+===errors 8.0-8.1===
+'false as standalone type' requires PHP 8.2 or higher
+===php_error <=7.4===
+PHP Fatal error:  Cannot use 'false' as class name as it is reserved in Standard input code on line 1
+===php_error 8.0-8.1===
 PHP Fatal error:  False can not be used as a standalone type in Standard input code on line 1
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

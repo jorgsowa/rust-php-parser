@@ -1,6 +1,6 @@
 ===source===
 <?php $val = Fiber::suspend(42);
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

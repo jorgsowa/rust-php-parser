@@ -4,7 +4,9 @@
 expected '::' or 'as', found identifier
 expected identifier, found ';'
 expected '::' or 'as', found ';'
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'invalid' (T_STRING), expecting :: (T_PAAMAYIM_NEKUDOTAYIM) in Standard input code on line 1
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected identifier "invalid", expecting "::" in Standard input code on line 1
 ===ast===
 {

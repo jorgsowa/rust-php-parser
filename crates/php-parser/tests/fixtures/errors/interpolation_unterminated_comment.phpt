@@ -5,7 +5,10 @@ $x = "{$a /* }";
 unterminated string literal
 unclosed '{' in string interpolation
 expected ';' after expression
-===php_error===
+===php_error <=7.4===
+PHP Warning:  Unterminated comment starting line 2 in Standard input code on line 2
+PHP Parse error:  syntax error, unexpected end of file, expecting :: (T_PAAMAYIM_NEKUDOTAYIM) in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  Unterminated comment starting line 2 in Standard input code on line 2
 ===ast===
 {

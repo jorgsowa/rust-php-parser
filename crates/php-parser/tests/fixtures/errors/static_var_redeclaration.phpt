@@ -19,7 +19,19 @@ class A {
     public function m() { static $a; static $a; }
     public $p { get { static $a; static $a; return 1; } }
 }
-===errors===
+===errors <=8.2===
+'property hooks' requires PHP 8.4 or higher
+===errors 8.3===
+Duplicate declaration of static variable $top
+Duplicate declaration of static variable $a
+Duplicate declaration of static variable $b
+Duplicate declaration of static variable $c
+Duplicate declaration of static variable $a
+Duplicate declaration of static variable $a
+Duplicate declaration of static variable $a
+'property hooks' requires PHP 8.4 or higher
+Duplicate declaration of static variable $a
+===errors >=8.4===
 Duplicate declaration of static variable $top
 Duplicate declaration of static variable $a
 Duplicate declaration of static variable $b
@@ -28,7 +40,9 @@ Duplicate declaration of static variable $a
 Duplicate declaration of static variable $a
 Duplicate declaration of static variable $a
 Duplicate declaration of static variable $a
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 19
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 19
 ===php_error >=8.4===
 PHP Fatal error:  Duplicate declaration of static variable $top in Standard input code on line 3

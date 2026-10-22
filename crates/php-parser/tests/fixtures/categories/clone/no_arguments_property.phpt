@@ -3,7 +3,9 @@
 clone()->b;
 ===errors===
 Cannot dereference this expression
-===php_error <=8.4===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ')' in Standard input code on line 2
+===php_error 8.0-8.4===
 PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 2
 ===php_error >=8.5===
 PHP Parse error:  syntax error, unexpected token "->" in Standard input code on line 2

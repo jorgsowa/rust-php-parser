@@ -44,16 +44,15 @@ fn identity_fold_across_corpus() {
         let content = std::fs::read_to_string(path).unwrap();
         let fixture = crate::common::Fixture::parse(&content)
             .unwrap_or_else(|e| panic!("malformed fixture {rel}: {e}"));
-        for min_php in fixture.targets() {
+        for version in crate::common::SUPPORTED {
             let source = fixture.source();
             let src_arena = Bump::new();
 
             let result = php_rs_parser::parse_arena_with(
                 &src_arena,
                 source,
-                &php_rs_parser::ParseOptions::default().version(crate::common::php_version(
-                    min_php.unwrap_or(crate::common::DEFAULT),
-                )),
+                &php_rs_parser::ParseOptions::default()
+                    .version(crate::common::php_version(version)),
             );
 
             let original_json = to_json(&result.program);
@@ -98,13 +97,12 @@ fn owned_identity_fold_matches_original_json_across_corpus() {
                 let content = std::fs::read_to_string(path).unwrap();
                 let fixture = crate::common::Fixture::parse(&content)
                     .unwrap_or_else(|e| panic!("malformed fixture {}: {e}", path.display()));
-                for min_php in fixture.targets() {
+                for version in crate::common::SUPPORTED {
                     let source = fixture.source();
                     let result = php_rs_parser::parse_with(
                         source,
-                        &php_rs_parser::ParseOptions::default().version(
-                            crate::common::php_version(min_php.unwrap_or(crate::common::DEFAULT)),
-                        ),
+                        &php_rs_parser::ParseOptions::default()
+                            .version(crate::common::php_version(version)),
                     );
                     let original = serde_json::to_string(&result.program).unwrap();
                     let folded = OwnedIdentity.fold_program(result.program);

@@ -7,6 +7,17 @@ class C {
     public function __construct(public void $e) {}
     public function m(int $f, void &$g) {}
 }
+===errors <=7.4===
+void cannot be used as a parameter type
+void cannot be used as a parameter type
+'constructor property promotion' requires PHP 8.0 or higher
+void cannot be used as a parameter type
+void cannot be used as a parameter type
+===errors 8.0===
+void cannot be used as a parameter type
+void cannot be used as a parameter type
+void cannot be used as a parameter type
+void cannot be used as a parameter type
 ===errors >=8.1===
 void cannot be used as a parameter type
 never cannot be used as a parameter type
@@ -14,9 +25,11 @@ void cannot be used as a parameter type
 never cannot be used as a parameter type
 void cannot be used as a parameter type
 void cannot be used as a parameter type
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 6
+===php_error >=8.0===
 PHP Fatal error:  void cannot be used as a parameter type in Standard input code on line 2
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

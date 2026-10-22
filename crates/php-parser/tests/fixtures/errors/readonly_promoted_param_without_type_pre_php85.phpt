@@ -7,7 +7,7 @@ class Foo {
 }
 ===errors <=7.4===
 'constructor property promotion' requires PHP 8.0 or higher
-===errors 8.1-8.4===
+===errors >=8.1===
 readonly promoted property must have type
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 4
@@ -115,7 +115,7 @@ PHP Fatal error:  Readonly property Foo::$x must have type in Standard input cod
     "end": 89
   }
 }
-===ast 8.1-8.4===
+===ast >=8.1===
 {
   "stmts": [
     {

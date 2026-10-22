@@ -9,6 +9,8 @@ fn\use();
 \fn\use();
 namespace\fn\use();
 private\protected\public\static\abstract\final();
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'fn' (T_FN), expecting '{' in Standard input code on line 2
 ===ast===
 {
   "stmts": [

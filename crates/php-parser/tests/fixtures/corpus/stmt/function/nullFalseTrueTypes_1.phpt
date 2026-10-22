@@ -4,9 +4,21 @@
 function f_null(): null {}
 function f_false(): false {}
 function f_true(): true {}
-===php_error <=8.1===
+===errors <=7.4===
+'null type' requires PHP 8.0 or higher
+'null as standalone type' requires PHP 8.2 or higher
+'false type' requires PHP 8.0 or higher
+'false as standalone type' requires PHP 8.2 or higher
+'true type' requires PHP 8.2 or higher
+===errors 8.0-8.1===
+'null as standalone type' requires PHP 8.2 or higher
+'false as standalone type' requires PHP 8.2 or higher
+'true type' requires PHP 8.2 or higher
+===php_error <=7.4===
+PHP Fatal error:  Cannot use 'null' as class name as it is reserved in Standard input code on line 3
+===php_error 8.0-8.1===
 PHP Fatal error:  Null can not be used as a standalone type in Standard input code on line 3
-===ast >=8.2===
+===ast===
 {
   "stmts": [
     {

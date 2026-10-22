@@ -1,9 +1,13 @@
 ===source===
 <?php
 (void) $a or $b;
-===php_error <=8.4===
+===errors <=8.4===
+'void cast' requires PHP 8.5 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '$a' (T_VARIABLE) in Standard input code on line 2
+===php_error 8.0-8.4===
 PHP Parse error:  syntax error, unexpected variable "$a" in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

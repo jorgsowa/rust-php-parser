@@ -18,7 +18,7 @@ EOT;
 $d = <<<EOT
 \\è escaped
 EOT;
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {

@@ -1,11 +1,11 @@
 ===source===
 <?php
 interface I { use T; }
-===errors >=8.5===
+===errors===
 Cannot use traits inside of interfaces. T is used in I
 ===php_error===
 PHP Fatal error:  Cannot use traits inside of interfaces. T is used in I in Standard input code on line 2
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

@@ -7,7 +7,31 @@ const D = $x::m(...);
 const E = static::m(...);
 const F = Foo::$m(...);
 const G = Foo::{PHP_EOL}(...);
-===errors===
+===errors <=8.0===
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callable syntax' requires PHP 8.1 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+===errors 8.1-8.4===
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+'first-class callables in constant expressions' requires PHP 8.5 or higher
+===errors >=8.5===
 Cannot use dynamic function name in constant expression
 Cannot use dynamic function name in constant expression
 Cannot use dynamic function name in constant expression
@@ -15,7 +39,9 @@ Cannot use dynamic class name in constant expression
 "static" is not allowed in compile-time constants
 Cannot use dynamic method name in constant expression
 Cannot use dynamic method name in constant expression
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ')' in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 2
 ===php_error 8.1-8.4===
 PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 2

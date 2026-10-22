@@ -2,6 +2,15 @@
 <?php
 array_slice(array: $arr, offset: 1, length: 2);
 foo(class: 'MyClass', static: true, match: 'yes');
+===errors <=7.4===
+'named arguments' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ':', expecting '(' in Standard input code on line 2
 ===ast===
 {
   "stmts": [

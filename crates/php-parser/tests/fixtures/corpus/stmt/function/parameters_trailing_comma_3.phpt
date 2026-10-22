@@ -1,6 +1,8 @@
 ===source===
 <?php
 fn($foo, ) => $bar;
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ')', expecting variable (T_VARIABLE) in Standard input code on line 2
 ===ast===
 {
   "stmts": [

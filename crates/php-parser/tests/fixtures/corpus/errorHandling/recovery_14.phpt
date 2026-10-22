@@ -5,7 +5,9 @@ $
 expected variable, found end of file
 expected expression
 expected ';' after expression
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected end of file, expecting variable (T_VARIABLE) or '{' or '$' in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected end of file, expecting variable or "{" or "$" in Standard input code on line 2
 ===ast===
 {

@@ -6,7 +6,9 @@ class Foo {
 }
 ===errors===
 expected expression
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ';' in Standard input code on line 3
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token ";" in Standard input code on line 3
 ===ast===
 {

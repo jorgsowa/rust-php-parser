@@ -3,7 +3,9 @@
 [$a] %= 2;
 ===errors===
 Cannot use a destructuring pattern with a compound assignment operator
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '%=' (T_MOD_EQUAL) in Standard input code on line 2
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token "%=" in Standard input code on line 2
 ===ast===
 {

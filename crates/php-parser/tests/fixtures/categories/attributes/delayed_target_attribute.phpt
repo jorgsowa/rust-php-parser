@@ -16,9 +16,23 @@ abstract class DemoAbstract {}
 #[DelayedTargetValidation]
 #[Attribute]
 enum DemoEnum {}
-===php_error <=8.0===
+===errors <=7.4===
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'attributes' requires PHP 8.0 or higher
+'enums' requires PHP 8.1 or higher
+===errors 8.0===
+'enums' requires PHP 8.1 or higher
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'DemoEnum' (T_STRING) in Standard input code on line 17
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "enum" in Standard input code on line 17
-===ast >=8.5===
+===ast===
 {
   "stmts": [
     {

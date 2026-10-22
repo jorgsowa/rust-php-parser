@@ -20,7 +20,41 @@ function f($a = 1 + $x) {}
 class D {}
 $f = static function ($a = $x) {};
 $g = fn ($a = $x) => $a;
-===errors===
+===errors <=7.4===
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+'constructor property promotion' requires PHP 8.0 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+'enums' requires PHP 8.1 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+'attributes' requires PHP 8.0 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+'attributes' requires PHP 8.0 or higher
+'named arguments' requires PHP 8.0 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+===errors 8.0===
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+'enums' requires PHP 8.1 or higher
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+Constant expression contains invalid operations
+===errors >=8.1===
 Constant expression contains invalid operations
 Constant expression contains invalid operations
 Constant expression contains invalid operations
@@ -34,7 +68,9 @@ Constant expression contains invalid operations
 Constant expression contains invalid operations
 Constant expression contains invalid operations
 Constant expression contains invalid operations
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 7
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 12
 ===php_error >=8.1===
 PHP Fatal error:  Constant expression contains invalid operations in Standard input code on line 3

@@ -5,13 +5,24 @@ class Foo {
         public readonly readonly string $x,
     ) {}
 }
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'readonly parameters' requires PHP 8.1 or higher
+'readonly parameters' requires PHP 8.1 or higher
+duplicate modifier 'readonly'
+===errors 8.0===
+'readonly parameters' requires PHP 8.1 or higher
+'readonly parameters' requires PHP 8.1 or higher
+duplicate modifier 'readonly'
 ===errors >=8.1===
 duplicate modifier 'readonly'
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 4
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "readonly", expecting variable in Standard input code on line 4
 ===php_error >=8.1===
 PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input code on line 4
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

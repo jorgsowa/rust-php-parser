@@ -7,9 +7,14 @@ enum E {
     public function f() {}
     public function F() {}
 }
-===errors===
+===errors <=8.0===
+'enums' requires PHP 8.1 or higher
 Cannot redeclare E::F()
-===php_error <=8.0===
+===errors >=8.1===
+Cannot redeclare E::F()
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'E' (T_STRING) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 2
 ===php_error >=8.1===
 PHP Fatal error:  Cannot redeclare E::F() in Standard input code on line 5

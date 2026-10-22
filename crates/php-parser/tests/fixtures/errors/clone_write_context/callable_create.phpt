@@ -2,10 +2,17 @@
 <?php
 f(...)->b = 1;
 $o->m(...)[0] = 1;
-===errors===
+===errors <=8.0===
+'first-class callable syntax' requires PHP 8.1 or higher
+Cannot use result of built-in function in write context
+'first-class callable syntax' requires PHP 8.1 or higher
+Cannot use result of built-in function in write context
+===errors >=8.1===
 Cannot use result of built-in function in write context
 Cannot use result of built-in function in write context
-===php_error <=8.0===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ')' in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected token ")" in Standard input code on line 2
 ===php_error >=8.1===
 PHP Fatal error:  Cannot use result of built-in function in write context in Standard input code on line 2

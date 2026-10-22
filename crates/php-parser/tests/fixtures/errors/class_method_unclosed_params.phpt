@@ -4,13 +4,15 @@ class Foo {
     public function bar(int $x, string $y { return 1; }
     public function baz() { return 2; }
 }
-===errors >=8.1===
+===errors===
 expected ')', found '{'
-===php_error <=8.3===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '{', expecting ')' in Standard input code on line 3
+===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard input code on line 3
 ===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token "return", expecting identifier in Standard input code on line 3
-===ast >=8.1===
+===ast===
 {
   "stmts": [
     {

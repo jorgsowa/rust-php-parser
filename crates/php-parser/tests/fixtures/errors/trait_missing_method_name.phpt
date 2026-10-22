@@ -2,7 +2,9 @@
 <?php trait A {} class C { use A { insteadof; } }
 ===errors===
 expected '::' or 'as', found ';'
-===php_error===
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected ';', expecting as (T_AS) in Standard input code on line 1
+===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected token ";", expecting "as" in Standard input code on line 1
 ===ast===
 {

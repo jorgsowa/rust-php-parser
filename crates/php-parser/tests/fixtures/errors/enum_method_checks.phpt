@@ -4,10 +4,21 @@ enum E {
     public function f(): void { return 1; }
     public function &g($a) { return $a?->b; }
 }
-===errors===
+===errors <=7.4===
+'enums' requires PHP 8.1 or higher
+A void function must not return a value
+'nullsafe operator (?->)' requires PHP 8.0 or higher
+Cannot take reference of a nullsafe chain
+===errors 8.0===
+'enums' requires PHP 8.1 or higher
 A void function must not return a value
 Cannot take reference of a nullsafe chain
-===php_error <=8.0===
+===errors >=8.1===
+A void function must not return a value
+Cannot take reference of a nullsafe chain
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected 'E' (T_STRING) in Standard input code on line 2
+===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code on line 2
 ===php_error 8.1-8.3===
 PHP Fatal error:  A void function must not return a value in Standard input code on line 3

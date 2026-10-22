@@ -1,18 +1,17 @@
 //! Fixture corpus tests for both the arena and owned parse APIs.
 
-use crate::common::{php_version, run_fixture_corpus, DEFAULT};
+use crate::common::{php_version, run_fixture_corpus};
 
 #[test]
 fn arena_fixtures() {
     let update = std::env::var("UPDATE_FIXTURES").is_ok();
     run_fixture_corpus(
-        |source, min_php| {
+        |source, version| {
             let arena = bumpalo::Bump::new();
             let result = php_rs_parser::parse_arena_with(
                 &arena,
                 source,
-                &php_rs_parser::ParseOptions::default()
-                    .version(php_version(min_php.unwrap_or(DEFAULT))),
+                &php_rs_parser::ParseOptions::default().version(php_version(version)),
             );
             let errors = result.errors.iter().map(|e| e.to_string()).collect();
             let json = serde_json::to_string_pretty(&result.program).unwrap();
@@ -25,11 +24,10 @@ fn arena_fixtures() {
 #[test]
 fn owned_fixtures() {
     run_fixture_corpus(
-        |source, min_php| {
+        |source, version| {
             let result = php_rs_parser::parse_with(
                 source,
-                &php_rs_parser::ParseOptions::default()
-                    .version(php_version(min_php.unwrap_or(DEFAULT))),
+                &php_rs_parser::ParseOptions::default().version(php_version(version)),
             );
             let errors = result.errors.iter().map(|e| e.to_string()).collect();
             let json = serde_json::to_string_pretty(&result.program).unwrap();
@@ -95,23 +93,11 @@ fn malformed_fixtures_are_rejected() {
             "===ast <=8.3=== overlaps ===ast >=8.3===",
         ),
         (
-            format!("===source===\n<?php\n===errors 8.1===\nx\n===ast >=8.4===\n{ast}\n"),
-            "===errors 8.1=== covers none of the versions the ===ast=== sections name",
-        ),
-        (
-            format!("===source===\n<?php\n===errors <=8.3===\nx\n===ast===\n{ast}\n"),
-            "===errors <=8.3=== needs a version-qualified ===ast=== section",
-        ),
-        (
             format!(
                 "===source===\n<?php\n===php_error <=8.3===\nx\n===php_error >=8.3===\ny\n\
                  ===ast===\n{ast}\n"
             ),
             "===php_error <=8.3=== overlaps ===php_error >=8.3===",
-        ),
-        (
-            format!("===source===\n<?php\n===ast===\n{ast}\n===ast >=8.4===\n{ast}\n"),
-            "===ast=== is never used next to version-qualified ones",
         ),
         (
             format!("===source===\n<?php\n===errors===\nx\n===errors===\ny\n===ast===\n{ast}\n"),
@@ -121,25 +107,18 @@ fn malformed_fixtures_are_rejected() {
     for (content, expected) in cases {
         assert_eq!(Fixture::parse(&content).unwrap_err(), expected, "{content}");
     }
-
-    let valid = format!(
-        "===source===\n<?php\n===errors <=8.3===\nx\n\
-         ===php_error===\ny\n===ast <=8.3===\n{ast}\n===ast >=8.4===\n{ast}\n"
-    );
-    let fixture = Fixture::parse(&valid).unwrap();
-    assert_eq!(fixture.targets().len(), crate::common::SUPPORTED.len());
 }
 
 #[test]
-fn php_error_sections_are_independent_of_parse_targets() {
+fn unqualified_section_is_the_fallback() {
     use crate::common::Fixture;
-    let content = "===source===\n<?php\n===php_error <=8.0===\nx\n===ast===\n{}\n";
+    let content = "===source===\n<?php\n===errors <=8.0===\nx\n===php_error <=8.0===\nx\n\
+                   ===ast <=8.3===\n{}\n===ast===\n[]\n";
     let fixture = Fixture::parse(content).unwrap();
-    assert_eq!(
-        fixture.section("php_error", Some((8, 0))).unwrap().body,
-        "x"
-    );
+    assert_eq!(fixture.section("errors", Some((8, 0))).unwrap().body, "x");
     assert!(fixture.section("php_error", Some((8, 1))).is_none());
+    assert_eq!(fixture.section("ast", Some((8, 3))).unwrap().body, "{}");
+    assert_eq!(fixture.section("ast", Some((8, 4))).unwrap().body, "[]");
 }
 
 #[test]
@@ -215,13 +194,7 @@ fn parse_results_can_be_stored_in_hashmap() {
                 .join(rel);
             let content = std::fs::read_to_string(&path).unwrap();
             let fixture = crate::common::Fixture::parse(&content).unwrap();
-            let result = match fixture.targets()[0].map(php_version) {
-                Some(v) => php_rs_parser::parse_with(
-                    fixture.source(),
-                    &php_rs_parser::ParseOptions::default().version(v),
-                ),
-                None => php_rs_parser::parse(fixture.source()),
-            };
+            let result = php_rs_parser::parse(fixture.source());
             (PathBuf::from(rel), result)
         })
         .collect();

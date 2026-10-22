@@ -5,9 +5,34 @@ class D {
     Protected(Set) int $b;
     public function __construct(public private(Set) int $c, private (A&B)|null $d) {}
 }
+===errors <=7.4===
+'asymmetric visibility' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'intersection types' requires PHP 8.1 or higher
+'union types' requires PHP 8.0 or higher
+'null type' requires PHP 8.0 or higher
+'DNF types' requires PHP 8.2 or higher
+===errors 8.0===
+'asymmetric visibility' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'intersection types' requires PHP 8.1 or higher
+'DNF types' requires PHP 8.2 or higher
+===errors 8.1===
+'asymmetric visibility' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'DNF types' requires PHP 8.2 or higher
+===errors 8.2-8.3===
+'asymmetric visibility' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
 ===php_error <=8.3===
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 3
-===ast >=8.4===
+===ast===
 {
   "stmts": [
     {

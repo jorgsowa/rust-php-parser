@@ -6,7 +6,7 @@ namespace A {
 namespace B {
     static $a;
 }
-===errors===
+===errors >=8.3===
 Duplicate declaration of static variable $a
 ===php_error >=8.3===
 PHP Fatal error:  Duplicate declaration of static variable $a in Standard input code on line 6

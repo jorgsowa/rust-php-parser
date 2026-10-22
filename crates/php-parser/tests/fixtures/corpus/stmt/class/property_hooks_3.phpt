@@ -16,7 +16,7 @@ PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
 ===php_error >=8.4===
 PHP Fatal error:  get hook of property Test::$prop must not have a parameter list in Standard input code on line 4
-===ast >=7.4===
+===ast===
 {
   "stmts": [
     {
