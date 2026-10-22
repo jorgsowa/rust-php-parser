@@ -7,21 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.25.1] - 2026-10-22
+
 ### Added
 
-- `Lexer::with_attributes`, which lexes `#[` as a `#` comment when disabled (`php-lexer`).
-- `EnumMemberKind::Property`, for a property declared in an enum (`php-ast`), and `ForbiddenRule::EnumProperty` (`php-rs-parser`).
+- `Lexer::with_attributes`; when disabled, `#[` starts a `#` comment (`php-lexer`).
+- `EnumMemberKind::Property` for a property declared in an enum, and `ForbiddenRule::EnumProperty` (`php-ast`, `php-rs-parser`).
 
 ### Changed
 
-- `Name::to_string_repr` builds a fully qualified name in one allocation instead of two, for both the arena and the owned `Name` (`php-ast`).
-- Parsing skips the walk that checks `self`, `parent` and `static` when every use is known to be valid, such as `self::` in a class body (`php-rs-parser`).
+- Faster parsing: `Name::to_string_repr` builds a fully qualified name in one allocation (`php-ast`), and the `self` / `parent` / `static` check is skipped when every use is known to be valid (`php-rs-parser`).
 
 ### Fixed
 
-- Before PHP 8.0, `#[` starts a `#` comment instead of an attribute, so `#[\ReturnTypeWillChange]` and other single-line attributes are accepted (`php-rs-parser`).
-- A property in an enum reports PHP's `Enum E cannot include properties` compile error and stays in the AST, instead of a syntax error (`php-rs-parser`).
-- Writing to a property or element of `clone $a` reports `Cannot use temporary expression in write context` before PHP 8.5 (`php-rs-parser`).
+- Before PHP 8.0, `#[` starts a comment instead of an attribute, so single-line attributes such as `#[\ReturnTypeWillChange]` are accepted (`php-rs-parser`).
+- A property in an enum reports `Enum E cannot include properties` and stays in the AST, instead of a syntax error (`php-rs-parser`).
+- A write to a property or element of `clone $a` reports `Cannot use temporary expression in write context` before PHP 8.5 (`php-rs-parser`).
 
 ## [0.25.0] - 2026-10-22
 
