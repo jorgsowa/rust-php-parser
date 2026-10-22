@@ -240,7 +240,8 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
                                               },
                                               "type_hint": null,
                                               "default": null,
-                                              "attributes": []
+                                              "attributes": [],
+                                              "empty_hook_list": true
                                             }
                                           },
                                           "span": {

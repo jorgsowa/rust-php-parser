@@ -57,6 +57,7 @@ PHP Fatal error:  Property hook list must not be empty in Standard input code on
                       "by_ref": false,
                       "variadic": false,
                       "attributes": [],
+                      "empty_hook_list": true,
                       "span": {
                         "start": 37,
                         "end": 39

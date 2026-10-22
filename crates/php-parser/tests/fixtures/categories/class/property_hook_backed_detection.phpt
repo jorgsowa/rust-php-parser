@@ -1515,7 +1515,8 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                       "end": 752
                     }
                   },
-                  "attributes": []
+                  "attributes": [],
+                  "empty_hook_list": true
                 }
               },
               "span": {

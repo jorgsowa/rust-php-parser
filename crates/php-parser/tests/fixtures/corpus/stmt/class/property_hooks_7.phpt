@@ -72,7 +72,8 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                   },
                   "type_hint": null,
                   "default": null,
-                  "attributes": []
+                  "attributes": [],
+                  "empty_hook_list": true
                 }
               },
               "span": {

@@ -1825,6 +1825,7 @@ pub fn parse_param_list<'arena, 'src>(
             param.modifiers.visibility = visibility;
             param.modifiers.set_visibility = set_visibility;
             param.attributes = param_attrs;
+            param.empty_hook_list = starts_hooks && hooks.is_empty();
             param.hooks = hooks;
             param.doc_comment = doc_comment;
             param

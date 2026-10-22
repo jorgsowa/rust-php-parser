@@ -52,7 +52,8 @@ PHP Fatal error:  Unknown hook "FOO" for property Test::$prop, expected "get" or
                   },
                   "type_hint": null,
                   "default": null,
-                  "attributes": []
+                  "attributes": [],
+                  "empty_hook_list": true
                 }
               },
               "span": {

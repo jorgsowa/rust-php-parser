@@ -56,6 +56,7 @@ PHP Parse error:  Unclosed '(' in Standard input code on line 1
               "by_ref": false,
               "variadic": false,
               "attributes": [],
+              "empty_hook_list": true,
               "span": {
                 "start": 20,
                 "end": 26

@@ -7,12 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `PropertyDecl::empty_hook_list` and `Param::empty_hook_list` for an empty hook list `{}` (`php-ast`).
+
 ### Changed
 
 - The messages for a positional or unpacked argument after a named one, an unparenthesized nested ternary and an unparenthesized arrow function after `|>` match PHP's (`php-rs-parser`).
 
 ### Fixed
 
+- An empty hook list `{}` prints as `{}` instead of `;`, so the printed code keeps PHP's error (`php-printer`).
 - A class property with a fully qualified type and no modifier, such as `\Foo $a;`, is a syntax error instead of being accepted (`php-rs-parser`).
 - An enum property with a fully qualified type, such as `public \Foo\Bar $a;`, reports `Enum E cannot include properties` instead of a syntax error (`php-rs-parser`).
 

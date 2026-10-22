@@ -60,7 +60,8 @@ PHP Fatal error:  Property hook list must not be empty in Standard input code on
                   },
                   "type_hint": null,
                   "default": null,
-                  "attributes": []
+                  "attributes": [],
+                  "empty_hook_list": true
                 }
               },
               "span": {
@@ -99,6 +100,7 @@ PHP Fatal error:  Property hook list must not be empty in Standard input code on
                         "visibility": "Public"
                       },
                       "attributes": [],
+                      "empty_hook_list": true,
                       "span": {
                         "start": 71,
                         "end": 84

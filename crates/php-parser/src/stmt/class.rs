@@ -2253,6 +2253,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
             built.type_hint = type_hint;
             built.default = default;
             built.attributes = member_attrs;
+            built.empty_hook_list = had_hooks_block && hooks.is_empty();
             built.hooks = hooks;
             built.doc_comment = parser.take_doc_comment(member_start);
             built
@@ -2282,7 +2283,8 @@ pub(super) fn parse_property_member<'arena, 'src>(
                 report_readonly_default(parser, default.span);
             }
 
-            let phooks = if parser.check(TokenKind::LeftBrace) {
+            let phas_hooks_block = parser.check(TokenKind::LeftBrace);
+            let phooks = if phas_hooks_block {
                 parser.forbid(
                     ForbiddenRule::HooksOnPropertyList,
                     "cannot have hooks on comma-separated property",
@@ -2309,6 +2311,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
                     built.type_hint = ptype_hint;
                     built.default = pdefault;
                     built.attributes = pattributes;
+                    built.empty_hook_list = phas_hooks_block && phooks.is_empty();
                     built.hooks = phooks;
                     built.doc_comment = None;
                     built

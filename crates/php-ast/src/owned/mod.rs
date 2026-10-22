@@ -1822,6 +1822,9 @@ pub struct Param {
     /// Property hooks of a promoted property.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "slice_is_empty"))]
     pub hooks: Box<[PropertyHook]>,
+    /// `true` for an empty hook list, `{}`, which PHP rejects.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
+    pub empty_hook_list: bool,
     /// Preceding doc comment.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
@@ -1844,6 +1847,7 @@ impl Param {
             modifiers: Modifiers::new(),
             attributes: Box::new([]),
             hooks: Box::new([]),
+            empty_hook_list: false,
             doc_comment: None,
             span,
         }
@@ -1944,6 +1948,9 @@ pub struct PropertyDecl {
     /// Property hooks.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "slice_is_empty"))]
     pub hooks: Box<[PropertyHook]>,
+    /// `true` for an empty hook list, `{}`, which PHP rejects.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
+    pub empty_hook_list: bool,
     /// Preceding doc comment.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment>,
@@ -1960,6 +1967,7 @@ impl PropertyDecl {
             default: None,
             attributes: Box::new([]),
             hooks: Box::new([]),
+            empty_hook_list: false,
             doc_comment: None,
         }
     }
@@ -2811,6 +2819,7 @@ fn owned_param(p: &arena_ast::Param<'_, '_>) -> Param {
         modifiers: p.modifiers,
         attributes: owned_attrs(&p.attributes),
         hooks: owned_hooks(&p.hooks),
+        empty_hook_list: p.empty_hook_list,
         doc_comment: p.doc_comment.as_ref().map(owned_comment),
         span: p.span,
     }
@@ -3065,6 +3074,7 @@ fn owned_property(p: &arena_ast::PropertyDecl<'_, '_>) -> PropertyDecl {
         default: p.default.as_ref().map(owned_expr),
         attributes: owned_attrs(&p.attributes),
         hooks: owned_hooks(&p.hooks),
+        empty_hook_list: p.empty_hook_list,
         doc_comment: owned_opt_comment(&p.doc_comment),
     }
 }
@@ -3820,6 +3830,7 @@ fn av_param<'a>(arena: &'a bumpalo::Bump, p: &Param) -> arena_ast::Param<'a, 'a>
         modifiers: p.modifiers,
         attributes: av_attrs(arena, &p.attributes),
         hooks: av_hooks(arena, &p.hooks),
+        empty_hook_list: p.empty_hook_list,
         doc_comment: av_opt_comment(arena, &p.doc_comment),
         span: p.span,
     }
@@ -4194,6 +4205,7 @@ fn av_property<'a>(arena: &'a bumpalo::Bump, p: &PropertyDecl) -> arena_ast::Pro
         default: p.default.as_ref().map(|e| av_expr(arena, e)),
         attributes: av_attrs(arena, &p.attributes),
         hooks: av_hooks(arena, &p.hooks),
+        empty_hook_list: p.empty_hook_list,
         doc_comment: av_opt_comment(arena, &p.doc_comment),
     }
 }

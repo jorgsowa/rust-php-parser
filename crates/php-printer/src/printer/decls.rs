@@ -304,6 +304,8 @@ impl<'src> Printer<'src> {
         if !prop.hooks.is_empty() {
             self.w(" ");
             self.print_property_hooks(&prop.hooks);
+        } else if prop.empty_hook_list {
+            self.w(" {}");
         } else {
             self.w(";");
         }
@@ -583,6 +585,8 @@ impl<'src> Printer<'src> {
         if !param.hooks.is_empty() {
             self.w(" ");
             self.print_property_hooks(&param.hooks);
+        } else if param.empty_hook_list {
+            self.w(" {}");
         }
     }
 

@@ -658,6 +658,7 @@ pub fn fold_owned_param<F: OwnedFold + ?Sized>(folder: &mut F, p: Param) -> Para
         modifiers: p.modifiers,
         attributes: fold_owned_attrs(folder, p.attributes),
         hooks: fold_owned_hooks(folder, p.hooks),
+        empty_hook_list: p.empty_hook_list,
         doc_comment: p.doc_comment,
         span: p.span,
     }
@@ -713,6 +714,7 @@ fn fold_owned_property<F: OwnedFold + ?Sized>(folder: &mut F, p: PropertyDecl) -
         default: p.default.map(|e| folder.fold_expr(e)),
         attributes: fold_owned_attrs(folder, p.attributes),
         hooks: fold_owned_hooks(folder, p.hooks),
+        empty_hook_list: p.empty_hook_list,
         doc_comment: p.doc_comment,
     }
 }

@@ -75,6 +75,9 @@ pub struct Param<'arena, 'src> {
     /// Property hooks on a promoted property (PHP 8.4+).
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "ArenaVec::is_empty"))]
     pub hooks: ArenaVec<'arena, PropertyHook<'arena, 'src>>,
+    /// `true` for an empty hook list, `{}`, which PHP rejects.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
+    pub empty_hook_list: bool,
     /// A doc-block attached directly to this parameter (PHP 8.6 recognizes
     /// this for reflection purposes), either immediately before it or
     /// trailing it up to the comma. Parsed at every version since a bare
@@ -100,6 +103,7 @@ impl<'arena, 'src> Param<'arena, 'src> {
             modifiers: Modifiers::new(),
             attributes: ArenaVec::new_in(arena),
             hooks: ArenaVec::new_in(arena),
+            empty_hook_list: false,
             doc_comment: None,
             span,
         }
@@ -277,6 +281,9 @@ pub struct PropertyDecl<'arena, 'src> {
     /// Property hooks (PHP 8.4+).
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "ArenaVec::is_empty"))]
     pub hooks: ArenaVec<'arena, PropertyHook<'arena, 'src>>,
+    /// `true` for an empty hook list, `{}`, which PHP rejects.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
+    pub empty_hook_list: bool,
     /// Preceding `/** */` doc-block, if any.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
     pub doc_comment: Option<Comment<'src>>,
@@ -293,6 +300,7 @@ impl<'arena, 'src> PropertyDecl<'arena, 'src> {
             default: None,
             attributes: ArenaVec::new_in(arena),
             hooks: ArenaVec::new_in(arena),
+            empty_hook_list: false,
             doc_comment: None,
         }
     }

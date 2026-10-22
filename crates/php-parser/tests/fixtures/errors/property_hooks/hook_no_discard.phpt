@@ -133,7 +133,8 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                             },
                             "type_hint": null,
                             "default": null,
-                            "attributes": []
+                            "attributes": [],
+                            "empty_hook_list": true
                           }
                         },
                         "span": {
@@ -156,7 +157,8 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                             },
                             "type_hint": null,
                             "default": null,
-                            "attributes": []
+                            "attributes": [],
+                            "empty_hook_list": true
                           }
                         },
                         "span": {
@@ -212,7 +214,8 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                                       },
                                       "type_hint": null,
                                       "default": null,
-                                      "attributes": []
+                                      "attributes": [],
+                                      "empty_hook_list": true
                                     }
                                   },
                                   "span": {

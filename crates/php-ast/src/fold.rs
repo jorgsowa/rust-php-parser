@@ -725,6 +725,7 @@ pub fn fold_param<'new, 'src, F: Fold<'src> + ?Sized>(
         modifiers: param.modifiers,
         attributes: fold_attrs(folder, arena, &param.attributes),
         hooks: fold_hooks(folder, arena, &param.hooks),
+        empty_hook_list: param.empty_hook_list,
         doc_comment: param.doc_comment,
         span: param.span,
     }
@@ -1062,6 +1063,7 @@ fn fold_property_decl<'new, 'src, F: Fold<'src> + ?Sized>(
         default: prop.default.as_ref().map(|d| folder.fold_expr(arena, d)),
         attributes: fold_attrs(folder, arena, &prop.attributes),
         hooks: fold_hooks(folder, arena, &prop.hooks),
+        empty_hook_list: prop.empty_hook_list,
         doc_comment: prop.doc_comment.as_ref().map(fold_comment),
     }
 }
