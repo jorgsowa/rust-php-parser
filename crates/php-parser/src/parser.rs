@@ -1692,11 +1692,12 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         | "object"
                         | "mixed"
                 ) || (last == "never" && self.version >= PhpVersion::Php81);
+                // PHP lexes `array` and `callable` as keywords, which a qualified name may end
+                // in before 8.5.
                 let reserved = builtin
-                    || matches!(
-                        last.as_str(),
-                        "array" | "callable" | "self" | "parent" | "static"
-                    );
+                    || matches!(last.as_str(), "self" | "parent" | "static")
+                    || (matches!(last.as_str(), "array" | "callable")
+                        && self.version >= PhpVersion::Php85);
                 let message = if parts.len() == 1 && builtin {
                     format!("Type declaration '{last}' must be unqualified")
                 } else if reserved {
