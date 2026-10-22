@@ -369,7 +369,10 @@ pub(super) fn parse_enum<'arena, 'src>(
             visibility = Some(Visibility::Public);
         }
         let starts_property = match parser.current_kind() {
-            TokenKind::Variable | TokenKind::Question | TokenKind::LeftParen => true,
+            TokenKind::Variable
+            | TokenKind::Question
+            | TokenKind::LeftParen
+            | TokenKind::Backslash => true,
             _ => {
                 parser.could_be_type_hint()
                     && matches!(
