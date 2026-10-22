@@ -463,10 +463,22 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         self.current = self.next;
         self.next = self.next2;
         self.next2 = self.next_non_comment();
-        if self.next.kind == TokenKind::Readonly {
-            self.next.kind = self.readonly_kind(self.next2.kind);
+        if matches!(
+            self.next.kind,
+            TokenKind::Readonly | TokenKind::MagicProperty
+        ) {
+            self.next.kind = self.versioned_kind(self.next.kind, self.next2.kind);
         }
         prev
+    }
+
+    /// The kind of a keyword token that is a plain name in older versions.
+    fn versioned_kind(&self, kind: TokenKind, follower: TokenKind) -> TokenKind {
+        match kind {
+            TokenKind::Readonly => self.readonly_kind(follower),
+            TokenKind::MagicProperty if self.version < PhpVersion::Php84 => TokenKind::Identifier,
+            _ => kind,
+        }
     }
 
     /// Before PHP 8.1 `readonly` is a plain name. It keeps its keyword kind when a modifier's
@@ -504,12 +516,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     }
 
     fn demote_initial_keywords(&mut self) {
-        if self.current.kind == TokenKind::Readonly {
-            self.current.kind = self.readonly_kind(self.next.kind);
-        }
-        if self.next.kind == TokenKind::Readonly {
-            self.next.kind = self.readonly_kind(self.next2.kind);
-        }
+        self.current.kind = self.versioned_kind(self.current.kind, self.next.kind);
+        self.next.kind = self.versioned_kind(self.next.kind, self.next2.kind);
     }
 
     /// End offset of the most recently consumed token.
