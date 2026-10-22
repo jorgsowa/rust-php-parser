@@ -1357,7 +1357,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                 None,
                 ClassBody {
                     members,
-                    span: Span::new(brace_start, end),
+                    span: Span::new(brace_start, end.max(brace_start)),
                 },
             );
             built.modifiers = crate::stmt::class_modifiers(false, false, anon_readonly);
@@ -1600,7 +1600,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
     let end = parser.previous_end();
     let body = parser.alloc(Block {
         stmts: body_stmts,
-        span: Span::new(brace_start, end),
+        span: Span::new(brace_start, end.max(brace_start)),
     });
     if let Some(rt) = &return_type {
         let in_class = parser.class_scope.is_some();

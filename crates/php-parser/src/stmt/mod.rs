@@ -1269,7 +1269,7 @@ fn parse_function<'arena, 'src>(
 
     let body = parser.alloc(Block {
         stmts: body_stmts,
-        span: Span::new(brace_start, end),
+        span: Span::new(brace_start, end.max(brace_start)),
     });
 
     if let Some(rt) = &return_type {
@@ -2144,7 +2144,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
         parser.expect(TokenKind::RightBrace);
     }
 
-    let body_span = Span::new(body_brace_start, parser.previous_end());
+    let body_span = parser.span_from(body_brace_start);
     let span = Span::new(start, parser.previous_end());
     Stmt {
         kind: StmtKind::Switch(parser.alloc({
@@ -2198,7 +2198,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
     parser.expect(TokenKind::RightBrace);
     let body = parser.alloc(Block {
         stmts: body_stmts,
-        span: Span::new(body_brace_start, parser.previous_end()),
+        span: parser.span_from(body_brace_start),
     });
 
     let mut catches = parser.alloc_vec_with_capacity(2);
@@ -2266,7 +2266,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         parser.expect(TokenKind::RightBrace);
         let catch_body = parser.alloc(Block {
             stmts: catch_body_stmts,
-            span: Span::new(catch_body_brace_start, parser.previous_end()),
+            span: parser.span_from(catch_body_brace_start),
         });
 
         catches.push({
@@ -2299,7 +2299,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         parser.expect(TokenKind::RightBrace);
         let finally_body = parser.alloc(Block {
             stmts: finally_stmts,
-            span: Span::new(finally_brace_start, parser.previous_end()),
+            span: parser.span_from(finally_brace_start),
         });
         (Some(finally_body), Some(finally_kw_span))
     } else {
@@ -2764,7 +2764,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         let end = parser.previous_end();
         let block = parser.alloc(Block {
             stmts,
-            span: Span::new(brace_start, end),
+            span: Span::new(brace_start, end.max(brace_start)),
         });
         return Stmt {
             kind: StmtKind::Namespace(
@@ -2809,7 +2809,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         let end = parser.previous_end();
         let block = parser.alloc(Block {
             stmts,
-            span: Span::new(brace_start, end),
+            span: Span::new(brace_start, end.max(brace_start)),
         });
         Stmt {
             kind: StmtKind::Namespace(

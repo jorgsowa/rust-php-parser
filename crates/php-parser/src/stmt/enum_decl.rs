@@ -457,7 +457,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                 name,
                 EnumBody {
                     members,
-                    span: Span::new(brace_start, end),
+                    span: Span::new(brace_start, end.max(brace_start)),
                 },
             );
             built.scalar_type = scalar_type;

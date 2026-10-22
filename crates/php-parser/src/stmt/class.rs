@@ -155,7 +155,7 @@ pub(super) fn parse_class<'arena, 'src>(
                 Some(name),
                 ClassBody {
                     members,
-                    span: Span::new(brace_start, end),
+                    span: Span::new(brace_start, end.max(brace_start)),
                 },
             );
             built.modifiers = modifiers;
@@ -2397,7 +2397,7 @@ pub(super) fn parse_interface<'arena, 'src>(
                 name,
                 ClassBody {
                     members,
-                    span: Span::new(brace_start, end),
+                    span: Span::new(brace_start, end.max(brace_start)),
                 },
             );
             built.extends = extends;
@@ -2456,7 +2456,7 @@ pub(super) fn parse_trait<'arena, 'src>(
                 name,
                 ClassBody {
                     members,
-                    span: Span::new(brace_start, end),
+                    span: Span::new(brace_start, end.max(brace_start)),
                 },
             );
             built.attributes = attributes;
