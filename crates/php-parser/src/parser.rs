@@ -2389,7 +2389,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     self.alloc_vec()
                 };
 
-                let span = Span::new(attr_start, self.previous_end());
+                let span = self.span_from(attr_start);
                 attributes.push({
                     let mut built = Attribute::new(self.arena, name, span);
                     built.args = args;
