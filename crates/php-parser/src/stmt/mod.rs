@@ -1556,13 +1556,13 @@ pub fn parse_param_list<'arena, 'src>(
                     // hint (`private (A&B)|null $x`) by requiring the literal token `set`
                     // inside the parens.
                     if parser.set_visibility_follows(parser.current_span().end) {
-                        let span = Span::new(param_start, parser.previous_end());
+                        let span = Span::new(param_start, parser.current_span().end);
                         parser.require_version(PhpVersion::Php84, "asymmetric visibility", span);
                         if set_visibility.is_some() {
                             parser.forbid(
                                 ForbiddenRule::MultipleSetVisibilityModifiers,
                                 "cannot use multiple set-visibility modifiers",
-                                Span::new(param_start, parser.previous_end()),
+                                span,
                             );
                         }
                         parser.advance(); // consume visibility keyword
