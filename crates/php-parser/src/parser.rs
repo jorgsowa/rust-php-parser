@@ -2431,7 +2431,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             exprs.push(expr::parse_expr(self));
         }
         self.expect_semicolon("short echo tag");
-        let span = Span::new(start, self.previous_end());
+        let span = self.span_from(start);
         Some(Stmt {
             kind: StmtKind::Echo(exprs),
             span,
