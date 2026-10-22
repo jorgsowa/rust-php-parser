@@ -1460,6 +1460,10 @@ fn parse_class_const_member<'arena, 'src>(
             span: parser.current_span(),
         });
     }
+    if mods.is_final {
+        let span = Span::new(member_start, parser.previous_end());
+        parser.require_version(PhpVersion::Php81, "final class constants", span);
+    }
     parser.advance(); // consume `const`
 
     // Check for typed constant: if what follows looks like a type hint
