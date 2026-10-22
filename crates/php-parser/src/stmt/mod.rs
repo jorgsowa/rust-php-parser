@@ -595,7 +595,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 // PHP 7.4 reads `#[` as a comment, so the attribute is only a version gate there.
                 if items.len() > 1 && parser.version >= PhpVersion::Php80 {
                     parser.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::AttributesOnMultipleConstants,
                         "Cannot apply attributes to multiple constants at once",
                         stmt.span,
                     );
@@ -1092,7 +1092,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     let (key, value, by_ref) = if parser.eat(TokenKind::FatArrow).is_some() {
         if let Some(amp) = first_ref {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::ReferenceKey,
                 "Key element cannot be a reference",
                 amp.span.merge(first.span),
             );
@@ -1409,11 +1409,11 @@ pub(crate) fn check_returns_against_type<'arena, 'src>(
                 StmtKind::Return(value) => {
                     let (rule, message) = match (rule, value) {
                         (ReturnRule::Void, Some(_)) => (
-                            ForbiddenRule::Other,
+                            ForbiddenRule::VoidReturnValue,
                             "A void function must not return a value".into(),
                         ),
                         (ReturnRule::Never, _) => (
-                            ForbiddenRule::Other,
+                            ForbiddenRule::NeverReturn,
                             "A never-returning function must not return".into(),
                         ),
                         (ReturnRule::Value(message), None) => {
@@ -1465,9 +1465,12 @@ fn check_param_name(
     earlier: &[Param<'_, '_>],
 ) {
     let (rule, message): (_, std::borrow::Cow<'static, str>) = match name.as_str() {
-        Some("this") => (ForbiddenRule::Other, "Cannot use $this as parameter".into()),
+        Some("this") => (
+            ForbiddenRule::ThisAsDeclaredVariable,
+            "Cannot use $this as parameter".into(),
+        ),
         Some(n) if expr::is_superglobal(n) => (
-            ForbiddenRule::Other,
+            ForbiddenRule::SuperglobalAsParameter,
             format!("Cannot re-assign auto-global variable {n}").into(),
         ),
         Some(n) if earlier.iter().any(|p| p.name.as_str() == Some(n)) => (
@@ -1716,7 +1719,7 @@ pub fn parse_param_list<'arena, 'src>(
         // "Variadic parameter cannot have a default value".
         if variadic && default.is_some() {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::VariadicParameterDefault,
                 "Variadic parameter cannot have a default value",
                 Span::new(param_start, parser.previous_end()),
             );
@@ -1835,7 +1838,7 @@ pub fn parse_param_list<'arena, 'src>(
         // another parameter after it is an error.
         if variadic && !parser.check(TokenKind::RightParen) {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::VariadicParameterNotLast,
                 "Only the last parameter can be variadic",
                 parser.current_span(),
             );
@@ -1950,7 +1953,7 @@ fn validate_break_continue<'arena, 'src>(
             // Implicit level 1
             if loop_depth == 0 {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::BreakOutOfLoop,
                     format!("Cannot '{}' 1 level", kw),
                     span,
                 );
@@ -1969,7 +1972,7 @@ fn validate_break_continue<'arena, 'src>(
                 ExprKind::Error => return,
                 _ => {
                     parser.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::InvalidBreakOperand,
                         format!("'{kw}' operator with non-integer operand is no longer supported"),
                         span,
                     );
@@ -1978,7 +1981,7 @@ fn validate_break_continue<'arena, 'src>(
             };
             if n <= 0 {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::InvalidBreakOperand,
                     format!("'{}' operator accepts only positive integers", kw),
                     span,
                 );
@@ -1991,7 +1994,7 @@ fn validate_break_continue<'arena, 'src>(
                     format!("{} levels", n)
                 };
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::BreakOutOfLoop,
                     format!("Cannot '{}' {}", kw, levels),
                     span,
                 );
@@ -2003,7 +2006,7 @@ fn validate_break_continue<'arena, 'src>(
     if let Some(finally_loop_depth) = parser.finally_loop_depth {
         if levels > loop_depth - finally_loop_depth {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::JumpAcrossFinally,
                 "jump out of a finally block is disallowed",
                 span,
             );
@@ -2098,7 +2101,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
             // PHP rejects "Switch statements may only contain one default clause".
             if seen_default_span.is_some() {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::DuplicateSwitchDefault,
                     "Switch statements may only contain one default clause",
                     default_tok.span,
                 );
@@ -2208,14 +2211,20 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             types.push(parser.parse_name());
         }
         for name in types.iter() {
-            let message = if let Some(text) = fully_qualified_class_keyword(name) {
-                format!("'\\{text}' is an invalid class name")
+            let (rule, message) = if let Some(text) = fully_qualified_class_keyword(name) {
+                (
+                    ForbiddenRule::QualifiedClassKeyword,
+                    format!("'\\{text}' is an invalid class name"),
+                )
             } else if matches!(name, Name::Simple { value, .. } if class_keyword(value).is_some()) {
-                "Bad class name in the catch statement".to_string()
+                (
+                    ForbiddenRule::ClassKeywordInCatch,
+                    "Bad class name in the catch statement".to_string(),
+                )
             } else {
                 continue;
             };
-            parser.forbid(ForbiddenRule::Other, message, name.span());
+            parser.forbid(rule, message, name.span());
         }
 
         let var = if parser.check(TokenKind::Variable) {
@@ -2461,7 +2470,7 @@ pub(crate) fn check_gotos<'arena, 'src>(
     collector.walk(stmts);
     for (name, span) in collector.duplicates {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::DuplicateLabel,
             format!("Label '{name}' already defined"),
             span,
         );
@@ -2469,7 +2478,7 @@ pub(crate) fn check_gotos<'arena, 'src>(
     for goto in &collector.gotos {
         let Some(label) = collector.labels.iter().find(|l| l.name == goto.name) else {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::UndefinedGotoLabel,
                 format!("'goto' to undefined label '{}'", goto.name),
                 goto.span,
             );
@@ -2482,7 +2491,7 @@ pub(crate) fn check_gotos<'arena, 'src>(
             .find(|f| matches!(f, Frame::LoopOrSwitch(_)));
         if label_loop.is_some_and(|f| !goto.frames.contains(f)) {
             parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::GotoIntoLoop,
                 "'goto' into loop or switch statement is disallowed",
                 goto.span,
             );
@@ -2504,7 +2513,7 @@ pub(crate) fn check_gotos<'arena, 'src>(
             (_, Some(_)) => "jump out of a finally block is disallowed",
             _ => continue,
         };
-        parser.forbid(ForbiddenRule::Other, message, goto.span);
+        parser.forbid(ForbiddenRule::JumpAcrossFinally, message, goto.span);
     }
 }
 
@@ -2600,36 +2609,54 @@ fn check_declare_directive(
         }
         _ => false,
     };
-    let message = if name.eq_ignore_ascii_case("encoding") {
+    let error = if name.eq_ignore_ascii_case("encoding") {
         // Checked while parsing, before the checks of the other directives.
         if !is_literal {
-            Some("Encoding must be a literal".to_string())
+            Some((
+                ForbiddenRule::NonLiteralDeclareValue,
+                "Encoding must be a literal".to_string(),
+            ))
         } else {
             // Unlike `strict_types`, an empty statement before it is not allowed.
             (!first_stmt || parser.top_level_nop_seen).then(|| {
-                "Encoding declaration pragma must be the very first statement in the script"
-                    .to_string()
+                (
+                    ForbiddenRule::DeclareNotFirstStatement,
+                    "Encoding declaration pragma must be the very first statement in the script"
+                        .to_string(),
+                )
             })
         }
     } else if !is_literal {
-        Some(format!("declare({name}) value must be a literal"))
+        Some((
+            ForbiddenRule::NonLiteralDeclareValue,
+            format!("declare({name}) value must be a literal"),
+        ))
     } else if name.eq_ignore_ascii_case("strict_types") {
         // Before 8.5 an empty statement before it is not allowed either.
         let nop_before = parser.top_level_nop_seen && parser.version < PhpVersion::Php85;
         if !first_stmt || nop_before {
-            Some("strict_types declaration must be the very first statement in the script".into())
+            Some((
+                ForbiddenRule::DeclareNotFirstStatement,
+                "strict_types declaration must be the very first statement in the script".into(),
+            ))
         } else if has_body {
-            Some("strict_types declaration must not use block mode".into())
+            Some((
+                ForbiddenRule::InvalidStrictTypes,
+                "strict_types declaration must not use block mode".into(),
+            ))
         } else if !matches!(value.kind, ExprKind::Int(0 | 1)) {
-            Some("strict_types declaration must have 0 or 1 as its value".into())
+            Some((
+                ForbiddenRule::InvalidStrictTypes,
+                "strict_types declaration must have 0 or 1 as its value".into(),
+            ))
         } else {
             None
         }
     } else {
         None
     };
-    if let Some(message) = message {
-        parser.forbid(ForbiddenRule::Other, message, span);
+    if let Some((rule, message)) = error {
+        parser.forbid(rule, message, span);
     }
 }
 
@@ -2691,7 +2718,7 @@ fn check_global_variable(parser: &mut Parser<'_, '_>, e: &Expr<'_, '_>) {
         });
     } else if matches!(&e.kind, ExprKind::Variable(n) if n.as_str() == "this") {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::ThisAsDeclaredVariable,
             "Cannot use $this as global variable",
             e.span,
         );
@@ -2978,7 +3005,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             if class::is_reserved_class_name(alias, parser.version) {
                 let name = item.name.parts_slice().join("\\");
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::SpecialClassNameAlias,
                     format!(
                         "Cannot use {name} as {alias} because '{alias}' is a special class name"
                     ),
@@ -3144,14 +3171,14 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             .unwrap_or(parser.missing_ident());
         match name.as_str() {
             Some("this") => parser.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::ThisAsDeclaredVariable,
                 "Cannot use $this as static variable",
                 name.span,
             ),
             // Before 8.3 a later declaration replaces an earlier one.
             Some(n) if parser.static_vars.contains(&n) && parser.version >= PhpVersion::Php83 => {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::DuplicateStaticVariable,
                     format!("Duplicate declaration of static variable ${n}"),
                     name.span,
                 )
@@ -3668,13 +3695,25 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
     for expr in exprs {
         let _ = finder.visit_expr(expr);
     }
-    for (spans, message) in [
-        (finder.read, "cannot use [] for reading"),
-        (finder.unset, "cannot use [] for unsetting"),
-        (finder.globals_append, "Cannot append to $GLOBALS"),
+    for (spans, rule, message) in [
+        (
+            finder.read,
+            ForbiddenRule::AppendOutsideWrite,
+            "cannot use [] for reading",
+        ),
+        (
+            finder.unset,
+            ForbiddenRule::AppendOutsideWrite,
+            "cannot use [] for unsetting",
+        ),
+        (
+            finder.globals_append,
+            ForbiddenRule::InvalidGlobalsWrite,
+            "Cannot append to $GLOBALS",
+        ),
     ] {
         for span in spans {
-            parser.forbid(ForbiddenRule::Other, message, span);
+            parser.forbid(rule, message, span);
         }
     }
 }
@@ -3992,7 +4031,8 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
                 ),
                 Some(_) => return true,
             };
-            self.errors.push((ForbiddenRule::Other, message, span));
+            self.errors
+                .push((ForbiddenRule::InvalidParentHookCall, message, span));
             true
         }
 
@@ -4044,7 +4084,7 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
                 // `\self::class` resolves like `self::class`.
                 if !class_name_fetch {
                     self.errors.push((
-                        ForbiddenRule::Other,
+                        ForbiddenRule::QualifiedClassKeyword,
                         format!("'\\{text}' is an invalid class name"),
                         name.span(),
                     ));
@@ -4060,7 +4100,7 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
                 self.keyword(keyword, name.span());
                 if keyword == "static" && self.scope.const_expr && self.errors.len() == reported {
                     self.errors.push((
-                        ForbiddenRule::Other,
+                        ForbiddenRule::StaticClassInConstantExpression,
                         "static::class cannot be used for compile-time class name resolution"
                             .to_string(),
                         name.span(),

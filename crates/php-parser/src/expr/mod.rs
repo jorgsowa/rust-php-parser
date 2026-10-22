@@ -181,11 +181,12 @@ pub(crate) fn check_special_variable_write(
             ("this", WriteKind::Assign) => (ForbiddenRule::ReassignThis, "Cannot re-assign $this"),
             ("this", WriteKind::Unset) => (ForbiddenRule::Other, "Cannot unset $this"),
             ("GLOBALS", _) if parser.version < PhpVersion::Php81 => return,
-            ("GLOBALS", WriteKind::Reference) => {
-                (ForbiddenRule::Other, "Cannot acquire reference to $GLOBALS")
-            }
+            ("GLOBALS", WriteKind::Reference) => (
+                ForbiddenRule::InvalidGlobalsWrite,
+                "Cannot acquire reference to $GLOBALS",
+            ),
             ("GLOBALS", _) => (
-                ForbiddenRule::Other,
+                ForbiddenRule::InvalidGlobalsWrite,
                 "$GLOBALS can only be modified using the $GLOBALS[$name] = $value syntax",
             ),
             _ => return,

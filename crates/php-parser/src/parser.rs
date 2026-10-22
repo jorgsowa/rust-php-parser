@@ -44,10 +44,10 @@ fn lex_error_to_parse_error(e: LexerError) -> ParseError {
         ParseError::UnterminatedString { span: e.span }
     } else {
         ParseError::Forbidden {
-            rule: if e.kind == LexerErrorKind::InvalidNumericLiteral {
-                ForbiddenRule::InvalidNumericLiteral
-            } else {
-                ForbiddenRule::Other
+            rule: match e.kind {
+                LexerErrorKind::InvalidNumericLiteral => ForbiddenRule::InvalidNumericLiteral,
+                LexerErrorKind::UnterminatedComment => ForbiddenRule::UnterminatedComment,
+                _ => ForbiddenRule::Other,
             },
             message: e.message.into(),
             span: e.span,
@@ -1296,7 +1296,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     pub(crate) fn check_class_nesting(&mut self, name_span: Span) {
         if self.class_scope.is_some() {
             self.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::NestedClassDeclaration,
                 "Class declarations may not be nested",
                 name_span,
             );
@@ -1477,26 +1477,34 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 let TypeHintKind::Keyword(builtin, span) = &inner.kind else {
                     return;
                 };
-                let message = match builtin {
+                let (rule, message) = match builtin {
                     // Before 8.0 `mixed` is a class name; its version error is enough.
                     BuiltinType::Mixed if self.version < PhpVersion::Php80 => return,
-                    BuiltinType::Mixed => {
-                        "Type mixed cannot be marked as nullable since mixed already includes null"
-                    }
-                    BuiltinType::Null => "null cannot be marked as nullable",
+                    BuiltinType::Mixed => (
+                        ForbiddenRule::InvalidNullableType,
+                        "Type mixed cannot be marked as nullable since mixed already includes null",
+                    ),
+                    BuiltinType::Null => (
+                        ForbiddenRule::InvalidNullableType,
+                        "null cannot be marked as nullable",
+                    ),
                     _ => match standalone_type_message(*builtin) {
-                        Some(message) => message,
+                        Some(message) => (ForbiddenRule::StandaloneTypeInComposite, message),
                         None => return,
                     },
                 };
-                self.forbid(ForbiddenRule::Other, message, *span);
+                self.forbid(rule, message, *span);
             }
             TypeHintKind::Union(types) => {
                 for ty in types.iter() {
                     match &ty.kind {
                         TypeHintKind::Keyword(builtin, span) => {
                             if let Some(message) = standalone_type_message(*builtin) {
-                                self.forbid(ForbiddenRule::Other, message, *span);
+                                self.forbid(
+                                    ForbiddenRule::StandaloneTypeInComposite,
+                                    message,
+                                    *span,
+                                );
                             }
                         }
                         TypeHintKind::Intersection(members) => {
@@ -1538,7 +1546,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 _ => self.type_display(ty),
             };
             let message = format!("Type {shown} cannot be part of an intersection type");
-            self.forbid(ForbiddenRule::Other, message, *span);
+            self.forbid(ForbiddenRule::BuiltinTypeInIntersection, message, *span);
         }
     }
 
@@ -1567,7 +1575,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 "Type {} contains both object and a class type, which is redundant",
                 self.type_display(type_hint)
             );
-            self.forbid(ForbiddenRule::Other, message, type_hint.span);
+            self.forbid(ForbiddenRule::RedundantType, message, type_hint.span);
         }
     }
 
@@ -1621,7 +1629,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         self.type_display(smaller)
                     )
                 };
-                self.forbid(ForbiddenRule::Other, message, ty.span);
+                self.forbid(ForbiddenRule::RedundantType, message, ty.span);
                 break;
             }
         }
@@ -1635,7 +1643,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             return false;
         };
         self.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::InvalidParameterType,
             format!("{} cannot be used as a parameter type", builtin.as_str()),
             *span,
         );
@@ -1670,7 +1678,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             "{subject} {class}{member} cannot have type {}",
             self.type_display(type_hint)
         );
-        self.forbid(ForbiddenRule::Other, message, type_hint.span);
+        self.forbid(ForbiddenRule::InvalidMemberType, message, type_hint.span);
     }
 
     /// Report a builtin type or class keyword written with a namespace, as in `\int`, `\self`,
@@ -1680,7 +1688,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             TypeHintKind::Named(name @ Name::Complex { parts, span, .. }) => {
                 if let Some(text) = crate::stmt::fully_qualified_class_keyword(name) {
                     self.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::QualifiedClassKeyword,
                         format!("'\\{text}' is an invalid class name"),
                         *span,
                     );
@@ -1694,7 +1702,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     && last.eq_ignore_ascii_case("static");
                 if unqualified_static {
                     self.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::QualifiedBuiltinType,
                         "Type declaration 'static' must be unqualified",
                         *span,
                     );
@@ -1726,19 +1734,25 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     || matches!(last.as_str(), "self" | "parent" | "static")
                     || (matches!(last.as_str(), "array" | "callable")
                         && self.version >= PhpVersion::Php85);
-                let message = if parts.len() == 1 && builtin {
-                    format!("Type declaration '{last}' must be unqualified")
+                let (rule, message) = if parts.len() == 1 && builtin {
+                    (
+                        ForbiddenRule::QualifiedBuiltinType,
+                        format!("Type declaration '{last}' must be unqualified"),
+                    )
                 } else if reserved {
                     let mut resolved = parts.join("\\");
                     let qualified = name.kind() != NameKind::FullyQualified;
                     if let (true, Some(namespace)) = (qualified, &self.namespace) {
                         resolved = format!("{namespace}\\{resolved}");
                     }
-                    format!("Cannot use \"{resolved}\" as a type name as it is reserved")
+                    (
+                        ForbiddenRule::ReservedTypeName,
+                        format!("Cannot use \"{resolved}\" as a type name as it is reserved"),
+                    )
                 } else {
                     return;
                 };
-                self.forbid(ForbiddenRule::Other, message, *span);
+                self.forbid(rule, message, *span);
             }
             TypeHintKind::Nullable(inner) => self.check_qualified_type_names(inner),
             TypeHintKind::Union(types) | TypeHintKind::Intersection(types) => {
@@ -1769,7 +1783,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             if !seen.insert(key.clone()) || covered {
                 let text = &self.source[ty.span.start as usize..ty.span.end as usize];
                 self.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::DuplicateType,
                     format!("Duplicate type '{text}' in {kind} type"),
                     ty.span,
                 );
@@ -1828,7 +1842,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 .any(|t| matches!(t.kind, TypeHintKind::Keyword(BuiltinType::False, _)));
             if has_true && has_false {
                 self.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::RedundantType,
                     "Type contains both true and false, bool must be used instead",
                     span,
                 );
@@ -2324,7 +2338,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                             for arg in args.iter() {
                                 if arg.is_spread() {
                                     self.forbid(
-                                        ForbiddenRule::Other,
+                                        ForbiddenRule::AttributeArgumentUnpacking,
                                         "Cannot use unpacking in attribute argument list",
                                         arg.span,
                                     );
@@ -2337,7 +2351,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         crate::expr::ArgListResult::CallableMarker => {
                             // PHP: "Cannot create Closure as attribute argument".
                             self.forbid(
-                                ForbiddenRule::Other,
+                                ForbiddenRule::AttributeArgumentClosure,
                                 "Cannot create Closure as attribute argument",
                                 Span::new(paren_start, self.previous_end()),
                             );
@@ -2566,13 +2580,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 };
                 if let Some((prev_kind, prev_span)) = first_ns {
                     if prev_kind != kind {
-                        self.forbid(ForbiddenRule::Other, "Cannot mix bracketed namespace declarations with unbracketed namespace declarations", stmt.span);
+                        self.forbid(ForbiddenRule::MixedNamespaceStyles, "Cannot mix bracketed namespace declarations with unbracketed namespace declarations", stmt.span);
                         let _ = prev_span;
                     }
                 } else {
                     first_ns = Some((kind, stmt.span));
                     if let Some(noncode_span) = saw_non_ns_before_first_ns {
-                        self.forbid(ForbiddenRule::Other, "Namespace declaration statement has to be the very first statement or after any declare call in the script", noncode_span);
+                        self.forbid(ForbiddenRule::NamespaceNotFirst, "Namespace declaration statement has to be the very first statement or after any declare call in the script", noncode_span);
                     }
                 }
             } else if !is_skippable {
@@ -2589,7 +2603,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
         if let Some(span) = saw_code_after_braced {
             self.forbid(
-                ForbiddenRule::Other,
+                ForbiddenRule::CodeOutsideNamespace,
                 "No code may exist outside of namespace {}",
                 span,
             );
@@ -2602,7 +2616,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     for s in inner.stmts.iter() {
                         if matches!(s.kind, StmtKind::Namespace(_)) {
                             self.forbid(
-                                ForbiddenRule::Other,
+                                ForbiddenRule::NestedNamespace,
                                 "Namespace declarations cannot be nested",
                                 s.span,
                             );
@@ -2665,7 +2679,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         _ => "",
                     };
                     self.forbid(
-                        ForbiddenRule::Other,
+                        ForbiddenRule::UseNameConflict,
                         format!(
                             "Cannot use {prefix}{} as {alias} because the name is already in use",
                             parts.join("\\")

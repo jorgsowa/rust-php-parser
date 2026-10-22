@@ -1722,7 +1722,7 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
         stmt::check_generator_return_type(parser, rt);
     } else if return_type.as_ref().is_some_and(stmt::is_void_type) {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::VoidReturnValue,
             "A void function must not return a value",
             body.span,
         );
@@ -1730,7 +1730,7 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
     // PHP 8.1 treats the arrow body as a `return` even when it is a `throw`.
     if parser.version < PhpVersion::Php82 && return_type.as_ref().is_some_and(stmt::is_never_type) {
         parser.forbid(
-            ForbiddenRule::Other,
+            ForbiddenRule::NeverReturn,
             "A never-returning function must not return",
             body.span,
         );
@@ -1777,7 +1777,7 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
         let conditions = if let Some(tok) = parser.eat(TokenKind::Default) {
             if seen_default {
                 parser.forbid(
-                    ForbiddenRule::Other,
+                    ForbiddenRule::DuplicateMatchDefault,
                     "match expression may only contain one default arm",
                     tok.span,
                 );

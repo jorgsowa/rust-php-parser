@@ -395,6 +395,94 @@ pub enum ForbiddenRule {
     PureEnumCaseValue,
     /// A trait alias is `static` or `abstract`.
     InvalidTraitAliasModifier,
+    /// A `/*` comment is never closed.
+    UnterminatedComment,
+    /// A named class-like is declared inside a class member.
+    NestedClassDeclaration,
+    /// Braced and unbraced namespace declarations are mixed.
+    MixedNamespaceStyles,
+    /// Code other than `declare` precedes the first namespace declaration.
+    NamespaceNotFirst,
+    /// Code follows a braced namespace declaration.
+    CodeOutsideNamespace,
+    /// A namespace declaration is nested.
+    NestedNamespace,
+    /// A `use` import reuses a name already imported.
+    UseNameConflict,
+    /// A `use` import is aliased to a reserved class name.
+    SpecialClassNameAlias,
+    /// `strict_types` or `encoding` is not declared first.
+    DeclareNotFirstStatement,
+    /// A `declare` directive's value is not a literal.
+    NonLiteralDeclareValue,
+    /// `strict_types` uses block mode or a value other than 0 or 1.
+    InvalidStrictTypes,
+    /// Attributes apply to a `const` statement declaring several constants.
+    AttributesOnMultipleConstants,
+    /// An attribute argument list unpacks with `...`.
+    AttributeArgumentUnpacking,
+    /// An attribute argument list is a first-class callable `(...)`.
+    AttributeArgumentClosure,
+    /// A `void` function returns a value.
+    VoidReturnValue,
+    /// A `never` function returns.
+    NeverReturn,
+    /// A variadic parameter has a default value.
+    VariadicParameterDefault,
+    /// A parameter follows a variadic one.
+    VariadicParameterNotLast,
+    /// `$this` is declared as a parameter, global or static variable.
+    ThisAsDeclaredVariable,
+    /// A superglobal is used as a parameter name.
+    SuperglobalAsParameter,
+    /// A static variable is declared twice in one function.
+    DuplicateStaticVariable,
+    /// `break` or `continue` names more loop levels than enclose it.
+    BreakOutOfLoop,
+    /// `break` or `continue` has an operand that is not a positive integer literal.
+    InvalidBreakOperand,
+    /// `break`, `continue` or `goto` jumps into or out of a `finally` block.
+    JumpAcrossFinally,
+    /// A `goto` label is defined twice.
+    DuplicateLabel,
+    /// `goto` names an undefined label.
+    UndefinedGotoLabel,
+    /// `goto` jumps into a loop or `switch`.
+    GotoIntoLoop,
+    /// A `switch` has more than one `default`.
+    DuplicateSwitchDefault,
+    /// A `match` has more than one `default` arm.
+    DuplicateMatchDefault,
+    /// A `foreach` key is taken by reference.
+    ReferenceKey,
+    /// `catch` names `self`, `parent` or `static`.
+    ClassKeywordInCatch,
+    /// `parent::$x::get()` or `::set()` is called outside the matching hook.
+    InvalidParentHookCall,
+    /// `static::class` is used in a constant expression.
+    StaticClassInConstantExpression,
+    /// `$a[]` is read or unset.
+    AppendOutsideWrite,
+    /// `$GLOBALS` is written to as a whole, appended to or referenced.
+    InvalidGlobalsWrite,
+    /// `mixed` or `null` is marked nullable.
+    InvalidNullableType,
+    /// `void`, `never` or `mixed` is part of a nullable or union type.
+    StandaloneTypeInComposite,
+    /// A builtin type is part of an intersection type.
+    BuiltinTypeInIntersection,
+    /// A type is redundant with another in the same declaration.
+    RedundantType,
+    /// A type appears twice in a union or intersection type.
+    DuplicateType,
+    /// A parameter is typed `void` or `never`.
+    InvalidParameterType,
+    /// A property or constant has a type it may not have, e.g. `callable`.
+    InvalidMemberType,
+    /// A builtin type is written with a namespace, e.g. `\int`.
+    QualifiedBuiltinType,
+    /// A qualified type name ends in a reserved name.
+    ReservedTypeName,
     /// Not yet classified.
     Other,
 }
@@ -538,6 +626,50 @@ impl ForbiddenRule {
             ForbiddenRule::MissingEnumCaseValue => "missing-enum-case-value",
             ForbiddenRule::PureEnumCaseValue => "pure-enum-case-value",
             ForbiddenRule::InvalidTraitAliasModifier => "invalid-trait-alias-modifier",
+            ForbiddenRule::UnterminatedComment => "unterminated-comment",
+            ForbiddenRule::NestedClassDeclaration => "nested-class-declaration",
+            ForbiddenRule::MixedNamespaceStyles => "mixed-namespace-styles",
+            ForbiddenRule::NamespaceNotFirst => "namespace-not-first",
+            ForbiddenRule::CodeOutsideNamespace => "code-outside-namespace",
+            ForbiddenRule::NestedNamespace => "nested-namespace",
+            ForbiddenRule::UseNameConflict => "use-name-conflict",
+            ForbiddenRule::SpecialClassNameAlias => "special-class-name-alias",
+            ForbiddenRule::DeclareNotFirstStatement => "declare-not-first-statement",
+            ForbiddenRule::NonLiteralDeclareValue => "non-literal-declare-value",
+            ForbiddenRule::InvalidStrictTypes => "invalid-strict-types",
+            ForbiddenRule::AttributesOnMultipleConstants => "attributes-on-multiple-constants",
+            ForbiddenRule::AttributeArgumentUnpacking => "attribute-argument-unpacking",
+            ForbiddenRule::AttributeArgumentClosure => "attribute-argument-closure",
+            ForbiddenRule::VoidReturnValue => "void-return-value",
+            ForbiddenRule::NeverReturn => "never-return",
+            ForbiddenRule::VariadicParameterDefault => "variadic-parameter-default",
+            ForbiddenRule::VariadicParameterNotLast => "variadic-parameter-not-last",
+            ForbiddenRule::ThisAsDeclaredVariable => "this-as-declared-variable",
+            ForbiddenRule::SuperglobalAsParameter => "superglobal-as-parameter",
+            ForbiddenRule::DuplicateStaticVariable => "duplicate-static-variable",
+            ForbiddenRule::BreakOutOfLoop => "break-out-of-loop",
+            ForbiddenRule::InvalidBreakOperand => "invalid-break-operand",
+            ForbiddenRule::JumpAcrossFinally => "jump-across-finally",
+            ForbiddenRule::DuplicateLabel => "duplicate-label",
+            ForbiddenRule::UndefinedGotoLabel => "undefined-goto-label",
+            ForbiddenRule::GotoIntoLoop => "goto-into-loop",
+            ForbiddenRule::DuplicateSwitchDefault => "duplicate-switch-default",
+            ForbiddenRule::DuplicateMatchDefault => "duplicate-match-default",
+            ForbiddenRule::ReferenceKey => "reference-key",
+            ForbiddenRule::ClassKeywordInCatch => "class-keyword-in-catch",
+            ForbiddenRule::InvalidParentHookCall => "invalid-parent-hook-call",
+            ForbiddenRule::StaticClassInConstantExpression => "static-class-in-constant-expression",
+            ForbiddenRule::AppendOutsideWrite => "append-outside-write",
+            ForbiddenRule::InvalidGlobalsWrite => "invalid-globals-write",
+            ForbiddenRule::InvalidNullableType => "invalid-nullable-type",
+            ForbiddenRule::StandaloneTypeInComposite => "standalone-type-in-composite",
+            ForbiddenRule::BuiltinTypeInIntersection => "builtin-type-in-intersection",
+            ForbiddenRule::RedundantType => "redundant-type",
+            ForbiddenRule::DuplicateType => "duplicate-type",
+            ForbiddenRule::InvalidParameterType => "invalid-parameter-type",
+            ForbiddenRule::InvalidMemberType => "invalid-member-type",
+            ForbiddenRule::QualifiedBuiltinType => "qualified-builtin-type",
+            ForbiddenRule::ReservedTypeName => "reserved-type-name",
             ForbiddenRule::Other => "other",
         }
     }
@@ -546,7 +678,8 @@ impl ForbiddenRule {
     pub(crate) fn raised_by_php_parser(self) -> bool {
         matches!(
             self,
-            ForbiddenRule::UnclosedInterpolation
+            ForbiddenRule::UnterminatedComment
+                | ForbiddenRule::UnclosedInterpolation
                 | ForbiddenRule::EmptyInterpolationIndex
                 | ForbiddenRule::EmptyInterpolationVariableName
                 | ForbiddenRule::UnclosedInterpolationIndex
@@ -599,6 +732,7 @@ impl ForbiddenRule {
 #[cfg(test)]
 mod tests {
     use super::{ForbiddenRule, ParseError};
+    use crate::PhpVersion;
 
     const RULES: &[ForbiddenRule] = &[
         ForbiddenRule::ClassKeywordOutsideClass,
@@ -716,6 +850,50 @@ mod tests {
         ForbiddenRule::MissingEnumCaseValue,
         ForbiddenRule::PureEnumCaseValue,
         ForbiddenRule::InvalidTraitAliasModifier,
+        ForbiddenRule::UnterminatedComment,
+        ForbiddenRule::NestedClassDeclaration,
+        ForbiddenRule::MixedNamespaceStyles,
+        ForbiddenRule::NamespaceNotFirst,
+        ForbiddenRule::CodeOutsideNamespace,
+        ForbiddenRule::NestedNamespace,
+        ForbiddenRule::UseNameConflict,
+        ForbiddenRule::SpecialClassNameAlias,
+        ForbiddenRule::DeclareNotFirstStatement,
+        ForbiddenRule::NonLiteralDeclareValue,
+        ForbiddenRule::InvalidStrictTypes,
+        ForbiddenRule::AttributesOnMultipleConstants,
+        ForbiddenRule::AttributeArgumentUnpacking,
+        ForbiddenRule::AttributeArgumentClosure,
+        ForbiddenRule::VoidReturnValue,
+        ForbiddenRule::NeverReturn,
+        ForbiddenRule::VariadicParameterDefault,
+        ForbiddenRule::VariadicParameterNotLast,
+        ForbiddenRule::ThisAsDeclaredVariable,
+        ForbiddenRule::SuperglobalAsParameter,
+        ForbiddenRule::DuplicateStaticVariable,
+        ForbiddenRule::BreakOutOfLoop,
+        ForbiddenRule::InvalidBreakOperand,
+        ForbiddenRule::JumpAcrossFinally,
+        ForbiddenRule::DuplicateLabel,
+        ForbiddenRule::UndefinedGotoLabel,
+        ForbiddenRule::GotoIntoLoop,
+        ForbiddenRule::DuplicateSwitchDefault,
+        ForbiddenRule::DuplicateMatchDefault,
+        ForbiddenRule::ReferenceKey,
+        ForbiddenRule::ClassKeywordInCatch,
+        ForbiddenRule::InvalidParentHookCall,
+        ForbiddenRule::StaticClassInConstantExpression,
+        ForbiddenRule::AppendOutsideWrite,
+        ForbiddenRule::InvalidGlobalsWrite,
+        ForbiddenRule::InvalidNullableType,
+        ForbiddenRule::StandaloneTypeInComposite,
+        ForbiddenRule::BuiltinTypeInIntersection,
+        ForbiddenRule::RedundantType,
+        ForbiddenRule::DuplicateType,
+        ForbiddenRule::InvalidParameterType,
+        ForbiddenRule::InvalidMemberType,
+        ForbiddenRule::QualifiedBuiltinType,
+        ForbiddenRule::ReservedTypeName,
     ];
 
     /// `(source, reported span text)` for each site that reports `rule`.
@@ -817,7 +995,7 @@ mod tests {
             ForbiddenRule::StaticStandaloneExpression => &[("<?php static;", "static"),],
             ForbiddenRule::ReferenceToParenthesized => &[("<?php $x = &($y);", "($y)"),],
             ForbiddenRule::ReferenceToNonReferenceable => &[("<?php $x = &1;", "1"), ("<?php [&$a] = 1;", "1"),],
-            ForbiddenRule::QualifiedClassKeyword => &[("<?php class A extends \\self {}", "\\self"),],
+            ForbiddenRule::QualifiedClassKeyword => &[("<?php try {} catch (\\self $e) {}", "\\self"), ("<?php function f() { return \\self::X; }", "\\self"), ("<?php function f(\\self $x) {}", "\\self"), ("<?php class A extends \\self {}", "\\self"),],
             ForbiddenRule::ReservedClassReference => &[("<?php class A extends self {}", "self"),],
             ForbiddenRule::ReservedEnumName => &[("<?php enum int {}", "int"),],
             ForbiddenRule::TraitInInterface => &[("<?php interface I { use T; }", "use T;"),],
@@ -872,6 +1050,50 @@ mod tests {
             ForbiddenRule::MissingEnumCaseValue => &[("<?php enum E: int { case A; }", "A"),],
             ForbiddenRule::PureEnumCaseValue => &[("<?php enum E { case A = 1; }", "="),],
             ForbiddenRule::InvalidTraitAliasModifier => &[("<?php class A { use T { f as static g; } }", "static"),],
+            ForbiddenRule::UnterminatedComment => &[("<?php /* x", "/* x"),],
+            ForbiddenRule::NestedClassDeclaration => &[("<?php class A { function f() { class B {} } }", "B"),],
+            ForbiddenRule::MixedNamespaceStyles => &[("<?php namespace A; namespace B {}", "namespace B {}"),],
+            ForbiddenRule::NamespaceNotFirst => &[("<?php echo 1; namespace A;", "echo 1;"),],
+            ForbiddenRule::CodeOutsideNamespace => &[("<?php namespace A {} echo 1;", "echo 1;"),],
+            ForbiddenRule::NestedNamespace => &[("<?php namespace A { namespace B {} }", "namespace B {}"),],
+            ForbiddenRule::UseNameConflict => &[("<?php use A\\B; use C\\B;", "C\\B"),],
+            ForbiddenRule::SpecialClassNameAlias => &[("<?php use A as self;", "A as self"),],
+            ForbiddenRule::DeclareNotFirstStatement => &[("<?php echo 1; declare(strict_types=1);", "strict_types=1"), ("<?php echo 1; declare(encoding='UTF-8');", "encoding='UTF-8'"),],
+            ForbiddenRule::NonLiteralDeclareValue => &[("<?php declare(ticks=A);", "ticks=A"), ("<?php declare(encoding=A);", "encoding=A"),],
+            ForbiddenRule::InvalidStrictTypes => &[("<?php declare(strict_types=2);", "strict_types=2"), ("<?php declare(strict_types=1) {}", "strict_types=1"),],
+            ForbiddenRule::AttributesOnMultipleConstants => &[("<?php #[A] const X = 1, Y = 2;", "const X = 1, Y = 2;"),],
+            ForbiddenRule::AttributeArgumentUnpacking => &[("<?php #[A(...$a)] function f() {}", "...$a"),],
+            ForbiddenRule::AttributeArgumentClosure => &[("<?php #[A(...)] function f() {}", "(...)"),],
+            ForbiddenRule::VoidReturnValue => &[("<?php function f(): void { return 1; }", "return 1;"), ("<?php $f = fn(): void => 1;", "1"),],
+            ForbiddenRule::NeverReturn => &[("<?php function f(): never { return; }", "return;"),],
+            ForbiddenRule::VariadicParameterDefault => &[("<?php function f(...$a = []) {}", "...$a = []"),],
+            ForbiddenRule::VariadicParameterNotLast => &[("<?php function f(...$a, $b) {}", "$b"),],
+            ForbiddenRule::ThisAsDeclaredVariable => &[("<?php function f($this) {}", "$this"), ("<?php function f() { global $this; }", "$this"), ("<?php function f() { static $this; }", "$this"),],
+            ForbiddenRule::SuperglobalAsParameter => &[("<?php function f($_GET) {}", "$_GET"),],
+            ForbiddenRule::DuplicateStaticVariable => &[("<?php function f() { static $a; static $a; }", "$a"),],
+            ForbiddenRule::BreakOutOfLoop => &[("<?php break;", "break"), ("<?php while (1) { break 2; }", "break"),],
+            ForbiddenRule::InvalidBreakOperand => &[("<?php while (1) { break $a; }", "break"), ("<?php while (1) { break 0; }", "break"),],
+            ForbiddenRule::JumpAcrossFinally => &[("<?php while (1) { try {} finally { break; } }", "break"), ("<?php try {} finally { goto a; } a:", "goto a;"),],
+            ForbiddenRule::DuplicateLabel => &[("<?php a: a:", "a:"),],
+            ForbiddenRule::UndefinedGotoLabel => &[("<?php goto a;", "goto a;"),],
+            ForbiddenRule::GotoIntoLoop => &[("<?php goto a; while (1) { a: }", "goto a;"),],
+            ForbiddenRule::DuplicateSwitchDefault => &[("<?php switch ($x) { default: default: }", "default"),],
+            ForbiddenRule::DuplicateMatchDefault => &[("<?php match ($x) { default => 1, default => 2 };", "default"),],
+            ForbiddenRule::ReferenceKey => &[("<?php foreach ($a as &$k => $v) {}", "&$k"),],
+            ForbiddenRule::ClassKeywordInCatch => &[("<?php try {} catch (self $e) {}", "self"),],
+            ForbiddenRule::InvalidParentHookCall => &[("<?php class A extends B { function f() { parent::$x::get(); } }", "parent::$x::get()"),],
+            ForbiddenRule::StaticClassInConstantExpression => &[("<?php class A { const X = static::class; }", "static"),],
+            ForbiddenRule::AppendOutsideWrite => &[("<?php $x = $a[];", "$a[]"), ("<?php unset($a[]);", "$a[]"),],
+            ForbiddenRule::InvalidGlobalsWrite => &[("<?php $GLOBALS[] = 1;", "$GLOBALS[]"), ("<?php $GLOBALS = [];", "$GLOBALS"), ("<?php $x = &$GLOBALS;", "$GLOBALS"),],
+            ForbiddenRule::InvalidNullableType => &[("<?php function f(?mixed $x) {}", "mixed"), ("<?php function f(?null $x) {}", "null"),],
+            ForbiddenRule::StandaloneTypeInComposite => &[("<?php function f(): ?void {}", "void"), ("<?php function f(): void|int {}", "void"),],
+            ForbiddenRule::BuiltinTypeInIntersection => &[("<?php function f(int&A $x) {}", "int"),],
+            ForbiddenRule::RedundantType => &[("<?php function f(object|A $x) {}", "object|A"), ("<?php function f((A&B)|A $x) {}", "A"), ("<?php function f(true|false $x) {}", "true|false"),],
+            ForbiddenRule::DuplicateType => &[("<?php function f(int|int $x) {}", "int"),],
+            ForbiddenRule::InvalidParameterType => &[("<?php function f(void $x) {}", "void"),],
+            ForbiddenRule::InvalidMemberType => &[("<?php class A { public callable $x; }", "callable"),],
+            ForbiddenRule::QualifiedBuiltinType => &[("<?php function f(\\int $x) {}", "\\int"),],
+            ForbiddenRule::ReservedTypeName => &[("<?php function f(A\\int $x) {}", "A\\int"),],
             ForbiddenRule::Other => &[],
         }
     }
@@ -889,6 +1111,34 @@ mod tests {
                     .collect();
                 assert_eq!(spans, [text], "{rule:?} in {src:?}: {errors:?}");
             }
+        }
+    }
+
+    #[test]
+    fn version_gated_rules_report_their_span() {
+        let samples = [
+            (
+                ForbiddenRule::NeverReturn,
+                PhpVersion::Php81,
+                "<?php $f = fn(): never => 1;",
+                "1",
+            ),
+            (
+                ForbiddenRule::QualifiedBuiltinType,
+                PhpVersion::Php86,
+                "<?php function f(namespace\\static $x) {}",
+                "namespace\\static",
+            ),
+        ];
+        for (rule, version, src, text) in samples {
+            let options = crate::ParseOptions::default().version(version);
+            let errors = crate::parse_with(src, &options).errors;
+            let spans: Vec<&str> = errors
+                .iter()
+                .filter(|e| e.forbidden_rule() == Some(rule))
+                .map(|e| &src[e.span().start as usize..e.span().end as usize])
+                .collect();
+            assert_eq!(spans, [text], "{rule:?} in {src:?}: {errors:?}");
         }
     }
 
