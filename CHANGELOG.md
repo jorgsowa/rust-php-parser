@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - An empty hook list `{}` prints as `{}` instead of `;`, so the printed code keeps PHP's error (`php-printer`).
 - A class property with a fully qualified type and no modifier, such as `\Foo $a;`, is a syntax error instead of being accepted (`php-rs-parser`).
 - An enum property with a fully qualified type, such as `public \Foo\Bar $a;`, reports `Enum E cannot include properties` instead of a syntax error (`php-rs-parser`).
+- An unclosed `exit(`, `die(` or `clone(` call no longer panics (`php-rs-parser`).
+- No span ends before it starts: the version errors for set-only visibility on a promoted parameter and for a non-capturing `catch`, and the spans of error statements, bodies missing their `{`, `use` items, parameters, attributes, short echo tags and static variables after a missing token (`php-rs-parser`).
 
 ## [0.25.1] - 2026-10-22
 
