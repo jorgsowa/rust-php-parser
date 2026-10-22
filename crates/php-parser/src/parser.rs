@@ -1343,6 +1343,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         match &ty.kind {
             TypeHintKind::Named(name) => self.resolve_class_name(name),
             TypeHintKind::Keyword(builtin @ (BuiltinType::Self_ | BuiltinType::Parent_), span) => {
+                // PHP resolves `self` and `parent` in types from 8.5 on.
+                let scope = scope.filter(|_| self.version >= PhpVersion::Php85);
                 let resolved = scope.and_then(|s| match builtin {
                     BuiltinType::Self_ => s.self_name.clone(),
                     _ => s.parent_name.clone(),

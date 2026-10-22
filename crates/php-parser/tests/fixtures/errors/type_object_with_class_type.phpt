@@ -9,7 +9,15 @@ class C extends P {
     public function f(): parent|object {}
     public function g(): object|static {}
 }
-===errors >=8.2===
+===errors 8.2-8.4===
+Type A|object contains both object and a class type, which is redundant
+Type A|object|int|null contains both object and a class type, which is redundant
+Type (A&B)|object contains both object and a class type, which is redundant
+Type Traversable|Closure|object|array contains both object and a class type, which is redundant
+Type self|object contains both object and a class type, which is redundant
+Type parent|object contains both object and a class type, which is redundant
+Type static|object contains both object and a class type, which is redundant
+===errors >=8.5===
 Type A|object contains both object and a class type, which is redundant
 Type A|object|int|null contains both object and a class type, which is redundant
 Type (A&B)|object contains both object and a class type, which is redundant

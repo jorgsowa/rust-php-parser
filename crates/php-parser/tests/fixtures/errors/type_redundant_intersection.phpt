@@ -20,7 +20,6 @@ Type A&B is redundant with type A&B
 Type A&C is redundant as it is more restrictive than type A
 Type B&D is redundant as it is more restrictive than type B
 Type self cannot be part of an intersection type
-Type K&B is redundant as it is more restrictive than type K
 ===errors >=8.5===
 Type A&B is redundant as it is more restrictive than type A
 Type A&B is redundant as it is more restrictive than type A
