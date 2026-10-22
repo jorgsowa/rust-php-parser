@@ -26,19 +26,22 @@ pub(super) fn visibility_rank(v: php_ast::Visibility) -> u8 {
     }
 }
 
-pub(crate) fn is_reserved_class_name(name: &str) -> bool {
-    matches!(
-        name.to_ascii_lowercase().as_str(),
-        // self / parent / static / readonly: meta-names that PHP rejects as
-        // class identifiers in declarations and extends/implements lists.
-        "self" | "parent" | "static" | "readonly"
+pub(crate) fn is_reserved_class_name(name: &str, version: PhpVersion) -> bool {
+    let name = name.to_ascii_lowercase();
+    // `readonly` is a keyword from PHP 8.1 on.
+    (name == "readonly" && version >= PhpVersion::Php81)
+        || matches!(
+            name.as_str(),
+            // self / parent / static: meta-names that PHP rejects as
+            // class identifiers in declarations and extends/implements lists.
+            "self" | "parent" | "static"
             // PHP's reserved type names — invalid as class names anywhere
             // ("Cannot use 'string' as a class name as it is reserved").
             | "int" | "float" | "bool" | "string" | "true" | "false" | "null"
             | "void" | "iterable" | "object" | "mixed" | "never" | "array"
             // A keyword in PHP, lexed as a name here.
             | "callable"
-    )
+        )
 }
 
 /// Report `self`, `parent` or `static` naming the class, interface or trait in `extends`,
@@ -53,7 +56,7 @@ pub(crate) fn validate_class_ref<'arena, 'src>(
     } else if let Name::Simple { value, .. } = name {
         // `readonly` and `array` are keyword tokens, a syntax error in PHP.
         if super::class_keyword(value).is_none()
-            && !value.eq_ignore_ascii_case("readonly")
+            && !(value.eq_ignore_ascii_case("readonly") && parser.version >= PhpVersion::Php81)
             && !value.eq_ignore_ascii_case("array")
         {
             return;
@@ -91,7 +94,7 @@ pub(super) fn parse_class<'arena, 'src>(
     };
 
     if let Some(text) = name.as_str() {
-        if is_reserved_class_name(text) || name_is_reserved_kw {
+        if is_reserved_class_name(text, parser.version) || name_is_reserved_kw {
             parser.error(ParseError::Forbidden {
                 message: format!("Cannot use \"{}\" as a class name as it is reserved", text)
                     .into(),
@@ -2255,7 +2258,7 @@ pub(super) fn parse_interface<'arena, 'src>(
     };
 
     if let Some(text) = name.as_str() {
-        if is_reserved_class_name(text) || name_is_reserved_kw {
+        if is_reserved_class_name(text, parser.version) || name_is_reserved_kw {
             parser.error(ParseError::Forbidden {
                 message: format!("cannot use '{}' as interface name", text).into(),
                 span: name_span,

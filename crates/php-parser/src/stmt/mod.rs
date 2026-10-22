@@ -2942,7 +2942,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             continue;
         }
         if let Some(alias) = item.alias.and_then(|a| a.as_str()) {
-            if class::is_reserved_class_name(alias) {
+            if class::is_reserved_class_name(alias, parser.version) {
                 let name = item.name.parts_slice().join("\\");
                 parser.error(ParseError::Forbidden {
                     message: format!(

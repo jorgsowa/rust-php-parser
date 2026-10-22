@@ -267,7 +267,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         let next = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
         let next2 = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
 
-        Self {
+        let mut parser = Self {
             arena,
             lexer,
             current,
@@ -302,7 +302,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             namespace: None,
             class_imports: std::collections::HashMap::new(),
             class_scope: None,
-        }
+        };
+        parser.demote_initial_keywords();
+        parser
     }
 
     /// Create a parser starting in PHP mode at `offset` within `source`.
@@ -322,7 +324,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         let next = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
         let next2 = advance_lexer_skip_comments(&mut lexer, source, &mut comments);
 
-        Self {
+        let mut parser = Self {
             arena,
             lexer,
             current,
@@ -357,7 +359,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             namespace: None,
             class_imports: std::collections::HashMap::new(),
             class_scope: None,
-        }
+        };
+        parser.demote_initial_keywords();
+        parser
     }
 
     /// Emit a `VersionTooLow` error if the targeted PHP version is less than `min`.
@@ -459,7 +463,53 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         self.current = self.next;
         self.next = self.next2;
         self.next2 = self.next_non_comment();
+        if self.next.kind == TokenKind::Readonly {
+            self.next.kind = self.readonly_kind(self.next2.kind);
+        }
         prev
+    }
+
+    /// Before PHP 8.1 `readonly` is a plain name. It keeps its keyword kind when a modifier's
+    /// follower comes next, so that modifier use still reports the version it needs.
+    fn readonly_kind(&self, follower: TokenKind) -> TokenKind {
+        let modifier_follower = matches!(
+            follower,
+            TokenKind::Identifier
+                | TokenKind::Question
+                | TokenKind::LeftParen
+                | TokenKind::Backslash
+                | TokenKind::Namespace
+                | TokenKind::Array
+                | TokenKind::Static
+                | TokenKind::Self_
+                | TokenKind::Parent_
+                | TokenKind::Null
+                | TokenKind::True
+                | TokenKind::False
+                | TokenKind::Public
+                | TokenKind::Protected
+                | TokenKind::Private
+                | TokenKind::Final
+                | TokenKind::Abstract
+                | TokenKind::Readonly
+                | TokenKind::Class
+                | TokenKind::Function
+                | TokenKind::Fn_
+        );
+        if self.version < PhpVersion::Php81 && !modifier_follower {
+            TokenKind::Identifier
+        } else {
+            TokenKind::Readonly
+        }
+    }
+
+    fn demote_initial_keywords(&mut self) {
+        if self.current.kind == TokenKind::Readonly {
+            self.current.kind = self.readonly_kind(self.next.kind);
+        }
+        if self.next.kind == TokenKind::Readonly {
+            self.next.kind = self.readonly_kind(self.next2.kind);
+        }
     }
 
     /// End offset of the most recently consumed token.
