@@ -3113,10 +3113,13 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 message: "Cannot use $this as static variable".into(),
                 span: name.span,
             }),
-            Some(n) if parser.static_vars.contains(&n) => parser.error(ParseError::Forbidden {
-                message: format!("Duplicate declaration of static variable ${n}").into(),
-                span: name.span,
-            }),
+            // Before 8.3 a later declaration replaces an earlier one.
+            Some(n) if parser.static_vars.contains(&n) && parser.version >= PhpVersion::Php83 => {
+                parser.error(ParseError::Forbidden {
+                    message: format!("Duplicate declaration of static variable ${n}").into(),
+                    span: name.span,
+                })
+            }
             Some(n) => parser.static_vars.push(n),
             None => {}
         }
