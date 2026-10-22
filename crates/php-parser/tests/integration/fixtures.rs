@@ -14,11 +14,33 @@ fn arena_fixtures() {
                 &php_rs_parser::ParseOptions::default().version(php_version(version)),
             );
             let errors = result.errors.iter().map(|e| e.to_string()).collect();
+            let mut spans: Vec<_> = result.errors.iter().map(|e| e.span()).collect();
+            collect_spans(&serde_json::to_value(&result.program).unwrap(), &mut spans);
+            for span in spans {
+                assert!(
+                    span.start <= span.end && span.end as usize <= source.len(),
+                    "span {span:?} out of order or bounds for source {source:?}"
+                );
+            }
             let json = serde_json::to_string_pretty(&result.program).unwrap();
             (errors, json)
         },
         update,
     );
+}
+
+fn collect_spans(value: &serde_json::Value, spans: &mut Vec<php_ast::Span>) {
+    match value {
+        serde_json::Value::Object(map) => {
+            let field = |name| map.get(name).and_then(serde_json::Value::as_u64);
+            if let (Some(start), Some(end)) = (field("start"), field("end")) {
+                spans.push(php_ast::Span::new(start as u32, end as u32));
+            }
+            map.values().for_each(|v| collect_spans(v, spans));
+        }
+        serde_json::Value::Array(items) => items.iter().for_each(|v| collect_spans(v, spans)),
+        _ => {}
+    }
 }
 
 #[test]
