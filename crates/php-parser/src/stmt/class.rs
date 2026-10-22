@@ -992,6 +992,10 @@ pub fn parse_class_members<'arena, 'src>(
 }
 
 fn report_readonly_default(parser: &mut Parser<'_, '_>, span: Span) {
+    // PHP 8.6 allows a default value on a readonly property.
+    if parser.version >= PhpVersion::Php86 {
+        return;
+    }
     parser.error(ParseError::Forbidden {
         message: "Readonly property cannot have default value".into(),
         span,

@@ -18,17 +18,13 @@ readonly class B {
 }
 $x = new readonly class { public int $m = 5; };
 ===errors===
-Readonly property cannot have default value
-Readonly property cannot have default value
 readonly promoted property must have type
 A readonly property cannot declare hooks
 readonly property must have type
 readonly promoted property must have type
-Readonly property cannot have default value
 static properties cannot be readonly
 A readonly property cannot declare hooks
 A readonly property cannot declare hooks
-Readonly property cannot have default value
 ===php_error <=8.0===
 PHP Parse error:  syntax error, unexpected identifier "int", expecting variable in Standard input code on line 3
 ===php_error 8.1-8.3===
