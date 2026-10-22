@@ -3,6 +3,7 @@ use wasm_bindgen::prelude::*;
 
 #[derive(Serialize)]
 struct WasmError {
+    code: &'static str,
     message: String,
     start: u32,
     end: u32,
@@ -53,6 +54,7 @@ pub fn parse(source: &str, version: Option<String>) -> Result<JsValue, JsError> 
         .map(|e| {
             let span = e.span();
             WasmError {
+                code: e.code(),
                 message: e.to_string(),
                 start: span.start,
                 end: span.end,

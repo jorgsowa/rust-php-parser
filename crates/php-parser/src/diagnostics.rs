@@ -130,6 +130,28 @@ impl ParseError {
             _ => None,
         }
     }
+
+    /// Stable kebab-case identifier: the variant's, or the rule's for [`ParseError::Forbidden`].
+    pub fn code(&self) -> &'static str {
+        match self {
+            ParseError::Expected { .. } => "expected",
+            ParseError::UnterminatedString { .. } => "unterminated-string",
+            ParseError::ExpectedAfter { .. } => "expected-after",
+            ParseError::UnclosedDelimiter { .. } => "unclosed-delimiter",
+            ParseError::Forbidden { rule, .. } => rule.as_str(),
+            ParseError::NestingTooDeep { .. } => "nesting-too-deep",
+            ParseError::SourceTooLarge { .. } => "source-too-large",
+            ParseError::VersionTooLow { .. } => "version-too-low",
+        }
+    }
+
+    /// Whether the AST around the error is a recovery guess rather than what the source says.
+    pub fn leaves_ast_incomplete(&self) -> bool {
+        !matches!(
+            self,
+            ParseError::Forbidden { .. } | ParseError::VersionTooLow { .. }
+        )
+    }
 }
 
 /// When PHP reports an error, which `php -l` prints as a parse error or a fatal error.
@@ -581,7 +603,7 @@ impl std::str::FromStr for ForbiddenRule {
 
 #[cfg(test)]
 mod tests {
-    use super::{ForbiddenRule, ParseError};
+    use super::{ForbiddenRule, ParseError, Span};
     use crate::PhpVersion;
 
     /// `(rule, version, source, reported span text)` for sites that report only at some versions.
@@ -884,6 +906,58 @@ mod tests {
             "no-such-rule".parse::<ForbiddenRule>(),
             Err(super::UnknownForbiddenRule)
         );
+    }
+
+    #[test]
+    fn codes_are_unique_and_only_syntax_errors_leave_the_ast_incomplete() {
+        let span = Span::new(0, 0);
+        let incomplete = [
+            ParseError::Expected {
+                expected: "';'".into(),
+                found: "'}'".into(),
+                span,
+            },
+            ParseError::UnterminatedString { span },
+            ParseError::ExpectedAfter {
+                expected: "';'".into(),
+                after: "expression".into(),
+                span,
+            },
+            ParseError::UnclosedDelimiter {
+                delimiter: "')'".into(),
+                opened_at: span,
+                span,
+            },
+            ParseError::NestingTooDeep { span },
+            ParseError::SourceTooLarge { len: 0, span },
+        ];
+        let complete = [
+            ParseError::Forbidden {
+                rule: ForbiddenRule::ReassignThis,
+                message: "Cannot re-assign $this".into(),
+                span,
+            },
+            ParseError::VersionTooLow {
+                feature: "match".into(),
+                required: PhpVersion::Php80,
+                used: PhpVersion::Php74,
+                span,
+            },
+        ];
+        assert!(incomplete.iter().all(ParseError::leaves_ast_incomplete));
+        assert!(!complete.iter().any(ParseError::leaves_ast_incomplete));
+        assert_eq!(complete[0].code(), "reassign-this");
+        let mut codes: Vec<&str> = ForbiddenRule::ALL.iter().map(|r| r.as_str()).collect();
+        codes.extend(
+            incomplete
+                .iter()
+                .chain(&complete[1..])
+                .map(ParseError::code),
+        );
+        let count = codes.len();
+        codes.sort_unstable();
+        codes.dedup();
+        assert_eq!(codes.len(), count);
     }
 
     #[test]
