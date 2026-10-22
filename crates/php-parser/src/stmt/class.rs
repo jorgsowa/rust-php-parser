@@ -1106,6 +1106,7 @@ fn is_promoted_param(param: &Param<'_, '_>) -> bool {
     param.modifiers.visibility.is_some()
         || param.modifiers.set_visibility.is_some()
         || param.modifiers.is_readonly
+        || param.modifiers.is_final
         || !param.hooks.is_empty()
 }
 
