@@ -2346,6 +2346,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// Parse `<?= expr ?>` — the short echo tag produces an implicit echo statement.
     pub(crate) fn parse_short_echo(&mut self) -> Option<Stmt<'arena, 'src>> {
         if self.check(TokenKind::Eof) || self.check(TokenKind::CloseTag) {
+            self.error(ParseError::ExpectedExpression {
+                span: self.current_span(),
+            });
             return None;
         }
         let start = self.start_span();
