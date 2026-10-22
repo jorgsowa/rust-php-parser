@@ -3208,7 +3208,8 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             default
                 .as_ref()
                 .map(|e| e.span.end)
-                .unwrap_or(parser.previous_end()),
+                .unwrap_or(parser.previous_end())
+                .max(var_start),
         );
         vars.push(StaticVar {
             name,
