@@ -225,6 +225,7 @@ fn starts_intersection_member(kind: TokenKind) -> bool {
             | TokenKind::Parent_
             | TokenKind::Static
             | TokenKind::Namespace
+            | TokenKind::Enum_
             | TokenKind::Array
             | TokenKind::Null
             | TokenKind::True
