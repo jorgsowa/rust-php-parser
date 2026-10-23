@@ -2,10 +2,19 @@ use php_ast::ast::*;
 
 use super::Printer;
 
+/// PHP 7.4 lexes a reopening `<?=` as `echo`, which is the only way to spell it inside PHP code.
+fn name_part(part: &str) -> &str {
+    if part == "<?=" {
+        "echo"
+    } else {
+        part
+    }
+}
+
 impl<'src> Printer<'src> {
     pub(crate) fn print_name(&mut self, name: &Name) {
         match name {
-            Name::Simple { value, .. } => self.w(value),
+            Name::Simple { value, .. } => self.w(name_part(value)),
             Name::Complex { parts, kind, .. } => {
                 match kind {
                     NameKind::FullyQualified => self.w("\\"),
@@ -16,7 +25,7 @@ impl<'src> Printer<'src> {
                     if i > 0 {
                         self.w("\\");
                     }
-                    self.w(part);
+                    self.w(name_part(part));
                 }
             }
             Name::Error { .. } => self.w("<error>"),

@@ -386,16 +386,9 @@ impl<'src> Lexer<'src> {
             0
         };
 
-        // Determine initial mode: if remaining source starts with `<?php` (case-insensitive) or `<?=`, start in PHP mode
-        let mode = if starts_with_open_tag(&source.as_bytes()[pos..]) {
-            LexerMode::Php
-        } else {
-            LexerMode::InlineHtml
-        };
-
         Self {
             source,
-            mode,
+            mode: LexerMode::InlineHtml,
             pos,
             peeked: None,
             peeked2: None,
@@ -578,14 +571,13 @@ impl<'src> Lexer<'src> {
 
         if let Some(tag_pos) = tag_pos {
             if tag_pos == 0 {
-                // We're right at the open tag, switch to PHP mode
+                self.pos = start + if self.check_at(2, b'=') { 3 } else { 5 };
                 self.mode = LexerMode::Php;
-                return self.lex_php();
+                return self.tok(TokenKind::OpenTag, start);
             }
-            // Emit inline HTML up to the tag
+            // Emit inline HTML up to the tag; the tag itself is lexed next, still in HTML mode.
             let end = self.pos + tag_pos;
             self.pos = end;
-            self.mode = LexerMode::Php;
             Token::new(TokenKind::InlineHtml, Span::new(start as u32, end as u32))
         } else {
             // Rest of file is inline HTML
@@ -1023,10 +1015,7 @@ impl<'src> Lexer<'src> {
             self.pos = start + 2;
             return self.tok(TokenKind::BangEquals, start);
         }
-        if starts_with_open_tag(&self.source.as_bytes()[start..]) {
-            self.pos = start + if self.check_at(2, b'=') { 3 } else { 5 };
-            return self.tok(TokenKind::OpenTag, start);
-        }
+        // An open tag in PHP mode is not a tag, as in PHP: `<?php` lexes as `<`, `?`, `php`.
         self.pos = start + 1;
         self.tok(TokenKind::LessThan, start)
     }
