@@ -451,6 +451,20 @@ impl<'src> Printer<'src> {
         self.flush_remaining_comments();
     }
 
+    /// Whether the `?>` before `stmts[i]` is an empty statement, as after `;` or `}`; unknown without source.
+    fn close_tag_makes_empty_stmt(&self, stmts: &[php_ast::ast::Stmt], i: usize) -> bool {
+        if self.source.is_empty() {
+            return false;
+        }
+        match i.checked_sub(1).map(|p| &stmts[p]) {
+            Some(prev) if !matches!(prev.kind, php_ast::ast::StmtKind::InlineHtml(_)) => matches!(
+                self.source.as_bytes()[(prev.span.end as usize).saturating_sub(1)],
+                b';' | b'}'
+            ),
+            _ => true,
+        }
+    }
+
     pub(crate) fn print_stmts(&mut self, stmts: &[php_ast::ast::Stmt], indent: bool) {
         if indent {
             self.indent();
@@ -465,13 +479,22 @@ impl<'src> Printer<'src> {
             let is_nop = matches!(stmt.kind, php_ast::ast::StmtKind::Nop);
             let is_inline_html = matches!(stmt.kind, php_ast::ast::StmtKind::InlineHtml(_));
 
-            if is_nop && prev_was_inline_html {
+            let empty_stmt_rejected_later = || {
+                stmts[i + 1..]
+                    .iter()
+                    .any(helpers::rejects_empty_stmt_before)
+            };
+
+            if is_nop && prev_was_inline_html && !empty_stmt_rejected_later() {
                 prev_was_inline_html = is_inline_html;
                 continue;
             }
 
-            // The `?>` and `<?php` around silent HTML change nothing, so both are dropped.
-            if !self.in_html_mode && helpers::is_silent_html(&stmt.kind) {
+            // Silent HTML's tags change nothing, unless its `?>` is an empty statement a later declare rejects.
+            if !self.in_html_mode
+                && helpers::is_silent_html(&stmt.kind)
+                && !(self.close_tag_makes_empty_stmt(stmts, i) && empty_stmt_rejected_later())
+            {
                 prev_was_inline_html = true;
                 continue;
             }
