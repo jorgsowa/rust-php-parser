@@ -25,15 +25,15 @@ PHP Parse error:  syntax error, unexpected token "{" in Standard input code on l
                 "array": {
                   "kind": "Error",
                   "span": {
-                    "start": 11,
-                    "end": 12
+                    "start": 10,
+                    "end": 10
                   }
                 },
                 "index": null
               }
             },
             "span": {
-              "start": 11,
+              "start": 10,
               "end": 14
             }
           },

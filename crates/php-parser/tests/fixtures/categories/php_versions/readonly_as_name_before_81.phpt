@@ -1114,7 +1114,7 @@ PHP Parse error:  syntax error, unexpected token "readonly", expecting identifie
                                   "kind": "Error",
                                   "span": {
                                     "start": 306,
-                                    "end": 307
+                                    "end": 306
                                   }
                                 },
                                 "op": "BitwiseOr",

@@ -14,14 +14,14 @@ PHP Parse error:  syntax error, unexpected '}', expecting end of file in Standar
     {
       "kind": "Error",
       "span": {
-        "start": 168,
-        "end": 168
+        "start": 5,
+        "end": 5
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 168
+    "end": 5
   }
 }
 ===ast >=8.0===

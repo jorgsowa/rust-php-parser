@@ -155,7 +155,7 @@ pub(super) fn parse_class<'arena, 'src>(
                 Some(name),
                 ClassBody {
                     members,
-                    span: Span::new(brace_start, end.max(brace_start)),
+                    span: parser.span_from(brace_start),
                 },
             );
             built.modifiers = modifiers;
@@ -251,7 +251,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                     parser.forbid(
                         ForbiddenRule::ModifierNotAllowed,
                         format!("Cannot use the {modifier} modifier on a property hook"),
-                        Span::new(start, parser.previous_end()),
+                        parser.span_from(start),
                     );
                 }
                 _ => break,
@@ -393,7 +393,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                     parser.forbid(
                         ForbiddenRule::DuplicateHook,
                         "duplicate 'get' hook",
-                        Span::new(hook_start, parser.previous_end()),
+                        parser.span_from(hook_start),
                     );
                 }
                 seen_get = true;
@@ -403,7 +403,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                     parser.forbid(
                         ForbiddenRule::DuplicateHook,
                         "duplicate 'set' hook",
-                        Span::new(hook_start, parser.previous_end()),
+                        parser.span_from(hook_start),
                     );
                 }
                 seen_set = true;
@@ -412,7 +412,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
         }
 
         parser.check_attributes(&hook_attrs, &AttrSite::hook());
-        let hook_span = Span::new(hook_start, parser.previous_end());
+        let hook_span = parser.span_from(hook_start);
         check_hook_signature(
             parser,
             kind,
@@ -1186,7 +1186,7 @@ fn parse_trait_use_member<'arena, 'src>(
     member_start: u32,
 ) -> ClassMember<'arena, 'src> {
     let decl = parse_trait_use_decl(parser, member_start);
-    let span = Span::new(member_start, parser.previous_end());
+    let span = parser.span_from(member_start);
     ClassMember {
         kind: ClassMemberKind::TraitUse(decl),
         span,
@@ -1242,10 +1242,10 @@ fn parse_class_member_modifiers<'arena, 'src>(
                             parser.forbid(
                                 ForbiddenRule::MultipleSetVisibilityModifiers,
                                 "cannot use multiple set-visibility modifiers",
-                                Span::new(member_start, parser.previous_end()),
+                                parser.span_from(member_start),
                             );
                         }
-                        asym_vis_span = Some(Span::new(member_start, parser.previous_end()));
+                        asym_vis_span = Some(parser.span_from(member_start));
                         parser.advance(); // consume (
                         parser.advance(); // consume "set"
                         parser.expect(TokenKind::RightParen);
@@ -1264,7 +1264,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
                                 _ => Visibility::Private,
                             };
                             // Save span; emit version check after loop when is_static is known.
-                            asym_vis_span = Some(Span::new(member_start, parser.previous_end()));
+                            asym_vis_span = Some(parser.span_from(member_start));
                             parser.advance(); // consume second visibility
                             parser.advance(); // consume (
                             parser.advance(); // consume "set"
@@ -1280,11 +1280,11 @@ fn parse_class_member_modifiers<'arena, 'src>(
                         parser.forbid(
                             ForbiddenRule::MultipleSetVisibilityModifiers,
                             "cannot use multiple set-visibility modifiers",
-                            Span::new(member_start, parser.previous_end()),
+                            parser.span_from(member_start),
                         );
                     }
                     // Save span for deferred version check after is_static is known.
-                    asym_vis_span = Some(Span::new(member_start, parser.previous_end()));
+                    asym_vis_span = Some(parser.span_from(member_start));
                     parser.advance(); // consume (
                     parser.advance(); // consume "set"
                     parser.expect(TokenKind::RightParen);
@@ -1293,7 +1293,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
                     parser.forbid(
                         ForbiddenRule::MultipleVisibilityModifiers,
                         "cannot use multiple visibility modifiers",
-                        Span::new(member_start, parser.previous_end()),
+                        parser.span_from(member_start),
                     );
                 }
             }
@@ -1302,7 +1302,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
                     parser.forbid(
                         ForbiddenRule::DuplicateModifier,
                         "duplicate modifier 'static'",
-                        Span::new(member_start, parser.previous_end()),
+                        parser.span_from(member_start),
                     );
                 }
                 parser.advance();
@@ -1313,7 +1313,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
                     parser.forbid(
                         ForbiddenRule::DuplicateModifier,
                         "duplicate modifier 'abstract'",
-                        Span::new(member_start, parser.previous_end()),
+                        parser.span_from(member_start),
                     );
                 }
                 parser.advance();
@@ -1324,7 +1324,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
                     parser.forbid(
                         ForbiddenRule::DuplicateModifier,
                         "duplicate modifier 'final'",
-                        Span::new(member_start, parser.previous_end()),
+                        parser.span_from(member_start),
                     );
                 }
                 parser.advance();
@@ -1335,7 +1335,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
                     parser.forbid(
                         ForbiddenRule::DuplicateModifier,
                         "duplicate modifier 'readonly'",
-                        Span::new(member_start, parser.previous_end()),
+                        parser.span_from(member_start),
                     );
                 }
                 let span = parser.current_span();
@@ -1358,14 +1358,14 @@ fn parse_class_member_modifiers<'arena, 'src>(
         parser.forbid(
             ForbiddenRule::AbstractFinalConflict,
             "cannot use 'abstract' and 'final' together",
-            Span::new(member_start, parser.previous_end()),
+            parser.span_from(member_start),
         );
     }
     if is_static && is_readonly {
         parser.forbid(
             ForbiddenRule::StaticReadonlyProperty,
             "static properties cannot be readonly",
-            Span::new(member_start, parser.previous_end()),
+            parser.span_from(member_start),
         );
     }
 
@@ -1503,7 +1503,7 @@ fn parse_class_const_member<'arena, 'src>(
         );
     }
     if mods.is_final {
-        let span = Span::new(member_start, parser.previous_end());
+        let span = parser.span_from(member_start);
         parser.require_version(PhpVersion::Php81, "final class constants", span);
     }
     parser.advance(); // consume `const`
@@ -1562,7 +1562,7 @@ fn parse_class_const_member<'arena, 'src>(
         }
     }
     parser.expect_member_end();
-    let span = Span::new(member_start, parser.previous_end());
+    let span = parser.span_from(member_start);
     if let (true, Some(Visibility::Private), Some((name, _))) =
         (mods.is_final, mods.visibility, const_items.first())
     {
@@ -1716,7 +1716,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
         None
     };
 
-    let member_span = Span::new(member_start, parser.previous_end());
+    let member_span = parser.span_from(member_start);
     let method_label = format!("{}{}()", parser.class_member_prefix(), method_name);
     if in_interface {
         if matches!(
@@ -1784,7 +1784,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
         parser.forbid(
             ForbiddenRule::ModifierNotAllowed,
             "Cannot use the readonly modifier on a method",
-            Span::new(member_start, parser.previous_end()),
+            parser.span_from(member_start),
         );
     }
 
@@ -1818,7 +1818,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
             .with_method_name(&class_name, method_name.as_str()),
     );
 
-    let span = Span::new(member_start, parser.previous_end());
+    let span = parser.span_from(member_start);
     ClassMember {
         kind: ClassMemberKind::Method({
             let mut method = MethodDecl::new(parser.arena, method_name);
@@ -2077,7 +2077,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
     // Property hooks: { get { ... } set { ... } } — PHP 8.4+
     let had_hooks_block = parser.check(TokenKind::LeftBrace);
     if in_interface {
-        let span = Span::new(member_start, parser.previous_end());
+        let span = parser.span_from(member_start);
         let mut report = |message: &'static str| {
             parser.forbid(
                 ForbiddenRule::InvalidInterfacePropertyModifier,
@@ -2102,7 +2102,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
         parser.forbid(
             ForbiddenRule::AbstractPropertyWithoutAbstractHook,
             "properties cannot be abstract",
-            Span::new(member_start, parser.previous_end()),
+            parser.span_from(member_start),
         );
     }
     let hooks = if had_hooks_block {
@@ -2131,7 +2131,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
         parser.forbid(
             ForbiddenRule::AbstractPropertyWithoutAbstractHook,
             format!("Abstract property {class}${name} must specify at least one abstract hook"),
-            Span::new(member_start, parser.previous_end()),
+            parser.span_from(member_start),
         );
     }
     if mods.set_visibility.is_some() && type_hint.is_none() {
@@ -2139,7 +2139,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
         parser.forbid(
             ForbiddenRule::UntypedAsymmetricProperty,
             format!("Property with asymmetric visibility {class}${prop_name} must have type"),
-            Span::new(member_start, parser.previous_end()),
+            parser.span_from(member_start),
         );
     }
     if let Some(name) = prop_name.as_str() {
@@ -2149,7 +2149,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
         .as_str()
         .filter(|name| !hooks.is_empty() && is_virtual_property(name, &hooks))
     {
-        let span = Span::new(member_start, parser.previous_end());
+        let span = parser.span_from(member_start);
         let has_parent = parser
             .class_scope
             .as_ref()
@@ -2174,7 +2174,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
             parser.forbid(
                 ForbiddenRule::SetVisibilityWiderThanVisibility,
                 "Visibility of property must not be weaker than set visibility",
-                Span::new(member_start, parser.previous_end()),
+                parser.span_from(member_start),
             );
         }
     }
@@ -2199,21 +2199,21 @@ pub(super) fn parse_property_member<'arena, 'src>(
         parser.forbid(
             ForbiddenRule::StaticPropertyHooks,
             "Cannot declare hooks for static property",
-            Span::new(member_start, parser.previous_end()),
+            parser.span_from(member_start),
         );
     }
     if in_interface && hooks.is_empty() {
         parser.forbid(
             ForbiddenRule::InterfacePropertyWithoutHooks,
             "Interfaces may only include hooked properties",
-            Span::new(member_start, parser.previous_end()),
+            parser.span_from(member_start),
         );
     }
     if mods.is_final && mods.visibility == Some(Visibility::Private) {
         parser.forbid(
             ForbiddenRule::PrivateFinalProperty,
             "Property cannot be both final and private",
-            Span::new(member_start, parser.previous_end()),
+            parser.span_from(member_start),
         );
     }
     if mods.is_final {
@@ -2221,7 +2221,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
         parser.require_version(
             PhpVersion::Php84,
             "final properties",
-            Span::new(member_start, parser.previous_end()),
+            parser.span_from(member_start),
         );
     }
     if mods.is_readonly {
@@ -2229,7 +2229,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
             parser.forbid(
                 ForbiddenRule::UntypedReadonlyProperty,
                 "readonly property must have type",
-                Span::new(member_start, parser.previous_end()),
+                parser.span_from(member_start),
             );
         }
         if let Some(hook) = hooks.first() {
@@ -2244,7 +2244,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
         }
     }
     parser.check_attributes(&member_attrs, &AttrSite::new(AttrTarget::Property));
-    let span = Span::new(member_start, parser.previous_end());
+    let span = parser.span_from(member_start);
     let first_index = members.len();
     members.push(ClassMember {
         kind: ClassMemberKind::Property({
@@ -2294,7 +2294,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
             } else {
                 parser.alloc_vec()
             };
-            let pspan = Span::new(member_start, parser.previous_end());
+            let pspan = parser.span_from(member_start);
             // Every item of `public int $a, $b;` gets its own copy of the shared type and attributes.
             let ClassMemberKind::Property(first) = &members[first_index].kind else {
                 unreachable!()
@@ -2397,7 +2397,7 @@ pub(super) fn parse_interface<'arena, 'src>(
                 name,
                 ClassBody {
                     members,
-                    span: Span::new(brace_start, end.max(brace_start)),
+                    span: parser.span_from(brace_start),
                 },
             );
             built.extends = extends;
@@ -2456,7 +2456,7 @@ pub(super) fn parse_trait<'arena, 'src>(
                 name,
                 ClassBody {
                     members,
-                    span: Span::new(brace_start, end.max(brace_start)),
+                    span: parser.span_from(brace_start),
                 },
             );
             built.attributes = attributes;

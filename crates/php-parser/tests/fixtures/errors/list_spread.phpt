@@ -23,13 +23,13 @@ PHP Fatal error:  Spread operator is not supported in assignments in Standard in
                     "kind": "Error",
                     "span": {
                       "start": 11,
-                      "end": 14
+                      "end": 11
                     }
                   }
                 },
                 "span": {
                   "start": 11,
-                  "end": 14
+                  "end": 11
                 }
               }
             ]

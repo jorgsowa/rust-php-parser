@@ -16,7 +16,7 @@ PHP Parse error:  syntax error, unexpected token ")" in Standard input code on l
             "kind": "Error",
             "span": {
               "start": 14,
-              "end": 15
+              "end": 14
             }
           },
           "cases": [

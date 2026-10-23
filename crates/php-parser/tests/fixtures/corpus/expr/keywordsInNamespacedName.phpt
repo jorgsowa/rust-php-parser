@@ -180,7 +180,7 @@ PHP Parse error:  syntax error, unexpected 'fn' (T_FN), expecting '{' in Standar
                     "kind": "Error",
                     "span": {
                       "start": 97,
-                      "end": 98
+                      "end": 97
                     }
                   }
                 },

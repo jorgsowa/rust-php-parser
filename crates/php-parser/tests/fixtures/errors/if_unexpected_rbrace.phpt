@@ -19,15 +19,15 @@ PHP Parse error:  Unmatched '}' in Standard input code on line 1
           "condition": {
             "kind": "Error",
             "span": {
-              "start": 9,
-              "end": 10
+              "start": 8,
+              "end": 8
             }
           },
           "then_branch": {
             "kind": "Error",
             "span": {
-              "start": 9,
-              "end": 9
+              "start": 8,
+              "end": 8
             }
           },
           "elseif_branches": [],
@@ -36,19 +36,19 @@ PHP Parse error:  Unmatched '}' in Standard input code on line 1
       },
       "span": {
         "start": 6,
-        "end": 9
+        "end": 8
       }
     },
     {
       "kind": "Error",
       "span": {
-        "start": 9,
-        "end": 9
+        "start": 8,
+        "end": 8
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 9
+    "end": 8
   }
 }

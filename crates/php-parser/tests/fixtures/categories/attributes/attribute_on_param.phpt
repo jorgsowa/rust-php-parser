@@ -29,8 +29,8 @@ PHP Parse error:  syntax error, unexpected end of file, expecting variable (T_VA
               "variadic": false,
               "attributes": [],
               "span": {
-                "start": 46,
-                "end": 46
+                "start": 17,
+                "end": 17
               }
             }
           ],

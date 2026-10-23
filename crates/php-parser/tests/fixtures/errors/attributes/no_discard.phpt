@@ -70,22 +70,22 @@ PHP Fatal error:  A void function does not return a value, but #[\NoDiscard] req
                     "value": {
                       "kind": "Error",
                       "span": {
-                        "start": 163,
-                        "end": 168
+                        "start": 128,
+                        "end": 128
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 124,
-                  "end": 168
+                  "end": 128
                 }
               }
             }
           },
           "span": {
             "start": 84,
-            "end": 168
+            "end": 128
           }
         }
       },

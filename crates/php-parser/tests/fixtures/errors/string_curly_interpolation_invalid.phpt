@@ -249,15 +249,15 @@ PHP Parse error:  syntax error, unexpected token "+", expecting "->" or "?->" or
                             "right": {
                               "kind": "Error",
                               "span": {
-                                "start": 84,
-                                "end": 84
+                                "start": 83,
+                                "end": 83
                               }
                             }
                           }
                         },
                         "span": {
                           "start": 80,
-                          "end": 84
+                          "end": 83
                         }
                       }
                     },

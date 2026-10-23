@@ -45,8 +45,8 @@ PHP Parse error:  syntax error, unexpected token ",", expecting "}" in Standard 
               },
               "alias": null,
               "span": {
-                "start": 16,
-                "end": 16
+                "start": 15,
+                "end": 15
               }
             },
             {

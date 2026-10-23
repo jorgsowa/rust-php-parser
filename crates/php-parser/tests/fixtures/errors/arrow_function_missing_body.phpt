@@ -41,7 +41,7 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
                 "kind": "Error",
                 "span": {
                   "start": 15,
-                  "end": 16
+                  "end": 15
                 }
               },
               "attributes": []
@@ -49,7 +49,7 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
           },
           "span": {
             "start": 6,
-            "end": 16
+            "end": 15
           }
         }
       },

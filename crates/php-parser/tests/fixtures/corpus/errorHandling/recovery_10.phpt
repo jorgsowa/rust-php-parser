@@ -42,15 +42,15 @@ PHP Parse error:  syntax error, unexpected token "}", expecting identifier or va
                       "property": {
                         "kind": "Error",
                         "span": {
-                          "start": 34,
-                          "end": 35
+                          "start": 33,
+                          "end": 33
                         }
                       }
                     }
                   },
                   "span": {
                     "start": 27,
-                    "end": 35
+                    "end": 33
                   }
                 }
               },

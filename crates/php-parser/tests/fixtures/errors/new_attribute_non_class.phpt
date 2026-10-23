@@ -36,8 +36,8 @@ PHP Parse error:  syntax error, unexpected identifier "B", expecting "class" in 
                     "class": {
                       "kind": "Error",
                       "span": {
-                        "start": 22,
-                        "end": 22
+                        "start": 14,
+                        "end": 14
                       }
                     },
                     "args": []

@@ -31,15 +31,15 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
               "value": {
                 "kind": "Error",
                 "span": {
-                  "start": 11,
-                  "end": 12
+                  "start": 10,
+                  "end": 10
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 12
+            "end": 10
           }
         }
       },
@@ -66,15 +66,15 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
               "value": {
                 "kind": "Error",
                 "span": {
-                  "start": 18,
-                  "end": 19
+                  "start": 17,
+                  "end": 17
                 }
               }
             }
           },
           "span": {
             "start": 13,
-            "end": 19
+            "end": 17
           }
         }
       },

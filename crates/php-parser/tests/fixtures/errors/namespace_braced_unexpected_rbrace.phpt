@@ -27,13 +27,13 @@ PHP Parse error:  Unmatched '}' in Standard input code on line 1
     {
       "kind": "Error",
       "span": {
-        "start": 19,
-        "end": 19
+        "start": 18,
+        "end": 18
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 19
+    "end": 18
   }
 }

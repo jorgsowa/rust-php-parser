@@ -34,8 +34,8 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
                   "value": {
                     "kind": "Error",
                     "span": {
-                      "start": 32,
-                      "end": 33
+                      "start": 31,
+                      "end": 31
                     }
                   },
                   "attributes": []

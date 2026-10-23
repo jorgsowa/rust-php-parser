@@ -105,8 +105,8 @@ PHP Fatal error:  Attribute "Attribute" must not be repeated in Standard input c
               "variadic": false,
               "attributes": [],
               "span": {
-                "start": 479,
-                "end": 479
+                "start": 395,
+                "end": 395
               }
             }
           ],

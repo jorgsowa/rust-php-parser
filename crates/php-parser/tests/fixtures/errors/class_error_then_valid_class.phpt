@@ -48,8 +48,8 @@ PHP Parse error:  syntax error, unexpected token "}" in Standard input code on l
                       "variadic": false,
                       "attributes": [],
                       "span": {
-                        "start": 34,
-                        "end": 34
+                        "start": 33,
+                        "end": 33
                       }
                     }
                   ],

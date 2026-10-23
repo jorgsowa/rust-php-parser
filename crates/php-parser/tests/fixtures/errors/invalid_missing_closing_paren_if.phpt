@@ -52,8 +52,8 @@ PHP Parse error:  syntax error, unexpected token "{" in Standard input code on l
                       "index": {
                         "kind": "Error",
                         "span": {
-                          "start": 23,
-                          "end": 27
+                          "start": 18,
+                          "end": 18
                         }
                       }
                     }
@@ -101,13 +101,13 @@ PHP Parse error:  syntax error, unexpected token "{" in Standard input code on l
     {
       "kind": "Error",
       "span": {
-        "start": 37,
-        "end": 37
+        "start": 36,
+        "end": 36
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 37
+    "end": 36
   }
 }

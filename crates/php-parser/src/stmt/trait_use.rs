@@ -33,13 +33,14 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
             let method = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
                 Name::Simple { value: text, span }
             } else {
-                let span = parser.current_span();
                 parser.error(ParseError::Expected {
                     expected: "method name".into(),
                     found: parser.current_kind().description().into(),
-                    span,
+                    span: parser.current_span(),
                 });
-                Name::Error { span }
+                Name::Error {
+                    span: parser.missing_span(),
+                }
             };
 
             // Check for `insteadof` or `as`
@@ -63,7 +64,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
                     super::validate_class_ref(parser, name, "trait");
                 }
                 parser.expect_member_end();
-                let span = Span::new(start, parser.previous_end());
+                let span = parser.span_from(start);
                 adaptations.push(TraitAdaptation {
                     kind: TraitAdaptationKind::Precedence {
                         trait_name: first_name,
@@ -76,7 +77,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
                 // Alias: TraitName::method as [visibility] [newName];
                 let (new_modifier, is_final, new_name) = parse_alias_rhs(parser);
                 parser.expect_member_end();
-                let span = Span::new(start, parser.previous_end());
+                let span = parser.span_from(start);
                 adaptations.push(TraitAdaptation {
                     kind: TraitAdaptationKind::Alias {
                         trait_name: Some(first_name),
@@ -101,7 +102,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
             // first_name already is the method Name — use it directly.
             let (new_modifier, is_final, new_name) = parse_alias_rhs(parser);
             parser.expect_member_end();
-            let span = Span::new(start, parser.previous_end());
+            let span = parser.span_from(start);
             adaptations.push(TraitAdaptation {
                 kind: TraitAdaptationKind::Alias {
                     trait_name: None,

@@ -67,14 +67,14 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
                           "kind": "Error",
                           "span": {
                             "start": 46,
-                            "end": 47
+                            "end": 46
                           }
                         }
                       }
                     },
                     "span": {
                       "start": 43,
-                      "end": 47
+                      "end": 46
                     }
                   },
                   "attributes": []

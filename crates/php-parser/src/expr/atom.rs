@@ -46,7 +46,7 @@ pub(super) fn parse_atom_nested<'arena, 'src>(
     if !parser.enter_nesting() {
         return Expr {
             kind: ExprKind::Error,
-            span: parser.current_span(),
+            span: parser.missing_span(),
         };
     }
     let expr = parse_atom(parser);
@@ -90,15 +90,14 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 return parse_arrow_function(parser, true, start, attributes);
             }
             // Error: attributes followed by static without function/fn
-            let span = parser.current_span();
             parser.error(ParseError::Expected {
                 expected: "'function' or 'fn'".into(),
                 found: parser.current_kind().description().into(),
-                span,
+                span: parser.current_span(),
             });
             return Expr {
                 kind: ExprKind::Error,
-                span: Span::new(start, span.end),
+                span: parser.span_from(start),
             };
         }
         if parser.check(TokenKind::Function) {
@@ -108,15 +107,14 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             return parse_arrow_function(parser, false, start, attributes);
         }
         // Error: attributes in expression context without closure/arrow function
-        let span = parser.current_span();
         parser.error(ParseError::Expected {
             expected: "'function', 'fn', or 'static'".into(),
             found: parser.current_kind().description().into(),
-            span,
+            span: parser.current_span(),
         });
         return Expr {
             kind: ExprKind::Error,
-            span: Span::new(start, span.end),
+            span: parser.span_from(start),
         };
     }
 
@@ -666,7 +664,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 // $$var or $$$var — parse_atom handles recursion
                 parse_variable_variable_name(parser)
             };
-            let span = Span::new(token.span.start, parser.previous_end());
+            let span = parser.span_from(token.span.start);
             Expr {
                 kind: ExprKind::VariableVariable(parser.alloc(inner)),
                 span,
@@ -785,7 +783,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             let open = parser.advance(); // consume (
             let inner = parse_expr(parser);
             parser.expect_closing(TokenKind::RightParen, open.span);
-            let span = Span::new(start, parser.previous_end());
+            let span = parser.span_from(start);
             Expr {
                 kind: ExprKind::Parenthesized(parser.alloc(inner)),
                 span,
@@ -918,13 +916,13 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 match parse_arg_list_or_callable(parser) {
                     ArgListResult::CallableMarker => {
                         // exit(...) - first class callable
-                        let span = Span::new(token.span.start, parser.previous_end());
+                        let span = parser.span_from(token.span.start);
                         parser.require_version(PhpVersion::Php84, "exit function call", span);
                         let callee = Expr {
                             kind: ExprKind::Name(name_text),
                             span: token.span,
                         };
-                        let span = Span::new(token.span.start, parser.previous_end());
+                        let span = parser.span_from(token.span.start);
                         Expr {
                             kind: ExprKind::CallableCreate(CallableCreateExpr {
                                 kind: CallableCreateKind::Function(parser.alloc(callee)),
@@ -933,7 +931,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                         }
                     }
                     ArgListResult::Args(args) => {
-                        let span = Span::new(token.span.start, parser.previous_end());
+                        let span = parser.span_from(token.span.start);
                         if args.is_empty() {
                             // exit()
                             Expr {
@@ -1007,7 +1005,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                             "clone(...) first-class callable",
                             token.span,
                         );
-                        let span = Span::new(token.span.start, parser.previous_end());
+                        let span = parser.span_from(token.span.start);
                         let callee = Expr {
                             kind: ExprKind::Name(name_text),
                             span: token.span,
@@ -1020,7 +1018,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                         }
                     }
                     ArgListResult::Args(args) => {
-                        let span = Span::new(token.span.start, parser.previous_end());
+                        let span = parser.span_from(token.span.start);
                         let is_simple = args.len() == 1 && is_plain_arg(&args[0]);
                         let is_clone_with =
                             args.len() == 2 && is_plain_arg(&args[0]) && is_plain_arg(&args[1]);
@@ -1051,7 +1049,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                                 // `clone($a)->b` is `clone (($a)->b)`: the parentheses are only grouping
                                 let grouped = Expr {
                                     kind: ExprKind::Parenthesized(parser.alloc(object)),
-                                    span: Span::new(open_paren_start, parser.previous_end()),
+                                    span: parser.span_from(open_paren_start),
                                 };
                                 let mut operand =
                                     parse_expr_continue(parser, grouped, precedence::CLONE_BP);
@@ -1155,11 +1153,10 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             name_expr(parser.parse_name())
         }
         TokenKind::Namespace => {
-            let span = parser.current_span();
             parser.error_expected("expression");
             Expr {
                 kind: ExprKind::Error,
-                span,
+                span: parser.missing_span(),
             }
         }
 
@@ -1171,11 +1168,10 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
 
         // Error: unexpected token
         _ => {
-            let span = parser.current_span();
             parser.error_expected("expression");
             Expr {
                 kind: ExprKind::Error,
-                span,
+                span: parser.missing_span(),
             }
         }
     }
@@ -1232,7 +1228,7 @@ fn parse_new_variable_tail<'arena, 'src>(
                     Some(parser.alloc(e))
                 };
                 parser.expect(TokenKind::RightBracket);
-                let span = Span::new(base.span.start, parser.previous_end());
+                let span = parser.span_from(base.span.start);
                 base = Expr {
                     kind: ExprKind::ArrayAccess(ArrayAccessExpr {
                         array: parser.alloc(base),
@@ -1307,7 +1303,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                     parser.forbid(
                         ForbiddenRule::ClosureForNew,
                         "Cannot create Closure for new expression",
-                        Span::new(paren_start, parser.previous_end()),
+                        parser.span_from(paren_start),
                     );
                     parser.alloc_vec()
                 }
@@ -1357,7 +1353,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                 None,
                 ClassBody {
                     members,
-                    span: Span::new(brace_start, end.max(brace_start)),
+                    span: parser.span_from(brace_start),
                 },
             );
             built.modifiers = crate::stmt::class_modifiers(false, false, anon_readonly);
@@ -1429,7 +1425,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             } else {
                 parse_variable_variable_name(parser)
             };
-            let span = Span::new(token.span.start, parser.previous_end());
+            let span = parser.span_from(token.span.start);
             Expr {
                 kind: ExprKind::VariableVariable(parser.alloc(inner)),
                 span,
@@ -1442,7 +1438,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             parser.require_version(PhpVersion::Php80, "new with an expression", open.span);
             let inner = parse_expr(parser);
             parser.expect_closing(TokenKind::RightParen, open.span);
-            let paren_span = Span::new(paren_start, parser.previous_end());
+            let paren_span = parser.span_from(paren_start);
             let class = Expr {
                 kind: ExprKind::Parenthesized(parser.alloc(inner)),
                 span: paren_span,
@@ -1482,7 +1478,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                 parser.forbid(
                     ForbiddenRule::ClosureForNew,
                     "Cannot create Closure for new expression",
-                    Span::new(paren_start, parser.previous_end()),
+                    parser.span_from(paren_start),
                 );
                 parser.alloc_vec()
             }
@@ -1516,7 +1512,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         }
     }
 
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
     Expr {
         kind: ExprKind::New(NewExpr {
             class: parser.alloc(class),
@@ -1600,7 +1596,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
     let end = parser.previous_end();
     let body = parser.alloc(Block {
         stmts: body_stmts,
-        span: Span::new(brace_start, end.max(brace_start)),
+        span: parser.span_from(brace_start),
     });
     if let Some(rt) = &return_type {
         let in_class = parser.class_scope.is_some();
@@ -1725,7 +1721,7 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
     parser.static_vars = saved_static_vars;
     let is_generator = std::mem::replace(&mut parser.has_yield, saved_has_yield);
     parser.restore_class_keywords(saved_class_keywords);
-    let span = Span::new(start, body.span.end);
+    let span = parser.span_to(start, body.span);
     if let (true, Some(rt)) = (is_generator, &return_type) {
         stmt::check_generator_return_type(parser, rt);
     } else if return_type.as_ref().is_some_and(stmt::is_void_type) {
@@ -1808,7 +1804,7 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
 
         parser.expect(TokenKind::FatArrow);
         let body = parse_expr(parser);
-        let arm_span = Span::new(arm_start, body.span.end);
+        let arm_span = parser.span_to(arm_start, body.span);
 
         arms.push(MatchArm {
             conditions,
@@ -1844,7 +1840,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
         parser.forbid(
             ForbiddenRule::YieldOutsideFunction,
             "'yield' can only be used inside a function",
-            Span::new(start, parser.previous_end()),
+            parser.span_from(start),
         );
     }
 
@@ -1852,7 +1848,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     if parser.check(TokenKind::Identifier) && parser.current_text().eq_ignore_ascii_case("from") {
         parser.advance();
         let value = parse_expr_bp(parser, precedence::YIELD_OPERAND_BP);
-        let span = Span::new(start, value.span.end);
+        let span = parser.span_to(start, value.span);
         if parser.by_ref_function {
             parser.forbid(
                 ForbiddenRule::YieldFromInByReferenceGenerator,
@@ -1890,7 +1886,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
                 | TokenKind::As
         )
     {
-        let span = Span::new(start, parser.previous_end());
+        let span = parser.span_from(start);
         return Expr {
             kind: ExprKind::Yield(YieldExpr {
                 key: None,
@@ -1907,7 +1903,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     if parser.eat(TokenKind::FatArrow).is_some() {
         let value = parse_expr_bp(parser, precedence::YIELD_OPERAND_BP);
         super::check_reference_return(parser, &value);
-        let span = Span::new(start, value.span.end);
+        let span = parser.span_to(start, value.span);
         return Expr {
             kind: ExprKind::Yield(YieldExpr {
                 key: Some(parser.alloc(first)),
@@ -1920,7 +1916,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
 
     // yield value
     super::check_reference_return(parser, &first);
-    let span = Span::new(start, first.span.end);
+    let span = parser.span_to(start, first.span);
     Expr {
         kind: ExprKind::Yield(YieldExpr {
             key: None,
@@ -2132,11 +2128,7 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
             "partial function application",
             ellipsis_span,
         );
-        return Arg::new(
-            name,
-            ArgKind::SpreadPlaceholder,
-            Span::new(start, parser.previous_end()),
-        );
+        return Arg::new(name, ArgKind::SpreadPlaceholder, parser.span_from(start));
     }
 
     // Bare `?` (PHP 8.6 placeholder) — never starts an expression, so no lookahead is needed.
@@ -2148,11 +2140,7 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
             "partial function application",
             question_span,
         );
-        return Arg::new(
-            name,
-            ArgKind::Placeholder,
-            Span::new(start, parser.previous_end()),
-        );
+        return Arg::new(name, ArgKind::Placeholder, parser.span_from(start));
     }
 
     // Check for by-reference: &$var (call-time pass-by-ref, removed in PHP 7.0)
@@ -2167,7 +2155,7 @@ fn parse_arg<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Arg<'arena, 
     }
 
     let value = parse_expr(parser);
-    let span = Span::new(start, value.span.end);
+    let span = parser.span_to(start, value.span);
 
     // `...&$x` is already reported above; the spread wins.
     let kind = if unpack {
@@ -2237,7 +2225,7 @@ pub(super) fn parse_function_call<'arena, 'src>(
 
     match parse_arg_list_or_callable(parser) {
         ArgListResult::CallableMarker => {
-            let span = Span::new(start, parser.previous_end());
+            let span = parser.span_from(start);
             Expr {
                 kind: ExprKind::CallableCreate(CallableCreateExpr {
                     kind: CallableCreateKind::Function(parser.alloc(callee)),
@@ -2246,7 +2234,7 @@ pub(super) fn parse_function_call<'arena, 'src>(
             }
         }
         ArgListResult::Args(args) => {
-            let span = Span::new(start, parser.previous_end());
+            let span = parser.span_from(start);
             Expr {
                 kind: ExprKind::FunctionCall(FunctionCallExpr {
                     name: parser.alloc(callee),
@@ -2388,7 +2376,7 @@ fn parse_array_element<'arena, 'src>(
                 super::check_special_variable_write(parser, &value, super::WriteKind::Modify);
             }
         }
-        let elem_span = Span::new(elem_start, value.span.end);
+        let elem_span = parser.span_to(elem_start, value.span);
         ArrayElement {
             key: Some(first_expr),
             kind: element_kind(value, false, by_ref),
@@ -2403,7 +2391,7 @@ fn parse_array_element<'arena, 'src>(
                 super::check_special_variable_write(parser, &first_expr, super::WriteKind::Modify);
             }
         }
-        let elem_span = Span::new(elem_start, first_expr.span.end);
+        let elem_span = parser.span_to(elem_start, first_expr.span);
         ArrayElement {
             key: None,
             kind: element_kind(first_expr, unpack, by_ref_value),
@@ -2485,7 +2473,7 @@ fn parse_list_element<'arena, 'src>(
     // Handle &$var (by-reference)
     if parser.eat(TokenKind::Ampersand).is_some() {
         let value = parse_expr(parser);
-        let elem_span = Span::new(elem_start, value.span.end);
+        let elem_span = parser.span_to(elem_start, value.span);
         return ArrayElement {
             key: None,
             kind: element_kind(value, false, true),
@@ -2499,14 +2487,14 @@ fn parse_list_element<'arena, 'src>(
         // key => [&]value
         let by_ref = parser.eat(TokenKind::Ampersand).is_some();
         let value = parse_expr(parser);
-        let elem_span = Span::new(elem_start, value.span.end);
+        let elem_span = parser.span_to(elem_start, value.span);
         ArrayElement {
             key: Some(first),
             kind: element_kind(value, false, by_ref),
             span: elem_span,
         }
     } else {
-        let elem_span = Span::new(elem_start, first.span.end);
+        let elem_span = parser.span_to(elem_start, first.span);
         ArrayElement {
             key: None,
             kind: element_kind(first, false, false),
@@ -2593,7 +2581,7 @@ fn try_parse_cast<'arena, 'src>(
         );
         return Some(Expr {
             kind: ExprKind::Parenthesized(parser.alloc(name)),
-            span: Span::new(start, parser.previous_end()),
+            span: parser.span_from(start),
         });
     }
 
@@ -2631,7 +2619,7 @@ fn try_parse_cast<'arena, 'src>(
     if parser.current_kind().is_assignment_op() {
         operand = parse_assign_continuation(parser, operand);
     }
-    let span = Span::new(start, operand.span.end);
+    let span = parser.span_to(start, operand.span);
     Some(Expr {
         kind: ExprKind::Cast(cast_kind, parser.alloc(operand)),
         span,

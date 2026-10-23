@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - An enum property with a fully qualified type, such as `public \Foo\Bar $a;`, reports `Enum E cannot include properties` instead of a syntax error (`php-rs-parser`).
 - An unclosed `exit(`, `die(` or `clone(` call no longer panics (`php-rs-parser`).
 - No span ends before it starts: the version errors for set-only visibility on a promoted parameter and for a non-capturing `catch`, and the spans of error statements, bodies missing their `{`, `use` items, parameters, attributes, short echo tags, static variables and alternative-syntax `elseif` branches after a missing token (`php-rs-parser`).
+- A node recovered from a missing or unexpected token, such as the name and parameter of `public function @return f() {}`, is empty and placed right after the last consumed token, so it lies inside its parent's span and no longer covers a token it did not consume (`php-rs-parser`).
 - A control character in code, including form feed, is an error from PHP 8.0 instead of being skipped (`php-lexer`, `php-rs-parser`).
 - `<?php` or `<?=` inside PHP code lexes as `<`, so it is a syntax error instead of being ignored (`php-lexer`).
 - A `?>` where a statement is expected, as in `if ($a) ?>x<?php`, is the empty body and the HTML after it runs unconditionally, as in PHP (`php-rs-parser`).

@@ -29,8 +29,8 @@ PHP Parse error:  syntax error, unexpected end of file in Standard input code on
                     "class": {
                       "kind": "Error",
                       "span": {
-                        "start": 34,
-                        "end": 34
+                        "start": 14,
+                        "end": 14
                       }
                     },
                     "args": []

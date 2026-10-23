@@ -128,8 +128,8 @@ PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input co
                           "class": {
                             "kind": "Error",
                             "span": {
-                              "start": 472,
-                              "end": 472
+                              "start": 427,
+                              "end": 427
                             }
                           },
                           "args": []

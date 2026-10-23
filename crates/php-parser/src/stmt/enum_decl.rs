@@ -93,7 +93,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                 parser.error_expected("'function' or 'const'");
             }
             let decl = super::class::parse_trait_use_decl(parser, member_start);
-            let span = Span::new(member_start, parser.previous_end());
+            let span = parser.span_from(member_start);
             members.push(EnumMember {
                 kind: EnumMemberKind::TraitUse(decl),
                 span,
@@ -156,7 +156,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                 );
             }
             parser.expect_member_end();
-            let span = Span::new(member_start, parser.previous_end());
+            let span = parser.span_from(member_start);
             parser.check_attributes(&member_attrs, &AttrSite::new(AttrTarget::ClassConst));
             members.push(EnumMember {
                 kind: EnumMemberKind::Case({
@@ -306,14 +306,14 @@ pub(super) fn parse_enum<'arena, 'src>(
                         built.doc_comment = doc_comment;
                         built
                     }),
-                    span: Span::new(member_start, parser.previous_end()),
+                    span: parser.span_from(member_start),
                 });
                 if parser.eat(TokenKind::Comma).is_none() {
                     break;
                 }
             }
             parser.expect_member_end();
-            let span = Span::new(member_start, parser.previous_end());
+            let span = parser.span_from(member_start);
             for member in &mut members[first_index..] {
                 member.span = span;
             }
@@ -326,7 +326,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                 parser.forbid(
                     ForbiddenRule::AbstractEnumMethod,
                     "enum methods cannot be abstract",
-                    Span::new(member_start, parser.previous_end()),
+                    parser.span_from(member_start),
                 );
             }
 
@@ -457,7 +457,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                 name,
                 EnumBody {
                     members,
-                    span: Span::new(brace_start, end.max(brace_start)),
+                    span: parser.span_from(brace_start),
                 },
             );
             built.scalar_type = scalar_type;

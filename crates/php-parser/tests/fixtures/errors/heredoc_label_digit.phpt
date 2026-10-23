@@ -41,8 +41,8 @@ PHP Parse error:  syntax error, unexpected token "<<" in Standard input code on 
                           "left": {
                             "kind": "Error",
                             "span": {
-                              "start": 11,
-                              "end": 13
+                              "start": 10,
+                              "end": 10
                             }
                           },
                           "op": "ShiftLeft",
@@ -50,14 +50,14 @@ PHP Parse error:  syntax error, unexpected token "<<" in Standard input code on 
                             "kind": "Error",
                             "span": {
                               "start": 13,
-                              "end": 14
+                              "end": 13
                             }
                           }
                         }
                       },
                       "span": {
-                        "start": 11,
-                        "end": 14
+                        "start": 10,
+                        "end": 13
                       }
                     },
                     "op": "Less",
@@ -73,7 +73,7 @@ PHP Parse error:  syntax error, unexpected token "<<" in Standard input code on 
                   }
                 },
                 "span": {
-                  "start": 11,
+                  "start": 10,
                   "end": 15
                 }
               }

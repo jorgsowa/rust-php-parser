@@ -44,13 +44,13 @@ PHP Parse error:  syntax error, unexpected token "}" in Standard input code on l
                   "body": {
                     "kind": "Error",
                     "span": {
-                      "start": 23,
-                      "end": 24
+                      "start": 22,
+                      "end": 22
                     }
                   },
                   "span": {
                     "start": 18,
-                    "end": 24
+                    "end": 22
                   }
                 }
               ]

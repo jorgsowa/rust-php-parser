@@ -32,7 +32,7 @@ PHP Parse error:  syntax error, unexpected token "=>", expecting "]" in Standard
                         "kind": "Error",
                         "span": {
                           "start": 12,
-                          "end": 14
+                          "end": 12
                         }
                       },
                       "kind": {

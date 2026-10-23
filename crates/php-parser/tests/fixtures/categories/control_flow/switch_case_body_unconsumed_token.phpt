@@ -40,8 +40,8 @@ PHP Parse error:  syntax error, unexpected token "endfor", expecting "case" or "
                 {
                   "kind": "Error",
                   "span": {
-                    "start": 36,
-                    "end": 36
+                    "start": 31,
+                    "end": 31
                   }
                 }
               ],

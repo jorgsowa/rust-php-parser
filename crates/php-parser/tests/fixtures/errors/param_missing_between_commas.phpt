@@ -46,8 +46,8 @@ PHP Parse error:  syntax error, unexpected token ",", expecting variable in Stan
               "variadic": false,
               "attributes": [],
               "span": {
-                "start": 21,
-                "end": 21
+                "start": 20,
+                "end": 20
               }
             },
             {

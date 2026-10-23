@@ -15,8 +15,8 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
           {
             "kind": "Error",
             "span": {
-              "start": 11,
-              "end": 12
+              "start": 10,
+              "end": 10
             }
           }
         ]

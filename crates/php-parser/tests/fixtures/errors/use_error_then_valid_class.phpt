@@ -19,14 +19,14 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
                 "parts": [],
                 "kind": "Error",
                 "span": {
-                  "start": 10,
-                  "end": 11
+                  "start": 9,
+                  "end": 9
                 }
               },
               "alias": null,
               "span": {
-                "start": 10,
-                "end": 10
+                "start": 9,
+                "end": 9
               }
             }
           ]

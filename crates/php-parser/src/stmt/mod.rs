@@ -68,7 +68,7 @@ pub fn parse_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
     if !parser.enter_nesting() {
         return Stmt {
             kind: StmtKind::Error,
-            span: parser.current_span(),
+            span: parser.missing_span(),
             doc_comment: None,
         };
     }
@@ -213,7 +213,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 parser.forbid(
                     ForbiddenRule::AbstractFinalConflict,
                     "cannot use 'abstract' and 'final' together on a class",
-                    Span::new(start, parser.previous_end()),
+                    parser.span_from(start),
                 );
                 if parser.check(TokenKind::Class) {
                     class::parse_class(
@@ -257,7 +257,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 parser.forbid(
                     ForbiddenRule::AbstractFinalConflict,
                     "cannot use 'abstract' and 'final' together on a class",
-                    Span::new(start, parser.previous_end()),
+                    parser.span_from(start),
                 );
                 if parser.check(TokenKind::Class) {
                     class::parse_class(
@@ -371,7 +371,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                     token.span,
                 );
                 parser.expect_semicolon("expression");
-                let span = Span::new(start, parser.previous_end());
+                let span = parser.span_from(start);
                 Stmt {
                     kind: StmtKind::Expression(parser.alloc(Expr {
                         kind: ExprKind::Name(Name::Simple {
@@ -390,11 +390,10 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
         // Label: `name:` — but only if followed by Colon
         TokenKind::Identifier => parse_expression_stmt_or_label(parser),
         TokenKind::Eof => {
-            let span = parser.current_span();
             parser.error_expected("statement");
             Stmt {
                 kind: StmtKind::Error,
-                span,
+                span: parser.missing_span(),
                 doc_comment: None,
             }
         }
@@ -419,7 +418,7 @@ fn class_modifier_error<'arena, 'src>(
     parser: &mut Parser<'arena, 'src>,
     start: u32,
 ) -> Stmt<'arena, 'src> {
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
     parser.error(ParseError::Expected {
         expected: "'class'".into(),
         found: parser.current_kind().description().into(),
@@ -464,7 +463,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             expr::parse_arrow_function(parser, is_static, attr_start, attributes)
         };
         parser.expect_semicolon("expression statement");
-        let span = Span::new(attr_start, parser.previous_end());
+        let span = parser.span_from(attr_start);
         return Stmt {
             kind: StmtKind::Expression(parser.alloc(expr)),
             span,
@@ -496,7 +495,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 parser.forbid(
                     ForbiddenRule::AbstractFinalConflict,
                     "cannot use 'abstract' and 'final' together on a class",
-                    Span::new(start, parser.previous_end()),
+                    parser.span_from(start),
                 );
                 if parser.check(TokenKind::Class) {
                     return class::parse_class(
@@ -526,7 +525,7 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 parser.forbid(
                     ForbiddenRule::AbstractFinalConflict,
                     "cannot use 'abstract' and 'final' together on a class",
-                    Span::new(start, parser.previous_end()),
+                    parser.span_from(start),
                 );
                 if parser.check(TokenKind::Class) {
                     class::parse_class(parser, class_modifiers(true, true, false), attributes)
@@ -557,16 +556,15 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 parser.advance(); // consume 'abstract'
                 return class::parse_class(parser, class_modifiers(true, false, true), attributes);
             } else {
-                let span = parser.current_span();
                 parser.error(ParseError::Expected {
                     expected: "'class'".into(),
                     found: parser.current_kind().description().into(),
-                    span,
+                    span: parser.current_span(),
                 });
                 parser.synchronize();
                 Stmt {
                     kind: StmtKind::Error,
-                    span,
+                    span: parser.span_from(readonly_span.start),
                     doc_comment: None,
                 }
             }
@@ -601,16 +599,16 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         }
         _ => {
             // Attributes before something unexpected
-            let span = parser.current_span();
+            let start = parser.start_span();
             parser.error(ParseError::Expected {
                 expected: "declaration after attributes".into(),
                 found: parser.current_kind().description().into(),
-                span,
+                span: parser.current_span(),
             });
             parser.synchronize();
             Stmt {
                 kind: StmtKind::Error,
-                span,
+                span: parser.span_from(start),
                 doc_comment: None,
             }
         }
@@ -639,8 +637,7 @@ pub fn parse_block<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
     parser.depth -= 1;
 
     parser.expect_closing(TokenKind::RightBrace, open_span);
-    let end = parser.previous_end();
-    let span = Span::new(start, end);
+    let span = parser.span_from(start);
 
     Stmt {
         kind: StmtKind::Block(parser.alloc(Block { stmts, span })),
@@ -694,7 +691,7 @@ fn parse_echo<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena
     }
 
     parser.expect_semicolon("echo statement");
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
 
     Stmt {
         kind: StmtKind::Echo(exprs),
@@ -721,7 +718,7 @@ fn parse_return<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
     }
 
     parser.expect_semicolon("return statement");
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
 
     Stmt {
         kind: StmtKind::Return(expr.map(|e| parser.alloc(e))),
@@ -751,7 +748,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
             parser,
             &[TokenKind::ElseIf, TokenKind::Else, TokenKind::EndIf],
         );
-        let then_span = Span::new(start, parser.previous_end());
+        let then_span = parser.span_from(start);
         let then_branch = parser.alloc(Stmt {
             kind: StmtKind::Block(parser.alloc(Block {
                 stmts,
@@ -791,7 +788,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
         let else_branch = if parser.eat(TokenKind::Else).is_some() {
             parser.expect(TokenKind::Colon);
             let else_stmts = parse_stmts_until_end(parser, &[TokenKind::EndIf]);
-            let else_span = Span::new(start, parser.previous_end());
+            let else_span = parser.span_from(start);
             Some(parser.alloc(Stmt {
                 kind: StmtKind::Block(parser.alloc(Block {
                     stmts: else_stmts,
@@ -806,7 +803,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
 
         parser.expect(TokenKind::EndIf);
         parser.expect_semicolon(TokenKind::EndIf);
-        let span = Span::new(start, parser.previous_end());
+        let span = parser.span_from(start);
 
         return Stmt {
             kind: StmtKind::If(parser.alloc({
@@ -833,7 +830,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
         let elseif_cond = expr::parse_expr(parser);
         parser.expect(TokenKind::RightParen);
         let elseif_body = parse_stmt_or_block(parser);
-        let elseif_span = Span::new(elseif_start, elseif_body.span.end);
+        let elseif_span = parser.span_to(elseif_start, elseif_body.span);
         elseif_branches.push(ElseIfBranch {
             condition: elseif_cond,
             body: elseif_body,
@@ -891,7 +888,7 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
         parser.loop_depth -= 1;
         parser.expect(TokenKind::EndWhile);
         parser.expect_semicolon(TokenKind::EndWhile);
-        let span = Span::new(start, parser.previous_end());
+        let span = parser.span_from(start);
         let body = parser.alloc(Stmt {
             kind: StmtKind::Block(parser.alloc(Block { stmts, span })),
             span,
@@ -912,7 +909,7 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
     let body_stmt = parse_stmt_or_block(parser);
     parser.loop_depth -= 1;
     let body = parser.alloc(body_stmt);
-    let span = Span::new(start, body.span.end);
+    let span = parser.span_to(start, body.span);
     Stmt {
         kind: StmtKind::While(parser.alloc({
             let mut built = WhileStmt::new(condition, body);
@@ -939,7 +936,7 @@ fn parse_do_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
     let condition = expr::parse_expr(parser);
     parser.expect_closing(TokenKind::RightParen, open_span);
     parser.expect_semicolon("do-while statement");
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
     Stmt {
         kind: StmtKind::DoWhile(parser.alloc(DoWhileStmt::new(body, condition))),
         span,
@@ -967,7 +964,7 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
         parser.loop_depth -= 1;
         parser.expect(TokenKind::EndFor);
         parser.expect_semicolon(TokenKind::EndFor);
-        let span = Span::new(start, parser.previous_end());
+        let span = parser.span_from(start);
         let body = parser.alloc(Stmt {
             kind: StmtKind::Block(parser.alloc(Block { stmts, span })),
             span,
@@ -991,7 +988,7 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
     let body_stmt = parse_stmt_or_block(parser);
     parser.loop_depth -= 1;
     let body = parser.alloc(body_stmt);
-    let span = Span::new(start, body.span.end);
+    let span = parser.span_to(start, body.span);
     Stmt {
         kind: StmtKind::For(parser.alloc({
             let mut built = ForStmt::new(parser.arena, body);
@@ -1083,7 +1080,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
         parser.loop_depth -= 1;
         parser.expect(TokenKind::EndForeach);
         parser.expect_semicolon(TokenKind::EndForeach);
-        let span = Span::new(start, parser.previous_end());
+        let span = parser.span_from(start);
         let body = parser.alloc(Stmt {
             kind: StmtKind::Block(parser.alloc(Block { stmts, span })),
             span,
@@ -1106,7 +1103,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     let body_stmt = parse_stmt_or_block(parser);
     parser.loop_depth -= 1;
     let body = parser.alloc(body_stmt);
-    let span = Span::new(start, body.span.end);
+    let span = parser.span_to(start, body.span);
     Stmt {
         kind: StmtKind::Foreach(parser.alloc({
             let mut built = ForeachStmt::new(collection, value, body);
@@ -1218,7 +1215,7 @@ fn parse_function<'arena, 'src>(
 
     let body = parser.alloc(Block {
         stmts: body_stmts,
-        span: Span::new(brace_start, end.max(brace_start)),
+        span: parser.span_from(brace_start),
     });
 
     if let Some(rt) = &return_type {
@@ -1511,7 +1508,7 @@ pub fn parse_param_list<'arena, 'src>(
                             parser.forbid(
                                 ForbiddenRule::MultipleSetVisibilityModifiers,
                                 "cannot use multiple set-visibility modifiers",
-                                Span::new(param_start, parser.previous_end()),
+                                parser.span_from(param_start),
                             );
                         }
                         parser.advance(); // consume visibility keyword
@@ -1530,7 +1527,7 @@ pub fn parse_param_list<'arena, 'src>(
                             parser.forbid(
                                 ForbiddenRule::MultipleVisibilityModifiers,
                                 "cannot use multiple visibility modifiers",
-                                Span::new(param_start, parser.previous_end()),
+                                parser.span_from(param_start),
                             );
                         }
                         parser.advance();
@@ -1587,7 +1584,7 @@ pub fn parse_param_list<'arena, 'src>(
                 parser.forbid(
                     ForbiddenRule::SetVisibilityWiderThanVisibility,
                     "Visibility of property must not be weaker than set visibility",
-                    Span::new(param_start, parser.previous_end()),
+                    parser.span_from(param_start),
                 );
             }
         }
@@ -1624,7 +1621,7 @@ pub fn parse_param_list<'arena, 'src>(
             parser.forbid(
                 ForbiddenRule::UntypedReadonlyProperty,
                 "readonly promoted property must have type",
-                Span::new(param_start, parser.previous_end()),
+                parser.span_from(param_start),
             );
         }
         // by-ref
@@ -1644,7 +1641,7 @@ pub fn parse_param_list<'arena, 'src>(
             parser.forbid(
                 ForbiddenRule::UntypedAsymmetricProperty,
                 format!("Property with asymmetric visibility {class}${name} must have type"),
-                Span::new(param_start, parser.previous_end()),
+                parser.span_from(param_start),
             );
         }
         if let Some(type_hint) = &type_hint {
@@ -1670,7 +1667,7 @@ pub fn parse_param_list<'arena, 'src>(
             parser.forbid(
                 ForbiddenRule::VariadicParameterDefault,
                 "Variadic parameter cannot have a default value",
-                Span::new(param_start, parser.previous_end()),
+                parser.span_from(param_start),
             );
         }
 
@@ -1729,7 +1726,7 @@ pub fn parse_param_list<'arena, 'src>(
                 && !hooks.is_empty()
                 && class::is_virtual_property(name, &hooks)
         }) {
-            let span = Span::new(param_start, parser.previous_end());
+            let span = parser.span_from(param_start);
             class::check_virtual_set_visibility(parser, name, &hooks, span);
         }
 
@@ -1763,12 +1760,13 @@ pub fn parse_param_list<'arena, 'src>(
         };
         parser.check_attributes(&param_attrs, &attr_site);
 
+        let param_span = if param_end < param_start {
+            parser.missing_span()
+        } else {
+            Span::new(param_start, param_end)
+        };
         params.push({
-            let mut param = Param::new(
-                parser.arena,
-                name,
-                Span::new(param_start, param_end.max(param_start)),
-            );
+            let mut param = Param::new(parser.arena, name, param_span);
             param.type_hint = type_hint;
             param.default = default;
             param.by_ref = by_ref;
@@ -1866,7 +1864,7 @@ fn parse_break<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
     };
     validate_break_continue(parser, "break", parser.loop_depth, &expr, kw_span);
     parser.expect_semicolon("break statement");
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
     Stmt {
         kind: StmtKind::Break(expr.map(|e| parser.alloc(e))),
         span,
@@ -1885,7 +1883,7 @@ fn parse_continue<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
     };
     validate_break_continue(parser, "continue", parser.loop_depth, &expr, kw_span);
     parser.expect_semicolon("continue statement");
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
     Stmt {
         kind: StmtKind::Continue(expr.map(|e| parser.alloc(e))),
         span,
@@ -2086,7 +2084,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
         cases.push(SwitchCase {
             value,
             body,
-            span: Span::new(case_start, parser.previous_end()),
+            span: parser.span_from(case_start),
         });
     }
 
@@ -2100,7 +2098,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
     }
 
     let body_span = parser.span_from(body_brace_start);
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
     Stmt {
         kind: StmtKind::Switch(parser.alloc({
             let mut built = SwitchStmt::new(
@@ -2127,7 +2125,7 @@ fn parse_throw_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
     parser.advance();
     let expr = expr::parse_expr(parser);
     parser.expect_semicolon("throw statement");
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
     Stmt {
         kind: StmtKind::Throw(parser.alloc(expr)),
         span,
@@ -2203,7 +2201,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             parser.require_version(
                 PhpVersion::Php80,
                 "non-capturing catch",
-                Span::new(catch_token.span.start, parser.previous_end()),
+                parser.span_from(catch_token.span.start),
             );
         }
 
@@ -2224,12 +2222,13 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             span: parser.span_from(catch_body_brace_start),
         });
 
+        // A recovered type for a missing `(` sits before `catch_start`, at the end of `catch`.
+        let clause_start = types
+            .first()
+            .map_or(catch_start, |t| t.span().start.min(catch_start));
         catches.push({
-            let mut built = CatchClause::new(
-                parser.arena,
-                catch_body,
-                Span::new(catch_start, parser.previous_end()),
-            );
+            let mut built =
+                CatchClause::new(parser.arena, catch_body, parser.span_from(clause_start));
             built.types = types;
             built.var = var;
             built
@@ -2265,11 +2264,11 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         parser.error(ParseError::Expected {
             expected: "catch or finally clause".into(),
             found: parser.current_kind().description().into(),
-            span: Span::new(start, parser.previous_end()),
+            span: parser.span_from(start),
         });
     }
 
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
     Stmt {
         kind: StmtKind::TryCatch(parser.alloc({
             let mut built = TryCatchStmt::new(parser.arena, body);
@@ -2299,7 +2298,7 @@ fn parse_goto<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena
     };
     parser.expect_statement_end();
     parser.has_goto_or_label = true;
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
     Stmt {
         kind: StmtKind::Goto(name),
         span,
@@ -2490,7 +2489,7 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
             parser.expect(TokenKind::Equals);
             let value = expr::parse_expr(parser);
             directives.push((name, value));
-            directive_spans.push(Span::new(t.span.start, parser.previous_end()));
+            directive_spans.push(parser.span_from(t.span.start));
         }
         if parser.eat(TokenKind::Comma).is_none() {
             break;
@@ -2509,7 +2508,7 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndDeclare]);
         parser.expect(TokenKind::EndDeclare);
         parser.expect_semicolon(TokenKind::EndDeclare);
-        let decl_span = Span::new(start, parser.previous_end());
+        let decl_span = parser.span_from(start);
         let block = parser.alloc(Stmt {
             kind: StmtKind::Block(parser.alloc(Block {
                 stmts,
@@ -2531,7 +2530,7 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
         check_declare_directive(parser, name, value, has_body, first_stmt, span);
     }
 
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
     Stmt {
         kind: StmtKind::Declare(parser.alloc({
             let mut built = DeclareStmt::new(directives);
@@ -2633,7 +2632,7 @@ fn parse_unset<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
     }
     parser.expect(TokenKind::RightParen);
     parser.expect_statement_end();
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
     Stmt {
         kind: StmtKind::Unset(exprs),
         span,
@@ -2658,7 +2657,7 @@ fn parse_global<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
         exprs.push(e);
     }
     parser.expect_statement_end();
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
     Stmt {
         kind: StmtKind::Global(exprs),
         span,
@@ -2720,7 +2719,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         let end = parser.previous_end();
         let block = parser.alloc(Block {
             stmts,
-            span: Span::new(brace_start, end.max(brace_start)),
+            span: parser.span_from(brace_start),
         });
         return Stmt {
             kind: StmtKind::Namespace(
@@ -2765,7 +2764,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         let end = parser.previous_end();
         let block = parser.alloc(Block {
             stmts,
-            span: Span::new(brace_start, end.max(brace_start)),
+            span: parser.span_from(brace_start),
         });
         Stmt {
             kind: StmtKind::Namespace(
@@ -2779,7 +2778,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         parser.namespace = Some(name.parts_slice().join("\\"));
         parser.class_imports.clear();
         parser.expect_statement_end();
-        let span = Span::new(start, parser.previous_end());
+        let span = parser.span_from(start);
         Stmt {
             kind: StmtKind::Namespace(
                 parser.alloc(NamespaceDecl::new(Some(name), NamespaceBody::Simple)),
@@ -2982,7 +2981,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
         }
     }
     parser.expect_statement_end();
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
     Stmt {
         kind: StmtKind::Use(parser.alloc(UseDecl::new(kind, uses))),
         span,
@@ -3031,7 +3030,7 @@ fn parse_const_with_attrs<'arena, 'src>(
         parser.expect(TokenKind::Equals);
         let value = expr::parse_expr(parser);
         expr::check_const_expr(parser, &value, true);
-        let item_span = Span::new(item_start, value.span.end);
+        let item_span = parser.span_to(item_start, value.span);
         let item_attrs = pending_attrs.take().unwrap_or_else(|| parser.alloc_vec());
         let doc_comment = pending_doc.take();
         items.push(ConstItem {
@@ -3052,7 +3051,7 @@ fn parse_const_with_attrs<'arena, 'src>(
     }
 
     parser.expect_statement_end();
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
     Stmt {
         kind: StmtKind::Const(items),
         span,
@@ -3179,7 +3178,7 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
     }
 
     parser.expect_statement_end();
-    let span = Span::new(start, parser.previous_end());
+    let span = parser.span_from(start);
     Stmt {
         kind: StmtKind::StaticVar(vars),
         span,
@@ -3235,7 +3234,7 @@ fn parse_label<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
     parser.has_goto_or_label = true;
     Stmt {
         kind: StmtKind::Label(Ident::new(text, token.span)),
-        span: Span::new(token.span.start, parser.previous_end()),
+        span: parser.span_from(token.span.start),
         doc_comment: None,
     }
 }
@@ -3250,7 +3249,7 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
         if parser.eat(TokenKind::Colon).is_some() {
             let label = Ident::new(value, span);
             parser.has_goto_or_label = true;
-            let span = Span::new(start, parser.previous_end());
+            let span = parser.span_from(start);
             return Stmt {
                 kind: StmtKind::Label(label),
                 span,
@@ -3269,7 +3268,8 @@ fn parse_expression_stmt_or_label<'arena, 'src>(
     }
 
     parser.expect_semicolon("expression");
-    let span = Span::new(start, parser.previous_end());
+    // A leading recovered expression sits before `start`, at the end of the previous token.
+    let span = parser.span_from(start.min(expr.span.start));
     Stmt {
         kind: StmtKind::Expression(parser.alloc(expr)),
         span,
@@ -3291,7 +3291,8 @@ fn parse_expression_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
     }
 
     parser.expect_semicolon("expression");
-    let span = Span::new(start, parser.previous_end());
+    // A leading recovered expression sits before `start`, at the end of the previous token.
+    let span = parser.span_from(start.min(expr.span.start));
     Stmt {
         kind: StmtKind::Expression(parser.alloc(expr)),
         span,

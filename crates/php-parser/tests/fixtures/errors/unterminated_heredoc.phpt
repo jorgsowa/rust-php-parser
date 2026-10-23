@@ -37,8 +37,8 @@ PHP Parse error:  syntax error, unexpected end of file, expecting variable or he
                           "left": {
                             "kind": "Error",
                             "span": {
-                              "start": 11,
-                              "end": 13
+                              "start": 10,
+                              "end": 10
                             }
                           },
                           "op": "ShiftLeft",
@@ -46,14 +46,14 @@ PHP Parse error:  syntax error, unexpected end of file, expecting variable or he
                             "kind": "Error",
                             "span": {
                               "start": 13,
-                              "end": 14
+                              "end": 13
                             }
                           }
                         }
                       },
                       "span": {
-                        "start": 11,
-                        "end": 14
+                        "start": 10,
+                        "end": 13
                       }
                     },
                     "op": "Less",
@@ -78,7 +78,7 @@ PHP Parse error:  syntax error, unexpected end of file, expecting variable or he
                   }
                 },
                 "span": {
-                  "start": 11,
+                  "start": 10,
                   "end": 17
                 }
               }

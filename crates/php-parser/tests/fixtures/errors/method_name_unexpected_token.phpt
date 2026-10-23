@@ -1,0 +1,89 @@
+===source===
+<?php class A { public function @return f() {} }
+===errors===
+expected method name, found '@'
+expected '(', found '@'
+expected variable, found '@'
+expected ')', found '@'
+expected ';', found '@'
+expected class member, found '@'
+expected expression, found '}'
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '@' in Standard input code on line 1
+===php_error >=8.0===
+PHP Parse error:  syntax error, unexpected token "@" in Standard input code on line 1
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": null,
+                  "modifiers": {
+                    "visibility": "Public"
+                  },
+                  "by_ref": false,
+                  "params": [
+                    {
+                      "name": null,
+                      "type_hint": null,
+                      "default": null,
+                      "by_ref": false,
+                      "variadic": false,
+                      "attributes": [],
+                      "span": {
+                        "start": 31,
+                        "end": 31
+                      }
+                    }
+                  ],
+                  "return_type": null,
+                  "body": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 16,
+                "end": 31
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 46
+      }
+    },
+    {
+      "kind": "Error",
+      "span": {
+        "start": 46,
+        "end": 46
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 46
+  }
+}

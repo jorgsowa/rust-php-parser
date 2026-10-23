@@ -522,10 +522,30 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         self.previous_end
     }
 
-    /// Span from `start` to [`previous_end`](Self::previous_end), empty when nothing was consumed since `start`.
+    /// Span from `start` to [`previous_end`](Self::previous_end), or [`missing_span`](Self::missing_span) when nothing was consumed since `start`.
     #[inline]
     pub fn span_from(&self, start: u32) -> Span {
-        Span::new(start, self.previous_end.max(start))
+        if self.previous_end < start {
+            self.missing_span()
+        } else {
+            Span::new(start, self.previous_end)
+        }
+    }
+
+    /// Span from `start` to the end of `last`, or `last` itself when it is a placeholder recovered before `start`.
+    #[inline]
+    pub fn span_to(&self, start: u32, last: Span) -> Span {
+        if last.end < start {
+            last
+        } else {
+            Span::new(start, last.end)
+        }
+    }
+
+    /// Zero-width span right after the last consumed token, for a node recovered from missing or unexpected input.
+    #[inline]
+    pub fn missing_span(&self) -> Span {
+        Span::new(self.previous_end, self.previous_end)
     }
 
     /// Strip the `$` prefix from a Variable token and return the bare name.
@@ -557,11 +577,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
-    /// Zero-width error [`Ident`] at the current token, for a missing name.
+    /// Error [`Ident`] at [`missing_span`](Self::missing_span), for a missing name.
     #[inline]
     pub fn missing_ident(&self) -> Ident<'src> {
-        let at = self.current.span.start;
-        Ident::error(Span::new(at, at))
+        Ident::error(self.missing_span())
     }
 
     /// Check if the current token matches the given kind.
@@ -1217,14 +1236,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             if let Some((text, span)) = self.eat_name_segment(fully_qualified || relative) {
                 (text, span)
             } else {
-                let err_span = self.current_span();
                 self.error(ParseError::Expected {
                     expected: "identifier".into(),
                     found: self.current_kind().description().into(),
-                    span: err_span,
+                    span: self.current_span(),
                 });
-                let span = Span::new(start, err_span.end);
-                return Name::Error { span };
+                return Name::Error {
+                    span: self.span_from(start),
+                };
             };
 
         // Fast path: single unqualified identifier (the common case, ~95% of names).
@@ -1866,7 +1885,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         // Nullable: ?Type
         if self.eat(TokenKind::Question).is_some() {
             let inner = self.parse_simple_type();
-            let span = Span::new(start, inner.span.end);
+            let span = self.span_to(start, inner.span);
             return TypeHint {
                 kind: TypeHintKind::Nullable(self.alloc(inner)),
                 span,
@@ -1967,7 +1986,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         }
 
                         if member_types.len() > 1 {
-                            let mspan = Span::new(member_start, self.previous_end());
+                            let mspan = self.span_from(member_start);
                             union_members.push(TypeHint {
                                 kind: TypeHintKind::Intersection(member_types),
                                 span: mspan,
@@ -2103,7 +2122,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 self.advance(); // consume |
 
                 // Wrap the first intersection member
-                let ispan = Span::new(start, self.previous_end());
+                let ispan = self.span_from(start);
                 let mut union_members = self.alloc_vec_one(TypeHint {
                     kind: TypeHintKind::Intersection(types),
                     span: ispan,
@@ -2126,7 +2145,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                             member_types.push(self.parse_simple_type());
                         }
 
-                        let mspan = Span::new(member_start, self.previous_end());
+                        let mspan = self.span_from(member_start);
                         union_members.push(TypeHint {
                             kind: TypeHintKind::Intersection(member_types),
                             span: mspan,
@@ -2176,7 +2195,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         member_types.push(self.parse_simple_type());
                     }
 
-                    let mspan = Span::new(member_start, self.previous_end());
+                    let mspan = self.span_from(member_start);
                     union_members.push(TypeHint {
                         kind: TypeHintKind::Intersection(member_types),
                         span: mspan,
@@ -2210,12 +2229,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
     /// Parse a simple (non-composite) type: named type from Name or builtin keyword.
     pub fn parse_simple_type(&mut self) -> TypeHint<'arena, 'src> {
-        let start = self.start_span();
-
         // `int\X` is a class in namespace `int`, not the builtin type followed by `\X`.
         if self.peek_kind() == Some(TokenKind::Backslash) && !self.check(TokenKind::Backslash) {
             let name = self.parse_name();
-            let span = Span::new(start, name.span().end);
+            let span = name.span();
             return TypeHint {
                 kind: TypeHintKind::Named(name),
                 span,
@@ -2320,7 +2337,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             _ => {
                 // Named type from qualified/unqualified name
                 let name = self.parse_name();
-                let span = Span::new(start, name.span().end);
+                let span = name.span();
                 TypeHint {
                     kind: TypeHintKind::Named(name),
                     span,
@@ -2398,7 +2415,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                             self.forbid(
                                 ForbiddenRule::AttributeArgumentClosure,
                                 "Cannot create Closure as attribute argument",
-                                Span::new(paren_start, self.previous_end()),
+                                self.span_from(paren_start),
                             );
                             self.alloc_vec()
                         }

@@ -177,7 +177,7 @@ PHP Parse error:  syntax error, unexpected '\' (T_NS_SEPARATOR), expecting '(' i
                     "kind": "Error",
                     "span": {
                       "start": 52,
-                      "end": 53
+                      "end": 52
                     }
                   }
                 },

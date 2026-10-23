@@ -58,13 +58,13 @@ PHP Parse error:  syntax error, unexpected token ",", expecting ")" in Standard 
                       "kind": "Error",
                       "span": {
                         "start": 12,
-                        "end": 13
+                        "end": 12
                       }
                     }
                   },
                   "span": {
                     "start": 12,
-                    "end": 13
+                    "end": 12
                   }
                 },
                 {

@@ -322,8 +322,8 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
                               "variadic": false,
                               "attributes": [],
                               "span": {
-                                "start": 1063,
-                                "end": 1063
+                                "start": 1027,
+                                "end": 1027
                               }
                             }
                           ],

@@ -60,7 +60,7 @@ PHP Parse error:  syntax error, unexpected token ")" in Standard input code on l
             "kind": "Error",
             "span": {
               "start": 22,
-              "end": 23
+              "end": 22
             }
           },
           "body": {

@@ -25,13 +25,13 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "=" in Standard 
               "kind": "Error",
               "span": {
                 "start": 13,
-                "end": 14
+                "end": 13
               }
             },
             "attributes": [],
             "span": {
               "start": 12,
-              "end": 14
+              "end": 13
             }
           }
         ]

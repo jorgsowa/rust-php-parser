@@ -26,15 +26,15 @@ PHP Parse error:  syntax error, unexpected end of file in Standard input code on
               "value": {
                 "kind": "Error",
                 "span": {
-                  "start": 44,
-                  "end": 44
+                  "start": 10,
+                  "end": 10
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 44
+            "end": 10
           }
         }
       },

@@ -48,8 +48,8 @@ PHP Parse error:  Unmatched '}' in Standard input code on line 3
                 {
                   "kind": "Error",
                   "span": {
-                    "start": 29,
-                    "end": 29
+                    "start": 28,
+                    "end": 28
                   }
                 }
               ]

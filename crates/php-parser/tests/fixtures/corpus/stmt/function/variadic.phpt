@@ -713,8 +713,8 @@ PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) 
               "variadic": false,
               "attributes": [],
               "span": {
-                "start": 330,
-                "end": 330
+                "start": 311,
+                "end": 311
               }
             }
           ],
@@ -738,8 +738,8 @@ PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) 
                       "variadic": false,
                       "attributes": [],
                       "span": {
-                        "start": 366,
-                        "end": 366
+                        "start": 346,
+                        "end": 346
                       }
                     }
                   ],
@@ -763,8 +763,8 @@ PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) 
                               "variadic": false,
                               "attributes": [],
                               "span": {
-                                "start": 406,
-                                "end": 406
+                                "start": 382,
+                                "end": 382
                               }
                             }
                           ],
@@ -788,8 +788,8 @@ PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) 
                                       "variadic": false,
                                       "attributes": [],
                                       "span": {
-                                        "start": 447,
-                                        "end": 447
+                                        "start": 422,
+                                        "end": 422
                                       }
                                     }
                                   ],
@@ -1072,8 +1072,8 @@ PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) 
                                                       "variadic": false,
                                                       "attributes": [],
                                                       "span": {
-                                                        "start": 706,
-                                                        "end": 706
+                                                        "start": 682,
+                                                        "end": 682
                                                       }
                                                     }
                                                   ],

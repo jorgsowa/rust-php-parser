@@ -41,8 +41,8 @@ PHP Parse error:  syntax error, unexpected token "else", expecting "(" in Standa
               "condition": {
                 "kind": "Error",
                 "span": {
-                  "start": 22,
-                  "end": 26
+                  "start": 21,
+                  "end": 21
                 }
               },
               "body": {
@@ -50,13 +50,13 @@ PHP Parse error:  syntax error, unexpected token "else", expecting "(" in Standa
                   "Block": []
                 },
                 "span": {
-                  "start": 22,
-                  "end": 22
+                  "start": 21,
+                  "end": 21
                 }
               },
               "span": {
-                "start": 22,
-                "end": 22
+                "start": 21,
+                "end": 21
               }
             }
           ],

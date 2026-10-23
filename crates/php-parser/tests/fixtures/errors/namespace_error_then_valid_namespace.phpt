@@ -16,8 +16,8 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "{" in Standard 
             "parts": [],
             "kind": "Error",
             "span": {
-              "start": 16,
-              "end": 17
+              "start": 15,
+              "end": 15
             }
           },
           "body": "Simple"

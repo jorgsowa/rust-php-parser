@@ -265,36 +265,36 @@ PHP Parse error:  syntax error, unexpected ',' in Standard input code on line 4
                                 "value": {
                                   "kind": "Error",
                                   "span": {
-                                    "start": 337,
-                                    "end": 337
+                                    "start": 312,
+                                    "end": 312
                                   }
                                 }
                               }
                             },
                             "span": {
                               "start": 308,
-                              "end": 337
+                              "end": 312
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 274,
-                        "end": 337
+                        "end": 312
                       }
                     }
                   }
                 },
                 "span": {
                   "start": 251,
-                  "end": 337
+                  "end": 312
                 }
               }
             }
           },
           "span": {
             "start": 224,
-            "end": 337
+            "end": 312
           }
         }
       },

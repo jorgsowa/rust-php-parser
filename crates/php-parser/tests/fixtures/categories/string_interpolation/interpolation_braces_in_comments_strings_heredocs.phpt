@@ -1360,14 +1360,14 @@ PHP Parse error:  syntax error, unexpected ';', expecting ')' in Standard input 
                                         "Value": {
                                           "kind": "Error",
                                           "span": {
-                                            "start": 440,
-                                            "end": 440
+                                            "start": 424,
+                                            "end": 424
                                           }
                                         }
                                       },
                                       "span": {
-                                        "start": 440,
-                                        "end": 440
+                                        "start": 424,
+                                        "end": 424
                                       }
                                     }
                                   ]

@@ -42,13 +42,13 @@ PHP Parse error:  syntax error, unexpected token ")" in Standard input code on l
                       "kind": "Error",
                       "span": {
                         "start": 11,
-                        "end": 17
+                        "end": 16
                       }
                     }
                   },
                   "span": {
                     "start": 11,
-                    "end": 17
+                    "end": 16
                   }
                 }
               ]

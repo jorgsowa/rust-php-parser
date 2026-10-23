@@ -110,14 +110,14 @@ PHP Fatal error:  Cannot use empty array elements in arrays in Standard input co
                   "Value": {
                     "kind": "Error",
                     "span": {
-                      "start": 26,
-                      "end": 27
+                      "start": 25,
+                      "end": 25
                     }
                   }
                 },
                 "span": {
-                  "start": 26,
-                  "end": 27
+                  "start": 25,
+                  "end": 25
                 }
               },
               {

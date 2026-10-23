@@ -28,15 +28,15 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or va
               "property": {
                 "kind": "Error",
                 "span": {
-                  "start": 13,
-                  "end": 14
+                  "start": 12,
+                  "end": 12
                 }
               }
             }
           },
           "span": {
             "start": 6,
-            "end": 14
+            "end": 12
           }
         }
       },

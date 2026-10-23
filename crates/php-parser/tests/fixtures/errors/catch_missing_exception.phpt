@@ -27,15 +27,15 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "(" in Standard 
                   "parts": [],
                   "kind": "Error",
                   "span": {
-                    "start": 20,
-                    "end": 21
+                    "start": 19,
+                    "end": 19
                   }
                 }
               ],
               "var": null,
               "body": [],
               "span": {
-                "start": 20,
+                "start": 19,
                 "end": 23
               }
             }

@@ -29,15 +29,15 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "(" in Standard 
                 "array": {
                   "kind": "Error",
                   "span": {
-                    "start": 13,
-                    "end": 14
+                    "start": 12,
+                    "end": 12
                   }
                 },
                 "index": null
               }
             },
             "span": {
-              "start": 13,
+              "start": 12,
               "end": 16
             }
           },

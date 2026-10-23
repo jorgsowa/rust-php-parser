@@ -194,8 +194,8 @@ PHP Parse error:  syntax error, unexpected token "use", expecting "{" in Standar
         "Break": {
           "kind": "Error",
           "span": {
-            "start": 69,
-            "end": 74
+            "start": 68,
+            "end": 68
           }
         }
       },
@@ -226,8 +226,8 @@ PHP Parse error:  syntax error, unexpected token "use", expecting "{" in Standar
         "Continue": {
           "kind": "Error",
           "span": {
-            "start": 86,
-            "end": 94
+            "start": 85,
+            "end": 85
           }
         }
       },
@@ -258,8 +258,8 @@ PHP Parse error:  syntax error, unexpected token "use", expecting "{" in Standar
         "Return": {
           "kind": "Error",
           "span": {
-            "start": 104,
-            "end": 110
+            "start": 103,
+            "end": 103
           }
         }
       },

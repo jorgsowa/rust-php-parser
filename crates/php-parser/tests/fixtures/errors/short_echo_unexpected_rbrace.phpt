@@ -17,27 +17,27 @@ PHP Parse error:  Unmatched '}' in Standard input code on line 1
           {
             "kind": "Error",
             "span": {
-              "start": 4,
-              "end": 5
+              "start": 3,
+              "end": 3
             }
           }
         ]
       },
       "span": {
-        "start": 4,
-        "end": 4
+        "start": 3,
+        "end": 3
       }
     },
     {
       "kind": "Error",
       "span": {
-        "start": 4,
-        "end": 4
+        "start": 3,
+        "end": 3
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 4
+    "end": 3
   }
 }

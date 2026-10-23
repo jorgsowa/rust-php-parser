@@ -28,7 +28,7 @@ PHP Parse error:  syntax error, unexpected token ")" in Standard input code on l
                     "kind": "Error",
                     "span": {
                       "start": 25,
-                      "end": 26
+                      "end": 25
                     }
                   },
                   "then_branch": {

@@ -19,14 +19,14 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fu
                 "parts": [],
                 "kind": "Error",
                 "span": {
-                  "start": 19,
-                  "end": 20
+                  "start": 18,
+                  "end": 18
                 }
               },
               "alias": null,
               "span": {
-                "start": 19,
-                "end": 19
+                "start": 18,
+                "end": 18
               }
             }
           ]

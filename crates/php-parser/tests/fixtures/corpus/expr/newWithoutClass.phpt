@@ -21,7 +21,7 @@ PHP Parse error:  syntax error, unexpected token ";", expecting "class" in Stand
                 "kind": "Error",
                 "span": {
                   "start": 9,
-                  "end": 10
+                  "end": 9
                 }
               },
               "args": []

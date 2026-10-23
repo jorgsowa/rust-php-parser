@@ -36,14 +36,14 @@ PHP Parse error:  syntax error, unexpected token ",", expecting identifier or fu
                 "parts": [],
                 "kind": "Error",
                 "span": {
-                  "start": 13,
-                  "end": 14
+                  "start": 12,
+                  "end": 12
                 }
               },
               "alias": null,
               "span": {
-                "start": 13,
-                "end": 13
+                "start": 12,
+                "end": 12
               }
             },
             {

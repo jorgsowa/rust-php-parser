@@ -45,8 +45,8 @@ PHP Parse error:  syntax error, unexpected token "<", expecting end of file in S
                     "left": {
                       "kind": "Error",
                       "span": {
-                        "start": 14,
-                        "end": 15
+                        "start": 13,
+                        "end": 13
                       }
                     },
                     "op": "Less",
@@ -54,14 +54,14 @@ PHP Parse error:  syntax error, unexpected token "<", expecting end of file in S
                       "kind": "Error",
                       "span": {
                         "start": 15,
-                        "end": 16
+                        "end": 15
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 14,
-                  "end": 16
+                  "start": 13,
+                  "end": 15
                 }
               },
               "then_expr": {
@@ -71,7 +71,7 @@ PHP Parse error:  syntax error, unexpected token "<", expecting end of file in S
                       "kind": "Error",
                       "span": {
                         "start": 16,
-                        "end": 17
+                        "end": 16
                       }
                     },
                     "op": "Assign",
@@ -95,19 +95,19 @@ PHP Parse error:  syntax error, unexpected token "<", expecting end of file in S
                 "kind": "Error",
                 "span": {
                   "start": 19,
-                  "end": 20
+                  "end": 19
                 }
               }
             }
           },
           "span": {
-            "start": 14,
-            "end": 20
+            "start": 13,
+            "end": 19
           }
         }
       },
       "span": {
-        "start": 14,
+        "start": 13,
         "end": 20
       }
     }

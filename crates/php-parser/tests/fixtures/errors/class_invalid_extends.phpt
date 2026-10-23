@@ -28,8 +28,8 @@ PHP Parse error:  syntax error, unexpected token "{" in Standard input code on l
             "parts": [],
             "kind": "Error",
             "span": {
-              "start": 25,
-              "end": 26
+              "start": 24,
+              "end": 24
             }
           },
           "implements": [],
