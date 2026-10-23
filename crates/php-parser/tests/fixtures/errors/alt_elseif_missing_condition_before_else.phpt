@@ -5,9 +5,6 @@ elseif else:
 endif;
 ===errors===
 expected '(', found 'else'
-expected expression, found 'else'
-expected ')', found 'else'
-expected ':', found 'else'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'else' (T_ELSE), expecting '(' in Standard input code on line 3
 ===php_error >=8.0===

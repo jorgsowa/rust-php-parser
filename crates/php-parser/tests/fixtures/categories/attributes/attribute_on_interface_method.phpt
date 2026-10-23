@@ -1,7 +1,7 @@
 ===source===
 <?php interface I { #[Pure] public function foo(): void; }
 ===errors <=7.4===
-expected '}', found end of file
+missing closing '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 1
 ===ast <=7.4===

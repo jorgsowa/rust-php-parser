@@ -23,6 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `<?= ?>` and `<?=` at the end of the file are an `Echo` holding an `Error`, like `<?= ;` (`php-rs-parser`).
 - A short echo's `Echo` span starts at `<?=` (`php-rs-parser`).
 - An `elseif` branch spans from `elseif`, and an alternative-syntax then, `elseif` or `else` block from its `:` instead of from `if` (`php-rs-parser`).
+- An alternative-syntax `while`, `for`, `foreach`, `declare` or `switch` body spans from its `:` to its last statement, without the closing keyword, like an `if` block; a `catch` clause spans from `catch` instead of `(` (`php-rs-parser`).
+- An unclosed statement or declaration body reports `missing closing '}'`, and a body missing its `{` reports only that, not also its `}` (`php-rs-parser`).
+- A syntax error at the same token as the previous one is dropped as a recovery cascade, as in `<?php if }` or a body missing at the end of the file (`php-rs-parser`).
 - The asymmetric-visibility version error spans the set-visibility modifier, such as `private(set)` (`php-rs-parser`).
 - The printer writes a newline after a `?>` before HTML when the source has one there or when the HTML starts with a newline that `?>` would swallow (`php-printer`).
 
@@ -32,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A class property with a fully qualified type and no modifier, such as `\Foo $a;`, is a syntax error instead of being accepted (`php-rs-parser`).
 - An enum property with a fully qualified type, such as `public \Foo\Bar $a;`, reports `Enum E cannot include properties` instead of a syntax error (`php-rs-parser`).
 - An unclosed `exit(`, `die(` or `clone(` call no longer panics (`php-rs-parser`).
+- A promoted parameter with only `readonly`, `final` or a set-visibility modifier, such as `private(set) int $a`, reports that promotion requires PHP 8.0 (`php-rs-parser`).
 - No span ends before it starts: the version errors for set-only visibility on a promoted parameter and for a non-capturing `catch`, and the spans of error statements, bodies missing their `{`, `use` items, parameters, attributes, short echo tags, static variables and alternative-syntax `elseif` branches after a missing token (`php-rs-parser`).
 - A node recovered from a missing or unexpected token, such as the name and parameter of `public function @return f() {}`, is empty and placed right after the last consumed token, so it lies inside its parent's span and no longer covers a token it did not consume (`php-rs-parser`).
 - A missing operand before an operator, as in `* 2;`, sits at the operator, so the expression and statement no longer start at the whitespace before it (`php-rs-parser`).

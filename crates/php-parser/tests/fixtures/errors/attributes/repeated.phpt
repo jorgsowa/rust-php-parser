@@ -14,9 +14,6 @@ function h(#[SensitiveParameter, SensitiveParameter] $a) {}
 #[\Attribute, ATTRIBUTE] class E {}
 ===errors <=7.4===
 expected variable, found end of file
-missing closing ')'
-expected '{', found end of file
-missing closing '}'
 ===errors 8.0===
 Attribute "Attribute" must not be repeated
 Attribute "Attribute" must not be repeated

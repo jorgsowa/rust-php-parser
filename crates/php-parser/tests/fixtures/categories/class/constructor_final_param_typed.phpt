@@ -1,6 +1,9 @@
 ===source===
 <?php class P { public function __construct(final int $i) {} }
-===errors <=8.4===
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'final promoted properties' requires PHP 8.5 or higher
+===errors 8.0-8.4===
 'final promoted properties' requires PHP 8.5 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'final' (T_FINAL), expecting variable (T_VARIABLE) in Standard input code on line 1

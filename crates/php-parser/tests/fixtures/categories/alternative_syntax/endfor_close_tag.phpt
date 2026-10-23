@@ -112,8 +112,8 @@
               ]
             },
             "span": {
-              "start": 6,
-              "end": 49
+              "start": 32,
+              "end": 42
             }
           },
           "uses_alternative": true

@@ -43,7 +43,7 @@ try {} catch (int\X | float\Y $e) {}
               },
               "body": [],
               "span": {
-                "start": 19,
+                "start": 13,
                 "end": 42
               }
             }

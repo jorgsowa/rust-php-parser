@@ -69,8 +69,8 @@ PHP Fatal error:  strict_types declaration must not use block mode in Standard i
               "Block": []
             },
             "span": {
-              "start": 33,
-              "end": 69
+              "start": 56,
+              "end": 57
             }
           },
           "uses_alternative": true

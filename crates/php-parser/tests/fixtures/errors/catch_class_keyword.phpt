@@ -51,7 +51,7 @@ PHP Fatal error:  Bad class name in the catch statement in Standard input code o
               },
               "body": [],
               "span": {
-                "start": 20,
+                "start": 14,
                 "end": 33
               }
             },
@@ -87,7 +87,7 @@ PHP Fatal error:  Bad class name in the catch statement in Standard input code o
               },
               "body": [],
               "span": {
-                "start": 40,
+                "start": 34,
                 "end": 59
               }
             },
@@ -107,7 +107,7 @@ PHP Fatal error:  Bad class name in the catch statement in Standard input code o
               "var": null,
               "body": [],
               "span": {
-                "start": 66,
+                "start": 60,
                 "end": 78
               }
             },
@@ -133,7 +133,7 @@ PHP Fatal error:  Bad class name in the catch statement in Standard input code o
               },
               "body": [],
               "span": {
-                "start": 85,
+                "start": 79,
                 "end": 99
               }
             }

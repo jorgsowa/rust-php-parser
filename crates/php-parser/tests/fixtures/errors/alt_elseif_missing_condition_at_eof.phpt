@@ -2,11 +2,6 @@
 <?php if ($a): elseif 
 ===errors===
 expected '(', found end of file
-expected expression, found end of file
-expected ')', found end of file
-expected ':', found end of file
-expected 'endif', found end of file
-expected ';' after 'endif'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected end of file, expecting '(' in Standard input code on line 1
 ===php_error >=8.0===

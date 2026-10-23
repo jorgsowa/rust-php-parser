@@ -5,14 +5,10 @@ if ($x > 1 {
 }
 ===errors <=7.4===
 expected expression, found 'echo'
-expected '}', found 'echo'
-missing closing ')'
 expected expression, found '}'
 ===errors >=8.0===
 expected expression, found 'echo'
-expected '}', found 'echo'
 Array and string offset access syntax with curly braces is no longer supported
-missing closing ')'
 expected expression, found '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '{' in Standard input code on line 2

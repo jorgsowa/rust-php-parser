@@ -35,13 +35,9 @@ class H {
 Cannot use expression as assignment target.
 Constant expression contains invalid operations
 missing closing ')'
-expected '{', found identifier
 expected ';', found '{'
 expected ';' after expression
 expected variable, found '}'
-expected ')', found '}'
-expected ';', found '}'
-missing closing '}'
 ===errors 8.0===
 'readonly class' requires PHP 8.2 or higher
 'attributes on constants' requires PHP 8.5 or higher

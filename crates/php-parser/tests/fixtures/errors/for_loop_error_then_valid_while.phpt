@@ -2,7 +2,6 @@
 <?php for (;;; ) {} while (true) { break; }
 ===errors===
 expected expression, found ';'
-missing closing ')'
 expected expression, found ')'
 expected expression, found '}'
 ===php_error <=7.4===

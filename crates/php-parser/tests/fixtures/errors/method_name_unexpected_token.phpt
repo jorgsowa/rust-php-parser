@@ -2,11 +2,6 @@
 <?php class A { public function @return f() {} }
 ===errors===
 expected method name, found '@'
-expected '(', found '@'
-expected variable, found '@'
-expected ')', found '@'
-expected ';', found '@'
-expected class member, found '@'
 expected expression, found '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '@' in Standard input code on line 1

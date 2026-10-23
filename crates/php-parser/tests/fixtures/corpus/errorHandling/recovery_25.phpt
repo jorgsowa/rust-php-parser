@@ -6,7 +6,6 @@ unterminated string literal
 expected ']', found identifier
 expected ';' after expression
 expected ';' after expression
-expected ';' after expression
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'thing' (T_STRING), expecting ']' in Standard input code on line 2
 ===php_error >=8.0===

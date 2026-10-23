@@ -402,7 +402,7 @@ try { echo 5; } catch (Exception $e) { echo 6; } finally { echo 7; }
                 }
               ],
               "span": {
-                "start": 175,
+                "start": 169,
                 "end": 201
               }
             }

@@ -129,7 +129,7 @@ pub(super) fn parse_class<'arena, 'src>(
     let doc_comment = parser.take_doc_comment(start);
 
     let brace_start = parser.start_span();
-    parser.expect(TokenKind::LeftBrace);
+    let open = parser.expect(TokenKind::LeftBrace);
     parser.check_class_nesting(name.span);
     let scope = parser.class_scope_for(name.as_str(), extends.as_ref(), false);
     let kind = ClassKind::Class {
@@ -145,7 +145,7 @@ pub(super) fn parse_class<'arena, 'src>(
     if modifiers.is_readonly {
         check_readonly_class_members(parser, &members);
     }
-    parser.expect(TokenKind::RightBrace);
+    parser.expect_body_close(open);
     let end = parser.previous_end();
 
     Stmt {
@@ -363,7 +363,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
             if parser.has_goto_or_label {
                 super::check_gotos(parser, &stmts);
             }
-            parser.expect_closing(TokenKind::RightBrace, brace_span);
+            parser.expect_body_close(open_brace);
             let block_end = parser.previous_end();
             PropertyHookBody::Block(parser.alloc(Block {
                 stmts,
@@ -434,7 +434,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
         });
     }
 
-    parser.expect_closing(TokenKind::RightBrace, open_span);
+    parser.expect_body_close(open);
     if hooks.is_empty() {
         parser.forbid(
             ForbiddenRule::EmptyHookList,
@@ -1680,7 +1680,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
     let mut is_generator = false;
     let body = if parser.check(TokenKind::LeftBrace) {
         let brace_start = parser.start_span();
-        parser.expect(TokenKind::LeftBrace);
+        let open = parser.expect(TokenKind::LeftBrace);
         let mut stmts = parser.alloc_vec_with_capacity(16);
         let saved_loop_depth = parser.loop_depth;
         parser.loop_depth = 0;
@@ -1707,7 +1707,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
         parser.has_goto_or_label = saved_has_goto_or_label;
         parser.finally_loop_depth = saved_finally_loop_depth;
         parser.loop_depth = saved_loop_depth;
-        parser.expect(TokenKind::RightBrace);
+        parser.expect_body_close(open);
         let block_end = parser.previous_end();
         Some(parser.alloc(Block {
             stmts,
@@ -2381,7 +2381,7 @@ pub(super) fn parse_interface<'arena, 'src>(
     let doc_comment = parser.take_doc_comment(start);
 
     let brace_start = parser.start_span();
-    parser.expect(TokenKind::LeftBrace);
+    let open = parser.expect(TokenKind::LeftBrace);
     parser.check_class_nesting(name.span);
     let scope = parser.class_scope_for(name.as_str(), None, false);
     parser.check_attributes(
@@ -2389,7 +2389,7 @@ pub(super) fn parse_interface<'arena, 'src>(
         &AttrSite::class(ClassKind::Interface, &scope.name),
     );
     let members = parse_class_members(parser, true, false, scope);
-    parser.expect(TokenKind::RightBrace);
+    parser.expect_body_close(open);
     let end = parser.previous_end();
 
     Stmt {
@@ -2443,12 +2443,12 @@ pub(super) fn parse_trait<'arena, 'src>(
     let doc_comment = parser.take_doc_comment(start);
 
     let brace_start = parser.start_span();
-    parser.expect(TokenKind::LeftBrace);
+    let open = parser.expect(TokenKind::LeftBrace);
     parser.check_class_nesting(name.span);
     let scope = parser.class_scope_for(name.as_str(), None, true);
     parser.check_attributes(&attributes, &AttrSite::class(ClassKind::Trait, &scope.name));
     let members = parse_class_members(parser, false, true, scope);
-    parser.expect(TokenKind::RightBrace);
+    parser.expect_body_close(open);
     let end = parser.previous_end();
 
     Stmt {

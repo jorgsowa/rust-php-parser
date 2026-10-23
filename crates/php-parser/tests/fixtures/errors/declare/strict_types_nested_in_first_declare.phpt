@@ -64,8 +64,8 @@ PHP Fatal error:  strict_types declaration must be the very first statement in t
               ]
             },
             "span": {
-              "start": 6,
-              "end": 60
+              "start": 22,
+              "end": 48
             }
           },
           "uses_alternative": true

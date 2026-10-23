@@ -13,6 +13,7 @@ trait T {
 'constructor property promotion' requires PHP 8.0 or higher
 'constructor property promotion' requires PHP 8.0 or higher
 'readonly parameters' requires PHP 8.1 or higher
+'constructor property promotion' requires PHP 8.0 or higher
 'asymmetric visibility' requires PHP 8.4 or higher
 Cannot declare promoted property in an abstract constructor
 Cannot declare promoted property in an abstract constructor

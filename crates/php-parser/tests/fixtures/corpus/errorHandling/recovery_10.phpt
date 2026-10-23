@@ -5,7 +5,6 @@ function foo() {
 }
 ===errors===
 expected member name, found '}'
-expected ';' after expression
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '}', expecting identifier (T_STRING) or variable (T_VARIABLE) or '{' or '$' in Standard input code on line 4
 ===php_error >=8.0===

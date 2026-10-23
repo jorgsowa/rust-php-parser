@@ -2,7 +2,7 @@
 <?php enum E { case A; #[Override] public function foo(): void {} }
 ===errors <=7.4===
 'enums' requires PHP 8.1 or higher
-expected '}', found end of file
+missing closing '}'
 ===errors 8.0===
 'enums' requires PHP 8.1 or higher
 ===php_error <=7.4===

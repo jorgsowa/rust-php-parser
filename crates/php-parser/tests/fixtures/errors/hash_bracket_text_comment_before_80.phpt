@@ -6,9 +6,7 @@ $y = 2; #[unclosed ?>
 $z = 3;
 ===errors >=8.0===
 expected ']', found identifier
-expected declaration after attributes, found identifier
 expected ']', found '?>'
-expected declaration after attributes, found '?>'
 ===php_error >=8.0===
 PHP Parse error:  syntax error, unexpected identifier "text", expecting "]" in Standard input code on line 2
 ===ast <=7.4===

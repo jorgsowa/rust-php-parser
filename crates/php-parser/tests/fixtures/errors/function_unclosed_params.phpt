@@ -4,8 +4,6 @@
 Cannot declare promoted property outside a constructor
 Property hook list must not be empty
 missing closing ')'
-expected '{', found end of file
-missing closing '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '{', expecting ')' in Standard input code on line 1
 ===php_error 8.0-8.3===

@@ -11,8 +11,6 @@ $a = clone \foo();
 expected '(', found '\'
 'reserved keyword in namespaced name' requires PHP 8.0 or higher
 expected variable, found '('
-expected ')', found '('
-expected '=>', found '('
 expected expression, found ')'
 expected expression, found 'private'
 ===php_error <=7.4===

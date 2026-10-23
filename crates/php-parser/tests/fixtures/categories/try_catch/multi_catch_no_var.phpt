@@ -114,7 +114,7 @@ PHP Parse error:  syntax error, unexpected ')', expecting '|' or variable (T_VAR
                 }
               ],
               "span": {
-                "start": 27,
+                "start": 21,
                 "end": 62
               }
             }

@@ -29,8 +29,7 @@ Property hook list must not be empty
 Interfaces may only include hooked properties
 'property hooks' requires PHP 8.4 or higher
 Property hook list must not be empty
-expected '}', found end of file
-expected '}', found end of file
+missing closing '}'
 Namespace declarations cannot be nested
 ===errors 8.0-8.3===
 'property hooks' requires PHP 8.4 or higher

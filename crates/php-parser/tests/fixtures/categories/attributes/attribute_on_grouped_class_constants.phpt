@@ -6,7 +6,7 @@ class C {
 }
 interface I { #[A] const X = 1, Y = 2; }
 ===errors <=7.4===
-expected '}', found end of file
+missing closing '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 6
 ===ast <=7.4===

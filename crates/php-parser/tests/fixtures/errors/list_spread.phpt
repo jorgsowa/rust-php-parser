@@ -2,10 +2,7 @@
 <?php list(...$x) = $arr;
 ===errors===
 expected expression, found '...'
-expected ')', found '...'
 list() can only be used as an assignment or foreach target
-expected ';' after expression
-expected expression, found '...'
 ===php_error===
 PHP Fatal error:  Spread operator is not supported in assignments in Standard input code on line 1
 ===ast===

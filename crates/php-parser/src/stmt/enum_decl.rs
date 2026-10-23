@@ -70,7 +70,7 @@ pub(super) fn parse_enum<'arena, 'src>(
     let doc_comment = parser.take_doc_comment(start);
 
     let brace_start = parser.start_span();
-    parser.expect(TokenKind::LeftBrace);
+    let open = parser.expect(TokenKind::LeftBrace);
     parser.check_class_nesting(name.span);
     let scope = parser.class_scope_for(name.as_str(), None, false);
     parser.check_attributes(&attributes, &AttrSite::class(ClassKind::Enum, &scope.name));
@@ -448,7 +448,7 @@ pub(super) fn parse_enum<'arena, 'src>(
     super::class::report_redefined_constants(parser, constants);
     parser.class_scope = outer_scope;
 
-    parser.expect(TokenKind::RightBrace);
+    parser.expect_body_close(open);
     let end = parser.previous_end();
     Stmt {
         kind: StmtKind::Enum(parser.alloc({

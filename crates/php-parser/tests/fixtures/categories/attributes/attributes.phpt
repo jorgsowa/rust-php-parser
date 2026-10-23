@@ -51,9 +51,7 @@ enum Color {
 }
 ===errors <=7.4===
 missing closing ')'
-expected '{', found ';'
 'enums' requires PHP 8.1 or higher
-missing closing '}'
 ===errors 8.0===
 'enums' requires PHP 8.1 or higher
 ===php_error <=7.4===

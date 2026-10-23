@@ -6,22 +6,14 @@ new list\Item;
 namespace\Foo::X;
 ===errors <=7.4===
 expected class name, found '\'
-expected '{', found '\'
-expected 'function' or 'const', found '\'
 expected class member, found '::'
 expected method name, found '\'
-expected '(', found '\'
 expected variable, found '('
-expected ')', found '('
-expected ';', found '('
-expected 'function' or 'const', found '('
 expected identifier, found ')'
-expected '&', found ')'
 expected class member, found ';'
 expected class member, found 'new'
 expected 'function' or 'const', found 'namespace'
 expected class member, found '::'
-expected '}', found end of file
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '\' (T_NS_SEPARATOR), expecting identifier (T_STRING) in Standard input code on line 2
 ===ast <=7.4===

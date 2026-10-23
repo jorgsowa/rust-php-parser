@@ -1,6 +1,9 @@
 ===source===
 <?php class Foo { function __construct(readonly string $x) {} }
-===errors <=8.0===
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'readonly parameters' requires PHP 8.1 or higher
+===errors 8.0===
 'readonly parameters' requires PHP 8.1 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'string' (T_STRING), expecting variable (T_VARIABLE) in Standard input code on line 1

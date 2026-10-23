@@ -1352,7 +1352,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         };
 
         let brace_start = parser.start_span();
-        parser.expect(TokenKind::LeftBrace);
+        let open = parser.expect(TokenKind::LeftBrace);
         let scope = parser.class_scope_for(None, extends.as_ref(), false);
         let kind = ClassKind::Class {
             is_abstract: false,
@@ -1365,7 +1365,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         if anon_readonly {
             stmt::check_readonly_class_members(parser, &members);
         }
-        parser.expect(TokenKind::RightBrace);
+        parser.expect_body_close(open);
         let end = parser.previous_end();
 
         let class_decl = {
@@ -1585,7 +1585,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
 
     // body
     let brace_start = parser.start_span();
-    parser.expect(TokenKind::LeftBrace);
+    let open = parser.expect(TokenKind::LeftBrace);
     let mut body_stmts = parser.alloc_vec_with_capacity(16);
     let saved_loop_depth = parser.loop_depth;
     parser.loop_depth = 0;
@@ -1613,7 +1613,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
     parser.finally_loop_depth = saved_finally_loop_depth;
     parser.loop_depth = saved_loop_depth;
     parser.restore_class_keywords(saved_class_keywords);
-    parser.expect(TokenKind::RightBrace);
+    parser.expect_body_close(open);
     let end = parser.previous_end();
     let body = parser.alloc(Block {
         stmts: body_stmts,

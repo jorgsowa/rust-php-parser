@@ -7,6 +7,7 @@ class C {
 'constructor property promotion' requires PHP 8.0 or higher
 'asymmetric visibility' requires PHP 8.4 or higher
 Visibility of property must not be weaker than set visibility
+'constructor property promotion' requires PHP 8.0 or higher
 'asymmetric visibility' requires PHP 8.4 or higher
 ===errors 8.0-8.3===
 'asymmetric visibility' requires PHP 8.4 or higher

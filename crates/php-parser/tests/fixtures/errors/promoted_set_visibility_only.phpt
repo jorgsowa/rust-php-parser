@@ -6,7 +6,12 @@ class A {
         protected(set) int $b
     ) {}
 }
-===errors <=8.3===
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+'constructor property promotion' requires PHP 8.0 or higher
+'asymmetric visibility' requires PHP 8.4 or higher
+===errors 8.0-8.3===
 'asymmetric visibility' requires PHP 8.4 or higher
 'asymmetric visibility' requires PHP 8.4 or higher
 ===php_error <=7.4===

@@ -4,14 +4,10 @@
 'match expressions' requires PHP 8.0 or higher
 expected '}', found integer
 expected ';' after expression
-expected ';' after expression
-expected expression, found '=>'
 expected expression, found '}'
 ===errors >=8.0===
 expected '}', found integer
 expected ';' after expression
-expected ';' after expression
-expected expression, found '=>'
 expected expression, found '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in Standard input code on line 1

@@ -1749,7 +1749,7 @@ PHP Parse error:  syntax error, unexpected identifier "TokenValidator", expectin
                                 }
                               ],
                               "span": {
-                                "start": 1227,
+                                "start": 1221,
                                 "end": 1338
                               }
                             },
@@ -1991,7 +1991,7 @@ PHP Parse error:  syntax error, unexpected identifier "TokenValidator", expectin
                                 }
                               ],
                               "span": {
-                                "start": 1345,
+                                "start": 1339,
                                 "end": 1525
                               }
                             }

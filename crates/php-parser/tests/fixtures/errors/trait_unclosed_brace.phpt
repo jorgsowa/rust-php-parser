@@ -1,7 +1,7 @@
 ===source===
 <?php trait A {} class C { use A { m as x; }
 ===errors===
-expected '}', found end of file
+missing closing '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 1
 ===php_error >=8.0===

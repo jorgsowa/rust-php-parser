@@ -2,7 +2,7 @@
 <?php
 class C { #[A] use T; }
 ===errors <=7.4===
-expected '}', found end of file
+missing closing '}'
 ===errors >=8.0===
 expected 'function' or 'const', found 'use'
 ===php_error <=7.4===

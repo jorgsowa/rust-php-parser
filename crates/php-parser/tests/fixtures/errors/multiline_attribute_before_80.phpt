@@ -5,7 +5,6 @@
 function f() {}
 ===errors <=7.4===
 expected ';' after expression
-expected expression, found ']'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ']' in Standard input code on line 3
 ===ast <=7.4===

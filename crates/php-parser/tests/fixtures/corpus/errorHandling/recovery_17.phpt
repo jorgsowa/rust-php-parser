@@ -22,15 +22,12 @@ expected ';', found 'use'
 expected ';', found 'const'
 expected ';', found 'break'
 expected expression, found 'break'
-expected ';' after break statement
 Cannot 'break' 2 levels
 expected ';' after break statement
 expected expression, found 'continue'
-expected ';' after continue statement
 Cannot 'continue' 2 levels
 expected ';' after continue statement
 expected expression, found 'return'
-expected ';' after return statement
 expected ';' after return statement
 expected ';' after echo statement
 expected ';', found 'throw'

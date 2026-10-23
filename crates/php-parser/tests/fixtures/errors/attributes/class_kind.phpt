@@ -19,7 +19,6 @@ $b = new #[AllowDynamicProperties] readonly class {};
 ===errors <=7.4===
 Cannot use expression as assignment target.
 expected identifier, found end of file
-expected ';' after expression
 ===errors 8.0===
 'enums' requires PHP 8.1 or higher
 'enums' requires PHP 8.1 or higher

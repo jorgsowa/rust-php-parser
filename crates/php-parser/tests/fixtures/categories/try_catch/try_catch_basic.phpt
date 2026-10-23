@@ -115,7 +115,7 @@ try {
                 }
               ],
               "span": {
-                "start": 47,
+                "start": 41,
                 "end": 78
               }
             }

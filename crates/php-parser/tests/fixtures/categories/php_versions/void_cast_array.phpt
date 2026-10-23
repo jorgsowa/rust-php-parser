@@ -2,8 +2,6 @@
 <?php (void)[1, 2, 3];
 ===errors <=8.4===
 expected ']', found ','
-expected ';' after expression
-expected expression, found ','
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ',', expecting ']' in Standard input code on line 1
 ===php_error 8.0-8.4===

@@ -6,7 +6,6 @@ foreach ($foo as ) { $bar; }
 ===errors===
 expected 'as', found ')'
 expected expression, found ')'
-expected expression, found ')'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ')' in Standard input code on line 3
 ===php_error >=8.0===

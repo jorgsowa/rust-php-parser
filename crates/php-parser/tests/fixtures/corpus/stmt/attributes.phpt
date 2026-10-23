@@ -31,9 +31,7 @@ $a = #[A12] static function() {};
 $b = #[A13] static fn() => 0;
 ===errors <=7.4===
 expected ';' after expression
-expected expression, found ','
 expected expression, found end of file
-expected ';' after expression
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ',' in Standard input code on line 4
 ===ast <=7.4===

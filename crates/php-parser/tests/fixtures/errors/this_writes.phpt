@@ -597,7 +597,7 @@ PHP Fatal error:  Cannot re-assign $this in Standard input code on line 2
               },
               "body": [],
               "span": {
-                "start": 206,
+                "start": 200,
                 "end": 218
               }
             }

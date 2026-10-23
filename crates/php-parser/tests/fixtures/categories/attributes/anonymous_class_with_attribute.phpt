@@ -2,7 +2,6 @@
 <?php $x = new #[Attr] class() {};
 ===errors <=7.4===
 expected identifier, found end of file
-expected ';' after expression
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected end of file in Standard input code on line 1
 ===ast <=7.4===

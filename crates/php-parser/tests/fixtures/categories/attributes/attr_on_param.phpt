@@ -2,9 +2,6 @@
 <?php function foo(#[Validate] int $x) {}
 ===errors <=7.4===
 expected variable, found end of file
-missing closing ')'
-expected '{', found end of file
-missing closing '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected end of file, expecting variable (T_VARIABLE) in Standard input code on line 1
 ===ast <=7.4===

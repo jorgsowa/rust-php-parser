@@ -970,7 +970,7 @@ PHP Parse error:  syntax error, unexpected identifier "AuthService", expecting v
                                 }
                               ],
                               "span": {
-                                "start": 813,
+                                "start": 807,
                                 "end": 897
                               }
                             }

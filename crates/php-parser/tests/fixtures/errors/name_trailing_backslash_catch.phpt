@@ -37,7 +37,7 @@ PHP Parse error:  syntax error, unexpected token "\", expecting ")" in Standard 
               },
               "body": [],
               "span": {
-                "start": 19,
+                "start": 13,
                 "end": 29
               }
             }

@@ -25,24 +25,10 @@ class Constructor {
 'union types' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
 expected variable, found 'function'
-missing closing ')'
-expected '{', found 'function'
 expected variable, found 'function'
-missing closing ')'
-expected '{', found 'function'
 expected variable, found 'function'
-missing closing ')'
-expected '{', found 'function'
 expected variable, found 'class'
-missing closing ')'
-expected '{', found 'class'
 expected variable, found '}'
-expected ')', found '}'
-expected ';', found '}'
-missing closing '}'
-missing closing '}'
-missing closing '}'
-missing closing '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in Standard input code on line 8
 ===ast <=7.4===

@@ -2,7 +2,6 @@
 <?php function f() { static $a, }
 ===errors===
 expected variable, found '}'
-expected ';', found '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '}', expecting variable (T_VARIABLE) in Standard input code on line 1
 ===php_error >=8.0===

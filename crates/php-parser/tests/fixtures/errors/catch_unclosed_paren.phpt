@@ -33,7 +33,7 @@ PHP Parse error:  syntax error, unexpected token "{", expecting ")" in Standard 
               "var": null,
               "body": [],
               "span": {
-                "start": 20,
+                "start": 14,
                 "end": 34
               }
             }

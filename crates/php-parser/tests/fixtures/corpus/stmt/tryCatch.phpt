@@ -124,7 +124,7 @@ finally { }
                 }
               ],
               "span": {
-                "start": 34,
+                "start": 28,
                 "end": 60
               }
             },
@@ -188,7 +188,7 @@ finally { }
                 }
               ],
               "span": {
-                "start": 67,
+                "start": 61,
                 "end": 93
               }
             }
@@ -266,7 +266,7 @@ finally { }
               },
               "body": [],
               "span": {
-                "start": 152,
+                "start": 146,
                 "end": 162
               }
             }

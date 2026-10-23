@@ -34,7 +34,7 @@ PHP Parse error:  syntax error, unexpected ')', expecting '|' or variable (T_VAR
               "var": null,
               "body": [],
               "span": {
-                "start": 22,
+                "start": 16,
                 "end": 38
               }
             }

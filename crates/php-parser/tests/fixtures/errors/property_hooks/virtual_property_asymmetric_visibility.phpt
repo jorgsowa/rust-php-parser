@@ -28,6 +28,7 @@ Write-only virtual property A::$c must not specify asymmetric visibility
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
 Read-only virtual property A::$e must not specify asymmetric visibility
+'constructor property promotion' requires PHP 8.0 or higher
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
 Write-only virtual property A::$f must not specify asymmetric visibility

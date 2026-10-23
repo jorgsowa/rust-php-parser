@@ -619,7 +619,6 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
 pub fn parse_block<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     let open = parser.expect(TokenKind::LeftBrace);
-    let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
 
     parser.depth += 1;
     // March 2026: reduce from 16 to 8 for statement blocks
@@ -634,7 +633,7 @@ pub fn parse_block<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
     }
     parser.depth -= 1;
 
-    parser.expect_closing(TokenKind::RightBrace, open_span);
+    parser.expect_body_close(open);
     let span = parser.span_from(start);
 
     Stmt {
@@ -886,16 +885,22 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
     let condition = expr::parse_expr(parser);
     parser.expect_closing(TokenKind::RightParen, open_span);
 
-    if parser.eat(TokenKind::Colon).is_some() {
+    if parser.check(TokenKind::Colon) {
+        let body_start = parser.start_span();
+        parser.advance();
         parser.loop_depth += 1;
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndWhile]);
         parser.loop_depth -= 1;
+        let body_span = parser.span_from(body_start);
         parser.expect(TokenKind::EndWhile);
         parser.expect_semicolon(TokenKind::EndWhile);
         let span = parser.span_from(start);
         let body = parser.alloc(Stmt {
-            kind: StmtKind::Block(parser.alloc(Block { stmts, span })),
-            span,
+            kind: StmtKind::Block(parser.alloc(Block {
+                stmts,
+                span: body_span,
+            })),
+            span: body_span,
             doc_comment: None,
         });
         return Stmt {
@@ -962,16 +967,22 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
     let update = parse_expr_list_until(parser, TokenKind::RightParen);
     parser.expect_closing(TokenKind::RightParen, open_span);
 
-    if parser.eat(TokenKind::Colon).is_some() {
+    if parser.check(TokenKind::Colon) {
+        let body_start = parser.start_span();
+        parser.advance();
         parser.loop_depth += 1;
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndFor]);
         parser.loop_depth -= 1;
+        let body_span = parser.span_from(body_start);
         parser.expect(TokenKind::EndFor);
         parser.expect_semicolon(TokenKind::EndFor);
         let span = parser.span_from(start);
         let body = parser.alloc(Stmt {
-            kind: StmtKind::Block(parser.alloc(Block { stmts, span })),
-            span,
+            kind: StmtKind::Block(parser.alloc(Block {
+                stmts,
+                span: body_span,
+            })),
+            span: body_span,
             doc_comment: None,
         });
         return Stmt {
@@ -1078,16 +1089,22 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
 
     parser.expect_closing(TokenKind::RightParen, open_span);
 
-    if parser.eat(TokenKind::Colon).is_some() {
+    if parser.check(TokenKind::Colon) {
+        let body_start = parser.start_span();
+        parser.advance();
         parser.loop_depth += 1;
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndForeach]);
         parser.loop_depth -= 1;
+        let body_span = parser.span_from(body_start);
         parser.expect(TokenKind::EndForeach);
         parser.expect_semicolon(TokenKind::EndForeach);
         let span = parser.span_from(start);
         let body = parser.alloc(Stmt {
-            kind: StmtKind::Block(parser.alloc(Block { stmts, span })),
-            span,
+            kind: StmtKind::Block(parser.alloc(Block {
+                stmts,
+                span: body_span,
+            })),
+            span: body_span,
             doc_comment: None,
         });
         return Stmt {
@@ -1183,7 +1200,6 @@ fn parse_function<'arena, 'src>(
 
     let brace_start = parser.start_span();
     let open_brace = parser.expect(TokenKind::LeftBrace);
-    let open_brace_span = open_brace.map(|t| t.span).unwrap_or(parser.current_span());
     // March 2026: reduce from 16 to 4 for smaller initial allocation
     // Most functions have 4-10 statements; large functions grow efficiently
     let mut body_stmts = parser.alloc_vec_with_capacity(4);
@@ -1213,7 +1229,7 @@ fn parse_function<'arena, 'src>(
     parser.has_goto_or_label = saved_has_goto_or_label;
     parser.finally_loop_depth = saved_finally_loop_depth;
     parser.loop_depth = saved_loop_depth;
-    parser.expect_closing(TokenKind::RightBrace, open_brace_span);
+    parser.expect_body_close(open_brace);
     let end = parser.previous_end();
     let span = Span::new(start, end);
 
@@ -1432,6 +1448,14 @@ fn check_param_name(
     parser.forbid(rule, message, name.span);
 }
 
+/// Records the first promotion modifier of a parameter; any of them makes it a promoted property.
+fn note_promotion_modifier(parser: &mut Parser<'_, '_>, first: &mut Option<Span>, span: Span) {
+    if first.is_none() {
+        parser.require_version(PhpVersion::Php80, "constructor property promotion", span);
+        *first = Some(span);
+    }
+}
+
 pub fn parse_param_list<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
 ) -> ArenaVec<'arena, Param<'arena, 'src>> {
@@ -1495,7 +1519,7 @@ pub fn parse_param_list<'arena, 'src>(
             let current_span = parser.current_span();
             match parser.current_kind() {
                 TokenKind::Public | TokenKind::Protected | TokenKind::Private => {
-                    first_modifier_span.get_or_insert(current_span);
+                    note_promotion_modifier(parser, &mut first_modifier_span, current_span);
                     let vis = match parser.current_kind() {
                         TokenKind::Public => Visibility::Public,
                         TokenKind::Protected => Visibility::Protected,
@@ -1522,12 +1546,6 @@ pub fn parse_param_list<'arena, 'src>(
                         }
                         set_visibility = Some(vis);
                     } else {
-                        let span = parser.current_span();
-                        parser.require_version(
-                            PhpVersion::Php80,
-                            "constructor property promotion",
-                            span,
-                        );
                         if visibility.is_some() {
                             parser.forbid(
                                 ForbiddenRule::MultipleVisibilityModifiers,
@@ -1540,7 +1558,7 @@ pub fn parse_param_list<'arena, 'src>(
                     }
                 }
                 TokenKind::Final => {
-                    first_modifier_span.get_or_insert(current_span);
+                    note_promotion_modifier(parser, &mut first_modifier_span, current_span);
                     parser.require_version(
                         PhpVersion::Php85,
                         "final promoted properties",
@@ -1557,7 +1575,7 @@ pub fn parse_param_list<'arena, 'src>(
                     is_final = true;
                 }
                 TokenKind::Readonly => {
-                    first_modifier_span.get_or_insert(current_span);
+                    note_promotion_modifier(parser, &mut first_modifier_span, current_span);
                     parser.require_version(PhpVersion::Php81, "readonly parameters", current_span);
                     if is_readonly {
                         parser.forbid(
@@ -2009,9 +2027,11 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
 
     let body_brace_start = parser.start_span();
     let alt_syntax = parser.eat(TokenKind::Colon).is_some();
-    if !alt_syntax {
-        parser.expect(TokenKind::LeftBrace);
-    }
+    let open = if alt_syntax {
+        None
+    } else {
+        parser.expect(TokenKind::LeftBrace)
+    };
     // PHP allows one `;`, or a `?>` acting as one, before the first case.
     let mut seen_separator = false;
     loop {
@@ -2083,14 +2103,15 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
 
     parser.loop_depth -= 1;
 
-    if alt_syntax {
+    let body_span = if alt_syntax {
+        let body_span = parser.span_from(body_brace_start);
         parser.expect(TokenKind::EndSwitch);
         parser.expect_semicolon(TokenKind::EndSwitch);
+        body_span
     } else {
-        parser.expect(TokenKind::RightBrace);
-    }
-
-    let body_span = parser.span_from(body_brace_start);
+        parser.expect_body_close(open);
+        parser.span_from(body_brace_start)
+    };
     let span = parser.span_from(start);
     Stmt {
         kind: StmtKind::Switch(parser.alloc({
@@ -2132,7 +2153,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
     let start = parser.start_span();
     parser.advance();
     let body_brace_start = parser.start_span();
-    parser.expect(TokenKind::LeftBrace);
+    let open = parser.expect(TokenKind::LeftBrace);
     let mut body_stmts = parser.alloc_vec_with_capacity(16);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();
@@ -2141,7 +2162,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             parser.advance();
         }
     }
-    parser.expect(TokenKind::RightBrace);
+    parser.expect_body_close(open);
     let body = parser.alloc(Block {
         stmts: body_stmts,
         span: parser.span_from(body_brace_start),
@@ -2149,7 +2170,6 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
 
     let mut catches = parser.alloc_vec_with_capacity(2);
     while let Some(catch_token) = parser.eat(TokenKind::Catch) {
-        let catch_start = parser.start_span();
         parser.expect(TokenKind::LeftParen);
 
         let mut types = parser.alloc_vec();
@@ -2200,7 +2220,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
 
         parser.expect(TokenKind::RightParen);
         let catch_body_brace_start = parser.start_span();
-        parser.expect(TokenKind::LeftBrace);
+        let open = parser.expect(TokenKind::LeftBrace);
         let mut catch_body_stmts = parser.alloc_vec_with_capacity(8);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
@@ -2209,19 +2229,18 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
                 parser.advance();
             }
         }
-        parser.expect(TokenKind::RightBrace);
+        parser.expect_body_close(open);
         let catch_body = parser.alloc(Block {
             stmts: catch_body_stmts,
             span: parser.span_from(catch_body_brace_start),
         });
 
-        // A recovered type for a missing `(` sits before `catch_start`, at the end of `catch`.
-        let clause_start = types
-            .first()
-            .map_or(catch_start, |t| t.span().start.min(catch_start));
         catches.push({
-            let mut built =
-                CatchClause::new(parser.arena, catch_body, parser.span_from(clause_start));
+            let mut built = CatchClause::new(
+                parser.arena,
+                catch_body,
+                parser.span_from(catch_token.span.start),
+            );
             built.types = types;
             built.var = var;
             built
@@ -2232,7 +2251,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         let finally_kw_span = parser.current_span();
         parser.advance();
         let finally_brace_start = parser.start_span();
-        parser.expect(TokenKind::LeftBrace);
+        let open = parser.expect(TokenKind::LeftBrace);
         let mut finally_stmts = parser.alloc_vec();
         let saved_finally_loop_depth = parser.finally_loop_depth.replace(parser.loop_depth);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
@@ -2243,7 +2262,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             }
         }
         parser.finally_loop_depth = saved_finally_loop_depth;
-        parser.expect(TokenKind::RightBrace);
+        parser.expect_body_close(open);
         let finally_body = parser.alloc(Block {
             stmts: finally_stmts,
             span: parser.span_from(finally_brace_start),
@@ -2497,17 +2516,19 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
         // `?>` ends the statement like `;`; the HTML after it is not the body.
         parser.close_tag_ends_stmt();
         (None, false)
-    } else if parser.eat(TokenKind::Colon).is_some() {
+    } else if parser.check(TokenKind::Colon) {
+        let body_start = parser.start_span();
+        parser.advance();
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndDeclare]);
+        let body_span = parser.span_from(body_start);
         parser.expect(TokenKind::EndDeclare);
         parser.expect_semicolon(TokenKind::EndDeclare);
-        let decl_span = parser.span_from(start);
         let block = parser.alloc(Stmt {
             kind: StmtKind::Block(parser.alloc(Block {
                 stmts,
-                span: decl_span,
+                span: body_span,
             })),
-            span: decl_span,
+            span: body_span,
             doc_comment: None,
         });
         (Some(block), true)
@@ -2693,7 +2714,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
     if parser.check(TokenKind::LeftBrace) {
         // Global namespace block
         let brace_start = parser.start_span();
-        parser.expect(TokenKind::LeftBrace);
+        let open = parser.expect(TokenKind::LeftBrace);
         let mut stmts = parser.alloc_vec_with_capacity(16);
         let saved_stmt_depth = std::mem::take(&mut parser.stmt_depth);
         let saved_namespace = parser.namespace.take();
@@ -2708,7 +2729,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         parser.stmt_depth = saved_stmt_depth;
         parser.namespace = saved_namespace;
         parser.class_imports = saved_imports;
-        parser.expect(TokenKind::RightBrace);
+        parser.expect_body_close(open);
         let end = parser.previous_end();
         let block = parser.alloc(Block {
             stmts,
@@ -2738,7 +2759,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
     if parser.check(TokenKind::LeftBrace) {
         // Braced namespace: namespace Foo\Bar { ... }
         let brace_start = parser.start_span();
-        parser.expect(TokenKind::LeftBrace);
+        let open = parser.expect(TokenKind::LeftBrace);
         let mut stmts = parser.alloc_vec_with_capacity(16);
         let saved_stmt_depth = std::mem::take(&mut parser.stmt_depth);
         let saved_namespace = parser.namespace.replace(name.parts_slice().join("\\"));
@@ -2753,7 +2774,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         parser.stmt_depth = saved_stmt_depth;
         parser.namespace = saved_namespace;
         parser.class_imports = saved_imports;
-        parser.expect(TokenKind::RightBrace);
+        parser.expect_body_close(open);
         let end = parser.previous_end();
         let block = parser.alloc(Block {
             stmts,

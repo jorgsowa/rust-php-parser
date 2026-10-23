@@ -1,7 +1,7 @@
 ===source===
 <?php class A { #[Attr] public private(set) ?int $a = 1, $b; }
 ===errors <=7.4===
-expected '}', found end of file
+missing closing '}'
 ===errors 8.0-8.3===
 'asymmetric visibility' requires PHP 8.4 or higher
 ===php_error <=7.4===

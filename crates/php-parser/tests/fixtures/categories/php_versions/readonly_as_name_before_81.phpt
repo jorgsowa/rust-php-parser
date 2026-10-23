@@ -24,7 +24,6 @@ namespace N4 {
 'union types' requires PHP 8.0 or higher
 ===errors >=8.1===
 expected identifier, found 'readonly'
-expected ';', found 'readonly'
 Cannot use "Readonly" as a class name as it is reserved
 Cannot use "readonly" as class name, as it is reserved
 Cannot use "Readonly" as interface name, as it is reserved
@@ -36,18 +35,12 @@ readonly promoted property must have type
 Cannot declare promoted property outside a constructor
 readonly promoted property must have type
 expected variable, found '|'
-missing closing ')'
-expected '{', found '|'
-expected expression, found '|'
 expected ';' after expression
 expected ';' after expression
-expected expression, found ','
 Cannot use the readonly modifier on a method
 readonly property must have type
 expected ';' after expression
-expected expression, found ':'
 expected identifier, found 'readonly'
-expected ';', found 'readonly'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in Standard input code on line 15
 ===php_error >=8.1===

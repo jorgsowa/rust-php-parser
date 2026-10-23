@@ -3250,7 +3250,7 @@ PHP Parse error:  syntax error, unexpected identifier "DB", expecting variable i
                                 }
                               ],
                               "span": {
-                                "start": 2251,
+                                "start": 2245,
                                 "end": 2363
                               }
                             }

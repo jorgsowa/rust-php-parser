@@ -276,8 +276,8 @@ endswitch;
               ]
             },
             "span": {
-              "start": 108,
-              "end": 156
+              "start": 122,
+              "end": 146
             }
           },
           "uses_alternative": true
@@ -400,8 +400,8 @@ endswitch;
               ]
             },
             "span": {
-              "start": 157,
-              "end": 205
+              "start": 183,
+              "end": 197
             }
           },
           "uses_alternative": true
@@ -459,8 +459,8 @@ endswitch;
               ]
             },
             "span": {
-              "start": 206,
-              "end": 260
+              "start": 231,
+              "end": 248
             }
           },
           "uses_alternative": true

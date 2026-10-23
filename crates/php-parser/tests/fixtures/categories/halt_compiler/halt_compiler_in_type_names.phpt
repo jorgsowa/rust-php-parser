@@ -234,7 +234,7 @@ PHP Parse error:  syntax error, unexpected '__halt_compiler' (T_HALT_COMPILER), 
               },
               "body": [],
               "span": {
-                "start": 168,
+                "start": 162,
                 "end": 193
               }
             }

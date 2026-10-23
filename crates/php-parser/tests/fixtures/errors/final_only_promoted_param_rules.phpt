@@ -13,7 +13,20 @@ class C {
     public $d;
     function __construct(final $d) {}
 }
-===errors <=8.4===
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'final promoted properties' requires PHP 8.5 or higher
+Cannot declare promoted property in an abstract constructor
+'constructor property promotion' requires PHP 8.0 or higher
+'final promoted properties' requires PHP 8.5 or higher
+Cannot declare promoted property in an abstract constructor
+'constructor property promotion' requires PHP 8.0 or higher
+'final promoted properties' requires PHP 8.5 or higher
+Cannot declare variadic promoted property
+'constructor property promotion' requires PHP 8.0 or higher
+'final promoted properties' requires PHP 8.5 or higher
+Cannot redeclare C::$d
+===errors 8.0-8.4===
 'final promoted properties' requires PHP 8.5 or higher
 Cannot declare promoted property in an abstract constructor
 'final promoted properties' requires PHP 8.5 or higher

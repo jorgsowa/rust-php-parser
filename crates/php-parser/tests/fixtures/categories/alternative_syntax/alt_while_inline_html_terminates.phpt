@@ -37,8 +37,8 @@
               ]
             },
             "span": {
-              "start": 6,
-              "end": 43
+              "start": 18,
+              "end": 33
             }
           },
           "uses_alternative": true

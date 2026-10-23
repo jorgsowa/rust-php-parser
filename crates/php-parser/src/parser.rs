@@ -703,6 +703,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
+    /// Expect the `}` of a body; when its `{` was missing, that error already covers the body.
+    pub(crate) fn expect_body_close(&mut self, open: Option<Token>) -> Option<Token> {
+        match open {
+            Some(open) => self.expect_closing(TokenKind::RightBrace, open.span),
+            None => self.eat(TokenKind::RightBrace),
+        }
+    }
+
     /// Start a span at the current token position.
     pub fn start_span(&self) -> u32 {
         self.current.span.start
@@ -743,6 +751,17 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     // =========================================================================
 
     pub fn error(&mut self, err: ParseError) {
+        // PHP stops at its first syntax error, so recovery errors at the same token are cascades.
+        if err.leaves_ast_incomplete()
+            && self
+                .errors
+                .iter()
+                .rev()
+                .find(|e| e.leaves_ast_incomplete())
+                .is_some_and(|e| e.span().start == err.span().start)
+        {
+            return;
+        }
         if self.errors.len() < MAX_ERRORS {
             self.errors.push(err);
         } else {

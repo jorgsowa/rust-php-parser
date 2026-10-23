@@ -65,8 +65,8 @@ PHP Parse error:  Unmatched '}' in Standard input code on line 3
               ]
             },
             "span": {
-              "start": 6,
-              "end": 52
+              "start": 24,
+              "end": 40
             }
           },
           "uses_alternative": true

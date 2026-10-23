@@ -3,8 +3,6 @@
 ===errors===
 Cannot use "function" as a class name as it is reserved
 expected '{', found 'while'
-expected class member, found 'while'
-expected '}', found end of file
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'function' (T_FUNCTION), expecting identifier (T_STRING) in Standard input code on line 1
 ===php_error >=8.0===

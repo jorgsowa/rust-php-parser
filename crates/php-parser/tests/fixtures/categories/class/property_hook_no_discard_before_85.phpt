@@ -6,7 +6,7 @@ class A {
 ===errors <=7.4===
 'property hooks' requires PHP 8.4 or higher
 Property hook list must not be empty
-expected '}', found end of file
+missing closing '}'
 ===errors 8.0-8.3===
 'property hooks' requires PHP 8.4 or higher
 ===errors >=8.5===

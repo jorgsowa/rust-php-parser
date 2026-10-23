@@ -14,11 +14,8 @@ Cannot dereference this expression
 Cannot use "__PROPERTY__" as a class name as it is reserved
 Cannot dereference this expression
 expected variable, found '__PROPERTY__'
-missing closing ')'
-expected '{', found '__PROPERTY__'
 expected ';' after expression
 expected ';' after expression
-expected expression, found ')'
 ===php_error >=8.4===
 PHP Parse error:  syntax error, unexpected token "__PROPERTY__", expecting identifier in Standard input code on line 3
 ===ast <=8.3===

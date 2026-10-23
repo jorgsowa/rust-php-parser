@@ -3,8 +3,7 @@
 class Foo {
     public function bar() {
 ===errors===
-expected '}', found end of file
-expected '}', found end of file
+missing closing '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected end of file in Standard input code on line 3
 ===php_error >=8.0===

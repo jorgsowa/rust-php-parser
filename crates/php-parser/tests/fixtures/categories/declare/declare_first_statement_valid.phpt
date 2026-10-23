@@ -123,8 +123,8 @@ PHP Fatal error:  strict_types declaration must be the very first statement in t
               "Block": []
             },
             "span": {
-              "start": 57,
-              "end": 86
+              "start": 73,
+              "end": 74
             }
           },
           "uses_alternative": true

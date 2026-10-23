@@ -7,8 +7,6 @@ echo 2;
 expected expression, found '<'
 expected expression, found '?'
 expected ':', found 'echo'
-expected expression, found 'echo'
-expected ';' after expression
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '<', expecting end of file in Standard input code on line 3
 ===php_error >=8.0===

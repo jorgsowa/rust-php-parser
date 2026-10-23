@@ -18,7 +18,6 @@ class B {
 }
 ===errors <=7.4===
 expected expression, found 'class'
-expected ';' after expression
 ===errors 8.1===
 A never-returning function must not return
 ===errors >=8.5===

@@ -3,7 +3,6 @@
 $a = new #[A] B;
 ===errors <=7.4===
 expected identifier, found end of file
-expected ';' after expression
 ===errors >=8.0===
 expected 'class', found identifier
 ===php_error <=7.4===

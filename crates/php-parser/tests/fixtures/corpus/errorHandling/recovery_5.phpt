@@ -5,7 +5,6 @@ function test() {
 }
 ===errors===
 expected expression, found '}'
-expected ';' after expression
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '}' in Standard input code on line 4
 ===php_error >=8.0===

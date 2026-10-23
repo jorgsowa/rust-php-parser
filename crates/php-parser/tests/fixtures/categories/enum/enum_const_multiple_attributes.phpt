@@ -2,7 +2,7 @@
 <?php enum Status { #[Attr1] #[Attr2('value')] const X = 1; }
 ===errors <=7.4===
 'enums' requires PHP 8.1 or higher
-expected '}', found end of file
+missing closing '}'
 ===errors 8.0===
 'enums' requires PHP 8.1 or higher
 ===php_error <=7.4===

@@ -16,8 +16,6 @@ private\protected\public\static\abstract\final();
 expected '(', found '\'
 'reserved keyword in namespaced name' requires PHP 8.0 or higher
 expected variable, found '('
-expected ')', found '('
-expected '=>', found '('
 expected expression, found ')'
 'reserved keyword in namespaced name' requires PHP 8.0 or higher
 'reserved keyword in namespaced name' requires PHP 8.0 or higher

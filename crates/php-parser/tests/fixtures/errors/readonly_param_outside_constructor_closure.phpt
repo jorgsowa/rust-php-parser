@@ -1,6 +1,10 @@
 ===source===
 <?php $f = function(readonly string $x) {};
-===errors <=8.0===
+===errors <=7.4===
+'constructor property promotion' requires PHP 8.0 or higher
+'readonly parameters' requires PHP 8.1 or higher
+Cannot declare promoted property outside a constructor
+===errors 8.0===
 'readonly parameters' requires PHP 8.1 or higher
 Cannot declare promoted property outside a constructor
 ===errors >=8.1===
