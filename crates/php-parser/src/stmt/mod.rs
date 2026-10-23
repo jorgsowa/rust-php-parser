@@ -823,7 +823,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
                 parser,
                 &[TokenKind::ElseIf, TokenKind::Else, TokenKind::EndIf],
             );
-            let elseif_span = Span::new(elseif_start, parser.previous_end());
+            let elseif_span = parser.span_from(elseif_start);
             let elseif_body = Stmt {
                 kind: StmtKind::Block(parser.alloc(Block {
                     stmts: elseif_stmts,
