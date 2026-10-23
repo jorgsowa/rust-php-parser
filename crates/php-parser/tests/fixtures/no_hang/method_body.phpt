@@ -36,13 +36,6 @@
                   "return_type": null,
                   "body": [
                     {
-                      "kind": "Nop",
-                      "span": {
-                        "start": 31,
-                        "end": 33
-                      }
-                    },
-                    {
                       "kind": {
                         "InlineHtml": " "
                       },

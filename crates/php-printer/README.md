@@ -10,14 +10,6 @@ assert_eq!(output, "<?php\necho 1 + 2;");
 
 The output is normalized, not format-preserving: original whitespace and layout are not retained.
 
-## Printing rules
-
-- **Same meaning.** Re-parsing the output gives the same AST as the input, apart from redundant parentheses, empty statements and inline HTML that outputs nothing.
-- **Same validity.** The printer never turns invalid PHP into valid PHP, or valid PHP into invalid PHP, on any supported PHP version. Invalid input prints to output that PHP rejects with the same errors.
-- **Redundant code is dropped only when that changes nothing.** Code is removed only when PHP's output and errors stay the same. Empty statements (`Nop`, including a `?>` that is a statement of its own) are dropped, except before a `declare(encoding=...)` or `declare(strict_types=...)` that rejects them. A `?>` followed only by the newline it consumes and the next `<?php` is dropped.
-
-Fixtures in `tests/fixtures/` enforce these rules. `edge_cases/` output must re-parse without errors to the same AST. `compile_errors/` output must keep the source's errors, and `scripts/validate-printer-output.sh` runs each output through `php -l`.
-
 Part of the [rust-php-parser](https://github.com/jorgsowa/rust-php-parser) workspace. API reference: [docs.rs/php-printer](https://docs.rs/php-printer).
 
 ## License

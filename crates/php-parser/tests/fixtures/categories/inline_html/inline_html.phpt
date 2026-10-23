@@ -38,13 +38,6 @@
       }
     },
     {
-      "kind": "Nop",
-      "span": {
-        "start": 34,
-        "end": 36
-      }
-    },
-    {
       "kind": {
         "InlineHtml": "\n<p>Some HTML</p>\n"
       },
@@ -70,13 +63,6 @@
       "span": {
         "start": 60,
         "end": 73
-      }
-    },
-    {
-      "kind": "Nop",
-      "span": {
-        "start": 74,
-        "end": 76
       }
     },
     {

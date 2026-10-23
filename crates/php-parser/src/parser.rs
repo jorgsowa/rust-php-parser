@@ -115,8 +115,6 @@ pub struct Parser<'arena, 'src> {
     pub(crate) top_level_code_seen: bool,
     /// True once a top-level empty statement (`;` or a standalone `?>`) has been seen.
     pub(crate) top_level_nop_seen: bool,
-    /// Start of the `?>` that ends the statement before it, which makes it no statement of its own.
-    pub(crate) stmt_ending_close_tag: Option<u32>,
     /// True only when parsing the parameter list of a `__construct` method.
     /// Used to reject `readonly` parameters outside constructors.
     pub(crate) in_constructor: bool,
@@ -261,7 +259,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             stmt_depth: 0,
             top_level_code_seen: false,
             top_level_nop_seen: false,
-            stmt_ending_close_tag: None,
             in_constructor: false,
             version,
             no_brace_subscript: false,
@@ -319,7 +316,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             stmt_depth: 0,
             top_level_code_seen: false,
             top_level_nop_seen: false,
-            stmt_ending_close_tag: None,
             in_constructor: false,
             version,
             no_brace_subscript: false,
@@ -614,7 +610,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             Some(self.advance())
         } else if self.check(TokenKind::CloseTag) {
             // `?>` acts as implicit semicolon — don't consume it
-            self.close_tag_ends_stmt();
             None
         } else {
             self.error(ParseError::ExpectedAfter {
@@ -624,11 +619,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             });
             None
         }
-    }
-
-    /// Mark the current `?>` as the end of the statement before it.
-    pub(crate) fn close_tag_ends_stmt(&mut self) {
-        self.stmt_ending_close_tag = Some(self.current.span.start);
     }
 
     /// At a `;` or `?>`, either of which ends a statement.
@@ -656,7 +646,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// Like `expect(TokenKind::Semicolon)`, but a `?>` also ends the statement (not consumed).
     pub fn expect_statement_end(&mut self) -> Option<Token> {
         if self.check(TokenKind::CloseTag) {
-            self.close_tag_ends_stmt();
             None
         } else {
             self.expect(TokenKind::Semicolon)
@@ -2490,33 +2479,59 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
 
         self.top_level_code_seen = !stmts.is_empty();
+        // End of the last statement since the latest open tag, to tell whether a `?>` ends it.
+        let mut stmt_end_since_open_tag: Option<u32> = None;
 
         // Parse statements until EOF
         while !self.check(TokenKind::Eof) {
-            let span_before = self.current_span();
-            let at_tag = matches!(
-                self.current_kind(),
-                TokenKind::CloseTag | TokenKind::InlineHtml | TokenKind::OpenTag
-            );
-            if !at_tag
-                && !matches!(
-                    self.current_kind(),
-                    TokenKind::Declare | TokenKind::Semicolon
-                )
-            {
-                self.top_level_code_seen = true;
-            }
-            let first_new = stmts.len();
-            stmt::push_stmt(self, &mut stmts);
-            for stmt in &stmts[first_new..] {
-                match stmt.kind {
-                    StmtKind::Nop => self.top_level_nop_seen = true,
-                    // PHP's `?>` swallows one newline after it.
-                    StmtKind::InlineHtml("\n" | "\r" | "\r\n") => {}
-                    _ if at_tag => self.top_level_code_seen = true,
-                    _ => {}
+            // Handle close tag -> inline HTML -> open tag sequences
+            if self.check(TokenKind::CloseTag) {
+                let terminates_stmt = stmt_end_since_open_tag.is_some_and(|end| {
+                    !matches!(
+                        self.source.as_bytes()[(end as usize).saturating_sub(1)],
+                        b';' | b'}'
+                    )
+                });
+                if !terminates_stmt {
+                    self.top_level_nop_seen = true;
                 }
+                self.advance();
+                if self.check(TokenKind::InlineHtml) {
+                    let token = self.advance();
+                    let text = &self.source[token.span.start as usize..token.span.end as usize];
+                    stmts.push(Stmt {
+                        kind: StmtKind::InlineHtml(text),
+                        span: token.span,
+                        doc_comment: None,
+                    });
+                    // PHP's `?>` swallows one newline after it.
+                    if !matches!(text, "\n" | "\r\n") {
+                        self.top_level_code_seen = true;
+                    }
+                }
+                stmt_end_since_open_tag = None;
+                if self.check(TokenKind::OpenTag) {
+                    let tag = self.advance();
+                    // <?= produces an implicit echo
+                    if self.source[tag.span.start as usize..tag.span.end as usize] == *"<?=" {
+                        if let Some(echo_stmt) = self.parse_short_echo() {
+                            stmts.push(echo_stmt);
+                            self.top_level_code_seen = true;
+                        }
+                    }
+                }
+                continue;
             }
+
+            match self.current_kind() {
+                TokenKind::Declare => {}
+                TokenKind::Semicolon => self.top_level_nop_seen = true,
+                _ => self.top_level_code_seen = true,
+            }
+            let span_before = self.current_span();
+            let stmt = stmt::parse_stmt(self);
+            stmt_end_since_open_tag = Some(stmt.span.end);
+            stmts.push(stmt);
             // Safety: if parsing made no progress, skip the token to avoid infinite loop
             if self.current_span() == span_before {
                 self.advance();

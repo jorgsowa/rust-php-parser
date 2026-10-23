@@ -29,13 +29,6 @@
             "kind": {
               "Block": [
                 {
-                  "kind": "Nop",
-                  "span": {
-                    "start": 26,
-                    "end": 28
-                  }
-                },
-                {
                   "kind": {
                     "InlineHtml": " HTML "
                   },
@@ -58,17 +51,10 @@
         "start": 6,
         "end": 51
       }
-    },
-    {
-      "kind": "Nop",
-      "span": {
-        "start": 52,
-        "end": 54
-      }
     }
   ],
   "span": {
     "start": 0,
-    "end": 54
+    "end": 51
   }
 }

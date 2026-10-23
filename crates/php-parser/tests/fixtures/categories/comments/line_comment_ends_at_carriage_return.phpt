@@ -196,13 +196,6 @@ $g = 6;
       }
     },
     {
-      "kind": "Nop",
-      "span": {
-        "start": 70,
-        "end": 72
-      }
-    },
-    {
       "kind": {
         "InlineHtml": "\rX"
       },

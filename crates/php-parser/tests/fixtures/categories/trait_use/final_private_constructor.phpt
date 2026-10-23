@@ -477,17 +477,10 @@ PHP Fatal error:  Cannot use 'final' as method modifier in Standard input code o
         "start": 376,
         "end": 441
       }
-    },
-    {
-      "kind": "Nop",
-      "span": {
-        "start": 443,
-        "end": 445
-      }
     }
   ],
   "span": {
     "start": 0,
-    "end": 445
+    "end": 441
   }
 }

@@ -92,13 +92,6 @@ $b = "";
       }
     },
     {
-      "kind": "Nop",
-      "span": {
-        "start": 42,
-        "end": 44
-      }
-    },
-    {
       "kind": {
         "InlineHtml": "\u0004"
       },

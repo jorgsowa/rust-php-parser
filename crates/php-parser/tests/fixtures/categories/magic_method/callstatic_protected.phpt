@@ -99,17 +99,10 @@ class a {
         "start": 7,
         "end": 77
       }
-    },
-    {
-      "kind": "Nop",
-      "span": {
-        "start": 79,
-        "end": 81
-      }
     }
   ],
   "span": {
     "start": 0,
-    "end": 81
+    "end": 77
   }
 }

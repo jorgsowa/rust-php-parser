@@ -3,7 +3,7 @@ use php_ast::ast::*;
 use crate::precedence::*;
 
 use super::imports::sorted_use_items;
-use super::{helpers, Printer, MAX_DEPTH};
+use super::{Printer, MAX_DEPTH};
 
 impl<'src> Printer<'src> {
     pub(crate) fn print_stmt(&mut self, stmt: &Stmt) {
@@ -54,7 +54,7 @@ impl<'src> Printer<'src> {
             }
             StmtKind::Block(block) => {
                 self.w("{");
-                if helpers::has_output(&block.stmts) {
+                if !block.stmts.is_empty() {
                     self.newline();
                     self.print_stmts_ensure_php(&block.stmts, true);
                     self.newline();
@@ -187,7 +187,7 @@ impl<'src> Printer<'src> {
                     } else {
                         self.w("default:");
                     }
-                    if helpers::has_output(&case.body) {
+                    if !case.body.is_empty() {
                         self.newline();
                         self.indent();
                         self.print_stmts_ensure_php(&case.body, false);
@@ -442,7 +442,7 @@ impl<'src> Printer<'src> {
     /// Prints a brace-delimited block. Total — every body position routes here.
     pub(crate) fn print_block(&mut self, block: &Block) {
         self.w("{");
-        if helpers::has_output(&block.stmts) {
+        if !block.stmts.is_empty() {
             self.newline();
             self.indent();
             self.print_stmts_ensure_php(&block.stmts, false);
@@ -471,10 +471,6 @@ impl<'src> Printer<'src> {
     pub(crate) fn print_stmt_or_block(&mut self, stmt: &Stmt) {
         if let StmtKind::Block(block) = &stmt.kind {
             self.print_block(block);
-        } else if matches!(stmt.kind, StmtKind::Nop) {
-            self.w("{");
-            self.print_comments_in_empty_block(stmt.span.end);
-            self.w("}");
         } else {
             self.w("{");
             self.newline();

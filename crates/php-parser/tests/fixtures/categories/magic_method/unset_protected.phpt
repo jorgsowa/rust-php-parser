@@ -107,17 +107,10 @@ class foo {
         "start": 7,
         "end": 88
       }
-    },
-    {
-      "kind": "Nop",
-      "span": {
-        "start": 90,
-        "end": 92
-      }
     }
   ],
   "span": {
     "start": 0,
-    "end": 92
+    "end": 88
   }
 }

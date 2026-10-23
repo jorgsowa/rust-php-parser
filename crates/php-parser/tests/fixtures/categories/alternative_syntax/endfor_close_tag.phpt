@@ -94,13 +94,6 @@
             "kind": {
               "Block": [
                 {
-                  "kind": "Nop",
-                  "span": {
-                    "start": 34,
-                    "end": 36
-                  }
-                },
-                {
                   "kind": {
                     "InlineHtml": "x"
                   },

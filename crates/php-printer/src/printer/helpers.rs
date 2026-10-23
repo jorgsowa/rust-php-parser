@@ -12,24 +12,6 @@ pub(crate) fn is_declaration(kind: &StmtKind) -> bool {
     )
 }
 
-/// Inline HTML holding only the newline its `?>` consumes, which outputs nothing after PHP code.
-pub(crate) fn is_silent_html(kind: &StmtKind) -> bool {
-    matches!(kind, StmtKind::InlineHtml("" | "\n" | "\r" | "\r\n"))
-}
-
-/// `declare(encoding=...)`, and `declare(strict_types=...)` before PHP 8.5, reject an empty statement before them.
-pub(crate) fn rejects_empty_stmt_before(stmt: &Stmt) -> bool {
-    matches!(&stmt.kind, StmtKind::Declare(d) if d.directives.iter().any(|(name, _)| {
-        name.eq_ignore_ascii_case("encoding") || name.eq_ignore_ascii_case("strict_types")
-    }))
-}
-
-pub(crate) fn has_output(stmts: &[Stmt]) -> bool {
-    !stmts
-        .iter()
-        .all(|stmt| is_silent_html(&stmt.kind) || matches!(stmt.kind, StmtKind::Nop))
-}
-
 /// Start of the doc comment printed before `stmt`, which may sit on its declaration.
 pub(crate) fn stmt_doc_comment_start(stmt: &Stmt) -> Option<u32> {
     let doc = match &stmt.kind {

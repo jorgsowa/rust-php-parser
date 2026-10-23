@@ -442,7 +442,7 @@ impl<'src> Printer<'src> {
         );
         if html_at_start {
             self.in_html_mode = true;
-        } else if helpers::has_output(&program.stmts) || !self.comments.is_empty() {
+        } else if !program.stmts.is_empty() || !self.comments.is_empty() {
             self.w("<?php");
             self.newline();
             self.has_php_content = true;
@@ -458,20 +458,15 @@ impl<'src> Printer<'src> {
         let imports = self.sorted_imports(stmts);
         let mut group = 0;
         let mut group_floor = 0;
-        let empty_stmts_matter_until = stmts.iter().rposition(helpers::rejects_empty_stmt_before);
-        let mut printed_any = false;
+        let mut prev_was_inline_html = false;
         for k in 0..stmts.len() {
             let i = imports.as_ref().map_or(k, |s| s.order[k]);
             let stmt = &stmts[i];
+            let is_nop = matches!(stmt.kind, php_ast::ast::StmtKind::Nop);
             let is_inline_html = matches!(stmt.kind, php_ast::ast::StmtKind::InlineHtml(_));
 
-            // Empty statements change nothing, unless a later declare rejects them.
-            let is_nop = matches!(stmt.kind, php_ast::ast::StmtKind::Nop);
-            if is_nop && !empty_stmts_matter_until.is_some_and(|last| i < last) {
-                continue;
-            }
-            // Silent HTML outputs nothing; an empty statement its `?>` makes is a `Nop` of its own.
-            if !self.in_html_mode && helpers::is_silent_html(&stmt.kind) {
+            if is_nop && prev_was_inline_html {
+                prev_was_inline_html = is_inline_html;
                 continue;
             }
 
@@ -489,7 +484,7 @@ impl<'src> Printer<'src> {
 
             // When transitioning out of HTML mode the <?php + newline + indent
             // is emitted by print_stmt_inner, so skip the normal separators here.
-            if printed_any && !self.in_html_mode {
+            if k > 0 && !self.in_html_mode {
                 let decl_min =
                     if helpers::is_declaration(&stmt.kind) && self.blank_lines_upper_bound > 0 {
                         1
@@ -522,7 +517,6 @@ impl<'src> Printer<'src> {
                 self.write_indent();
             }
             self.print_stmt(stmt);
-            printed_any = true;
             if !is_inline_html {
                 self.flush_same_line_comments(stmt.span.end);
             }
@@ -536,6 +530,7 @@ impl<'src> Printer<'src> {
                     group += 1;
                 }
             }
+            prev_was_inline_html = is_inline_html;
         }
         if indent {
             self.dedent();

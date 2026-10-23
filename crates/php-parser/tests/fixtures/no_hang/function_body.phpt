@@ -16,13 +16,6 @@
           "params": [],
           "body": [
             {
-              "kind": "Nop",
-              "span": {
-                "start": 21,
-                "end": 23
-              }
-            },
-            {
               "kind": {
                 "InlineHtml": " "
               },

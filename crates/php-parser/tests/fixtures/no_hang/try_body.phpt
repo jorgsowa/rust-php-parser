@@ -8,13 +8,6 @@
         "TryCatch": {
           "body": [
             {
-              "kind": "Nop",
-              "span": {
-                "start": 12,
-                "end": 14
-              }
-            },
-            {
               "kind": {
                 "InlineHtml": " "
               },

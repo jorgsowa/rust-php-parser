@@ -23,13 +23,6 @@ if ($cond) {
             "kind": {
               "Block": [
                 {
-                  "kind": "Nop",
-                  "span": {
-                    "start": 23,
-                    "end": 25
-                  }
-                },
-                {
                   "kind": {
                     "InlineHtml": "<p>html</p>"
                   },
