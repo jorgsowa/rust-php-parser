@@ -66,6 +66,13 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                       "body": {
                         "Block": [
                           {
+                            "kind": "Nop",
+                            "span": {
+                              "start": 41,
+                              "end": 43
+                            }
+                          },
+                          {
                             "kind": {
                               "InlineHtml": " "
                             },

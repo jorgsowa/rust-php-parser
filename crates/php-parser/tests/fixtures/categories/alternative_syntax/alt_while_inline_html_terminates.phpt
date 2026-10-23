@@ -19,6 +19,13 @@
             "kind": {
               "Block": [
                 {
+                  "kind": "Nop",
+                  "span": {
+                    "start": 20,
+                    "end": 22
+                  }
+                },
+                {
                   "kind": {
                     "InlineHtml": " HTML "
                   },
@@ -41,10 +48,17 @@
         "start": 6,
         "end": 43
       }
+    },
+    {
+      "kind": "Nop",
+      "span": {
+        "start": 44,
+        "end": 46
+      }
     }
   ],
   "span": {
     "start": 0,
-    "end": 43
+    "end": 46
   }
 }

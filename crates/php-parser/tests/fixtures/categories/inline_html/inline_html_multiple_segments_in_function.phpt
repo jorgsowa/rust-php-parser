@@ -60,6 +60,13 @@ function page() {
               }
             },
             {
+              "kind": "Nop",
+              "span": {
+                "start": 42,
+                "end": 44
+              }
+            },
+            {
               "kind": {
                 "InlineHtml": "<header>"
               },
@@ -103,6 +110,13 @@ function page() {
               "span": {
                 "start": 62,
                 "end": 68
+              }
+            },
+            {
+              "kind": "Nop",
+              "span": {
+                "start": 73,
+                "end": 75
               }
             },
             {

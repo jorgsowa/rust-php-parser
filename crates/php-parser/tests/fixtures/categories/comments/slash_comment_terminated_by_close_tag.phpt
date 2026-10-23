@@ -6,6 +6,13 @@
 {
   "stmts": [
     {
+      "kind": "Nop",
+      "span": {
+        "start": 17,
+        "end": 19
+      }
+    },
+    {
       "kind": {
         "InlineHtml": "\n<div>html</div>\n"
       },

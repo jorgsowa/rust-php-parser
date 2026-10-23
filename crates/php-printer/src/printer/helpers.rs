@@ -25,7 +25,9 @@ pub(crate) fn rejects_empty_stmt_before(stmt: &Stmt) -> bool {
 }
 
 pub(crate) fn has_output(stmts: &[Stmt]) -> bool {
-    !stmts.iter().all(|stmt| is_silent_html(&stmt.kind))
+    !stmts
+        .iter()
+        .all(|stmt| is_silent_html(&stmt.kind) || matches!(stmt.kind, StmtKind::Nop))
 }
 
 /// Start of the doc comment printed before `stmt`, which may sit on its declaration.

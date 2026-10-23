@@ -43,6 +43,13 @@ PHP Fatal error:  Encoding declaration pragma must be the very first statement i
       }
     },
     {
+      "kind": "Nop",
+      "span": {
+        "start": 26,
+        "end": 28
+      }
+    },
+    {
       "kind": {
         "InlineHtml": "\n"
       },

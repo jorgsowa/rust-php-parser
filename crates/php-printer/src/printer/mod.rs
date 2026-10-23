@@ -442,27 +442,13 @@ impl<'src> Printer<'src> {
         );
         if html_at_start {
             self.in_html_mode = true;
-        } else if !program.stmts.is_empty() || !self.comments.is_empty() {
+        } else if helpers::has_output(&program.stmts) || !self.comments.is_empty() {
             self.w("<?php");
             self.newline();
             self.has_php_content = true;
         }
         self.print_stmts(&program.stmts, false);
         self.flush_remaining_comments();
-    }
-
-    /// Whether the `?>` before `stmts[i]` is an empty statement, as after `;` or `}`; unknown without source.
-    fn close_tag_makes_empty_stmt(&self, stmts: &[php_ast::ast::Stmt], i: usize) -> bool {
-        if self.source.is_empty() {
-            return false;
-        }
-        match i.checked_sub(1).map(|p| &stmts[p]) {
-            Some(prev) if !matches!(prev.kind, php_ast::ast::StmtKind::InlineHtml(_)) => matches!(
-                self.source.as_bytes()[(prev.span.end as usize).saturating_sub(1)],
-                b';' | b'}'
-            ),
-            _ => true,
-        }
     }
 
     pub(crate) fn print_stmts(&mut self, stmts: &[php_ast::ast::Stmt], indent: bool) {
@@ -473,17 +459,19 @@ impl<'src> Printer<'src> {
         let mut group = 0;
         let mut group_floor = 0;
         let empty_stmts_matter_until = stmts.iter().rposition(helpers::rejects_empty_stmt_before);
+        let mut printed_any = false;
         for k in 0..stmts.len() {
             let i = imports.as_ref().map_or(k, |s| s.order[k]);
             let stmt = &stmts[i];
             let is_inline_html = matches!(stmt.kind, php_ast::ast::StmtKind::InlineHtml(_));
 
-            // Silent HTML's tags change nothing, unless its `?>` is an empty statement a later declare rejects.
-            if !self.in_html_mode
-                && helpers::is_silent_html(&stmt.kind)
-                && !(empty_stmts_matter_until.is_some_and(|last| i < last)
-                    && self.close_tag_makes_empty_stmt(stmts, i))
-            {
+            // Empty statements change nothing, unless a later declare rejects them.
+            let is_nop = matches!(stmt.kind, php_ast::ast::StmtKind::Nop);
+            if is_nop && !empty_stmts_matter_until.is_some_and(|last| i < last) {
+                continue;
+            }
+            // Silent HTML outputs nothing; an empty statement its `?>` makes is a `Nop` of its own.
+            if !self.in_html_mode && helpers::is_silent_html(&stmt.kind) {
                 continue;
             }
 
@@ -501,7 +489,7 @@ impl<'src> Printer<'src> {
 
             // When transitioning out of HTML mode the <?php + newline + indent
             // is emitted by print_stmt_inner, so skip the normal separators here.
-            if k > 0 && !self.in_html_mode {
+            if printed_any && !self.in_html_mode {
                 let decl_min =
                     if helpers::is_declaration(&stmt.kind) && self.blank_lines_upper_bound > 0 {
                         1
@@ -534,6 +522,7 @@ impl<'src> Printer<'src> {
                 self.write_indent();
             }
             self.print_stmt(stmt);
+            printed_any = true;
             if !is_inline_html {
                 self.flush_same_line_comments(stmt.span.end);
             }

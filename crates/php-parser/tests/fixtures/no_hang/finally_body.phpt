@@ -10,6 +10,13 @@
           "catches": [],
           "finally": [
             {
+              "kind": "Nop",
+              "span": {
+                "start": 23,
+                "end": 25
+              }
+            },
+            {
               "kind": {
                 "InlineHtml": " "
               },

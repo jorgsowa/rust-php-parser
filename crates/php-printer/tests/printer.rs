@@ -119,10 +119,26 @@ impl<'src> php_ast::fold::Fold<'src> for StripParens {
     }
 }
 
-/// Drops inline HTML holding only the newline its `?>` consumes, since it outputs nothing.
-struct StripSilentHtml;
+/// Drops empty statements and inline HTML holding only the newline its `?>` consumes,
+/// and reads an empty block as the empty statement it is.
+struct StripEmptyStmts;
 
-impl<'src> php_ast::fold::Fold<'src> for StripSilentHtml {
+impl<'src> php_ast::fold::Fold<'src> for StripEmptyStmts {
+    fn fold_stmt<'new>(
+        &mut self,
+        arena: &'new bumpalo::Bump,
+        stmt: &php_ast::ast::Stmt<'_, 'src>,
+    ) -> php_ast::ast::Stmt<'new, 'src> {
+        let folded = php_ast::fold::fold_stmt(self, arena, stmt);
+        match &folded.kind {
+            php_ast::ast::StmtKind::Block(block) if block.stmts.is_empty() => php_ast::ast::Stmt {
+                kind: php_ast::ast::StmtKind::Nop,
+                ..folded
+            },
+            _ => folded,
+        }
+    }
+
     fn fold_stmts<'new>(
         &mut self,
         arena: &'new bumpalo::Bump,
@@ -132,7 +148,8 @@ impl<'src> php_ast::fold::Fold<'src> for StripSilentHtml {
         for stmt in stmts {
             if !matches!(
                 stmt.kind,
-                php_ast::ast::StmtKind::InlineHtml("" | "\n" | "\r" | "\r\n")
+                php_ast::ast::StmtKind::Nop
+                    | php_ast::ast::StmtKind::InlineHtml("" | "\n" | "\r" | "\r\n")
             ) {
                 folded.push(self.fold_stmt(arena, stmt));
             }
@@ -142,11 +159,12 @@ impl<'src> php_ast::fold::Fold<'src> for StripSilentHtml {
 }
 
 /// Fingerprint of `program`'s shape, which already encodes precedence, so
-/// redundant parentheses and silent close tags do not count as a change.
+/// redundant parentheses, empty statements and silent close tags do not count as a change;
+/// `compile_errors/` fixtures check the declares that reject empty statements.
 fn shape(program: &php_ast::ast::Program) -> u64 {
     let arena = bumpalo::Bump::new();
     let stripped = php_ast::fold::fold_program(&mut StripParens, &arena, program);
-    let stripped = php_ast::fold::fold_program(&mut StripSilentHtml, &arena, &stripped);
+    let stripped = php_ast::fold::fold_program(&mut StripEmptyStmts, &arena, &stripped);
     php_ast::fingerprint::structural_fingerprint(&stripped)
 }
 

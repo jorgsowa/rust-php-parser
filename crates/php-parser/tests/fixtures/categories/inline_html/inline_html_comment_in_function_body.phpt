@@ -62,12 +62,26 @@ function tmpl() {
               }
             },
             {
+              "kind": "Nop",
+              "span": {
+                "start": 39,
+                "end": 41
+              }
+            },
+            {
               "kind": {
                 "InlineHtml": "\n<div>\n"
               },
               "span": {
                 "start": 41,
                 "end": 48
+              }
+            },
+            {
+              "kind": "Nop",
+              "span": {
+                "start": 65,
+                "end": 67
               }
             },
             {

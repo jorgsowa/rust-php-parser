@@ -24,6 +24,13 @@
             "kind": {
               "Block": [
                 {
+                  "kind": "Nop",
+                  "span": {
+                    "start": 24,
+                    "end": 26
+                  }
+                },
+                {
                   "kind": {
                     "InlineHtml": "body"
                   },

@@ -5,8 +5,6 @@ echo 1; ?>y<?php ;
 <?php
 if ($a) {
     ?>x<?php
-    ;
 }
 echo 1;
-?>y<?php
-;
+?>y

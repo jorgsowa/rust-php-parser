@@ -471,6 +471,10 @@ impl<'src> Printer<'src> {
     pub(crate) fn print_stmt_or_block(&mut self, stmt: &Stmt) {
         if let StmtKind::Block(block) = &stmt.kind {
             self.print_block(block);
+        } else if matches!(stmt.kind, StmtKind::Nop) {
+            self.w("{");
+            self.print_comments_in_empty_block(stmt.span.end);
+            self.w("}");
         } else {
             self.w("{");
             self.newline();

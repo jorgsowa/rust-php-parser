@@ -211,10 +211,17 @@ echo $b->__invoke();
         "start": 114,
         "end": 134
       }
+    },
+    {
+      "kind": "Nop",
+      "span": {
+        "start": 136,
+        "end": 138
+      }
     }
   ],
   "span": {
     "start": 0,
-    "end": 134
+    "end": 138
   }
 }

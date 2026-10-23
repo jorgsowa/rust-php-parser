@@ -19,6 +19,13 @@
             "kind": {
               "Block": [
                 {
+                  "kind": "Nop",
+                  "span": {
+                    "start": 15,
+                    "end": 17
+                  }
+                },
+                {
                   "kind": {
                     "InlineHtml": "hello"
                   },

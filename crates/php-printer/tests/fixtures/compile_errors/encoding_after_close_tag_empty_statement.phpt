@@ -6,6 +6,5 @@ php_error=Encoding declaration pragma must be the very first statement in the sc
 ===print===
 <?php
 declare(ticks=1);
-?>
-<?php
+;
 declare(encoding='UTF-8');

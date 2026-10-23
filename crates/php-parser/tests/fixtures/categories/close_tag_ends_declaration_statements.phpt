@@ -150,13 +150,6 @@
               }
             },
             {
-              "kind": "Nop",
-              "span": {
-                "start": 98,
-                "end": 104
-              }
-            },
-            {
               "kind": {
                 "StaticVar": [
                   {
@@ -181,13 +174,6 @@
               }
             },
             {
-              "kind": "Nop",
-              "span": {
-                "start": 116,
-                "end": 121
-              }
-            },
-            {
               "kind": {
                 "Unset": [
                   {
@@ -207,13 +193,6 @@
               }
             },
             {
-              "kind": "Nop",
-              "span": {
-                "start": 134,
-                "end": 138
-              }
-            },
-            {
               "kind": {
                 "Goto": {
                   "name": "l",
@@ -226,13 +205,6 @@
               "span": {
                 "start": 134,
                 "end": 140
-              }
-            },
-            {
-              "kind": "Nop",
-              "span": {
-                "start": 149,
-                "end": 150
               }
             },
             {

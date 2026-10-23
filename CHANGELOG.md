@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - The messages for a positional or unpacked argument after a named one, an unparenthesized nested ternary and an unparenthesized arrow function after `|>` match PHP's (`php-rs-parser`).
+- A `?>` that is a statement of its own, as after `;`, `}`, `:` or another tag, is a `Nop` with the span of the `?>`; a `?>` that ends the statement before it adds nothing, and `?><?php` no longer adds a `Nop` (`php-rs-parser`).
+- The printer drops empty statements, except before a `declare(encoding=...)` or `declare(strict_types=...)` that rejects them, and a `?>` with nothing but its consumed newline before the next `<?php` (`php-printer`).
 
 ### Fixed
 
@@ -25,8 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - No span ends before it starts: the version errors for set-only visibility on a promoted parameter and for a non-capturing `catch`, and the spans of error statements, bodies missing their `{`, `use` items, parameters, attributes, short echo tags, static variables and alternative-syntax `elseif` branches after a missing token (`php-rs-parser`).
 - A control character in code, including form feed, is an error from PHP 8.0 instead of being skipped (`php-lexer`, `php-rs-parser`).
 - `<?php` or `<?=` inside PHP code lexes as `<`, so it is a syntax error instead of being ignored (`php-lexer`).
-- A `?>` with nothing but its consumed newline before the next `<?php` is dropped together with that `<?php`, instead of adding an empty statement that made a following `declare(encoding=...)` an error (`php-printer`).
-- A `;` after inline HTML is no longer dropped, and a `; ?>` empty statement is kept when a later `declare(encoding=...)` or `declare(strict_types=...)` rejects it, so the printer no longer turns that invalid code valid (`php-printer`).
+- A `?>` where a statement is expected, as in `if ($a) ?>x<?php`, is the empty body and the HTML after it runs unconditionally, as in PHP (`php-rs-parser`).
+- Printing no longer turns a `declare(encoding=...)` or `declare(strict_types=...)` after an empty statement valid, or one after a `?>` that ends a statement invalid (`php-printer`).
 
 ## [0.25.1] - 2026-10-22
 

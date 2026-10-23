@@ -5,6 +5,5 @@ min_php=8.5
 <?php declare(strict_types=1);
 ===print===
 <?php
-?>
-<?php
+;
 declare(strict_types=1);
