@@ -105,7 +105,7 @@ pub(crate) mod precedence;
 pub mod source_map;
 pub(crate) mod stmt;
 /// Target PHP version selection.
-pub mod version;
+pub use php_ast::version;
 
 use diagnostics::ParseError;
 use php_ast::owned::Comment as OwnedComment;

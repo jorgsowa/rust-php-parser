@@ -1,9 +1,8 @@
 use std::fmt;
 
-/// The PHP language version the parser should target.
+/// The PHP language version that code is parsed or printed for.
 ///
-/// When a [`PhpVersion`] is set in [`crate::ParseOptions`], the parser
-/// emits [`crate::diagnostics::ParseError::VersionTooLow`] for any syntax that
+/// When set in `php_rs_parser::ParseOptions`, the parser reports syntax that
 /// requires a higher version.  The AST is still produced (the parser recovers),
 /// so callers can always inspect what was parsed.
 ///

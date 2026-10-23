@@ -59,11 +59,14 @@ pub mod owned;
 pub mod resolve;
 /// Byte-offset source spans.
 pub mod span;
+/// Target PHP version selection.
+pub mod version;
 /// Read-only AST traversal.
 pub mod visitor;
 
 pub use ast::*;
 pub use span::Span;
+pub use version::PhpVersion;
 
 /// The arena allocator behind [`ArenaVec`] and [`fold::Fold`], re-exported so
 /// callers use the same version.
