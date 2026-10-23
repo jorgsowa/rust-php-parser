@@ -842,7 +842,15 @@ impl<'src> Lexer<'src> {
             }
             b'?' => {
                 if self.check_at(1, b'>') {
-                    self.pos = start + 2;
+                    // Like PHP's T_CLOSE_TAG, `?>` takes one following newline with it.
+                    self.pos = start
+                        + if self.check_at(2, b'\r') && self.check_at(3, b'\n') {
+                            4
+                        } else if self.check_at(2, b'\n') || self.check_at(2, b'\r') {
+                            3
+                        } else {
+                            2
+                        };
                     self.mode = LexerMode::InlineHtml;
                     self.tok(TokenKind::CloseTag, start)
                 } else if self.check_at(1, b'?') {

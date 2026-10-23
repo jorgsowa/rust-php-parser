@@ -34,12 +34,10 @@ PHP Parse error:  syntax error, unexpected token ",", expecting "}" in Standard 
             },
             {
               "name": {
-                "parts": [
-                  "A"
-                ],
-                "kind": "Qualified",
+                "parts": [],
+                "kind": "Error",
                 "span": {
-                  "start": 10,
+                  "start": 15,
                   "end": 15
                 }
               },

@@ -1227,6 +1227,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
     loop {
         match parser.current_kind() {
             TokenKind::Public | TokenKind::Protected | TokenKind::Private => {
+                let vis_start = parser.start_span();
                 let vis = match parser.current_kind() {
                     TokenKind::Public => Visibility::Public,
                     TokenKind::Protected => Visibility::Protected,
@@ -1245,10 +1246,10 @@ fn parse_class_member_modifiers<'arena, 'src>(
                                 parser.span_from(member_start),
                             );
                         }
-                        asym_vis_span = Some(parser.span_from(member_start));
                         parser.advance(); // consume (
                         parser.advance(); // consume "set"
                         parser.expect(TokenKind::RightParen);
+                        asym_vis_span = Some(parser.span_from(vis_start));
                         set_visibility = Some(vis);
                     } else {
                         visibility = Some(vis);
@@ -1263,12 +1264,13 @@ fn parse_class_member_modifiers<'arena, 'src>(
                                 TokenKind::Protected => Visibility::Protected,
                                 _ => Visibility::Private,
                             };
-                            // Save span; emit version check after loop when is_static is known.
-                            asym_vis_span = Some(parser.span_from(member_start));
+                            let set_start = parser.start_span();
                             parser.advance(); // consume second visibility
                             parser.advance(); // consume (
                             parser.advance(); // consume "set"
                             parser.expect(TokenKind::RightParen);
+                            // Version check waits until after the loop, when is_static is known.
+                            asym_vis_span = Some(parser.span_from(set_start));
                             set_visibility = Some(set_vis);
                         }
                     }
@@ -1283,11 +1285,11 @@ fn parse_class_member_modifiers<'arena, 'src>(
                             parser.span_from(member_start),
                         );
                     }
-                    // Save span for deferred version check after is_static is known.
-                    asym_vis_span = Some(parser.span_from(member_start));
                     parser.advance(); // consume (
                     parser.advance(); // consume "set"
                     parser.expect(TokenKind::RightParen);
+                    // Version check waits until after the loop, when is_static is known.
+                    asym_vis_span = Some(parser.span_from(vis_start));
                     set_visibility = Some(vis);
                 } else {
                     parser.forbid(

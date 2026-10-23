@@ -75,7 +75,7 @@ declare (a='b') $C;
                 }
               },
               "span": {
-                "start": 26,
+                "start": 19,
                 "end": 34
               }
             }

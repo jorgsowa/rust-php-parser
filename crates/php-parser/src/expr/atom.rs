@@ -1167,14 +1167,35 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         }
 
         // Error: unexpected token
-        _ => {
+        kind => {
             parser.error_expected("expression");
+            // An operator the expression goes on to consume starts its parent, so the operand sits there.
+            let span = if continues_expression(kind) {
+                let at = parser.start_span();
+                Span::new(at, at)
+            } else {
+                parser.missing_span()
+            };
             Expr {
                 kind: ExprKind::Error,
-                span: parser.missing_span(),
+                span,
             }
         }
     }
+}
+
+/// Whether `kind` continues an expression after its first operand.
+fn continues_expression(kind: TokenKind) -> bool {
+    precedence::infix_binding_power(kind).is_some()
+        || kind.is_assignment_op()
+        || matches!(
+            kind,
+            TokenKind::Question
+                | TokenKind::QuestionQuestion
+                | TokenKind::Arrow
+                | TokenKind::NullsafeArrow
+                | TokenKind::DoubleColon
+        )
 }
 
 // =============================================================================

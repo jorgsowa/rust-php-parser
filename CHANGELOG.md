@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `PhpVersion` lives in `php-ast`; `php-rs-parser` re-exports it at the same paths (`php-ast`, `php-rs-parser`).
 - A `?>` that is a statement of its own, as after `;`, `}`, `:` or another tag, is a `Nop` with the span of the `?>`; a `?>` that ends the statement before it adds nothing, and `?><?php` no longer adds a `Nop` (`php-rs-parser`).
 - Empty statements are dropped, except where the target PHP version rejects them before a `declare`, and so is a `?>` with nothing but its consumed newline before the next `<?php` (`php-printer`).
+- The `CloseTag` token includes the one newline after `?>` (`\n`, `\r\n` or `\r`), as PHP's `T_CLOSE_TAG` does, so the `InlineHtml` after it holds only the output and the `Nop` for `?>` spans the newline (`php-lexer`, `php-rs-parser`).
+- `<?= ?>` and `<?=` at the end of the file are an `Echo` holding an `Error`, like `<?= ;` (`php-rs-parser`).
+- A short echo's `Echo` span starts at `<?=` (`php-rs-parser`).
+- An `elseif` branch spans from `elseif`, and an alternative-syntax then, `elseif` or `else` block from its `:` instead of from `if` (`php-rs-parser`).
+- The asymmetric-visibility version error spans the set-visibility modifier, such as `private(set)` (`php-rs-parser`).
+- The printer writes a newline after a `?>` before HTML when the source has one there or when the HTML starts with a newline that `?>` would swallow (`php-printer`).
 
 ### Fixed
 
@@ -28,6 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - An unclosed `exit(`, `die(` or `clone(` call no longer panics (`php-rs-parser`).
 - No span ends before it starts: the version errors for set-only visibility on a promoted parameter and for a non-capturing `catch`, and the spans of error statements, bodies missing their `{`, `use` items, parameters, attributes, short echo tags, static variables and alternative-syntax `elseif` branches after a missing token (`php-rs-parser`).
 - A node recovered from a missing or unexpected token, such as the name and parameter of `public function @return f() {}`, is empty and placed right after the last consumed token, so it lies inside its parent's span and no longer covers a token it did not consume (`php-rs-parser`).
+- A missing operand before an operator, as in `* 2;`, sits at the operator, so the expression and statement no longer start at the whitespace before it (`php-rs-parser`).
+- A missing item in a group `use`, as in `use A\{B, , C};`, has an `Error` name instead of the prefix with a span covering `A\{B,` (`php-rs-parser`).
+- A missing static variable after a trailing comma lies inside its statement's span (`php-rs-parser`).
+- `__halt_compiler() ?>` followed by `\r` leaves the `\r` out of the data, as PHP does (`php-rs-parser`).
 - A control character in code, including form feed, is an error from PHP 8.0 instead of being skipped (`php-lexer`, `php-rs-parser`).
 - `<?php` or `<?=` inside PHP code lexes as `<`, so it is a syntax error instead of being ignored (`php-lexer`).
 - A `?>` where a statement is expected, as in `if ($a) ?>x<?php`, is the empty body and the HTML after it runs unconditionally, as in PHP (`php-rs-parser`).

@@ -24,7 +24,7 @@ PHP Parse error:  Unmatched '}' in Standard input code on line 1
         ]
       },
       "span": {
-        "start": 3,
+        "start": 0,
         "end": 3
       }
     },

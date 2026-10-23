@@ -65,15 +65,15 @@ function tmpl() {
               "kind": "Nop",
               "span": {
                 "start": 39,
-                "end": 41
+                "end": 42
               }
             },
             {
               "kind": {
-                "InlineHtml": "\n<div>\n"
+                "InlineHtml": "<div>\n"
               },
               "span": {
-                "start": 41,
+                "start": 42,
                 "end": 48
               }
             },
@@ -81,15 +81,15 @@ function tmpl() {
               "kind": "Nop",
               "span": {
                 "start": 65,
-                "end": 67
+                "end": 68
               }
             },
             {
               "kind": {
-                "InlineHtml": "\n    <p>text</p>\n"
+                "InlineHtml": "    <p>text</p>\n"
               },
               "span": {
-                "start": 67,
+                "start": 68,
                 "end": 84
               }
             },

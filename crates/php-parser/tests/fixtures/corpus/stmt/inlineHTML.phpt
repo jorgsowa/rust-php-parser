@@ -32,15 +32,15 @@ $d;
       "kind": "Nop",
       "span": {
         "start": 10,
-        "end": 12
+        "end": 13
       }
     },
     {
       "kind": {
-        "InlineHtml": "\nB\n"
+        "InlineHtml": "B\n"
       },
       "span": {
-        "start": 12,
+        "start": 13,
         "end": 15
       }
     },
@@ -65,15 +65,6 @@ $d;
       "kind": "Nop",
       "span": {
         "start": 25,
-        "end": 27
-      }
-    },
-    {
-      "kind": {
-        "InlineHtml": "\n"
-      },
-      "span": {
-        "start": 27,
         "end": 28
       }
     },

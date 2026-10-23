@@ -45,8 +45,8 @@ PHP Parse error:  syntax error, unexpected token "*" in Standard input code on l
                           "left": {
                             "kind": "Error",
                             "span": {
-                              "start": 14,
-                              "end": 14
+                              "start": 15,
+                              "end": 15
                             }
                           },
                           "op": "Mul",
@@ -62,7 +62,7 @@ PHP Parse error:  syntax error, unexpected token "*" in Standard input code on l
                         }
                       },
                       "span": {
-                        "start": 14,
+                        "start": 15,
                         "end": 18
                       }
                     }

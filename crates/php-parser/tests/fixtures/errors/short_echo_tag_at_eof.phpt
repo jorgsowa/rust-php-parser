@@ -15,10 +15,27 @@ PHP Parse error:  syntax error, unexpected end of file in Standard input code on
         "start": 0,
         "end": 1
       }
+    },
+    {
+      "kind": {
+        "Echo": [
+          {
+            "kind": "Error",
+            "span": {
+              "start": 4,
+              "end": 4
+            }
+          }
+        ]
+      },
+      "span": {
+        "start": 1,
+        "end": 4
+      }
     }
   ],
   "span": {
     "start": 0,
-    "end": 1
+    "end": 4
   }
 }

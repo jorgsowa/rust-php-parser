@@ -32,15 +32,15 @@ echo "foobar";
       "kind": "Nop",
       "span": {
         "start": 42,
-        "end": 44
+        "end": 45
       }
     },
     {
       "kind": {
-        "InlineHtml": "\n#!/usr/bin/env php"
+        "InlineHtml": "#!/usr/bin/env php"
       },
       "span": {
-        "start": 44,
+        "start": 45,
         "end": 63
       }
     }

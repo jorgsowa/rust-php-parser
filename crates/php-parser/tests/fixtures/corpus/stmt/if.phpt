@@ -60,7 +60,7 @@ if ($a): endif; // without else
                 }
               },
               "span": {
-                "start": 31,
+                "start": 23,
                 "end": 38
               }
             },
@@ -84,7 +84,7 @@ if ($a): endif; // without else
                 }
               },
               "span": {
-                "start": 47,
+                "start": 39,
                 "end": 54
               }
             }
@@ -152,7 +152,7 @@ if ($a): endif; // without else
               "Block": []
             },
             "span": {
-              "start": 100,
+              "start": 112,
               "end": 113
             }
           },
@@ -172,12 +172,12 @@ if ($a): endif; // without else
                   "Block": []
                 },
                 "span": {
-                  "start": 122,
+                  "start": 126,
                   "end": 127
                 }
               },
               "span": {
-                "start": 122,
+                "start": 114,
                 "end": 127
               }
             },
@@ -196,12 +196,12 @@ if ($a): endif; // without else
                   "Block": []
                 },
                 "span": {
-                  "start": 136,
+                  "start": 140,
                   "end": 141
                 }
               },
               "span": {
-                "start": 136,
+                "start": 128,
                 "end": 141
               }
             }
@@ -211,7 +211,7 @@ if ($a): endif; // without else
               "Block": []
             },
             "span": {
-              "start": 100,
+              "start": 154,
               "end": 155
             }
           },
@@ -240,7 +240,7 @@ if ($a): endif; // without else
               "Block": []
             },
             "span": {
-              "start": 164,
+              "start": 171,
               "end": 172
             }
           },

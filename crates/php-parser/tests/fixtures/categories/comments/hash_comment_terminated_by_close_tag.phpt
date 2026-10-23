@@ -9,15 +9,15 @@
       "kind": "Nop",
       "span": {
         "start": 16,
-        "end": 18
+        "end": 19
       }
     },
     {
       "kind": {
-        "InlineHtml": "\n<span>html</span>\n"
+        "InlineHtml": "<span>html</span>\n"
       },
       "span": {
-        "start": 18,
+        "start": 19,
         "end": 37
       }
     },

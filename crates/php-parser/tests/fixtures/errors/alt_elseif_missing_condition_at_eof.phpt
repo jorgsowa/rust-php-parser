@@ -31,7 +31,7 @@ PHP Parse error:  syntax error, unexpected end of file, expecting "(" in Standar
               "Block": []
             },
             "span": {
-              "start": 6,
+              "start": 13,
               "end": 14
             }
           },
@@ -54,7 +54,7 @@ PHP Parse error:  syntax error, unexpected end of file, expecting "(" in Standar
                 }
               },
               "span": {
-                "start": 21,
+                "start": 15,
                 "end": 21
               }
             }

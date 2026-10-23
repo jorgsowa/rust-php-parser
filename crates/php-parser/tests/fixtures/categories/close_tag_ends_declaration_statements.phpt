@@ -29,15 +29,6 @@
     },
     {
       "kind": {
-        "InlineHtml": "\n"
-      },
-      "span": {
-        "start": 20,
-        "end": 21
-      }
-    },
-    {
-      "kind": {
         "Use": {
           "kind": "Normal",
           "uses": [
@@ -65,15 +56,6 @@
       "span": {
         "start": 27,
         "end": 34
-      }
-    },
-    {
-      "kind": {
-        "InlineHtml": "\n"
-      },
-      "span": {
-        "start": 37,
-        "end": 38
       }
     },
     {
@@ -107,15 +89,6 @@
       "span": {
         "start": 44,
         "end": 55
-      }
-    },
-    {
-      "kind": {
-        "InlineHtml": "\n"
-      },
-      "span": {
-        "start": 58,
-        "end": 59
       }
     },
     {

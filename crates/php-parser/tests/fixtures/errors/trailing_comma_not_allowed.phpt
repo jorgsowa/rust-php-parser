@@ -523,15 +523,6 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fu
       "kind": "Nop",
       "span": {
         "start": 252,
-        "end": 254
-      }
-    },
-    {
-      "kind": {
-        "InlineHtml": "\n"
-      },
-      "span": {
-        "start": 254,
         "end": 255
       }
     },
@@ -550,7 +541,7 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fu
         ]
       },
       "span": {
-        "start": 259,
+        "start": 255,
         "end": 261
       }
     }

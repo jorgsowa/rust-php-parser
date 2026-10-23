@@ -31,10 +31,10 @@ html
     },
     {
       "kind": {
-        "InlineHtml": "\nhtml"
+        "InlineHtml": "html"
       },
       "span": {
-        "start": 32,
+        "start": 33,
         "end": 37
       }
     }

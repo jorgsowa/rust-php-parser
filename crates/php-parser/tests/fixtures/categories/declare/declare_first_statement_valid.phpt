@@ -267,15 +267,6 @@ PHP Fatal error:  strict_types declaration must be the very first statement in t
       "kind": "Nop",
       "span": {
         "start": 205,
-        "end": 207
-      }
-    },
-    {
-      "kind": {
-        "InlineHtml": "\n"
-      },
-      "span": {
-        "start": 207,
         "end": 208
       }
     },
@@ -302,15 +293,6 @@ PHP Fatal error:  strict_types declaration must be the very first statement in t
       "span": {
         "start": 214,
         "end": 237
-      }
-    },
-    {
-      "kind": {
-        "InlineHtml": "\n"
-      },
-      "span": {
-        "start": 240,
-        "end": 241
       }
     },
     {

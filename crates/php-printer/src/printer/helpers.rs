@@ -1,9 +1,9 @@
 use php_ast::ast::*;
 use php_ast::PhpVersion;
 
-/// Inline HTML holding only the newline its `?>` consumes, which outputs nothing.
+/// Inline HTML that outputs nothing.
 pub(crate) fn is_silent_html(kind: &StmtKind) -> bool {
-    matches!(kind, StmtKind::InlineHtml("" | "\n" | "\r" | "\r\n"))
+    matches!(kind, StmtKind::InlineHtml(""))
 }
 
 /// Whether `stmts` prints anything; empty statements and silent HTML do not.

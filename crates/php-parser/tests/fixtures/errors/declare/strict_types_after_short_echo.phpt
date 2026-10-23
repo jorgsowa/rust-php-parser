@@ -22,7 +22,7 @@ PHP Fatal error:  strict_types declaration must be the very first statement in t
         ]
       },
       "span": {
-        "start": 4,
+        "start": 0,
         "end": 6
       }
     },

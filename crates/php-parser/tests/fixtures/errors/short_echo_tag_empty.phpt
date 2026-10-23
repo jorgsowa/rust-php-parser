@@ -10,15 +10,25 @@ PHP Parse error:  syntax error, unexpected token ";" in Standard input code on l
 {
   "stmts": [
     {
-      "kind": "Nop",
+      "kind": {
+        "Echo": [
+          {
+            "kind": "Error",
+            "span": {
+              "start": 3,
+              "end": 3
+            }
+          }
+        ]
+      },
       "span": {
-        "start": 4,
-        "end": 6
+        "start": 0,
+        "end": 3
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 6
+    "end": 3
   }
 }

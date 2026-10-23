@@ -662,10 +662,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             return self.expect(TokenKind::Semicolon);
         }
         let close = self.advance();
-        // PHP drops one newline after `?>`; any other inline HTML is not a class member.
-        if self.check(TokenKind::InlineHtml) && matches!(self.current_text(), "\n" | "\r\n") {
-            self.advance();
-        }
         if self.check(TokenKind::OpenTag) && self.current_text() != "<?=" {
             self.advance();
         }
@@ -740,12 +736,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     #[inline]
     pub fn peek_text(&mut self) -> Option<&'src str> {
         Some(&self.source[self.next.span.start as usize..self.next.span.end as usize])
-    }
-
-    /// Get the text of the token two tokens ahead of current.
-    #[inline]
-    pub fn peek2_text(&mut self) -> Option<&'src str> {
-        Some(&self.source[self.next2.span.start as usize..self.next2.span.end as usize])
     }
 
     // =========================================================================
@@ -2449,14 +2439,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     }
 
     /// Parse `<?= expr ?>` — the short echo tag produces an implicit echo statement.
-    pub(crate) fn parse_short_echo(&mut self) -> Option<Stmt<'arena, 'src>> {
-        if self.check(TokenKind::Eof) || self.check(TokenKind::CloseTag) {
-            self.error_expected("expression");
-            return None;
-        }
-        let start = self.start_span();
+    pub(crate) fn parse_short_echo(&mut self, tag_start: u32) -> Stmt<'arena, 'src> {
         // `<?= a, b ?>` behaves like `echo a, b;` — a comma-separated list.
         let mut exprs = self.alloc_vec();
+        let at_eof = self.check(TokenKind::Eof);
         exprs.push(expr::parse_expr(self));
         while self.eat(TokenKind::Comma).is_some() {
             if self.check(TokenKind::Semicolon) || self.check(TokenKind::CloseTag) {
@@ -2465,13 +2451,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             }
             exprs.push(expr::parse_expr(self));
         }
-        self.expect_semicolon("short echo tag");
-        let span = self.span_from(start);
-        Some(Stmt {
+        if !at_eof {
+            self.expect_semicolon("short echo tag");
+        }
+        Stmt {
             kind: StmtKind::Echo(exprs),
-            span,
+            span: Span::new(tag_start, self.previous_end),
             doc_comment: None,
-        })
+        }
     }
 
     // =========================================================================
@@ -2498,9 +2485,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             let tag = self.advance();
             // <?= produces an implicit echo
             if self.source[tag.span.start as usize..tag.span.end as usize] == *"<?=" {
-                if let Some(echo_stmt) = self.parse_short_echo() {
-                    stmts.push(echo_stmt);
-                }
+                stmts.push(self.parse_short_echo(tag.span.start));
             }
         } else if self.current_kind() != TokenKind::Eof {
             self.error_expected("opening PHP tag");
@@ -2528,8 +2513,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             for stmt in &stmts[first_new..] {
                 match stmt.kind {
                     StmtKind::Nop => self.top_level_nop_seen = true,
-                    // PHP's `?>` swallows one newline after it.
-                    StmtKind::InlineHtml("\n" | "\r" | "\r\n") => {}
                     _ if at_tag => self.top_level_code_seen = true,
                     _ => {}
                 }

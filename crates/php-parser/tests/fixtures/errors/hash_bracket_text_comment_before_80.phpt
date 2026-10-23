@@ -92,15 +92,6 @@ PHP Parse error:  syntax error, unexpected identifier "text", expecting "]" in S
       "kind": "Nop",
       "span": {
         "start": 46,
-        "end": 48
-      }
-    },
-    {
-      "kind": {
-        "InlineHtml": "\n"
-      },
-      "span": {
-        "start": 48,
         "end": 49
       }
     },
@@ -205,15 +196,6 @@ PHP Parse error:  syntax error, unexpected identifier "text", expecting "]" in S
       "kind": "Nop",
       "span": {
         "start": 46,
-        "end": 48
-      }
-    },
-    {
-      "kind": {
-        "InlineHtml": "\n"
-      },
-      "span": {
-        "start": 48,
         "end": 49
       }
     },

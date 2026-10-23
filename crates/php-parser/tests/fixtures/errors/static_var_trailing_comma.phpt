@@ -43,8 +43,8 @@ PHP Parse error:  syntax error, unexpected token "}", expecting variable in Stan
                     "name": null,
                     "default": null,
                     "span": {
-                      "start": 32,
-                      "end": 32
+                      "start": 31,
+                      "end": 31
                     }
                   }
                 ]

@@ -199,15 +199,15 @@ $g = 6;
       "kind": "Nop",
       "span": {
         "start": 70,
-        "end": 72
+        "end": 73
       }
     },
     {
       "kind": {
-        "InlineHtml": "\rX"
+        "InlineHtml": "X"
       },
       "span": {
-        "start": 72,
+        "start": 73,
         "end": 74
       }
     },

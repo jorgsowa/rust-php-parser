@@ -83,15 +83,15 @@ function tmpl() {
               "kind": "Nop",
               "span": {
                 "start": 44,
-                "end": 46
+                "end": 47
               }
             },
             {
               "kind": {
-                "InlineHtml": "\n<div>html</div>\n"
+                "InlineHtml": "<div>html</div>\n"
               },
               "span": {
-                "start": 46,
+                "start": 47,
                 "end": 63
               }
             },

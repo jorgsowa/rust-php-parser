@@ -1075,8 +1075,8 @@ PHP Parse error:  syntax error, unexpected token "(void)" in Standard input code
                           "left": {
                             "kind": "Error",
                             "span": {
-                              "start": 102,
-                              "end": 102
+                              "start": 103,
+                              "end": 103
                             }
                           },
                           "right": {
@@ -1091,7 +1091,7 @@ PHP Parse error:  syntax error, unexpected token "(void)" in Standard input code
                         }
                       },
                       "span": {
-                        "start": 102,
+                        "start": 103,
                         "end": 107
                       }
                     }
@@ -1140,8 +1140,8 @@ PHP Parse error:  syntax error, unexpected token "(void)" in Standard input code
                           "left": {
                             "kind": "Error",
                             "span": {
-                              "start": 120,
-                              "end": 120
+                              "start": 121,
+                              "end": 121
                             }
                           },
                           "op": "Concat",
@@ -1157,7 +1157,7 @@ PHP Parse error:  syntax error, unexpected token "(void)" in Standard input code
                         }
                       },
                       "span": {
-                        "start": 120,
+                        "start": 121,
                         "end": 126
                       }
                     }

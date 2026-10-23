@@ -540,6 +540,50 @@ fn crlf_newline() {
     assert_eq!(out, "<?php\r\nif ($a) {\r\n    echo 1;\r\n}");
 }
 
+/// The newline `?>` swallows prints in the configured style, so the HTML after it keeps its bytes.
+#[test]
+fn crlf_newline_after_close_tag() {
+    for (source, html) in [
+        ("<?php echo 1; ?>\r\nX\r\n", "X\r\n"),
+        ("<?php echo 1; ?>\n\r\nX", "\r\nX"),
+    ] {
+        let result = php_rs_parser::parse(source);
+        let mut config = PrinterConfig::default();
+        config.newline = php_printer::Newline::CrLf;
+        let out = PrettyPrinter::new()
+            .config(config)
+            .comments(&result.source, &result.comments)
+            .print(&result.program);
+        assert_eq!(
+            out,
+            format!("<?php\r\necho 1;\r\n?>\r\n{html}"),
+            "{source:?}"
+        );
+        let reparsed = php_rs_parser::parse(&out);
+        assert!(
+            matches!(
+                reparsed.program.stmts.last().map(|s| &s.kind),
+                Some(php_ast::owned::StmtKind::InlineHtml(h)) if &**h == html
+            ),
+            "{out:?}"
+        );
+    }
+}
+
+/// `<?= ?>` has no expression, so it must print as invalid PHP too.
+#[test]
+fn empty_short_echo_stays_invalid() {
+    for source in ["<?= ?>", "a<?= ?>\nb", "<?="] {
+        let result = php_rs_parser::parse(source);
+        assert!(!result.errors.is_empty(), "{source:?}");
+        let out = php_printer::pretty_print(&result.program);
+        assert!(
+            !php_rs_parser::parse(&out).errors.is_empty(),
+            "{source:?} printed as valid {out:?}"
+        );
+    }
+}
+
 #[test]
 fn owned_program_keeps_comments() {
     let result = php_rs_parser::parse("<?php\n// greet\necho 'hi';");

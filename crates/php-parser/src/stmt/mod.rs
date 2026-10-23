@@ -47,9 +47,7 @@ pub(crate) fn push_stmt<'arena, 'src>(
         TokenKind::OpenTag => {
             let tag = parser.advance();
             if parser.source[tag.span.start as usize..tag.span.end as usize] == *"<?=" {
-                if let Some(echo_stmt) = parser.parse_short_echo() {
-                    stmts.push(echo_stmt);
-                }
+                stmts.push(parser.parse_short_echo(tag.span.start));
             }
         }
         _ => stmts.push(parse_stmt(parser)),
@@ -743,12 +741,14 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
     parser.expect_closing(TokenKind::RightParen, open_span);
 
     // Alternative syntax: if (...): ... endif;
-    if parser.eat(TokenKind::Colon).is_some() {
+    if parser.check(TokenKind::Colon) {
+        let then_start = parser.start_span();
+        parser.advance();
         let stmts = parse_stmts_until_end(
             parser,
             &[TokenKind::ElseIf, TokenKind::Else, TokenKind::EndIf],
         );
-        let then_span = parser.span_from(start);
+        let then_span = parser.span_from(then_start);
         let then_branch = parser.alloc(Stmt {
             kind: StmtKind::Block(parser.alloc(Block {
                 stmts,
@@ -759,36 +759,39 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
         });
 
         let mut elseif_branches = parser.alloc_vec();
-        while parser.eat(TokenKind::ElseIf).is_some() {
+        while parser.check(TokenKind::ElseIf) {
             let elseif_start = parser.start_span();
+            parser.advance();
             parser.expect(TokenKind::LeftParen);
             let elseif_cond = expr::parse_expr(parser);
             parser.expect(TokenKind::RightParen);
+            let body_start = parser.start_span();
             parser.expect(TokenKind::Colon);
             let elseif_stmts = parse_stmts_until_end(
                 parser,
                 &[TokenKind::ElseIf, TokenKind::Else, TokenKind::EndIf],
             );
-            let elseif_span = parser.span_from(elseif_start);
+            let body_span = parser.span_from(body_start);
             let elseif_body = Stmt {
                 kind: StmtKind::Block(parser.alloc(Block {
                     stmts: elseif_stmts,
-                    span: elseif_span,
+                    span: body_span,
                 })),
-                span: elseif_span,
+                span: body_span,
                 doc_comment: None,
             };
             elseif_branches.push(ElseIfBranch {
                 condition: elseif_cond,
                 body: elseif_body,
-                span: elseif_span,
+                span: parser.span_from(elseif_start),
             });
         }
 
         let else_branch = if parser.eat(TokenKind::Else).is_some() {
+            let else_start = parser.start_span();
             parser.expect(TokenKind::Colon);
             let else_stmts = parse_stmts_until_end(parser, &[TokenKind::EndIf]);
-            let else_span = parser.span_from(start);
+            let else_span = parser.span_from(else_start);
             Some(parser.alloc(Stmt {
                 kind: StmtKind::Block(parser.alloc(Block {
                     stmts: else_stmts,
@@ -824,8 +827,9 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
     let then_branch = parser.alloc(then_branch_stmt);
 
     let mut elseif_branches = parser.alloc_vec_with_capacity(2);
-    while parser.eat(TokenKind::ElseIf).is_some() {
+    while parser.check(TokenKind::ElseIf) {
         let elseif_start = parser.start_span();
+        parser.advance();
         parser.expect(TokenKind::LeftParen);
         let elseif_cond = expr::parse_expr(parser);
         parser.expect(TokenKind::RightParen);
@@ -1502,19 +1506,20 @@ pub fn parse_param_list<'arena, 'src>(
                     // hint (`private (A&B)|null $x`) by requiring the literal token `set`
                     // inside the parens.
                     if parser.set_visibility_follows(parser.current_span().end) {
-                        let span = Span::new(param_start, parser.current_span().end);
+                        let modifiers_span = parser.span_from(param_start);
+                        parser.advance(); // consume visibility keyword
+                        parser.advance(); // consume (
+                        parser.advance(); // consume "set"
+                        parser.expect(TokenKind::RightParen);
+                        let span = parser.span_from(current_span.start);
                         parser.require_version(PhpVersion::Php84, "asymmetric visibility", span);
                         if set_visibility.is_some() {
                             parser.forbid(
                                 ForbiddenRule::MultipleSetVisibilityModifiers,
                                 "cannot use multiple set-visibility modifiers",
-                                parser.span_from(param_start),
+                                modifiers_span,
                             );
                         }
-                        parser.advance(); // consume visibility keyword
-                        parser.advance(); // consume (
-                        parser.advance(); // consume "set"
-                        parser.expect(TokenKind::RightParen);
                         set_visibility = Some(vis);
                     } else {
                         let span = parser.current_span();
@@ -1970,28 +1975,16 @@ fn validate_break_continue<'arena, 'src>(
 // Switch statement
 // =============================================================================
 
-/// Consume `?>` followed directly by `<?php`, or by only the newline that
-/// `?>` swallows and then `<?php`, which together act as a `;`.
+/// Consume `?>` followed directly by `<?php`, which together act as a `;`.
 fn skip_empty_php_break(parser: &mut Parser<'_, '_>) -> bool {
-    if !parser.check(TokenKind::CloseTag) {
-        return false;
-    }
-    let is_open_tag = |kind: Option<TokenKind>, text: Option<&str>| {
-        kind == Some(TokenKind::OpenTag) && text.is_some_and(|t| t != "<?=")
-    };
-    let tokens = if is_open_tag(parser.peek_kind(), parser.peek_text()) {
-        2
-    } else if parser.peek_kind() == Some(TokenKind::InlineHtml)
-        && matches!(parser.peek_text(), Some("\n" | "\r\n"))
-        && is_open_tag(parser.peek2_kind(), parser.peek2_text())
+    if !parser.check(TokenKind::CloseTag)
+        || parser.peek_kind() != Some(TokenKind::OpenTag)
+        || parser.peek_text() == Some("<?=")
     {
-        3
-    } else {
         return false;
-    };
-    for _ in 0..tokens {
-        parser.advance();
     }
+    parser.advance();
+    parser.advance();
     true
 }
 
@@ -2877,32 +2870,36 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             }
 
             // Combine prefix with sub-name
-            let combined_parts = {
-                let sub_slice = sub_name.parts_slice();
-                let mut cp = parser.alloc_vec_with_capacity(prefix_parts.len() + sub_slice.len());
-                for p in prefix_parts.iter() {
-                    cp.push(*p);
-                }
-                match sub_name {
-                    Name::Simple { value, .. } => cp.push(value),
-                    Name::Complex { parts, .. } => {
-                        for p in parts.into_iter() {
-                            cp.push(p);
-                        }
+            let combined_name = if matches!(sub_name, Name::Error { .. }) {
+                sub_name
+            } else {
+                let combined_parts = {
+                    let sub_slice = sub_name.parts_slice();
+                    let mut cp =
+                        parser.alloc_vec_with_capacity(prefix_parts.len() + sub_slice.len());
+                    for p in prefix_parts.iter() {
+                        cp.push(*p);
                     }
-                    _ => {}
+                    match sub_name {
+                        Name::Simple { value, .. } => cp.push(value),
+                        Name::Complex { parts, .. } => {
+                            for p in parts.into_iter() {
+                                cp.push(p);
+                            }
+                        }
+                        _ => {}
+                    }
+                    cp
+                };
+                Name::Complex {
+                    parts: combined_parts,
+                    kind: if first_name.kind() == NameKind::FullyQualified {
+                        NameKind::FullyQualified
+                    } else {
+                        NameKind::Qualified
+                    },
+                    span: parser.span_from(item_start),
                 }
-                cp
-            };
-            let sub_span = parser.span_from(item_start);
-            let combined_name = Name::Complex {
-                parts: combined_parts,
-                kind: if first_name.kind() == NameKind::FullyQualified {
-                    NameKind::FullyQualified
-                } else {
-                    NameKind::Qualified
-                },
-                span: sub_span,
             };
 
             let alias = parse_use_alias(parser);
@@ -3094,15 +3091,7 @@ fn parse_halt_compiler<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> St
 
     // Everything after the terminator is raw data. Use previous_end() to capture
     // the position right after the terminator, preserving any whitespace.
-    let mut current_pos = parser.previous_end() as usize;
-    if closed_by_tag {
-        let rest = &parser.source.as_bytes()[current_pos..];
-        current_pos += if rest.starts_with(b"\r\n") {
-            2
-        } else {
-            usize::from(rest.starts_with(b"\n"))
-        };
-    }
+    let current_pos = parser.previous_end() as usize;
     let remaining = &parser.source[current_pos..];
     parser.halt_at(current_pos);
 
@@ -3154,18 +3143,10 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             None
         };
 
-        let var_span = Span::new(
-            var_start,
-            default
-                .as_ref()
-                .map(|e| e.span.end)
-                .unwrap_or(parser.previous_end())
-                .max(var_start),
-        );
         vars.push(StaticVar {
             name,
             default,
-            span: var_span,
+            span: parser.span_from(var_start),
         });
 
         if parser.eat(TokenKind::Comma).is_none() {

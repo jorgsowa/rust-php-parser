@@ -302,14 +302,28 @@ impl<'src> Printer<'src> {
                 self.w(";");
             }
             StmtKind::InlineHtml(html) => {
-                if self.in_html_mode {
-                    // Adjacent HTML nodes come from separate blocks; merging them
-                    // would keep a newline that the `?>` between them consumed.
-                    if !self.output.is_empty() {
+                let closes_php = if self.in_html_mode {
+                    // Adjacent HTML nodes come from separate blocks, so keep them apart.
+                    let separate = !self.output.is_empty();
+                    if separate {
                         self.w("<?php ?>");
                     }
-                } else if self.has_php_content {
-                    self.w("?>");
+                    separate
+                } else {
+                    if self.has_php_content {
+                        self.w("?>");
+                    }
+                    self.has_php_content
+                };
+                // `?>` swallows one newline: keep the source's, and add one the HTML would lose.
+                let after_tag_newline = stmt
+                    .span
+                    .start
+                    .checked_sub(1)
+                    .and_then(|i| self.source.as_bytes().get(i as usize))
+                    .is_some_and(|b| matches!(b, b'\n' | b'\r'));
+                if closes_php && (after_tag_newline || html.starts_with(['\n', '\r'])) {
+                    self.newline();
                 }
                 self.w(html);
                 self.in_html_mode = true;

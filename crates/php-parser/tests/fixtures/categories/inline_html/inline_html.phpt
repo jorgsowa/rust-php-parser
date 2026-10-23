@@ -41,15 +41,15 @@
       "kind": "Nop",
       "span": {
         "start": 34,
-        "end": 36
+        "end": 37
       }
     },
     {
       "kind": {
-        "InlineHtml": "\n<p>Some HTML</p>\n"
+        "InlineHtml": "<p>Some HTML</p>\n"
       },
       "span": {
-        "start": 36,
+        "start": 37,
         "end": 54
       }
     },
@@ -76,15 +76,15 @@
       "kind": "Nop",
       "span": {
         "start": 74,
-        "end": 76
+        "end": 77
       }
     },
     {
       "kind": {
-        "InlineHtml": "\n</body>\n</html>"
+        "InlineHtml": "</body>\n</html>"
       },
       "span": {
-        "start": 76,
+        "start": 77,
         "end": 92
       }
     }

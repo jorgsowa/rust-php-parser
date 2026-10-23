@@ -58,15 +58,6 @@
                   "kind": "Nop",
                   "span": {
                     "start": 54,
-                    "end": 56
-                  }
-                },
-                {
-                  "kind": {
-                    "InlineHtml": "\n"
-                  },
-                  "span": {
-                    "start": 56,
                     "end": 57
                   }
                 }

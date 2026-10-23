@@ -31,15 +31,6 @@
     },
     {
       "kind": {
-        "InlineHtml": "\n"
-      },
-      "span": {
-        "start": 25,
-        "end": 26
-      }
-    },
-    {
-      "kind": {
         "Declare": {
           "directives": [
             [
