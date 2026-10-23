@@ -29,6 +29,13 @@
             "kind": {
               "Block": [
                 {
+                  "kind": "Nop",
+                  "span": {
+                    "start": 27,
+                    "end": 29
+                  }
+                },
+                {
                   "kind": {
                     "Echo": [
                       {

@@ -16,16 +16,44 @@ pub(crate) use class::check_abstract_hooks;
 pub(crate) use class::validate_class_ref;
 pub use class::{check_readonly_class_members, parse_class_members, parse_name_list};
 
-/// Push the next statement; a bare `<?php` reopening after inline HTML is skipped, not a `Nop`.
+/// Push the next statement, or the inline HTML or `<?=` echo between PHP tags; a `?>`
+/// is a `Nop` unless it ends the statement before it, and a bare `<?php` is skipped.
 pub(crate) fn push_stmt<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     stmts: &mut ArenaVec<'arena, Stmt<'arena, 'src>>,
 ) {
-    if parser.check(TokenKind::OpenTag) && parser.current_text() != "<?=" {
-        parser.advance();
-        return;
+    match parser.current_kind() {
+        TokenKind::CloseTag => {
+            let ends_stmt = parser.stmt_ending_close_tag == Some(parser.current_span().start);
+            let tag = parser.advance();
+            if !ends_stmt {
+                stmts.push(Stmt {
+                    kind: StmtKind::Nop,
+                    span: tag.span,
+                    doc_comment: None,
+                });
+            }
+        }
+        TokenKind::InlineHtml => {
+            let token = parser.advance();
+            stmts.push(Stmt {
+                kind: StmtKind::InlineHtml(
+                    &parser.source[token.span.start as usize..token.span.end as usize],
+                ),
+                span: token.span,
+                doc_comment: None,
+            });
+        }
+        TokenKind::OpenTag => {
+            let tag = parser.advance();
+            if parser.source[tag.span.start as usize..tag.span.end as usize] == *"<?=" {
+                if let Some(echo_stmt) = parser.parse_short_echo() {
+                    stmts.push(echo_stmt);
+                }
+            }
+        }
+        _ => stmts.push(parse_stmt(parser)),
     }
-    stmts.push(parse_stmt(parser));
 }
 
 /// Parse a single statement.
@@ -105,47 +133,12 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
         {
             parse_label(parser)
         }
-        // ?> ... <?php  /  ?> ... <?=  transitions — valid anywhere a statement is expected
+        // A `?>` where a statement is expected is an empty statement; the HTML after it is not.
         TokenKind::CloseTag => {
-            parser.advance(); // consume ?>
-            if parser.check(TokenKind::InlineHtml) {
-                let token = parser.advance();
-                let text = &parser.source[token.span.start as usize..token.span.end as usize];
-                // Leave the following OpenTag (if any) for the next parse_stmt call
-                return Stmt {
-                    kind: StmtKind::InlineHtml(text),
-                    span: token.span,
-                    doc_comment: None,
-                };
-            }
-            // No inline HTML; fall through to consume any following OpenTag
-            if parser.check(TokenKind::OpenTag) {
-                let tag = parser.advance();
-                if parser.source[tag.span.start as usize..tag.span.end as usize] == *"<?=" {
-                    if let Some(echo_stmt) = parser.parse_short_echo() {
-                        return echo_stmt;
-                    }
-                }
-            }
-            let span = parser.current_span();
-            Stmt {
-                kind: StmtKind::Nop,
-                span,
-                doc_comment: None,
-            }
-        }
-        // <?= after an inline HTML section (OpenTag left in stream by CloseTag handler above)
-        TokenKind::OpenTag => {
             let tag = parser.advance();
-            if parser.source[tag.span.start as usize..tag.span.end as usize] == *"<?=" {
-                if let Some(echo_stmt) = parser.parse_short_echo() {
-                    return echo_stmt;
-                }
-            }
-            let span = parser.current_span();
             Stmt {
                 kind: StmtKind::Nop,
-                span,
+                span: tag.span,
                 doc_comment: None,
             }
         }
@@ -637,28 +630,6 @@ pub fn parse_block<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
     // Most blocks have 4-12 statements; larger blocks grow efficiently
     let mut stmts = parser.alloc_vec_with_capacity(8);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
-        // Handle close tag -> inline HTML -> open tag sequences inside blocks
-        if parser.check(TokenKind::CloseTag) {
-            parser.advance();
-            if parser.check(TokenKind::InlineHtml) {
-                let token = parser.advance();
-                let text = &parser.source[token.span.start as usize..token.span.end as usize];
-                stmts.push(Stmt {
-                    kind: StmtKind::InlineHtml(text),
-                    span: token.span,
-                    doc_comment: None,
-                });
-            }
-            if parser.check(TokenKind::OpenTag) {
-                let tag = parser.advance();
-                if parser.source[tag.span.start as usize..tag.span.end as usize] == *"<?=" {
-                    if let Some(echo_stmt) = parser.parse_short_echo() {
-                        stmts.push(echo_stmt);
-                    }
-                }
-            }
-            continue;
-        }
         let span_before = parser.current_span();
         push_stmt(parser, &mut stmts);
         if parser.current_span() == span_before {
@@ -694,28 +665,6 @@ fn parse_stmts_until_end<'arena, 'src>(
 ) -> ArenaVec<'arena, Stmt<'arena, 'src>> {
     let mut stmts = parser.alloc_vec_with_capacity(8);
     while !ends.contains(&parser.current_kind()) && !parser.check(TokenKind::Eof) {
-        // Handle close tag -> inline HTML -> open tag sequences
-        if parser.check(TokenKind::CloseTag) {
-            parser.advance();
-            if parser.check(TokenKind::InlineHtml) {
-                let token = parser.advance();
-                let text = &parser.source[token.span.start as usize..token.span.end as usize];
-                stmts.push(Stmt {
-                    kind: StmtKind::InlineHtml(text),
-                    span: token.span,
-                    doc_comment: None,
-                });
-            }
-            if parser.check(TokenKind::OpenTag) {
-                let tag = parser.advance();
-                if parser.source[tag.span.start as usize..tag.span.end as usize] == *"<?=" {
-                    if let Some(echo_stmt) = parser.parse_short_echo() {
-                        stmts.push(echo_stmt);
-                    }
-                }
-            }
-            continue;
-        }
         let span_before = parser.current_span();
         push_stmt(parser, &mut stmts);
         if parser.current_span() == span_before {
@@ -2050,7 +1999,9 @@ fn skip_empty_php_break(parser: &mut Parser<'_, '_>) -> bool {
 
 /// `:` or `;` after a case label; `?>` also acts as the `;` and stays for the case body.
 fn expect_case_separator(parser: &mut Parser<'_, '_>) {
-    if parser.eat(TokenKind::Colon).is_none() && !parser.check(TokenKind::CloseTag) {
+    if parser.check(TokenKind::CloseTag) {
+        parser.close_tag_ends_stmt();
+    } else if parser.eat(TokenKind::Colon).is_none() {
         parser.expect(TokenKind::Semicolon);
     }
 }
@@ -2552,6 +2503,7 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
         (None, false)
     } else if parser.check(TokenKind::CloseTag) {
         // `?>` ends the statement like `;`; the HTML after it is not the body.
+        parser.close_tag_ends_stmt();
         (None, false)
     } else if parser.eat(TokenKind::Colon).is_some() {
         let stmts = parse_stmts_until_end(parser, &[TokenKind::EndDeclare]);

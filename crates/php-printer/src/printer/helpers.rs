@@ -1,4 +1,28 @@
 use php_ast::ast::*;
+use php_ast::PhpVersion;
+
+/// Inline HTML holding only the newline its `?>` consumes, which outputs nothing.
+pub(crate) fn is_silent_html(kind: &StmtKind) -> bool {
+    matches!(kind, StmtKind::InlineHtml("" | "\n" | "\r" | "\r\n"))
+}
+
+/// Whether `stmts` prints anything; empty statements and silent HTML do not.
+pub(crate) fn has_output(stmts: &[Stmt]) -> bool {
+    stmts
+        .iter()
+        .any(|stmt| !matches!(stmt.kind, StmtKind::Nop) && !is_silent_html(&stmt.kind))
+}
+
+/// `declare(encoding=...)`, and `declare(strict_types=...)` before PHP 8.5, reject an empty statement before them.
+pub(crate) fn rejects_empty_stmt_before(stmt: &Stmt, version: PhpVersion) -> bool {
+    let StmtKind::Declare(declare) = &stmt.kind else {
+        return false;
+    };
+    declare.directives.iter().any(|(name, _)| {
+        name.eq_ignore_ascii_case("encoding")
+            || (name.eq_ignore_ascii_case("strict_types") && version < PhpVersion::Php85)
+    })
+}
 
 pub(crate) fn is_declaration(kind: &StmtKind) -> bool {
     matches!(

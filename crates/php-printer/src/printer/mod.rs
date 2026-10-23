@@ -5,7 +5,7 @@ mod imports;
 mod stmts;
 mod types;
 
-use php_ast::Comment;
+use php_ast::{Comment, PhpVersion};
 
 /// Configuration for the pretty printer.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -17,6 +17,8 @@ pub struct PrinterConfig {
     pub newline: Newline,
     /// Maximum blank lines preserved between statements. 0 normalizes all blank lines away.
     pub blank_lines_upper_bound: usize,
+    /// PHP version the output is for; empty statements that it rejects are kept.
+    pub php_version: PhpVersion,
 }
 
 /// Indentation style.
@@ -56,6 +58,7 @@ impl Default for PrinterConfig {
             indent: Indent::Spaces(4),
             newline: Newline::Lf,
             blank_lines_upper_bound: 1,
+            php_version: PhpVersion::default(),
         }
     }
 }
@@ -91,6 +94,7 @@ pub(crate) struct Printer<'src> {
     indent_str: &'static str,
     nl: &'static str,
     blank_lines_upper_bound: usize,
+    php_version: PhpVersion,
     pub(crate) depth: usize,
     source: &'src str,
     comments: &'src [Comment<'src>],
@@ -128,6 +132,7 @@ impl<'src> Printer<'src> {
             indent_str,
             nl: config.newline.as_str(),
             blank_lines_upper_bound: config.blank_lines_upper_bound,
+            php_version: config.php_version,
             depth: 0,
             source,
             comments,
@@ -442,7 +447,7 @@ impl<'src> Printer<'src> {
         );
         if html_at_start {
             self.in_html_mode = true;
-        } else if !program.stmts.is_empty() || !self.comments.is_empty() {
+        } else if helpers::has_output(&program.stmts) || !self.comments.is_empty() {
             self.w("<?php");
             self.newline();
             self.has_php_content = true;
@@ -458,15 +463,20 @@ impl<'src> Printer<'src> {
         let imports = self.sorted_imports(stmts);
         let mut group = 0;
         let mut group_floor = 0;
-        let mut prev_was_inline_html = false;
+        let empty_stmts_rejected_until = stmts
+            .iter()
+            .rposition(|stmt| helpers::rejects_empty_stmt_before(stmt, self.php_version));
+        let mut printed_any = false;
         for k in 0..stmts.len() {
             let i = imports.as_ref().map_or(k, |s| s.order[k]);
             let stmt = &stmts[i];
-            let is_nop = matches!(stmt.kind, php_ast::ast::StmtKind::Nop);
             let is_inline_html = matches!(stmt.kind, php_ast::ast::StmtKind::InlineHtml(_));
 
-            if is_nop && prev_was_inline_html {
-                prev_was_inline_html = is_inline_html;
+            let is_nop = matches!(stmt.kind, php_ast::ast::StmtKind::Nop);
+            if is_nop && !empty_stmts_rejected_until.is_some_and(|last| i < last) {
+                continue;
+            }
+            if !self.in_html_mode && helpers::is_silent_html(&stmt.kind) {
                 continue;
             }
 
@@ -484,7 +494,7 @@ impl<'src> Printer<'src> {
 
             // When transitioning out of HTML mode the <?php + newline + indent
             // is emitted by print_stmt_inner, so skip the normal separators here.
-            if k > 0 && !self.in_html_mode {
+            if printed_any && !self.in_html_mode {
                 let decl_min =
                     if helpers::is_declaration(&stmt.kind) && self.blank_lines_upper_bound > 0 {
                         1
@@ -530,7 +540,7 @@ impl<'src> Printer<'src> {
                     group += 1;
                 }
             }
-            prev_was_inline_html = is_inline_html;
+            printed_any = true;
         }
         if indent {
             self.dedent();

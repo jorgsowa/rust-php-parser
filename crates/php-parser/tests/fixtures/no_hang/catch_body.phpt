@@ -30,6 +30,13 @@
               },
               "body": [
                 {
+                  "kind": "Nop",
+                  "span": {
+                    "start": 36,
+                    "end": 38
+                  }
+                },
+                {
                   "kind": {
                     "InlineHtml": " "
                   },

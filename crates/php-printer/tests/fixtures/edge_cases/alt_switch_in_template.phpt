@@ -8,8 +8,6 @@ switch ($a):
     case 1:
         ?>one<?php
         break;
-        ?>
-<?php
     case 2:
         ?>two<?php
 endswitch;

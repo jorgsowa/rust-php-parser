@@ -65,10 +65,17 @@ use \B;
         "start": 13,
         "end": 20
       }
+    },
+    {
+      "kind": "Nop",
+      "span": {
+        "start": 21,
+        "end": 23
+      }
     }
   ],
   "span": {
     "start": 0,
-    "end": 20
+    "end": 23
   }
 }

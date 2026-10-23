@@ -91,6 +91,7 @@ fn parse_printer_fixture(content: &str) -> Result<PrinterFixture, String> {
         }
     }
 
+    config.php_version = version;
     Ok(PrinterFixture {
         raw_config,
         source: source.to_string(),
@@ -119,11 +120,52 @@ impl<'src> php_ast::fold::Fold<'src> for StripParens {
     }
 }
 
+/// Drops empty statements and inline HTML holding only the newline its `?>` consumes,
+/// and reads an empty block as the empty statement it is.
+struct StripEmptyStmts;
+
+impl<'src> php_ast::fold::Fold<'src> for StripEmptyStmts {
+    fn fold_stmt<'new>(
+        &mut self,
+        arena: &'new bumpalo::Bump,
+        stmt: &php_ast::ast::Stmt<'_, 'src>,
+    ) -> php_ast::ast::Stmt<'new, 'src> {
+        let folded = php_ast::fold::fold_stmt(self, arena, stmt);
+        match &folded.kind {
+            php_ast::ast::StmtKind::Block(block) if block.stmts.is_empty() => php_ast::ast::Stmt {
+                kind: php_ast::ast::StmtKind::Nop,
+                ..folded
+            },
+            _ => folded,
+        }
+    }
+
+    fn fold_stmts<'new>(
+        &mut self,
+        arena: &'new bumpalo::Bump,
+        stmts: &[php_ast::ast::Stmt<'_, 'src>],
+    ) -> php_ast::ast::ArenaVec<'new, php_ast::ast::Stmt<'new, 'src>> {
+        let mut folded = php_ast::ast::ArenaVec::new_in(arena);
+        for stmt in stmts {
+            if !matches!(
+                stmt.kind,
+                php_ast::ast::StmtKind::Nop
+                    | php_ast::ast::StmtKind::InlineHtml("" | "\n" | "\r" | "\r\n")
+            ) {
+                folded.push(self.fold_stmt(arena, stmt));
+            }
+        }
+        folded
+    }
+}
+
 /// Fingerprint of `program`'s shape, which already encodes precedence, so
-/// redundant parentheses do not count as a change.
+/// redundant parentheses, empty statements and silent close tags do not count as a change;
+/// `compile_errors/` fixtures check the declares that reject empty statements.
 fn shape(program: &php_ast::ast::Program) -> u64 {
     let arena = bumpalo::Bump::new();
     let stripped = php_ast::fold::fold_program(&mut StripParens, &arena, program);
+    let stripped = php_ast::fold::fold_program(&mut StripEmptyStmts, &arena, &stripped);
     php_ast::fingerprint::structural_fingerprint(&stripped)
 }
 
@@ -527,4 +569,34 @@ EOT;
     assert!(printed.contains(r#""a\x80b\xc3""#), "{printed}");
     assert!(printed.contains(r#""\xed\xa0\x80""#), "{printed}");
     assert!(printed.contains("'ÿ'"), "{printed}");
+}
+
+/// An empty statement before `strict_types` is an error only before PHP 8.5, so it
+/// prints only for those versions.
+#[test]
+fn empty_statement_before_strict_types_depends_on_version() {
+    let source = "<?php ?>\n<?php declare(strict_types=1);";
+    for (version, expected) in [
+        (
+            php_rs_parser::PhpVersion::Php84,
+            "<?php\n;\ndeclare(strict_types=1);",
+        ),
+        (
+            php_rs_parser::PhpVersion::Php85,
+            "<?php\ndeclare(strict_types=1);",
+        ),
+    ] {
+        let options = php_rs_parser::ParseOptions::default().version(version);
+        let result = php_rs_parser::parse_with(source, &options);
+        let mut config = PrinterConfig::default();
+        config.php_version = version;
+        let printed = PrettyPrinter::new().config(config).print(&result.program);
+        assert_eq!(printed, expected, "PHP {version}");
+        let reparsed = php_rs_parser::parse_with(&printed, &options);
+        assert_eq!(
+            messages(&reparsed.errors),
+            messages(&result.errors),
+            "PHP {version}"
+        );
+    }
 }

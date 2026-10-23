@@ -59,6 +59,13 @@ PHP Parse error:  syntax error, unexpected identifier "E" in Standard input code
                   "return_type": null,
                   "body": [
                     {
+                      "kind": "Nop",
+                      "span": {
+                        "start": 45,
+                        "end": 47
+                      }
+                    },
+                    {
                       "kind": {
                         "InlineHtml": " "
                       },

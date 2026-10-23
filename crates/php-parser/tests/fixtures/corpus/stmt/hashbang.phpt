@@ -29,6 +29,13 @@ echo "foobar";
       }
     },
     {
+      "kind": "Nop",
+      "span": {
+        "start": 42,
+        "end": 44
+      }
+    },
+    {
       "kind": {
         "InlineHtml": "\n#!/usr/bin/env php"
       },

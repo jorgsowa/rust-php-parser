@@ -29,6 +29,13 @@ $d;
       }
     },
     {
+      "kind": "Nop",
+      "span": {
+        "start": 10,
+        "end": 12
+      }
+    },
+    {
       "kind": {
         "InlineHtml": "\nB\n"
       },
@@ -52,6 +59,13 @@ $d;
       "span": {
         "start": 21,
         "end": 24
+      }
+    },
+    {
+      "kind": "Nop",
+      "span": {
+        "start": 25,
+        "end": 27
       }
     },
     {
