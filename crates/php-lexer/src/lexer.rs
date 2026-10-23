@@ -16,7 +16,6 @@ const fn make_whitespace_table() -> [bool; 256] {
     t[b'\t' as usize] = true;
     t[b'\r' as usize] = true;
     t[b'\n' as usize] = true;
-    t[0x0C] = true; // form feed (\f)
     t
 }
 
@@ -62,6 +61,8 @@ pub enum LexerErrorKind {
     UnterminatedComment,
     /// A numeric literal is malformed, e.g. `1_` or `0x`.
     InvalidNumericLiteral,
+    /// A control character appears in code, outside strings, comments and inline HTML.
+    UnexpectedCharacter,
     /// Any other lexer-level error (e.g. invalid numeric literal).
     Other,
 }
@@ -124,6 +125,11 @@ pub struct Lexer<'src> {
     /// Whether `#[` opens an attribute (PHP 8.0+) rather than a `#` comment.
     attributes: bool,
     errors: Vec<LexerError>,
+}
+
+#[inline(always)]
+fn is_unexpected_character(b: u8) -> bool {
+    (b < 0x20 && !IS_PHP_WHITESPACE[b as usize]) || b == 0x7F
 }
 
 #[inline(always)]
@@ -647,7 +653,7 @@ impl<'src> Lexer<'src> {
         self.scan_token()
     }
 
-    /// Skip PHP whitespace (space, tab, CR, LF, form-feed) at the current position.
+    /// Skip PHP whitespace (space, tab, CR, LF) at the current position.
     fn skip_whitespace(&mut self) {
         let bytes = self.source.as_bytes();
         while self.pos < bytes.len() && IS_PHP_WHITESPACE[bytes[self.pos] as usize] {
@@ -969,9 +975,18 @@ impl<'src> Lexer<'src> {
                 self.scan_identifier()
             }
 
-            // Unknown byte - skip and retry
+            // Only control characters are left; a run of them is reported once and skipped.
             _ => {
-                self.pos = start + 1;
+                let mut end = start + 1;
+                while bytes.get(end).is_some_and(|&b| is_unexpected_character(b)) {
+                    end += 1;
+                }
+                self.errors.push(LexerError {
+                    kind: LexerErrorKind::UnexpectedCharacter,
+                    message: format!("unexpected character 0x{b:02X}"),
+                    span: Span::new(start as u32, end as u32),
+                });
+                self.pos = end;
                 self.read_next_token()
             }
         }
@@ -1429,9 +1444,7 @@ impl<'src> Lexer<'src> {
     /// Returns Some(Token) if a heredoc/nowdoc was found, None otherwise.
     fn try_lex_heredoc(&mut self, remaining: &str) -> Option<Token> {
         // Skip leading whitespace (and newlines) to find <<< (or b<<<)
-        let trimmed = remaining.trim_start_matches(|c: char| {
-            c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\x0C'
-        });
+        let trimmed = remaining.trim_start_matches([' ', '\t', '\n', '\r']);
         let ws_len = remaining.len() - trimmed.len();
 
         // Handle optional binary prefix: b<<< or B<<<

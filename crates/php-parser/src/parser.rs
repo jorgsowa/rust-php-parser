@@ -47,6 +47,7 @@ fn lex_error_to_parse_error(e: LexerError) -> ParseError {
             rule: match e.kind {
                 LexerErrorKind::InvalidNumericLiteral => ForbiddenRule::InvalidNumericLiteral,
                 LexerErrorKind::UnterminatedComment => ForbiddenRule::UnterminatedComment,
+                LexerErrorKind::UnexpectedCharacter => ForbiddenRule::UnexpectedCharacter,
                 _ => ForbiddenRule::Other,
             },
             message: e.message.into(),
@@ -800,13 +801,19 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
     pub fn into_errors(mut self) -> Vec<ParseError> {
         self.retract_uncompiled_errors();
-        // PHP 7.4 only warns about an unterminated comment.
-        let comment_error_allowed = self.version >= PhpVersion::Php80;
+        // PHP 7.4 only warns about an unterminated comment or an unexpected character.
+        let warning_is_error = self.version >= PhpVersion::Php80;
         let mut errors: Vec<ParseError> = self
             .lexer
             .into_errors()
             .into_iter()
-            .filter(|e| e.kind != LexerErrorKind::UnterminatedComment || comment_error_allowed)
+            .filter(|e| {
+                warning_is_error
+                    || !matches!(
+                        e.kind,
+                        LexerErrorKind::UnterminatedComment | LexerErrorKind::UnexpectedCharacter
+                    )
+            })
             .map(lex_error_to_parse_error)
             .collect();
         errors.extend(self.errors);

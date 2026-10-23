@@ -581,6 +581,8 @@ forbidden_rules! {
     NoDiscardOnInvalidTarget = "no-discard-on-invalid-target", Compile;
     /// `#[\NoDiscard]` is applied to a function that returns no value.
     NoDiscardWithoutReturnValue = "no-discard-without-return-value", Compile;
+    /// A control character appears in code.
+    UnexpectedCharacter = "unexpected-character", Parse;
     /// Not yet classified.
     Other = "other", Compile;
 }
@@ -870,6 +872,7 @@ mod tests {
             ForbiddenRule::RepeatedAttribute => &[("<?php #[Override, Override] function f() {}", "Override"),],
             ForbiddenRule::NoDiscardOnInvalidTarget => &[("<?php class A { public $x { #[NoDiscard] get => 1; } }", "NoDiscard"), ("<?php class A { #[NoDiscard] function __construct() {} }", "NoDiscard"),],
             ForbiddenRule::NoDiscardWithoutReturnValue => &[("<?php #[NoDiscard] function f(): void {}", "NoDiscard"),],
+            ForbiddenRule::UnexpectedCharacter => &[("<?php $a\x01\x02 = 1;", "\x01\x02"), ("<?php $a =\x0c1;", "\x0c"),],
             ForbiddenRule::DynamicClassFetch | ForbiddenRule::Other => &[],
         }
     }
