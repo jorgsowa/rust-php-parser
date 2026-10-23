@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A control character in code, including form feed, is an error from PHP 8.0 instead of being skipped (`php-lexer`, `php-rs-parser`).
 - `<?php` or `<?=` inside PHP code lexes as `<`, so it is a syntax error instead of being ignored (`php-lexer`).
 - A `?>` with nothing but its consumed newline before the next `<?php` is dropped together with that `<?php`, instead of adding an empty statement that made a following `declare(encoding=...)` an error (`php-printer`).
-- An empty statement that makes a later `declare(encoding=...)` or `declare(strict_types=...)` invalid is kept, whether written as `;` after inline HTML or as `; ?>`, so the printer no longer turns that invalid code valid (`php-printer`).
+- A `;` after inline HTML is no longer dropped, and a `; ?>` empty statement is kept when a later `declare(encoding=...)` or `declare(strict_types=...)` rejects it, so the printer no longer turns that invalid code valid (`php-printer`).
 
 ## [0.25.1] - 2026-10-22
 

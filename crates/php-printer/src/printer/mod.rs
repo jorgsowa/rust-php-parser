@@ -472,30 +472,18 @@ impl<'src> Printer<'src> {
         let imports = self.sorted_imports(stmts);
         let mut group = 0;
         let mut group_floor = 0;
-        let mut prev_was_inline_html = false;
+        let empty_stmts_matter_until = stmts.iter().rposition(helpers::rejects_empty_stmt_before);
         for k in 0..stmts.len() {
             let i = imports.as_ref().map_or(k, |s| s.order[k]);
             let stmt = &stmts[i];
-            let is_nop = matches!(stmt.kind, php_ast::ast::StmtKind::Nop);
             let is_inline_html = matches!(stmt.kind, php_ast::ast::StmtKind::InlineHtml(_));
-
-            let empty_stmt_rejected_later = || {
-                stmts[i + 1..]
-                    .iter()
-                    .any(helpers::rejects_empty_stmt_before)
-            };
-
-            if is_nop && prev_was_inline_html && !empty_stmt_rejected_later() {
-                prev_was_inline_html = is_inline_html;
-                continue;
-            }
 
             // Silent HTML's tags change nothing, unless its `?>` is an empty statement a later declare rejects.
             if !self.in_html_mode
                 && helpers::is_silent_html(&stmt.kind)
-                && !(self.close_tag_makes_empty_stmt(stmts, i) && empty_stmt_rejected_later())
+                && !(empty_stmts_matter_until.is_some_and(|last| i < last)
+                    && self.close_tag_makes_empty_stmt(stmts, i))
             {
-                prev_was_inline_html = true;
                 continue;
             }
 
@@ -559,7 +547,6 @@ impl<'src> Printer<'src> {
                     group += 1;
                 }
             }
-            prev_was_inline_html = is_inline_html;
         }
         if indent {
             self.dedent();
