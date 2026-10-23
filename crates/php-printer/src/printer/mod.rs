@@ -482,6 +482,15 @@ impl<'src> Printer<'src> {
                 self.seek_comments(group_floor, self.same_line_comments_end(prev_end));
             }
 
+            // `?>` acts as `;`, so keeping both adds an empty statement, which a later `declare(encoding=...)` rejects.
+            if is_inline_html && k > 0 && self.output.ends_with(';') {
+                let prev = imports.as_ref().map_or(k - 1, |s| s.order[k - 1]);
+                if matches!(&stmts[prev].kind, php_ast::ast::StmtKind::Declare(d) if d.body.is_none())
+                {
+                    self.output.pop();
+                }
+            }
+
             // When transitioning out of HTML mode the <?php + newline + indent
             // is emitted by print_stmt_inner, so skip the normal separators here.
             if k > 0 && !self.in_html_mode {
