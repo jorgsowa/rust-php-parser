@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `PropertyDecl::empty_hook_list` and `Param::empty_hook_list` for an empty hook list `{}` (`php-ast`).
+- `LexerErrorKind::UnexpectedCharacter` (`php-lexer`) and `ForbiddenRule::UnexpectedCharacter` (`php-rs-parser`) for a control character in code.
 
 ### Changed
 
@@ -21,7 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A class property with a fully qualified type and no modifier, such as `\Foo $a;`, is a syntax error instead of being accepted (`php-rs-parser`).
 - An enum property with a fully qualified type, such as `public \Foo\Bar $a;`, reports `Enum E cannot include properties` instead of a syntax error (`php-rs-parser`).
 - An unclosed `exit(`, `die(` or `clone(` call no longer panics (`php-rs-parser`).
-- No span ends before it starts: the version errors for set-only visibility on a promoted parameter and for a non-capturing `catch`, and the spans of error statements, bodies missing their `{`, `use` items, parameters, attributes, short echo tags and static variables after a missing token (`php-rs-parser`).
+- No span ends before it starts: the version errors for set-only visibility on a promoted parameter and for a non-capturing `catch`, and the spans of error statements, bodies missing their `{`, `use` items, parameters, attributes, short echo tags, static variables and alternative-syntax `elseif` branches after a missing token (`php-rs-parser`).
+- A control character in code, including form feed, is an error from PHP 8.0 instead of being skipped (`php-lexer`, `php-rs-parser`).
+- `<?php` or `<?=` inside PHP code lexes as `<`, so it is a syntax error instead of being ignored (`php-lexer`).
+- A body-less `declare` before `?>` prints without its `;`, which made a following `declare(encoding=...)` an error (`php-printer`).
 
 ## [0.25.1] - 2026-10-22
 
