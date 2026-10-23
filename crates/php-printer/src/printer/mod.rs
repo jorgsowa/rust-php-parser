@@ -470,6 +470,12 @@ impl<'src> Printer<'src> {
                 continue;
             }
 
+            // The `?>` and `<?php` around silent HTML change nothing, so both are dropped.
+            if !self.in_html_mode && helpers::is_silent_html(&stmt.kind) {
+                prev_was_inline_html = true;
+                continue;
+            }
+
             let in_group = imports
                 .as_ref()
                 .and_then(|s| s.groups.get(group))
@@ -482,22 +488,9 @@ impl<'src> Printer<'src> {
                 self.seek_comments(group_floor, self.same_line_comments_end(prev_end));
             }
 
-            // `?>` acts as `;`, so keeping both adds an empty statement, which a later `declare(encoding=...)` rejects.
-            let mut close_tag_ends_declare = false;
-            if is_inline_html && k > 0 && self.output.ends_with(';') {
-                let prev = imports.as_ref().map_or(k - 1, |s| s.order[k - 1]);
-                if matches!(&stmts[prev].kind, php_ast::ast::StmtKind::Declare(d) if d.body.is_none())
-                {
-                    self.output.pop();
-                    close_tag_ends_declare = !self.has_comments_before(stmt.span.start);
-                }
-            }
-
-            if close_tag_ends_declare {
-                self.w(" ");
-            } else if k > 0 && !self.in_html_mode {
-                // When transitioning out of HTML mode the <?php + newline + indent
-                // is emitted by print_stmt_inner, so skip the normal separators here.
+            // When transitioning out of HTML mode the <?php + newline + indent
+            // is emitted by print_stmt_inner, so skip the normal separators here.
+            if k > 0 && !self.in_html_mode {
                 let decl_min =
                     if helpers::is_declaration(&stmt.kind) && self.blank_lines_upper_bound > 0 {
                         1

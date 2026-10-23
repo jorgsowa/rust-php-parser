@@ -119,11 +119,34 @@ impl<'src> php_ast::fold::Fold<'src> for StripParens {
     }
 }
 
+/// Drops inline HTML holding only the newline its `?>` consumes, since it outputs nothing.
+struct StripSilentHtml;
+
+impl<'src> php_ast::fold::Fold<'src> for StripSilentHtml {
+    fn fold_stmts<'new>(
+        &mut self,
+        arena: &'new bumpalo::Bump,
+        stmts: &[php_ast::ast::Stmt<'_, 'src>],
+    ) -> php_ast::ast::ArenaVec<'new, php_ast::ast::Stmt<'new, 'src>> {
+        let mut folded = php_ast::ast::ArenaVec::new_in(arena);
+        for stmt in stmts {
+            if !matches!(
+                stmt.kind,
+                php_ast::ast::StmtKind::InlineHtml("" | "\n" | "\r" | "\r\n")
+            ) {
+                folded.push(self.fold_stmt(arena, stmt));
+            }
+        }
+        folded
+    }
+}
+
 /// Fingerprint of `program`'s shape, which already encodes precedence, so
-/// redundant parentheses do not count as a change.
+/// redundant parentheses and silent close tags do not count as a change.
 fn shape(program: &php_ast::ast::Program) -> u64 {
     let arena = bumpalo::Bump::new();
     let stripped = php_ast::fold::fold_program(&mut StripParens, &arena, program);
+    let stripped = php_ast::fold::fold_program(&mut StripSilentHtml, &arena, &stripped);
     php_ast::fingerprint::structural_fingerprint(&stripped)
 }
 

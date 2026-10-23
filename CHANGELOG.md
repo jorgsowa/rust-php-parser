@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - No span ends before it starts: the version errors for set-only visibility on a promoted parameter and for a non-capturing `catch`, and the spans of error statements, bodies missing their `{`, `use` items, parameters, attributes, short echo tags, static variables and alternative-syntax `elseif` branches after a missing token (`php-rs-parser`).
 - A control character in code, including form feed, is an error from PHP 8.0 instead of being skipped (`php-lexer`, `php-rs-parser`).
 - `<?php` or `<?=` inside PHP code lexes as `<`, so it is a syntax error instead of being ignored (`php-lexer`).
-- A body-less `declare` before `?>` prints without its `;`, which made a following `declare(encoding=...)` an error (`php-printer`).
+- A `?>` with nothing but its consumed newline before the next `<?php` is dropped together with that `<?php`, instead of adding an empty statement that made a following `declare(encoding=...)` an error (`php-printer`).
 
 ## [0.25.1] - 2026-10-22
 

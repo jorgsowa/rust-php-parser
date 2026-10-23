@@ -12,6 +12,15 @@ pub(crate) fn is_declaration(kind: &StmtKind) -> bool {
     )
 }
 
+/// Inline HTML holding only the newline its `?>` consumes, which outputs nothing after PHP code.
+pub(crate) fn is_silent_html(kind: &StmtKind) -> bool {
+    matches!(kind, StmtKind::InlineHtml("" | "\n" | "\r" | "\r\n"))
+}
+
+pub(crate) fn has_output(stmts: &[Stmt]) -> bool {
+    !stmts.iter().all(|stmt| is_silent_html(&stmt.kind))
+}
+
 /// Start of the doc comment printed before `stmt`, which may sit on its declaration.
 pub(crate) fn stmt_doc_comment_start(stmt: &Stmt) -> Option<u32> {
     let doc = match &stmt.kind {
