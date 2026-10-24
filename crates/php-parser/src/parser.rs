@@ -2057,9 +2057,13 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     types.push(t);
                 }
 
-                // Check if there's a union after this intersection (DNF: A&B|C&D)
+                // A bare intersection in a union, as in `A&B|C`, is a syntax error; DNF needs `(A&B)|C`.
                 if self.check(TokenKind::Pipe) {
-                    self.require_version(PhpVersion::Php82, "DNF types", Span::new(start, end));
+                    self.error(ParseError::Expected {
+                        expected: "'(' around an intersection type in a union".into(),
+                        found: self.current_kind().description().into(),
+                        span: self.current_span(),
+                    });
                     let intersection_span = Span::new(start, end);
                     let intersection = TypeHint {
                         kind: TypeHintKind::Intersection(types),
