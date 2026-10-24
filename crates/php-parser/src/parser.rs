@@ -1270,6 +1270,35 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         }
     }
 
+    /// Parse a class reference, where PHP's grammar takes no keyword token, as in `new fn`.
+    pub(crate) fn parse_class_ref_name(&mut self) -> Name<'arena, 'src> {
+        if self.keyword_is_not_class_name() {
+            self.error_expected("class name");
+        }
+        self.parse_name()
+    }
+
+    fn keyword_is_not_class_name(&self) -> bool {
+        let is_name = match self.current_kind() {
+            TokenKind::Enum_
+            | TokenKind::True
+            | TokenKind::False
+            | TokenKind::Null
+            | TokenKind::Self_
+            | TokenKind::Parent_
+            | TokenKind::Static
+            | TokenKind::Namespace => true,
+            TokenKind::Match_ => self.version < PhpVersion::Php80,
+            TokenKind::Readonly => {
+                self.version < PhpVersion::Php81
+                    || (self.version == PhpVersion::Php81 && self.next.kind == TokenKind::LeftParen)
+            }
+            // A namespaced name is one token from PHP 8.0; before, its parts are checked apart.
+            _ => self.next.kind == TokenKind::Backslash,
+        };
+        !is_name && self.is_semi_reserved_keyword()
+    }
+
     /// Parse a name: qualified, fully-qualified, relative, or unqualified.
     /// e.g., `Foo`, `Foo\Bar`, `\Foo\Bar`, `namespace\Foo\Bar`
     pub fn parse_name(&mut self) -> Name<'arena, 'src> {

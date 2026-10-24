@@ -12,6 +12,7 @@ cannot use '__PROPERTY__' as constant name as it is reserved
 cannot use '__PROPERTY__' as function name; it is reserved
 Cannot dereference this expression
 Cannot use "__PROPERTY__" as a class name as it is reserved
+expected class name, found '__PROPERTY__'
 Cannot dereference this expression
 expected variable, found '__PROPERTY__'
 expected ';' after expression

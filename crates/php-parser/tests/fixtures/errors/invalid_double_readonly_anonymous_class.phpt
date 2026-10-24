@@ -1,12 +1,13 @@
 ===source===
 <?php new readonly readonly class {};
-===errors <=8.1===
+===errors <=8.0===
 expected ';' after expression
 'readonly class' requires PHP 8.2 or higher
 expected class name, found '{'
-===errors >=8.2===
-expected ';' after expression
-expected class name, found '{'
+===errors 8.1-8.2===
+'readonly anonymous classes' requires PHP 8.3 or higher
+===errors >=8.3===
+Multiple readonly modifiers are not allowed
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'readonly' (T_STRING) in Standard input code on line 1
 ===php_error 8.0===
@@ -15,7 +16,7 @@ PHP Parse error:  syntax error, unexpected identifier "readonly" in Standard inp
 PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 1
 ===php_error >=8.3===
 PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input code on line 1
-===ast===
+===ast <=8.0===
 {
   "stmts": [
     {
@@ -79,6 +80,54 @@ PHP Fatal error:  Multiple readonly modifiers are not allowed in Standard input 
       "kind": "Nop",
       "span": {
         "start": 36,
+        "end": 37
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 37
+  }
+}
+===ast >=8.1===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "New": {
+              "class": {
+                "kind": {
+                  "AnonymousClass": {
+                    "name": null,
+                    "modifiers": {
+                      "is_abstract": false,
+                      "is_final": false,
+                      "is_readonly": true
+                    },
+                    "extends": null,
+                    "implements": [],
+                    "members": [],
+                    "attributes": []
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 36
+                }
+              },
+              "args": []
+            }
+          },
+          "span": {
+            "start": 6,
+            "end": 36
+          }
+        }
+      },
+      "span": {
+        "start": 6,
         "end": 37
       }
     }

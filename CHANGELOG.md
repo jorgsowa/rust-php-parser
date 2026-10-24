@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A reserved keyword where PHP expects a class name, as in `new fn`, `new match`, `new array`, `catch (array $e)`, `extends fn` or `use fn;` in a class body, is a syntax error, and from PHP 8.1 `readonly` after `new` starts an anonymous class, so `new readonly;` reports the missing `class` and `new readonly readonly class {}` PHP's `Multiple readonly modifiers are not allowed` (`php-rs-parser`).
 - The printer keeps PHP's error instead of printing valid code for a foreach key taken by reference, a trait alias with `static`, `abstract` or `readonly`, `new Foo(...)`, `#[Foo(...)]`, a property hook with an empty `()`, a redeclared hook spelled in another case, such as `set {} SET {}`, and, when given the source, a destructuring target that mixes `list()` and `[]` (`php-printer`).
 
 ## [0.26.0] - 2026-10-24

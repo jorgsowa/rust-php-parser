@@ -58,11 +58,7 @@ pub(crate) fn validate_class_ref<'arena, 'src>(
             format!("'\\{text}' is an invalid class name"),
         )
     } else if let Name::Simple { value, .. } = name {
-        // `readonly` and `array` are keyword tokens, a syntax error in PHP.
-        if super::class_keyword(value).is_none()
-            && !(value.eq_ignore_ascii_case("readonly") && parser.version >= PhpVersion::Php81)
-            && !value.eq_ignore_ascii_case("array")
-        {
+        if super::class_keyword(value).is_none() {
             return;
         }
         (
@@ -120,7 +116,7 @@ pub(super) fn parse_class<'arena, 'src>(
     }
 
     let extends = if parser.eat(TokenKind::Extends).is_some() {
-        let n = parser.parse_name();
+        let n = parser.parse_class_ref_name();
         validate_class_ref(parser, &n, "class");
         Some(n)
     } else {
@@ -186,13 +182,13 @@ pub fn parse_name_list<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
 ) -> ArenaVec<'arena, Name<'arena, 'src>> {
     let mut names = parser.alloc_vec();
-    names.push(parser.parse_name());
+    names.push(parser.parse_class_ref_name());
     while parser.eat(TokenKind::Comma).is_some() {
         if parser.check(TokenKind::LeftBrace) || parser.check(TokenKind::Semicolon) {
             parser.trailing_comma_error("class name");
             break;
         }
-        names.push(parser.parse_name());
+        names.push(parser.parse_class_ref_name());
     }
     names
 }
@@ -1166,13 +1162,13 @@ pub(super) fn parse_trait_use_decl<'arena, 'src>(
 ) -> TraitUseDecl<'arena, 'src> {
     parser.advance(); // consume `use`
     let mut traits = parser.alloc_vec_with_capacity(2);
-    traits.push(parser.parse_name());
+    traits.push(parser.parse_class_ref_name());
     while parser.eat(TokenKind::Comma).is_some() {
         if parser.check(TokenKind::Semicolon) || parser.check(TokenKind::LeftBrace) {
             parser.trailing_comma_error("trait name");
             break;
         }
-        traits.push(parser.parse_name());
+        traits.push(parser.parse_class_ref_name());
     }
     for name in traits.iter() {
         validate_class_ref(parser, name, "trait");

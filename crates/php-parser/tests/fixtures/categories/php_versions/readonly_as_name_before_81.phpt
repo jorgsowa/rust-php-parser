@@ -25,8 +25,8 @@ namespace N4 {
 ===errors >=8.1===
 expected identifier, found 'readonly'
 Cannot use "Readonly" as a class name as it is reserved
-Cannot use "readonly" as class name, as it is reserved
-Cannot use "Readonly" as interface name, as it is reserved
+expected class name, found 'readonly'
+expected class name, found 'readonly'
 cannot use 'readonly' as interface name
 cannot use 'readonly' as trait name
 cannot use 'readonly' as constant name as it is reserved

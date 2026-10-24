@@ -2127,9 +2127,9 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         parser.expect(TokenKind::LeftParen);
 
         let mut types = parser.alloc_vec();
-        types.push(parser.parse_name());
+        types.push(parser.parse_class_ref_name());
         while parser.eat(TokenKind::Pipe).is_some() {
-            types.push(parser.parse_name());
+            types.push(parser.parse_class_ref_name());
         }
         for name in types.iter() {
             let (rule, message) = if let Some(text) = fully_qualified_class_keyword(name) {

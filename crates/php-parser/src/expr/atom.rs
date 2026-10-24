@@ -1295,21 +1295,42 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
     } else {
         parser.alloc_vec()
     };
-    let anon_readonly =
-        parser.check(TokenKind::Readonly) && parser.peek_kind() == Some(TokenKind::Class);
-    if !anon_attributes.is_empty() && !parser.check(TokenKind::Class) && !anon_readonly {
+    // From PHP 8.1 `readonly` after `new` can only start an anonymous class; PHP 8.1 alone
+    // lexes `readonly(` as a name.
+    let anon_readonly = parser.check(TokenKind::Readonly)
+        && match parser.peek_kind() {
+            Some(TokenKind::Class) => true,
+            Some(TokenKind::LeftParen) => parser.version >= PhpVersion::Php82,
+            _ => parser.version >= PhpVersion::Php81,
+        };
+    if anon_readonly {
+        let readonly = parser.advance();
+        parser.require_version(
+            PhpVersion::Php83,
+            "readonly anonymous classes",
+            readonly.span,
+        );
+        while let Some(repeated) = parser.eat(TokenKind::Readonly) {
+            if parser.version >= PhpVersion::Php83 {
+                parser.forbid(
+                    ForbiddenRule::DuplicateModifier,
+                    "Multiple readonly modifiers are not allowed",
+                    repeated.span,
+                );
+            }
+        }
+        if !parser.check(TokenKind::Class) {
+            parser.error_expected("'class'");
+            return Expr {
+                kind: ExprKind::Error,
+                span: parser.span_from(start),
+            };
+        }
+    } else if !anon_attributes.is_empty() && !parser.check(TokenKind::Class) {
         // Attributes after `new` belong to an anonymous class only.
         parser.error_expected("'class'");
     }
-    if parser.check(TokenKind::Class) || anon_readonly {
-        if anon_readonly {
-            let readonly = parser.advance();
-            parser.require_version(
-                PhpVersion::Php83,
-                "readonly anonymous classes",
-                readonly.span,
-            );
-        }
+    if parser.check(TokenKind::Class) {
         parser.advance(); // consume 'class'
 
         // Optional constructor args (before extends/implements).
@@ -1335,7 +1356,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         };
 
         let extends = if parser.eat(TokenKind::Extends).is_some() {
-            let name = parser.parse_name();
+            let name = parser.parse_class_ref_name();
             stmt::validate_class_ref(parser, &name, "class");
             Some(name)
         } else {
@@ -1468,7 +1489,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             super::check_class_name_literal(parser, &class);
             class
         }
-        _ => name_expr(parser.parse_name()),
+        _ => name_expr(parser.parse_class_ref_name()),
     };
 
     // Consume any `new_variable` dereference tail that is part of the class-name
