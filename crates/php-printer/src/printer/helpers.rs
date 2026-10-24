@@ -129,6 +129,37 @@ pub(crate) fn escape_heredoc(s: &str) -> String {
     out
 }
 
+/// Writes every line of a heredoc body that PHP would read as the closing `label` with its
+/// first byte escaped, so an escaped label in the source, as in `\x45OT`, cannot end the heredoc.
+/// `at_line_start` tells whether `text` starts a line; its last line is followed by an
+/// interpolation or the closing label, which end a label the way any non-label byte does.
+pub(crate) fn guard_heredoc_label(text: &str, label: &str, at_line_start: bool) -> String {
+    let mut out = String::with_capacity(text.len());
+    for (i, line) in text.split('\n').enumerate() {
+        if i > 0 {
+            out.push('\n');
+        }
+        let body = line.trim_start_matches([' ', '\t']);
+        let ends_label = body.strip_prefix(label).is_some_and(|rest| {
+            !rest
+                .bytes()
+                .next()
+                .is_some_and(|b| b.is_ascii_alphanumeric() || b == b'_' || b >= 0x80)
+        });
+        if (i > 0 || at_line_start) && !label.is_empty() && ends_label {
+            out.push_str(&line[..line.len() - body.len()]);
+            let first = body.chars().next().map_or(0, char::len_utf8);
+            for byte in &body.as_bytes()[..first] {
+                out.push_str(&format!("\\x{byte:02x}"));
+            }
+            out.push_str(&body[first..]);
+        } else {
+            out.push_str(line);
+        }
+    }
+    out
+}
+
 pub(crate) fn escape_double_quoted(s: &str) -> String {
     let mut out = String::with_capacity(s.len());
     for ch in s.chars() {

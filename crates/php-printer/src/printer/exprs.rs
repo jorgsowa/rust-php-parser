@@ -192,7 +192,7 @@ impl<'src> Printer<'src> {
                 self.w("<<<");
                 self.w(label);
                 self.newline();
-                self.print_heredoc_parts(parts);
+                self.print_heredoc_parts(parts, label);
                 self.newline();
                 self.w(label);
             }
@@ -724,23 +724,39 @@ impl<'src> Printer<'src> {
     }
 
     fn print_string_parts(&mut self, parts: &[StringPart]) {
-        self.print_interpolated_parts(parts, escape_double_quoted);
+        self.print_interpolated_parts(parts, escape_double_quoted, None);
     }
 
     fn print_backtick_parts(&mut self, parts: &[StringPart]) {
-        self.print_interpolated_parts(parts, escape_shell_exec);
+        self.print_interpolated_parts(parts, escape_shell_exec, None);
     }
 
-    fn print_heredoc_parts(&mut self, parts: &[StringPart]) {
-        self.print_interpolated_parts(parts, escape_heredoc);
+    fn print_heredoc_parts(&mut self, parts: &[StringPart], label: &str) {
+        self.print_interpolated_parts(parts, escape_heredoc, Some(label));
     }
 
-    fn print_interpolated_parts(&mut self, parts: &[StringPart], escape: fn(&str) -> String) {
+    /// Print string parts; `heredoc_label` guards the lines of a heredoc body against it.
+    fn print_interpolated_parts(
+        &mut self,
+        parts: &[StringPart],
+        escape: fn(&str) -> String,
+        heredoc_label: Option<&str>,
+    ) {
         let mut after_brace = false;
+        let mut at_line_start = true;
         for (i, part) in parts.iter().enumerate() {
             match part {
                 StringPart::Literal(s) => {
-                    self.w(&escape_bytes(s.as_bytes(), escape));
+                    let escaped = escape_bytes(s.as_bytes(), escape);
+                    match heredoc_label {
+                        Some(label) => {
+                            self.w(&guard_heredoc_label(&escaped, label, at_line_start));
+                        }
+                        None => self.w(&escaped),
+                    }
+                    if !s.as_bytes().is_empty() {
+                        at_line_start = s.as_bytes().ends_with(b"\n");
+                    }
                     // A bare `$name` after a literal `{` would open `{$...}` syntax.
                     after_brace = s.as_bytes().ends_with(b"{");
                 }
@@ -759,6 +775,7 @@ impl<'src> Printer<'src> {
                         }
                     }
                     after_brace = false;
+                    at_line_start = false;
                 }
                 _ => self.unsupported("string part"),
             }
