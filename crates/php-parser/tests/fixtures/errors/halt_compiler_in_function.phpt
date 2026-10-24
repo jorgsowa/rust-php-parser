@@ -1,8 +1,7 @@
 ===source===
 <?php function f() { __halt_compiler(); }
 ===errors===
-__halt_compiler() can only be used at the outermost scope
-missing closing '}'
+__HALT_COMPILER() can only be used from the outermost scope
 ===php_error===
 PHP Fatal error:  __HALT_COMPILER() can only be used from the outermost scope in Standard input code on line 1
 ===ast===
@@ -22,11 +21,11 @@ PHP Fatal error:  __HALT_COMPILER() can only be used from the outermost scope in
           "body": [
             {
               "kind": {
-                "HaltCompiler": " }"
+                "HaltCompiler": ""
               },
               "span": {
                 "start": 21,
-                "end": 41
+                "end": 39
               }
             }
           ],
@@ -37,12 +36,12 @@ PHP Fatal error:  __HALT_COMPILER() can only be used from the outermost scope in
       },
       "span": {
         "start": 6,
-        "end": 39
+        "end": 41
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 39
+    "end": 41
   }
 }

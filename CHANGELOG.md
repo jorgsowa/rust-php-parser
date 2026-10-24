@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - An unclosed statement or declaration body reports `missing closing '}'`, and a body missing its `{` reports only that, not also its `}` (`php-rs-parser`).
 - A syntax error at the same token as the previous one is dropped as a recovery cascade, as in `<?php if }` or a body missing at the end of the file (`php-rs-parser`).
 - The asymmetric-visibility version error spans the set-visibility modifier, such as `private(set)` (`php-rs-parser`).
+- A nested `__halt_compiler()` reports PHP's message, `__HALT_COMPILER() can only be used from the outermost scope`, and is a statement of its own: parsing goes on after it, as in PHP, so it no longer reports `missing closing '}'` and its node ends at its `;` (`php-rs-parser`).
 - The printer writes a newline after a `?>` before HTML when the source has one there or when the HTML starts with a newline that `?>` would swallow (`php-printer`).
 
 ### Fixed

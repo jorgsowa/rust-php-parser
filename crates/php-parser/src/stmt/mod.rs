@@ -3090,12 +3090,35 @@ fn check_top_level(parser: &mut Parser<'_, '_>, what: &str) {
 
 fn parse_halt_compiler<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
-
-    check_top_level(parser, "__halt_compiler()");
+    let nested = parser.stmt_depth > 1;
+    if nested {
+        parser.forbid(
+            ForbiddenRule::OutermostScopeOnly,
+            "__HALT_COMPILER() can only be used from the outermost scope",
+            parser.current_span(),
+        );
+    }
 
     parser.advance(); // consume '__halt_compiler'
     parser.expect(TokenKind::LeftParen);
     parser.expect(TokenKind::RightParen);
+    // PHP stops lexing only at an outermost `__halt_compiler()`; a nested one is a plain statement.
+    if nested {
+        if parser.check(TokenKind::CloseTag) {
+            parser.close_tag_ends_stmt();
+        } else if parser.eat(TokenKind::Semicolon).is_none() {
+            parser.error(ParseError::ExpectedAfter {
+                expected: "';' or '?>'".into(),
+                after: "__halt_compiler()".into(),
+                span: parser.current_span(),
+            });
+        }
+        return Stmt {
+            kind: StmtKind::HaltCompiler(""),
+            span: parser.span_from(start),
+            doc_comment: None,
+        };
+    }
     let closed_by_tag = parser.check(TokenKind::CloseTag);
     // Accept either ; or ?> as terminator
     if parser.check(TokenKind::Semicolon) {
