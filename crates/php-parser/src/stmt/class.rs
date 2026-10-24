@@ -1240,7 +1240,7 @@ fn parse_trait_use_member<'arena, 'src>(
     }
 }
 
-fn parse_class_member_modifiers<'arena, 'src>(
+pub(super) fn parse_class_member_modifiers<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     member_start: u32,
 ) -> Modifiers {
@@ -1405,13 +1405,6 @@ fn parse_class_member_modifiers<'arena, 'src>(
         parser.error_expected("variable");
     }
 
-    if is_abstract && is_final {
-        parser.forbid(
-            ForbiddenRule::AbstractFinalConflict,
-            "cannot use 'abstract' and 'final' together",
-            parser.span_from(member_start),
-        );
-    }
     if is_static && is_readonly {
         parser.forbid(
             ForbiddenRule::StaticReadonlyProperty,
@@ -1447,6 +1440,54 @@ fn parse_class_member_modifiers<'arena, 'src>(
 
 fn const_modifiers(mods: &Modifiers) -> Modifiers {
     const_modifiers_of(mods.visibility, mods.is_final)
+}
+
+/// Report `abstract` with `final` on a method or property, in PHP's words for the version.
+fn reject_abstract_final(
+    parser: &mut Parser<'_, '_>,
+    mods: &Modifiers,
+    member: &str,
+    member_start: u32,
+) {
+    if !(mods.is_abstract && mods.is_final) {
+        return;
+    }
+    let message = match parser.version {
+        v if v < PhpVersion::Php83 => {
+            "Cannot use the final modifier on an abstract class member".to_string()
+        }
+        PhpVersion::Php83 if member == "property" => {
+            "Cannot use the abstract modifier on a property".to_string()
+        }
+        _ => format!("Cannot use the final modifier on an abstract {member}"),
+    };
+    parser.forbid(
+        ForbiddenRule::AbstractFinalConflict,
+        message,
+        parser.span_from(member_start),
+    );
+}
+
+/// Report asymmetric visibility, as in `private(set)`, on a member that is not a property.
+fn reject_set_visibility(
+    parser: &mut Parser<'_, '_>,
+    mods: &Modifiers,
+    member: &str,
+    member_start: u32,
+) {
+    let Some(set_visibility) = mods.set_visibility else {
+        return;
+    };
+    let keyword = match set_visibility {
+        Visibility::Public => "public",
+        Visibility::Protected => "protected",
+        _ => "private",
+    };
+    parser.forbid(
+        ForbiddenRule::ModifierNotAllowed,
+        format!("Cannot use the {keyword}(set) modifier on {member}"),
+        parser.span_from(member_start),
+    );
 }
 
 pub(super) fn const_modifiers_of(visibility: Option<Visibility>, is_final: bool) -> Modifiers {
@@ -1670,7 +1711,7 @@ pub(super) fn check_typed_const_value(
     parser.forbid(ForbiddenRule::ClassConstantValueType, message, value.span);
 }
 
-fn parse_class_const_member<'arena, 'src>(
+pub(super) fn parse_class_const_member<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     members: &mut ArenaVec<'arena, ClassMember<'arena, 'src>>,
     member_attrs: ArenaVec<'arena, Attribute<'arena, 'src>>,
@@ -1678,27 +1719,25 @@ fn parse_class_const_member<'arena, 'src>(
     mods: &Modifiers,
     in_interface: bool,
 ) {
-    if mods.is_static {
-        parser.forbid(
-            ForbiddenRule::InvalidConstantModifier,
-            "cannot use 'static' as constant modifier",
-            parser.current_span(),
-        );
+    for (present, modifier) in [
+        (mods.is_static, "static"),
+        (mods.is_abstract, "abstract"),
+        (mods.is_readonly, "readonly"),
+    ] {
+        if present {
+            let message = if parser.version >= PhpVersion::Php83 {
+                format!("Cannot use the {modifier} modifier on a class constant")
+            } else {
+                format!("Cannot use '{modifier}' as constant modifier")
+            };
+            parser.forbid(
+                ForbiddenRule::InvalidConstantModifier,
+                message,
+                parser.current_span(),
+            );
+        }
     }
-    if mods.is_abstract {
-        parser.forbid(
-            ForbiddenRule::InvalidConstantModifier,
-            "cannot use 'abstract' as constant modifier",
-            parser.current_span(),
-        );
-    }
-    if mods.is_readonly {
-        parser.forbid(
-            ForbiddenRule::InvalidConstantModifier,
-            "cannot use 'readonly' as constant modifier",
-            parser.current_span(),
-        );
-    }
+    reject_set_visibility(parser, mods, "a class constant", member_start);
     if mods.is_final {
         let span = parser.span_from(member_start);
         parser.require_version(PhpVersion::Php81, "final class constants", span);
@@ -1837,6 +1876,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
     in_interface: bool,
     in_trait: bool,
 ) -> ClassMember<'arena, 'src> {
+    reject_abstract_final(parser, mods, "method", member_start);
     parser.advance(); // consume `function`
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
     let method_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
@@ -2001,12 +2041,18 @@ pub(super) fn parse_method_member<'arena, 'src>(
         }
     }
     if mods.is_readonly {
+        let message = if parser.version >= PhpVersion::Php83 {
+            "Cannot use the readonly modifier on a method"
+        } else {
+            "Cannot use 'readonly' as method modifier"
+        };
         parser.forbid(
             ForbiddenRule::ModifierNotAllowed,
-            "Cannot use the readonly modifier on a method",
+            message,
             parser.span_from(member_start),
         );
     }
+    reject_set_visibility(parser, mods, "a method", member_start);
 
     if let (Some(rt), Some(b)) = (&return_type, body) {
         super::check_returns_against_type(parser, b, rt, is_generator, true);
@@ -2282,6 +2328,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
     type_hint: Option<TypeHint<'arena, 'src>>,
     in_interface: bool,
 ) {
+    reject_abstract_final(parser, mods, "property", member_start);
     let var_token = parser.advance();
     let prop_name = parser.variable_ident(var_token);
 

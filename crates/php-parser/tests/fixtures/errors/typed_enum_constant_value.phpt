@@ -10,31 +10,31 @@ enum E: int {
 }
 ===errors <=7.4===
 'enums' requires PHP 8.1 or higher
-'typed enum constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
 Cannot use string as value for class constant E::A of type int
-'typed enum constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
 Cannot use int as value for class constant E::B of type string
-'typed enum constants' requires PHP 8.3 or higher
-'typed enum constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
 'union types' requires PHP 8.0 or higher
-'typed enum constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
 ===errors 8.0===
 'enums' requires PHP 8.1 or higher
-'typed enum constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
 Cannot use string as value for class constant E::A of type int
-'typed enum constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
 Cannot use int as value for class constant E::B of type string
-'typed enum constants' requires PHP 8.3 or higher
-'typed enum constants' requires PHP 8.3 or higher
-'typed enum constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
 ===errors 8.1-8.2===
-'typed enum constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
 Cannot use string as value for class constant E::A of type int
-'typed enum constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
 Cannot use int as value for class constant E::B of type string
-'typed enum constants' requires PHP 8.3 or higher
-'typed enum constants' requires PHP 8.3 or higher
-'typed enum constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
 ===errors >=8.3===
 Cannot use string as value for class constant E::A of type int
 Cannot use int as value for class constant E::B of type string

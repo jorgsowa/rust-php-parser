@@ -2,6 +2,8 @@
 <?php enum Status { final const X = 1; final public const Y = 2; }
 ===errors <=8.0===
 'enums' requires PHP 8.1 or higher
+'final class constants' requires PHP 8.1 or higher
+'final class constants' requires PHP 8.1 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'Status' (T_STRING) in Standard input code on line 1
 ===php_error 8.0===

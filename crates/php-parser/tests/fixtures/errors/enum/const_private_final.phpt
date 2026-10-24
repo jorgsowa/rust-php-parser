@@ -2,9 +2,10 @@
 <?php enum Status { private final const PRIV = 1; }
 ===errors <=8.0===
 'enums' requires PHP 8.1 or higher
-Private constant cannot be final as it is not visible to other classes
+'final class constants' requires PHP 8.1 or higher
+Private constant Status::PRIV cannot be final as it is not visible to other classes
 ===errors >=8.1===
-Private constant cannot be final as it is not visible to other classes
+Private constant Status::PRIV cannot be final as it is not visible to other classes
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'Status' (T_STRING) in Standard input code on line 1
 ===php_error 8.0===

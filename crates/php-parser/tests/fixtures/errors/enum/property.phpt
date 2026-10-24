@@ -18,6 +18,7 @@ enum E
 Enums may not include properties
 Enums may not include properties
 Enums may not include properties
+'readonly properties' requires PHP 8.1 or higher
 Enums may not include properties
 ===errors 8.1===
 Enums may not include properties

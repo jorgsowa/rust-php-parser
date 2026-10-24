@@ -1,10 +1,13 @@
 ===source===
 <?php class A { abstract final function a(); }
-===errors <=8.4===
-cannot use 'abstract' and 'final' together
+===errors <=8.2===
+Cannot use the final modifier on an abstract class member
+Class A contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (A::a)
+===errors 8.3-8.4===
+Cannot use the final modifier on an abstract method
 Class A contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (A::a)
 ===errors >=8.5===
-cannot use 'abstract' and 'final' together
+Cannot use the final modifier on an abstract method
 Class A declares abstract method a() and must therefore be declared abstract
 ===php_error <=8.2===
 PHP Fatal error:  Cannot use the final modifier on an abstract class member in Standard input code on line 1

@@ -2,9 +2,11 @@
 <?php enum Status { abstract const X = 1; }
 ===errors <=8.0===
 'enums' requires PHP 8.1 or higher
-cannot use 'abstract' as constant modifier
-===errors >=8.1===
-cannot use 'abstract' as constant modifier
+Cannot use 'abstract' as constant modifier
+===errors 8.1-8.2===
+Cannot use 'abstract' as constant modifier
+===errors >=8.3===
+Cannot use the abstract modifier on a class constant
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'Status' (T_STRING) in Standard input code on line 1
 ===php_error 8.0===

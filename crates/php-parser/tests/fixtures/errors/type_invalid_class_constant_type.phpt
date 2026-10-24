@@ -25,7 +25,7 @@ Class constant A::D cannot have type callable|int
 'typed class constants' requires PHP 8.3 or higher
 Cannot use int as value for class constant I::E of type never
 'enums' requires PHP 8.1 or higher
-'typed enum constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
 Class constant E::F cannot have type callable
 'typed class constants' requires PHP 8.3 or higher
 Class constant class@anonymous::G cannot have type void
@@ -39,7 +39,7 @@ Class constant A::D cannot have type callable|int
 'typed class constants' requires PHP 8.3 or higher
 Cannot use int as value for class constant I::E of type never
 'enums' requires PHP 8.1 or higher
-'typed enum constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
 Class constant E::F cannot have type callable
 'typed class constants' requires PHP 8.3 or higher
 Class constant class@anonymous::G cannot have type void
@@ -52,7 +52,7 @@ Class constant A::C cannot have type ?callable
 Class constant A::D cannot have type callable|int
 'typed class constants' requires PHP 8.3 or higher
 Class constant I::E cannot have type never
-'typed enum constants' requires PHP 8.3 or higher
+'typed class constants' requires PHP 8.3 or higher
 Class constant E::F cannot have type callable
 'typed class constants' requires PHP 8.3 or higher
 Class constant class@anonymous::G cannot have type void

@@ -802,7 +802,7 @@ mod tests {
             ForbiddenRule::ClassConstantNamedClass => &[("<?php class A { const class = 1; }", "class"),],
             ForbiddenRule::ClassConstantValueType => &[("<?php class A { const int X = \"a\"; }", "\"a\""),],
             ForbiddenRule::DefaultValueType => &[("<?php function f(int $x = \"a\") {}", "\"a\""), ("<?php class A { public int $x = null; }", "null"),],
-            ForbiddenRule::PrivateFinalConstant => &[("<?php class A { final private const X = 1; }", "final private const X = 1;"), ("<?php enum E { final private const X = 1; }", "const"),],
+            ForbiddenRule::PrivateFinalConstant => &[("<?php class A { final private const X = 1; }", "final private const X = 1;"), ("<?php enum E { final private const X = 1; }", "final private const X = 1;"),],
             ForbiddenRule::InvalidInterfaceConstantModifier => &[("<?php interface I { private const X = 1; }", "private const X = 1;"),],
             ForbiddenRule::InvalidInterfaceMethodModifier => &[("<?php interface I { private function f(); }", "private function f();"), ("<?php interface I { final function f(); }", "final function f();"), ("<?php interface I { abstract function f(); }", "abstract function f();"),],
             ForbiddenRule::InvalidInterfacePropertyModifier => &[("<?php interface I { final public $x { get; } }", "final public $x"),],

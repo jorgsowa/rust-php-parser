@@ -3,8 +3,10 @@
 class A {
     abstract const X = 1;
 }
-===errors===
-cannot use 'abstract' as constant modifier
+===errors <=8.2===
+Cannot use 'abstract' as constant modifier
+===errors >=8.3===
+Cannot use the abstract modifier on a class constant
 ===php_error <=8.2===
 PHP Fatal error:  Cannot use 'abstract' as constant modifier in Standard input code on line 3
 ===php_error >=8.3===

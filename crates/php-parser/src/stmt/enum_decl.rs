@@ -79,6 +79,7 @@ pub(super) fn parse_enum<'arena, 'src>(
     let mut members = parser.alloc_vec_with_capacity(4);
     let mut seen_methods = std::collections::HashSet::new();
     let mut case_values = Vec::new();
+    let mut abstract_methods = Vec::new();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         if parser.check(TokenKind::Semicolon) {
             parser.error_expected("class member");
@@ -188,176 +189,31 @@ pub(super) fn parse_enum<'arena, 'src>(
             continue;
         }
 
-        // Parse modifiers for methods/consts
-        let mut visibility = None;
-        let mut is_static = false;
-        let mut is_abstract = false;
-        let mut is_final = false;
-        let mut is_readonly = false;
+        let mods = super::class::parse_class_member_modifiers(parser, member_start);
 
-        loop {
-            match parser.current_kind() {
-                TokenKind::Public => {
-                    parser.advance();
-                    visibility = Some(Visibility::Public);
-                }
-                TokenKind::Protected => {
-                    parser.advance();
-                    visibility = Some(Visibility::Protected);
-                }
-                TokenKind::Private => {
-                    parser.advance();
-                    visibility = Some(Visibility::Private);
-                }
-                TokenKind::Static => {
-                    parser.advance();
-                    is_static = true;
-                }
-                TokenKind::Abstract => {
-                    parser.advance();
-                    is_abstract = true;
-                }
-                TokenKind::Final => {
-                    parser.advance();
-                    is_final = true;
-                }
-                TokenKind::Readonly => {
-                    parser.advance();
-                    is_readonly = true;
-                }
-                _ => break,
-            }
-        }
-
-        // Const
         if parser.check(TokenKind::Const) {
-            if is_static {
-                parser.forbid(
-                    ForbiddenRule::InvalidConstantModifier,
-                    "cannot use 'static' as constant modifier",
-                    parser.current_span(),
-                );
-            }
-            if is_abstract {
-                parser.forbid(
-                    ForbiddenRule::InvalidConstantModifier,
-                    "cannot use 'abstract' as constant modifier",
-                    parser.current_span(),
-                );
-            }
-            if is_readonly {
-                parser.forbid(
-                    ForbiddenRule::InvalidConstantModifier,
-                    "cannot use 'readonly' as constant modifier",
-                    parser.current_span(),
-                );
-            }
-            if is_final && visibility == Some(Visibility::Private) {
-                parser.forbid(
-                    ForbiddenRule::PrivateFinalConstant,
-                    "Private constant cannot be final as it is not visible to other classes",
-                    parser.current_span(),
-                );
-            }
-            parser.advance();
-
-            // PHP 8.3: typed enum constants — e.g. `public const string MODE = 'fit'`
-            let const_type = if parser.could_be_type_hint()
-                && !parser.check(TokenKind::Variable)
-                && parser.peek_kind() != Some(TokenKind::Equals)
-                && parser.peek_kind() != Some(TokenKind::Comma)
-            {
-                let span = parser.current_span();
-                parser.require_version(PhpVersion::Php83, "typed enum constants", span);
-                let th = parser.parse_type_hint();
-                Some(parser.alloc(th))
-            } else {
-                None
-            };
-
-            let first_index = members.len();
-            parser.check_attributes(&member_attrs, &AttrSite::new(AttrTarget::ClassConst));
-            let mut attributes = Some(member_attrs);
-            let mut prev_end = member_start;
-            loop {
-                let item_start = parser.start_span();
-                let const_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-                    Ident::new(text, span)
-                } else {
-                    parser.error(ParseError::Expected {
-                        expected: "constant name".into(),
-                        found: parser.current_kind().description().into(),
-                        span: parser.current_span(),
+            let mut consts = parser.alloc_vec();
+            super::class::parse_class_const_member(
+                parser,
+                &mut consts,
+                member_attrs,
+                member_start,
+                &mods,
+                false,
+            );
+            for member in consts {
+                if let ClassMemberKind::ClassConst(decl) = member.kind {
+                    members.push(EnumMember {
+                        kind: EnumMemberKind::ClassConst(decl),
+                        span: member.span,
                     });
-                    parser.missing_ident()
-                };
-                if let (Some(ty), Some(name), true) = (
-                    const_type,
-                    const_name.as_str(),
-                    members.len() == first_index,
-                ) {
-                    parser.reject_member_type(ty, "Class constant", name);
                 }
-                parser.expect(TokenKind::Equals);
-                let value = expr::parse_expr(parser);
-                expr::check_const_expr(parser, &value, false);
-                if let (Some(ty), Some(name)) = (const_type, const_name.as_str()) {
-                    super::class::check_typed_const_value(parser, ty, name, &value);
-                }
-                // Every item of `const A = 1, B = 2;` gets its own copy of the attributes.
-                let attributes = attributes.take().unwrap_or_else(|| {
-                    let EnumMemberKind::ClassConst(first) = &members[first_index].kind else {
-                        unreachable!()
-                    };
-                    super::class::copy_attributes(parser, &first.attributes)
-                });
-                let is_first = members.len() == first_index;
-                let doc_comment = if is_first {
-                    parser.take_doc_comment(member_start)
-                } else {
-                    parser.take_doc_comment_from(item_start, prev_end)
-                };
-                // Each constant of a group spans its own item; the first also its modifiers.
-                let span = parser.span_from(if is_first { member_start } else { item_start });
-                prev_end = span.end;
-                members.push(EnumMember {
-                    kind: EnumMemberKind::ClassConst({
-                        let mut built = ClassConstDecl::new(parser.arena, const_name, value);
-                        built.modifiers = super::class::const_modifiers_of(visibility, is_final);
-                        built.type_hint = const_type;
-                        built.attributes = attributes;
-                        built.doc_comment = doc_comment;
-                        built
-                    }),
-                    span,
-                });
-                if parser.eat(TokenKind::Comma).is_none() {
-                    break;
-                }
-            }
-            parser.expect_member_end();
-            if let Some(last) = members.last_mut() {
-                last.span.end = parser.previous_end().max(last.span.end);
             }
             continue;
         }
 
-        // Method
         if parser.check(TokenKind::Function) {
-            if is_abstract {
-                parser.forbid(
-                    ForbiddenRule::AbstractEnumMethod,
-                    "enum methods cannot be abstract",
-                    parser.span_from(member_start),
-                );
-            }
-
-            let mut mods = php_ast::Modifiers::new();
-            mods.visibility = visibility;
-            mods.is_static = is_static;
-            mods.is_abstract = is_abstract;
-            mods.is_final = is_final;
-            mods.is_readonly = is_readonly;
+            let abstract_start = mods.is_abstract.then(|| parser.span_from(member_start));
             let member = super::class::parse_method_member(
                 parser,
                 member_attrs,
@@ -366,6 +222,9 @@ pub(super) fn parse_enum<'arena, 'src>(
                 false,
                 false,
             );
+            if let (Some(span), ClassMemberKind::Method(method)) = (abstract_start, &member.kind) {
+                abstract_methods.push((method.name.to_string(), span));
+            }
             if let ClassMemberKind::Method(method) = member.kind {
                 super::class::report_redeclared_method(
                     parser,
@@ -381,15 +240,14 @@ pub(super) fn parse_enum<'arena, 'src>(
             continue;
         }
 
-        let has_modifier =
-            visibility.is_some() || is_static || is_abstract || is_final || is_readonly;
-        let is_var = !has_modifier
-            && parser.check(TokenKind::Identifier)
-            && parser.current_text().eq_ignore_ascii_case("var");
-        if is_var {
-            parser.advance();
-            visibility = Some(Visibility::Public);
-        }
+        let is_var = mods.is_var;
+        let has_modifier = !is_var
+            && (mods.visibility.is_some()
+                || mods.set_visibility.is_some()
+                || mods.is_static
+                || mods.is_abstract
+                || mods.is_final
+                || mods.is_readonly);
         let starts_property = match parser.current_kind() {
             TokenKind::Variable
             | TokenKind::Question
@@ -427,13 +285,6 @@ pub(super) fn parse_enum<'arena, 'src>(
                     "Enums may not include properties".to_string()
                 };
                 parser.forbid(ForbiddenRule::EnumProperty, message, parser.current_span());
-                let mut mods = php_ast::Modifiers::new();
-                mods.visibility = visibility;
-                mods.is_static = is_static;
-                mods.is_abstract = is_abstract;
-                mods.is_final = is_final;
-                mods.is_readonly = is_readonly;
-                mods.is_var = is_var;
                 let mut properties = parser.alloc_vec();
                 super::class::parse_property_member(
                     parser,
@@ -469,6 +320,7 @@ pub(super) fn parse_enum<'arena, 'src>(
         _ => None,
     });
     super::class::report_redefined_constants(parser, constants);
+    report_abstract_methods(parser, &abstract_methods);
     parser.class_scope = outer_scope;
 
     parser.expect_body_close(open);
@@ -550,4 +402,42 @@ fn check_case_value_81(
         return;
     }
     case_values.push((case_name.to_string(), key));
+}
+
+/// Report abstract enum methods, one by one from PHP 8.5 and as one error before.
+fn report_abstract_methods(parser: &mut Parser<'_, '_>, methods: &[(String, Span)]) {
+    let Some((_, first_span)) = methods.first() else {
+        return;
+    };
+    let enum_name = parser
+        .class_scope
+        .as_ref()
+        .map_or_else(String::new, |scope| scope.name.clone());
+    if parser.version >= PhpVersion::Php85 {
+        for (name, span) in methods {
+            parser.forbid(
+                ForbiddenRule::AbstractEnumMethod,
+                format!("Enum method {enum_name}::{name}() must not be abstract"),
+                *span,
+            );
+        }
+        return;
+    }
+    let count = methods.len();
+    let plural = if count == 1 { "" } else { "s" };
+    let mut names: Vec<String> = methods
+        .iter()
+        .take(3)
+        .map(|(name, _)| format!("{enum_name}::{name}"))
+        .collect();
+    if count > 3 {
+        names.push("...".into());
+    }
+    let names = names.join(", ");
+    let message = if parser.version >= PhpVersion::Php82 {
+        format!("Enum {enum_name} must implement {count} abstract private method{plural} ({names})")
+    } else {
+        format!("Class {enum_name} contains {count} abstract method{plural} and must therefore be declared abstract or implement the remaining methods ({names})")
+    };
+    parser.forbid(ForbiddenRule::AbstractEnumMethod, message, *first_span);
 }

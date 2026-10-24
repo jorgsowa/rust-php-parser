@@ -3,8 +3,10 @@
 class A {
     static const X = 1;
 }
-===errors===
-cannot use 'static' as constant modifier
+===errors <=8.2===
+Cannot use 'static' as constant modifier
+===errors >=8.3===
+Cannot use the static modifier on a class constant
 ===php_error <=8.2===
 PHP Fatal error:  Cannot use 'static' as constant modifier in Standard input code on line 3
 ===php_error >=8.3===
