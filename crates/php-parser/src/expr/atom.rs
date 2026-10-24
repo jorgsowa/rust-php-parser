@@ -1723,9 +1723,13 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
 
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
 
-    parser.expect(TokenKind::LeftParen);
-    let params = stmt::parse_param_list(parser);
-    parser.expect(TokenKind::RightParen);
+    let params = if parser.expect(TokenKind::LeftParen).is_some() {
+        let params = stmt::parse_param_list(parser);
+        parser.expect(TokenKind::RightParen);
+        params
+    } else {
+        parser.alloc_vec()
+    };
 
     // return type
     let return_type = if parser.eat(TokenKind::Colon).is_some() {

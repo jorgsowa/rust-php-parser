@@ -10,8 +10,6 @@ $a = clone \foo();
 ===errors <=7.4===
 expected '(', found '\'
 'reserved keyword in namespaced name' requires PHP 8.0 or higher
-expected variable, found '('
-expected expression, found ')'
 expected expression, found 'private'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '\' (T_NS_SEPARATOR), expecting '(' in Standard input code on line 4
@@ -137,50 +135,34 @@ PHP Parse error:  syntax error, unexpected '\' (T_NS_SEPARATOR), expecting '(' i
             "ArrowFunction": {
               "is_static": false,
               "by_ref": false,
-              "params": [
-                {
-                  "name": null,
-                  "type_hint": {
-                    "kind": {
-                      "Named": {
-                        "parts": [
-                          "use"
-                        ],
-                        "kind": "FullyQualified",
-                        "span": {
-                          "start": 47,
-                          "end": 51
-                        }
-                      }
-                    },
-                    "span": {
-                      "start": 47,
-                      "end": 51
-                    }
-                  },
-                  "default": null,
-                  "by_ref": false,
-                  "variadic": false,
-                  "attributes": [],
-                  "span": {
-                    "start": 47,
-                    "end": 51
-                  }
-                }
-              ],
+              "params": [],
               "return_type": null,
               "body": {
                 "kind": {
-                  "Parenthesized": {
-                    "kind": "Error",
-                    "span": {
-                      "start": 52,
-                      "end": 52
-                    }
+                  "FunctionCall": {
+                    "name": {
+                      "kind": {
+                        "Name": {
+                          "parts": [
+                            "use"
+                          ],
+                          "kind": "FullyQualified",
+                          "span": {
+                            "start": 47,
+                            "end": 51
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 47,
+                        "end": 51
+                      }
+                    },
+                    "args": []
                   }
                 },
                 "span": {
-                  "start": 51,
+                  "start": 47,
                   "end": 53
                 }
               },

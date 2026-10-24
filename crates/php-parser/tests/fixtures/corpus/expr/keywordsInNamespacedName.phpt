@@ -15,8 +15,6 @@ private\protected\public\static\abstract\final();
 'reserved keyword in namespaced name' requires PHP 8.0 or higher
 expected '(', found '\'
 'reserved keyword in namespaced name' requires PHP 8.0 or higher
-expected variable, found '('
-expected expression, found ')'
 'reserved keyword in namespaced name' requires PHP 8.0 or higher
 'reserved keyword in namespaced name' requires PHP 8.0 or higher
 expected expression, found 'private'
@@ -140,50 +138,34 @@ PHP Parse error:  syntax error, unexpected 'fn' (T_FN), expecting '{' in Standar
             "ArrowFunction": {
               "is_static": false,
               "by_ref": false,
-              "params": [
-                {
-                  "name": null,
-                  "type_hint": {
-                    "kind": {
-                      "Named": {
-                        "parts": [
-                          "use"
-                        ],
-                        "kind": "FullyQualified",
-                        "span": {
-                          "start": 92,
-                          "end": 96
-                        }
-                      }
-                    },
-                    "span": {
-                      "start": 92,
-                      "end": 96
-                    }
-                  },
-                  "default": null,
-                  "by_ref": false,
-                  "variadic": false,
-                  "attributes": [],
-                  "span": {
-                    "start": 92,
-                    "end": 96
-                  }
-                }
-              ],
+              "params": [],
               "return_type": null,
               "body": {
                 "kind": {
-                  "Parenthesized": {
-                    "kind": "Error",
-                    "span": {
-                      "start": 97,
-                      "end": 97
-                    }
+                  "FunctionCall": {
+                    "name": {
+                      "kind": {
+                        "Name": {
+                          "parts": [
+                            "use"
+                          ],
+                          "kind": "FullyQualified",
+                          "span": {
+                            "start": 92,
+                            "end": 96
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 92,
+                        "end": 96
+                      }
+                    },
+                    "args": []
                   }
                 },
                 "span": {
-                  "start": 96,
+                  "start": 92,
                   "end": 98
                 }
               },
