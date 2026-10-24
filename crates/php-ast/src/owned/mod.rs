@@ -704,6 +704,9 @@ pub struct ForeachStmt {
     pub expr: Expr,
     /// The key target, if any.
     pub key: Option<Expr>,
+    /// `true` for a key taken by reference, `foreach ($a as &$k => $v)`, which PHP rejects.
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
+    pub key_by_ref: bool,
     /// The value target.
     pub value: Expr,
     /// `true` when the value is taken by reference: `foreach ($a as &$v)`.
@@ -729,6 +732,7 @@ impl ForeachStmt {
         Self {
             expr,
             key: None,
+            key_by_ref: false,
             value,
             by_ref: false,
             by_ref_span: None,
@@ -2008,8 +2012,15 @@ pub struct PropertyHook {
     pub by_ref: bool,
     /// Parameters of a `set` hook.
     pub params: Box<[Param]>,
+    /// `true` for an empty `()` parameter list, which PHP rejects on both hooks.
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
+    pub empty_param_list: bool,
     /// Attributes on the hook.
     pub attributes: Box<[Attribute]>,
+    /// The `get` or `set` keyword. Printer layout detail, outside semver; not serialized.
+    #[cfg_attr(feature = "serde", serde(skip))]
+    #[doc(hidden)]
+    pub name_span: Span,
     /// Source span.
     pub span: Span,
 }
@@ -2024,7 +2035,9 @@ impl PropertyHook {
             modifiers: Modifiers::new(),
             by_ref: false,
             params: Box::new([]),
+            empty_param_list: false,
             attributes: Box::new([]),
+            name_span: Span::DUMMY,
             span,
         }
     }
@@ -2192,6 +2205,12 @@ pub enum TraitAdaptationKind {
         /// `true` for `m as final alias;` (PHP 8.3+).
         #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
         is_final: bool,
+        /// A modifier PHP rejects on an alias: `static`, `abstract` or `readonly`.
+        #[cfg_attr(
+            feature = "serde",
+            serde(default, skip_serializing_if = "Option::is_none")
+        )]
+        invalid_modifier: Option<Ident>,
         /// Alias name, if any.
         new_name: Option<Name>,
     },
@@ -2874,7 +2893,9 @@ fn owned_hook(h: &arena_ast::PropertyHook<'_, '_>) -> PropertyHook {
         modifiers: h.modifiers,
         by_ref: h.by_ref,
         params: owned_params(&h.params),
+        empty_param_list: h.empty_param_list,
         attributes: owned_attrs(&h.attributes),
+        name_span: h.name_span,
         span: h.span,
     }
 }
@@ -2954,6 +2975,7 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
         arena_ast::StmtKind::Foreach(s) => StmtKind::Foreach(Box::new(ForeachStmt {
             expr: owned_expr(&s.expr),
             key: s.key.as_ref().map(owned_expr),
+            key_by_ref: s.key_by_ref,
             value: owned_expr(&s.value),
             by_ref: s.by_ref,
             by_ref_span: s.by_ref_span,
@@ -3182,12 +3204,14 @@ fn owned_trait_use(t: &arena_ast::TraitUseDecl<'_, '_>) -> TraitUseDecl {
                         method,
                         new_modifier,
                         is_final,
+                        invalid_modifier,
                         new_name,
                     } => TraitAdaptationKind::Alias {
                         trait_name: trait_name.as_ref().map(owned_name),
                         method: owned_name(method),
                         new_modifier: *new_modifier,
                         is_final: *is_final,
+                        invalid_modifier: (*invalid_modifier).map(owned_ident),
                         new_name: new_name.as_ref().map(owned_name),
                     },
                 },
@@ -3894,7 +3918,9 @@ fn av_hook<'a>(arena: &'a bumpalo::Bump, h: &PropertyHook) -> arena_ast::Propert
         modifiers: h.modifiers,
         by_ref: h.by_ref,
         params: av_params(arena, &h.params),
+        empty_param_list: h.empty_param_list,
         attributes: av_attrs(arena, &h.attributes),
+        name_span: h.name_span,
         span: h.span,
     }
 }
@@ -4054,6 +4080,7 @@ fn av_foreach_stmt<'a>(
     arena_ast::ForeachStmt {
         expr: av_expr(arena, &s.expr),
         key: s.key.as_ref().map(|e| av_expr(arena, e)),
+        key_by_ref: s.key_by_ref,
         value: av_expr(arena, &s.value),
         by_ref: s.by_ref,
         by_ref_span: s.by_ref_span,
@@ -4333,12 +4360,14 @@ fn av_trait_use<'a>(arena: &'a bumpalo::Bump, t: &TraitUseDecl) -> arena_ast::Tr
                     method,
                     new_modifier,
                     is_final,
+                    invalid_modifier,
                     new_name,
                 } => arena_ast::TraitAdaptationKind::Alias {
                     trait_name: trait_name.as_ref().map(|n| av_name(arena, n)),
                     method: av_name(arena, method),
                     new_modifier: *new_modifier,
                     is_final: *is_final,
+                    invalid_modifier: invalid_modifier.as_ref().map(|m| av_ident(arena, m)),
                     new_name: new_name.as_ref().map(|n| av_name(arena, n)),
                 },
             },

@@ -272,6 +272,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
 
         // Expect "get" or "set" identifier (contextual keywords)
         let hook_name = parser.current_text();
+        let name_span = parser.current_span();
         let kind = if parser.check(TokenKind::Identifier) {
             match hook_name {
                 t if t.eq_ignore_ascii_case("get") => {
@@ -321,7 +322,8 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
         };
 
         // Parse optional (params) for set hooks
-        let params = if parser.check(TokenKind::LeftParen) {
+        let has_param_list = parser.check(TokenKind::LeftParen);
+        let params = if has_param_list {
             let paren_span = parser.current_span();
             parser.advance();
             let p = super::parse_param_list(parser);
@@ -441,8 +443,10 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
             let mut built = PropertyHook::new(parser.arena, kind, body, hook_span);
             built.modifiers = hook_modifiers;
             built.by_ref = by_ref;
+            built.empty_param_list = has_param_list && params.is_empty();
             built.params = params;
             built.attributes = hook_attrs;
+            built.name_span = name_span;
             built
         });
     }

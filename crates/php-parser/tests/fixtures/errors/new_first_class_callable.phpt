@@ -38,7 +38,16 @@ PHP Fatal error:  Cannot create Closure for new expression in Standard input cod
                   "end": 13
                 }
               },
-              "args": []
+              "args": [
+                {
+                  "name": null,
+                  "kind": "SpreadPlaceholder",
+                  "span": {
+                    "start": 14,
+                    "end": 17
+                  }
+                }
+              ]
             }
           },
           "span": {

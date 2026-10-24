@@ -54,6 +54,7 @@ cargo test -p php-rs-parser --test integration fixtures::     # .phpt parser fix
 cargo test -p php-rs-parser --test integration malformed_php:: # error recovery and diagnostics
 cargo test -p php-rs-parser --test integration visitor::      # visitor and scope-aware traversal
 cargo test -p php-rs-parser --test php_syntax                 # validate every fixture via `php -l`
+cargo test -p php-printer --test php_syntax                   # printing keeps each fixture's `php -l` result
 cargo test -p php-printer --test printer  # printer fixtures
 
 # Regenerate expected AST/errors in all .phpt fixtures

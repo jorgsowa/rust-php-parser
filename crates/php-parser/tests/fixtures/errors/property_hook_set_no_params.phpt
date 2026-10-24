@@ -78,6 +78,7 @@ PHP Fatal error:  set hook of property Foo::$x must accept exactly one parameter
                       },
                       "by_ref": false,
                       "params": [],
+                      "empty_param_list": true,
                       "attributes": [],
                       "span": {
                         "start": 46,

@@ -69,6 +69,30 @@ impl<'src> Printer<'src> {
         at_edge && outer.span.start < outer.span.end && outer.span.end as usize <= self.source.len()
     }
 
+    /// Whether the source spells the array `expr` with `list(...)` rather than `[...]`.
+    fn written_as_list(&self, expr: &Expr) -> bool {
+        expr.span.end as usize <= self.source.len()
+            && self
+                .source
+                .as_bytes()
+                .get(expr.span.start as usize)
+                .is_some_and(|b| b.eq_ignore_ascii_case(&b'l'))
+    }
+
+    /// Whether an array nested in the array `expr` is spelled differently from it, which PHP
+    /// rejects as "Cannot mix [] and list()".
+    fn mixes_list_spelling(&self, expr: &Expr) -> bool {
+        let ExprKind::Array(elements) = &expr.kind else {
+            return false;
+        };
+        let as_list = self.written_as_list(expr);
+        elements.iter().any(|e| {
+            matches!(e.value().kind, ExprKind::Array(_))
+                && (self.written_as_list(e.value()) != as_list
+                    || self.mixes_list_spelling(e.value()))
+        })
+    }
+
     /// The precedence `operand` of `parent` prints at. A ternary written without parentheses as
     /// the condition of another prints as written, so the error PHP 8.0 reports for it is kept.
     fn source_operand_prec(&self, parent: &Expr, operand: &Expr, prec: i8) -> i8 {
@@ -301,9 +325,13 @@ impl<'src> Printer<'src> {
                 self.w(")");
             }
             ExprKind::Array(elements) => {
-                self.w("[");
+                let keep_list = self.keep_list_spelling || self.mixes_list_spelling(expr);
+                let outer_keep_list = std::mem::replace(&mut self.keep_list_spelling, keep_list);
+                let as_list = keep_list && self.written_as_list(expr);
+                self.w(if as_list { "list(" } else { "[" });
                 self.print_array_elements(elements, expr.span);
-                self.w("]");
+                self.w(if as_list { ")" } else { "]" });
+                self.keep_list_spelling = outer_keep_list;
             }
             ExprKind::ArrayAccess(access) => {
                 self.w("[");

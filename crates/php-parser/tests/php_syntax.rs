@@ -1,54 +1,12 @@
 #[path = "integration/common.rs"]
 mod common;
 
-use common::{collect_phpt_files, Fixture, Version, SUPPORTED};
+use common::{
+    collect_phpt_files, installed_php, normalize_quotes, php_lint, strip_stack_trace, Fixture,
+    Version, SUPPORTED,
+};
 use rayon::prelude::*;
-use std::io::Write;
 use std::sync::Mutex;
-
-/// Version of the `php` binary on `PATH`, or `None` when PHP is not installed.
-fn php_version() -> Option<Version> {
-    let out = std::process::Command::new("php")
-        .args(["-r", "echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION;"])
-        .output()
-        .ok()?;
-    let ver = String::from_utf8_lossy(&out.stdout);
-    let (maj, min) = ver.trim().split_once('.')?;
-    Some((maj.parse().ok()?, min.parse().ok()?))
-}
-
-fn strip_stack_trace(s: &str) -> String {
-    let mut lines: Vec<&str> = s.lines().collect();
-    while let Some(last) = lines.last() {
-        if last.starts_with('#') || *last == "Stack trace:" {
-            lines.pop();
-        } else {
-            break;
-        }
-    }
-    lines.join("\n")
-}
-
-fn normalize_quotes(s: &str) -> String {
-    s.replace('\'', "\"")
-}
-
-fn php_lint(code: &str) -> std::process::Output {
-    let mut child = std::process::Command::new("php")
-        .arg("-l")
-        .stdin(std::process::Stdio::piped())
-        .stderr(std::process::Stdio::piped())
-        .stdout(std::process::Stdio::null())
-        .spawn()
-        .expect("failed to spawn php");
-    child
-        .stdin
-        .take()
-        .unwrap()
-        .write_all(code.as_bytes())
-        .unwrap();
-    child.wait_with_output().unwrap()
-}
 
 /// Errors `php -l` does not report: a fixture that lists errors must record a `php -l` failure.
 fn non_fatal_errors(fixture: &Fixture) -> Vec<String> {
@@ -85,7 +43,7 @@ fn update_fixture_php_error(path: &std::path::Path, php: Version, actual: Option
 
 #[test]
 fn fixture_files_are_valid_php() {
-    let Some(php) = php_version() else {
+    let Some(php) = installed_php() else {
         assert!(
             std::env::var_os("CI").is_none(),
             "`php` not found on PATH in CI"
@@ -137,9 +95,7 @@ fn fixture_files_are_valid_php() {
         let expected = fixture
             .section("php_error", Some(php))
             .map(|s| strip_stack_trace(&s.body));
-        let out = php_lint(source);
-        let actual = (!out.status.success())
-            .then(|| strip_stack_trace(String::from_utf8_lossy(&out.stderr).trim()));
+        let actual = php_lint(source);
         if expected.as_deref().map(normalize_quotes) == actual.as_deref().map(normalize_quotes) {
             return;
         }

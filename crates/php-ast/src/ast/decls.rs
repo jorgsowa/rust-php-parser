@@ -354,8 +354,15 @@ pub struct PropertyHook<'arena, 'src> {
     pub by_ref: bool,
     /// Explicit parameters, e.g. `set(string $v)`.
     pub params: ArenaVec<'arena, Param<'arena, 'src>>,
+    /// `true` for an empty `()` parameter list, which PHP rejects on both hooks.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
+    pub empty_param_list: bool,
     /// `#[...]` attributes applied to this node.
     pub attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+    /// The `get` or `set` keyword. Printer layout detail, outside semver; not serialized.
+    #[cfg_attr(feature = "serde", serde(skip))]
+    #[doc(hidden)]
+    pub name_span: Span,
     /// Source range of this node.
     pub span: Span,
 }
@@ -375,7 +382,9 @@ impl<'arena, 'src> PropertyHook<'arena, 'src> {
             modifiers: Modifiers::new(),
             by_ref: false,
             params: ArenaVec::new_in(arena),
+            empty_param_list: false,
             attributes: ArenaVec::new_in(arena),
+            name_span: Span::DUMMY,
             span,
         }
     }
@@ -532,6 +541,9 @@ pub enum TraitAdaptationKind<'arena, 'src> {
         /// `true` for `foo as final bar;` (PHP 8.3+).
         #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
         is_final: bool,
+        /// A modifier PHP rejects on an alias: `static`, `abstract` or `readonly`.
+        #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
+        invalid_modifier: Option<Ident<'src>>,
         /// Alias name, if given.
         new_name: Option<Name<'arena, 'src>>,
     },

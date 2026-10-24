@@ -369,19 +369,26 @@ fn parser_corpus_round_trip() {
 
         let rel = path.strip_prefix(&parser_fixtures).unwrap();
         for target in targets {
-            let options = php_rs_parser::ParseOptions::default().version(php_version(target));
+            let version = php_version(target);
+            let options = php_rs_parser::ParseOptions::default().version(version);
+            let mut config = PrinterConfig::default();
+            config.php_version = version;
             let print = |source: &str| {
                 let arena = bumpalo::Bump::new();
                 let result = php_rs_parser::parse_arena_with(&arena, source, &options);
-                php_printer::pretty_print(&result.program)
+                PrettyPrinter::new()
+                    .config(config.clone())
+                    .print(&result.program)
             };
             let first_print = print(fixture.source());
             let second_print = print(&first_print);
 
             if first_print != second_print {
                 failures.lock().unwrap().push(format!(
-                    "FAIL {}\n  first:  {first_print}\n  second: {second_print}",
-                    rel.display()
+                    "FAIL {} (PHP {}.{})\n  first:  {first_print}\n  second: {second_print}",
+                    rel.display(),
+                    target.0,
+                    target.1
                 ));
             }
         }

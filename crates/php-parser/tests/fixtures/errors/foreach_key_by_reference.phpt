@@ -28,6 +28,7 @@ PHP Fatal error:  Key element cannot be a reference in Standard input code on li
               "end": 24
             }
           },
+          "key_by_ref": true,
           "value": {
             "kind": {
               "Variable": "v"

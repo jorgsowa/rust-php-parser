@@ -15,7 +15,8 @@ pub(crate) mod interpolation;
 
 // Re-exports so external callers' paths don't change
 pub(crate) use atom::{
-    parse_arg_list_or_callable, parse_arrow_function, parse_closure, ArgListResult,
+    callable_marker_arg, parse_arg_list_or_callable, parse_arrow_function, parse_closure,
+    ArgListResult,
 };
 
 use atom::{parse_atom, parse_function_call};
@@ -1659,7 +1660,7 @@ fn parse_expr_rest<'arena, 'src>(
                 // Check if it's a method call
                 if parser.check(TokenKind::LeftParen) {
                     match parse_arg_list_or_callable(parser) {
-                        ArgListResult::CallableMarker => {
+                        ArgListResult::CallableMarker(_) => {
                             let span = parser.span_from(lhs.span.start);
                             let nullsafe_lhs = nullsafe_link(&lhs.kind, true);
                             if (is_nullsafe && !is_this(&lhs.kind)) || nullsafe_lhs {
@@ -1799,7 +1800,7 @@ fn parse_expr_rest<'arena, 'src>(
                         span: var_span,
                     });
                     match parse_arg_list_or_callable(parser) {
-                        ArgListResult::CallableMarker => {
+                        ArgListResult::CallableMarker(_) => {
                             let span = parser.span_from(lhs.span.start);
                             lhs = Expr {
                                 kind: ExprKind::CallableCreate(CallableCreateExpr {
@@ -1860,7 +1861,7 @@ fn parse_expr_rest<'arena, 'src>(
                 if parser.check(TokenKind::LeftParen) {
                     // Dynamic static method call: A::{'b'}()
                     match parse_arg_list_or_callable(parser) {
-                        ArgListResult::CallableMarker => {
+                        ArgListResult::CallableMarker(_) => {
                             let span = parser.span_from(lhs.span.start);
                             lhs = Expr {
                                 kind: ExprKind::CallableCreate(CallableCreateExpr {
@@ -1948,7 +1949,7 @@ fn parse_expr_rest<'arena, 'src>(
                         span: member_span,
                     });
                     match parse_arg_list_or_callable(parser) {
-                        ArgListResult::CallableMarker => {
+                        ArgListResult::CallableMarker(_) => {
                             let span = parser.span_from(lhs.span.start);
                             lhs = Expr {
                                 kind: ExprKind::CallableCreate(CallableCreateExpr {

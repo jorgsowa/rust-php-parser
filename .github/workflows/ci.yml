@@ -118,7 +118,8 @@ jobs:
         with:
           key: ${{ matrix.php-version }}
 
-      - name: Check PHP syntax in tests
+      # Lints every parser fixture, and every fixture printed for this PHP version, with php -l.
+      - name: Check fixtures and printed fixtures with php -l
         run: cargo test --test php_syntax
 
   test:

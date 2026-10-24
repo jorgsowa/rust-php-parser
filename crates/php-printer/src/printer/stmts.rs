@@ -104,6 +104,9 @@ impl<'src> Printer<'src> {
                 self.print_expr(&f.expr, PREC_LOWEST);
                 self.w(" as ");
                 if let Some(key) = &f.key {
+                    if f.key_by_ref {
+                        self.w("&");
+                    }
                     self.print_expr(key, PREC_LOWEST);
                     self.w(" => ");
                 }

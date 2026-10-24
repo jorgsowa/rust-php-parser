@@ -949,6 +949,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     let first_ref = parser.eat(TokenKind::Ampersand);
     let first = expr::parse_expr(parser);
 
+    let key_by_ref = first_ref.is_some() && parser.check(TokenKind::FatArrow);
     let (key, value, by_ref_span) = if parser.eat(TokenKind::FatArrow).is_some() {
         if let Some(amp) = first_ref {
             parser.forbid(
@@ -1020,6 +1021,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
             kind: StmtKind::Foreach(parser.alloc({
                 let mut built = ForeachStmt::new(collection, value, body);
                 built.key = key;
+                built.key_by_ref = key_by_ref;
                 built.by_ref = by_ref;
                 built.by_ref_span = by_ref_span;
                 built.uses_alternative = true;
@@ -1039,6 +1041,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
         kind: StmtKind::Foreach(parser.alloc({
             let mut built = ForeachStmt::new(collection, value, body);
             built.key = key;
+            built.key_by_ref = key_by_ref;
             built.by_ref = by_ref;
             built.by_ref_span = by_ref_span;
             built.uses_alternative = false;

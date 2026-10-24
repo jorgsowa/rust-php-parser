@@ -68,6 +68,13 @@ PHP Fatal error:  Cannot use "static" as method modifier in trait alias in Stand
                             }
                           },
                           "new_modifier": null,
+                          "invalid_modifier": {
+                            "name": "static",
+                            "span": {
+                              "start": 32,
+                              "end": 38
+                            }
+                          },
                           "new_name": null
                         }
                       },

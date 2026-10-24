@@ -75,7 +75,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
                 });
             } else if parser.eat(TokenKind::As).is_some() {
                 // Alias: TraitName::method as [visibility] [newName];
-                let (new_modifier, is_final, new_name) = parse_alias_rhs(parser);
+                let (new_modifier, is_final, invalid_modifier, new_name) = parse_alias_rhs(parser);
                 parser.expect_member_end();
                 let span = parser.span_from(start);
                 adaptations.push(TraitAdaptation {
@@ -84,6 +84,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
                         method,
                         new_modifier,
                         is_final,
+                        invalid_modifier,
                         new_name,
                     },
                     span,
@@ -100,7 +101,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
         } else if parser.eat(TokenKind::As).is_some() {
             // Unqualified alias: `method as [visibility] [newName];`
             // first_name already is the method Name — use it directly.
-            let (new_modifier, is_final, new_name) = parse_alias_rhs(parser);
+            let (new_modifier, is_final, invalid_modifier, new_name) = parse_alias_rhs(parser);
             parser.expect_member_end();
             let span = parser.span_from(start);
             adaptations.push(TraitAdaptation {
@@ -109,6 +110,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
                     method: first_name,
                     new_modifier,
                     is_final,
+                    invalid_modifier,
                     new_name,
                 },
                 span,
@@ -130,7 +132,12 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
 /// Parse the right-hand side of an `as` alias: `[visibility | final] [newName]`
 fn parse_alias_rhs<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
-) -> (Option<Visibility>, bool, Option<Name<'arena, 'src>>) {
+) -> (
+    Option<Visibility>,
+    bool,
+    Option<Ident<'src>>,
+    Option<Name<'arena, 'src>>,
+) {
     let is_final = parser.check(TokenKind::Final);
     if is_final {
         let span = parser.advance().span;
@@ -154,6 +161,7 @@ fn parse_alias_rhs<'arena, 'src>(
     };
     // Other member modifiers parse here but cannot apply to an alias.
     let mut has_modifier = is_final || new_modifier.is_some();
+    let mut invalid_modifier = None;
     if !has_modifier {
         let error = match parser.current_kind() {
             TokenKind::Static | TokenKind::Abstract => Some((
@@ -170,8 +178,10 @@ fn parse_alias_rhs<'arena, 'src>(
             _ => None,
         };
         if let Some((rule, message)) = error {
+            let text = parser.current_text();
             let span = parser.advance().span;
             parser.forbid(rule, message, span);
+            invalid_modifier = Some(Ident::new(text, span));
             has_modifier = true;
         }
     }
@@ -184,5 +194,5 @@ fn parse_alias_rhs<'arena, 'src>(
         parser.error_expected("identifier");
     }
 
-    (new_modifier, is_final, new_name)
+    (new_modifier, is_final, invalid_modifier, new_name)
 }

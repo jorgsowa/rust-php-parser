@@ -71,6 +71,7 @@ PHP Fatal error:  get hook of property A::$a must not have a parameter list in S
                       },
                       "by_ref": false,
                       "params": [],
+                      "empty_param_list": true,
                       "attributes": [],
                       "span": {
                         "start": 32,

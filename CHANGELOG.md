@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `ForeachStmt::key_by_ref` for a key taken by reference, `invalid_modifier` on a trait alias for `static`, `abstract` or `readonly`, and `PropertyHook::empty_param_list` for a hook written with `()` (`php-ast`).
+
+### Changed
+
+- `new Foo(...)` and `#[Foo(...)]` keep the `...` as an `ArgKind::SpreadPlaceholder` argument instead of no arguments (`php-rs-parser`).
+
+### Fixed
+
+- The printer keeps PHP's error instead of printing valid code for a foreach key taken by reference, a trait alias with `static`, `abstract` or `readonly`, `new Foo(...)`, `#[Foo(...)]`, a property hook with an empty `()`, a redeclared hook spelled in another case, such as `set {} SET {}`, and, when given the source, a destructuring target that mixes `list()` and `[]` (`php-printer`).
+
 ## [0.26.0] - 2026-10-24
 
 Error messages and recovery follow PHP more closely, spans are ordered and stay inside their parent, and the printer keeps invalid code invalid.

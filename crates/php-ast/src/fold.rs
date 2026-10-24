@@ -303,6 +303,7 @@ pub fn fold_stmt<'new, 'src, F: Fold<'src> + ?Sized>(
             let new_fe = arena.alloc(ForeachStmt {
                 expr: folder.fold_expr(arena, &fe.expr),
                 key: fe.key.as_ref().map(|k| folder.fold_expr(arena, k)),
+                key_by_ref: fe.key_by_ref,
                 value: folder.fold_expr(arena, &fe.value),
                 by_ref: fe.by_ref,
                 by_ref_span: fe.by_ref_span,
@@ -830,7 +831,9 @@ pub fn fold_property_hook<'new, 'src, F: Fold<'src> + ?Sized>(
         modifiers: hook.modifiers,
         by_ref: hook.by_ref,
         params: fold_params(folder, arena, &hook.params),
+        empty_param_list: hook.empty_param_list,
         attributes: fold_attrs(folder, arena, &hook.attributes),
+        name_span: hook.name_span,
         span: hook.span,
     }
 }
@@ -968,12 +971,14 @@ pub fn fold_trait_adaptation<'new, 'src, F: Fold<'src> + ?Sized>(
             method,
             new_modifier,
             is_final,
+            invalid_modifier,
             new_name,
         } => TraitAdaptationKind::Alias {
             trait_name: trait_name.as_ref().map(|n| folder.fold_name(arena, n)),
             method: folder.fold_name(arena, method),
             new_modifier: *new_modifier,
             is_final: *is_final,
+            invalid_modifier: *invalid_modifier,
             new_name: new_name.as_ref().map(|n| folder.fold_name(arena, n)),
         },
     };

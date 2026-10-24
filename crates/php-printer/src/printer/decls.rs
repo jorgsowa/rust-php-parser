@@ -313,7 +313,7 @@ impl<'src> Printer<'src> {
         self.w("{");
         self.newline();
         self.indent();
-        for hook in hooks.iter() {
+        for (i, hook) in hooks.iter().enumerate() {
             self.flush_leading_comments(hook.span.start);
             self.write_indent();
             self.print_attributes(&hook.attributes);
@@ -323,12 +323,22 @@ impl<'src> Printer<'src> {
             if hook.by_ref {
                 self.w("&");
             }
-            match hook.kind {
-                PropertyHookKind::Get => self.w("get"),
-                PropertyHookKind::Set => self.w("set"),
-                _ => self.unsupported("property hook"),
-            }
-            if !hook.params.is_empty() {
+            let name = match hook.kind {
+                PropertyHookKind::Get => "get",
+                PropertyHookKind::Set => "set",
+                _ => {
+                    self.unsupported("property hook");
+                    ""
+                }
+            };
+            // PHP names a redeclared hook as written, so a repeated one keeps its spelling.
+            let written = self
+                .source
+                .get(hook.name_span.start as usize..hook.name_span.end as usize)
+                .filter(|w| w.eq_ignore_ascii_case(name))
+                .filter(|_| hooks[..i].iter().any(|h| h.kind == hook.kind));
+            self.w(written.unwrap_or(name));
+            if !hook.params.is_empty() || hook.empty_param_list {
                 self.w("(");
                 self.print_params(&hook.params);
                 self.w(")");
@@ -422,6 +432,7 @@ impl<'src> Printer<'src> {
                         method,
                         new_modifier,
                         is_final,
+                        invalid_modifier,
                         new_name,
                     } => {
                         if let Some(tn) = trait_name {
@@ -436,6 +447,10 @@ impl<'src> Printer<'src> {
                         }
                         if *is_final {
                             self.w(" final");
+                        }
+                        if let Some(modifier) = invalid_modifier.and_then(|m| m.as_str()) {
+                            self.w(" ");
+                            self.w(&modifier.to_ascii_lowercase());
                         }
                         if let Some(name) = new_name {
                             self.w(" ");

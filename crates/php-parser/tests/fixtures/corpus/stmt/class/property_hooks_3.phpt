@@ -69,6 +69,7 @@ PHP Fatal error:  get hook of property Test::$prop must not have a parameter lis
                       },
                       "by_ref": false,
                       "params": [],
+                      "empty_param_list": true,
                       "attributes": [],
                       "span": {
                         "start": 46,

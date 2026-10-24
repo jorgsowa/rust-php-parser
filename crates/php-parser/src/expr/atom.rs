@@ -35,7 +35,8 @@ const CAST_KEYWORDS: &[(&str, CastKind)] = &[
 /// Result of parsing an argument list — either regular args or a `(...)` callable marker.
 pub(crate) enum ArgListResult<'arena, 'src> {
     Args(ArenaVec<'arena, Arg<'arena, 'src>>),
-    CallableMarker,
+    /// The span of the `...`.
+    CallableMarker(Span),
 }
 
 /// [`parse_atom`] for the operand of a variable-variable `$`, which recurses
@@ -914,7 +915,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             };
             if parser.check(TokenKind::LeftParen) {
                 match parse_arg_list_or_callable(parser) {
-                    ArgListResult::CallableMarker => {
+                    ArgListResult::CallableMarker(_) => {
                         // exit(...) - first class callable
                         let span = parser.span_from(token.span.start);
                         parser.require_version(PhpVersion::Php84, "exit function call", span);
@@ -998,7 +999,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 };
                 let open_paren_start = parser.current_span().start;
                 match parse_arg_list_or_callable(parser) {
-                    ArgListResult::CallableMarker => {
+                    ArgListResult::CallableMarker(_) => {
                         // clone(...) — first-class callable (PHP 8.5)
                         parser.require_version(
                             PhpVersion::Php85,
@@ -1320,13 +1321,13 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                     reject_pfa_placeholders_in_new(parser, &args);
                     args
                 }
-                ArgListResult::CallableMarker => {
+                ArgListResult::CallableMarker(ellipsis) => {
                     parser.forbid(
                         ForbiddenRule::ClosureForNew,
                         "Cannot create Closure for new expression",
                         parser.span_from(paren_start),
                     );
-                    parser.alloc_vec()
+                    callable_marker_arg(parser, ellipsis)
                 }
             }
         } else {
@@ -1495,13 +1496,13 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
                 reject_pfa_placeholders_in_new(parser, &args);
                 args
             }
-            ArgListResult::CallableMarker => {
+            ArgListResult::CallableMarker(ellipsis) => {
                 parser.forbid(
                     ForbiddenRule::ClosureForNew,
                     "Cannot create Closure for new expression",
                     parser.span_from(paren_start),
                 );
-                parser.alloc_vec()
+                callable_marker_arg(parser, ellipsis)
             }
         }
     } else {
@@ -2028,6 +2029,16 @@ fn isset_target_valid(kind: &ExprKind<'_, '_>) -> bool {
 // =============================================================================
 
 /// Parse an argument list `(arg, arg, ...)` or detect `(...)` first-class callable syntax.
+/// The `...` of a `(...)` that PHP rejects, kept as a placeholder so the error survives printing.
+pub(crate) fn callable_marker_arg<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    ellipsis: Span,
+) -> ArenaVec<'arena, Arg<'arena, 'src>> {
+    let mut args = parser.alloc_vec_with_capacity(1);
+    args.push(Arg::new(None, ArgKind::SpreadPlaceholder, ellipsis));
+    args
+}
+
 pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
 ) -> ArgListResult<'arena, 'src> {
@@ -2039,7 +2050,7 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
         parser.require_version(PhpVersion::Php81, "first-class callable syntax", span);
         parser.advance(); // consume ...
         parser.advance(); // consume )
-        return ArgListResult::CallableMarker;
+        return ArgListResult::CallableMarker(span);
     }
 
     let mut args = parser.alloc_vec_with_capacity(4);
@@ -2268,7 +2279,7 @@ pub(super) fn parse_function_call<'arena, 'src>(
     let start = callee.span.start;
 
     match parse_arg_list_or_callable(parser) {
-        ArgListResult::CallableMarker => {
+        ArgListResult::CallableMarker(_) => {
             let span = parser.span_from(start);
             Expr {
                 kind: ExprKind::CallableCreate(CallableCreateExpr {

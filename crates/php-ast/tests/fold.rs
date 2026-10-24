@@ -961,6 +961,7 @@ fn fold_trait_adaptation_override_is_dispatched() {
             },
             new_modifier: None,
             is_final: false,
+            invalid_modifier: None,
             new_name: Some(Name::Simple {
                 value: "bar",
                 span: Span::DUMMY,

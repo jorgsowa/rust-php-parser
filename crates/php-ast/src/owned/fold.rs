@@ -315,6 +315,7 @@ fn fold_owned_stmt_kind<F: OwnedFold + ?Sized>(folder: &mut F, k: StmtKind) -> S
             StmtKind::Foreach(Box::new(ForeachStmt {
                 expr: folder.fold_expr(s.expr),
                 key: s.key.map(|k| folder.fold_expr(k)),
+                key_by_ref: s.key_by_ref,
                 value: folder.fold_expr(s.value),
                 by_ref: s.by_ref,
                 by_ref_span: s.by_ref_span,
@@ -785,7 +786,9 @@ pub fn fold_owned_property_hook<F: OwnedFold + ?Sized>(
         modifiers: hook.modifiers,
         by_ref: hook.by_ref,
         params: fold_owned_params(folder, hook.params),
+        empty_param_list: hook.empty_param_list,
         attributes: fold_owned_attrs(folder, hook.attributes),
+        name_span: hook.name_span,
         span: hook.span,
     }
 }
@@ -893,12 +896,14 @@ pub fn fold_owned_trait_adaptation<F: OwnedFold + ?Sized>(
                 method,
                 new_modifier,
                 is_final,
+                invalid_modifier,
                 new_name,
             } => TraitAdaptationKind::Alias {
                 trait_name: trait_name.map(|n| folder.fold_name(n)),
                 method: folder.fold_name(method),
                 new_modifier,
                 is_final,
+                invalid_modifier,
                 new_name: new_name.map(|n| folder.fold_name(n)),
             },
         },

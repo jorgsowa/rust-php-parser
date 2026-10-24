@@ -478,3 +478,54 @@ fn sections_for(name: &str, outputs: &[String], skip_empty: bool) -> Vec<Section
     }
     sections
 }
+
+/// Version of the `php` binary on `PATH`, or `None` when PHP is not installed.
+#[allow(dead_code)]
+pub fn installed_php() -> Option<Version> {
+    let out = std::process::Command::new("php")
+        .args(["-r", "echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION;"])
+        .output()
+        .ok()?;
+    let ver = String::from_utf8_lossy(&out.stdout);
+    let (maj, min) = ver.trim().split_once('.')?;
+    Some((maj.parse().ok()?, min.parse().ok()?))
+}
+
+#[allow(dead_code)]
+pub fn strip_stack_trace(s: &str) -> String {
+    let mut lines: Vec<&str> = s.lines().collect();
+    while let Some(last) = lines.last() {
+        if last.starts_with('#') || *last == "Stack trace:" {
+            lines.pop();
+        } else {
+            break;
+        }
+    }
+    lines.join("\n")
+}
+
+#[allow(dead_code)]
+pub fn normalize_quotes(s: &str) -> String {
+    s.replace('\'', "\"")
+}
+
+/// The error `php -l` reports for `code`, without its stack trace, or `None` when it passes.
+#[allow(dead_code)]
+pub fn php_lint(code: &str) -> Option<String> {
+    use std::io::Write;
+    let mut child = std::process::Command::new("php")
+        .arg("-l")
+        .stdin(std::process::Stdio::piped())
+        .stderr(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::null())
+        .spawn()
+        .expect("failed to spawn php");
+    child
+        .stdin
+        .take()
+        .unwrap()
+        .write_all(code.as_bytes())
+        .unwrap();
+    let out = child.wait_with_output().unwrap();
+    (!out.status.success()).then(|| strip_stack_trace(String::from_utf8_lossy(&out.stderr).trim()))
+}

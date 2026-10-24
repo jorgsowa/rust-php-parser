@@ -317,6 +317,9 @@ pub struct ForeachStmt<'arena, 'src> {
     pub expr: Expr<'arena, 'src>,
     /// Key target in `$k => $v`.
     pub key: Option<Expr<'arena, 'src>>,
+    /// `true` for a key taken by reference, `foreach ($a as &$k => $v)`, which PHP rejects.
+    #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
+    pub key_by_ref: bool,
     /// Value target.
     pub value: Expr<'arena, 'src>,
     /// `true` when the value is taken by reference: `foreach ($a as &$v)`.
@@ -346,6 +349,7 @@ impl<'arena, 'src> ForeachStmt<'arena, 'src> {
         Self {
             expr,
             key: None,
+            key_by_ref: false,
             value,
             by_ref: false,
             by_ref_span: None,

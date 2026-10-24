@@ -114,6 +114,8 @@ pub(crate) struct Printer<'src> {
     pub(crate) doc_comment_node_start: Option<u32>,
     /// Set once a comment has broken the method chain being printed onto continuation lines.
     pub(crate) in_chain_continuation: bool,
+    /// Set inside a destructuring target that mixes `list()` and `[]`, which keeps both spellings.
+    pub(crate) keep_list_spelling: bool,
 }
 
 impl<'src> Printer<'src> {
@@ -142,6 +144,7 @@ impl<'src> Printer<'src> {
             at_tail: true,
             doc_comment_node_start: None,
             in_chain_continuation: false,
+            keep_list_spelling: false,
         }
     }
 

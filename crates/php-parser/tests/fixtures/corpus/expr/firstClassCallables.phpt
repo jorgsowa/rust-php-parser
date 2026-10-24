@@ -423,7 +423,16 @@ PHP Fatal error:  Cannot create Closure as attribute argument in Standard input 
                   "end": 71
                 }
               },
-              "args": [],
+              "args": [
+                {
+                  "name": null,
+                  "kind": "SpreadPlaceholder",
+                  "span": {
+                    "start": 72,
+                    "end": 75
+                  }
+                }
+              ],
               "span": {
                 "start": 68,
                 "end": 76

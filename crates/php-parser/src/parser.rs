@@ -2479,14 +2479,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                             }
                             args
                         }
-                        crate::expr::ArgListResult::CallableMarker => {
+                        crate::expr::ArgListResult::CallableMarker(ellipsis) => {
                             // PHP: "Cannot create Closure as attribute argument".
                             self.forbid(
                                 ForbiddenRule::AttributeArgumentClosure,
                                 "Cannot create Closure as attribute argument",
                                 self.span_from(paren_start),
                             );
-                            self.alloc_vec()
+                            crate::expr::callable_marker_arg(self, ellipsis)
                         }
                     }
                 } else {

@@ -1222,6 +1222,13 @@ PHP Parse error:  syntax error, unexpected token "readonly", expecting identifie
                                       }
                                     },
                                     "new_modifier": null,
+                                    "invalid_modifier": {
+                                      "name": "readonly",
+                                      "span": {
+                                        "start": 395,
+                                        "end": 403
+                                      }
+                                    },
                                     "new_name": null
                                   }
                                 },
