@@ -1433,6 +1433,20 @@ fn literal_value_type(value: &Expr<'_, '_>) -> Option<&'static str> {
         ExprKind::UnaryPrefix(u) if matches!(u.op, UnaryPrefixOp::Negate | UnaryPrefixOp::Plus) => {
             literal_value_type(u.operand).filter(|t| matches!(*t, "int" | "float"))
         }
+        ExprKind::Array(elements) => elements
+            .iter()
+            .all(|element| {
+                element
+                    .key
+                    .as_ref()
+                    .is_none_or(|k| literal_value_type(k).is_some())
+                    && match &element.kind {
+                        ArrayElementKind::Value(v) => literal_value_type(v).is_some(),
+                        ArrayElementKind::Spread(v) => literal_value_type(v) == Some("array"),
+                        _ => false,
+                    }
+            })
+            .then_some("array"),
         _ => None,
     }
 }
@@ -1454,10 +1468,141 @@ fn type_accepts_literal(ty: &TypeHint<'_, '_>, value: &Expr<'_, '_>, value_type:
             BuiltinType::True => matches!(value.kind, ExprKind::Bool(true)),
             BuiltinType::False => matches!(value.kind, ExprKind::Bool(false)),
             BuiltinType::Null => value_type == "null",
+            BuiltinType::Array | BuiltinType::Iterable => value_type == "array",
             _ => false,
         },
         _ => false,
     }
+}
+
+/// The declaration a typed default value belongs to: a parameter or a property, by name.
+pub(super) enum DefaultOwner<'a> {
+    Param(&'a str),
+    Property(&'a str),
+}
+
+/// Report a literal default value that a parameter's or property's type does not accept.
+pub(super) fn check_typed_default(
+    parser: &mut Parser<'_, '_>,
+    ty: &TypeHint<'_, '_>,
+    value: &Expr<'_, '_>,
+    owner: DefaultOwner<'_>,
+) {
+    let Some(value_type) = literal_value_type(value) else {
+        return;
+    };
+    // These types are reported on their own.
+    if matches!(
+        ty.kind,
+        TypeHintKind::Keyword(
+            BuiltinType::Void | BuiltinType::Never | BuiltinType::Static,
+            _
+        )
+    ) {
+        return;
+    }
+    let is_intersection = matches!(ty.kind, TypeHintKind::Intersection(_));
+    let accepted = match (&owner, value_type) {
+        // A null default makes a parameter's type nullable, except an intersection in PHP 8.1.
+        (DefaultOwner::Param(_), "null") => {
+            !(is_intersection && parser.version == PhpVersion::Php81)
+        }
+        _ => type_accepts_literal(ty, value, value_type),
+    };
+    if accepted {
+        return;
+    }
+    let type_name = parser.type_display(ty);
+    let message = match owner {
+        DefaultOwner::Property(_) if value_type == "null" && !is_intersection => {
+            let nullable = if type_name.contains('|') {
+                format!("{type_name}|null")
+            } else {
+                format!("?{type_name}")
+            };
+            format!("Default value for property of type {type_name} may not be null. Use the nullable type {nullable} to allow null default value")
+        }
+        _ if parser.version < PhpVersion::Php80 => {
+            let Some(message) = default_type_message_74(parser, ty, &owner) else {
+                return;
+            };
+            message
+        }
+        DefaultOwner::Param(name) => {
+            format!("Cannot use {value_type} as default value for parameter ${name} of type {type_name}")
+        }
+        DefaultOwner::Property(name) => {
+            let value_type = match &value.kind {
+                ExprKind::Bool(b) if parser.version >= PhpVersion::Php83 => {
+                    if *b {
+                        "true"
+                    } else {
+                        "false"
+                    }
+                }
+                _ => value_type,
+            };
+            let class = parser.class_member_prefix();
+            format!("Cannot use {value_type} as default value for property {class}${name} of type {type_name}")
+        }
+    };
+    parser.forbid(ForbiddenRule::DefaultValueType, message, value.span);
+}
+
+/// PHP 7.4's message for a non-null default value its single, possibly nullable, type rejects.
+fn default_type_message_74(
+    parser: &Parser<'_, '_>,
+    ty: &TypeHint<'_, '_>,
+    owner: &DefaultOwner<'_>,
+) -> Option<String> {
+    let ty = match &ty.kind {
+        TypeHintKind::Nullable(inner) => inner,
+        _ => ty,
+    };
+    let builtin = match &ty.kind {
+        TypeHintKind::Keyword(builtin, _) => Some(*builtin),
+        TypeHintKind::Named(_) => None,
+        _ => return None,
+    };
+    let is_class = matches!(
+        builtin,
+        None | Some(BuiltinType::Self_ | BuiltinType::Parent_)
+    );
+    Some(match owner {
+        DefaultOwner::Param(_) => {
+            let rule = match builtin {
+                _ if is_class => "a class type can only be NULL",
+                Some(BuiltinType::Int) => "a int type can only be int or NULL",
+                Some(BuiltinType::Float) => "a float type can only be float, integer, or NULL",
+                Some(BuiltinType::String) => "a string type can only be string or NULL",
+                Some(BuiltinType::Bool) => "a bool type can only be bool or NULL",
+                Some(BuiltinType::Array) => "array type can only be an array or NULL",
+                Some(BuiltinType::Iterable) => "iterable type can only be an array or NULL",
+                Some(BuiltinType::Callable) => "callable type can only be NULL",
+                Some(BuiltinType::Object) => "an object type can only be NULL",
+                _ => return None,
+            };
+            format!("Default value for parameters with {rule}")
+        }
+        DefaultOwner::Property(_) => {
+            let type_name = parser.type_display(ty);
+            if is_class {
+                return Some(format!(
+                    "Property of type {type_name} may not have default value"
+                ));
+            }
+            let allowed = match builtin {
+                Some(BuiltinType::Int) => "int",
+                Some(BuiltinType::Float) => "float or int",
+                Some(BuiltinType::String) => "string",
+                Some(BuiltinType::Bool) => "bool",
+                Some(BuiltinType::Array | BuiltinType::Iterable) => "an array",
+                Some(BuiltinType::Object) => "object",
+                _ => return None,
+            };
+            format!("Default value for property of type {type_name} can only be {allowed}")
+        }
+    })
 }
 
 /// Report a literal value that a typed class constant's type does not accept.
@@ -2109,6 +2254,9 @@ pub(super) fn parse_property_member<'arena, 'src>(
         // is not consumed as part of the default expression.
         let e = parser.with_no_brace_subscript(expr::parse_expr);
         expr::check_const_expr(parser, &e, false);
+        if let (Some(ty), Some(name)) = (&type_hint, prop_name.as_str()) {
+            check_typed_default(parser, ty, &e, DefaultOwner::Property(name));
+        }
         Some(e)
     } else {
         None
@@ -2317,6 +2465,13 @@ pub(super) fn parse_property_member<'arena, 'src>(
             let pdefault = if parser.eat(TokenKind::Equals).is_some() {
                 let e = expr::parse_expr(parser);
                 expr::check_const_expr(parser, &e, false);
+                if let (ClassMemberKind::Property(first), Some(name)) =
+                    (&members[first_index].kind, pname.as_str())
+                {
+                    if let Some(ty) = &first.type_hint {
+                        check_typed_default(parser, ty, &e, DefaultOwner::Property(name));
+                    }
+                }
                 Some(e)
             } else {
                 None

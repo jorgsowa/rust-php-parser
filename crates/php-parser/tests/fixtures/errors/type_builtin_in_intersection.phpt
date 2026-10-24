@@ -41,7 +41,7 @@ Type false cannot be part of an intersection type
 'DNF types' requires PHP 8.2 or higher
 Type bool cannot be part of an intersection type
 'intersection types' requires PHP 8.1 or higher
-Type Traversable|array cannot be part of an intersection type
+Type iterable cannot be part of an intersection type
 'intersection types' requires PHP 8.1 or higher
 Type object cannot be part of an intersection type
 'intersection types' requires PHP 8.1 or higher
@@ -76,7 +76,7 @@ Type false cannot be part of an intersection type
 'DNF types' requires PHP 8.2 or higher
 Type bool cannot be part of an intersection type
 'intersection types' requires PHP 8.1 or higher
-Type Traversable|array cannot be part of an intersection type
+Type iterable cannot be part of an intersection type
 'intersection types' requires PHP 8.1 or higher
 Type object cannot be part of an intersection type
 'intersection types' requires PHP 8.1 or higher
@@ -102,7 +102,7 @@ Type null cannot be part of an intersection type
 Type false cannot be part of an intersection type
 'DNF types' requires PHP 8.2 or higher
 Type bool cannot be part of an intersection type
-Type Traversable|array cannot be part of an intersection type
+Type iterable cannot be part of an intersection type
 Type object cannot be part of an intersection type
 Type void cannot be part of an intersection type
 Type never cannot be part of an intersection type

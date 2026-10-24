@@ -1599,7 +1599,12 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 resolved
                     .unwrap_or_else(|| self.source[span.start as usize..span.end as usize].into())
             }
-            TypeHintKind::Keyword(BuiltinType::Iterable, _) => "Traversable|array".into(),
+            // From PHP 8.2 `iterable` is an alias of `Traversable|array`.
+            TypeHintKind::Keyword(BuiltinType::Iterable, _)
+                if self.version >= PhpVersion::Php82 =>
+            {
+                "Traversable|array".into()
+            }
             TypeHintKind::Keyword(builtin, _) => builtin.as_str().into(),
             TypeHintKind::Nullable(inner) => format!("?{}", self.type_display(inner)),
             TypeHintKind::Intersection(types) => types
@@ -1615,7 +1620,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         TypeHintKind::Intersection(_) => {
                             parts.push(format!("({})", self.type_display(t)));
                         }
-                        TypeHintKind::Keyword(BuiltinType::Iterable, _) => {
+                        TypeHintKind::Keyword(BuiltinType::Iterable, _)
+                            if self.version >= PhpVersion::Php82 =>
+                        {
                             parts.push("Traversable".into());
                             builtins.push(BuiltinType::Array);
                         }
@@ -1631,6 +1638,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 for builtin in [
                     BuiltinType::Static,
                     BuiltinType::Callable,
+                    BuiltinType::Iterable,
                     BuiltinType::Object,
                     BuiltinType::Array,
                     BuiltinType::String,

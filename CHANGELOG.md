@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `ForbiddenRule::UnexpectedCast` (`php-rs-parser`).
+- `ForbiddenRule::UnexpectedCast` and `ForbiddenRule::DefaultValueType` (`php-rs-parser`).
 - `ForeachStmt::key_by_ref` for a key taken by reference, `invalid_modifier` on a trait alias for `static`, `abstract` or `readonly`, and `PropertyHook::empty_param_list` for a hook written with `()` (`php-ast`).
 
 ### Changed
@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A literal default value that a parameter's or property's type rejects, as in `int $x = 'a'`, `array $a = 1`, `Foo $f = 1` or a property `int $p = null`, reports PHP's error for the target version, including PHP 7.4's wording and PHP 8.1's `Cannot use null as default value` for an intersection type. A typed class constant also checks array values, and messages spell `iterable` as `Traversable|array` only from PHP 8.2, as PHP does (`php-rs-parser`).
 - A number offset in simple interpolation with a misplaced `_`, as in `"$a[1_]"`, `"$a[1__2]"` or `"$a[0x_1]"`, or an `0o` octal before PHP 8.1, is an error, as in PHP (`php-rs-parser`).
 - A cast token where no cast can start, as in `foo(int)`, `if (int) {}` or, from PHP 8.5, `foo(void)`, reports PHP's `unexpected token "(int)"` (`php-rs-parser`).
 - An intersection type without parentheses in a union, as in `A&B|C $a` or `: A&B|C`, is a syntax error, as in PHP (`php-rs-parser`).

@@ -20,7 +20,7 @@ Type A|object|int|null contains both object and a class type, which is redundant
 'DNF types' requires PHP 8.2 or higher
 Type (A&B)|object contains both object and a class type, which is redundant
 'union types' requires PHP 8.0 or higher
-Type Traversable|Closure|object|array contains both object and a class type, which is redundant
+Type Closure|iterable|object contains both object and a class type, which is redundant
 'union types' requires PHP 8.0 or higher
 Type self|object contains both object and a class type, which is redundant
 'union types' requires PHP 8.0 or higher
@@ -34,7 +34,7 @@ Type A|object|int|null contains both object and a class type, which is redundant
 'intersection types' requires PHP 8.1 or higher
 'DNF types' requires PHP 8.2 or higher
 Type (A&B)|object contains both object and a class type, which is redundant
-Type Traversable|Closure|object|array contains both object and a class type, which is redundant
+Type Closure|iterable|object contains both object and a class type, which is redundant
 Type self|object contains both object and a class type, which is redundant
 Type parent|object contains both object and a class type, which is redundant
 Type static|object contains both object and a class type, which is redundant
@@ -43,7 +43,7 @@ Type A|object contains both object and a class type, which is redundant
 Type A|object|int|null contains both object and a class type, which is redundant
 'DNF types' requires PHP 8.2 or higher
 Type (A&B)|object contains both object and a class type, which is redundant
-Type Traversable|Closure|object|array contains both object and a class type, which is redundant
+Type Closure|iterable|object contains both object and a class type, which is redundant
 Type self|object contains both object and a class type, which is redundant
 Type parent|object contains both object and a class type, which is redundant
 Type static|object contains both object and a class type, which is redundant

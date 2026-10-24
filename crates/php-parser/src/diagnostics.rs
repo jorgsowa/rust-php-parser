@@ -353,6 +353,8 @@ forbidden_rules! {
     ClassConstantNamedClass = "class-constant-named-class", Compile;
     /// A typed class constant's value does not match its type.
     ClassConstantValueType = "class-constant-value-type", Compile;
+    /// A parameter's or property's literal default value does not match its type.
+    DefaultValueType = "default-value-type", Compile;
     /// A private class constant is `final`.
     PrivateFinalConstant = "private-final-constant", Compile;
     /// An interface constant is not public.
@@ -771,6 +773,7 @@ mod tests {
             ForbiddenRule::DuplicateClassConstant => &[("<?php class A { const X = 1; const X = 2; }", "X"),],
             ForbiddenRule::ClassConstantNamedClass => &[("<?php class A { const class = 1; }", "class"),],
             ForbiddenRule::ClassConstantValueType => &[("<?php class A { const int X = \"a\"; }", "\"a\""),],
+            ForbiddenRule::DefaultValueType => &[("<?php function f(int $x = \"a\") {}", "\"a\""), ("<?php class A { public int $x = null; }", "null"),],
             ForbiddenRule::PrivateFinalConstant => &[("<?php class A { final private const X = 1; }", "final private const X = 1;"), ("<?php enum E { final private const X = 1; }", "const"),],
             ForbiddenRule::InvalidInterfaceConstantModifier => &[("<?php interface I { private const X = 1; }", "private const X = 1;"),],
             ForbiddenRule::InvalidInterfaceMethodModifier => &[("<?php interface I { private function f(); }", "private function f();"), ("<?php interface I { final function f(); }", "final function f();"), ("<?php interface I { abstract function f(); }", "abstract function f();"),],
