@@ -1640,13 +1640,17 @@ pub(super) fn parse_method_member<'arena, 'src>(
         parser.missing_ident()
     };
 
-    parser.expect(TokenKind::LeftParen);
+    let open_paren = parser.expect(TokenKind::LeftParen);
     let was_in_constructor = parser.in_constructor;
     let is_constructor = method_name
         .as_str()
         .is_some_and(|n| n.eq_ignore_ascii_case("__construct"));
     parser.in_constructor = is_constructor;
-    let params = super::parse_param_list(parser);
+    let params = if open_paren.is_some() {
+        super::parse_param_list(parser)
+    } else {
+        parser.alloc_vec()
+    };
     parser.in_constructor = was_in_constructor;
     if is_constructor && (mods.is_abstract || in_interface) {
         for param in params.iter().filter(|p| is_promoted_param(p)) {
@@ -1666,7 +1670,9 @@ pub(super) fn parse_method_member<'arena, 'src>(
             );
         }
     }
-    parser.expect(TokenKind::RightParen);
+    if open_paren.is_some() {
+        parser.expect(TokenKind::RightParen);
+    }
 
     let return_type = if parser.eat(TokenKind::Colon).is_some() {
         Some(parser.parse_type_hint())

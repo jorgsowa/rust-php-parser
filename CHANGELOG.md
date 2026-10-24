@@ -47,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `<?php` or `<?=` inside PHP code lexes as `<`, so it is a syntax error instead of being ignored (`php-lexer`).
 - A `?>` where a statement is expected, as in `if ($a) ?>x<?php`, is the empty body and the HTML after it runs unconditionally, as in PHP (`php-rs-parser`).
 - Printing keeps whether a `declare(encoding=...)` or `declare(strict_types=...)` after an empty statement is valid, instead of making a `?>` that ends a statement before one an error (`php-printer`).
+- A method missing its `(` has no parameters instead of an empty placeholder (`php-rs-parser`).
 
 ## [0.25.1] - 2026-10-22
 

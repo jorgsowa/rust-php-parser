@@ -8,9 +8,7 @@ namespace\Foo::X;
 expected class name, found '\'
 expected class member, found '::'
 expected method name, found '\'
-expected variable, found '('
-expected identifier, found ')'
-expected class member, found ';'
+expected class member, found '('
 expected class member, found 'new'
 expected 'function' or 'const', found 'namespace'
 expected class member, found '::'
@@ -36,37 +34,7 @@ PHP Parse error:  syntax error, unexpected '\' (T_NS_SEPARATOR), expecting ident
                 "Method": {
                   "name": null,
                   "by_ref": false,
-                  "params": [
-                    {
-                      "name": null,
-                      "type_hint": {
-                        "kind": {
-                          "Named": {
-                            "parts": [
-                              "bar"
-                            ],
-                            "kind": "FullyQualified",
-                            "span": {
-                              "start": 30,
-                              "end": 34
-                            }
-                          }
-                        },
-                        "span": {
-                          "start": 30,
-                          "end": 34
-                        }
-                      },
-                      "default": null,
-                      "by_ref": false,
-                      "variadic": false,
-                      "attributes": [],
-                      "span": {
-                        "start": 30,
-                        "end": 34
-                      }
-                    }
-                  ],
+                  "params": [],
                   "return_type": null,
                   "body": null,
                   "attributes": []
@@ -74,7 +42,7 @@ PHP Parse error:  syntax error, unexpected '\' (T_NS_SEPARATOR), expecting ident
               },
               "span": {
                 "start": 22,
-                "end": 34
+                "end": 30
               }
             }
           ],

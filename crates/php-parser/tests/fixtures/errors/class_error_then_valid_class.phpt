@@ -35,20 +35,7 @@ PHP Parse error:  syntax error, unexpected token "}" in Standard input code on l
                     "visibility": "Public"
                   },
                   "by_ref": false,
-                  "params": [
-                    {
-                      "name": null,
-                      "type_hint": null,
-                      "default": null,
-                      "by_ref": false,
-                      "variadic": false,
-                      "attributes": [],
-                      "span": {
-                        "start": 33,
-                        "end": 33
-                      }
-                    }
-                  ],
+                  "params": [],
                   "return_type": null,
                   "body": null,
                   "attributes": []
