@@ -1562,9 +1562,13 @@ pub(crate) fn parse_closure<'arena, 'src>(
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
     let saved_class_keywords = parser.unresolve_class_keywords();
 
-    parser.expect(TokenKind::LeftParen);
-    let params = stmt::parse_param_list(parser);
-    parser.expect(TokenKind::RightParen);
+    let params = if parser.expect(TokenKind::LeftParen).is_some() {
+        let params = stmt::parse_param_list(parser);
+        parser.expect(TokenKind::RightParen);
+        params
+    } else {
+        parser.alloc_vec()
+    };
 
     // use clause
     let use_vars = if parser.eat(TokenKind::Use).is_some() {
