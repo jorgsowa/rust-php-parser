@@ -133,11 +133,12 @@ pub fn prefix_binding_power(kind: TokenKind) -> Option<u8> {
     match kind {
         // `!` (boolean not) is the only prefix unary BELOW instanceof per PHP.
         TokenKind::Bang => Some(LOW_PREFIX_BP),
-        // All other prefix unaries (+u, -u, ~, ++, --, casts, @) sit
-        // ABOVE instanceof per PHP's precedence table; `clone` uses `CLONE_BP`.
+        // +u, -u, ~, casts and @ sit ABOVE instanceof per PHP's precedence table.
         TokenKind::Minus | TokenKind::Plus => Some(HIGH_PREFIX_BP),
         TokenKind::Tilde => Some(HIGH_PREFIX_BP),
-        TokenKind::PlusPlus | TokenKind::MinusMinus => Some(HIGH_PREFIX_BP),
+        // PHP's grammar gives `++`/`--` a variable, never a binary expression: `--$a ** 2`
+        // is `(--$a) ** 2`.
+        TokenKind::PlusPlus | TokenKind::MinusMinus => Some(CLONE_BP),
         _ => None,
     }
 }
@@ -145,7 +146,7 @@ pub fn prefix_binding_power(kind: TokenKind) -> Option<u8> {
 /// Right binding power for `!` (boolean not) — below `instanceof` per PHP.
 pub const LOW_PREFIX_BP: u8 = 41;
 
-/// Right binding power for high-tier prefix unaries (+u, -u, ~, ++, --,
+/// Right binding power for high-tier prefix unaries (+u, -u, ~,
 /// (cast), @) — above `instanceof` (45/46), below `**` (60).
 pub const HIGH_PREFIX_BP: u8 = 47;
 
