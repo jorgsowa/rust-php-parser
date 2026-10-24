@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A number offset in simple interpolation with a misplaced `_`, as in `"$a[1_]"`, `"$a[1__2]"` or `"$a[0x_1]"`, or an `0o` octal before PHP 8.1, is an error, as in PHP (`php-rs-parser`).
 - A cast token where no cast can start, as in `foo(int)`, `if (int) {}` or, from PHP 8.5, `foo(void)`, reports PHP's `unexpected token "(int)"` (`php-rs-parser`).
 - An intersection type without parentheses in a union, as in `A&B|C $a` or `: A&B|C`, is a syntax error, as in PHP (`php-rs-parser`).
 - A reserved keyword where PHP expects a class name, as in `new fn`, `new match`, `new array`, `catch (array $e)`, `extends fn` or `use fn;` in a class body, is a syntax error, and from PHP 8.1 `readonly` after `new` starts an anonymous class, so `new readonly;` reports the missing `class` and `new readonly readonly class {}` PHP's `Multiple readonly modifiers are not allowed` (`php-rs-parser`).

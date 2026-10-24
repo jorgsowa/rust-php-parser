@@ -151,6 +151,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                                 check_simple_offset(
                                     idx_str,
                                     Span::new(idx_offset, idx_end),
+                                    version,
                                     errors,
                                 );
 
@@ -414,6 +415,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                                 check_simple_offset(
                                     idx_str,
                                     Span::new(idx_offset, idx_end),
+                                    version,
                                     errors,
                                 );
                                 let index_expr =
@@ -782,26 +784,24 @@ fn is_utf8_continuation(b: u8) -> bool {
 
 /// Report an offset in `"$a[...]"` that PHP's lexer does not accept there: only a name, a
 /// `$variable` or an optionally negated number, with no quotes or whitespace.
-fn check_simple_offset(idx: &str, span: Span, errors: &mut Vec<ParseError>) {
+fn check_simple_offset(idx: &str, span: Span, version: PhpVersion, errors: &mut Vec<ParseError>) {
     let bytes = idx.as_bytes();
     let is_name_byte = |c: &u8| c.is_ascii_alphanumeric() || *c == b'_' || *c >= 0x80;
     let is_name =
         |b: &[u8]| b.first().is_some_and(|c| !c.is_ascii_digit()) && b.iter().all(is_name_byte);
+    // A `_` separates two digits, as in `1_000`; `1_`, `1__2` and `0x_1` end the number early.
+    let grouped = |rest: &[u8], digit: fn(&u8) -> bool| {
+        rest.split(|c| *c == b'_')
+            .all(|group| !group.is_empty() && group.iter().all(digit))
+    };
     let digits = bytes.strip_prefix(b"-").unwrap_or(bytes);
     let is_number = match digits {
-        [b'0', b'x' | b'X', rest @ ..] => {
-            !rest.is_empty() && rest.iter().all(|c| c.is_ascii_hexdigit() || *c == b'_')
+        [b'0', b'x' | b'X', rest @ ..] => grouped(rest, u8::is_ascii_hexdigit),
+        [b'0', b'b' | b'B', rest @ ..] => grouped(rest, |c| matches!(c, b'0' | b'1')),
+        [b'0', b'o' | b'O', rest @ ..] if version >= PhpVersion::Php81 => {
+            grouped(rest, |c| matches!(c, b'0'..=b'7'))
         }
-        [b'0', b'b' | b'B', rest @ ..] => {
-            !rest.is_empty() && rest.iter().all(|c| matches!(c, b'0' | b'1' | b'_'))
-        }
-        [b'0', b'o' | b'O', rest @ ..] => {
-            !rest.is_empty() && rest.iter().all(|c| matches!(c, b'0'..=b'7' | b'_'))
-        }
-        [first, ..] => {
-            first.is_ascii_digit() && digits.iter().all(|c| c.is_ascii_digit() || *c == b'_')
-        }
-        [] => false,
+        _ => grouped(digits, u8::is_ascii_digit),
     };
     let valid = is_number || is_name(bytes) || bytes.strip_prefix(b"$").is_some_and(is_name);
     if !valid {
