@@ -3,5 +3,6 @@
 ===print===
 <?php
 namespace App;
+
 var_dump(true, false, null, \true, \null);
 $a = true ? false : null;

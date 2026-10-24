@@ -3,6 +3,7 @@
 ===print===
 <?php
 namespace App;
+
 start:
 foo();
 goto start;

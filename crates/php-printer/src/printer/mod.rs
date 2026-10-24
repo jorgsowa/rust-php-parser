@@ -467,6 +467,7 @@ impl<'src> Printer<'src> {
             .iter()
             .rposition(|stmt| helpers::rejects_empty_stmt_before(stmt, self.php_version));
         let mut printed_any = false;
+        let mut after_declaration = false;
         for k in 0..stmts.len() {
             let i = imports.as_ref().map_or(k, |s| s.order[k]);
             let stmt = &stmts[i];
@@ -495,12 +496,14 @@ impl<'src> Printer<'src> {
             // When transitioning out of HTML mode the <?php + newline + indent
             // is emitted by print_stmt_inner, so skip the normal separators here.
             if printed_any && !self.in_html_mode {
-                let decl_min =
-                    if helpers::is_declaration(&stmt.kind) && self.blank_lines_upper_bound > 0 {
-                        1
-                    } else {
-                        0
-                    };
+                // A declaration gets a blank line on both sides.
+                let decl_min = if (after_declaration || helpers::is_declaration(&stmt.kind))
+                    && self.blank_lines_upper_bound > 0
+                {
+                    1
+                } else {
+                    0
+                };
                 let blank = if in_group.is_some_and(|g| k > g.start) {
                     decl_min
                 } else if !self.source.is_empty() {
@@ -541,6 +544,7 @@ impl<'src> Printer<'src> {
                 }
             }
             printed_any = true;
+            after_declaration = helpers::is_declaration(&stmt.kind);
         }
         if indent {
             self.dedent();

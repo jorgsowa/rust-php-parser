@@ -40,6 +40,7 @@ function h()
     return 1;
     ?>x<?php
 }
+
 while (1) {
     while (1) {
         break 2;

@@ -12,6 +12,7 @@ if ($a) {}
 
 function f()
 {}
+
 switch ($a) {
     case 1:
     case 2:

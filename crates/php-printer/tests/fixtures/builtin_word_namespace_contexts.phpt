@@ -21,6 +21,7 @@ class A
 
     public ?string\Y $q = null;
 }
+
 try {} catch (int\X|float\Y $e) {}
 $a = function(callable\X $x): never\Y {};
 $b = fn(bool\X $x): int\Y => 1;

@@ -9,6 +9,7 @@ function f()
 {
     /* in */
 }
+
 if ($a) {
     // x
 }

@@ -59,6 +59,7 @@ class C
         a as b;
     }
 }
+
 $o = new class {
     public $p;
 };

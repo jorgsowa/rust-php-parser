@@ -34,6 +34,7 @@ $d = 2; # hash
 /** doc */
 function g()
 {}
+
 $e = 3; // before close
 ?>
 html

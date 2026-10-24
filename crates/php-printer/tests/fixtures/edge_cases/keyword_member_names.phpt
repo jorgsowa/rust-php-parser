@@ -30,6 +30,7 @@ class A
 
     const FOREACH = 1;
 }
+
 $a->list();
 A::list();
 $a->class;
@@ -40,4 +41,5 @@ $a?->match;
 
 function enum()
 {}
+
 enum();

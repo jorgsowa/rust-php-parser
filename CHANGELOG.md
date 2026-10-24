@@ -73,6 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A heredoc line whose escapes decode to the closing label, as `\x45OT` in `<<<EOT`, prints with its first byte escaped instead of ending the heredoc early (`php-printer`).
 - A control character in a string, backtick or heredoc literal prints as `\xNN` instead of the raw byte, so `"a\0b"` prints as `"a\x00b"` instead of a single-quoted string holding a NUL, consistent with `\e`, `\f` and `\v` (`php-printer`).
 - An empty alternative-syntax body, as in `foreach ($a as &$v): endforeach;` or `if ($a): endif;`, prints without a blank line (`php-printer`).
+- A blank line follows a function, class-like or namespace declaration as it precedes one, instead of only before it (`php-printer`).
 - A function, method, closure or arrow function missing its `(` prints without `()`, so the printed code keeps PHP's error instead of becoming valid (`php-printer`).
 - A syntax error at the closing `}` of a `{$...}` interpolation, as in `"{$a->}"`, reports `found '}'` at the `}` instead of `found end of file` (`php-rs-parser`).
 - Recovery from an invalid class or enum member skips over a `{ ... }` block, so the block's `}` no longer ends the class, as in `public function @return f() {}` (`php-rs-parser`).

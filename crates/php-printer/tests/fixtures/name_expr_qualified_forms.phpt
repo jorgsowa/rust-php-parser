@@ -3,6 +3,7 @@
 ===print===
 <?php
 namespace App;
+
 \strlen($s);
 Foo\bar();
 namespace\baz();
