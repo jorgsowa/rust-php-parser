@@ -1072,7 +1072,16 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
             span: value.span,
         });
     }
-    if let Some(k) = &key {
+    if let Some(k) = key
+        .as_ref()
+        .filter(|k| matches!(k.kind, ExprKind::Array(_)))
+    {
+        parser.forbid(
+            ForbiddenRule::ListAsForeachKey,
+            "Cannot use list as key element",
+            k.span,
+        );
+    } else if let Some(k) = &key {
         expr::check_write_target(parser, k, false);
         expr::check_special_variable_write(parser, k, expr::WriteKind::Assign);
     }

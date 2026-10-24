@@ -81,9 +81,32 @@ fn is_valid_assignment_target(kind: &ExprKind<'_, '_>) -> bool {
     )
 }
 
+/// PHP's message for a write to the result of a call, as in `f() = 1`.
+fn call_result_write_message(kind: &ExprKind<'_, '_>) -> Option<&'static str> {
+    match kind {
+        ExprKind::FunctionCall(FunctionCallExpr { name, .. })
+        | ExprKind::CallableCreate(CallableCreateExpr {
+            kind: CallableCreateKind::Function(name),
+        }) if !is_clone_keyword(name) => Some("Can't use function return value in write context"),
+        ExprKind::MethodCall(_)
+        | ExprKind::NullsafeMethodCall(_)
+        | ExprKind::StaticMethodCall(_)
+        | ExprKind::StaticMethodCallDynamic(_)
+        | ExprKind::CallableCreate(CallableCreateExpr {
+            kind:
+                CallableCreateKind::Method { .. }
+                | CallableCreateKind::NullsafeMethod { .. }
+                | CallableCreateKind::StaticMethod { .. },
+        }) => Some("Can't use method return value in write context"),
+        _ => None,
+    }
+}
+
 /// Report an operand of `++` or `--` that PHP cannot write to.
 pub(crate) fn check_increment_operand(parser: &mut Parser<'_, '_>, operand: &Expr<'_, '_>) {
-    let (rule, message) = if !matches!(
+    let (rule, message) = if let Some(message) = call_result_write_message(&operand.kind) {
+        (ForbiddenRule::CallResultWrite, message)
+    } else if !matches!(
         operand.kind,
         ExprKind::Variable(_)
             | ExprKind::VariableVariable(_)
@@ -122,6 +145,8 @@ pub(crate) fn check_write_target(
     let (rule, message) = if let Some(error) = temporary_write_message(&target.kind, parser.version)
     {
         error
+    } else if let Some(message) = call_result_write_message(&target.kind) {
+        (ForbiddenRule::CallResultWrite, message)
     } else if has_nullsafe_link(&target.kind) {
         (
             ForbiddenRule::NullsafeWrite,
@@ -162,12 +187,17 @@ fn check_destructure_elements(parser: &mut Parser<'_, '_>, elems: &[ArrayElement
         match &value.kind {
             ExprKind::Omit => {}
             ExprKind::Array(nested) => check_destructure_elements(parser, nested),
-            kind if !is_valid_destructure_element(kind, parser.version) => parser.forbid(
-                ForbiddenRule::UnwritableDestructuringElement,
-                "Assignments can only happen to writable values",
-                el.value().span,
-            ),
-            _ => {}
+            kind => {
+                if let Some(message) = call_result_write_message(kind) {
+                    parser.forbid(ForbiddenRule::CallResultWrite, message, value.span);
+                } else if !is_valid_destructure_element(kind, parser.version) {
+                    parser.forbid(
+                        ForbiddenRule::UnwritableDestructuringElement,
+                        "Assignments can only happen to writable values",
+                        el.value().span,
+                    );
+                }
+            }
         }
     }
 }
@@ -1328,6 +1358,8 @@ fn parse_assign_continuation<'arena, 'src>(
             "Cannot use a destructuring pattern with a compound assignment operator",
             span,
         );
+    } else if let Some(message) = call_result_write_message(&lhs.kind) {
+        parser.forbid(ForbiddenRule::CallResultWrite, message, lhs.span);
     } else if !is_valid_assignment_target(&lhs.kind) {
         parser.forbid(
             ForbiddenRule::InvalidAssignTarget,

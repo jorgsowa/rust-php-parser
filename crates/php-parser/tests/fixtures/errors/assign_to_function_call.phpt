@@ -1,7 +1,7 @@
 ===source===
 <?php func() = $x;
 ===errors===
-Cannot use expression as assignment target.
+Can't use function return value in write context
 ===php_error===
 PHP Fatal error:  Can't use function return value in write context in Standard input code on line 1
 ===ast===

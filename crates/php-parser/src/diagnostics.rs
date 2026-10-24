@@ -493,6 +493,8 @@ forbidden_rules! {
     DuplicateMatchDefault = "duplicate-match-default", Compile;
     /// A `foreach` key is taken by reference.
     ReferenceKey = "reference-key", Compile;
+    /// A `foreach` key is a destructuring list.
+    ListAsForeachKey = "list-as-foreach-key", Compile;
     /// `catch` names `self`, `parent` or `static`.
     ClassKeywordInCatch = "class-keyword-in-catch", Compile;
     /// `parent::$x::get()` or `::set()` is called outside the matching hook.
@@ -535,6 +537,8 @@ forbidden_rules! {
     UnsetCast = "unset-cast", Compile;
     /// The result of a builtin such as `clone` is written to.
     BuiltinResultWrite = "builtin-result-write", Compile;
+    /// The result of a function or method call is written to, e.g. `f() = 1`.
+    CallResultWrite = "call-result-write", Compile;
     /// A temporary value is written to, e.g. `(1)[0] = 2`.
     TemporaryExpressionWrite = "temporary-expression-write", Compile;
     /// A nullsafe chain is written to.
@@ -729,9 +733,9 @@ mod tests {
             ForbiddenRule::InvalidAssignTarget => &[("<?php 1 = 2;", "="),],
             ForbiddenRule::CompoundAssignToDestructuring => &[("<?php [$a] += 1;", "+="),],
             ForbiddenRule::ReferenceAssignToDestructuring => &[("<?php [$a] = &$b;", "&"),],
-            ForbiddenRule::IncDecNonVariable => &[("<?php f()++;", "f()"),],
+            ForbiddenRule::IncDecNonVariable => &[("<?php A++;", "A"),],
             ForbiddenRule::InvalidDereference => &[("<?php echo 1[0];", "1"),],
-            ForbiddenRule::InvalidWriteContext => &[("<?php unset(f());", "f()"),],
+            ForbiddenRule::InvalidWriteContext => &[("<?php unset(A);", "A"),],
             ForbiddenRule::ListOutsideDestructuring => &[("<?php $x = list($a);", "list($a)"),],
             ForbiddenRule::EmptyArrayElement => &[("<?php $x = [1, , 2];", ","),],
             ForbiddenRule::ReferenceAssignNew => &[("<?php $x = &new A;", "new A"),],
@@ -829,6 +833,7 @@ mod tests {
             ForbiddenRule::DuplicateSwitchDefault => &[("<?php switch ($x) { default: default: }", "default"),],
             ForbiddenRule::DuplicateMatchDefault => &[("<?php match ($x) { default => 1, default => 2 };", "default"),],
             ForbiddenRule::ReferenceKey => &[("<?php foreach ($a as &$k => $v) {}", "&$k"),],
+            ForbiddenRule::ListAsForeachKey => &[("<?php foreach ($a as [$k] => $v) {}", "[$k]"),],
             ForbiddenRule::ClassKeywordInCatch => &[("<?php try {} catch (self $e) {}", "self"),],
             ForbiddenRule::InvalidParentHookCall => &[("<?php class A extends B { function f() { parent::$x::get(); } }", "parent::$x::get()"),],
             ForbiddenRule::StaticClassInConstantExpression => &[("<?php class A { const X = static::class; }", "static"),],
@@ -850,11 +855,12 @@ mod tests {
             ForbiddenRule::PositionalAfterNamedArgument => &[("<?php f(a: 1, 2);", "2"),],
             ForbiddenRule::UnsetCast => &[("<?php $x = (unset) 1;", "unset"),],
             ForbiddenRule::BuiltinResultWrite => &[("<?php (clone $a)->b = 1;", "(clone $a)->b"), ("<?php $x = &f(...);", "f(...)"),],
+            ForbiddenRule::CallResultWrite => &[("<?php f() = 1;", "f()"), ("<?php $a->f()++;", "$a->f()"), ("<?php unset(A::f());", "A::f()"), ("<?php [f(...)] = $a;", "f(...)"), ("<?php foreach ($a as $k => $b?->f()) {}", "$b?->f()"),],
             ForbiddenRule::TemporaryExpressionWrite => &[("<?php (1)[0] = 2;", "(1)[0]"), ("<?php (1)[0]++;", "(1)[0]"), ("<?php unset((1)[0]);", "(1)[0]"), ("<?php $x = &(1)[0];", "(1)[0]"),],
             ForbiddenRule::NullsafeWrite => &[("<?php $a?->b = 1;", "$a?->b"), ("<?php $a?->b++;", "$a?->b"), ("<?php unset($a?->b);", "$a?->b"),],
             ForbiddenRule::ReferenceToNullsafe => &[("<?php $x = &$a?->b;", "$a?->b"), ("<?php [&$x] = $a?->b;", "$a?->b"), ("<?php function &f() { return $a?->b; }", "$a?->b"),],
             ForbiddenRule::NullsafeClosureCreation => &[("<?php $a?->b(...);", "$a?->b(...)"),],
-            ForbiddenRule::UnwritableDestructuringElement => &[("<?php [f()] = $a;", "f()"), ("<?php foreach ($a as [f()]) {}", "f()"),],
+            ForbiddenRule::UnwritableDestructuringElement => &[("<?php [A] = $a;", "A"), ("<?php foreach ($a as [A]) {}", "A"),],
             ForbiddenRule::UnsetThis => &[("<?php function f() { unset($this); }", "$this"),],
             ForbiddenRule::ClosureUseShadowsParameter => &[("<?php $f = function ($a) use ($a) {};", "$a"),],
             ForbiddenRule::DuplicateClosureUseVariable => &[("<?php $f = function () use ($a, $a) {};", "$a"),],

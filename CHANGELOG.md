@@ -13,10 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `FunctionDecl::missing_param_list`, `MethodDecl::missing_param_list`, `ClosureExpr::missing_param_list` and `ArrowFunctionExpr::missing_param_list` for a parameter list missing its `(` (`php-ast`).
 - `LexerErrorKind::UnexpectedCharacter` (`php-lexer`) and `ForbiddenRule::UnexpectedCharacter` (`php-rs-parser`) for a control character in code.
 - `PrinterConfig::php_version`, the PHP version the output is for (`php-printer`).
+- `ForbiddenRule::CallResultWrite` and `ForbiddenRule::ListAsForeachKey` (`php-rs-parser`).
 
 ### Changed
 
 - The messages for a positional or unpacked argument after a named one, an unparenthesized nested ternary and an unparenthesized arrow function after `|>` match PHP's (`php-rs-parser`).
+- A write to a call result, as in `f() = 1`, `$a->f()++`, `unset(f())` or `[f()] = $a`, reports PHP's `Can't use function return value in write context` or `Can't use method return value in write context`, and a list as a `foreach` key `Cannot use list as key element` (`php-rs-parser`).
 - A repeated property hook reports PHP's message, `Cannot redeclare property hook "get"`, with the hook name as written, instead of `duplicate 'get' hook` (`php-rs-parser`).
 - `PhpVersion` lives in `php-ast`; `php-rs-parser` re-exports it at the same paths (`php-ast`, `php-rs-parser`).
 - A `?>` that is a statement of its own, as after `;`, `}`, `:` or another tag, is a `Nop` with the span of the `?>`; a `?>` that ends the statement before it adds nothing, and `?><?php` no longer adds a `Nop` (`php-rs-parser`).

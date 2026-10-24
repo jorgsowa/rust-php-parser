@@ -1,7 +1,7 @@
 ===source===
 <?php foreach ($a as [$x] => $v) {}
 ===errors===
-Can't use this expression in write context
+Cannot use list as key element
 ===php_error===
 PHP Fatal error:  Cannot use list as key element in Standard input code on line 1
 ===ast===

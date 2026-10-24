@@ -1,7 +1,7 @@
 ===source===
 <?php unset(f());
 ===errors===
-Can't use this expression in write context
+Can't use function return value in write context
 ===php_error===
 PHP Fatal error:  Can't use function return value in write context in Standard input code on line 1
 ===ast===

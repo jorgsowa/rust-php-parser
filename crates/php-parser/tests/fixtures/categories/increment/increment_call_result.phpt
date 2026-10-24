@@ -1,7 +1,7 @@
 ===source===
 <?php ++f();
 ===errors===
-Cannot increment or decrement an expression that is not a variable
+Can't use function return value in write context
 ===php_error===
 PHP Fatal error:  Can't use function return value in write context in Standard input code on line 1
 ===ast===
