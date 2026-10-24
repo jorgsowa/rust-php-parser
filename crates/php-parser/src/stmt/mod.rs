@@ -2935,7 +2935,15 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
         if item.kind.unwrap_or(kind) != UseKind::Normal {
             continue;
         }
-        if let Some(alias) = item.alias.and_then(|a| a.as_str()) {
+        let explicit_alias = item.alias.and_then(|a| a.as_str());
+        // An imported `readonly`, or before PHP 8.5 `array` or `callable`, is only a keyword
+        // as an explicit alias.
+        let implicit_alias = item.name.parts_slice().last().copied().filter(|last| {
+            let is = |word: &str| last.eq_ignore_ascii_case(word);
+            !is("readonly")
+                && (parser.version >= PhpVersion::Php85 || !(is("array") || is("callable")))
+        });
+        if let Some(alias) = explicit_alias.or(implicit_alias) {
             if class::is_reserved_class_name(alias, parser.version) {
                 let name = item.name.parts_slice().join("\\");
                 parser.forbid(
