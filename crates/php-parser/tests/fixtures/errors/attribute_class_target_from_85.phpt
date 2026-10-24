@@ -66,7 +66,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to abstract class A in Standard inp
         }
       },
       "span": {
-        "start": 28,
+        "start": 6,
         "end": 38
       }
     },
@@ -104,7 +104,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to abstract class A in Standard inp
         }
       },
       "span": {
-        "start": 52,
+        "start": 39,
         "end": 66
       }
     },
@@ -141,7 +141,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to abstract class A in Standard inp
         }
       },
       "span": {
-        "start": 80,
+        "start": 67,
         "end": 90
       }
     },
@@ -180,7 +180,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to abstract class A in Standard inp
         }
       },
       "span": {
-        "start": 104,
+        "start": 91,
         "end": 113
       }
     }

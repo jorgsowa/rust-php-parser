@@ -322,6 +322,12 @@ pub struct ForeachStmt<'arena, 'src> {
     /// `true` when the value is taken by reference: `foreach ($a as &$v)`.
     #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub by_ref: bool,
+    /// The `&` of a by-reference value; `None` when `by_ref` is `false`.
+    #[cfg_attr(
+        feature = "serde",
+        serde(default, skip_serializing_if = "Option::is_none")
+    )]
+    pub by_ref_span: Option<Span>,
     /// Loop body.
     pub body: &'arena Stmt<'arena, 'src>,
     /// `true` when written in alternative syntax (`: ... endX;`).
@@ -342,6 +348,7 @@ impl<'arena, 'src> ForeachStmt<'arena, 'src> {
             key: None,
             value,
             by_ref: false,
+            by_ref_span: None,
             body,
             uses_alternative: false,
         }

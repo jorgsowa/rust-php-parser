@@ -18,7 +18,7 @@ PHP Parse error:  Unclosed '[' in Standard input code on line 1
     {
       "kind": "Error",
       "span": {
-        "start": 8,
+        "start": 6,
         "end": 8
       }
     }

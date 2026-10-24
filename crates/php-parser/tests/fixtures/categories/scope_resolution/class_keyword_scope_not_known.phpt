@@ -2498,7 +2498,7 @@ PHP Fatal error:  Traits cannot have constants in Standard input code on line 19
         }
       },
       "span": {
-        "start": 334,
+        "start": 320,
         "end": 349
       }
     },

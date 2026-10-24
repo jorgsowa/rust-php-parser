@@ -85,7 +85,7 @@ PHP Fatal error:  Attribute "Deprecated" cannot target class (allowed targets: f
         }
       },
       "span": {
-        "start": 46,
+        "start": 6,
         "end": 56
       }
     },
@@ -140,7 +140,7 @@ PHP Fatal error:  Attribute "Deprecated" cannot target class (allowed targets: f
         }
       },
       "span": {
-        "start": 98,
+        "start": 57,
         "end": 112
       }
     },
@@ -201,7 +201,7 @@ PHP Fatal error:  Attribute "Deprecated" cannot target class (allowed targets: f
         }
       },
       "span": {
-        "start": 175,
+        "start": 113,
         "end": 185
       }
     },
@@ -262,7 +262,7 @@ PHP Fatal error:  Attribute "Deprecated" cannot target class (allowed targets: f
         }
       },
       "span": {
-        "start": 235,
+        "start": 186,
         "end": 245
       }
     },
@@ -318,7 +318,7 @@ PHP Fatal error:  Attribute "Deprecated" cannot target class (allowed targets: f
         }
       },
       "span": {
-        "start": 287,
+        "start": 246,
         "end": 296
       }
     }

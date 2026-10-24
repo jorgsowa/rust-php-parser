@@ -1192,7 +1192,7 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
         }
       },
       "span": {
-        "start": 264,
+        "start": 245,
         "end": 281
       }
     },

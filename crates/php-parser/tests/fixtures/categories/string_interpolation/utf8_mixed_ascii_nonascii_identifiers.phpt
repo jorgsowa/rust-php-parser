@@ -170,8 +170,8 @@ echo "Complex: {$naïve}";
                       "Variable": "café"
                     },
                     "span": {
-                      "start": 118,
-                      "end": 123
+                      "start": 116,
+                      "end": 124
                     }
                   }
                 }
@@ -204,8 +204,8 @@ echo "Complex: {$naïve}";
                       "Variable": "ïce"
                     },
                     "span": {
-                      "start": 164,
-                      "end": 168
+                      "start": 162,
+                      "end": 169
                     }
                   }
                 }

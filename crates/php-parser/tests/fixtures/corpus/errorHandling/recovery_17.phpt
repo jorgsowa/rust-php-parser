@@ -135,7 +135,7 @@ PHP Parse error:  syntax error, unexpected token "use", expecting "{" in Standar
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 45,
+                  "start": 48,
                   "end": 49
                 }
               },

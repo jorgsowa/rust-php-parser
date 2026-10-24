@@ -267,7 +267,7 @@ function f(
         }
       },
       "span": {
-        "start": 21,
+        "start": 6,
         "end": 96
       }
     }

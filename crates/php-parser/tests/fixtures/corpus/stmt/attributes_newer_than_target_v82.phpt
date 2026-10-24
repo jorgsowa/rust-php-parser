@@ -80,7 +80,7 @@ PHP Fatal error:  Attribute "Override" cannot target class (allowed targets: met
         }
       },
       "span": {
-        "start": 18,
+        "start": 6,
         "end": 28
       }
     },
@@ -124,7 +124,7 @@ PHP Fatal error:  Attribute "Override" cannot target class (allowed targets: met
         }
       },
       "span": {
-        "start": 43,
+        "start": 29,
         "end": 53
       }
     },
@@ -168,7 +168,7 @@ PHP Fatal error:  Attribute "Override" cannot target class (allowed targets: met
         }
       },
       "span": {
-        "start": 67,
+        "start": 54,
         "end": 77
       }
     },
@@ -225,7 +225,7 @@ PHP Fatal error:  Attribute "Override" cannot target class (allowed targets: met
         }
       },
       "span": {
-        "start": 106,
+        "start": 78,
         "end": 121
       }
     },
@@ -263,7 +263,7 @@ PHP Fatal error:  Attribute "Override" cannot target class (allowed targets: met
         }
       },
       "span": {
-        "start": 149,
+        "start": 122,
         "end": 163
       }
     }

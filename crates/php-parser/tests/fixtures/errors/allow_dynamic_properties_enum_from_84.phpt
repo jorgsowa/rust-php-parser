@@ -82,7 +82,7 @@ PHP Fatal error:  Cannot apply #[\AllowDynamicProperties] to enum E in Standard 
         }
       },
       "span": {
-        "start": 32,
+        "start": 6,
         "end": 41
       }
     }

@@ -206,6 +206,10 @@ PHP Fatal error:  Cannot use result of built-in function in write context in Sta
             }
           },
           "by_ref": true,
+          "by_ref_span": {
+            "start": 76,
+            "end": 77
+          },
           "body": {
             "kind": {
               "Block": []

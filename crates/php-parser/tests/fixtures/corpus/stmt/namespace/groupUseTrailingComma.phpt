@@ -18,7 +18,7 @@ use function A\{b,};
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 10,
+                  "start": 13,
                   "end": 14
                 }
               },
@@ -49,7 +49,7 @@ use function A\{b,};
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 31,
+                  "start": 34,
                   "end": 35
                 }
               },

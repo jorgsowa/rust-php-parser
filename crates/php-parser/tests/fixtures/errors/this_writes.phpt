@@ -526,6 +526,10 @@ PHP Fatal error:  Cannot re-assign $this in Standard input code on line 2
             }
           },
           "by_ref": true,
+          "by_ref_span": {
+            "start": 164,
+            "end": 165
+          },
           "body": {
             "kind": {
               "Block": []

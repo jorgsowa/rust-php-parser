@@ -457,8 +457,8 @@ PHP Parse error:  syntax error, unexpected ';', expecting ')' in Standard input 
                                         "Variable": "b"
                                       },
                                       "span": {
-                                        "start": 136,
-                                        "end": 137
+                                        "start": 134,
+                                        "end": 138
                                       }
                                     }
                                   }
@@ -2100,8 +2100,8 @@ PHP Parse error:  syntax error, unexpected ';', expecting ')' in Standard input 
                                         "Variable": "b"
                                       },
                                       "span": {
-                                        "start": 136,
-                                        "end": 137
+                                        "start": 134,
+                                        "end": 138
                                       }
                                     }
                                   }

@@ -18,7 +18,7 @@ use Bar\ {B};
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 10,
+                  "start": 17,
                   "end": 18
                 }
               },
@@ -49,7 +49,7 @@ use Bar\ {B};
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 25,
+                  "start": 31,
                   "end": 32
                 }
               },

@@ -24,7 +24,7 @@ PHP Parse error:  syntax error, unexpected fully qualified name "\Bar", expectin
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 32,
+                  "start": 37,
                   "end": 41
                 }
               },

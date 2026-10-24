@@ -21,7 +21,7 @@ use App\{Models\User as U, Services\Auth as A};
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 10,
+                  "start": 15,
                   "end": 26
                 }
               },
@@ -40,7 +40,7 @@ use App\{Models\User as U, Services\Auth as A};
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 10,
+                  "start": 28,
                   "end": 41
                 }
               },
@@ -72,7 +72,7 @@ use App\{Models\User as U, Services\Auth as A};
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 57,
+                  "start": 70,
                   "end": 76
                 }
               },
@@ -91,7 +91,7 @@ use App\{Models\User as U, Services\Auth as A};
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 57,
+                  "start": 78,
                   "end": 86
                 }
               },
@@ -123,7 +123,7 @@ use App\{Models\User as U, Services\Auth as A};
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 99,
+                  "start": 111,
                   "end": 118
                 }
               },
@@ -142,7 +142,7 @@ use App\{Models\User as U, Services\Auth as A};
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 99,
+                  "start": 120,
                   "end": 127
                 }
               },
@@ -174,7 +174,7 @@ use App\{Models\User as U, Services\Auth as A};
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 134,
+                  "start": 139,
                   "end": 150
                 }
               },
@@ -199,7 +199,7 @@ use App\{Models\User as U, Services\Auth as A};
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 134,
+                  "start": 157,
                   "end": 170
                 }
               },

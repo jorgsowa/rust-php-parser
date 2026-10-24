@@ -84,8 +84,8 @@ pub(super) fn parse_enum<'arena, 'src>(
             parser.advance();
             continue;
         }
-        let member_attrs = parser.parse_attributes();
         let member_start = parser.start_span();
+        let member_attrs = parser.parse_attributes();
 
         // Trait use
         if parser.check(TokenKind::Use) {

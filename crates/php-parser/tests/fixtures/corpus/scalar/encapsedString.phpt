@@ -577,8 +577,8 @@ B"$A";
                     "Variable": "A"
                   },
                   "span": {
-                    "start": 146,
-                    "end": 147
+                    "start": 144,
+                    "end": 148
                   }
                 }
               }

@@ -18,7 +18,7 @@ use Foo\Bar\{Baz};
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 10,
+                  "start": 19,
                   "end": 22
                 }
               },

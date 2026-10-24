@@ -23,8 +23,8 @@ PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard 
                     "Variable": "a"
                   },
                   "span": {
-                    "start": 9,
-                    "end": 10
+                    "start": 7,
+                    "end": 11
                   }
                 }
               }

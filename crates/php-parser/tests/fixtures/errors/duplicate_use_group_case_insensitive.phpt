@@ -21,7 +21,7 @@ PHP Fatal error:  Cannot use A\b as b because the name is already in use in Stan
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 10,
+                  "start": 13,
                   "end": 14
                 }
               },
@@ -52,7 +52,7 @@ PHP Fatal error:  Cannot use A\b as b because the name is already in use in Stan
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 21,
+                  "start": 24,
                   "end": 25
                 }
               },

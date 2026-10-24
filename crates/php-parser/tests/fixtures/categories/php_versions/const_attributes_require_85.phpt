@@ -62,7 +62,7 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
         ]
       },
       "span": {
-        "start": 16,
+        "start": 6,
         "end": 38
       }
     }

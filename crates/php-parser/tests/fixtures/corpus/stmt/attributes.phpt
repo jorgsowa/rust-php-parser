@@ -444,7 +444,7 @@ PHP Parse error:  syntax error, unexpected ',' in Standard input code on line 4
         }
       },
       "span": {
-        "start": 55,
+        "start": 7,
         "end": 71
       }
     },
@@ -610,7 +610,7 @@ PHP Parse error:  syntax error, unexpected ',' in Standard input code on line 4
         }
       },
       "span": {
-        "start": 79,
+        "start": 73,
         "end": 183
       }
     },
@@ -648,7 +648,7 @@ PHP Parse error:  syntax error, unexpected ',' in Standard input code on line 4
         }
       },
       "span": {
-        "start": 191,
+        "start": 185,
         "end": 205
       }
     },
@@ -685,7 +685,7 @@ PHP Parse error:  syntax error, unexpected ',' in Standard input code on line 4
         }
       },
       "span": {
-        "start": 212,
+        "start": 206,
         "end": 222
       }
     },

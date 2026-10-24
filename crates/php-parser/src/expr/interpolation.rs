@@ -975,7 +975,7 @@ fn parse_dollar_brace<'arena, 'src>(
         span: Span::new(offset + content_start as u32, offset + name_end as u32),
     };
     if name_end == close {
-        return (var, after);
+        return (Expr { span, ..var }, after);
     }
     let empty = text[name_end + 1..bracket_end - 1].trim().is_empty();
     if empty {

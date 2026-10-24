@@ -207,7 +207,7 @@ PHP Fatal error:  A void function does not return a value, but #[\NoDiscard] req
         }
       },
       "span": {
-        "start": 19,
+        "start": 6,
         "end": 40
       }
     },
@@ -282,7 +282,7 @@ PHP Fatal error:  A void function does not return a value, but #[\NoDiscard] req
         }
       },
       "span": {
-        "start": 54,
+        "start": 41,
         "end": 83
       }
     },

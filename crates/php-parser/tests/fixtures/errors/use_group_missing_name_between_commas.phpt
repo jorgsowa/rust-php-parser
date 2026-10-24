@@ -22,7 +22,7 @@ PHP Parse error:  syntax error, unexpected token ",", expecting "}" in Standard 
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 10,
+                  "start": 13,
                   "end": 14
                 }
               },
@@ -55,7 +55,7 @@ PHP Parse error:  syntax error, unexpected token ",", expecting "}" in Standard 
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 10,
+                  "start": 18,
                   "end": 19
                 }
               },

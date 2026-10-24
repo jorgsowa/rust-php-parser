@@ -184,7 +184,7 @@ PHP Fatal error:  Attribute "Attribute" must not be repeated in Standard input c
         }
       },
       "span": {
-        "start": 32,
+        "start": 6,
         "end": 42
       }
     },
@@ -245,7 +245,7 @@ PHP Fatal error:  Attribute "Attribute" must not be repeated in Standard input c
         }
       },
       "span": {
-        "start": 67,
+        "start": 43,
         "end": 77
       }
     },
@@ -306,7 +306,7 @@ PHP Fatal error:  Attribute "Attribute" must not be repeated in Standard input c
         }
       },
       "span": {
-        "start": 128,
+        "start": 78,
         "end": 138
       }
     },
@@ -363,7 +363,7 @@ PHP Fatal error:  Attribute "Attribute" must not be repeated in Standard input c
         }
       },
       "span": {
-        "start": 167,
+        "start": 139,
         "end": 182
       }
     },
@@ -420,7 +420,7 @@ PHP Fatal error:  Attribute "Attribute" must not be repeated in Standard input c
         }
       },
       "span": {
-        "start": 235,
+        "start": 183,
         "end": 250
       }
     },
@@ -698,7 +698,7 @@ PHP Fatal error:  Attribute "Attribute" must not be repeated in Standard input c
         }
       },
       "span": {
-        "start": 469,
+        "start": 444,
         "end": 479
       }
     }

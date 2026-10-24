@@ -63,7 +63,7 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fu
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 11,
+                  "start": 14,
                   "end": 15
                 }
               },
@@ -94,7 +94,7 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fu
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 33,
+                  "start": 36,
                   "end": 37
                 }
               },

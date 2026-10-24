@@ -52,7 +52,7 @@ PHP Parse error:  syntax error, unexpected token "\", expecting "]" in Standard 
         }
       },
       "span": {
-        "start": 15,
+        "start": 6,
         "end": 30
       }
     }

@@ -609,7 +609,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             self.error(ParseError::Expected {
                 expected: format!("{}", kind).into(),
                 found: self.current_kind().description().into(),
-                span: self.current_span(),
+                span: self.found_span(),
             });
             None
         }
@@ -620,8 +620,37 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         self.error(ParseError::Expected {
             expected: expected.into(),
             found: self.current_kind().description().into(),
-            span: self.current_span(),
+            span: self.found_span(),
         });
+    }
+
+    /// Span of the current token, or from PHP 8.0 of the namespaced name it starts, which PHP
+    /// lexes as one token even when it starts with a keyword, as in `implements\A`.
+    fn found_span(&self) -> Span {
+        let span = self.current.span;
+        let starts_name = self.check(TokenKind::Identifier) || self.is_semi_reserved_keyword();
+        if self.version < PhpVersion::Php80
+            || !starts_name
+            || self.next.kind != TokenKind::Backslash
+            || self.next.span.start != span.end
+        {
+            return span;
+        }
+        let is_label_start = |b: u8| b.is_ascii_alphabetic() || b == b'_' || b >= 0x80;
+        let bytes = self.source.as_bytes();
+        let mut end = span.end as usize;
+        while bytes.get(end) == Some(&b'\\')
+            && bytes.get(end + 1).is_some_and(|&b| is_label_start(b))
+        {
+            end += 1;
+            while bytes
+                .get(end)
+                .is_some_and(|&b| is_label_start(b) || b.is_ascii_digit())
+            {
+                end += 1;
+            }
+        }
+        Span::new(span.start, end as u32)
     }
 
     /// Expect a semicolon or `?>` close tag (which acts as an implicit semicolon in PHP).
@@ -701,6 +730,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 span: self.current_span(),
             });
             None
+        }
+    }
+
+    /// Expect the `)` closing `open`; when the `(` was missing, that error already covers it.
+    pub(crate) fn expect_paren_close(&mut self, open: Option<Token>) -> Option<Token> {
+        match open {
+            Some(open) => self.expect_closing(TokenKind::RightParen, open.span),
+            None => self.eat(TokenKind::RightParen),
         }
     }
 

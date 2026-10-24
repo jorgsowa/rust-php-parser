@@ -20,7 +20,7 @@ PHP Fatal error:  Cannot use A\Foo as Foo because the name is already in use in 
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 10,
+                  "start": 13,
                   "end": 16
                 }
               },
@@ -38,7 +38,7 @@ PHP Fatal error:  Cannot use A\Foo as Foo because the name is already in use in 
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 10,
+                  "start": 18,
                   "end": 21
                 }
               },

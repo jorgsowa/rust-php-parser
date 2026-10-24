@@ -54,6 +54,10 @@ PHP Parse error:  syntax error, unexpected token ")", expecting "->" or "?->" or
             }
           },
           "by_ref": true,
+          "by_ref_span": {
+            "start": 21,
+            "end": 22
+          },
           "body": {
             "kind": {
               "Block": []

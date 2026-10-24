@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `PrinterConfig::php_version`, the PHP version the output is for (`php-printer`).
 - `ForbiddenRule::CallResultWrite` and `ForbiddenRule::ListAsForeachKey` (`php-rs-parser`).
 - `ParseError::UnmatchedDelimiter` for a `}` that closes nothing (`php-rs-parser`).
+- `ForeachStmt::by_ref_span`, the `&` of a by-reference value (`php-ast`).
 
 ### Changed
 
@@ -27,6 +28,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A `}` at the top level that closes nothing reports `unmatched '}'`, as PHP's `Unmatched '}'`, instead of `expected expression, found '}'` and `No code may exist outside of namespace {}` (`php-rs-parser`).
 - A `try` whose body is missing its `{` or `}` no longer also reports a missing `catch` or `finally` clause, and compile errors inside an unclosed parameter list, such as `Cannot declare promoted property outside a constructor` for `function f(int $x { }`, are dropped, since PHP stops at the syntax error (`php-rs-parser`).
 - Fewer recovery cascades: a `<?php` or `<?=` inside PHP code is one error and the statement after it parses; a `match` arm missing its comma reports only that; the rest of a broken `for` header, as in `for (;;;)`, is skipped; and a `class` with neither a name nor a body, as in `class\Foo::x();` before PHP 8.0, no longer reads the following statements as class members (`php-rs-parser`).
+- A dynamic property fetch spans its closing `}`, as in `$o->{'x'}`; a group `use` item's name spans the name as written, `D` in `A\{B, D}`, instead of the prefix and its siblings; `"${a}"` spans the whole `${a}` like `"${a[0]}"`; and a statement or enum member with attributes starts at its first attribute, like a class member (`php-rs-parser`).
+- A namespaced name starting with a keyword where it is not expected, as in `class A implements\B {}`, is reported over the whole name, as PHP lexes it (`php-rs-parser`).
+- An `if`, `while` or `switch` missing its `(` before the `{`, as in `if { }`, reports only the missing `(` instead of also reading the body as a curly-brace offset and an unclosed `)` opened at the `{`; `for` and `foreach` no longer report an unclosed `)` whose `(` was missing (`php-rs-parser`).
 - A repeated property hook reports PHP's message, `Cannot redeclare property hook "get"`, with the hook name as written, instead of `duplicate 'get' hook` (`php-rs-parser`).
 - `PhpVersion` lives in `php-ast`; `php-rs-parser` re-exports it at the same paths (`php-ast`, `php-rs-parser`).
 - A `?>` that is a statement of its own, as after `;`, `}`, `:` or another tag, is a `Nop` with the span of the `?>`; a `?>` that ends the statement before it adds nothing, and `?><?php` no longer adds a `Nop` (`php-rs-parser`).

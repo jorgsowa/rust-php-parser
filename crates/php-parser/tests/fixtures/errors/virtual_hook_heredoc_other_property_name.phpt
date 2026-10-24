@@ -112,7 +112,7 @@ PHP Fatal error:  Cannot specify default value for virtual hooked property C::$p
                           },
                           "span": {
                             "start": 43,
-                            "end": 59
+                            "end": 60
                           }
                         }
                       },

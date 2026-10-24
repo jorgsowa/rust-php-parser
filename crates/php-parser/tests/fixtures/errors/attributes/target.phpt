@@ -310,7 +310,7 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
         }
       },
       "span": {
-        "start": 19,
+        "start": 6,
         "end": 34
       }
     },
@@ -354,7 +354,7 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
         }
       },
       "span": {
-        "start": 47,
+        "start": 35,
         "end": 57
       }
     },
@@ -398,7 +398,7 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
         }
       },
       "span": {
-        "start": 82,
+        "start": 58,
         "end": 92
       }
     },
@@ -438,7 +438,7 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
         }
       },
       "span": {
-        "start": 115,
+        "start": 93,
         "end": 130
       }
     },
@@ -476,7 +476,7 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
         }
       },
       "span": {
-        "start": 144,
+        "start": 131,
         "end": 158
       }
     },
@@ -516,7 +516,7 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
         }
       },
       "span": {
-        "start": 185,
+        "start": 159,
         "end": 200
       }
     },
@@ -1155,7 +1155,7 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
                 }
               },
               "span": {
-                "start": 562,
+                "start": 549,
                 "end": 569
               }
             },
@@ -1192,7 +1192,7 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
                 }
               },
               "span": {
-                "start": 586,
+                "start": 574,
                 "end": 593
               }
             }
@@ -1252,7 +1252,7 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
         ]
       },
       "span": {
-        "start": 608,
+        "start": 596,
         "end": 620
       }
     },
@@ -1303,7 +1303,7 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
         ]
       },
       "span": {
-        "start": 634,
+        "start": 621,
         "end": 646
       }
     }

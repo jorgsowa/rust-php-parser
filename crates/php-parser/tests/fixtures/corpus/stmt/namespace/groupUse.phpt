@@ -29,7 +29,7 @@ PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in 
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 10,
+                  "start": 13,
                   "end": 14
                 }
               },
@@ -61,7 +61,7 @@ PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in 
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 21,
+                  "start": 24,
                   "end": 27
                 }
               },
@@ -79,7 +79,7 @@ PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in 
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 21,
+                  "start": 29,
                   "end": 30
                 }
               },
@@ -112,7 +112,7 @@ PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in 
                 ],
                 "kind": "FullyQualified",
                 "span": {
-                  "start": 37,
+                  "start": 43,
                   "end": 46
                 }
               },
@@ -131,7 +131,7 @@ PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in 
                 ],
                 "kind": "FullyQualified",
                 "span": {
-                  "start": 37,
+                  "start": 48,
                   "end": 49
                 }
               },
@@ -163,7 +163,7 @@ PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in 
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 65,
+                  "start": 68,
                   "end": 71
                 }
               },
@@ -181,7 +181,7 @@ PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in 
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 65,
+                  "start": 73,
                   "end": 74
                 }
               },
@@ -213,7 +213,7 @@ PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in 
                 ],
                 "kind": "FullyQualified",
                 "span": {
-                  "start": 87,
+                  "start": 91,
                   "end": 94
                 }
               },
@@ -231,7 +231,7 @@ PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in 
                 ],
                 "kind": "FullyQualified",
                 "span": {
-                  "start": 87,
+                  "start": 96,
                   "end": 97
                 }
               },
@@ -264,7 +264,7 @@ PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in 
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 104,
+                  "start": 109,
                   "end": 112
                 }
               },
@@ -284,7 +284,7 @@ PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in 
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 104,
+                  "start": 123,
                   "end": 126
                 }
               },
@@ -304,7 +304,7 @@ PHP Fatal error:  Cannot use A\B\C\D as D because the name is already in use in 
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 104,
+                  "start": 134,
                   "end": 135
                 }
               },

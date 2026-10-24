@@ -197,7 +197,7 @@ PHP Parse error:  syntax error, unexpected '}', expecting end of file in Standar
         }
       },
       "span": {
-        "start": 46,
+        "start": 6,
         "end": 169
       }
     }

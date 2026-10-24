@@ -202,7 +202,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input co
         }
       },
       "span": {
-        "start": 19,
+        "start": 6,
         "end": 33
       }
     },
@@ -239,7 +239,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input co
         }
       },
       "span": {
-        "start": 47,
+        "start": 34,
         "end": 57
       }
     },
@@ -278,7 +278,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input co
         }
       },
       "span": {
-        "start": 71,
+        "start": 58,
         "end": 80
       }
     },
@@ -322,7 +322,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input co
         }
       },
       "span": {
-        "start": 103,
+        "start": 81,
         "end": 113
       }
     },
@@ -360,7 +360,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input co
         }
       },
       "span": {
-        "start": 140,
+        "start": 114,
         "end": 154
       }
     },
@@ -397,7 +397,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input co
         }
       },
       "span": {
-        "start": 181,
+        "start": 155,
         "end": 191
       }
     },
@@ -436,7 +436,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input co
         }
       },
       "span": {
-        "start": 218,
+        "start": 192,
         "end": 227
       }
     },
@@ -480,7 +480,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input co
         }
       },
       "span": {
-        "start": 263,
+        "start": 228,
         "end": 273
       }
     },
@@ -524,7 +524,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input co
         }
       },
       "span": {
-        "start": 288,
+        "start": 274,
         "end": 298
       }
     },
@@ -568,7 +568,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input co
         }
       },
       "span": {
-        "start": 322,
+        "start": 299,
         "end": 332
       }
     },
@@ -606,7 +606,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input co
         }
       },
       "span": {
-        "start": 347,
+        "start": 333,
         "end": 361
       }
     },
@@ -645,7 +645,7 @@ PHP Fatal error:  Cannot apply #[\Attribute] to interface I in Standard input co
         }
       },
       "span": {
-        "start": 376,
+        "start": 362,
         "end": 385
       }
     },

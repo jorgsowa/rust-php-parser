@@ -326,7 +326,7 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                           },
                           "span": {
                             "start": 145,
-                            "end": 156
+                            "end": 157
                           }
                         }
                       },
@@ -1137,7 +1137,7 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                           },
                           "span": {
                             "start": 541,
-                            "end": 563
+                            "end": 564
                           }
                         }
                       },
@@ -2131,7 +2131,7 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                           },
                           "span": {
                             "start": 145,
-                            "end": 156
+                            "end": 157
                           }
                         }
                       },
@@ -2942,7 +2942,7 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                           },
                           "span": {
                             "start": 541,
-                            "end": 563
+                            "end": 564
                           }
                         }
                       },

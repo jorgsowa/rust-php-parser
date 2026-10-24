@@ -38,7 +38,7 @@ PHP Parse error:  syntax error, unexpected token "]" in Standard input code on l
         }
       },
       "span": {
-        "start": 10,
+        "start": 6,
         "end": 20
       }
     }

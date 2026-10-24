@@ -474,7 +474,7 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
         }
       },
       "span": {
-        "start": 70,
+        "start": 57,
         "end": 80
       }
     },
@@ -565,7 +565,7 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
         }
       },
       "span": {
-        "start": 132,
+        "start": 81,
         "end": 142
       }
     },
@@ -609,7 +609,7 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
         }
       },
       "span": {
-        "start": 151,
+        "start": 143,
         "end": 161
       }
     },
@@ -653,7 +653,7 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
         }
       },
       "span": {
-        "start": 197,
+        "start": 162,
         "end": 207
       }
     },
@@ -690,7 +690,7 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
         }
       },
       "span": {
-        "start": 222,
+        "start": 208,
         "end": 232
       }
     },
@@ -782,7 +782,7 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
         }
       },
       "span": {
-        "start": 258,
+        "start": 233,
         "end": 290
       }
     },
@@ -833,7 +833,7 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
         ]
       },
       "span": {
-        "start": 305,
+        "start": 291,
         "end": 317
       }
     },
@@ -873,7 +873,7 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
         }
       },
       "span": {
-        "start": 332,
+        "start": 318,
         "end": 348
       }
     },
@@ -1050,7 +1050,7 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
         }
       },
       "span": {
-        "start": 467,
+        "start": 419,
         "end": 482
       }
     },
@@ -1111,7 +1111,7 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
         }
       },
       "span": {
-        "start": 534,
+        "start": 483,
         "end": 544
       }
     },
@@ -1189,7 +1189,7 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
         }
       },
       "span": {
-        "start": 586,
+        "start": 545,
         "end": 596
       }
     },
@@ -1518,7 +1518,7 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
                 }
               },
               "span": {
-                "start": 759,
+                "start": 745,
                 "end": 766
               }
             },
@@ -1563,7 +1563,7 @@ PHP Parse error:  syntax error, unexpected token "const" in Standard input code 
                 }
               },
               "span": {
-                "start": 785,
+                "start": 771,
                 "end": 797
               }
             }

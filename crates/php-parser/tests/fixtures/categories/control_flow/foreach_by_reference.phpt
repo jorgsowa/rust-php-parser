@@ -26,6 +26,10 @@
             }
           },
           "by_ref": true,
+          "by_ref_span": {
+            "start": 25,
+            "end": 26
+          },
           "body": {
             "kind": {
               "Block": [

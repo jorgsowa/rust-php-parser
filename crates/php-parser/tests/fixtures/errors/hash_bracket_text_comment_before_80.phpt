@@ -179,14 +179,14 @@ PHP Parse error:  syntax error, unexpected identifier "text", expecting "]" in S
     {
       "kind": "Error",
       "span": {
-        "start": 21,
+        "start": 14,
         "end": 34
       }
     },
     {
       "kind": "Error",
       "span": {
-        "start": 45,
+        "start": 35,
         "end": 45
       }
     },

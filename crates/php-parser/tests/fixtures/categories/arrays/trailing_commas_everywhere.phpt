@@ -469,7 +469,7 @@ PHP Parse error:  syntax error, unexpected ')', expecting variable (T_VARIABLE) 
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 154,
+                  "start": 159,
                   "end": 160
                 }
               },
@@ -487,7 +487,7 @@ PHP Parse error:  syntax error, unexpected ')', expecting variable (T_VARIABLE) 
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 154,
+                  "start": 162,
                   "end": 163
                 }
               },

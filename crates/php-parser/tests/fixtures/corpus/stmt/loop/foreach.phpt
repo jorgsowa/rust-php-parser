@@ -79,6 +79,10 @@ endforeach;
             }
           },
           "by_ref": true,
+          "by_ref_span": {
+            "start": 68,
+            "end": 69
+          },
           "body": {
             "kind": {
               "Block": []
@@ -172,6 +176,10 @@ endforeach;
             }
           },
           "by_ref": true,
+          "by_ref_span": {
+            "start": 125,
+            "end": 126
+          },
           "body": {
             "kind": {
               "Block": []

@@ -552,6 +552,10 @@ PHP Fatal error:  $GLOBALS can only be modified using the $GLOBALS[$name] = $val
             }
           },
           "by_ref": true,
+          "by_ref_span": {
+            "start": 209,
+            "end": 210
+          },
           "body": {
             "kind": {
               "Block": []

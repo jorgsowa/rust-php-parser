@@ -170,7 +170,7 @@ PHP Parse error:  syntax error, unexpected identifier "enum" in Standard input c
         }
       },
       "span": {
-        "start": 47,
+        "start": 7,
         "end": 65
       }
     },
@@ -225,7 +225,7 @@ PHP Parse error:  syntax error, unexpected identifier "enum" in Standard input c
         }
       },
       "span": {
-        "start": 107,
+        "start": 67,
         "end": 133
       }
     },
@@ -286,7 +286,7 @@ PHP Parse error:  syntax error, unexpected identifier "enum" in Standard input c
         }
       },
       "span": {
-        "start": 184,
+        "start": 135,
         "end": 205
       }
     },
@@ -342,7 +342,7 @@ PHP Parse error:  syntax error, unexpected identifier "enum" in Standard input c
         }
       },
       "span": {
-        "start": 247,
+        "start": 207,
         "end": 263
       }
     }

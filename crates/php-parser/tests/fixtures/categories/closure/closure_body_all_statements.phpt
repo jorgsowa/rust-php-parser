@@ -1374,6 +1374,10 @@ PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard 
                                                                     }
                                                                   },
                                                                   "by_ref": true,
+                                                                  "by_ref_span": {
+                                                                    "start": 647,
+                                                                    "end": 648
+                                                                  },
                                                                   "body": {
                                                                     "kind": {
                                                                       "Block": [
@@ -3156,8 +3160,8 @@ PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard 
                                                                   "Variable": "a"
                                                                 },
                                                                 "span": {
-                                                                  "start": 1808,
-                                                                  "end": 1809
+                                                                  "start": 1806,
+                                                                  "end": 1810
                                                                 }
                                                               }
                                                             },

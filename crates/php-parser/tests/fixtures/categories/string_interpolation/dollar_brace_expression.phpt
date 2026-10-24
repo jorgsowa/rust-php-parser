@@ -19,8 +19,8 @@ echo <<<EOT
                       "Variable": "a"
                     },
                     "span": {
-                      "start": 14,
-                      "end": 15
+                      "start": 12,
+                      "end": 16
                     }
                   }
                 },
@@ -294,8 +294,8 @@ echo <<<EOT
                         "Variable": "a"
                       },
                       "span": {
-                        "start": 100,
-                        "end": 101
+                        "start": 98,
+                        "end": 102
                       }
                     }
                   },

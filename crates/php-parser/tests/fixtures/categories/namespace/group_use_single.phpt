@@ -17,7 +17,7 @@
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 10,
+                  "start": 15,
                   "end": 16
                 }
               },

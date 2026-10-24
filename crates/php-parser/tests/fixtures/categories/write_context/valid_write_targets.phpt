@@ -975,6 +975,10 @@ foreach ($a as A::$p => &$o[0]) {}
             }
           },
           "by_ref": true,
+          "by_ref_span": {
+            "start": 236,
+            "end": 237
+          },
           "body": {
             "kind": {
               "Block": []

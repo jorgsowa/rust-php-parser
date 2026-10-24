@@ -1,12 +1,7 @@
 ===source===
 <?php if { }
-===errors <=7.4===
+===errors===
 expected '(', found '{'
-missing closing ')'
-===errors >=8.0===
-expected '(', found '{'
-Array and string offset access syntax with curly braces is no longer supported
-missing closing ')'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '{', expecting '(' in Standard input code on line 1
 ===php_error >=8.0===
@@ -18,27 +13,18 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "(" in Standard 
       "kind": {
         "If": {
           "condition": {
-            "kind": {
-              "ArrayAccess": {
-                "array": {
-                  "kind": "Error",
-                  "span": {
-                    "start": 8,
-                    "end": 8
-                  }
-                },
-                "index": null
-              }
-            },
+            "kind": "Error",
             "span": {
               "start": 8,
-              "end": 12
+              "end": 8
             }
           },
           "then_branch": {
-            "kind": "Error",
+            "kind": {
+              "Block": []
+            },
             "span": {
-              "start": 12,
+              "start": 9,
               "end": 12
             }
           },

@@ -464,7 +464,7 @@ PHP Fatal error:  Cannot apply attributes to multiple constants at once in Stand
         ]
       },
       "span": {
-        "start": 57,
+        "start": 46,
         "end": 84
       }
     },
@@ -532,7 +532,7 @@ PHP Fatal error:  Cannot apply attributes to multiple constants at once in Stand
         ]
       },
       "span": {
-        "start": 105,
+        "start": 86,
         "end": 138
       }
     },
@@ -600,7 +600,7 @@ PHP Fatal error:  Cannot apply attributes to multiple constants at once in Stand
         ]
       },
       "span": {
-        "start": 157,
+        "start": 140,
         "end": 187
       }
     },
@@ -674,7 +674,7 @@ PHP Fatal error:  Cannot apply attributes to multiple constants at once in Stand
         ]
       },
       "span": {
-        "start": 200,
+        "start": 189,
         "end": 263
       }
     }

@@ -1297,7 +1297,7 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
         }
       },
       "span": {
-        "start": 272,
+        "start": 260,
         "end": 298
       }
     },
@@ -1389,7 +1389,7 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
         }
       },
       "span": {
-        "start": 318,
+        "start": 299,
         "end": 328
       }
     },

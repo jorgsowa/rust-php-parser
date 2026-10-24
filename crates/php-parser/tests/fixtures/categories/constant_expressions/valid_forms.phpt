@@ -860,13 +860,13 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
               },
               "span": {
                 "start": 205,
-                "end": 219
+                "end": 220
               }
             },
             "attributes": [],
             "span": {
               "start": 201,
-              "end": 219
+              "end": 220
             }
           }
         ]
@@ -3719,13 +3719,13 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
               },
               "span": {
                 "start": 205,
-                "end": 219
+                "end": 220
               }
             },
             "attributes": [],
             "span": {
               "start": 201,
-              "end": 219
+              "end": 220
             }
           }
         ]
@@ -6058,7 +6058,7 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
         }
       },
       "span": {
-        "start": 1111,
+        "start": 1060,
         "end": 1192
       }
     }

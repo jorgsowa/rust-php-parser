@@ -127,7 +127,7 @@ PHP Parse error:  syntax error, unexpected ']' in Standard input code on line 3
         }
       },
       "span": {
-        "start": 16,
+        "start": 6,
         "end": 31
       }
     }

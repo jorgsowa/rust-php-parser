@@ -25,7 +25,7 @@ PHP Parse error:  syntax error, unexpected token "use", expecting ";" in Standar
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 31,
+                  "start": 36,
                   "end": 39
                 }
               },
@@ -56,7 +56,7 @@ PHP Parse error:  syntax error, unexpected token "use", expecting ";" in Standar
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 45,
+                  "start": 50,
                   "end": 53
                 }
               },

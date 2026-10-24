@@ -188,7 +188,7 @@ PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to trait DemoTrait in S
         }
       },
       "span": {
-        "start": 60,
+        "start": 7,
         "end": 78
       }
     },
@@ -243,7 +243,7 @@ PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to trait DemoTrait in S
         }
       },
       "span": {
-        "start": 133,
+        "start": 80,
         "end": 159
       }
     },
@@ -304,7 +304,7 @@ PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to trait DemoTrait in S
         }
       },
       "span": {
-        "start": 223,
+        "start": 161,
         "end": 244
       }
     },
@@ -360,7 +360,7 @@ PHP Fatal error:  Cannot apply #[AllowDynamicProperties] to trait DemoTrait in S
         }
       },
       "span": {
-        "start": 299,
+        "start": 246,
         "end": 315
       }
     }

@@ -124,7 +124,7 @@ PHP Fatal error:  Cannot use unpacking in attribute argument list in Standard in
         }
       },
       "span": {
-        "start": 21,
+        "start": 6,
         "end": 36
       }
     },
@@ -224,7 +224,7 @@ PHP Fatal error:  Cannot use unpacking in attribute argument list in Standard in
         }
       },
       "span": {
-        "start": 56,
+        "start": 37,
         "end": 66
       }
     }

@@ -27,8 +27,8 @@
                           "Variable": "foo"
                         },
                         "span": {
-                          "start": 14,
-                          "end": 17
+                          "start": 12,
+                          "end": 18
                         }
                       }
                     },

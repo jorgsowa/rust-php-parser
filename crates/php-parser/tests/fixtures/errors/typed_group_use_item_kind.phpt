@@ -26,7 +26,7 @@ PHP Parse error:  syntax error, unexpected token "const", expecting "}" in Stand
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 16,
+                  "start": 21,
                   "end": 22
                 }
               },
@@ -44,7 +44,7 @@ PHP Parse error:  syntax error, unexpected token "const", expecting "}" in Stand
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 16,
+                  "start": 30,
                   "end": 31
                 }
               },
@@ -76,7 +76,7 @@ PHP Parse error:  syntax error, unexpected token "const", expecting "}" in Stand
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 47,
+                  "start": 52,
                   "end": 53
                 }
               },
@@ -94,7 +94,7 @@ PHP Parse error:  syntax error, unexpected token "const", expecting "}" in Stand
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 47,
+                  "start": 64,
                   "end": 65
                 }
               },
@@ -113,7 +113,7 @@ PHP Parse error:  syntax error, unexpected token "const", expecting "}" in Stand
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 47,
+                  "start": 73,
                   "end": 74
                 }
               },

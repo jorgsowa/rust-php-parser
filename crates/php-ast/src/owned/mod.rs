@@ -709,6 +709,12 @@ pub struct ForeachStmt {
     /// `true` when the value is taken by reference: `foreach ($a as &$v)`.
     #[cfg_attr(feature = "serde", serde(default, skip_serializing_if = "is_false"))]
     pub by_ref: bool,
+    /// The `&` of a by-reference value; `None` when `by_ref` is `false`.
+    #[cfg_attr(
+        feature = "serde",
+        serde(default, skip_serializing_if = "Option::is_none")
+    )]
+    pub by_ref_span: Option<Span>,
     /// The loop body.
     pub body: Box<Stmt>,
     /// Whether the `foreach: ... endforeach;` syntax is used.
@@ -725,6 +731,7 @@ impl ForeachStmt {
             key: None,
             value,
             by_ref: false,
+            by_ref_span: None,
             body,
             uses_alternative: false,
         }
@@ -2949,6 +2956,7 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
             key: s.key.as_ref().map(owned_expr),
             value: owned_expr(&s.value),
             by_ref: s.by_ref,
+            by_ref_span: s.by_ref_span,
             body: Box::new(owned_stmt(s.body)),
             uses_alternative: s.uses_alternative,
         })),
@@ -4048,6 +4056,7 @@ fn av_foreach_stmt<'a>(
         key: s.key.as_ref().map(|e| av_expr(arena, e)),
         value: av_expr(arena, &s.value),
         by_ref: s.by_ref,
+        by_ref_span: s.by_ref_span,
         body: arena.alloc(av_stmt(arena, &s.body)),
         uses_alternative: s.uses_alternative,
     }

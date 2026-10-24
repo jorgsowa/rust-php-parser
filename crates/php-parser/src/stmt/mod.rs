@@ -394,9 +394,20 @@ fn class_modifier_error<'arena, 'src>(
     }
 }
 
-/// Parse a statement preceded by attributes.
+/// Parse a statement preceded by attributes; its span starts at the first attribute.
 fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let attr_start = parser.start_span();
+    let mut stmt = parse_stmt_after_attributes(parser, attr_start);
+    if stmt.span.start > attr_start {
+        stmt.span = Span::new(attr_start, stmt.span.end.max(attr_start));
+    }
+    stmt
+}
+
+fn parse_stmt_after_attributes<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    attr_start: u32,
+) -> Stmt<'arena, 'src> {
     let attributes = parser.parse_attributes();
 
     // Anonymous closure / arrow fn / static closure used as an expression
@@ -488,6 +499,21 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
     };
 
     stmt
+}
+
+/// Parse the parenthesized condition of `if`, `while` or `switch`. Without its `(`, a `{` is
+/// the body, not the start of the condition.
+fn parse_paren_condition<'arena, 'src>(parser: &mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
+    let open = parser.expect(TokenKind::LeftParen);
+    if open.is_none() && parser.check(TokenKind::LeftBrace) {
+        return Expr {
+            kind: ExprKind::Error,
+            span: parser.missing_span(),
+        };
+    }
+    let condition = expr::parse_expr(parser);
+    parser.expect_paren_close(open);
+    condition
 }
 
 /// Parse a block statement: `{ stmts }`
@@ -609,10 +635,7 @@ fn parse_if<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 
     let start = parser.start_span();
     parser.advance(); // consume 'if'
 
-    let open = parser.expect(TokenKind::LeftParen);
-    let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
-    let condition = expr::parse_expr(parser);
-    parser.expect_closing(TokenKind::RightParen, open_span);
+    let condition = parse_paren_condition(parser);
 
     // Alternative syntax: if (...): ... endif;
     if parser.check(TokenKind::Colon) {
@@ -755,10 +778,7 @@ fn parse_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'aren
 
     let start = parser.start_span();
     parser.advance();
-    let open = parser.expect(TokenKind::LeftParen);
-    let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
-    let condition = expr::parse_expr(parser);
-    parser.expect_closing(TokenKind::RightParen, open_span);
+    let condition = parse_paren_condition(parser);
 
     if parser.check(TokenKind::Colon) {
         let body_start = parser.start_span();
@@ -815,10 +835,7 @@ fn parse_do_while<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'a
     parser.loop_depth -= 1;
     let body = parser.alloc(body_stmt);
     parser.expect(TokenKind::While);
-    let open = parser.expect(TokenKind::LeftParen);
-    let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
-    let condition = expr::parse_expr(parser);
-    parser.expect_closing(TokenKind::RightParen, open_span);
+    let condition = parse_paren_condition(parser);
     parser.expect_semicolon("do-while statement");
     let span = parser.span_from(start);
     Stmt {
@@ -834,17 +851,12 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
     let start = parser.start_span();
     parser.advance();
     let open = parser.expect(TokenKind::LeftParen);
-    let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
     let init = parse_expr_list_until(parser, TokenKind::Semicolon);
     parser.expect(TokenKind::Semicolon);
     let condition = parse_expr_list_until(parser, TokenKind::Semicolon);
     parser.expect(TokenKind::Semicolon);
     let update = parse_expr_list_until(parser, TokenKind::RightParen);
-    if parser
-        .expect_closing(TokenKind::RightParen, open_span)
-        .is_none()
-        && open.is_some()
-    {
+    if parser.expect_paren_close(open).is_none() && open.is_some() {
         // Skip the rest of the header, as in `for (;;;)`, so the body is not read from it.
         while !matches!(
             parser.current_kind(),
@@ -931,14 +943,13 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     let start = parser.start_span();
     parser.advance();
     let open = parser.expect(TokenKind::LeftParen);
-    let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
     let collection = expr::parse_expr(parser);
     parser.expect(TokenKind::As);
 
     let first_ref = parser.eat(TokenKind::Ampersand);
     let first = expr::parse_expr(parser);
 
-    let (key, value, by_ref) = if parser.eat(TokenKind::FatArrow).is_some() {
+    let (key, value, by_ref_span) = if parser.eat(TokenKind::FatArrow).is_some() {
         if let Some(amp) = first_ref {
             parser.forbid(
                 ForbiddenRule::ReferenceKey,
@@ -946,12 +957,13 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
                 amp.span.merge(first.span),
             );
         }
-        let by_ref = parser.eat(TokenKind::Ampersand).is_some();
+        let by_ref_span = parser.eat(TokenKind::Ampersand).map(|amp| amp.span);
         let value = expr::parse_expr(parser);
-        (Some(first), value, by_ref)
+        (Some(first), value, by_ref_span)
     } else {
-        (None, first, first_ref.is_some())
+        (None, first, first_ref.map(|amp| amp.span))
     };
+    let by_ref = by_ref_span.is_some();
     if by_ref && matches!(value.kind, ExprKind::Array(_)) {
         // `&[$a]` and `&list($a)` are not foreach targets; only a variable can be taken by reference.
         parser.error(ParseError::Expected {
@@ -984,7 +996,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
         parser.retract_destructuring_errors_within(k.span);
     }
 
-    parser.expect_closing(TokenKind::RightParen, open_span);
+    parser.expect_paren_close(open);
 
     if parser.check(TokenKind::Colon) {
         let body_start = parser.start_span();
@@ -1009,6 +1021,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
                 let mut built = ForeachStmt::new(collection, value, body);
                 built.key = key;
                 built.by_ref = by_ref;
+                built.by_ref_span = by_ref_span;
                 built.uses_alternative = true;
                 built
             })),
@@ -1027,6 +1040,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
             let mut built = ForeachStmt::new(collection, value, body);
             built.key = key;
             built.by_ref = by_ref;
+            built.by_ref_span = by_ref_span;
             built.uses_alternative = false;
             built
         })),
@@ -1959,10 +1973,7 @@ fn parse_switch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'are
 
     let start = parser.start_span();
     parser.advance();
-    let open = parser.expect(TokenKind::LeftParen);
-    let open_span = open.map(|t| t.span).unwrap_or(parser.current_span());
-    let switch_expr = expr::parse_expr(parser);
-    parser.expect_closing(TokenKind::RightParen, open_span);
+    let switch_expr = parse_paren_condition(parser);
 
     let body_brace_start = parser.start_span();
     let alt_syntax = parser.eat(TokenKind::Colon).is_some();
@@ -2832,6 +2843,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             }
 
             // Combine prefix with sub-name
+            let sub_span = sub_name.span();
             let combined_name = if matches!(sub_name, Name::Error { .. }) {
                 sub_name
             } else {
@@ -2860,7 +2872,8 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                     } else {
                         NameKind::Qualified
                     },
-                    span: parser.span_from(item_start),
+                    // The name as written in the group; the prefix is shared with its siblings.
+                    span: sub_span,
                 }
             };
 

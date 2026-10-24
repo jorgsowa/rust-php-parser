@@ -24,7 +24,7 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 34,
+                  "start": 39,
                   "end": 42
                 }
               },
@@ -42,7 +42,7 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                 ],
                 "kind": "Qualified",
                 "span": {
-                  "start": 34,
+                  "start": 44,
                   "end": 47
                 }
               },

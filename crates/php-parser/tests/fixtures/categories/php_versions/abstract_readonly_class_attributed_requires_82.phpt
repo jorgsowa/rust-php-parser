@@ -88,7 +88,7 @@ PHP Parse error:  syntax error, unexpected token "readonly", expecting "abstract
         }
       },
       "span": {
-        "start": 29,
+        "start": 6,
         "end": 41
       }
     }

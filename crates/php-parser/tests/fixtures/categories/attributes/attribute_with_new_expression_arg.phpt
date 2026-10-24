@@ -118,7 +118,7 @@ PHP Fatal error:  Constant expression contains invalid operations in Standard in
         }
       },
       "span": {
-        "start": 40,
+        "start": 6,
         "end": 55
       }
     }

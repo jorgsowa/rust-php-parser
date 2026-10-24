@@ -552,7 +552,7 @@ PHP Fatal error:  Closures in constant expressions must be static in Standard in
         }
       },
       "span": {
-        "start": 189,
+        "start": 165,
         "end": 204
       }
     }

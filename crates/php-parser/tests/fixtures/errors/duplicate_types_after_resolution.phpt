@@ -124,7 +124,7 @@ PHP Fatal error:  Duplicate type N\F is redundant in Standard input code on line
                           ],
                           "kind": "Qualified",
                           "span": {
-                            "start": 46,
+                            "start": 49,
                             "end": 50
                           }
                         },
@@ -142,7 +142,7 @@ PHP Fatal error:  Duplicate type N\F is redundant in Standard input code on line
                           ],
                           "kind": "Qualified",
                           "span": {
-                            "start": 46,
+                            "start": 52,
                             "end": 53
                           }
                         },

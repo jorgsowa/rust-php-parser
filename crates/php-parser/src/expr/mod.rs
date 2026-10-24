@@ -1706,7 +1706,8 @@ fn parse_expr_rest<'arena, 'src>(
                         }
                     }
                 } else {
-                    let span = Span::new(lhs.span.start, member.span.end);
+                    // Ends after the `}` of `->{'x'}`, which the member's own span leaves out.
+                    let span = parser.span_from(lhs.span.start);
                     let expr_kind = if is_nullsafe {
                         ExprKind::NullsafePropertyAccess(PropertyAccessExpr {
                             object: parser.alloc(lhs),
