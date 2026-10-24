@@ -13,78 +13,77 @@ Error messages and recovery follow PHP more closely, spans are ordered and stay 
 
 ### Added
 
-- `PropertyDecl::empty_hook_list` and `Param::empty_hook_list` for an empty hook list `{}` (`php-ast`).
-- `FunctionDecl::missing_param_list`, `MethodDecl::missing_param_list`, `ClosureExpr::missing_param_list` and `ArrowFunctionExpr::missing_param_list` for a parameter list missing its `(` (`php-ast`).
-- `LexerErrorKind::UnexpectedCharacter` (`php-lexer`) and `ForbiddenRule::UnexpectedCharacter` (`php-rs-parser`) for a control character in code.
-- `PrinterConfig::php_version`, the PHP version the output is for (`php-printer`).
-- `ForbiddenRule::CallResultWrite` and `ForbiddenRule::ListAsForeachKey` (`php-rs-parser`).
-- `ParseError::UnmatchedDelimiter` for a `}` that closes nothing (`php-rs-parser`).
+- `ParseError::UnmatchedDelimiter` for a `}` that closes nothing, and `ForbiddenRule::CallResultWrite`, `ForbiddenRule::ListAsForeachKey` and `ForbiddenRule::UnexpectedCharacter` (`php-rs-parser`).
+- `LexerErrorKind::UnexpectedCharacter` for a control character in code (`php-lexer`).
+- `missing_param_list` on `FunctionDecl`, `MethodDecl`, `ClosureExpr` and `ArrowFunctionExpr`, for a parameter list missing its `(` (`php-ast`).
+- `empty_hook_list` on `PropertyDecl` and `Param`, for an empty hook list `{}` (`php-ast`).
 - `ForeachStmt::by_ref_span`, the `&` of a by-reference value (`php-ast`).
 - `Modifiers::is_var` for a property declared with `var` (`php-ast`).
+- `PrinterConfig::php_version`, the PHP version the output is for (`php-printer`).
 
 ### Changed
 
-- The messages for a positional or unpacked argument after a named one, an unparenthesized nested ternary and an unparenthesized arrow function after `|>` match PHP's (`php-rs-parser`).
-- A write to a call result, as in `f() = 1`, `$a->f()++`, `unset(f())` or `[f()] = $a`, reports PHP's `Can't use function return value in write context` or `Can't use method return value in write context`, and a list as a `foreach` key `Cannot use list as key element` (`php-rs-parser`).
-- From PHP 8.4, a `void` or `never` return error in a method, or in a closure or arrow function inside a class, says "method" as PHP does (`A void method must not return a value`), and `return null;` from a `void` function adds PHP's `(did you mean "return;" instead of "return null;"?)` (`php-rs-parser`).
-- `break` or `continue` outside a loop or `switch` reports PHP's `'break' not in the 'loop' or 'switch' context` instead of `Cannot 'break' 1 level` (`php-rs-parser`).
-- A repeated member or promoted-parameter modifier reports PHP's message, such as `Multiple access type modifiers are not allowed` for `public public` or `public private(set) protected(set)` and `Multiple static modifiers are not allowed` (`php-rs-parser`).
-- A repeated class modifier, as in `readonly readonly class` or `abstract readonly abstract class`, reports PHP's `Multiple readonly modifiers are not allowed` instead of a syntax error, and `abstract final class` PHP's `Cannot use the final modifier on an abstract class` (`php-rs-parser`).
-- A `}` at the top level that closes nothing reports `unmatched '}'`, as PHP's `Unmatched '}'`, instead of `expected expression, found '}'` and `No code may exist outside of namespace {}` (`php-rs-parser`).
-- A `try` whose body is missing its `{` or `}` no longer also reports a missing `catch` or `finally` clause, and compile errors inside an unclosed parameter list, such as `Cannot declare promoted property outside a constructor` for `function f(int $x { }`, are dropped, since PHP stops at the syntax error (`php-rs-parser`).
-- Fewer recovery cascades: a `<?php` or `<?=` inside PHP code is one error and the statement after it parses; a `match` arm missing its comma reports only that; the rest of a broken `for` header, as in `for (;;;)`, is skipped; and a `class` with neither a name nor a body, as in `class\Foo::x();` before PHP 8.0, no longer reads the following statements as class members (`php-rs-parser`).
-- A dynamic property fetch spans its closing `}`, as in `$o->{'x'}`; a group `use` item's name spans the name as written, `D` in `A\{B, D}`, instead of the prefix and its siblings; `"${a}"` spans the whole `${a}` like `"${a[0]}"`; and a statement or enum member with attributes starts at its first attribute, like a class member (`php-rs-parser`).
-- Each constant or property of a grouped declaration, as in `const A = 1, B = 2;` or `public $a, $b;`, spans its own item, the first one from the modifiers, instead of the whole declaration or every earlier item, and a later item keeps its own doc comment, as PHP does (`php-rs-parser`).
-- A namespaced name starting with a keyword where it is not expected, as in `class A implements\B {}`, is reported over the whole name, as PHP lexes it (`php-rs-parser`).
-- An `if`, `while` or `switch` missing its `(` before the `{`, as in `if { }`, reports only the missing `(` instead of also reading the body as a curly-brace offset and an unclosed `)` opened at the `{`; `for` and `foreach` no longer report an unclosed `)` whose `(` was missing (`php-rs-parser`).
-- A repeated property hook reports PHP's message, `Cannot redeclare property hook "get"`, with the hook name as written, instead of `duplicate 'get' hook` (`php-rs-parser`).
 - `PhpVersion` lives in `php-ast`; `php-rs-parser` re-exports it at the same paths (`php-ast`, `php-rs-parser`).
-- A `?>` that is a statement of its own, as after `;`, `}`, `:` or another tag, is a `Nop` with the span of the `?>`; a `?>` that ends the statement before it adds nothing, and `?><?php` no longer adds a `Nop` (`php-rs-parser`).
-- Empty statements are dropped, except where the target PHP version rejects them before a `declare`, and so is a `?>` with nothing but its consumed newline before the next `<?php` (`php-printer`).
-- The `CloseTag` token includes the one newline after `?>` (`\n`, `\r\n` or `\r`), as PHP's `T_CLOSE_TAG` does, so the `InlineHtml` after it holds only the output and the `Nop` for `?>` spans the newline (`php-lexer`, `php-rs-parser`).
+- The `CloseTag` token includes the one newline after `?>` (`\n`, `\r\n` or `\r`), as PHP's `T_CLOSE_TAG` does, so the `InlineHtml` after it holds only the output (`php-lexer`, `php-rs-parser`).
+- A `?>` that is a statement of its own, as after `;`, `}`, `:` or another tag, is a `Nop` spanning the `?>` and its newline; a `?>` that ends the statement before it adds nothing, and `?><?php` no longer adds a `Nop` (`php-rs-parser`).
 - `<?= ?>` and `<?=` at the end of the file are an `Echo` holding an `Error`, like `<?= ;` (`php-rs-parser`).
-- A short echo's `Echo` span starts at `<?=` (`php-rs-parser`).
-- An `elseif` branch spans from `elseif`, and an alternative-syntax then, `elseif` or `else` block from its `:` instead of from `if` (`php-rs-parser`).
-- An alternative-syntax `while`, `for`, `foreach`, `declare` or `switch` body spans from its `:` to its last statement, without the closing keyword, like an `if` block; a `catch` clause spans from `catch` instead of `(` (`php-rs-parser`).
+- Error messages match PHP's for:
+  - a positional or unpacked argument after a named one, an unparenthesized nested ternary and an unparenthesized arrow function after `|>`;
+  - a write to a call result, as in `f() = 1`, `$a->f()++`, `unset(f())` or `[f()] = $a` (`Can't use function return value in write context`, or `method` for a method), and a list as a `foreach` key (`Cannot use list as key element`);
+  - from PHP 8.4, a `void` or `never` return error in a method, or in a closure or arrow function inside a class (`A void method must not return a value`), and `return null;` from a `void` function, which adds `(did you mean "return;" instead of "return null;"?)`;
+  - `break` or `continue` outside a loop or `switch` (`'break' not in the 'loop' or 'switch' context` instead of `Cannot 'break' 1 level`);
+  - a repeated member or promoted-parameter modifier, such as `public public` or `public private(set) protected(set)` (`Multiple access type modifiers are not allowed`, `Multiple static modifiers are not allowed`);
+  - a repeated class modifier, as in `readonly readonly class` (`Multiple readonly modifiers are not allowed` instead of a syntax error), and `abstract final class` (`Cannot use the final modifier on an abstract class`);
+  - a repeated property hook (`Cannot redeclare property hook "get"`, with the hook name as written, instead of `duplicate 'get' hook`);
+  - a nested `__halt_compiler()` (`__HALT_COMPILER() can only be used from the outermost scope`), which is now a statement of its own: parsing goes on after it, so it no longer reports `missing closing '}'`, and its node ends at its `;` (`php-rs-parser`).
+- A `}` at the top level that closes nothing reports `unmatched '}'`, as PHP's `Unmatched '}'`, instead of `expected expression, found '}'` and `No code may exist outside of namespace {}` (`php-rs-parser`).
 - An unclosed statement or declaration body reports `missing closing '}'`, and a body missing its `{` reports only that, not also its `}` (`php-rs-parser`).
-- A syntax error at the same token as the previous one is dropped as a recovery cascade, as in `<?php if }` or a body missing at the end of the file (`php-rs-parser`).
-- The asymmetric-visibility version error spans the set-visibility modifier, such as `private(set)` (`php-rs-parser`).
-- A nested `__halt_compiler()` reports PHP's message, `__HALT_COMPILER() can only be used from the outermost scope`, and is a statement of its own: parsing goes on after it, as in PHP, so it no longer reports `missing closing '}'` and its node ends at its `;` (`php-rs-parser`).
-- The printer writes a newline after a `?>` before HTML when the source has one there or when the HTML starts with a newline that `?>` would swallow (`php-printer`).
+- A namespaced name starting with a keyword where it is not expected, as in `class A implements\B {}`, is reported over the whole name, as PHP lexes it (`php-rs-parser`).
+- Fewer recovery cascades (`php-rs-parser`):
+  - a syntax error at the same token as the previous one is dropped, as in `<?php if }` or a body missing at the end of the file;
+  - a `try` whose body is missing its `{` or `}` no longer also reports a missing `catch` or `finally`;
+  - compile errors inside an unclosed parameter list, such as `Cannot declare promoted property outside a constructor` for `function f(int $x { }`, are dropped, since PHP stops at the syntax error;
+  - an `if`, `while` or `switch` missing its `(` before the `{`, as in `if { }`, reports only the missing `(`, and `for` and `foreach` no longer report an unclosed `)` whose `(` was missing;
+  - a `<?php` or `<?=` inside PHP code is one error and the statement after it parses;
+  - a `match` arm missing its comma reports only that, and the rest of a broken `for` header, as in `for (;;;)`, is skipped;
+  - a `class` with neither a name nor a body, as in `class\Foo::x();` before PHP 8.0, no longer reads the following statements as class members.
+- Spans (`php-rs-parser`):
+  - a short echo's `Echo` starts at `<?=`, and a statement or enum member with attributes at its first attribute, like a class member;
+  - an `elseif` branch spans from `elseif`, and an alternative-syntax then, `elseif` or `else` block from its `:` instead of from `if`;
+  - an alternative-syntax `while`, `for`, `foreach`, `declare` or `switch` body spans from its `:` to its last statement, without the closing keyword, and a `catch` clause from `catch` instead of `(`;
+  - each constant or property of a grouped declaration, as in `const A = 1, B = 2;` or `public $a, $b;`, spans its own item, the first one from the modifiers, and a later item keeps its own doc comment, as PHP does;
+  - a dynamic property fetch spans its closing `}`, as in `$o->{'x'}`; `"${a}"` spans the whole `${a}`, like `"${a[0]}"`; and a group `use` item's name spans only the name as written, `D` in `A\{B, D}`;
+  - the asymmetric-visibility version error spans the set-visibility modifier, such as `private(set)`.
+- The printer drops empty statements, except where the target PHP version rejects them before a `declare`, and drops a `?>` with nothing but its newline before the next `<?php` (`php-printer`).
+- The printer writes a newline after a `?>` before HTML when the source has one there, or when the HTML starts with a newline that `?>` would swallow (`php-printer`).
 
 ### Fixed
 
-- An empty hook list `{}` prints as `{}` instead of `;`, so the printed code keeps PHP's error (`php-printer`).
-- A class property with a fully qualified type and no modifier, such as `\Foo $a;`, is a syntax error instead of being accepted (`php-rs-parser`).
-- An enum property with a fully qualified type, such as `public \Foo\Bar $a;`, reports `Enum E cannot include properties` instead of a syntax error (`php-rs-parser`).
 - An unclosed `exit(`, `die(` or `clone(` call no longer panics (`php-rs-parser`).
-- A promoted parameter with only `readonly`, `final` or a set-visibility modifier, such as `private(set) int $a`, reports that promotion requires PHP 8.0 (`php-rs-parser`).
-- No span ends before it starts: the version errors for set-only visibility on a promoted parameter and for a non-capturing `catch`, and the spans of error statements, bodies missing their `{`, `use` items, parameters, attributes, short echo tags, static variables and alternative-syntax `elseif` branches after a missing token (`php-rs-parser`).
-- A node recovered from a missing or unexpected token, such as the name and parameter of `public function @return f() {}`, is empty and placed right after the last consumed token, so it lies inside its parent's span and no longer covers a token it did not consume (`php-rs-parser`).
-- A missing operand before an operator, as in `* 2;`, sits at the operator, so the expression and statement no longer start at the whitespace before it (`php-rs-parser`).
-- A missing item in a group `use`, as in `use A\{B, , C};`, has an `Error` name instead of the prefix with a span covering `A\{B,` (`php-rs-parser`).
-- A missing static variable after a trailing comma lies inside its statement's span (`php-rs-parser`).
-- `__halt_compiler() ?>` followed by `\r` leaves the `\r` out of the data, as PHP does (`php-rs-parser`).
 - A control character in code, including form feed, is an error from PHP 8.0 instead of being skipped (`php-lexer`, `php-rs-parser`).
 - `<?php` or `<?=` inside PHP code lexes as `<`, so it is a syntax error instead of being ignored (`php-lexer`).
-- A `?>` where a statement is expected, as in `if ($a) ?>x<?php`, is the empty body and the HTML after it runs unconditionally, as in PHP (`php-rs-parser`).
+- A class property with a fully qualified type and no modifier, such as `\Foo $a;`, is a syntax error instead of being accepted (`php-rs-parser`).
+- An enum property with a fully qualified type, such as `public \Foo\Bar $a;`, reports `Enum E cannot include properties` instead of a syntax error (`php-rs-parser`).
+- A promoted parameter with only `readonly`, `final` or a set-visibility modifier, such as `private(set) int $a`, reports that promotion requires PHP 8.0 (`php-rs-parser`).
+- A spread in `list()`, as in `list(...$x) = $a`, or in a `foreach` destructuring target reports PHP's `Spread operator is not supported in assignments` instead of a syntax error or `Assignments can only happen to writable values`; in a nested list it is reported at the element (`php-rs-parser`).
+- A `?>` where a statement is expected, as in `if ($a) ?>x<?php`, is the empty body, and the HTML after it runs unconditionally, as in PHP (`php-rs-parser`).
+- `__halt_compiler() ?>` followed by `\r` leaves the `\r` out of the data, as PHP does (`php-rs-parser`).
+- A function, method, closure or arrow function missing its `(`, as in `function f {}`, `function {}` or `fn => 1`, has no parameters instead of an empty placeholder, so a function or closure body is no longer read as a parameter's property hook list (`php-rs-parser`).
+- Recovery from an invalid class or enum member skips over a `{ ... }` block, so the block's `}` no longer ends the class, as in `public function @return f() {}` (`php-rs-parser`).
+- A syntax error at the closing `}` of a `{$...}` interpolation, as in `"{$a->}"`, reports `found '}'` at the `}` instead of `found end of file` (`php-rs-parser`).
+- No span ends before it starts: the version errors for set-only visibility on a promoted parameter and for a non-capturing `catch`, and the spans of error statements, bodies missing their `{`, `use` items, parameters, attributes, short echo tags, static variables and alternative-syntax `elseif` branches after a missing token (`php-rs-parser`).
+- A node recovered from a missing or unexpected token, such as the name and parameter of `public function @return f() {}`, is empty and placed right after the last consumed token, so it lies inside its parent's span and no longer covers a token it did not consume; this includes a missing static variable after a trailing comma (`php-rs-parser`).
+- A missing operand before an operator, as in `* 2;`, sits at the operator, so the expression and statement no longer start at the whitespace before it (`php-rs-parser`).
+- A missing item in a group `use`, as in `use A\{B, , C};`, has an `Error` name instead of the prefix with a span covering `A\{B,` (`php-rs-parser`).
+- The printer keeps PHP's error instead of printing valid code for an empty hook list `{}` (it printed `;`), a function, method, closure or arrow function missing its `(` (it added `()`), and, when given the source, a nested ternary or an arrow function after `|>` written without parentheses, such as `$a ? $b : $c ? $d : $e` or `1 |> fn($x) => $x`. Without the source, the printer still adds the parentheses (`php-printer`).
 - Printing keeps whether a `declare(encoding=...)` or `declare(strict_types=...)` after an empty statement is valid, instead of making a `?>` that ends a statement before one an error (`php-printer`).
-- A method missing its `(` has no parameters instead of an empty placeholder (`php-rs-parser`).
-- A function missing its `(`, as in `function f {}`, has no parameters, so its body is no longer read as a parameter's property hook list (`php-rs-parser`).
-- A closure missing its `(`, as in `function {}`, has no parameters, so its body is no longer read as a parameter's property hook list (`php-rs-parser`).
-- An arrow function missing its `(`, as in `fn => 1`, has no parameters instead of an empty placeholder (`php-rs-parser`).
-- A grouped constant or property is split into declarations that keep their own doc comments, instead of moving `/** q */` in `public $p, /** q */ $q;` to the next member (`php-printer`).
-- A comment before a property hook, such as a doc comment on `set(int $value) {}` or `// c` before `get`, prints before the hook instead of between its parameter list or keyword and its body (`php-printer`).
 - A heredoc line whose escapes decode to the closing label, as `\x45OT` in `<<<EOT`, prints with its first byte escaped instead of ending the heredoc early (`php-printer`).
 - A control character in a string, backtick or heredoc literal prints as `\xNN` instead of the raw byte, so `"a\0b"` prints as `"a\x00b"` instead of a single-quoted string holding a NUL, consistent with `\e`, `\f` and `\v` (`php-printer`).
-- An empty alternative-syntax body, as in `foreach ($a as &$v): endforeach;` or `if ($a): endif;`, prints without a blank line (`php-printer`).
-- A blank line follows a function, class-like or namespace declaration as it precedes one, instead of only before it (`php-printer`).
+- A grouped constant or property is split into declarations that keep their own doc comments, instead of moving `/** q */` in `public $p, /** q */ $q;` to the next member (`php-printer`).
+- A comment before a property hook, such as a doc comment on `set(int $value) {}` or `// c` before `get`, prints before the hook instead of between its parameter list or keyword and its body (`php-printer`).
 - A property declared with `var` prints as `var` instead of `public` (`php-printer`).
-- With the source given, a nested ternary or an arrow function after `|>` that the source writes without parentheses prints without them, so `$a ? $b : $c ? $d : $e` and `1 |> fn($x) => $x` keep PHP's error instead of becoming valid; without the source, the printer still adds the parentheses (`php-printer`).
-- A function, method, closure or arrow function missing its `(` prints without `()`, so the printed code keeps PHP's error instead of becoming valid (`php-printer`).
-- A syntax error at the closing `}` of a `{$...}` interpolation, as in `"{$a->}"`, reports `found '}'` at the `}` instead of `found end of file` (`php-rs-parser`).
-- Recovery from an invalid class or enum member skips over a `{ ... }` block, so the block's `}` no longer ends the class, as in `public function @return f() {}` (`php-rs-parser`).
-- A spread in `list()`, as in `list(...$x) = $a`, or in a `foreach` destructuring target reports PHP's `Spread operator is not supported in assignments` instead of a syntax error or `Assignments can only happen to writable values`; an element of a nested list is reported at the element (`php-rs-parser`).
+- A blank line follows a function, class-like or namespace declaration as well as preceding it (`php-printer`).
+- An empty alternative-syntax body, as in `foreach ($a as &$v): endforeach;` or `if ($a): endif;`, prints without a blank line (`php-printer`).
 
 ## [0.25.1] - 2026-10-22
 
@@ -105,7 +104,7 @@ Error messages and recovery follow PHP more closely, spans are ordered and stay 
 
 ## [0.25.0] - 2026-10-22
 
-Errors are now machine-readable: every `ParseError` has a stable code, and every compile-time error names the rule it breaks. Version-targeted parsing follows each PHP version from 7.4 to 8.6 much more closely.
+Errors are machine-readable: every `ParseError` has a stable code, and every compile-time error names the rule it breaks. Version-targeted parsing follows each PHP version from 7.4 to 8.6 much more closely.
 
 ### Added
 
@@ -128,7 +127,7 @@ Errors are now machine-readable: every `ParseError` has a stable code, and every
 - Version gates follow PHP from 7.4 to 8.6: errors that older versions report (trailing commas in parameter lists before 8.0, `?false` before 8.2, `new readonly class` before 8.3, `exit` and `clone` argument forms, …), valid PHP 7.4 that was rejected (`mixed` as a class name, `function match()`, `#[...]` as a comment, …), keywords such as `readonly`, `never` and `__PROPERTY__` read as names before they were introduced, and PHP 8.6 features (readonly property defaults, partial function application in constant expressions, property writes through constant objects). `\static` and `namespace\static` in types are rejected from PHP 8.5 (`php-rs-parser`).
 - Lexing: nothing after `__halt_compiler()` is lexed, casts need only spaces or tabs around the keyword, a lone `\r` is a line break, and interpolations are scanned correctly past comments, backticks, heredocs and nested strings (`php-lexer`, `php-rs-parser`).
 - Parsing: bare `yield` before `?`, `??`, `:`, `=>` and `as`; `var`, `insteadof` and hook names match case-insensitively; `**` stays out of an `instanceof` operand; `::` works on non-constant array expressions; `self` and `parent` are valid global constant names and stay unresolved in anonymous class types (`php-rs-parser`).
-- Compile-time checks no longer reject valid code (`Enum` in intersection types, foldable class names, short-circuit folding, set hook parameter types, heredoc indentation inside interpolations) and now catch stray semicolons in class bodies, `var` with other modifiers, `final private` and pre-8.1 `final` constants, reserved enum names, invalid typed enum constants, by-reference `get` hooks with a `set` hook and `<?=` without an expression (`php-rs-parser`).
+- Compile-time checks no longer reject valid code (`Enum` in intersection types, foldable class names, short-circuit folding, set hook parameter types, heredoc indentation inside interpolations) and catch stray semicolons in class bodies, `var` with other modifiers, `final private` and pre-8.1 `final` constants, reserved enum names, invalid typed enum constants, by-reference `get` hooks with a `set` hook and `<?=` without an expression (`php-rs-parser`).
 - A parenthesized constant named like a cast keyword, such as `(int)`, no longer prints as a cast (`php-printer`).
 
 ## [0.24.1] - 2026-10-21
@@ -143,10 +142,10 @@ Errors are now machine-readable: every `ParseError` has a stable code, and every
 
 - `php_ast::Modifiers` (`visibility`, `set_visibility`, `is_static`, `is_abstract`, `is_final`, `is_readonly`), shared by methods, properties, parameters, class constants and property hooks (`php-ast`).
 - `php_ast::ByteStr` (arena) and `php_ast::owned::ByteString`: a PHP string literal's value as bytes, with `as_bytes()`, `to_str()` and `to_string_lossy()`. With `serde`, valid UTF-8 serializes as a string and anything else as `{"bytes": [..]}` (`php-ast`).
-- `Fold::fold_stmts` and `OwnedFold::fold_stmts` hooks, called for the program, every block and every `case` body, so a fold can delete, split or insert statements (`php-ast`).
+- `Fold::fold_stmts` and `OwnedFold::fold_stmts`, called for the program, every block and every `case` body, so a fold can delete, split or insert statements (`php-ast`).
 - `walk_trait_adaptation`, `walk_owned_trait_adaptation`, and `walk_owned_block` / `fold_owned_block` re-exported from `php_ast::owned` (`php-ast`).
 - `new` constructors for the node structs that are now `#[non_exhaustive]` (`php-ast`).
-- Owned `Name::span()`, `kind()`, `to_string_repr()`, `join_parts()` and `Expr::name_str()`, `into_kind()`, like their arena counterparts. `Expr` implements `Drop`; take the kind out with `into_kind()` instead of destructuring (`php-ast`).
+- Owned `Name::span()`, `kind()`, `to_string_repr()`, `join_parts()` and `Expr::name_str()`, `into_kind()`, like their arena counterparts (`php-ast`).
 
 ### Changed
 
@@ -155,22 +154,28 @@ Errors are now machine-readable: every `ParseError` has a stable code, and every
 - **Breaking:** `Arg` has `kind: ArgKind` and `ArrayElement` has `kind: ArrayElementKind` instead of `value` + `unpack` + `by_ref`. Read them with `value()`, `is_spread()`, `is_by_ref()` and `is_placeholder()` (`php-ast`, `php-rs-parser`, `php-printer`).
 - **Breaking:** `MethodDecl`, `PropertyDecl`, `Param`, `ClassConstDecl` and `PropertyHook` carry `modifiers: Modifiers` instead of separate `visibility`, `is_static`, `is_final`, … fields (`php-ast`, `php-rs-parser`, `php-printer`).
 - **Breaking:** `ExprKind::String` and `StringPart::Literal` hold a `ByteStr` / `ByteString` instead of a `str`, because a PHP string is bytes. Nowdoc values are unchanged (`php-ast`, `php-rs-parser`, `php-printer`).
-- **Breaking:** new fields that were parsed and dropped before: `PropertyDecl::is_final` / `is_abstract` (PHP 8.4), `ForeachStmt::by_ref`, and `TraitAdaptationKind::Alias::is_final`. Each is serialized only when `true` (`php-ast`, `php-rs-parser`, `php-printer`).
-- **Breaking:** removed `BuiltinType::Integer`, `Double` and `Boolean`; `integer`, `double` and `boolean` are class names and parse as `TypeHintKind::Named` (`php-ast`, `php-rs-parser`).
-- **Breaking:** removed `TokenKind::From`; `from` is an identifier that the parser recognizes only after `yield` (`php-lexer`).
-- **Breaking:** removed `ParseError::ForbiddenWarning`, `Severity` and `ParseError::severity()`. Every diagnostic is an error, matching `php -l`; PHP warnings are no longer reported (`php-rs-parser`).
+- **Breaking:** new fields for modifiers that were parsed and dropped: `PropertyDecl::is_final` / `is_abstract` (PHP 8.4), `ForeachStmt::by_ref`, and `TraitAdaptationKind::Alias::is_final`. Each is serialized only when `true` (`php-ast`, `php-rs-parser`, `php-printer`).
+- **Breaking:** every diagnostic is an error, matching `php -l`; PHP warnings are not reported (`php-rs-parser`).
 - **Breaking:** `Visitor`, `ScopeVisitor`, `OwnedVisitor` and `OwnedScopeVisitor` have an associated `type Break`, and `visit_*` / `walk_*` return `ControlFlow<Self::Break>`. Existing visitors add `type Break = ();` (`php-ast`).
 - **Breaking:** `FoldOwned` is renamed `OwnedFold` and takes every node by value; `fold_owned_*` move the children they keep instead of cloning them. `Fold::fold_closure_use_var` takes the arena (`php-ast`).
-- **Breaking:** removed the `php_rs_parser::phpdoc` re-export; depend on `phpdoc-parser` directly. The `serde` feature of `php-rs-parser` no longer enables `phpdoc-parser/serde` (`php-rs-parser`).
+- **Breaking:** the `serde` feature of `php-rs-parser` no longer enables `phpdoc-parser/serde` (`php-rs-parser`).
 - **Breaking:** the most extensible structs (`ClassDecl`, `FunctionDecl`, `ClosureExpr`, `IfStmt`, `ForeachStmt`, `TryCatchStmt`, `UseDecl`, … in arena and owned form), the struct variants of `ParseError` and `LexerError`, and the `phpdoc-parser` structs are `#[non_exhaustive]`. Build structs with `new(..)` and match errors with `..` (`php-ast`, `php-rs-parser`, `php-lexer`, `phpdoc-parser`).
+- **Breaking:** owned `Expr` implements `Drop`; take the kind out with `into_kind()` instead of destructuring (`php-ast`).
 - **Breaking:** `NameStr::__src` / `__arena` are the documented `from_source` / `from_arena`; `ArenaVec::into_iter` returns `php_ast::ast::IntoIter`; `Lexer::errors` is the `errors()` accessor. Printer-only spans and `Lexer::is_verbatim_string` are `#[doc(hidden)]` and outside semver (`php-ast`, `php-lexer`, `php-rs-parser`).
 - The printer puts trait `use` first in class bodies, sorts each run of top-level `use` imports, opens anonymous class braces on the same line, puts a blank line before a member that starts with a comment, and indents a comment in an empty block (`php-printer`).
+
+### Removed
+
+- **Breaking:** `BuiltinType::Integer`, `Double` and `Boolean`; `integer`, `double` and `boolean` are class names and parse as `TypeHintKind::Named` (`php-ast`, `php-rs-parser`).
+- **Breaking:** `TokenKind::From`; `from` is an identifier that the parser recognizes only after `yield` (`php-lexer`).
+- **Breaking:** `ParseError::ForbiddenWarning`, `Severity` and `ParseError::severity()` (`php-rs-parser`).
+- **Breaking:** the `php_rs_parser::phpdoc` re-export; depend on `phpdoc-parser` directly (`php-rs-parser`).
 
 ### Fixed
 
 #### Parser: invalid code PHP rejects
 
-Many constructs were accepted that PHP reports at compile time; they are now reported with PHP's wording:
+These constructs were accepted and are now reported with PHP's wording (`php-rs-parser`):
 
 - Names and imports: imports differing only in case, `use namespace\A`, a trailing `\` in a name, whitespace inside a namespaced name, `namespace namespace\Foo`, builtin or special class names as import aliases or with a namespace (`\int`, `Foo\int`, `use A as self`), `self`, `parent` and `static` where no class scope exists or written as `\self`.
 - Declarations: `class callable`, a class constant named `class`, duplicate constants, parameters, properties and methods, abstract methods in non-abstract classes, methods without a body, `const`, `use` and `namespace` inside blocks, and nested named classes.
@@ -185,18 +190,18 @@ Many constructs were accepted that PHP reports at compile time; they are now rep
 
 #### Parser: valid code PHP accepts
 
-- `$this?->foo(...)`, `?>` ending a class member or a `case`, `goto`, `unset`, `global`, `static`, `use`, `const` or `namespace` statement, `break`, `continue`, `return` or `yield`, and a `switch` opening with `?>`/`<?php`.
-- `use A as enum`, goto labels such as `self:` and `null:`, a method named `namespace` in a trait adaptation, `$obj->__halt_compiler`, `A&B &$x`, `abstract readonly class` below 8.4, `int\X` class names, `extends int`, a constructor parameter with hooks and no visibility, grouped class constants in enums and with attributes, `yield` in hooks and enum methods, `1...2`, and whitespace-only heredoc lines shorter than the closing indentation.
+- `$this?->foo(...)`, `?>` ending a class member or a `case`, `goto`, `unset`, `global`, `static`, `use`, `const` or `namespace` statement, `break`, `continue`, `return` or `yield`, and a `switch` opening with `?>`/`<?php` (`php-rs-parser`).
+- `use A as enum`, goto labels such as `self:` and `null:`, a method named `namespace` in a trait adaptation, `$obj->__halt_compiler`, `A&B &$x`, `abstract readonly class` below 8.4, `int\X` class names, `extends int`, a constructor parameter with hooks and no visibility, grouped class constants in enums and with attributes, `yield` in hooks and enum methods, `1...2`, and whitespace-only heredoc lines shorter than the closing indentation (`php-rs-parser`).
 - `from` works as a function, class or constant name (`php-lexer`).
-- `__CONSTRUCT` is recognized case-insensitively, and `private(SET)` is matched like PHP's single token.
+- `__CONSTRUCT` is recognized case-insensitively, and `private(SET)` is matched like PHP's single token (`php-rs-parser`).
 
 #### Parser: wrong trees
 
-- Precedence and binding: `(void) f() + 1`, `include $a or $b`, `throw $e or 1`, `yield $a or $b`, `clone($a)->b = 1`, `clone $a ** 2`, `$a = &$b + $c`, and postfix `++` / `--` against prefix operators.
-- `new namespace\Foo` lost the `namespace\` prefix; `A::{$m}()` is now `ExprKind::StaticMethodCallDynamic` and no longer requires PHP 8.3; `#[Attr] function &f() {}` is a function, not a by-reference closure; `include \dirname(...)` and similar apply the keyword to the name.
-- Strings: octal escapes above `\377`, surrogate `\u{D800}` escapes, `"$a?->b"`, `${expr}`, `"\xff"` and other non-UTF-8 escapes now decode to the bytes PHP stores; a heredoc line inside `{$...}` that looks like the closing label; long float literals were truncated; `declare(...) ?>` took following HTML as its body.
-- Grouped property declarations give every property the declared visibility, type and attributes.
-- Version gates follow PHP (`fn(): never`, `self` in intersections, `namespace\static`, untyped readonly promotion).
+- Precedence and binding: `(void) f() + 1`, `include $a or $b`, `throw $e or 1`, `yield $a or $b`, `clone($a)->b = 1`, `clone $a ** 2`, `$a = &$b + $c`, and postfix `++` / `--` against prefix operators (`php-rs-parser`).
+- `new namespace\Foo` keeps the `namespace\` prefix; `A::{$m}()` is `ExprKind::StaticMethodCallDynamic` and no longer requires PHP 8.3; `#[Attr] function &f() {}` is a function, not a by-reference closure; `include \dirname(...)` and similar apply the keyword to the name (`php-rs-parser`).
+- Strings: octal escapes above `\377`, surrogate `\u{D800}` escapes, `"$a?->b"`, `${expr}`, `"\xff"` and other non-UTF-8 escapes decode to the bytes PHP stores; a heredoc line inside `{$...}` that looks like the closing label no longer ends the heredoc; long float literals are no longer truncated; `declare(...) ?>` no longer takes the following HTML as its body (`php-rs-parser`).
+- Grouped property declarations give every property the declared visibility, type and attributes (`php-rs-parser`).
+- Version gates follow PHP for `fn(): never`, `self` in intersections, `namespace\static` and untyped readonly promotion (`php-rs-parser`).
 
 #### Lexer
 
@@ -209,802 +214,604 @@ Many constructs were accepted that PHP reports at compile time; they are now rep
 
 #### Printer
 
-- Printed code PHP rejects or reads differently: `- -$a` and `+ ++$a`, braces in `"{$a}b"`, mixed group `use` kinds, `$a->{$n . 'b'}(...)`, attributes on anonymous classes, hooks on promoted properties, the precedence of `and`, `or`, `xor`, `|>`, casts and `!`, and inline HTML around `<?php ?>` and in `switch` cases.
-- Comments: kept on their own line or at the end of the line, inside arrays, argument lists and method chains, around doc comments, and after the last statement; doc comments are re-indented under `/**`.
+- Printed code that PHP rejects or reads differently: `- -$a` and `+ ++$a`, braces in `"{$a}b"`, mixed group `use` kinds, `$a->{$n . 'b'}(...)`, attributes on anonymous classes, hooks on promoted properties, the precedence of `and`, `or`, `xor`, `|>`, casts and `!`, and inline HTML around `<?php ?>` and in `switch` cases (`php-printer`).
+- Comments are kept on their own line or at the end of the line, inside arrays, argument lists and method chains, around doc comments, and after the last statement; doc comments are re-indented under `/**` (`php-printer`).
 - Floats below `1e-4` or from `1e15` use exponent notation, and non-UTF-8 string bytes are written as escapes (`php-printer`).
-
----
 
 ## [0.23.0] - 2026-10-18
 
 ### Changed
 
-- **Breaking:** `serde` is now an opt-in feature instead of an unconditional dependency. `Serialize` impls for the AST and the `php_ast::fingerprint` module require `features = ["serde"]`; the `php-rs-parser` feature of the same name forwards to `php-ast` and `phpdoc-parser`. A plain parse no longer compiles `serde_derive` or expands `Serialize` for the ~170 AST types (`php-ast`, `phpdoc-parser`, `php-rs-parser`).
+- **Breaking:** `serde` is an opt-in feature instead of an unconditional dependency. `Serialize` impls for the AST and the `php_ast::fingerprint` module require `features = ["serde"]`; the `php-rs-parser` feature of the same name forwards to `php-ast` and `phpdoc-parser`. A plain parse no longer compiles `serde_derive` (`php-ast`, `phpdoc-parser`, `php-rs-parser`).
 - docs.rs builds `php-ast` and `phpdoc-parser` with all features and `php-rs-parser` with the `serde` feature (`php-ast`, `phpdoc-parser`, `php-rs-parser`).
-
----
 
 ## [0.22.0] - 2026-10-18
 
-### Fixed
-
-- Removed the unused `miette` dependency, which pulled about 70 crates into every build (`php-rs-parser`).
-- `php-rs-parser` no longer has a build script; it ran `php -r` on every build only to configure its own tests, which now detect PHP at run time (`php-rs-parser`).
-- Every published crate now ships its `LICENSE` file, as BSD-3-Clause requires.
-- `Cargo.lock` is committed, so `cargo publish --locked` and the MSRV job build against known dependency versions.
-- **Deeply nested input no longer overflows the stack.** Statements, expressions and the code inside string interpolation now share one recursion budget of 512 levels, and input nested deeper reports the new `ParseError::NestingTooDeep` instead of aborting the process. Statement nesting had no limit at all and interpolated code restarted the count at zero, so about 10 KB of `{` or `if (1) {` was enough to crash. The budget is sized so that the costliest paths stay within about 1 MiB of stack in release builds (`php-rs-parser`).
-- Expressions nested more than 50 levels deep are no longer rejected. Most constructs (`[`, `(`, `f(`, `match (`) take one level of the 512-level budget; some take two, e.g. `($x + (...))` (`php-rs-parser`).
-- Nested strings inside interpolation (`"{$a["{$b[...]}"]}"`, nested heredocs) no longer take quadratic time. Every nested string is re-lexed by its own sub-parser, so each one now takes a larger share of the budget, which keeps string nesting under 32 levels (`php-rs-parser`).
-- The lexer skips nested strings inside `{$...}` with an explicit stack instead of recursion; deeply nested double-quoted strings overflowed the stack before the parser's limit applied (`php-lexer`).
-- `parse()` no longer overflows the stack on long left-associative or postfix chains such as a 20,000-term concatenation or method chain: converting the AST to its owned form and back, and dropping the owned form, walk chains iteratively (`php-ast`).
-- The printer prints such chains without recursing per link, and its depth guard now sits well above anything the parser accepts, so a 300-term concatenation is no longer printed as `/* max depth */` (`php-printer`).
-- Sources over 4 GiB are refused in release builds too. The size guard was a `debug_assert!`, so release builds wrapped the `u32` span offsets and could slice the wrong text or panic. The `parse_*` functions now return an empty program with the new `ParseError::SourceTooLarge`, and `Lexer::new`/`Lexer::new_at` yield only `Eof` with a `LexerErrorKind::FileTooLarge` error (`php-lexer`, `php-rs-parser`).
-- The WebAssembly build reserves an 8 MiB stack instead of the 1 MiB default; wasm has no guard page, so an overflow there would corrupt memory rather than trap (`php-wasm`).
-- `errors_truncated` is `true` only when errors were actually dropped; it was also set when exactly 100 errors were reported (`php-rs-parser`).
-- `ParseError::UnclosedDelimiter` reads "expected ')' to close the delimiter opened at byte 3074" instead of "unclosed '')'' opened at Span { start: 3074, end: 3075 }", and its `delimiter` field holds `')'` rather than `'')''` (`php-rs-parser`).
-- `SourceMap::line_col_to_offset` returns `None` for a column past the end of its line instead of an offset on a later line, and no longer overflows on a huge column (`php-rs-parser`).
-
 ### Added
 
-- `php_ast::fingerprint::structural_fingerprint` hashes any AST node (arena or owned) while ignoring every `Span`, so a declaration that only moved keeps its fingerprint. It is meant for incremental analyzers: comparing fingerprints lets a salsa query backdate a function or method whose code did not change when the file around it was edited (`php-ast`).
-- `Param::new` and `MethodDecl::new` in the arena and owned AST (`php-ast`).
+- `php_ast::fingerprint::structural_fingerprint` hashes any AST node (arena or owned) while ignoring every `Span`, so a declaration that only moved keeps its fingerprint, for example to let an incremental analyzer skip unchanged functions (`php-ast`).
+- `ParseError::NestingTooDeep` and `ParseError::SourceTooLarge`, and `LexerErrorKind::FileTooLarge` (`php-rs-parser`, `php-lexer`).
+- `Param::new` and `MethodDecl::new` in the arena and owned AST, and `NameStr::new_in` to build a `NameStr` in an arena (`php-ast`).
 - `TokenKind::description` (`php-lexer`).
-- `ScopeVisitor` and `OwnedScopeVisitor` gain `visit_name` and `visit_block`, and `FoldOwned` gains `fold_trait_use` and `fold_trait_adaptation` (with `fold_owned_trait_use`/`fold_owned_trait_adaptation`), matching the plain visitors and the arena `Fold`. All have default bodies (`php-ast`).
-- `NameStr::new_in` builds a `NameStr` in an arena without the hidden `__arena` constructor (`php-ast`).
-- `php_ast::bumpalo` and `php_rs_parser::bumpalo` re-export the arena allocator that appears in their APIs (`php-ast`, `php-rs-parser`).
-- Pull requests run `cargo-semver-checks` against their base branch (informational), and the release workflow runs it against crates.io before publishing.
-- `Lexer::is_verbatim_string` reports whether a quoted-string token contains no escape sequence (and, for a double-quoted string, no `$`), as recorded while lexing it (`php-lexer`).
-- `ParseResult`, `SourceMap`, `PrinterConfig` and `Indent` implement `Debug` and `Clone` (`SourceMap`, `PrinterConfig` and `Indent` also `PartialEq`/`Eq`, `Indent` also `Copy`); `ArenaParseResult` and `ParserContext` implement `Debug` (`php-rs-parser`, `php-printer`).
+- `Lexer::is_verbatim_string`, whether a quoted-string token contains no escape sequence (and, for a double-quoted string, no `$`) (`php-lexer`).
+- `ScopeVisitor` and `OwnedScopeVisitor` gain `visit_name` and `visit_block`, and `FoldOwned` gains `fold_trait_use` and `fold_trait_adaptation` (with `fold_owned_trait_use` / `fold_owned_trait_adaptation`), all with default bodies (`php-ast`).
+- `php_ast::bumpalo` and `php_rs_parser::bumpalo` re-export the arena allocator used in their APIs (`php-ast`, `php-rs-parser`).
+- `ParseResult`, `SourceMap`, `PrinterConfig` and `Indent` implement `Debug` and `Clone` (`SourceMap`, `PrinterConfig` and `Indent` also `PartialEq` / `Eq`, `Indent` also `Copy`); `ArenaParseResult` and `ParserContext` implement `Debug` (`php-rs-parser`, `php-printer`).
 
 ### Changed
 
-- **Breaking:** every public enum is `#[non_exhaustive]` — all AST enums (`ExprKind`, `StmtKind`, `BinaryOp`, `TypeHintKind`, …, arena and owned), `PhpVersion`, `ParseError`, `Severity`, `TokenKind`, `LexerErrorKind`, `Indent` and `TextSegment` — so new PHP syntax and versions can be added without a major release. Matches on them outside these crates need a `_` arm. The structs most likely to grow fields are `#[non_exhaustive]` too: `Param`, `MethodDecl` (arena and owned), `ClassModifiers`, `ParseResult`, `ArenaParseResult` and `PrinterConfig`. Build them with `Param::new`/`MethodDecl::new` or `Default::default()` and assign the remaining public fields, e.g. `let mut config = PrinterConfig::default(); config.indent = Indent::Spaces(2);` (all crates).
-- The printer writes `/* unsupported … */` for a node kind it does not know, rather than dropping it silently (`php-printer`).
-- **Breaking:** `ParseError::Expected::found` is a `Cow<'static, str>` description (e.g. `"';'"`, `"identifier"`) instead of a `php_lexer::TokenKind`, so new lexer tokens are no longer a breaking change for `php-rs-parser`. The error message text is unchanged. `TokenKind::description` returns the same text as its `Display` (`php-rs-parser`, `php-lexer`).
-- **Breaking:** the printer-only offsets are `Span`s of the token they mark: `IfStmt::else_kw_start` → `else_kw_span`, `TryCatchStmt::finally_kw_start` → `finally_kw_span`, `MatchExpr::brace_start` → `brace_span`, `TraitUseDecl::adaptations_brace_start` → `adaptations_brace_span`, in both the arena and owned AST. They are still not serialized (`php-ast`, `php-rs-parser`, `php-printer`).
-- **Breaking:** `php_rs_parser::instrument` is public only with the `instrument` feature, and `owned::from_owned_program` is `#[doc(hidden)]`: both are internals, not stable API (`php-rs-parser`, `php-ast`).
-- **Breaking:** `ExprKind::String` holds a `NameStr` instead of `&'arena str`, so literals without escape sequences borrow the source instead of being copied into the arena. `NameStr` derefs to `str`; use `.as_str()` where a `&str` is needed (`php-ast`, `php-rs-parser`).
-- Faster parsing, measured on the Laravel framework with its vendor directory (95 MB), the workload of the `mir` analyzer: arena parsing is ~14% faster and `parse()` ~10% faster. String literals are no longer copied into the arena, the parser no longer rescans each quoted string for escapes or interpolation that the lexer already saw, double-quoted strings are lexed with a vectorised search instead of byte by byte, and array literals start with room for two elements instead of growing from zero. Arena memory use is ~7% lower (`php-lexer`, `php-rs-parser`).
-- PHPDoc parsing is ~27% faster with identical output: lines are borrowed from the comment rather than copied, and text is appended directly instead of being built and merged (`phpdoc-parser`).
-- `ParseError` has new `NestingTooDeep` and `SourceTooLarge` variants; exhaustive matches need extra arms. Exceeding the nesting limit used to produce `ParseError::Forbidden` with the message "maximum expression nesting depth exceeded" (`php-rs-parser`).
-- `php_ast::owned::Expr` implements `Drop`, so its fields can no longer be moved out by destructuring; take them with `std::mem::replace(&mut expr.kind, ExprKind::Error)` instead (`php-ast`).
-- **Breaking:** `ParseError::VersionTooLow::required` and `::used` are `PhpVersion` values instead of strings. The message text is unchanged (`php-rs-parser`).
-- **Breaking:** `ResolvedName::Special` holds a `SpecialClass` enum (`Self_`, `Static`, `Parent`) instead of a `&'static str` (`php-ast`).
-- **Breaking:** `ExprKind::ThrowExpr` is renamed to `ExprKind::Throw`, matching `StmtKind::Throw`, in the arena and owned AST and in serialized output (`php-ast`).
-- **Breaking:** `ExprKind::StaticDynMethodCall` and `StaticDynMethodCallExpr` are renamed to `StaticMethodCallDynamic` and `StaticMethodCallDynamicExpr`, matching `ClassConstAccessDynamic` and `StaticPropertyAccessDynamic` (`php-ast`).
-- **Breaking:** `StmtKind::Label` holds an `Ident` borrowed from the source, like `StmtKind::Goto`, instead of an arena-allocated `&str` (`Box<str>` in the owned AST). Serialized output is unchanged (`php-ast`, `php-rs-parser`).
-- **Breaking:** `owned::Ident` is a struct instead of an alias for `Option<Box<str>>`, with the same API as the arena `Ident`: `Ident::name`, `Ident::ERROR`, `as_str`, `is_error`, `or_error`, `Display` and `PartialEq<&str>`. Serialized output is unchanged (`php-ast`).
-- **Breaking:** `phpdoc_parser::Span` is a re-export of `php_ast::Span` instead of its own type, so PHPDoc and AST spans share one type; PHPDoc offsets are still relative to the docblock text. `phpdoc-parser` now depends on `php-ast` (`phpdoc-parser`).
-- **Breaking:** `phpdoc_parser::body_text` takes `Option<&PhpDocText>` instead of `&Option<PhpDocText>` (call it with `tag.body.as_ref()`), and `find_tags` and `inline_tags` return iterators instead of `Vec`s (`phpdoc-parser`).
-- **Breaking:** the parse entry points take a `ParseOptions` (target `version`, whether to build the `source_map`) instead of coming in one function per combination. `parse_versioned(src, v)` becomes `parse_with(src, &ParseOptions::default().version(v))`, `parse_arena_versioned` becomes `parse_arena_with`, and `parse_arena_raw` becomes `parse_arena_with` with `.source_map(false)`. `ParserContext::with_options` and `set_options` replace `reparse_versioned` and `reparse_owned_versioned` (`php-rs-parser`).
+- **Breaking:** every public enum is `#[non_exhaustive]`: all AST enums (`ExprKind`, `StmtKind`, `BinaryOp`, `TypeHintKind`, …, arena and owned), `PhpVersion`, `ParseError`, `Severity`, `TokenKind`, `LexerErrorKind`, `Indent` and `TextSegment`. Matches outside these crates need a `_` arm. `Param`, `MethodDecl` (arena and owned), `ClassModifiers`, `ParseResult`, `ArenaParseResult` and `PrinterConfig` are `#[non_exhaustive]` too; build them with `new` or `Default::default()` and assign the public fields (all crates).
+- **Breaking:** the parse entry points take a `ParseOptions` (target `version`, whether to build the `source_map`). `parse_versioned(src, v)` becomes `parse_with(src, &ParseOptions::default().version(v))`, `parse_arena_versioned` becomes `parse_arena_with`, and `parse_arena_raw` becomes `parse_arena_with` with `.source_map(false)`. `ParserContext::with_options` and `set_options` replace `reparse_versioned` and `reparse_owned_versioned` (`php-rs-parser`).
 - **Breaking:** the ten `pretty_print*` functions are replaced by `pretty_print` and a `PrettyPrinter` builder; both accept the arena and the owned program. `pretty_print_owned(p)` becomes `pretty_print(p)`, and the `_with_config`, `_with_comments` and `_file` variants become `PrettyPrinter::new().config(c).comments(source, &comments).trailing_newline(true).print(p)`. The trailing newline follows `PrinterConfig::newline` (`php-printer`).
-- The serde/JSON shape of the AST is documented as outside the semver guarantee: it may change in any release, and `Deserialize` is not implemented (`php-ast`, `phpdoc-parser`).
 - **Breaking:** `PrinterConfig::newline` is a `Newline` enum (`Lf`, the default, or `CrLf`) instead of a `&'static str` (`php-printer`).
----
+- **Breaking:** `ParseError::Expected::found` is a `Cow<'static, str>` description (e.g. `"';'"`, `"identifier"`) instead of a `php_lexer::TokenKind`. The message text is unchanged (`php-rs-parser`).
+- **Breaking:** `ParseError::VersionTooLow::required` and `::used` are `PhpVersion` values instead of strings. The message text is unchanged (`php-rs-parser`).
+- **Breaking:** exceeding the nesting limit reports `ParseError::NestingTooDeep` instead of `ParseError::Forbidden` (`php-rs-parser`).
+- **Breaking:** `ExprKind::String` holds a `NameStr` instead of `&'arena str`, so literals without escape sequences borrow the source. Use `.as_str()` where a `&str` is needed (`php-ast`, `php-rs-parser`).
+- **Breaking:** the printer-only offsets are `Span`s of the token they mark: `IfStmt::else_kw_start` → `else_kw_span`, `TryCatchStmt::finally_kw_start` → `finally_kw_span`, `MatchExpr::brace_start` → `brace_span`, `TraitUseDecl::adaptations_brace_start` → `adaptations_brace_span`, in the arena and owned AST (`php-ast`, `php-rs-parser`, `php-printer`).
+- **Breaking:** `ResolvedName::Special` holds a `SpecialClass` enum (`Self_`, `Static`, `Parent`) instead of a `&'static str` (`php-ast`).
+- **Breaking:** `ExprKind::ThrowExpr` is renamed `ExprKind::Throw`, matching `StmtKind::Throw`, in the arena and owned AST and in serialized output (`php-ast`).
+- **Breaking:** `ExprKind::StaticDynMethodCall` and `StaticDynMethodCallExpr` are renamed `StaticMethodCallDynamic` and `StaticMethodCallDynamicExpr`, matching `ClassConstAccessDynamic` and `StaticPropertyAccessDynamic` (`php-ast`).
+- **Breaking:** `StmtKind::Label` holds an `Ident` borrowed from the source, like `StmtKind::Goto`. Serialized output is unchanged (`php-ast`, `php-rs-parser`).
+- **Breaking:** `owned::Ident` is a struct instead of an alias for `Option<Box<str>>`, with the same API as the arena `Ident`. Serialized output is unchanged (`php-ast`).
+- **Breaking:** owned `Expr` implements `Drop`, so its fields can't be moved out by destructuring; use `std::mem::replace(&mut expr.kind, ExprKind::Error)` (`php-ast`).
+- **Breaking:** `phpdoc_parser::Span` is a re-export of `php_ast::Span`; PHPDoc offsets are still relative to the docblock text. `phpdoc-parser` depends on `php-ast` (`phpdoc-parser`).
+- **Breaking:** `phpdoc_parser::body_text` takes `Option<&PhpDocText>` instead of `&Option<PhpDocText>`, and `find_tags` and `inline_tags` return iterators instead of `Vec`s (`phpdoc-parser`).
+- **Breaking:** `php_rs_parser::instrument` is public only with the `instrument` feature, and `owned::from_owned_program` is `#[doc(hidden)]` (`php-rs-parser`, `php-ast`).
+- The serde/JSON shape of the AST is outside the semver guarantee and may change in any release; `Deserialize` is not implemented (`php-ast`, `phpdoc-parser`).
+- The printer writes `/* unsupported … */` for a node kind it does not know, instead of dropping it (`php-printer`).
+- Faster parsing: on the Laravel framework with its vendor directory, arena parsing is ~14% faster, `parse()` ~10% faster, and arena memory use ~7% lower (`php-lexer`, `php-rs-parser`).
+- PHPDoc parsing is ~27% faster with identical output (`phpdoc-parser`).
+- Statements, expressions and string interpolation share one nesting budget of 512 levels. Expressions nested more than 50 levels deep are no longer rejected; nested strings inside interpolation take a larger share, which keeps string nesting under 32 levels (`php-rs-parser`).
+- Every published crate ships its `LICENSE` file, and `Cargo.lock` is committed.
+
+### Removed
+
+- The unused `miette` dependency, which pulled about 70 crates into every build (`php-rs-parser`).
+- The build script of `php-rs-parser`, which ran `php -r` on every build (`php-rs-parser`).
+
+### Fixed
+
+- Deeply nested statements or interpolated code report `ParseError::NestingTooDeep` instead of overflowing the stack; about 10 KB of `{` or `if (1) {` was enough to crash (`php-rs-parser`).
+- Nested strings inside interpolation (`"{$a["{$b[...]}"]}"`, nested heredocs) no longer take quadratic time (`php-rs-parser`).
+- Deeply nested double-quoted strings no longer overflow the lexer's stack (`php-lexer`).
+- `parse()` no longer overflows the stack on long left-associative or postfix chains, such as a 20,000-term concatenation or method chain (`php-ast`).
+- The printer prints long chains without recursing per link, so a 300-term concatenation is no longer printed as `/* max depth */` (`php-printer`).
+- Sources over 4 GiB are refused in release builds too, instead of wrapping the `u32` span offsets: the `parse_*` functions return an empty program with `ParseError::SourceTooLarge`, and the lexer yields only `Eof` with `LexerErrorKind::FileTooLarge` (`php-lexer`, `php-rs-parser`).
+- The WebAssembly build reserves an 8 MiB stack instead of 1 MiB; wasm has no guard page, so an overflow would corrupt memory rather than trap (`php-wasm`).
+- `errors_truncated` is `true` only when errors were dropped, not also when exactly 100 errors were reported (`php-rs-parser`).
+- `ParseError::UnclosedDelimiter` reads "expected ')' to close the delimiter opened at byte 3074" instead of "unclosed '')'' opened at Span { start: 3074, end: 3075 }", and its `delimiter` field holds `')'` instead of `'')''` (`php-rs-parser`).
+- `SourceMap::line_col_to_offset` returns `None` for a column past the end of its line instead of an offset on a later line, and no longer overflows on a huge column (`php-rs-parser`).
 
 ## [0.21.0] - 2026-09-29
 
 ### Added
 
-- **`NameResolver`** — resolves class, function and const names to fully qualified names using the current namespace and `use` imports (including group uses and aliases), for both the arena and owned ASTs (`php-ast`).
+- `NameResolver`, which resolves class, function and constant names to fully qualified names using the current namespace and `use` imports (including group uses and aliases), for the arena and owned ASTs (`php-ast`).
 
 ### Changed
 
-- `Scope` and `OwnedScope` are now `#[non_exhaustive]` (`php-ast`).
-- Lexer no longer runs a heredoc probe before every token, making parsing ~13% faster on the Laravel framework source (`php-lexer`).
-
----
+- **Breaking:** `Scope` and `OwnedScope` are `#[non_exhaustive]` (`php-ast`).
+- Parsing is ~13% faster on the Laravel framework source: the lexer no longer probes for a heredoc before every token (`php-lexer`).
 
 ## [0.20.0] - 2026-09-29
 
 ### Added
 
-- **PHP 8.6 doc comments on function parameters** — `Param` now has a `doc_comment` field, populated from a `/** ... */` block placed either immediately before a parameter or trailing it up to the comma (e.g. `function f(/** the id */ int $id, string $name /** display name */) {}`), per the [DocComments For Function Parameters RFC](https://wiki.php.net/rfc/parameter-doccomments). Since a bare comment is legal PHP at any version, attachment isn't gated behind `PhpVersion::Php86` (`php-ast`, `php-rs-parser`, `php-printer`).
-
----
+- `Param::doc_comment`, a `/** ... */` block immediately before a parameter or trailing it up to the comma, as in `function f(/** the id */ int $id, string $name /** display name */) {}`, per the PHP 8.6 [DocComments For Function Parameters RFC](https://wiki.php.net/rfc/parameter-doccomments). It is attached at every target version (`php-ast`, `php-rs-parser`, `php-printer`).
 
 ## [0.19.2] - 2026-08-27
 
 ### Fixed
 
-- A doc comment nested inside an earlier statement's own parens/brackets (e.g. above a closure argument in a call: `foo(/** @param T $x */ fn($x) => ..., $other)`) is no longer stolen by whichever unrelated statement is parsed next. `Parser` now also tracks the end of the most recently fully-parsed statement (`last_stmt_end`) and floors every doc-comment claim by it, in addition to the existing scope-brace floor — closing the gap for statements that close without ever opening a `{`/`}` of their own. Three existing fixture snapshots (`comments_in_array.phpt`, `comments_in_function_arguments.phpt`, `comments_in_method_chains.phpt`) had this exact leak baked into their expected AST and are corrected (`php-rs-parser`).
-
----
+- A doc comment inside an earlier statement's parentheses or brackets, as above a closure argument in `foo(/** @param T $x */ fn($x) => ..., $other)`, is no longer attached to the next statement (`php-rs-parser`).
 
 ## [0.19.1] - 2026-08-25
 
 ### Fixed
 
-- A doc comment above a `use SomeTrait;` declaration is no longer stolen by whichever member is parsed next (e.g. the constructor); `TraitUseDecl` now has its own `doc_comment` slot, captured before the adaptations block is parsed. The enum body's trait-use parsing, which had the same gap, now shares the class body's parser instead of duplicating it (`php-ast`, `php-rs-parser`, `php-printer`).
-
----
+- A doc comment above a `use SomeTrait;` declaration belongs to the new `TraitUseDecl::doc_comment` instead of the next member, in classes and enums (`php-ast`, `php-rs-parser`, `php-printer`).
 
 ## [0.19.0] - 2026-07-31
 
 ### Added
 
-- **PHP 8.6 partial function application (early support)** — `PhpVersion::Php86` added; the parser now understands the `?` and bare `...` call-argument placeholders (e.g. `foo(1, ?, 3)`, `foo(1, ...)`, `foo(s: ?)`, `stuff(1, a: 5, ...)`) from the [Partial Function Application RFC](https://wiki.php.net/rfc/partial_function_application_v2). Placeholders are rejected in `new` expressions, matching the RFC. Default parse target stays `Php85` since PHP 8.6 hasn't shipped yet (`php-rs-parser`, `php-ast`, `php-printer`).
-
----
+- `PhpVersion::Php86` and early support for PHP 8.6 [partial function application](https://wiki.php.net/rfc/partial_function_application_v2): the `?` and `...` argument placeholders, as in `foo(1, ?, 3)`, `foo(1, ...)` and `foo(s: ?)`. Placeholders are rejected in `new`. The default target stays PHP 8.5 (`php-rs-parser`, `php-ast`, `php-printer`).
 
 ## [0.18.3] - 2026-07-17
 
 ### Fixed
 
-- Blank lines inside an indented heredoc/nowdoc in a CRLF file no longer emit a spurious "Invalid body indentation level" error. A blank line in a CRLF source still carries its `\r` after splitting on `\n`, so the indentation check saw a non-empty line without the closing marker's indent; PHP's scanner treats a line that reaches `\r`/`\n` before any non-whitespace as empty (`php-rs-parser`).
-
----
+- Blank lines inside an indented heredoc or nowdoc in a CRLF file no longer report "Invalid body indentation level" (`php-rs-parser`).
 
 ## [0.18.2] - 2026-07-04
 
 ### Fixed
 
-- Multiple `@tag`s on the same physical PHPDoc line (`@param int $x @return int`, or combined psalm/phpstan annotations like `@template U @extends Foo<U>`) are now parsed as separate tags instead of one tag whose body swallows the rest. The split only applies to a line that itself starts with `@`; a tag's continuation/description lines are still treated as prose, so text like `Contact user @example for details.` is not mistaken for a new tag (`phpdoc-parser`).
-
----
+- Several `@tag`s on one PHPDoc line, as in `@param int $x @return int` or `@template U @extends Foo<U>`, are separate tags. Only a line that starts with `@` is split, so `Contact user @example for details.` stays prose (`phpdoc-parser`).
 
 ## [0.18.1] - 2026-06-21
 
 ### Fixed
 
-- Member access and dereference (`->`, `?->`, `[]`, `{}`, method calls) now bind tighter than `**` exponentiation, matching PHP. `10 ** $this->maxDigits` now parses as `10 ** ($this->maxDigits)` instead of `(10 ** $this)->maxDigits`; in PHP a dereference chain binds tighter than every binary operator. `MEMBER_ACCESS_BP` was raised above `**` (and stays below `::`) (`php-rs-parser`).
-
----
+- Member access and dereference (`->`, `?->`, `[]`, `{}`, method calls) bind tighter than `**`, so `10 ** $this->maxDigits` parses as `10 ** ($this->maxDigits)` instead of `(10 ** $this)->maxDigits` (`php-rs-parser`).
 
 ## [0.18.0] - 2026-06-14
 
-### Fixed
-
-- `new` with a member-access or nullsafe class reference now instantiates the named class instead of dereferencing a fresh object. `new $this->job()` is `new ($this->job)()` (not `(new $this)->job()`), and `new $a?->b()` is `new ($a?->b)()`. PHP treats `->prop`, `?->prop`, `[idx]` and `::$prop` after a variable class reference as part of the class-name reference (a `new_variable`), not a dereference of the result. The nullsafe `?->` form is gated to PHP 8.0 (`php-rs-parser`).
-- A parenless `new` with a class *name* can no longer be dereferenced: `new Foo->bar`, `new Foo::class`, `new Foo[0]`, and `new self::C` are rejected by PHP but the parser accepted them (parsing as `(new Foo)->bar`). Variable-form (`new $c->p`) and static-property (`new A::$b`) class refs remain valid. The parenthesized result-dereference `new Foo()->bar` is the PHP 8.4 feature and is now version-gated (`php-rs-parser`).
-- Empty array elements (`[1, , 3]`) are now rejected in value arrays, where PHP fatals with "Cannot use empty array elements in arrays". The error is retracted at destructuring sites, so `[$a, , $c] = ...` and `foreach ($x as [$a, , $c])` remain valid (`php-rs-parser`).
-- Reserved keywords are now rejected as class/interface/trait/enum/global-const names (e.g. `class class {}`, `const for = 1;`), matching PHP. The contextual `enum`/`from` remain usable, and member names (methods, class constants) stay unrestricted (`php-rs-parser`).
-- Parameters after a variadic parameter are now rejected (`function f(...$a, $b) {}`), which PHP fatals as "Only the last parameter can be variadic". A trailing comma after the variadic (`...$a,`) is still valid (`php-rs-parser`).
-- A backed enum's type is now restricted to `int` or `string`; the parser previously accepted any name (`enum E: bool`, `enum E: Foo`) (`php-rs-parser`).
-- An empty attribute group `#[]` is now rejected as a syntax error instead of being silently accepted as an empty attribute set (`php-rs-parser`).
-- `new` in enum constant initializers is now rejected, matching the existing class-constant rule (PHP: "New expressions are not supported in this context") (`php-rs-parser`).
-- `<?= $a, $b ?>` now parses the comma-separated expression list (shorthand for `echo $a, $b;`); previously only a single expression was accepted before erroring (`php-rs-parser`).
-- `enum Enum {}` is now accepted — a second `enum` not followed by a label lexes as a plain identifier, but statement dispatch only treated `enum` as a declaration when followed by a bare identifier token, so it fell through to expression parsing. The `Enum_` token is also accepted as a name; fully-reserved words (`match`/`list`/`fn`) still fall through correctly (`php-rs-parser`).
-- A statement-level `(void)` cast is now allowed as the leftmost-descending leaf under any binary operator (`(void) $x + 1`, `(void) 5 |> f(...)`); the check previously whitelisted only logical operators. A void cast on the right operand is still rejected (`php-rs-parser`).
-- The cross-statement duplicate-`use` detector now resets its seen-imports set when entering a new unbraced `namespace X;` block, so the same import in sibling namespaces is no longer wrongly reported as "already in use". Braced namespaces already reset correctly (`php-rs-parser`).
-- `new` is now allowed in global constant and static-variable initializers (`const C = new Foo();`, `static $x = new Cache();`), which PHP 8.1+ permits; only class/enum constants and property defaults reject it (`php-rs-parser`).
-- `final` properties are now version-gated to PHP 8.4+ instead of being rejected unconditionally with "Cannot use the final modifier on a property" (`php-rs-parser`).
-
 ### Changed
 
-- Attributes (`#[...]`) are now version-gated to PHP 8.0; below that target the parser emits a version error rather than accepting them (before 8.0, `#[` begins a comment) (`php-rs-parser`).
-- The `0o`/`0O` explicit octal prefix is now version-gated to PHP 8.1. Legacy `0NNN` octals are unaffected (`php-rs-parser`).
-- Non-capturing `catch (Exception)` without a variable binding is now version-gated to PHP 8.0 (`php-rs-parser`).
-- Constants in traits are now version-gated to PHP 8.2; class/interface/enum constants are unaffected (`php-rs-parser`).
+- Attributes (`#[...]`) are version-gated to PHP 8.0 (`php-rs-parser`).
+- The `0o` / `0O` octal prefix is version-gated to PHP 8.1 (`php-rs-parser`).
+- A non-capturing `catch (Exception)` is version-gated to PHP 8.0 (`php-rs-parser`).
+- Constants in traits are version-gated to PHP 8.2 (`php-rs-parser`).
 
----
+### Fixed
+
+- `new` with a member-access or nullsafe class reference instantiates the named class: `new $this->job()` is `new ($this->job)()`, not `(new $this)->job()`, and `new $a?->b()` is `new ($a?->b)()`, gated to PHP 8.0 (`php-rs-parser`).
+- A parenless `new` with a class name can't be dereferenced: `new Foo->bar`, `new Foo::class`, `new Foo[0]` and `new self::C` are rejected. `new Foo()->bar` is gated to PHP 8.4 (`php-rs-parser`).
+- Empty array elements (`[1, , 3]`) are rejected in value arrays and stay valid in destructuring (`php-rs-parser`).
+- Reserved keywords are rejected as class-like and global constant names, as in `class class {}` or `const for = 1;`; `enum` and `from` stay usable, and member names stay unrestricted (`php-rs-parser`).
+- A parameter after a variadic parameter is rejected; a trailing comma after the variadic is still valid (`php-rs-parser`).
+- A backed enum's type must be `int` or `string` (`php-rs-parser`).
+- An empty attribute group `#[]` is a syntax error (`php-rs-parser`).
+- `new` in enum constant initializers is rejected, like in class constants (`php-rs-parser`).
+- `<?= $a, $b ?>` parses the whole expression list (`php-rs-parser`).
+- `enum Enum {}` is accepted (`php-rs-parser`).
+- A statement-level `(void)` cast is allowed as the leftmost operand under any binary operator, as in `(void) $x + 1` (`php-rs-parser`).
+- The same import in sibling unbraced namespaces is no longer reported as "already in use" (`php-rs-parser`).
+- `new` is allowed in global constant and static variable initializers, as PHP 8.1 permits (`php-rs-parser`).
+- `final` properties are version-gated to PHP 8.4 instead of always rejected (`php-rs-parser`).
 
 ## [0.17.1] - 2026-06-14
 
 ### Fixed
 
-- The parser no longer rejects `numeric` and `resource` as class, interface, or extends/implements names. Unlike `int`/`float`/`string`/`bool`/etc., `numeric` and `resource` are not reserved class names in PHP — `class numeric {}` and `class resource {}` are accepted by `php -l`, so flagging them was a spurious `Forbidden` parse error (`php-rs-parser`).
-
----
+- `numeric` and `resource` are accepted as class, interface and `extends` / `implements` names, as PHP allows (`php-rs-parser`).
 
 ## [0.17.0] - 2026-06-09
 
 ### Added
 
-- `parse_arena_raw` — parses without building a line/column `SourceMap`, for callers (formatters, linters) that only need spans. `SourceMap::new` scans the entire source for newlines and allocates a `Vec<u32>` of line-start offsets on every `parse_arena` call; profiling measured this at ~7.7% of total parse time on the symfony corpus. `parse_arena` is unchanged (`php-rs-parser`).
-- `SourceMap::empty()` — returns a no-op map (single entry at offset 0) used internally by `parse_arena_raw` (`php-rs-parser`).
+- `parse_arena_raw`, which parses without building a line/column `SourceMap`, for callers that only need spans (`php-rs-parser`).
+- `SourceMap::empty()` (`php-rs-parser`).
 
 ### Changed
 
-- The parser no longer pre-lexes the whole source into a `Vec<Token>` before parsing. Because only two tokens of lookahead are needed, lexing is now lazy and streamed through a small peeking window, avoiding the wasted pre-pass and the cache pressure of holding the full token array on large files. Behavior is unchanged; lexer errors are still ordered ahead of parse errors. Benchmarks: symfony −6.9%, laravel −24.5% (`php-rs-parser`, `php-lexer`).
-- The `(void)` cast misuse walk now runs only when a void cast was actually parsed, instead of walking every expression statement's subtree. Void casts are a rare PHP 8.5 feature, so the walk almost always found nothing. Behavior is unchanged. Benchmarks: laravel −4.5%, wordpress −2.2%; symfony flat (`php-rs-parser`).
-- Pre-allocate the token `Vec` in `lex_all` and the `line_starts` `Vec` in `SourceMap::new` with capacity hints derived from source length, eliminating several reallocations per file (`php-lexer`, `php-rs-parser`).
-
-### Documentation
-
-- Document `parse_arena_raw` and `SourceMap::empty` in the crate-level Arena API section and README, with cross-links to `parse_arena`; update the Architecture note to reflect lazy streaming and the 2-token lookahead window (`php-rs-parser`).
-
----
+- Faster parsing: tokens are lexed on demand through a two-token lookahead window instead of into an array up front (Symfony −6.9%, Laravel −24.5%), the `(void)` cast check runs only when a void cast was parsed, and token and line-start buffers are pre-sized (`php-rs-parser`, `php-lexer`).
 
 ## [0.16.0] - 2026-06-02
 
 ### Added
 
-- `Stmt::doc_comment` field — standalone `/** */` doc-blocks before non-declaration statements (`foreach`, `if`, `while`, assignments, etc.) are now structurally attached to the `Stmt` node that immediately follows them. Previously these appeared only as free-floating entries in `ParseResult::comments`, requiring positional search. The field is stored as an arena pointer (`Option<&'arena Comment<'src>>`) so the `None` case that covers the vast majority of statements costs only 8 bytes instead of the 32 bytes an inline slot would require (`php-ast`, `php-rs-parser`).
-- `Stmt::leading_doc_comment() -> Option<&Comment>` — unified accessor that returns the preceding `/** */` doc-block regardless of where it lives: `Stmt::doc_comment` for non-declaration statements, or the inner declaration node's own field (`FunctionDecl::doc_comment`, `ClassDecl::doc_comment`, …) for declaration statements. External tools can call this single method without branching on statement kind (`php-ast`).
-- `Comment<'src>` now derives `Clone + Copy`; all three fields (`CommentKind`, `&'src str`, `Span`) were already `Copy` (`php-ast`).
-- `Parser::take_doc_comment_from(before, from)` — like `take_doc_comment` but accepts an explicit lower bound instead of the current scope boundary; used internally by `parse_stmt` to reclaim the correct comment after the statement body has been fully parsed (`php-rs-parser`).
+- `Stmt::doc_comment`, a `/** */` block before a non-declaration statement such as `foreach`, `if` or an assignment (`php-ast`, `php-rs-parser`).
+- `Stmt::leading_doc_comment()`, which returns a statement's preceding doc comment whether it is on the `Stmt` or on its declaration (`php-ast`).
+- `Comment` implements `Clone` and `Copy` (`php-ast`).
 
-### Changed
+### Fixed
 
-- `Parser::advance()` now updates the internal scope-boundary tracker on both `{` and `}` tokens (previously only `}`). This ensures statements inside a block body cannot claim doc-blocks written before the opening brace (`php-rs-parser`).
-- `Printer::print_doc_comment` signature tightened from `&Option<Comment>` to `Option<&Comment>` (`php-printer`).
-
----
+- A statement inside a block no longer takes a doc comment written before the block's `{` (`php-rs-parser`).
 
 ## [0.15.0] - 2026-05-28
 
 ### Added
 
-- `Block` AST node and `StmtKind::Block`; always-braced bodies (function, method, closure, try/catch/finally, braced namespace, property-hook block) now hold a `Block`, so "this body is a block" is enforced by the type rather than an out-of-band invariant (`php-ast`).
-- `ClassBody`/`EnumBody`/`SwitchBody` wrappers and brace/keyword offset fields (`else_kw_start`, `finally_kw_start`, match brace, trait-use adaptations brace). Position data is `#[serde(skip)]` and `Block` is `#[serde(transparent)]`, so serialized AST is unchanged (`php-ast`).
-- `visit_block`, `fold_block`, `owned_block`, and `av_block` to thread `Block` through both visitors, both folds, and the owned↔arena conversions (`php-ast`).
+- **Breaking:** `Block` and `StmtKind::Block`; function, method, closure, `try` / `catch` / `finally`, braced namespace and property hook bodies hold a `Block` (`php-ast`).
+- **Breaking:** `ClassBody`, `EnumBody` and `SwitchBody`, and brace and keyword offsets for the printer (`else_kw_start`, `finally_kw_start`, the `match` brace and the trait-use adaptations brace). Serialized output is unchanged (`php-ast`).
+- `visit_block`, `fold_block`, `owned_block` and `av_block` (`php-ast`).
 
 ### Fixed
 
-- Printer preserves a comment that sits immediately before `{`, `else`, `finally`, or the `while` of a do-while (and other braced/keyword positions) instead of dropping or misplacing it (`php-printer`).
-- Multiline `@tag` bodies now join continuation lines with a newline instead of a space, so a type expression and its description stay on separate lines (e.g. `@var T` followed by an indented description) and consumers of `body_text`/`text_content` can split them on the boundary (`phpdoc-parser`).
-
----
+- The printer keeps a comment just before `{`, `else`, `finally` or the `while` of a `do`-`while` in place (`php-printer`).
+- Multiline `@tag` bodies join continuation lines with a newline instead of a space, so a type and its description stay on separate lines (`phpdoc-parser`).
 
 ## [0.14.1] - 2026-05-23
 
 ### Fixed
 
-- Parser no longer emits false-positive "non-compound use has no effect" warning for single-part unaliased use statements inside named namespaces (`php-rs-parser`).
-
----
+- A single-part unaliased `use` inside a named namespace no longer reports "non-compound use has no effect" (`php-rs-parser`).
 
 ## [0.14.0] - 2026-05-21
 
 ### Added
 
-- Owned (lifetime-free) parse API: `parse()` and `parse_versioned()` return a fully-owned `ParseResult` with no lifetime parameters; existing arena API is now `parse_arena()` / `parse_arena_versioned()` (`php-rs-parser`).
-- `php_ast::owned` module — every AST type mirrored with `Box<str>` / `Box<[T]>` instead of arena references; JSON serialisation is byte-for-byte identical to arena types (`php-ast`).
-- `OwnedVisitor`, `OwnedScopeVisitor`, `OwnedScopeWalker`, and `walk_owned_*` free functions for traversing owned ASTs without managing lifetimes (`php-ast`).
-- `FoldOwned` trait and `fold_owned_*` free functions for transforming owned ASTs; identity defaults rebuild the tree identically (`php-ast`).
-- `pretty_print_owned`, `pretty_print_owned_file`, and related helpers for printing owned ASTs directly — converts owned→arena via a short-lived bump arena internally (`php-printer`).
-- `ParserContext::reparse_owned` and `reparse_owned_versioned` for lifetime-free re-parses (`php-rs-parser`).
-
----
+- An owned parse API: `parse()` and `parse_versioned()` return a `ParseResult` with no lifetime parameters; the arena API is `parse_arena()` and `parse_arena_versioned()` (`php-rs-parser`).
+- `php_ast::owned`, every AST type with `Box<str>` / `Box<[T]>` instead of arena references; its JSON is identical to the arena types' (`php-ast`).
+- `OwnedVisitor`, `OwnedScopeVisitor`, `OwnedScopeWalker` and `walk_owned_*` (`php-ast`).
+- `FoldOwned` and `fold_owned_*` (`php-ast`).
+- `pretty_print_owned`, `pretty_print_owned_file` and related functions (`php-printer`).
+- `ParserContext::reparse_owned` and `reparse_owned_versioned` (`php-rs-parser`).
 
 ## [0.13.0] - 2026-05-17
 
 ### Added
 
-- `ParseError::ForbiddenWarning` variant and `severity()` method on `ParseError` — non-fatal diagnostics for constructs that PHP itself treats as warnings rather than hard errors (`php-rs-parser`).
+- `ParseError::ForbiddenWarning` and `ParseError::severity()`, for constructs PHP reports as warnings (`php-rs-parser`).
 
 ### Fixed
 
-- Parser rejects incompatible `set`-hook parameter types (`php-rs-parser`).
-- Parser rejects `void` cast in value-consuming (expression) context (`php-rs-parser`).
-- Parser rejects standalone parenthesized intersection types (`php-rs-parser`).
-- Parser rejects `new` in constant, property, and static-variable initializers (`php-rs-parser`).
-- Parser rejects curly-brace array/string offset access (`$a{'b'}`) (`php-rs-parser`).
-- Parser rejects mixing `list()` and `[]` in destructuring (`php-rs-parser`).
-- Parser rejects empty `list()` / `[, ,]` destructuring (`php-rs-parser`).
-- Parser rejects non-writable destructure targets (`php-rs-parser`).
-- Parser rejects temporary expression in write context (`php-rs-parser`).
-- Parser rejects `return` value in `void`/`never` functions (`php-rs-parser`).
-- Parser rejects `new ClassName(...)` first-class callable syntax (`php-rs-parser`).
-- Parser rejects property hooks on static properties (`php-rs-parser`).
-- Parser rejects empty property hook list and `get` with any parameters (`php-rs-parser`).
-- Parser rejects non-hooked properties in interfaces (`php-rs-parser`).
-- Parser enforces asymmetric visibility rules: type required, `set` visibility cannot be wider than `get` (`php-rs-parser`).
-- Parser rejects `final` modifier on properties and `readonly` modifier on methods (`php-rs-parser`).
-- Parser rejects duplicate property declarations (`php-rs-parser`).
-- Parser rejects return type and `static` modifier on `__construct` (`php-rs-parser`).
-- Parser rejects `static` modifier on `__destruct` and `__clone` (`php-rs-parser`).
-- Parser rejects `static` modifier on parameters (`php-rs-parser`).
-- Parser rejects promoted property modifiers outside `__construct` (`php-rs-parser`).
-- Parser rejects duplicate methods and enum cases (`php-rs-parser`).
-- Parser rejects reserved type names (`int`, `string`, etc.) as class names (`php-rs-parser`).
-- Parser rejects standalone `null`/`false` types below PHP 8.2 and `Closure` in attribute arguments (`php-rs-parser`).
-- Parser enforces program-level namespace layout rules (`php-rs-parser`).
-- Parser rejects multiple `default` arms in `switch`, variadic parameters with default values, and `isset(expr)` with non-variable arguments (`php-rs-parser`).
-- Operator precedence aligned with PHP 8 — three additional opt-out gaps closed (`php-rs-parser`).
-- Parser warns on non-compound `use` names and detects cross-statement duplicate imports (`php-rs-parser`).
-- Parser warns on `final private` methods (`php-rs-parser`).
-- Playground project dropdown stays open while scrolling the list (`playground`).
-- `ast-stats` tool counts files with warnings-only as parsed; only hard errors are skipped (`ast-stats`).
-
----
+- Invalid code PHP rejects is reported (`php-rs-parser`):
+  - types: incompatible `set` hook parameter types, standalone parenthesized intersection types, reserved type names such as `int` as class names, and standalone `null` / `false` before PHP 8.2;
+  - expressions: a `(void)` cast used as a value, `new` in constant, property and static variable initializers, `$a{'b'}` offsets, `new Foo(...)` first-class callables, `Closure` in attribute arguments, and `isset()` on a non-variable;
+  - destructuring and writes: mixing `list()` and `[]`, empty `list()` or `[, ,]`, non-writable targets, and temporaries in write context;
+  - functions: a value returned from a `void` or `never` function, a default on a variadic parameter, and `static` on a parameter;
+  - classes: hooks on static properties, an empty hook list, `get` with parameters, non-hooked properties in interfaces, asymmetric visibility without a type or with `set` wider than `get`, `final` on properties, `readonly` on methods, duplicate properties, methods and enum cases, a return type or `static` on `__construct`, `static` on `__destruct` and `__clone`, and promotion outside `__construct`;
+  - statements: namespace layout rules and several `default` arms in a `switch`.
+- Operator precedence matches PHP 8 in three more cases (`php-rs-parser`).
+- Non-compound `use` names, duplicate imports across statements and `final private` methods are reported (`php-rs-parser`).
+- The playground's project dropdown stays open while scrolling (`playground`).
 
 ## [0.12.2] - 2026-05-16
 
 ### Added
 
-- Project stats playground expanded from 10 to 50 open-source PHP projects with per-directory breakdown and expandable node-variant rows.
-- Per-project stats pages with interactive directory tree navigation.
-- AST node comparison page for side-by-side project analysis.
+- The playground's project stats cover 50 open-source PHP projects, with per-project pages, a directory tree and a side-by-side AST node comparison (`playground`).
 
 ### Fixed
 
-- Parser no longer consumes `[index]` after `->prop` in string interpolation (`php-rs-parser`).
-- Parser now correctly handles single-keyword asymmetric visibility (`private(set)`) (`php-rs-parser`).
-
----
+- `[index]` after `->prop` in string interpolation is no longer consumed (`php-rs-parser`).
+- `private(set)` without a get visibility parses (`php-rs-parser`).
 
 ## [0.12.1] - 2026-05-15
 
 ### Added
 
-- `visit_comment` hook in the `Visitor` trait for traversing doc comments on declarations (`php-ast`).
+- `Visitor::visit_comment` for doc comments on declarations (`php-ast`).
 
 ### Fixed
 
-- Doc comments no longer leak across scope boundaries during parsing — scoped comments are properly isolated to their declaration context (`php-rs-parser`).
-
-### Tests
-
-- Comprehensive comment fixture coverage across all supported PHP versions (`php-rs-parser`).
-
----
+- Doc comments no longer leak across scopes (`php-rs-parser`).
 
 ## [0.12.0] - 2026-05-14
 
 ### Added
 
-- `Fold` trait for arena-to-arena AST transformations — enables efficient rewriting of AST nodes with the bump arena as the target allocation context (`php-ast`).
-- Printer now preserves blank lines from source in switch cases and enum members, maintaining semantic formatting hints from the original code (`php-printer`).
+- `Fold`, for arena-to-arena AST transformations (`php-ast`).
+- The printer keeps blank lines from the source between `switch` cases and enum members (`php-printer`).
 
 ### Fixed
 
-- Printer now correctly tracks `has_php_content` state across blank lines, preventing spurious `<?php` tags from being emitted (`php-printer`).
-
----
+- The printer no longer writes a spurious `<?php` after blank lines (`php-printer`).
 
 ## [0.11.1] - 2026-05-12
 
-### Changed
-
-- Printer state management simplified with duplicate code eliminated (`php-printer`).
-
-### Fixed
-
-- CI validation script no longer prepends `<?php` header when validating pretty-printed output — header already included by `pretty_print()` (`php-parser`).
-- PHPDoc parser package name corrected in CI and release workflows (`phpdoc-parser`).
-
----
+No user-facing changes.
 
 ## [0.11.0] - 2026-05-11
 
-### Added
+### Changed
 
-- `pretty_print` and all printer variants now emit `<?php\n` at the start of PHP-first programs, making the output valid standalone PHP (`php-printer`).
-- `pretty_print_file` simplified to `pretty_print` + trailing newline — no longer duplicates the `<?php` header logic (`php-printer`).
+- `pretty_print` writes `<?php` and a newline at the start of a program that starts with PHP code, so the output is valid PHP; `pretty_print_file` is `pretty_print` plus a trailing newline (`php-printer`).
+- `phpdoc-parser` parses PHPDoc blocks structurally, without external dependencies (`phpdoc-parser`).
 
 ### Fixed
 
-- Printer correctly emits `?>` before inline HTML following alternative-syntax closing keywords (`endforeach`, `endfor`, `endwhile`, `endif`, `endswitch`, `enddeclare`) — previously the `has_php_content` flag was left `false` after the loop body, suppressing the close tag (`php-printer`).
-- Printer no longer emits a spurious trailing `<?php` after the last inline HTML node in a file (`php-printer`).
-- Printer suppresses `?>` for empty `<?php ?>` blocks that produce no PHP output (`php-printer`).
-- Round-trip stability verified across the full parser corpus — `pretty_print(parse(pretty_print(parse(src))))` is always identical to `pretty_print(parse(src))` (`php-printer`).
-
-### Changed
-
-- `phpdoc-parser` crate replaced with a structural-only implementation that parses PHPDoc blocks without external dependencies (`phpdoc-parser`).
-- README expanded with full API coverage; `docs/` directory removed in favour of inline documentation.
-
----
+- The printer writes `?>` before inline HTML after `endforeach`, `endfor`, `endwhile`, `endif`, `endswitch` and `enddeclare` (`php-printer`).
+- The printer no longer writes a trailing `<?php` after the last inline HTML, nor `?>` for an empty `<?php ?>` block (`php-printer`).
+- Printing a printed program again gives the same output (`php-printer`).
 
 ## [0.10.1] - 2026-05-09
 
 ### Fixed
 
-- Correct UTF-8 variable detection in string interpolation — fixes parsing of variables with multibyte characters in interpolated strings (`php-rs-parser`).
-
----
+- Variables with multibyte characters in interpolated strings parse correctly (`php-rs-parser`).
 
 ## [0.10.0] - 2026-05-09
 
-### Added
-
-- Enhanced parser validation for constructor promotion modifiers — explicitly rejects multiple modifiers on promoted parameters in anonymous classes and refines `readonly` validation on properties (`php-rs-parser`).
-- Improved error diagnostics with proper error context in recovery paths — error recovery now preserves more meaningful context for debugging (`php-rs-parser`).
-- CI validation: printer output now validated against `php -l` to ensure round-trip output is syntactically valid PHP (`php-parser`).
-- Comprehensive printer edge-case coverage including `new` expressions with empty arguments, property hooks, DNF types, pipe operator expressions, and clone with list arguments (`php-printer`).
-
 ### Fixed
 
-- Parser validates parenthesized arrow functions in pipe operator (`|>`) expressions — prevents invalid syntax like `|> ($x) => $x` (`php-rs-parser`).
-- Parser now rejects invalid PHP constructs during parsing rather than silently accepting them and potentially dropping AST nodes (`php-rs-parser`).
-- Control characters in heredoc/nowdoc and braces in string interpolation now properly escaped in printer output (`php-printer`).
-- Variadic parameter modifiers now print in correct order (`&` before `...`) to match PHP syntax (`php-printer`).
-- Printer now always emits parentheses for `new` expressions, ensuring valid PHP output in all contexts (`php-printer`).
-- Property hooks printer fixture updated with valid PHP syntax and edge cases (`php-printer`).
-
-### Changed
-
-- All `.unwrap()` calls replaced with `.expect()` with documented invariants explaining why panic is guaranteed not to occur (`php-parser`).
-- Clippy warnings in example binaries resolved (`php-parser`).
-- Test fixtures now include `===php_error===` sections where appropriate to validate against PHP's own syntax validation (`php-parser`).
-- Fixture test runner parallelized with `rayon` for faster test execution (`php-parser`).
-
-### Documentation
-
-- Added inline documentation explaining dead-code suppressions in test utilities (`php-parser/tests/common.rs`).
-- Parser recursion depth limits and error recovery behavior documented in source (`php-rs-parser`).
-
-### Tests
-
-- Comprehensive edge cases for variadic parameter modifiers (`php-rs-parser`).
-- Printer fixtures expanded to cover `new` expressions, property hooks, and DNF type combinations (`php-printer`).
-
----
+- Several modifiers on a promoted parameter in an anonymous class are rejected, and `readonly` property checks are stricter (`php-rs-parser`).
+- A parenthesized arrow function after `|>`, as in `|> ($x) => $x`, is rejected (`php-rs-parser`).
+- Invalid constructs are reported instead of being accepted and dropping AST nodes (`php-rs-parser`).
+- The printer escapes control characters in heredoc and nowdoc bodies and braces in string interpolation (`php-printer`).
+- The printer writes `&` before `...` on a variadic parameter (`php-printer`).
+- The printer always writes parentheses after `new` (`php-printer`).
 
 ## [0.9.8] - 2026-05-07
 
 ### Added
 
-- Support for parenthesized unions in type hints (e.g., `(A|B)`) — parser now accepts parenthesized unions in parameter types, return types, and property types for better type expression flexibility (`php-rs-parser`).
-- Comprehensive test coverage for DNF (Disjunctive Normal Form) edge cases and parenthesized type combinations (`php-rs-parser`).
-
----
+- Parenthesized unions in types, as in `(A|B)` (`php-rs-parser`).
 
 ## [0.9.7] - 2026-05-06
 
 ### Added
 
-- Context-aware anchor sets for error recovery — parser now maintains contextual error recovery anchors to improve diagnostics in various syntactic contexts (issue #276) (`php-rs-parser`).
-
-### Fixed
-
-- Declaration docblocks are now preserved during parsing instead of being dropped (`php-rs-parser`).
-- Parse errors for invalid names now emit `ExprKind::Error` instead of `Identifier("<error>")`, improving error diagnostics (`php-rs-parser`).
-- `Name::Error` variant added for synthesized error names during error recovery (`php-ast`, `php-rs-parser`).
-- Enum constant validation: private enum constants now properly reject the `final` modifier (`php-rs-parser`).
-- Enum constant validation: static and abstract modifiers on enum constants now properly validated (`php-rs-parser`).
-- PHP version-specific error message handling aligned across all PHP 8.1–8.5 error recovery fixtures (`php-rs-parser`).
+- `Name::Error` for a name synthesized during error recovery (`php-ast`, `php-rs-parser`).
 
 ### Changed
 
-- Internal refactoring: `ERROR_PLACEHOLDER` string literals replaced with typed `Ident` at declaration name sites (`php-rs-parser`).
+- Error recovery uses anchors that depend on the syntactic context (`php-rs-parser`).
+- An invalid name is `ExprKind::Error` instead of `Identifier("<error>")` (`php-rs-parser`).
 
-### Tests
+### Fixed
 
-- Comprehensive enum constant parser and printer coverage (`php-rs-parser`, `php-printer`).
-- Expression span edge-case fixtures from parser audit (`php-rs-parser`).
-- Version-specific interface and trait error recovery fixtures for PHP 8.1–8.5 coverage (`php-rs-parser`).
-- Comprehensive error recovery fixtures for various syntactic contexts (issue #276) (`php-rs-parser`).
-
----
+- Declaration doc comments are kept (`php-rs-parser`).
+- `final` on a private enum constant, and `static` and `abstract` on enum constants, are rejected (`php-rs-parser`).
 
 ## [0.9.6] - 2026-04-27
 
 ### Added
 
-- Playground AST tree is now interactive with collapsible nodes — click any node to expand or collapse its subtree (`playground`).
+- The playground's AST tree has collapsible nodes (`playground`).
 
 ### Fixed
 
-- Workspace dependency versions in `Cargo.toml` were still pinned to `0.9.4` after the 0.9.5 release; corrected to `0.9.5` (`Cargo.toml`).
----
+- The workspace dependency versions were still `0.9.4` in the 0.9.5 release.
 
 ## [0.9.5] - 2026-04-27
 
 ### Added
 
-- Interactive WebAssembly playground deployed to GitHub Pages — parse and format PHP in the browser, powered by the Rust parser compiled to WASM (`php-wasm`).
-- New `php-wasm` crate: `wasm-bindgen` bindings exposing `parse()`, `format()`, `parser_version()`, and `build_commit()` to JavaScript.
-- GitHub Actions workflow (`playground.yml`) that builds the WASM package with `wasm-pack` and deploys the playground on every push to `main` that touches parser or playground files.
-
-### Fixed
-
-- Playground statusbar version link pointed to `releases/tag/0.9.x` (missing `v` prefix); corrected to `releases/tag/v0.9.x` to match the actual tag format (`playground`).
-
-### Documentation
-
-- Added playground link to the top of `README.md`.
-- `parse_stmt` stack-depth behaviour documented in source (`php-rs-parser`).
-
----
+- `php-wasm`, WebAssembly bindings exposing `parse()`, `format()`, `parser_version()` and `build_commit()` (`php-wasm`).
+- An interactive playground on GitHub Pages to parse and format PHP in the browser (`playground`).
 
 ## [0.9.4] - 2026-04-26
 
 ### Added
 
-- `is_final: bool` field on `ClassConstDecl` — the `final` modifier on class and enum constants (PHP 8.1+) was previously accepted by the modifier-parsing loop but dropped before reaching the AST. Now captured in both class and enum const parsers and emitted by the printer (`php-ast`, `php-rs-parser`, `php-printer`).
+- `ClassConstDecl::is_final`, the `final` modifier on class and enum constants (PHP 8.1) (`php-ast`, `php-rs-parser`, `php-printer`).
 
 ### Fixed
 
-- Printer wraps intersection types nested inside union types (DNF) in parentheses, e.g. `(A&B)|null`; previously it emitted invalid PHP (`php-printer`).
-- Printer placed `new class(args) extends Base { body }` constructor arguments after the body; arguments are now emitted between `class` and the `extends`/`implements` clauses (`php-printer`).
-- Printer routed heredoc literal segments through the double-quoted-string escaper, which collapsed multi-line heredocs onto one line by converting real newlines to `\n`. A dedicated heredoc escaper now only escapes `\` and `$` (`php-printer`).
-
-### Changed
-
-- Internal: `crates/php-ast/src/ast.rs` (1,498 lines) split into an `ast/` module directory across `names`, `exprs`, `stmts`, `decls`, `misc`. No public API changes (`php-ast`, #246).
-- Internal: `crates/php-printer/src/printer.rs` (1,662 lines) split into a `printer/` module directory across `stmts`, `decls`, `exprs`, `types`, `helpers`. No public API changes (`php-printer`, #247).
-
-### Tests
-
-- 30 new printer fixtures covering heredoc/nowdoc, shell_exec, declare, trait-use adaptations, property hooks (PHP 8.4), asymmetric visibility, DNF types, pipe operator (PHP 8.5), `clone(..., [...])` (PHP 8.5), array destructuring, anonymous classes with constructor args, typed class constants, switch fallthrough, multi-use imports, and other previously-untested AST nodes (`php-printer`).
-
----
+- The printer wraps an intersection type inside a union in parentheses, as in `(A&B)|null` (`php-printer`).
+- The printer writes the constructor arguments of `new class(args) extends Base {}` before `extends` instead of after the body (`php-printer`).
+- The printer keeps the newlines of a multi-line heredoc instead of writing them as `\n` (`php-printer`).
 
 ## [0.9.3] - 2026-04-26
 
 ### Added
 
-- `doc_comment: Option<Comment<'src>>` field on `ConstItem` — top-level constants now carry their preceding doc comment in the AST. In multi-constant declarations (`const A = 1, B = 2;`) the doc comment is attached to the first item only, mirroring the existing `pending_attrs` pattern (`php-ast`, `php-rs-parser`, #277).
+- `ConstItem::doc_comment`; in `const A = 1, B = 2;` it is on the first item (`php-ast`, `php-rs-parser`).
 
 ### Fixed
 
-- Printer emitted attributes on `const` statements after the `const` keyword (invalid PHP); both doc comments and attributes are now printed before `const` (`php-printer`, #277).
-
----
+- The printer writes attributes and doc comments of a `const` statement before `const` (`php-printer`).
 
 ## [0.9.2] - 2026-04-25
 
 ### Fixed
 
-- Leading-zero and negative-zero indices in simple string interpolation (`$arr[00]`, `$arr[07]`, `$arr[-0]`) are now correctly classified as string keys instead of `Int(0)`, matching PHP's tokenizer behaviour (`php-rs-parser`).
-
----
+- Leading-zero and negative-zero indices in simple string interpolation (`$arr[00]`, `$arr[07]`, `$arr[-0]`) are string keys instead of `Int(0)`, as in PHP (`php-rs-parser`).
 
 ## [0.9.1] - 2026-04-24
 
 ### Fixed
 
-- Parser stress-test corpus regressions across alternative syntax, attributes, clone/cast operands, dynamic member access, heredoc contexts, and semi-reserved end-keywords (`php-rs-parser`).
-- Lexer handling of edge cases uncovered by stress testing (`php-lexer`).
-
-### Documentation
-
-- PHP 7.4 listed among supported versions.
-
----
+- Alternative syntax, attributes, `clone` and cast operands, dynamic member access, heredoc contexts and semi-reserved end keywords parse correctly in stress-test cases (`php-rs-parser`, `php-lexer`).
 
 ## [0.9.0] - 2026-04-20
 
-### Added
+### Fixed
 
-- Backed enum cases (`enum E: int`) now require a value; pure enum cases now reject values. Both emit `ParseError::Forbidden` pointing to the missing or unwanted `=` token (`php-rs-parser`, #269).
-- `readonly` properties and constructor-promoted parameters without a type hint now emit `ParseError::Forbidden` (`php-rs-parser`, #268).
-- `break` and `continue` outside a loop or `switch` now emit a parse error; numeric level arguments are validated against the current loop depth (`php-rs-parser`, #265).
-
-### Tests
-
-- Span coverage fixtures added for `const` statement declarations (`php-rs-parser`, #267).
-- Span coverage fixtures added for first-class callable expressions (`php-rs-parser`, #266).
-
-### Documentation
-
-- CONTRIBUTING guide improved and ROADMAP restructured (#264).
-- Acknowledgements section added for nikic/PHP-Parser and the PHP community (#254).
-- README reorganized for clarity and audience separation (#253).
-- `docs/INDEX.md` navigation path for tool consumers updated (#250).
-
----
+- A backed enum case requires a value and a pure enum case rejects one (`php-rs-parser`).
+- A `readonly` property or promoted parameter without a type is rejected (`php-rs-parser`).
+- `break` and `continue` outside a loop or `switch` are rejected, and their level is checked against the loop depth (`php-rs-parser`).
 
 ## [0.8.1] - 2026-04-19
 
-### Fixed
-
-- `readonly` property with a `set` hook now emits a parse error instead of silently accepting it (`php-rs-parser`, #237).
-
 ### Changed
 
-- Builtin type hint matching refactored from chained `eq_ignore_ascii_case` to a `match` expression (`php-rs-parser`, #238).
-- Verbose ampersand-eat patterns replaced with `parser.eat()` helper (`php-rs-parser`, #235).
+- The public API of `php-ast` and `php-lexer` is fully documented (`php-ast`, `php-lexer`).
 
-### Documentation
+### Fixed
 
-- Complete public API documentation coverage for `php-ast` and `php-lexer` crates (#241).
-- Binding-power convention documented in `precedence.rs` (`php-rs-parser`, #240).
-
-### Tests
-
-- String interpolation edge-case fixtures added (`php-rs-parser`, #239).
-- Error-recovery fixtures for property hooks added (`php-rs-parser`, #236).
-
----
+- A `readonly` property with a `set` hook is rejected (`php-rs-parser`).
 
 ## [0.8.0] - 2026-04-19
 
 ### Added
 
-- `visit_name()` hook and `walk_name()` free function in the `Visitor` trait — fully backwards compatible; all existing visitors compile unchanged (`php-ast`, #226).
-- `ParserContext` struct with `reparse()` / `reparse_versioned()` methods for arena reuse across re-parses. Resets the bump arena in O(1) before each parse, reducing allocator churn in LSP servers that re-parse on every keystroke (`php-rs-parser`, #221).
+- `Visitor::visit_name` and `walk_name` (`php-ast`).
+- `ParserContext` with `reparse()` and `reparse_versioned()`, which reuse one arena across parses (`php-rs-parser`).
 
-### Changed (breaking)
+### Changed
 
-- `StaticMethodCall` / `StaticMethodCallExpr` now covers only static dispatch (`Foo::bar()`). Dynamic dispatch (`Class::$method()`) is a new `StaticDynMethodCall` / `StaticDynMethodCallExpr` variant. Match arms that previously handled dynamic dispatch via `StaticMethodCall` must be updated (`php-ast`, #225).
+- **Breaking:** `StaticMethodCall` covers only `Foo::bar()`; `Class::$method()` is the new `StaticDynMethodCall` (`php-ast`).
 
 ### Fixed
 
-- Visitor now traverses `TraitUse` adaptations (`php-ast`, #223).
-- Risky `unwrap()` in trait alias parsing replaced with proper error handling (`php-rs-parser`, #219).
-- Empty index in string interpolation (`$$arr[]`) now emits a parse error instead of silently producing a malformed AST (`php-rs-parser`, #218).
-- Malformed Unicode escape sequences now emit parse errors (`php-rs-parser`, #217).
-- Invalid assignment targets (e.g. `1 = $x`) now emit parse errors (`php-rs-parser`, #216).
-- Non-associative chain detection restricted to same-precedence operators; mixed-precedence chains no longer trigger a false error (`php-rs-parser`, #215).
-- Property hook parameter counts validated; mismatched arity now emits a parse error (`php-rs-parser`, #214).
-- Invalid heredoc/nowdoc body indentation now emits a parse error (`php-rs-parser`, #212).
-
----
+- `Visitor` walks trait `use` adaptations (`php-ast`).
+- A malformed trait alias no longer panics (`php-rs-parser`).
+- An empty index in string interpolation, a malformed Unicode escape, an invalid assignment target such as `1 = $x`, a property hook with the wrong number of parameters, and invalid heredoc or nowdoc body indentation are reported (`php-rs-parser`).
+- Chained non-associative operators are reported only at the same precedence (`php-rs-parser`).
 
 ## [0.7.0] - 2026-04-17
 
 ### Added
 
-- Spans on static method/member/argument identifiers in the AST (`php-ast`, #197).
-- Named argument ordering and uniqueness validation: duplicate names and non-trailing named arguments now produce diagnostics (`php-rs-parser`, #193).
-- `Name::src_repr(&self, src: &'src str) -> &'src str` — zero-alloc slice into source for any name shape (`php-ast`, #169).
+- Spans on static method, member and argument identifiers (`php-ast`).
+- Duplicate named arguments and positional arguments after named ones are reported (`php-rs-parser`).
+- `Name::src_repr(src)`, a slice of the source for any name (`php-ast`).
 
-### Changed (breaking)
+### Changed
 
-- `ScopeWalker::new` now requires the source string (`src: &'src str`) to support zero-alloc namespace resolution. Update call sites to pass `result.source` or your source buffer (#169).
-- `Scope` now derives `Copy`; `Scope::namespace` changed from `Option<Cow<'src, str>>` to `Option<&'src str>` (#169).
-- `ArenaVec::len` and `ArenaVec::last` explicit methods removed — both remain accessible via `Deref<Target=[T]>` and continue to work without call-site changes (#170).
+- **Breaking:** `ScopeWalker::new` takes the source string (`php-ast`).
+- **Breaking:** `Scope` derives `Copy`, and `Scope::namespace` is an `Option<&'src str>` instead of an `Option<Cow<'src, str>>` (`php-ast`).
+- Namespace tracking in `ScopeWalker`, printer strings and heredoc labels in the lexer no longer allocate (`php-ast`, `php-printer`, `php-lexer`).
 
-### Performance
+### Removed
 
-- `ScopeWalker` namespace tracking is now zero-alloc; scope saves/restores are a free word copy (#169).
-- `Printer` internal strings changed from heap-allocated `String` to `&'static str` (#164).
-- Lexer heredoc label now borrows from source instead of allocating a `String` (#163).
+- **Breaking:** `ParseError::Unexpected`, which was never produced (`php-rs-parser`).
+- `ArenaVec::len` and `ArenaVec::last`; both still work through `Deref<Target = [T]>` (`php-ast`).
 
 ### Fixed
 
-- Guard against silent `u32` truncation for source files larger than 4 GB in the lexer (#166).
-- Eliminated panic-prone `unwrap()` calls after explicit length checks in the parser (#165).
-- Replaced bare `unreachable!()` calls with descriptive messages and `Option` returns in the parser (#167).
-- Removed dead `ParseError::Unexpected` variant from diagnostics (#168).
-- Variable name extraction now guarded against empty-span tokens (#160).
-
----
+- Source files over 4 GB are guarded against `u32` span truncation in the lexer (`php-lexer`).
+- Fewer panics on malformed input (`php-rs-parser`).
 
 ## [0.6.2] - 2026-04-12
 
 ### Fixed
 
-- `php-printer` published package excluded test fixtures (`tests/`), reducing package size from 198 files to 7.
-
----
+- The `php-printer` package no longer includes its test fixtures (`php-printer`).
 
 ## [0.6.1] - 2026-04-12
 
-### Fixed
+No user-facing changes.
 
-- Root `CHANGELOG.md` was stale at v0.3.2; synced through v0.6.0, including the v0.6.0 breaking changes and `ScopeVisitor`/`ScopeWalker` migration guidance (#146).
-
----
-
-## [0.6.0] - 2026-04-11
+## [0.6.0] - 2026-04-12
 
 ### Added
 
-- **`ScopeVisitor` trait and `ScopeWalker`** (`php-ast`) — zero-allocation scope-aware AST traversal. Every visit method now receives a `&Scope<'src>` with the current namespace, class name, and function/method name. `ScopeWalker` wraps any `ScopeVisitor`, maintains scope automatically, and handles all PHP scope transitions (braced/simple namespaces, classes, interfaces, traits, enums, methods, closures, arrow functions, anonymous classes).
+- `ScopeVisitor` and `ScopeWalker`: every visit method receives a `&Scope` with the current namespace, class and function or method, maintained across all PHP scope transitions (`php-ast`).
+- `NameStr`, which borrows a name from the source or holds one synthesized in the arena (`php-ast`).
+- `PhpVersion::Php74`; the `(real)` and `(unset)` casts report a version error from PHP 8.0 (`php-rs-parser`).
+- PHPDoc tag descriptions include indented continuation lines (`php-rs-parser`).
 
-- **`NameStr<'arena, 'src>`** (`php-ast`) — unified binding type for `Variable` and `Identifier` expression nodes, replacing the previous `Cow<'src, str>` in `Variable`. Zero-copy for source-borrowed names; arena-owned for synthesised names.
+### Changed
 
-- **`PhpVersion::Php74`** (`php-rs-parser`) — PHP 7.4 target added to `PhpVersion` enum. Deprecated casts (`(real)`, `(unset)`) are now gated on version and emit `VersionTooLow` diagnostics when targeting PHP 8.0+.
+- **Breaking:** `ExprKind::Variable` holds a `NameStr` instead of a `Cow<'src, str>`; use `name.as_str()` (`php-ast`).
+- **Breaking:** `SourceMap` moved to `php-rs-parser` and is part of `ParseResult` (`php-ast`, `php-rs-parser`).
 
-- **PHPDoc continuation lines** (`php-rs-parser`) — tag descriptions now accumulate indented continuation lines, matching PHPStan/Psalm behaviour.
+### Removed
+
+- **Breaking:** `CommentMap` and `SymbolTable`; use `ScopeVisitor` / `ScopeWalker` to enumerate declarations by namespace (`php-ast`).
 
 ### Fixed
 
-- Panic on string slice at non-char boundary in the lexer (#139).
-- Unterminated string literals now emit a proper `ParseError` instead of silently producing a malformed AST (#133).
-- Missing version gates for deprecated casts and several PHP 8.x-only constructs (#131).
-- Diagnostics: reject `void`/`never`/`mixed` in union positions, `static readonly`, and `abstract final` class (#130).
-- Chained non-associative operators and bare ternary chains now emit errors in PHP 8 mode (#129).
-- PHP version not threaded correctly through the interpolation sub-parser (#128).
-- `declare(…)` in conditional position skipped in `php -l` validation to avoid false failures (#141).
+- A string slice at a non-char boundary no longer panics in the lexer (`php-lexer`).
+- An unterminated string literal is reported (`php-rs-parser`).
+- Missing version gates for deprecated casts and several PHP 8.x constructs (`php-rs-parser`).
+- `void`, `never` and `mixed` in unions, `static readonly` and `abstract final class` are rejected (`php-rs-parser`).
+- Chained non-associative operators and unparenthesized ternary chains are rejected for PHP 8 (`php-rs-parser`).
+- The target version applies inside string interpolation (`php-rs-parser`).
 
-### Changed (breaking)
-
-- `ExprKind::Variable` changed from `Cow<'src, str>` to `NameStr<'arena, 'src>` (#132, #138). Code matching on `Variable(name)` should use `name.as_str()` or `name.deref()` instead of `name.as_ref()`.
-- LSP utilities (`CommentMap`, `SymbolTable`) removed from `php-ast`; `SourceMap` moved to `php-rs-parser` and is now included directly in `ParseResult` (#117). Use `ScopeVisitor`/`ScopeWalker` for namespace-aware declaration enumeration.
-
----
-
-## [0.5.0] - 2026-04-01
+## [0.5.0] - 2026-04-10
 
 ### Added
 
-- **`SourceMap` in `ParseResult`** — `parse()` and `parse_versioned()` now return a pre-built `SourceMap` in `result.source_map`, eliminating the need for callers to construct one manually.
-- **Source string in `ParseResult`** — `result.source` exposes the original source string, enabling span-to-text extraction without holding a separate reference.
+- `ParseResult::source_map`, a pre-built `SourceMap` (`php-rs-parser`).
+- `ParseResult::source`, the original source string (`php-rs-parser`).
 
 ### Fixed
 
-- Unterminated block comments now emit a `ParseError` instead of silently truncating the token stream.
+- An unterminated block comment is reported instead of truncating the token stream (`php-lexer`).
 
----
-
-## [0.4.0] - 2026-03-28
+## [0.4.0] - 2026-04-09
 
 ### Added
 
-- **`php-printer` crate** — new `php-printer` crate provides `pretty_print(&program)` and `pretty_print_file(&program)` for round-tripping AST back to PHP source. Round-trip stability is verified in the printer test suite.
-- **PHPDoc parser** (`php-rs-parser`) — `php_rs_parser::phpdoc::parse()` parses structured doc comments into typed `PhpDocTag` variants (param, return, var, throws, template, property, method, deprecated, psalm/phpstan annotations). Doc comments are attached to function, class, method, property, and constant AST nodes.
-- **Visitor API improvements** (`php-ast`) — `Visitor` trait upgraded to use `ControlFlow<()>` for early termination, with support for type hints, attributes, catch clauses, match arms, and closure use-vars. All walk functions are public.
-- **Corpus test suite** — nikic/PHP-Parser fixtures integrated into the unified `.phpt` test runner; all fixtures validated via `php -l` in CI.
-- **Fuzz target** — `cargo-fuzz` target with CI smoke test to catch panics on arbitrary input.
-- **Nesting depth guard** — expression parser enforces a recursion limit to prevent stack overflow on deeply nested input.
+- `php-printer`, with `pretty_print` and `pretty_print_file` to print an AST back to PHP source (`php-printer`).
+- `php_rs_parser::phpdoc::parse()`, which parses doc comments into typed `PhpDocTag`s (param, return, var, throws, template, property, method, deprecated and Psalm/PHPStan annotations) (`php-rs-parser`).
+- Doc comments on function, class, method, property and constant nodes (`php-ast`, `php-rs-parser`).
+- `SourceMap`, `CommentMap` and `SymbolTable` (`php-ast`).
+
+### Changed
+
+- **Breaking:** `Visitor` methods return `ControlFlow<()>` for early termination, and the visitor covers type hints, attributes, catch clauses, match arms and closure `use` variables. All walk functions are public (`php-ast`).
+- Version gates cover all version-specific syntax (`php-rs-parser`).
 
 ### Fixed
 
-- Incorrect AST for `=&` assignment, `&$var` array elements, and empty destructuring slots.
-- Precedence bugs for concat, shift, and `instanceof` operators.
-- Octal literals with digits 8 or 9 now parsed correctly.
-- Trailing-dot float literals (`1.`) tokenised as `FloatLiteralSimple`.
-- `<?php` opening tag is now matched case-insensitively.
-- `abstract` modifier on properties and abstract methods in enums now rejected.
+- A `readonly` anonymous class requires PHP 8.3, not 8.2 (`php-rs-parser`).
 
----
+## [0.3.3] - 2026-04-04
+
+### Fixed
+
+- Deeply nested expressions report an error instead of overflowing the stack (`php-rs-parser`).
+- Unparenthesized ternary chains are rejected for PHP 8 (`php-rs-parser`).
+- Overflowing integer literals are floats (`php-rs-parser`).
+- Multi-byte UTF-8 characters are kept in single-quoted strings with escape sequences (`php-rs-parser`).
+- The precedence of `.`, `<<`, `>>` and `instanceof` matches PHP 8 (`php-rs-parser`).
+- Legacy octal literals with digits 8 or 9 lex correctly, `1.` is a float, and `<?php` matches case-insensitively (`php-lexer`).
+- `abstract` on properties and abstract methods in enums are rejected (`php-rs-parser`).
+- Long float literals parse, and a `ClassConstAccessDynamic` callee has the right span (`php-rs-parser`).
 
 ## [0.3.2] - 2026-04-01
 
-### Bug Fixes
+### Added
 
-- **AST: `=&` by-reference assignment** — `$a =& $b` was previously
-  indistinguishable from `$a = $b` in the AST. `AssignExpr` now carries a
-  `by_ref: bool` field that is `true` for `=&`.
-- **AST: `&$var` in array/list destructuring elements** — `[&$a]` and
-  `list(&$a)` elements silently dropped the `&` from the AST.
-  `ArrayElement` now carries a `by_ref: bool` field.
-- **AST: empty destructuring slots** — `[$a, , $c]` and `list($a, , $c)`
-  empty slots were emitted as `ExprKind::Null`, making them
-  indistinguishable from literal `null` values. They are now emitted as
-  the new `ExprKind::Omit` variant.
-- **String parsing: dead code branch** — a branch in double-quoted string
-  parsing would produce an empty `InterpolatedString` (dropping the
-  expression) if a single-part string ended up with a non-literal part.
-  The part is now preserved correctly.
+- `AssignExpr::by_ref` for `$a =& $b`, `ArrayElement::by_ref` for `[&$a]` and `list(&$a)`, each serialized only when `true` (`php-ast`, `php-rs-parser`).
+- `ExprKind::Omit` for a skipped slot in destructuring (`php-ast`).
 
-### AST Changes (php-ast)
+### Changed
 
-- `AssignExpr` has a new field `by_ref: bool`
-  (serialized only when `true` to keep existing snapshots stable).
-- `ArrayElement` has a new field `by_ref: bool`
-  (serialized only when `true`).
-- `ExprKind::Omit` is a new unit variant representing a skipped position
-  in array or list destructuring.
+- **Breaking:** an empty destructuring slot, as in `[$a, , $c]`, is `ExprKind::Omit` instead of `ExprKind::Null` (`php-ast`, `php-rs-parser`).
 
----
+### Fixed
+
+- A double-quoted string with a single non-literal part no longer drops the expression (`php-rs-parser`).
+- Unicode escapes, the `yield from` flag, negative string indices, `\${...}` in interpolation, `readonly final class` in either order and flexible heredoc closing markers parse correctly, and `true|false` is rejected (`php-rs-parser`).
 
 ## [0.3.1] - 2026-03-30
 
-### Bug Fixes
+### Fixed
 
-- Fix `is_final`, `is_readonly` on `Param` and `by_ref` on `Arg` not
-  being preserved in the AST.
+- `Param::is_final`, `Param::is_readonly` and `Arg::by_ref` are kept in the AST (`php-rs-parser`).
 
----
-
-## [0.3.0] - 2026-03-20
+## [0.3.0] - 2026-03-30
 
 ### Added
 
-- **PHP version system** — `PhpVersion` enum (`Php80`–`Php85`); `parse_versioned()` API for version-targeted parsing. Syntax requiring a higher version is parsed into the AST but emits `VersionTooLow` diagnostics.
-- **PHP 8.5 support** — `CloneWith` expression node, version-gated `clone()` argument forms.
-- **`.phpt` fixture system** — all integration tests migrated to structured `.phpt` files (`===source===`, `===ast===`, `===errors===`, `===config===`). `UPDATE_FIXTURES=1` regenerates expected output.
-- **Documentation structure** — `docs/` directory with architecture, performance, and development subdirectories.
-
-### Fixed
-
-- Ternary chaining rejected in PHP 8 mode.
-- Overflowing integer literals promoted to float.
-- Multi-byte UTF-8 characters preserved in single-quoted strings with escape sequences.
-- `instanceof` operator precedence corrected.
-
----
+- `PhpVersion` (`Php80` to `Php85`) and `parse_versioned()`: syntax that needs a higher version is parsed and reported as `VersionTooLow` (`php-rs-parser`).
+- PHP 8.5 `clone` with arguments and the `CloneWith` node (`php-ast`, `php-rs-parser`).
 
 ## [0.2.1] - 2026-03-18
 
-### Added
-
-- 31 malformed PHP error recovery tests — validates parser resilience with intentionally malformed PHP code.
-- 80+ new tests covering previously untested code paths.
-
----
+No user-facing changes.
 
 ## [0.2.0] - 2026-03-17
 
-### Added
+### Changed
 
-- **Lazy lexer with peeking slots** — replaced pre-lexed token array with arena-allocated lazy lexer.
-- **Jump table dispatch in Pratt loop** — converted sequential if-statements to match-based routing.
-- **Simple parameter fast path** — optimized common `$var` parameter pattern.
+- Faster parsing: tokens are lexed into an array up front, the Pratt loop dispatches on a jump table, simple `$var` parameters take a fast path, and `ArenaVec` pre-allocation is right-sized (5–10% less memory) (`php-rs-parser`, `php-lexer`).
 
-### Fixed
+## 0.1.0 - 2026-03-14
 
-- Right-sized `ArenaVec` pre-allocation (5–10% memory savings).
+Initial release: a recursive descent PHP parser for PHP 8.3 syntax with arena allocation, zero-copy string borrowing, error recovery and nikic/PHP-Parser corpus compatibility.
 
----
-
-## [0.1.0] - 2025-Q4
-
-Initial release with core recursive descent PHP parser supporting PHP 8.3 syntax, arena allocation, zero-copy string borrowing, comprehensive error recovery, and nikic/PHP-Parser corpus compatibility.
+[Unreleased]: https://github.com/jorgsowa/rust-php-parser/compare/v0.26.0...HEAD
+[0.26.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.25.1...v0.26.0
+[0.25.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.25.0...v0.25.1
+[0.25.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.24.1...v0.25.0
+[0.24.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.24.0...v0.24.1
+[0.24.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.23.0...v0.24.0
+[0.23.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.22.0...v0.23.0
+[0.22.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.21.0...v0.22.0
+[0.21.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.20.0...v0.21.0
+[0.20.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.19.2...v0.20.0
+[0.19.2]: https://github.com/jorgsowa/rust-php-parser/compare/v0.19.1...v0.19.2
+[0.19.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.19.0...v0.19.1
+[0.19.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.18.3...v0.19.0
+[0.18.3]: https://github.com/jorgsowa/rust-php-parser/compare/v0.18.2...v0.18.3
+[0.18.2]: https://github.com/jorgsowa/rust-php-parser/compare/v0.18.1...v0.18.2
+[0.18.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.18.0...v0.18.1
+[0.18.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.17.1...v0.18.0
+[0.17.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.17.0...v0.17.1
+[0.17.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.16.0...v0.17.0
+[0.16.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.15.0...v0.16.0
+[0.15.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.14.1...v0.15.0
+[0.14.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.14.0...v0.14.1
+[0.14.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.13.0...v0.14.0
+[0.13.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.12.2...v0.13.0
+[0.12.2]: https://github.com/jorgsowa/rust-php-parser/compare/v0.12.1...v0.12.2
+[0.12.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.12.0...v0.12.1
+[0.12.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.11.1...v0.12.0
+[0.11.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.11.0...v0.11.1
+[0.11.0]: https://github.com/jorgsowa/rust-php-parser/compare/15b12991...v0.11.0
+[0.10.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.10.0...15b12991
+[0.10.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.9.8...v0.10.0
+[0.9.8]: https://github.com/jorgsowa/rust-php-parser/compare/v0.9.7...v0.9.8
+[0.9.7]: https://github.com/jorgsowa/rust-php-parser/compare/v0.9.6...v0.9.7
+[0.9.6]: https://github.com/jorgsowa/rust-php-parser/compare/v0.9.5...v0.9.6
+[0.9.5]: https://github.com/jorgsowa/rust-php-parser/compare/v0.9.4...v0.9.5
+[0.9.4]: https://github.com/jorgsowa/rust-php-parser/compare/v0.9.3...v0.9.4
+[0.9.3]: https://github.com/jorgsowa/rust-php-parser/compare/v0.9.2...v0.9.3
+[0.9.2]: https://github.com/jorgsowa/rust-php-parser/compare/v0.9.1...v0.9.2
+[0.9.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.9.0...v0.9.1
+[0.9.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.8.1...v0.9.0
+[0.8.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.8.0...v0.8.1
+[0.8.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.7.0...v0.8.0
+[0.7.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.6.2...v0.7.0
+[0.6.2]: https://github.com/jorgsowa/rust-php-parser/compare/v0.6.1...v0.6.2
+[0.6.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.6.0...v0.6.1
+[0.6.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.3.3...v0.4.0
+[0.3.3]: https://github.com/jorgsowa/rust-php-parser/compare/v0.3.2...v0.3.3
+[0.3.2]: https://github.com/jorgsowa/rust-php-parser/compare/v0.3.1...v0.3.2
+[0.3.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.3.0...v0.3.1
+[0.3.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.2.1...v0.3.0
+[0.2.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/jorgsowa/rust-php-parser/releases/tag/v0.2.0
