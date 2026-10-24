@@ -11,13 +11,13 @@ get hook of property must not have a parameter list
 'property hooks' requires PHP 8.4 or higher
 set hook must have exactly one parameter
 'property hooks' requires PHP 8.4 or higher
-duplicate 'get' hook
+Cannot redeclare property hook "GET"
 Non-abstract property hook must have a body
 Non-abstract property hook must have a body
 ===errors >=8.4===
 get hook of property must not have a parameter list
 set hook must have exactly one parameter
-duplicate 'get' hook
+Cannot redeclare property hook "GET"
 Non-abstract property hook must have a body
 Non-abstract property hook must have a body
 ===php_error <=7.4===

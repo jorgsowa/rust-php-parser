@@ -14,14 +14,14 @@ class Test {
 Cannot use the public modifier on a property hook
 Cannot use the public modifier on a property hook
 Cannot use the protected modifier on a property hook
-duplicate 'get' hook
+Cannot redeclare property hook "get"
 Cannot use the private modifier on a property hook
-duplicate 'get' hook
+Cannot redeclare property hook "get"
 Cannot use the abstract modifier on a property hook
 Cannot use the static modifier on a property hook
-duplicate 'get' hook
+Cannot redeclare property hook "get"
 Cannot use the readonly modifier on a property hook
-duplicate 'get' hook
+Cannot redeclare property hook "get"
 Non-abstract property hook must have a body
 Non-abstract property hook must have a body
 Non-abstract property hook must have a body
@@ -31,14 +31,14 @@ Non-abstract property hook must have a body
 Cannot use the public modifier on a property hook
 Cannot use the public modifier on a property hook
 Cannot use the protected modifier on a property hook
-duplicate 'get' hook
+Cannot redeclare property hook "get"
 Cannot use the private modifier on a property hook
-duplicate 'get' hook
+Cannot redeclare property hook "get"
 Cannot use the abstract modifier on a property hook
 Cannot use the static modifier on a property hook
-duplicate 'get' hook
+Cannot redeclare property hook "get"
 Cannot use the readonly modifier on a property hook
-duplicate 'get' hook
+Cannot redeclare property hook "get"
 Non-abstract property hook must have a body
 Non-abstract property hook must have a body
 Non-abstract property hook must have a body

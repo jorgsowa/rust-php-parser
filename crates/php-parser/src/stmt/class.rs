@@ -259,8 +259,9 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
         }
 
         // Expect "get" or "set" identifier (contextual keywords)
+        let hook_name = parser.current_text();
         let kind = if parser.check(TokenKind::Identifier) {
-            match parser.current_text() {
+            match hook_name {
                 t if t.eq_ignore_ascii_case("get") => {
                     parser.advance();
                     PropertyHookKind::Get
@@ -392,7 +393,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                 if seen_get {
                     parser.forbid(
                         ForbiddenRule::DuplicateHook,
-                        "duplicate 'get' hook",
+                        format!("Cannot redeclare property hook \"{hook_name}\""),
                         parser.span_from(hook_start),
                     );
                 }
@@ -402,7 +403,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                 if seen_set {
                     parser.forbid(
                         ForbiddenRule::DuplicateHook,
-                        "duplicate 'set' hook",
+                        format!("Cannot redeclare property hook \"{hook_name}\""),
                         parser.span_from(hook_start),
                     );
                 }
