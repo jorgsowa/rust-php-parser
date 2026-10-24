@@ -330,6 +330,154 @@ fn check_dereferencable(parser: &mut Parser<'_, '_>, lhs: &Expr<'_, '_>, op: Tok
 pub(crate) const CURLY_OFFSET_REMOVED: &str =
     "Array and string offset access syntax with curly braces is no longer supported";
 
+/// PHP 8.0 to 8.3 check a `{}` offset only where it is not the base of a fetch or call.
+fn allow_curly_base(parser: &mut Parser<'_, '_>, base: &Expr<'_, '_>) {
+    if !(PhpVersion::Php80..PhpVersion::Php84).contains(&parser.version) {
+        return;
+    }
+    let ExprKind::ArrayAccess(a) = &base.kind else {
+        return;
+    };
+    let brace = Span::new(
+        a.array.span.end,
+        a.index.map_or(base.span.end, |index| index.span.start),
+    );
+    let mut retracted = Vec::new();
+    parser.errors_mut().retain(|e| match e {
+        ParseError::Forbidden {
+            rule: ForbiddenRule::CurlyOffsetAccess,
+            span,
+            ..
+        } if span.start >= brace.start && span.end <= brace.end => {
+            retracted.push(*span);
+            false
+        }
+        _ => true,
+    });
+    parser.curly_bases.extend(retracted);
+}
+
+/// PHP 8.0 to 8.3 fold array literal elements at compile time, which checks every `{}` offset
+/// the fold reaches, base of a fetch or not.
+pub(crate) fn check_folded_curly_offsets(parser: &mut Parser<'_, '_>, expr: &Expr<'_, '_>) {
+    if parser.curly_bases.is_empty() {
+        return;
+    }
+    match &expr.kind {
+        ExprKind::Array(elements) => {
+            for element in elements.iter() {
+                if let Some(key) = &element.key {
+                    check_folded_curly_in(parser, key);
+                }
+                check_folded_curly_in(parser, element.value());
+            }
+        }
+        _ => check_folded_curly_in(parser, expr),
+    }
+}
+
+/// The walk of PHP's `zend_eval_const_expr`; a nested array literal was checked when parsed.
+fn check_folded_curly_in(parser: &mut Parser<'_, '_>, expr: &Expr<'_, '_>) {
+    match &expr.kind {
+        ExprKind::ArrayAccess(a) => {
+            let brace = Span::new(
+                a.array.span.end,
+                a.index.map_or(expr.span.end, |index| index.span.start),
+            );
+            let retracted = parser
+                .curly_bases
+                .iter()
+                .copied()
+                .find(|s| s.start >= brace.start && s.end <= brace.end);
+            if let Some(span) = retracted.filter(|s| !parser.folded_curly.contains(s)) {
+                parser.folded_curly.push(span);
+                parser.forbid(ForbiddenRule::CurlyOffsetAccess, CURLY_OFFSET_REMOVED, span);
+            }
+            check_folded_curly_in(parser, a.array);
+            if let Some(index) = a.index {
+                check_folded_curly_in(parser, index);
+            }
+        }
+        ExprKind::Binary(b) => {
+            check_folded_curly_in(parser, b.left);
+            check_folded_curly_in(parser, b.right);
+        }
+        ExprKind::UnaryPrefix(u)
+            if !matches!(
+                u.op,
+                UnaryPrefixOp::PreIncrement | UnaryPrefixOp::PreDecrement
+            ) =>
+        {
+            check_folded_curly_in(parser, u.operand);
+        }
+        ExprKind::NullCoalesce(c) => {
+            check_folded_curly_in(parser, c.left);
+            check_folded_curly_in(parser, c.right);
+        }
+        ExprKind::Ternary(t) => {
+            check_folded_curly_in(parser, t.condition);
+            if let Some(then_expr) = t.then_expr {
+                check_folded_curly_in(parser, then_expr);
+            }
+            check_folded_curly_in(parser, t.else_expr);
+        }
+        ExprKind::Parenthesized(inner) => check_folded_curly_in(parser, inner),
+        ExprKind::ClassConstAccess(a) => check_folded_curly_in(parser, a.class),
+        ExprKind::ClassConstAccessDynamic { class, member } => {
+            check_folded_curly_in(parser, class);
+            check_folded_curly_in(parser, member);
+        }
+        ExprKind::New(n) => {
+            check_folded_curly_in(parser, n.class);
+            for value in n.args.iter().filter_map(|arg| arg.value()) {
+                check_folded_curly_in(parser, value);
+            }
+        }
+        ExprKind::PropertyAccess(p) | ExprKind::NullsafePropertyAccess(p)
+            if parser.version >= PhpVersion::Php82 =>
+        {
+            check_folded_curly_in(parser, p.object);
+            check_folded_curly_in(parser, p.property);
+        }
+        _ => {}
+    }
+}
+
+/// A destructuring or `foreach` target is not folded, so its `{}` bases stay allowed.
+pub(crate) fn unfold_curly_offsets(parser: &mut Parser<'_, '_>, target: &Expr<'_, '_>) {
+    if parser.folded_curly.is_empty() || !matches!(target.kind, ExprKind::Array(_)) {
+        return;
+    }
+    let range = target.span;
+    let (unfolded, kept): (Vec<Span>, Vec<Span>) = parser
+        .folded_curly
+        .iter()
+        .partition(|s| s.start >= range.start && s.end <= range.end);
+    parser.folded_curly = kept;
+    parser.errors_mut().retain(|e| {
+        !matches!(e, ParseError::Forbidden {
+            rule: ForbiddenRule::CurlyOffsetAccess,
+            span,
+            ..
+        } if unfolded.contains(span))
+    });
+}
+
+/// The class of a static property fetch or static call, whose `{}` offset PHP 8.0 to 8.3 allow.
+fn allow_curly_static_base(parser: &mut Parser<'_, '_>, expr: &Expr<'_, '_>) {
+    let class = match &expr.kind {
+        ExprKind::StaticPropertyAccess(a) => a.class,
+        ExprKind::StaticPropertyAccessDynamic { class, .. } => *class,
+        ExprKind::StaticMethodCall(c) => c.class,
+        ExprKind::StaticMethodCallDynamic(c) => c.class,
+        ExprKind::CallableCreate(CallableCreateExpr {
+            kind: CallableCreateKind::StaticMethod { class, .. },
+        }) => *class,
+        _ => return,
+    };
+    allow_curly_base(parser, class);
+}
+
 /// PHP's `class_name_reference`: a name, a parenthesized expression or a `new_variable`.
 fn is_class_name_reference(expr: &Expr<'_, '_>) -> bool {
     matches!(
@@ -1497,6 +1645,9 @@ fn parse_assign_continuation<'arena, 'src>(
     debug_assert!(parser.current_kind().is_assignment_op());
     let span = parser.current_span();
     let is_plain_assign = parser.current_kind() == TokenKind::Equals;
+    if is_plain_assign {
+        unfold_curly_offsets(parser, &lhs);
+    }
     // PHP rejects pre/post-increment/decrement as an assignment target at parse time.
     if matches!(
         lhs.kind,
@@ -1809,6 +1960,7 @@ fn parse_expr_rest<'arena, 'src>(
                     break;
                 }
                 check_dereferencable(parser, &lhs, kind);
+                allow_curly_base(parser, &lhs);
                 let is_nullsafe = kind == TokenKind::NullsafeArrow;
                 if is_nullsafe {
                     let span = parser.current_span();
@@ -2153,6 +2305,7 @@ fn parse_expr_rest<'arena, 'src>(
                     };
                 }
             }
+            allow_curly_static_base(parser, &lhs);
             continue;
         }
 
@@ -2162,6 +2315,7 @@ fn parse_expr_rest<'arena, 'src>(
                 break;
             }
             check_dereferencable(parser, &lhs, kind);
+            allow_curly_base(parser, &lhs);
             parser.advance(); // consume [
             let index = if parser.check(TokenKind::RightBracket) {
                 parser.empty_dim_count += 1;
@@ -2187,6 +2341,7 @@ fn parse_expr_rest<'arena, 'src>(
             if MEMBER_ACCESS_BP < min_bp || parser.no_brace_subscript {
                 break;
             }
+            allow_curly_base(parser, &lhs);
             let brace_span = parser.current_span();
             parser.advance(); // consume {
             let index = if parser.check(TokenKind::RightBrace) {

@@ -967,6 +967,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     } else {
         (None, first, first_ref.map(|amp| amp.span))
     };
+    expr::unfold_curly_offsets(parser, &value);
     let by_ref = by_ref_span.is_some();
     if by_ref && matches!(value.kind, ExprKind::Array(_)) {
         // `&[$a]` and `&list($a)` are not foreach targets; only a variable can be taken by reference.
@@ -3154,6 +3155,9 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             // Before 8.3 the initializer is a constant expression, which permits `new` from 8.1.
             if parser.version < PhpVersion::Php83 {
                 expr::check_const_expr(parser, &value, true);
+            } else {
+                // PHP 8.3 folds the initializer at compile time.
+                expr::check_folded_curly_offsets(parser, &value);
             }
             Some(value)
         } else {

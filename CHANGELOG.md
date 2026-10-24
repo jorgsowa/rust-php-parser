@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- On PHP 8.0 to 8.3, a curly brace offset that is the base of another fetch or call, as in `$a{0}->b`, `$a{0}[1]`, `$a{0}::$c` or `$a{0}->m()`, is accepted as PHP does; PHP checks it only where it folds an array literal or a PHP 8.3 `static` initializer (`[$a{0}->b]` from PHP 8.2) (`php-rs-parser`).
 - Before PHP 8.4, calling a new object without wrapping parentheses (`new Foo()()`) and dereferencing a new anonymous class (`new class {}->foo`, `new class {}()`) report `'dereferencing a new expression without parentheses' requires PHP 8.4 or higher` (`php-rs-parser`).
 - `++` and `--` bind tighter than `**`, so `--$a ** 2` parses as `(--$a) ** 2` instead of reporting `Cannot increment or decrement an expression that is not a variable` (`php-rs-parser`).
 - Constant expressions fold only what PHP folds: literals and their arithmetic and concatenation, magic constants, `X::class`, and outside parameter defaults the internal constants PHP substitutes (unqualified outside a namespace, or fully qualified) and earlier constants of the class being declared. So `const A = FOO ?? $x;`, `FOO ? 1 : $x`, `-0.0 || $x`, `(1-1) ? 1 : $x`, `function f($a = PHP_INT_MAX ?? $x)`, `(B)::C`, `B::C::D`, `new (B)` and `('a' ? 'b' : 'c')::class` report PHP's errors (`php-rs-parser`).

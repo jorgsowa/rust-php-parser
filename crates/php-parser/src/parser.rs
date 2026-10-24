@@ -141,6 +141,11 @@ pub struct Parser<'arena, 'src> {
     /// Used when parsing property/parameter default values so that a following hook block
     /// `{ get => ...; }` is not consumed as part of the default expression.
     pub(crate) no_brace_subscript: bool,
+    /// Spans of `{}` offset errors retracted because the offset is the base of a fetch or call,
+    /// which PHP 8.0 to 8.3 allow unless an array literal fold reaches them.
+    pub(crate) curly_bases: Vec<Span>,
+    /// The `curly_bases` an array literal fold reported again.
+    pub(crate) folded_curly: Vec<Span>,
     /// End position of the most recently consumed `{` or `}` token.
     /// Used as a floor when searching for doc comments: a comment that starts
     /// before this boundary belongs to an already-closed scope or to the
@@ -269,6 +274,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             in_constructor: false,
             version,
             no_brace_subscript: false,
+            curly_bases: Vec::new(),
+            folded_curly: Vec::new(),
             last_scope_close: 0,
             last_stmt_end: 0,
             void_cast_count: 0,
@@ -328,6 +335,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             in_constructor: false,
             version,
             no_brace_subscript: false,
+            curly_bases: Vec::new(),
+            folded_curly: Vec::new(),
             last_scope_close: 0,
             last_stmt_end: 0,
             void_cast_count: 0,

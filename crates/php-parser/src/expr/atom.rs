@@ -2402,10 +2402,12 @@ fn parse_array_literal<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Ex
     let end = parser.previous_end();
     let span = Span::new(start, end);
 
-    Expr {
+    let array = Expr {
         kind: ExprKind::Array(elements),
         span,
-    }
+    };
+    super::check_folded_curly_offsets(parser, &array);
+    array
 }
 
 fn parse_array_call<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
@@ -2439,10 +2441,12 @@ fn parse_array_call<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     let end = parser.previous_end();
     let span = Span::new(start, end);
 
-    Expr {
+    let array = Expr {
         kind: ExprKind::Array(elements),
         span,
-    }
+    };
+    super::check_folded_curly_offsets(parser, &array);
+    array
 }
 
 fn parse_array_element<'arena, 'src>(
