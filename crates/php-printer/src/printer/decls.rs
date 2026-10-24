@@ -273,7 +273,9 @@ impl<'src> Printer<'src> {
         if prop.modifiers.is_final {
             self.w("final ");
         }
-        if let Some(vis) = &prop.modifiers.visibility {
+        if prop.modifiers.is_var {
+            self.w("var ");
+        } else if let Some(vis) = &prop.modifiers.visibility {
             self.w(visibility_str(*vis));
             self.w(" ");
         }

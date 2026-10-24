@@ -1217,11 +1217,13 @@ fn parse_class_member_modifiers<'arena, 'src>(
     let mut is_abstract = false;
     let mut is_final = false;
     let mut is_readonly = false;
+    let mut is_var = false;
 
     // Handle `var` keyword (PHP4 style, equivalent to public)
     if parser.check(TokenKind::Identifier) && parser.current_text().eq_ignore_ascii_case("var") {
         parser.advance();
         visibility = Some(Visibility::Public);
+        is_var = true;
         // `var` takes no other modifier.
         if matches!(
             parser.current_kind(),
@@ -1405,6 +1407,7 @@ fn parse_class_member_modifiers<'arena, 'src>(
     modifiers.is_abstract = is_abstract;
     modifiers.is_final = is_final;
     modifiers.is_readonly = is_readonly;
+    modifiers.is_var = is_var;
     modifiers
 }
 

@@ -416,6 +416,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                 mods.is_abstract = is_abstract;
                 mods.is_final = is_final;
                 mods.is_readonly = is_readonly;
+                mods.is_var = is_var;
                 let mut properties = parser.alloc_vec();
                 super::class::parse_property_member(
                     parser,

@@ -11,7 +11,7 @@ enum E
     /** Name */
     public string $name = 'a';
 
-    public $b;
+    var $b;
 
-    public $c;
+    var $c;
 }

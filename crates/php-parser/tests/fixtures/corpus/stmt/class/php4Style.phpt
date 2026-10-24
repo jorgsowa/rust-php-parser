@@ -48,7 +48,8 @@ PHP Fatal error:  Class A declares abstract method baz() and must therefore be d
                     }
                   },
                   "modifiers": {
-                    "visibility": "Public"
+                    "visibility": "Public",
+                    "is_var": true
                   },
                   "type_hint": null,
                   "default": null,

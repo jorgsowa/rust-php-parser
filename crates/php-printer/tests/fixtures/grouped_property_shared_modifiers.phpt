@@ -21,7 +21,7 @@ class Foo
 
     public private(set) int $q;
 
-    public $x;
+    var $x;
 
-    public $y;
+    var $y;
 }

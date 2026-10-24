@@ -69,7 +69,8 @@ PHP Parse error:  syntax error, unexpected token "static", expecting variable in
                   },
                   "modifiers": {
                     "visibility": "Public",
-                    "is_static": true
+                    "is_static": true,
+                    "is_var": true
                   },
                   "type_hint": null,
                   "default": null,
@@ -93,7 +94,8 @@ PHP Parse error:  syntax error, unexpected token "static", expecting variable in
                   },
                   "modifiers": {
                     "visibility": "Public",
-                    "is_readonly": true
+                    "is_readonly": true,
+                    "is_var": true
                   },
                   "type_hint": {
                     "kind": {
@@ -134,7 +136,8 @@ PHP Parse error:  syntax error, unexpected token "static", expecting variable in
                   },
                   "modifiers": {
                     "visibility": "Public",
-                    "is_final": true
+                    "is_final": true,
+                    "is_var": true
                   },
                   "type_hint": null,
                   "default": null,
@@ -237,7 +240,8 @@ PHP Parse error:  syntax error, unexpected token "static", expecting variable in
                     }
                   },
                   "modifiers": {
-                    "visibility": "Public"
+                    "visibility": "Public",
+                    "is_var": true
                   },
                   "type_hint": {
                     "kind": {

@@ -32,7 +32,8 @@
                     }
                   },
                   "modifiers": {
-                    "visibility": "Public"
+                    "visibility": "Public",
+                    "is_var": true
                   },
                   "type_hint": null,
                   "default": null,
@@ -55,7 +56,8 @@
                     }
                   },
                   "modifiers": {
-                    "visibility": "Public"
+                    "visibility": "Public",
+                    "is_var": true
                   },
                   "type_hint": null,
                   "default": {

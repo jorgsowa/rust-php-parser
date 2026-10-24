@@ -138,6 +138,9 @@ pub struct Modifiers {
     /// `true` for `readonly`.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
     pub is_readonly: bool,
+    /// `true` for a property declared with `var`, whose `visibility` is `Public`.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
+    pub is_var: bool,
 }
 
 impl Modifiers {
@@ -152,6 +155,7 @@ impl Modifiers {
             is_abstract: false,
             is_final: false,
             is_readonly: false,
+            is_var: false,
         }
     }
 

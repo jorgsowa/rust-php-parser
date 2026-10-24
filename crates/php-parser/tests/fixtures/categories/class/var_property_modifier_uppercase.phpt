@@ -36,7 +36,8 @@ class A {
                     }
                   },
                   "modifiers": {
-                    "visibility": "Public"
+                    "visibility": "Public",
+                    "is_var": true
                   },
                   "type_hint": null,
                   "default": null,
@@ -59,7 +60,8 @@ class A {
                     }
                   },
                   "modifiers": {
-                    "visibility": "Public"
+                    "visibility": "Public",
+                    "is_var": true
                   },
                   "type_hint": null,
                   "default": {
@@ -90,7 +92,8 @@ class A {
                     }
                   },
                   "modifiers": {
-                    "visibility": "Public"
+                    "visibility": "Public",
+                    "is_var": true
                   },
                   "type_hint": null,
                   "default": null,

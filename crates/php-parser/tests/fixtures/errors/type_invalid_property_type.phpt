@@ -163,7 +163,8 @@ PHP Fatal error:  Property A::$a cannot have type void in Standard input code on
                     }
                   },
                   "modifiers": {
-                    "visibility": "Public"
+                    "visibility": "Public",
+                    "is_var": true
                   },
                   "type_hint": {
                     "kind": {

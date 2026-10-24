@@ -144,7 +144,8 @@ PHP Fatal error:  Enum N\E cannot include properties in Standard input code on l
                     }
                   },
                   "modifiers": {
-                    "visibility": "Public"
+                    "visibility": "Public",
+                    "is_var": true
                   },
                   "type_hint": null,
                   "default": null,
@@ -167,7 +168,8 @@ PHP Fatal error:  Enum N\E cannot include properties in Standard input code on l
                     }
                   },
                   "modifiers": {
-                    "visibility": "Public"
+                    "visibility": "Public",
+                    "is_var": true
                   },
                   "type_hint": null,
                   "default": {
@@ -467,7 +469,8 @@ PHP Fatal error:  Enum N\E cannot include properties in Standard input code on l
                     }
                   },
                   "modifiers": {
-                    "visibility": "Public"
+                    "visibility": "Public",
+                    "is_var": true
                   },
                   "type_hint": null,
                   "default": null,
@@ -490,7 +493,8 @@ PHP Fatal error:  Enum N\E cannot include properties in Standard input code on l
                     }
                   },
                   "modifiers": {
-                    "visibility": "Public"
+                    "visibility": "Public",
+                    "is_var": true
                   },
                   "type_hint": null,
                   "default": {
