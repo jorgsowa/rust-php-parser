@@ -91,6 +91,7 @@ Constant expression contains invalid operations
 'dynamic class constant fetch' requires PHP 8.3 or higher
 'dynamic class constant fetch' requires PHP 8.3 or higher
 'dynamic class constant fetch' requires PHP 8.3 or higher
+(expression)::class cannot be used in constant expressions
 'property fetch in constant expressions' requires PHP 8.2 or higher
 'property fetch in constant expressions' requires PHP 8.2 or higher
 'property fetch in constant expressions' requires PHP 8.2 or higher
@@ -129,6 +130,7 @@ Constant expression contains invalid operations
 'dynamic class constant fetch' requires PHP 8.3 or higher
 'dynamic class constant fetch' requires PHP 8.3 or higher
 'dynamic class constant fetch' requires PHP 8.3 or higher
+(expression)::class cannot be used in constant expressions
 'property fetch in constant expressions' requires PHP 8.2 or higher
 'property fetch in constant expressions' requires PHP 8.2 or higher
 'property fetch in constant expressions' requires PHP 8.2 or higher

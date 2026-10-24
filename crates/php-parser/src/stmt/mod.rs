@@ -1624,7 +1624,7 @@ pub fn parse_param_list<'arena, 'src>(
             // Suppress `{` subscript so a following hook block `{ get => ...; }`
             // is not consumed as part of the default expression.
             let default = parser.with_no_brace_subscript(expr::parse_expr);
-            expr::check_const_expr(parser, &default, true);
+            expr::check_param_default(parser, &default);
             if let (Some(ty), Some(name), false) = (&type_hint, name.as_str(), variadic) {
                 class::check_typed_default(parser, ty, &default, class::DefaultOwner::Param(name));
             }

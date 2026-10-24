@@ -15,7 +15,6 @@ Dynamic class names are not allowed in compile-time class constant references
 'dynamic class constant fetch' requires PHP 8.3 or higher
 Dynamic class names are not allowed in compile-time class constant references
 Cannot use ::class with dynamic class name
-(expression)::class cannot be used in constant expressions
 "static::" is not allowed in compile-time constants
 'dynamic class constant fetch' requires PHP 8.3 or higher
 "static::" is not allowed in compile-time constants

@@ -11,6 +11,7 @@ use crate::version::PhpVersion;
 use php_ast::span::Span;
 
 mod atom;
+mod internal_constants;
 pub(crate) mod interpolation;
 
 // Re-exports so external callers' paths don't change
@@ -668,11 +669,28 @@ enum ConstExprError {
 
 /// Report the first part of a constant expression PHP cannot evaluate at compile time.
 pub(crate) fn check_const_expr(parser: &mut Parser<'_, '_>, expr: &Expr<'_, '_>, allow_new: bool) {
+    report_const_expr(parser, expr, allow_new, true);
+}
+
+/// [`check_const_expr`] for a parameter default, where PHP substitutes no constant while folding.
+pub(crate) fn check_param_default(parser: &mut Parser<'_, '_>, expr: &Expr<'_, '_>) {
+    report_const_expr(parser, expr, true, false);
+}
+
+fn report_const_expr(
+    parser: &mut Parser<'_, '_>,
+    expr: &Expr<'_, '_>,
+    allow_new: bool,
+    substitutes_constants: bool,
+) {
     let checker = ConstExprChecker {
+        parser,
         version: parser.version,
         allow_new,
+        substitutes_constants,
     };
-    match checker.check(expr) {
+    let result = checker.check(expr);
+    match result {
         Ok(()) => {}
         Err(ConstExprError::Forbidden(message, span)) => {
             parser.forbid(ForbiddenRule::InvalidConstantExpression, message, span)
@@ -683,12 +701,66 @@ pub(crate) fn check_const_expr(parser: &mut Parser<'_, '_>, expr: &Expr<'_, '_>,
     }
 }
 
-struct ConstExprChecker {
+struct ConstExprChecker<'p, 'arena, 'src> {
+    parser: &'p Parser<'arena, 'src>,
     version: PhpVersion,
     allow_new: bool,
+    substitutes_constants: bool,
 }
 
-impl ConstExprChecker {
+impl ConstExprChecker<'_, '_, '_> {
+    /// Whether PHP may fold `expr` at compile time, substituting the constants it knows.
+    fn may_fold(&self, expr: &Expr<'_, '_>) -> bool {
+        foldable(expr, Some(self))
+    }
+
+    /// Whether `name` may be an internal constant, which PHP substitutes while folding.
+    fn may_be_internal_constant(&self, name: &Name<'_, '_>) -> bool {
+        let parts = name.parts_slice();
+        let global = match name.kind() {
+            NameKind::FullyQualified => true,
+            NameKind::Unqualified | NameKind::Qualified | NameKind::Relative => {
+                self.parser.namespace.is_none()
+            }
+            _ => false,
+        };
+        match parts {
+            [word]
+                if ["true", "false", "null"]
+                    .iter()
+                    .any(|w| word.eq_ignore_ascii_case(w)) =>
+            {
+                true
+            }
+            [word] => {
+                global && self.substitutes_constants && {
+                    let leading = word.split('_').next().unwrap_or(word);
+                    internal_constants::INTERNAL_CONSTANT_WORDS
+                        .binary_search(&leading)
+                        .is_ok()
+                }
+            }
+            // PHP substitutes no namespaced constant.
+            _ => false,
+        }
+    }
+
+    /// Whether `class` names the class being declared, whose earlier constants PHP substitutes.
+    fn is_declaring_class(&self, class: &Name<'_, '_>) -> bool {
+        let Some(scope) = self.parser.class_scope.as_ref() else {
+            return false;
+        };
+        // A trait's `self` is only known when the trait is used.
+        if matches!(class, Name::Simple { value, .. } if value.eq_ignore_ascii_case("self")) {
+            return scope.self_name.is_some();
+        }
+        !scope.is_anonymous
+            && self
+                .parser
+                .resolve_class_name(class)
+                .eq_ignore_ascii_case(&scope.name)
+    }
+
     fn require(
         &self,
         min: PhpVersion,
@@ -728,7 +800,7 @@ impl ConstExprChecker {
             ExprKind::Binary(b) if !matches!(b.op, BinaryOp::Instanceof | BinaryOp::Pipe) => {
                 self.check(b.left)?;
                 // PHP folds `false && $x` before checking, dropping the right operand.
-                let folded_away = match (b.op, folded_truth(b.left)) {
+                let folded_away = match (b.op, const_truth(b.left)) {
                     (BinaryOp::BooleanAnd | BinaryOp::LogicalAnd, Some(truth)) => !truth,
                     (BinaryOp::BooleanOr | BinaryOp::LogicalOr, Some(truth)) => truth,
                     (
@@ -737,7 +809,7 @@ impl ConstExprChecker {
                         | BinaryOp::LogicalAnd
                         | BinaryOp::LogicalOr,
                         None,
-                    ) => may_fold(b.left),
+                    ) => self.may_fold(b.left),
                     _ => false,
                 };
                 if folded_away {
@@ -747,12 +819,12 @@ impl ConstExprChecker {
             }
             ExprKind::Ternary(t) => {
                 self.check(t.condition)?;
-                match folded_truth(t.condition) {
+                match const_truth(t.condition) {
                     Some(true) => t
                         .then_expr
                         .map_or(Ok(()), |then_expr| self.check(then_expr)),
                     Some(false) => self.check(t.else_expr),
-                    None if may_fold(t.condition) => Ok(()),
+                    None if self.may_fold(t.condition) => Ok(()),
                     None => {
                         if let Some(then_expr) = t.then_expr {
                             self.check(then_expr)?;
@@ -764,7 +836,7 @@ impl ConstExprChecker {
             ExprKind::NullCoalesce(n) => {
                 self.check(n.left)?;
                 let left_is_null = matches!(unparenthesized(n.left).kind, ExprKind::Null);
-                if !left_is_null && may_fold(n.left) {
+                if !left_is_null && self.may_fold(n.left) {
                     return Ok(());
                 }
                 self.check(n.right)
@@ -822,10 +894,30 @@ impl ConstExprChecker {
                 if !is_class_name {
                     return self.class_const_class(class);
                 }
-                match &class.kind {
-                    // `static::class` is reported with the class scope checks.
-                    ExprKind::Name(_) => Ok(()),
-                    _ if is_literal(class) => Ok(()),
+                // `static::class` is reported with the class scope checks, and before PHP 8.0
+                // any other expression by the `::class` checks of every expression.
+                if matches!(class.kind, ExprKind::Name(_)) || self.version < PhpVersion::Php80 {
+                    return Ok(());
+                }
+                match &unparenthesized(class).kind {
+                    // A literal other than a string is reported by the `::class` checks of
+                    // every expression.
+                    ExprKind::Int(_)
+                    | ExprKind::Float(_)
+                    | ExprKind::String(_)
+                    | ExprKind::Bool(_)
+                    | ExprKind::Null
+                    | ExprKind::Nowdoc { .. }
+                    | ExprKind::Array(_) => Ok(()),
+                    ExprKind::Heredoc { parts, .. } if is_literal_parts(parts) => Ok(()),
+                    // From PHP 8.2 a concatenation of literals is folded before the check.
+                    ExprKind::Binary(b)
+                        if b.op == BinaryOp::Concat
+                            && self.version >= PhpVersion::Php82
+                            && is_literal(class) =>
+                    {
+                        Ok(())
+                    }
                     _ => Err(Forbidden(
                         "(expression)::class cannot be used in constant expressions",
                         expr.span,
@@ -859,7 +951,7 @@ impl ConstExprChecker {
                             class.span,
                         ))
                     }
-                    _ if may_fold(class) => {}
+                    _ if self.may_fold(class) => {}
                     _ => {
                         return Err(Forbidden(
                             "Cannot use dynamic class name in constant expression",
@@ -960,7 +1052,7 @@ impl ConstExprChecker {
                 ))
             }
             ExprKind::Name(_) => {}
-            _ if may_fold(class) => {}
+            _ if self.may_fold(class) => {}
             _ => {
                 return Err(ConstExprError::Forbidden(
                     "Cannot use dynamic class name in constant expression",
@@ -1004,7 +1096,7 @@ impl ConstExprChecker {
                 class.span,
             )),
             ExprKind::Name(_) => Ok(()),
-            _ if may_fold(class) => Ok(()),
+            _ if self.may_fold(class) => Ok(()),
             _ => Err(ConstExprError::Forbidden(
                 "Dynamic class names are not allowed in compile-time class constant references",
                 class.span,
@@ -1030,12 +1122,7 @@ fn is_literal_parts(parts: &[StringPart<'_, '_>]) -> bool {
 
 /// Whether `expr` is built from literals only, which PHP always folds at compile time.
 fn is_literal(expr: &Expr<'_, '_>) -> bool {
-    foldable(expr, false)
-}
-
-/// Whether PHP may fold `expr` at compile time, substituting constants whose value it knows.
-fn may_fold(expr: &Expr<'_, '_>) -> bool {
-    foldable(expr, true)
+    foldable(expr, None)
 }
 
 fn unparenthesized<'e, 'arena, 'src>(mut expr: &'e Expr<'arena, 'src>) -> &'e Expr<'arena, 'src> {
@@ -1050,6 +1137,65 @@ fn is_short_circuit(op: BinaryOp) -> bool {
         op,
         BinaryOp::BooleanAnd | BinaryOp::BooleanOr | BinaryOp::LogicalAnd | BinaryOp::LogicalOr
     )
+}
+
+/// [`folded_truth`], also folding the arithmetic and concatenation of literals in constants.
+fn const_truth(expr: &Expr<'_, '_>) -> Option<bool> {
+    folded_truth(expr).or_else(|| match literal_scalar(expr)? {
+        Scalar::Int(n) => Some(n != 0),
+        Scalar::Float(f) => Some(f != 0.0),
+        Scalar::String(s) => Some(!matches!(s.as_slice(), b"" | b"0")),
+    })
+}
+
+enum Scalar {
+    Int(i64),
+    Float(f64),
+    String(Vec<u8>),
+}
+
+/// The value of a literal number, string, or `+`, `-`, `*` or `.` of them; `None` otherwise.
+fn literal_scalar(expr: &Expr<'_, '_>) -> Option<Scalar> {
+    let number = |s: Scalar| match s {
+        Scalar::Int(n) => Some(n as f64),
+        Scalar::Float(f) => Some(f),
+        Scalar::String(_) => None,
+    };
+    let expr = unparenthesized(expr);
+    Some(match &expr.kind {
+        ExprKind::Int(n) => Scalar::Int(*n),
+        ExprKind::Float(f) => Scalar::Float(*f),
+        ExprKind::String(s) => Scalar::String(s.as_bytes().to_vec()),
+        ExprKind::Nowdoc { value, .. } => Scalar::String(value.as_bytes().to_vec()),
+        ExprKind::UnaryPrefix(u) => match (u.op, literal_scalar(u.operand)?) {
+            (UnaryPrefixOp::Plus, n @ (Scalar::Int(_) | Scalar::Float(_))) => n,
+            (UnaryPrefixOp::Negate, Scalar::Int(n)) => Scalar::Int(n.checked_neg()?),
+            (UnaryPrefixOp::Negate, Scalar::Float(f)) => Scalar::Float(-f),
+            _ => return None,
+        },
+        ExprKind::Binary(b) => {
+            let (left, right) = (literal_scalar(b.left)?, literal_scalar(b.right)?);
+            match (b.op, left, right) {
+                (BinaryOp::Concat, Scalar::String(mut l), Scalar::String(r)) => {
+                    l.extend_from_slice(&r);
+                    Scalar::String(l)
+                }
+                (BinaryOp::Add, Scalar::Int(l), Scalar::Int(r)) => Scalar::Int(l.checked_add(r)?),
+                (BinaryOp::Sub, Scalar::Int(l), Scalar::Int(r)) => Scalar::Int(l.checked_sub(r)?),
+                (BinaryOp::Mul, Scalar::Int(l), Scalar::Int(r)) => Scalar::Int(l.checked_mul(r)?),
+                (op @ (BinaryOp::Add | BinaryOp::Sub | BinaryOp::Mul), l, r) => {
+                    let (l, r) = (number(l)?, number(r)?);
+                    Scalar::Float(match op {
+                        BinaryOp::Add => l + r,
+                        BinaryOp::Sub => l - r,
+                        _ => l * r,
+                    })
+                }
+                _ => return None,
+            }
+        }
+        _ => return None,
+    })
 }
 
 /// The truthiness PHP gives `expr` when it folds `?:`, `&&` and `||` at compile time.
@@ -1106,7 +1252,8 @@ fn folded_truth(expr: &Expr<'_, '_>) -> Option<bool> {
     }
 }
 
-fn foldable(expr: &Expr<'_, '_>, constants: bool) -> bool {
+/// Whether PHP folds `expr` from literals, or with `constants` also the names it may substitute.
+fn foldable(expr: &Expr<'_, '_>, constants: Option<&ConstExprChecker<'_, '_, '_>>) -> bool {
     let operand = |e: &Expr<'_, '_>| foldable(e, constants);
     match &expr.kind {
         ExprKind::Int(_)
@@ -1116,12 +1263,27 @@ fn foldable(expr: &Expr<'_, '_>, constants: bool) -> bool {
         | ExprKind::Null
         | ExprKind::Nowdoc { .. } => true,
         ExprKind::Heredoc { parts, .. } => is_literal_parts(parts),
-        ExprKind::MagicConst(_) | ExprKind::Name(_) => constants,
-        ExprKind::ClassConstAccess(access) => {
-            constants
-                && matches!(access.class.kind, ExprKind::Name(_))
-                && matches!(access.member.kind, ExprKind::Identifier(_))
-        }
+        // A trait's `__CLASS__` is the class that uses it.
+        ExprKind::MagicConst(MagicConstKind::Class) => constants.is_some_and(|c| {
+            c.parser
+                .class_scope
+                .as_ref()
+                .is_none_or(|scope| scope.self_name.is_some() || scope.is_anonymous)
+        }),
+        ExprKind::MagicConst(_) => constants.is_some(),
+        ExprKind::Name(name) => constants.is_some_and(|c| c.may_be_internal_constant(name)),
+        ExprKind::ClassConstAccess(access) => constants.is_some_and(|c| {
+            let ExprKind::Name(class) = &access.class.kind else {
+                return false;
+            };
+            match &access.member.kind {
+                ExprKind::Identifier(m) if m.eq_ignore_ascii_case("class") => {
+                    !is_static_name(class)
+                }
+                ExprKind::Identifier(_) => c.substitutes_constants && c.is_declaring_class(class),
+                _ => false,
+            }
+        }),
         ExprKind::Parenthesized(inner) => operand(inner),
         ExprKind::UnaryPrefix(u) => {
             !matches!(
