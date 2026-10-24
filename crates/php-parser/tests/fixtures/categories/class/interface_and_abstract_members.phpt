@@ -33,6 +33,7 @@ class C {
 'property hooks' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
+Abstract function T::f() cannot be declared private
 'property hooks' requires PHP 8.4 or higher
 'constructor property promotion' requires PHP 8.0 or higher
 'constructor property promotion' requires PHP 8.0 or higher

@@ -449,6 +449,10 @@ forbidden_rules! {
     MissingEnumCaseValue = "missing-enum-case-value", Compile;
     /// A case of a pure enum has a value.
     PureEnumCaseValue = "pure-enum-case-value", Compile;
+    /// A backed enum case value does not match the backing type (PHP 8.1 only).
+    EnumCaseValueType = "enum-case-value-type", Compile;
+    /// Two cases of a backed enum have the same value (PHP 8.1 only).
+    DuplicateEnumCaseValue = "duplicate-enum-case-value", Compile;
     /// An enum declares a property.
     EnumProperty = "enum-property", Compile;
     /// A trait alias is `static` or `abstract`.
@@ -638,6 +642,18 @@ mod tests {
 
     /// `(rule, version, source, reported span text)` for sites that report only at some versions.
     const VERSION_GATED: &[(ForbiddenRule, PhpVersion, &str, &str)] = &[
+        (
+            ForbiddenRule::EnumCaseValueType,
+            PhpVersion::Php81,
+            "<?php enum E: int { case A = \"a\"; }",
+            "\"a\"",
+        ),
+        (
+            ForbiddenRule::DuplicateEnumCaseValue,
+            PhpVersion::Php81,
+            "<?php enum E: int { case A = 1; case B = 1; }",
+            "1",
+        ),
         (
             ForbiddenRule::PartialApplicationWithUnpacking,
             PhpVersion::Php86,
@@ -913,6 +929,8 @@ mod tests {
             ForbiddenRule::UnexpectedCast => &[("<?php foo(int);", "(int)"), ("<?php if ( float ) {}", "( float )"),],
             ForbiddenRule::DynamicClassFetch
             | ForbiddenRule::PartialApplicationWithUnpacking
+            | ForbiddenRule::EnumCaseValueType
+            | ForbiddenRule::DuplicateEnumCaseValue
             | ForbiddenRule::Other => &[],
         }
     }

@@ -78,6 +78,7 @@ pub(super) fn parse_enum<'arena, 'src>(
 
     let mut members = parser.alloc_vec_with_capacity(4);
     let mut seen_methods = std::collections::HashSet::new();
+    let mut case_values = Vec::new();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         if parser.check(TokenKind::Semicolon) {
             parser.error_expected("class member");
@@ -132,13 +133,14 @@ pub(super) fn parse_enum<'arena, 'src>(
             } else {
                 None
             };
+            let enum_name = parser
+                .class_scope
+                .as_ref()
+                .map_or_else(String::new, |scope| scope.name.clone());
             if scalar_type.is_some() && value.is_none() {
                 parser.forbid(
                     ForbiddenRule::MissingEnumCaseValue,
-                    format!(
-                        "Case {} of backed enum {} must have a value",
-                        case_name, name
-                    ),
+                    format!("Case {case_name} of backed enum {enum_name} must have a value"),
                     case_name_span,
                 );
             } else if scalar_type.is_none() && value.is_some() {
@@ -146,13 +148,28 @@ pub(super) fn parse_enum<'arena, 'src>(
                 let span = equals_token
                     .expect("value.is_some() guarantees equals_token.is_some()")
                     .span;
+                let hint = if parser.version == PhpVersion::Php81 {
+                    ", try adding \": int\" to the enum declaration"
+                } else {
+                    ""
+                };
                 parser.forbid(
                     ForbiddenRule::PureEnumCaseValue,
-                    format!(
-                        "Case {} of pure enum {} must not have a value",
-                        case_name, name
-                    ),
+                    format!("Case {case_name} of non-backed enum {enum_name} must not have a value{hint}"),
                     span,
+                );
+            }
+            // Only PHP 8.1 checks literal case values at compile time; later versions on first use.
+            if let (Some(backing), Some(value), true) =
+                (&scalar_type, &value, parser.version == PhpVersion::Php81)
+            {
+                check_case_value_81(
+                    parser,
+                    backing,
+                    value,
+                    &enum_name,
+                    &case_name,
+                    &mut case_values,
                 );
             }
             parser.expect_member_end();
@@ -475,4 +492,62 @@ pub(super) fn parse_enum<'arena, 'src>(
         span: Span::new(start, end),
         doc_comment: None,
     }
+}
+
+/// A literal backed enum case value, compared as PHP 8.1 does at compile time.
+#[derive(PartialEq)]
+enum CaseValue {
+    Int(i64),
+    String(Vec<u8>),
+}
+
+fn literal_case_value(value: &Expr<'_, '_>) -> Option<CaseValue> {
+    match &value.kind {
+        ExprKind::Int(n) => Some(CaseValue::Int(*n)),
+        ExprKind::String(s) => Some(CaseValue::String(s.as_bytes().to_vec())),
+        ExprKind::Nowdoc { value, .. } => Some(CaseValue::String(value.as_bytes().to_vec())),
+        ExprKind::UnaryPrefix(u) => match (u.op, literal_case_value(u.operand)?) {
+            (UnaryPrefixOp::Plus, int @ CaseValue::Int(_)) => Some(int),
+            (UnaryPrefixOp::Negate, CaseValue::Int(n)) => n.checked_neg().map(CaseValue::Int),
+            _ => None,
+        },
+        _ => None,
+    }
+}
+
+/// Report a literal case value of the wrong type, or one an earlier case already has.
+fn check_case_value_81(
+    parser: &mut Parser<'_, '_>,
+    backing: &Name<'_, '_>,
+    value: &Expr<'_, '_>,
+    enum_name: &str,
+    case_name: &Ident<'_>,
+    case_values: &mut Vec<(String, CaseValue)>,
+) {
+    let Some(value_type) = super::class::literal_value_type(value) else {
+        return;
+    };
+    let backing_type = match backing {
+        Name::Simple { value, .. } if value.eq_ignore_ascii_case("int") => "int",
+        Name::Simple { value, .. } if value.eq_ignore_ascii_case("string") => "string",
+        _ => return,
+    };
+    if value_type != backing_type {
+        parser.forbid(
+            ForbiddenRule::EnumCaseValueType,
+            format!("Enum case type {value_type} does not match enum backing type {backing_type}"),
+            value.span,
+        );
+        return;
+    }
+    let Some(key) = literal_case_value(value) else {
+        return;
+    };
+    if let Some((earlier, _)) = case_values.iter().find(|(_, v)| *v == key) {
+        let message =
+            format!("Duplicate value in enum {enum_name} for cases {earlier} and {case_name}");
+        parser.forbid(ForbiddenRule::DuplicateEnumCaseValue, message, value.span);
+        return;
+    }
+    case_values.push((case_name.to_string(), key));
 }

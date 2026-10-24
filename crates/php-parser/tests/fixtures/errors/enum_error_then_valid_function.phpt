@@ -3,10 +3,13 @@
 ===errors <=8.0===
 'enums' requires PHP 8.1 or higher
 expected expression, found ';'
-Case Active of pure enum Status must not have a value
-===errors >=8.1===
+Case Active of non-backed enum Status must not have a value
+===errors 8.1===
 expected expression, found ';'
-Case Active of pure enum Status must not have a value
+Case Active of non-backed enum Status must not have a value, try adding ": int" to the enum declaration
+===errors >=8.2===
+expected expression, found ';'
+Case Active of non-backed enum Status must not have a value
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'Status' (T_STRING) in Standard input code on line 1
 ===php_error 8.0===

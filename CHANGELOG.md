@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::PrivateFinalPropertyHook`, `ForbiddenRule::SetHookParameterDefault` and `ForbiddenRule::PartialApplicationWithUnpacking` (`php-rs-parser`).
+- `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::PrivateFinalPropertyHook`, `ForbiddenRule::SetHookParameterDefault`, `ForbiddenRule::PartialApplicationWithUnpacking`, `ForbiddenRule::EnumCaseValueType` and `ForbiddenRule::DuplicateEnumCaseValue` (`php-rs-parser`).
 - `ForeachStmt::key_by_ref` for a key taken by reference, `invalid_modifier` on a trait alias for `static`, `abstract` or `readonly`, and `PropertyHook::empty_param_list` for a hook written with `()` (`php-ast`).
 
 ### Changed
@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- On PHP 7.4, an abstract private method in a trait reports `Abstract function T::f() cannot be declared private`. On PHP 8.1, a literal backed enum case value of the wrong type or one that repeats an earlier case reports PHP 8.1's `Enum case type string does not match enum backing type int` or `Duplicate value in enum E for cases A and B`. A value on a case of a pure enum says `non-backed enum` with the namespaced name, as PHP does (`php-rs-parser`).
 - On PHP 8.4, `#[\Deprecated]` on a class, interface, trait or enum reports PHP's `Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)`; classes and constants are targets from PHP 8.5. Attributes on a constant before PHP 8.5 report only the version error (`php-rs-parser`).
 - From PHP 8.6, a placeholder with argument unpacking, as in `f(...$a, ?)`, reports PHP's `Cannot combine partial application and unpacking`, a placeholder in an attribute argument list `Cannot create Closure as attribute argument`, and a placeholder in `new A(?)` PHP's `Cannot create Closure for new expression` (`php-rs-parser`).
 - A `final` hook on a private property reports PHP's `Property hook cannot be both final and private`, a `set` hook parameter with a default value `Parameter $value of set hook A::$x must not have a default value`, and from PHP 8.6 asymmetric visibility on a virtual property says `get-only` or `set-only` as PHP does (`php-rs-parser`).

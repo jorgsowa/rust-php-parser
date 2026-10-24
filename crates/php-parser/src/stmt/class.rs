@@ -1457,7 +1457,7 @@ pub(super) fn const_modifiers_of(visibility: Option<Visibility>, is_final: bool)
 }
 
 /// PHP's type name for a literal constant value; `None` for anything it evaluates later.
-fn literal_value_type(value: &Expr<'_, '_>) -> Option<&'static str> {
+pub(super) fn literal_value_type(value: &Expr<'_, '_>) -> Option<&'static str> {
     match &value.kind {
         ExprKind::Int(_) => Some("int"),
         ExprKind::Float(_) => Some("float"),
@@ -1982,8 +1982,10 @@ pub(super) fn parse_method_member<'arena, 'src>(
                 member_span,
             );
         }
-        // Traits may declare abstract private methods.
-        if mods.visibility == Some(Visibility::Private) && !in_trait {
+        // From PHP 8.0 traits may declare abstract private methods.
+        if mods.visibility == Some(Visibility::Private)
+            && (!in_trait || parser.version < PhpVersion::Php80)
+        {
             parser.forbid(
                 ForbiddenRule::PrivateAbstractMethod,
                 format!("Abstract function {method_label} cannot be declared private"),
