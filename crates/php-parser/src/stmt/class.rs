@@ -94,6 +94,18 @@ pub(super) fn parse_class<'arena, 'src>(
             found: parser.current_kind().description().into(),
             span: parser.current_span(),
         });
+        // Without a name or a body this is no declaration, as in `class\Foo::x();` before 8.0.
+        if !matches!(
+            parser.current_kind(),
+            TokenKind::LeftBrace | TokenKind::Extends | TokenKind::Implements
+        ) {
+            parser.synchronize();
+            return Stmt {
+                kind: StmtKind::Error,
+                span: parser.span_from(start),
+                doc_comment: None,
+            };
+        }
         (parser.missing_ident(), parser.current_span())
     };
 

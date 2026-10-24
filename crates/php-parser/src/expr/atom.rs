@@ -1848,6 +1848,16 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
 
         // Match arms separated by commas
         if parser.eat(TokenKind::Comma).is_none() {
+            // Read on after a missing comma, so the next arm is not parsed as statements.
+            if parser.current_span().start > arm_start
+                && !matches!(
+                    parser.current_kind(),
+                    TokenKind::RightBrace | TokenKind::Eof | TokenKind::Semicolon
+                )
+            {
+                parser.error_expected("'}'");
+                continue;
+            }
             break;
         }
     }

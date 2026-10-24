@@ -281,7 +281,37 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
                 doc_comment: None,
             }
         }
+        TokenKind::LessThan if open_tag_len(parser).is_some() => parse_nested_open_tag(parser),
         _ => parse_expression_stmt(parser),
+    }
+}
+
+/// Length of the `<?php`, `<?=` or `<?` that the lexer read as `<` at the current token; PHP
+/// lexes no open tag inside PHP code.
+fn open_tag_len(parser: &Parser<'_, '_>) -> Option<u32> {
+    let rest = &parser.source()[parser.current_span().start as usize..];
+    let tag = rest.as_bytes().get(..5);
+    if tag.is_some_and(|t| t.eq_ignore_ascii_case(b"<?php")) {
+        Some(5)
+    } else if rest.starts_with("<?=") {
+        Some(3)
+    } else {
+        rest.starts_with("<?").then_some(2)
+    }
+}
+
+/// Report an open tag inside PHP code once and skip it, so the statement after it is parsed.
+fn parse_nested_open_tag<'arena, 'src>(parser: &mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
+    let start = parser.start_span();
+    let end = start + open_tag_len(parser).unwrap_or(1);
+    parser.error_expected("expression");
+    while parser.current_span().start < end && !parser.check(TokenKind::Eof) {
+        parser.advance();
+    }
+    Stmt {
+        kind: StmtKind::Error,
+        span: parser.span_from(start),
+        doc_comment: None,
     }
 }
 
@@ -810,7 +840,20 @@ fn parse_for<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
     let condition = parse_expr_list_until(parser, TokenKind::Semicolon);
     parser.expect(TokenKind::Semicolon);
     let update = parse_expr_list_until(parser, TokenKind::RightParen);
-    parser.expect_closing(TokenKind::RightParen, open_span);
+    if parser
+        .expect_closing(TokenKind::RightParen, open_span)
+        .is_none()
+        && open.is_some()
+    {
+        // Skip the rest of the header, as in `for (;;;)`, so the body is not read from it.
+        while !matches!(
+            parser.current_kind(),
+            TokenKind::RightParen | TokenKind::LeftBrace | TokenKind::Colon | TokenKind::Eof
+        ) {
+            parser.advance();
+        }
+        parser.eat(TokenKind::RightParen);
+    }
 
     if parser.check(TokenKind::Colon) {
         let body_start = parser.start_span();

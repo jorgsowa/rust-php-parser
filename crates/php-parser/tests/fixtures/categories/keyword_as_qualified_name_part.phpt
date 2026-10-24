@@ -6,52 +6,155 @@ new list\Item;
 namespace\Foo::X;
 ===errors <=7.4===
 expected class name, found '\'
-expected class member, found '::'
-expected method name, found '\'
-expected class member, found '('
-expected class member, found 'new'
-expected 'function' or 'const', found 'namespace'
-expected class member, found '::'
+expected function name, found '\'
+'reserved keyword in namespaced name' requires PHP 8.0 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '\' (T_NS_SEPARATOR), expecting identifier (T_STRING) in Standard input code on line 2
 ===ast <=7.4===
 {
   "stmts": [
     {
+      "kind": "Error",
+      "span": {
+        "start": 6,
+        "end": 21
+      }
+    },
+    {
       "kind": {
-        "Class": {
+        "Function": {
           "name": null,
-          "modifiers": {
-            "is_abstract": false,
-            "is_final": false,
-            "is_readonly": false
-          },
-          "extends": null,
-          "implements": [],
-          "members": [
+          "params": [],
+          "missing_param_list": true,
+          "body": [
             {
               "kind": {
-                "Method": {
-                  "name": null,
-                  "by_ref": false,
-                  "params": [],
-                  "missing_param_list": true,
-                  "return_type": null,
-                  "body": null,
-                  "attributes": []
+                "Expression": {
+                  "kind": {
+                    "FunctionCall": {
+                      "name": {
+                        "kind": {
+                          "Name": {
+                            "parts": [
+                              "bar"
+                            ],
+                            "kind": "FullyQualified",
+                            "span": {
+                              "start": 30,
+                              "end": 34
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 30,
+                          "end": 34
+                        }
+                      },
+                      "args": []
+                    }
+                  },
+                  "span": {
+                    "start": 30,
+                    "end": 36
+                  }
                 }
               },
               "span": {
-                "start": 22,
-                "end": 30
+                "start": 30,
+                "end": 37
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "New": {
+                      "class": {
+                        "kind": {
+                          "Name": {
+                            "parts": [
+                              "list",
+                              "Item"
+                            ],
+                            "kind": "Qualified",
+                            "span": {
+                              "start": 42,
+                              "end": 51
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 42,
+                          "end": 51
+                        }
+                      },
+                      "args": []
+                    }
+                  },
+                  "span": {
+                    "start": 38,
+                    "end": 51
+                  }
+                }
+              },
+              "span": {
+                "start": 38,
+                "end": 52
+              }
+            },
+            {
+              "kind": {
+                "Expression": {
+                  "kind": {
+                    "ClassConstAccess": {
+                      "class": {
+                        "kind": {
+                          "Name": {
+                            "parts": [
+                              "Foo"
+                            ],
+                            "kind": "Relative",
+                            "span": {
+                              "start": 53,
+                              "end": 66
+                            }
+                          }
+                        },
+                        "span": {
+                          "start": 53,
+                          "end": 66
+                        }
+                      },
+                      "member": {
+                        "kind": {
+                          "Identifier": "X"
+                        },
+                        "span": {
+                          "start": 68,
+                          "end": 69
+                        }
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 53,
+                    "end": 69
+                  }
+                }
+              },
+              "span": {
+                "start": 53,
+                "end": 70
               }
             }
           ],
+          "return_type": null,
+          "by_ref": false,
           "attributes": []
         }
       },
       "span": {
-        "start": 6,
+        "start": 22,
         "end": 70
       }
     }

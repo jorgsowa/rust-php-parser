@@ -4,11 +4,9 @@
 'match expressions' requires PHP 8.0 or higher
 expected '}', found integer
 expected ';' after expression
-unmatched '}'
 ===errors >=8.0===
 expected '}', found integer
 expected ';' after expression
-unmatched '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in Standard input code on line 1
 ===php_error >=8.0===
@@ -56,48 +54,50 @@ PHP Parse error:  syntax error, unexpected integer "2", expecting "}" in Standar
                     "start": 18,
                     "end": 26
                   }
+                },
+                {
+                  "conditions": [
+                    {
+                      "kind": {
+                        "Int": 2
+                      },
+                      "span": {
+                        "start": 27,
+                        "end": 28
+                      }
+                    }
+                  ],
+                  "body": {
+                    "kind": {
+                      "String": "b"
+                    },
+                    "span": {
+                      "start": 32,
+                      "end": 35
+                    }
+                  },
+                  "span": {
+                    "start": 27,
+                    "end": 35
+                  }
                 }
               ]
             }
           },
           "span": {
             "start": 6,
-            "end": 26
+            "end": 37
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 26
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Int": 2
-          },
-          "span": {
-            "start": 27,
-            "end": 28
-          }
-        }
-      },
-      "span": {
-        "start": 27,
-        "end": 28
-      }
-    },
-    {
-      "kind": "Error",
-      "span": {
-        "start": 29,
-        "end": 35
+        "end": 37
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 35
+    "end": 37
   }
 }

@@ -2,8 +2,6 @@
 <?php for (;;; ) {} while (true) { break; }
 ===errors===
 expected expression, found ';'
-expected expression, found ')'
-unmatched '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ';', expecting ')' in Standard input code on line 1
 ===php_error >=8.0===
@@ -26,24 +24,19 @@ PHP Parse error:  syntax error, unexpected token ";", expecting ")" in Standard 
             }
           ],
           "body": {
-            "kind": "Nop",
+            "kind": {
+              "Block": []
+            },
             "span": {
-              "start": 13,
-              "end": 14
+              "start": 17,
+              "end": 19
             }
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 14
-      }
-    },
-    {
-      "kind": "Error",
-      "span": {
-        "start": 15,
-        "end": 18
+        "end": 19
       }
     },
     {
