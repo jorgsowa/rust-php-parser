@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `ForbiddenRule::UnexpectedCast` (`php-rs-parser`).
 - `ForeachStmt::key_by_ref` for a key taken by reference, `invalid_modifier` on a trait alias for `static`, `abstract` or `readonly`, and `PropertyHook::empty_param_list` for a hook written with `()` (`php-ast`).
 
 ### Changed
@@ -17,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A cast token where no cast can start, as in `foo(int)`, `if (int) {}` or, from PHP 8.5, `foo(void)`, reports PHP's `unexpected token "(int)"` (`php-rs-parser`).
 - An intersection type without parentheses in a union, as in `A&B|C $a` or `: A&B|C`, is a syntax error, as in PHP (`php-rs-parser`).
 - A reserved keyword where PHP expects a class name, as in `new fn`, `new match`, `new array`, `catch (array $e)`, `extends fn` or `use fn;` in a class body, is a syntax error, and from PHP 8.1 `readonly` after `new` starts an anonymous class, so `new readonly;` reports the missing `class` and `new readonly readonly class {}` PHP's `Multiple readonly modifiers are not allowed` (`php-rs-parser`).
 - The printer keeps PHP's error instead of printing valid code for a foreach key taken by reference, a trait alias with `static`, `abstract` or `readonly`, `new Foo(...)`, `#[Foo(...)]`, a property hook with an empty `()`, a redeclared hook spelled in another case, such as `set {} SET {}`, and, when given the source, a destructuring target that mixes `list()` and `[]` (`php-printer`).

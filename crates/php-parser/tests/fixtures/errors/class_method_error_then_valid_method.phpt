@@ -4,6 +4,7 @@
     public function good(): string { return 'ok'; }
 }
 ===errors===
+unexpected token "(int)"
 expected variable, found ')'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '(int )' (int) (T_INT_CAST), expecting '(' in Standard input code on line 2

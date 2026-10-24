@@ -131,6 +131,8 @@ pub struct Parser<'arena, 'src> {
     errors: Vec<ParseError>,
     /// Set when [`error`](Self::error) discards an error because the cap was reached.
     errors_dropped: bool,
+    /// Set while the `(` of a cast is consumed, so it is not reported as a stray cast token.
+    pub(crate) reading_cast: bool,
     /// All comments found in the source, collected during lexing.
     comments: Vec<Comment<'src>>,
     /// PHP version being targeted — used for version-specific error reporting.
@@ -248,6 +250,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             source,
             errors: Vec::new(),
             errors_dropped: false,
+            reading_cast: false,
             comments,
             depth: 0,
             nesting_depth: 0,
@@ -306,6 +309,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             source,
             errors: Vec::new(),
             errors_dropped: false,
+            reading_cast: false,
             comments,
             depth: 0,
             nesting_depth,
@@ -445,7 +449,45 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         if self.next2.kind == TokenKind::Backslash && self.version < PhpVersion::Php80 {
             self.next.kind = self.unqualified_kind_before_80(self.next);
         }
+        if prev.kind == TokenKind::LeftParen && !std::mem::take(&mut self.reading_cast) {
+            self.check_stray_cast(prev.span);
+        }
         prev
+    }
+
+    /// PHP lexes `(int)` as one cast token everywhere, so after any `(` that does not start a
+    /// cast, as in `foo(int)` or `if (int)`, it is a syntax error.
+    #[cold]
+    fn check_stray_cast(&mut self, open: Span) {
+        let keyword = self.current;
+        if !matches!(
+            keyword.kind,
+            TokenKind::Identifier | TokenKind::Array | TokenKind::Unset
+        ) || self.next.kind != TokenKind::RightParen
+        {
+            return;
+        }
+        let blank = |from: u32, to: u32| {
+            self.source[from as usize..to as usize]
+                .bytes()
+                .all(|b| b == b' ' || b == b'\t')
+        };
+        let text = &self.source[keyword.span.start as usize..keyword.span.end as usize];
+        let is_cast = crate::expr::CAST_KEYWORDS
+            .iter()
+            .any(|(kw, _)| kw.eq_ignore_ascii_case(text))
+            && (self.version >= PhpVersion::Php85 || !text.eq_ignore_ascii_case("void"));
+        if is_cast
+            && blank(open.end, keyword.span.start)
+            && blank(keyword.span.end, self.next.span.start)
+        {
+            let span = Span::new(open.start, self.next.span.end);
+            self.forbid(
+                ForbiddenRule::UnexpectedCast,
+                format!("unexpected token \"({})\"", text.to_ascii_lowercase()),
+                span,
+            );
+        }
     }
 
     /// Before PHP 8.0 a name is lexed per segment, so the lexer's `keyword\` name segment is a keyword.

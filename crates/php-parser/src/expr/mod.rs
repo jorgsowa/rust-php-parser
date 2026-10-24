@@ -16,7 +16,7 @@ pub(crate) mod interpolation;
 // Re-exports so external callers' paths don't change
 pub(crate) use atom::{
     callable_marker_arg, parse_arg_list_or_callable, parse_arrow_function, parse_closure,
-    ArgListResult,
+    ArgListResult, CAST_KEYWORDS,
 };
 
 use atom::{parse_atom, parse_function_call};

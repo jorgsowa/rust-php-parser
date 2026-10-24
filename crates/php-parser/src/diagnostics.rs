@@ -599,6 +599,8 @@ forbidden_rules! {
     NoDiscardWithoutReturnValue = "no-discard-without-return-value", Compile;
     /// A control character appears in code.
     UnexpectedCharacter = "unexpected-character", Parse;
+    /// A cast token such as `(int)` where no cast can start, as in `foo(int)`.
+    UnexpectedCast = "unexpected-cast", Parse;
     /// Not yet classified.
     Other = "other", Compile;
 }
@@ -891,6 +893,7 @@ mod tests {
             ForbiddenRule::NoDiscardOnInvalidTarget => &[("<?php class A { public $x { #[NoDiscard] get => 1; } }", "NoDiscard"), ("<?php class A { #[NoDiscard] function __construct() {} }", "NoDiscard"),],
             ForbiddenRule::NoDiscardWithoutReturnValue => &[("<?php #[NoDiscard] function f(): void {}", "NoDiscard"),],
             ForbiddenRule::UnexpectedCharacter => &[("<?php $a\x01\x02 = 1;", "\x01\x02"), ("<?php $a =\x0c1;", "\x0c"),],
+            ForbiddenRule::UnexpectedCast => &[("<?php foo(int);", "(int)"), ("<?php if ( float ) {}", "( float )"),],
             ForbiddenRule::DynamicClassFetch | ForbiddenRule::Other => &[],
         }
     }

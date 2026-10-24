@@ -16,7 +16,7 @@ use super::{
 };
 
 /// Cast keyword strings and their CastKind values
-const CAST_KEYWORDS: &[(&str, CastKind)] = &[
+pub(crate) const CAST_KEYWORDS: &[(&str, CastKind)] = &[
     ("int", CastKind::Int),
     ("integer", CastKind::Int),
     ("float", CastKind::Float),
@@ -2653,6 +2653,7 @@ fn try_parse_cast<'arena, 'src>(
     let cast_kind = cast_kind_ahead(parser)?;
 
     let start = parser.start_span();
+    parser.reading_cast = true;
     parser.advance(); // consume (
     let kw_span = parser.current_span();
     parser.advance(); // consume the cast keyword
