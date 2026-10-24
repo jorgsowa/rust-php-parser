@@ -475,7 +475,10 @@ fn parse_stmt_after_attributes<'arena, 'src>(
                         stmt.span,
                     );
                 }
-                if let Some(first) = items.first() {
+                if let Some(first) = items
+                    .first()
+                    .filter(|_| parser.version >= PhpVersion::Php85)
+                {
                     parser.check_attributes(&first.attributes, &AttrSite::new(AttrTarget::Const));
                 }
             }

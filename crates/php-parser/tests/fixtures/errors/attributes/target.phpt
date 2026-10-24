@@ -41,7 +41,6 @@ Attribute "Attribute" cannot target method (allowed targets: class)
 Attribute "Attribute" cannot target class constant (allowed targets: class)
 'attributes on constants' requires PHP 8.5 or higher
 'attributes on constants' requires PHP 8.5 or higher
-Attribute "Attribute" cannot target constant (allowed targets: class)
 ===errors 8.1===
 Attribute "Attribute" cannot target function (allowed targets: class)
 Attribute "ReturnTypeWillChange" cannot target class (allowed targets: method)
@@ -54,7 +53,6 @@ Attribute "Attribute" cannot target method (allowed targets: class)
 Attribute "Attribute" cannot target class constant (allowed targets: class)
 'attributes on constants' requires PHP 8.5 or higher
 'attributes on constants' requires PHP 8.5 or higher
-Attribute "Attribute" cannot target constant (allowed targets: class)
 ===errors 8.2===
 Attribute "Attribute" cannot target function (allowed targets: class)
 Attribute "ReturnTypeWillChange" cannot target class (allowed targets: method)
@@ -69,7 +67,6 @@ Attribute "Attribute" cannot target method (allowed targets: class)
 Attribute "Attribute" cannot target class constant (allowed targets: class)
 'attributes on constants' requires PHP 8.5 or higher
 'attributes on constants' requires PHP 8.5 or higher
-Attribute "Attribute" cannot target constant (allowed targets: class)
 ===errors 8.3===
 Attribute "Attribute" cannot target function (allowed targets: class)
 Attribute "Override" cannot target class (allowed targets: method)
@@ -88,9 +85,7 @@ Attribute "Attribute" cannot target method (allowed targets: class)
 Attribute "Attribute" cannot target class constant (allowed targets: class)
 Attribute "Override" cannot target class constant (allowed targets: method)
 'attributes on constants' requires PHP 8.5 or higher
-Attribute "Override" cannot target constant (allowed targets: method)
 'attributes on constants' requires PHP 8.5 or higher
-Attribute "Attribute" cannot target constant (allowed targets: class)
 ===errors 8.4===
 Attribute "Attribute" cannot target function (allowed targets: class)
 Attribute "Override" cannot target class (allowed targets: method)
@@ -102,17 +97,15 @@ Attribute "Override" cannot target function (allowed targets: method)
 Attribute "Attribute" cannot target property (allowed targets: class)
 Attribute "Attribute" cannot target class constant (allowed targets: class)
 Attribute "Override" cannot target parameter (allowed targets: method)
-Attribute "Deprecated" cannot target parameter (allowed targets: class, function, method, class constant, constant)
+Attribute "Deprecated" cannot target parameter (allowed targets: function, method, class constant)
 Attribute "Attribute" cannot target method (allowed targets: class)
-Attribute "Deprecated" cannot target property (allowed targets: class, function, method, class constant, constant)
+Attribute "Deprecated" cannot target property (allowed targets: function, method, class constant)
 Attribute "Override" cannot target class constant (allowed targets: method)
 Attribute "Attribute" cannot target method (allowed targets: class)
 Attribute "Attribute" cannot target class constant (allowed targets: class)
 Attribute "Override" cannot target class constant (allowed targets: method)
 'attributes on constants' requires PHP 8.5 or higher
-Attribute "Override" cannot target constant (allowed targets: method)
 'attributes on constants' requires PHP 8.5 or higher
-Attribute "Attribute" cannot target constant (allowed targets: class)
 ===errors 8.5===
 Attribute "Attribute" cannot target function (allowed targets: class)
 Attribute "Override" cannot target class (allowed targets: method, property)

@@ -134,6 +134,9 @@ impl InternalAttribute {
                 targets |= AttrTarget::ClassConst.bit();
             }
         }
+        if self.lower_name == "deprecated" && version >= PhpVersion::Php85 {
+            targets |= AttrTarget::Class.bit() | AttrTarget::Const.bit();
+        }
         targets
     }
 }
@@ -177,14 +180,13 @@ const INTERNAL_ATTRIBUTES: [InternalAttribute; 8] = [
         targets: bits(&[AttrTarget::Method]),
         since: PhpVersion::Php83,
     },
+    // Classes and constants from 8.5 are added by `targets_for`.
     InternalAttribute {
         lower_name: "deprecated",
         targets: bits(&[
-            AttrTarget::Class,
             AttrTarget::Function,
             AttrTarget::Method,
             AttrTarget::ClassConst,
-            AttrTarget::Const,
         ]),
         since: PhpVersion::Php84,
     },

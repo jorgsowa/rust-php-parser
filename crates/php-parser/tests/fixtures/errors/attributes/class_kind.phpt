@@ -44,11 +44,11 @@ Cannot apply #[\AllowDynamicProperties] to interface J
 Cannot apply #[\AllowDynamicProperties] to trait U
 Cannot apply #[\AllowDynamicProperties] to enum F
 Cannot apply #[\AllowDynamicProperties] to readonly class R
-Cannot apply #[\Deprecated] to class C
-Cannot apply #[\Deprecated] to class D
-Cannot apply #[\Deprecated] to interface K
-Cannot apply #[\Deprecated] to enum G
-Cannot apply #[\Deprecated] to class class@anonymous
+Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
+Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
+Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
+Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
+Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
 Cannot apply #[\AllowDynamicProperties] to readonly class class@anonymous
 ===errors >=8.5===
 Cannot apply #[\Attribute] to interface I

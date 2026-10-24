@@ -11,7 +11,7 @@ Attributes added after the target version are ordinary classes, so they are not 
 Attribute "Override" cannot target class (allowed targets: method)
 ===errors 8.4===
 Attribute "Override" cannot target class (allowed targets: method)
-Cannot apply #[\Deprecated] to class B
+Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
 Attribute "Deprecated" must not be repeated
 ===errors 8.5===
 Attribute "Override" cannot target class (allowed targets: method, property)

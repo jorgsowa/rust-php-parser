@@ -62,9 +62,10 @@ const GLOBAL_CONST = 'BAR';
 'property hooks' requires PHP 8.4 or higher
 'attributes on constants' requires PHP 8.5 or higher
 ===errors 8.4===
-Cannot apply #[\Deprecated] to class DemoClass
-Attribute "Deprecated" cannot target property (allowed targets: class, function, method, class constant, constant)
-Attribute "Deprecated" cannot target parameter (allowed targets: class, function, method, class constant, constant)
+Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
+Attribute "Deprecated" cannot target property (allowed targets: function, method, class constant)
+Attribute "Deprecated" cannot target parameter (allowed targets: function, method, class constant)
+Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
 'attributes on constants' requires PHP 8.5 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 10

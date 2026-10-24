@@ -51,7 +51,13 @@ Attribute "ReturnTypeWillChange" cannot target class (allowed targets: method)
 'attributes on constants' requires PHP 8.5 or higher
 Attribute "Attribute" cannot target function (allowed targets: class)
 Attribute "ReturnTypeWillChange" cannot target class (allowed targets: method)
-===errors 8.3-8.4===
+===errors 8.3===
+'attributes on constants' requires PHP 8.5 or higher
+Attribute "Attribute" cannot target function (allowed targets: class)
+Attribute "Override" cannot target function (allowed targets: method)
+Attribute "ReturnTypeWillChange" cannot target class (allowed targets: method)
+===errors 8.4===
+Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
 'attributes on constants' requires PHP 8.5 or higher
 Attribute "Attribute" cannot target function (allowed targets: class)
 Attribute "Override" cannot target function (allowed targets: method)

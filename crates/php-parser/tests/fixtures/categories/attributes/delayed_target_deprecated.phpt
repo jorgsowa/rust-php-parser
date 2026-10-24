@@ -15,9 +15,9 @@ enum DemoEnum {}
 ===errors <=8.0===
 'enums' requires PHP 8.1 or higher
 ===errors 8.4===
-Cannot apply #[\Deprecated] to interface DemoInterface
-Cannot apply #[\Deprecated] to class DemoClass
-Cannot apply #[\Deprecated] to enum DemoEnum
+Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
+Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
+Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'DemoEnum' (T_STRING) in Standard input code on line 13
 ===php_error 8.0===
