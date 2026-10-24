@@ -5,17 +5,17 @@ class Test {
     private(set) public(set) $x;
 }
 ===errors <=8.3===
-cannot use multiple set-visibility modifiers
+Multiple access type modifiers are not allowed
 'asymmetric visibility' requires PHP 8.4 or higher
 Property with asymmetric visibility Test::$x must have type
-cannot use multiple set-visibility modifiers
+Multiple access type modifiers are not allowed
 'asymmetric visibility' requires PHP 8.4 or higher
 Property with asymmetric visibility Test::$x must have type
 Cannot redeclare Test::$x
 ===errors >=8.4===
-cannot use multiple set-visibility modifiers
+Multiple access type modifiers are not allowed
 Property with asymmetric visibility Test::$x must have type
-cannot use multiple set-visibility modifiers
+Multiple access type modifiers are not allowed
 Property with asymmetric visibility Test::$x must have type
 Cannot redeclare Test::$x
 ===php_error <=7.4===

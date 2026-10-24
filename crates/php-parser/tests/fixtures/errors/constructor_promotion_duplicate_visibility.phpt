@@ -7,10 +7,10 @@ class Foo {
 }
 ===errors <=7.4===
 'constructor property promotion' requires PHP 8.0 or higher
-cannot use multiple visibility modifiers
+Multiple access type modifiers are not allowed
 'trailing comma in parameter list' requires PHP 8.0 or higher
 ===errors >=8.0===
-cannot use multiple visibility modifiers
+Multiple access type modifiers are not allowed
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 4
 ===php_error 8.0===

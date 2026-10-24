@@ -1,7 +1,7 @@
 ===source===
 <?php class A { static static $x; }
 ===errors===
-duplicate modifier 'static'
+Multiple static modifiers are not allowed
 ===php_error===
 PHP Fatal error:  Multiple static modifiers are not allowed in Standard input code on line 1
 ===ast===

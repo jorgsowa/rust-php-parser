@@ -1577,7 +1577,7 @@ pub fn parse_param_list<'arena, 'src>(
                         if set_visibility.is_some() {
                             parser.forbid(
                                 ForbiddenRule::MultipleSetVisibilityModifiers,
-                                "cannot use multiple set-visibility modifiers",
+                                "Multiple access type modifiers are not allowed",
                                 modifiers_span,
                             );
                         }
@@ -1586,7 +1586,7 @@ pub fn parse_param_list<'arena, 'src>(
                         if visibility.is_some() {
                             parser.forbid(
                                 ForbiddenRule::MultipleVisibilityModifiers,
-                                "cannot use multiple visibility modifiers",
+                                "Multiple access type modifiers are not allowed",
                                 parser.span_from(param_start),
                             );
                         }
@@ -1604,7 +1604,7 @@ pub fn parse_param_list<'arena, 'src>(
                     if is_final {
                         parser.forbid(
                             ForbiddenRule::DuplicateModifier,
-                            "duplicate modifier 'final'",
+                            "Multiple final modifiers are not allowed",
                             current_span,
                         );
                     }
@@ -1617,7 +1617,7 @@ pub fn parse_param_list<'arena, 'src>(
                     if is_readonly {
                         parser.forbid(
                             ForbiddenRule::DuplicateModifier,
-                            "duplicate modifier 'readonly'",
+                            "Multiple readonly modifiers are not allowed",
                             current_span,
                         );
                     }

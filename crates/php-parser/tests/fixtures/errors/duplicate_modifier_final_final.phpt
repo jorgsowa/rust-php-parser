@@ -1,7 +1,7 @@
 ===source===
 <?php class A { final final function f() {} }
 ===errors===
-duplicate modifier 'final'
+Multiple final modifiers are not allowed
 ===php_error===
 PHP Fatal error:  Multiple final modifiers are not allowed in Standard input code on line 1
 ===ast===
