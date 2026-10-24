@@ -1674,7 +1674,9 @@ pub fn parse_param_list<'arena, 'src>(
                     parser.current_span(),
                 );
             }
-            class::parse_property_hooks(parser, type_hint.as_ref(), name.as_str())
+            let hooks = class::parse_property_hooks(parser, type_hint.as_ref(), name.as_str());
+            class::check_private_final_hooks(parser, visibility, &hooks);
+            hooks
         } else {
             parser.alloc_vec()
         };

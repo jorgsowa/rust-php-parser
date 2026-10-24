@@ -395,6 +395,8 @@ forbidden_rules! {
     SetVisibilityWiderThanVisibility = "set-visibility-wider-than-visibility", Compile;
     /// A private property is `final`.
     PrivateFinalProperty = "private-final-property", Compile;
+    /// A property hook of a private property is `final`.
+    PrivateFinalPropertyHook = "private-final-property-hook", Compile;
     /// An abstract property has no abstract hook.
     AbstractPropertyWithoutAbstractHook = "abstract-property-without-abstract-hook", Compile;
     /// An interface declares a property without hooks.
@@ -417,6 +419,8 @@ forbidden_rules! {
     SetHookParameterByReference = "set-hook-parameter-by-reference", Compile;
     /// A `set` hook parameter is variadic.
     SetHookParameterVariadic = "set-hook-parameter-variadic", Compile;
+    /// A `set` hook parameter has a default value.
+    SetHookParameterDefault = "set-hook-parameter-default", Compile;
     /// A `set` hook parameter's type does not accept the property's type.
     SetHookParameterType = "set-hook-parameter-type", Compile;
     /// A backed property with a `set` hook has a by-reference `get` hook.
@@ -794,6 +798,7 @@ mod tests {
             ForbiddenRule::UntypedAsymmetricProperty => &[("<?php class A { public private(set) $x; }", "public private(set) $x"), ("<?php class A { function __construct(public private(set) $x) {} }", "public private(set) $x"),],
             ForbiddenRule::SetVisibilityWiderThanVisibility => &[("<?php class A { private public(set) int $x; }", "private public(set) int $x"), ("<?php class A { function __construct(private public(set) int $x) {} }", "private public(set)"),],
             ForbiddenRule::PrivateFinalProperty => &[("<?php class A { final private $x; }", "final private $x"),],
+            ForbiddenRule::PrivateFinalPropertyHook => &[("<?php class A { private $x { final get => 1; } }", "final get => 1;"),],
             ForbiddenRule::AbstractPropertyWithoutAbstractHook => &[("<?php abstract class A { abstract public $x; }", "abstract public $x"), ("<?php abstract class A { abstract public $x { get => 1; } }", "abstract public $x { get => 1; }"),],
             ForbiddenRule::InterfacePropertyWithoutHooks => &[("<?php interface I { public $x; }", "public $x"),],
             ForbiddenRule::StaticPropertyHooks => &[("<?php class A { public static $x { get => 1; } }", "public static $x { get => 1; }"),],
@@ -805,6 +810,7 @@ mod tests {
             ForbiddenRule::SetHookParameterCount => &[("<?php class A { public $x { set($a, $b) {} } }", "("),],
             ForbiddenRule::SetHookParameterByReference => &[("<?php class A { public $x { set(&$v) {} } }", "&$v"),],
             ForbiddenRule::SetHookParameterVariadic => &[("<?php class A { public $x { set(...$v) {} } }", "...$v"),],
+            ForbiddenRule::SetHookParameterDefault => &[("<?php class A { public $x { set($v = 1) {} } }", "$v = 1"),],
             ForbiddenRule::SetHookParameterType => &[("<?php class A { public int $x { set(string $v) {} } }", "string $v"),],
             ForbiddenRule::ByReferenceGetHookWithSet => &[("<?php class A { public $x { &get => $this->x; set { $this->x = $value; } } }", "&get => $this->x;"),],
             ForbiddenRule::MissingHookBody => &[("<?php class A { public $x { get; } }", "get;"),],

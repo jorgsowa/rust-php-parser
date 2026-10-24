@@ -562,6 +562,24 @@ pub(super) fn is_virtual_property(name: &str, hooks: &[PropertyHook<'_, '_>]) ->
     })
 }
 
+/// Report a `final` hook of a private property.
+pub(super) fn check_private_final_hooks(
+    parser: &mut Parser<'_, '_>,
+    visibility: Option<Visibility>,
+    hooks: &[PropertyHook<'_, '_>],
+) {
+    if visibility != Some(Visibility::Private) {
+        return;
+    }
+    for hook in hooks.iter().filter(|hook| hook.modifiers.is_final) {
+        parser.forbid(
+            ForbiddenRule::PrivateFinalPropertyHook,
+            "Property hook cannot be both final and private",
+            hook.span,
+        );
+    }
+}
+
 /// Report asymmetric visibility on a virtual property that lacks a `get` or `set` hook.
 pub(super) fn check_virtual_set_visibility(
     parser: &mut Parser<'_, '_>,
@@ -570,10 +588,19 @@ pub(super) fn check_virtual_set_visibility(
     span: Span,
 ) {
     let has = |kind| hooks.iter().any(|hook| hook.kind == kind);
+    let new_wording = parser.version >= PhpVersion::Php86;
     let access = if !has(PropertyHookKind::Get) {
-        "Write-only"
+        if new_wording {
+            "set-only"
+        } else {
+            "Write-only"
+        }
     } else if !has(PropertyHookKind::Set) {
-        "Read-only"
+        if new_wording {
+            "get-only"
+        } else {
+            "Read-only"
+        }
     } else {
         return;
     };
@@ -684,6 +711,13 @@ fn check_hook_signature(
             messages.push((
                 ForbiddenRule::SetHookParameterVariadic,
                 format!("Parameter ${name} of set hook {property} must not be variadic"),
+                param.span,
+            ));
+        }
+        if param.default.is_some() {
+            messages.push((
+                ForbiddenRule::SetHookParameterDefault,
+                format!("Parameter ${name} of set hook {property} must not have a default value"),
                 param.span,
             ));
         }
@@ -2296,7 +2330,9 @@ pub(super) fn parse_property_member<'arena, 'src>(
     let hooks = if had_hooks_block {
         let span = parser.current_span();
         parser.require_version(PhpVersion::Php84, "property hooks", span);
-        parse_property_hooks(parser, type_hint.as_ref(), prop_name.as_str())
+        let hooks = parse_property_hooks(parser, type_hint.as_ref(), prop_name.as_str());
+        check_private_final_hooks(parser, mods.visibility, &hooks);
+        hooks
     } else {
         parser.alloc_vec()
     };

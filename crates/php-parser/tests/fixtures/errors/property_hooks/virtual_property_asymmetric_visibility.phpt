@@ -51,12 +51,18 @@ Read-only virtual property A::$e must not specify asymmetric visibility
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
 Write-only virtual property A::$f must not specify asymmetric visibility
-===errors >=8.4===
+===errors 8.4-8.5===
 Read-only virtual property I::$a must not specify asymmetric visibility
 Read-only virtual property A::$b must not specify asymmetric visibility
 Write-only virtual property A::$c must not specify asymmetric visibility
 Read-only virtual property A::$e must not specify asymmetric visibility
 Write-only virtual property A::$f must not specify asymmetric visibility
+===errors >=8.6===
+get-only virtual property I::$a must not specify asymmetric visibility
+get-only virtual property A::$b must not specify asymmetric visibility
+set-only virtual property A::$c must not specify asymmetric visibility
+get-only virtual property A::$e must not specify asymmetric visibility
+set-only virtual property A::$f must not specify asymmetric visibility
 ===php_error <=8.3===
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 3
 ===php_error 8.4-8.5===
