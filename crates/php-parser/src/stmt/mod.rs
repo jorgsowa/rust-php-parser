@@ -1964,11 +1964,7 @@ fn validate_break_continue<'arena, 'src>(
         None => {
             // Implicit level 1
             if loop_depth == 0 {
-                parser.forbid(
-                    ForbiddenRule::BreakOutOfLoop,
-                    format!("Cannot '{}' 1 level", kw),
-                    span,
-                );
+                report_outside_loop(parser, kw, span);
                 return;
             }
             1
@@ -1999,6 +1995,10 @@ fn validate_break_continue<'arena, 'src>(
                 );
                 return;
             }
+            if loop_depth == 0 {
+                report_outside_loop(parser, kw, span);
+                return;
+            }
             if n as u64 > loop_depth as u64 {
                 let levels = if n == 1 {
                     "1 level".to_string()
@@ -2024,6 +2024,14 @@ fn validate_break_continue<'arena, 'src>(
             );
         }
     }
+}
+
+fn report_outside_loop(parser: &mut Parser<'_, '_>, kw: &str, span: Span) {
+    parser.forbid(
+        ForbiddenRule::BreakOutOfLoop,
+        format!("'{kw}' not in the 'loop' or 'switch' context"),
+        span,
+    );
 }
 
 // =============================================================================

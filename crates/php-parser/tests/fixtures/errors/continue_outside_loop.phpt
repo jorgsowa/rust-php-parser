@@ -2,7 +2,7 @@
 <?php
 continue;
 ===errors===
-Cannot 'continue' 1 level
+'continue' not in the 'loop' or 'switch' context
 ===php_error===
 PHP Fatal error:  'continue' not in the 'loop' or 'switch' context in Standard input code on line 2
 ===ast===

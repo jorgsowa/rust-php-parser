@@ -15,10 +15,10 @@ throw $e;
 label:
 goto label;
 ===errors===
-Cannot 'break' 1 level
-Cannot 'break' 2 levels
-Cannot 'continue' 1 level
-Cannot 'continue' 2 levels
+'break' not in the 'loop' or 'switch' context
+'break' not in the 'loop' or 'switch' context
+'continue' not in the 'loop' or 'switch' context
+'continue' not in the 'loop' or 'switch' context
 ===php_error===
 PHP Fatal error:  'break' not in the 'loop' or 'switch' context in Standard input code on line 3
 ===ast===

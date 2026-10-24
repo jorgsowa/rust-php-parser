@@ -22,10 +22,10 @@ expected ';', found 'use'
 expected ';', found 'const'
 expected ';', found 'break'
 expected expression, found 'break'
-Cannot 'break' 2 levels
+'break' not in the 'loop' or 'switch' context
 expected ';' after break statement
 expected expression, found 'continue'
-Cannot 'continue' 2 levels
+'continue' not in the 'loop' or 'switch' context
 expected ';' after continue statement
 expected expression, found 'return'
 expected ';' after return statement

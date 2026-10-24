@@ -2,7 +2,7 @@
 <?php
 break;
 ===errors===
-Cannot 'break' 1 level
+'break' not in the 'loop' or 'switch' context
 ===php_error===
 PHP Fatal error:  'break' not in the 'loop' or 'switch' context in Standard input code on line 2
 ===ast===
