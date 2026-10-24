@@ -312,6 +312,7 @@ impl<'src> Printer<'src> {
         self.newline();
         self.indent();
         for hook in hooks.iter() {
+            self.flush_leading_comments(hook.span.start);
             self.write_indent();
             self.print_attributes(&hook.attributes);
             if hook.modifiers.is_final {

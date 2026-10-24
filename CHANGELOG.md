@@ -69,6 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A closure missing its `(`, as in `function {}`, has no parameters, so its body is no longer read as a parameter's property hook list (`php-rs-parser`).
 - An arrow function missing its `(`, as in `fn => 1`, has no parameters instead of an empty placeholder (`php-rs-parser`).
 - A grouped constant or property is split into declarations that keep their own doc comments, instead of moving `/** q */` in `public $p, /** q */ $q;` to the next member (`php-printer`).
+- A comment before a property hook, such as a doc comment on `set(int $value) {}` or `// c` before `get`, prints before the hook instead of between its parameter list or keyword and its body (`php-printer`).
 - A function, method, closure or arrow function missing its `(` prints without `()`, so the printed code keeps PHP's error instead of becoming valid (`php-printer`).
 - A syntax error at the closing `}` of a `{$...}` interpolation, as in `"{$a->}"`, reports `found '}'` at the `}` instead of `found end of file` (`php-rs-parser`).
 - Recovery from an invalid class or enum member skips over a `{ ... }` block, so the block's `}` no longer ends the class, as in `public function @return f() {}` (`php-rs-parser`).
