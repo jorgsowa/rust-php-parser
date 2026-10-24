@@ -184,133 +184,19 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
         TokenKind::Class => {
             class::parse_class(parser, ClassModifiers::default(), parser.alloc_vec())
         }
-        TokenKind::Abstract => {
-            let start = parser.start_span();
-            parser.advance();
-            if parser.check(TokenKind::Class) {
-                class::parse_class(
-                    parser,
-                    class_modifiers(true, false, false),
-                    parser.alloc_vec(),
+        TokenKind::Abstract | TokenKind::Final => parse_modified_class(parser, parser.alloc_vec()),
+        TokenKind::Readonly
+            if matches!(
+                parser.peek_kind(),
+                Some(
+                    TokenKind::Class | TokenKind::Final | TokenKind::Abstract | TokenKind::Readonly
                 )
-            } else if parser.check(TokenKind::Readonly)
-                && parser.peek_kind() == Some(TokenKind::Class)
-            {
-                // `abstract readonly class` — valid since PHP 8.2
-                let span = parser.current_span();
-                parser.require_version(PhpVersion::Php82, "abstract readonly class", span);
-                parser.advance(); // consume 'readonly'
-                class::parse_class(
-                    parser,
-                    class_modifiers(true, false, true),
-                    parser.alloc_vec(),
-                )
-            } else if parser.check(TokenKind::Final) {
-                // `abstract final class` — collect both modifiers and emit diagnostic
-                parser.advance(); // consume 'final'
-                parser.forbid(
-                    ForbiddenRule::AbstractFinalConflict,
-                    "cannot use 'abstract' and 'final' together on a class",
-                    parser.span_from(start),
-                );
-                if parser.check(TokenKind::Class) {
-                    class::parse_class(
-                        parser,
-                        class_modifiers(true, true, false),
-                        parser.alloc_vec(),
-                    )
-                } else {
-                    class_modifier_error(parser, start)
-                }
-            } else {
-                // abstract without class - error recovery
-                class_modifier_error(parser, start)
-            }
+            ) =>
+        {
+            parse_modified_class(parser, parser.alloc_vec())
         }
-        TokenKind::Final => {
-            let start = parser.start_span();
-            parser.advance();
-            if parser.check(TokenKind::Class) {
-                class::parse_class(
-                    parser,
-                    class_modifiers(false, true, false),
-                    parser.alloc_vec(),
-                )
-            } else if parser.check(TokenKind::Readonly) {
-                let span = parser.current_span();
-                parser.require_version(PhpVersion::Php82, "readonly class", span);
-                parser.advance();
-                if parser.check(TokenKind::Class) {
-                    class::parse_class(
-                        parser,
-                        class_modifiers(false, true, true),
-                        parser.alloc_vec(),
-                    )
-                } else {
-                    class_modifier_error(parser, start)
-                }
-            } else if parser.check(TokenKind::Abstract) {
-                // `final abstract class` — collect both modifiers and emit diagnostic
-                parser.advance(); // consume 'abstract'
-                parser.forbid(
-                    ForbiddenRule::AbstractFinalConflict,
-                    "cannot use 'abstract' and 'final' together on a class",
-                    parser.span_from(start),
-                );
-                if parser.check(TokenKind::Class) {
-                    class::parse_class(
-                        parser,
-                        class_modifiers(true, true, false),
-                        parser.alloc_vec(),
-                    )
-                } else {
-                    class_modifier_error(parser, start)
-                }
-            } else {
-                class_modifier_error(parser, start)
-            }
-        }
-        TokenKind::Readonly => {
-            if parser.peek_kind() == Some(TokenKind::Class) {
-                let span = parser.current_span();
-                parser.require_version(PhpVersion::Php82, "readonly class", span);
-                parser.advance(); // consume 'readonly'
-                class::parse_class(
-                    parser,
-                    class_modifiers(false, false, true),
-                    parser.alloc_vec(),
-                )
-            } else if parser.peek_kind() == Some(TokenKind::Final)
-                && parser.peek2_kind() == Some(TokenKind::Class)
-            {
-                // `readonly final class` — same as `final readonly class`
-                let span = parser.current_span();
-                parser.require_version(PhpVersion::Php82, "readonly class", span);
-                parser.advance(); // consume 'readonly'
-                parser.advance(); // consume 'final'
-                class::parse_class(
-                    parser,
-                    class_modifiers(false, true, true),
-                    parser.alloc_vec(),
-                )
-            } else if parser.peek_kind() == Some(TokenKind::Abstract)
-                && parser.peek2_kind() == Some(TokenKind::Class)
-            {
-                // `readonly abstract class` — valid since PHP 8.2
-                let span = parser.current_span();
-                parser.require_version(PhpVersion::Php82, "abstract readonly class", span);
-                parser.advance(); // consume 'readonly'
-                parser.advance(); // consume 'abstract'
-                class::parse_class(
-                    parser,
-                    class_modifiers(true, false, true),
-                    parser.alloc_vec(),
-                )
-            } else {
-                // readonly used as function name/expression (e.g., readonly())
-                parse_expression_stmt(parser)
-            }
-        }
+        // `readonly` as a function name, e.g. `readonly()`.
+        TokenKind::Readonly => parse_expression_stmt(parser),
         TokenKind::Interface => class::parse_interface(parser, parser.alloc_vec()),
         TokenKind::Trait => class::parse_trait(parser, parser.alloc_vec()),
         TokenKind::Enum_ => {
@@ -412,6 +298,54 @@ pub(crate) fn class_modifiers(
     modifiers
 }
 
+/// Parse `abstract`, `final` and `readonly` before `class`, reporting a repeated modifier or
+/// `abstract` with `final` where PHP does, at the modifier that completes it.
+fn parse_modified_class<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    attributes: ArenaVec<'arena, Attribute<'arena, 'src>>,
+) -> Stmt<'arena, 'src> {
+    let start = parser.start_span();
+    let mut modifiers = ClassModifiers::default();
+    let mut readonly_span = None;
+    loop {
+        let (seen, name) = match parser.current_kind() {
+            TokenKind::Abstract => (&mut modifiers.is_abstract, "abstract"),
+            TokenKind::Final => (&mut modifiers.is_final, "final"),
+            TokenKind::Readonly => (&mut modifiers.is_readonly, "readonly"),
+            _ => break,
+        };
+        let repeated = std::mem::replace(seen, true);
+        let token = parser.advance();
+        if repeated {
+            parser.forbid(
+                ForbiddenRule::DuplicateModifier,
+                format!("Multiple {name} modifiers are not allowed"),
+                token.span,
+            );
+        } else if name == "readonly" {
+            readonly_span = Some(token.span);
+        } else if modifiers.is_abstract && modifiers.is_final {
+            parser.forbid(
+                ForbiddenRule::AbstractFinalConflict,
+                "Cannot use the final modifier on an abstract class",
+                parser.span_from(start),
+            );
+        }
+    }
+    if !parser.check(TokenKind::Class) {
+        return class_modifier_error(parser, start);
+    }
+    if let Some(span) = readonly_span {
+        let feature = if modifiers.is_abstract {
+            "abstract readonly class"
+        } else {
+            "readonly class"
+        };
+        parser.require_version(PhpVersion::Php82, feature, span);
+    }
+    class::parse_class(parser, modifiers, attributes)
+}
+
 fn class_modifier_error<'arena, 'src>(
     parser: &mut Parser<'arena, 'src>,
     start: u32,
@@ -475,97 +409,8 @@ fn parse_attributed_stmt<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         TokenKind::Class => {
             return class::parse_class(parser, ClassModifiers::default(), attributes)
         }
-        TokenKind::Abstract => {
-            let start = parser.start_span();
-            parser.advance();
-            if parser.check(TokenKind::Class) {
-                return class::parse_class(parser, class_modifiers(true, false, false), attributes);
-            } else if parser.check(TokenKind::Readonly)
-                && parser.peek_kind() == Some(TokenKind::Class)
-            {
-                // `abstract readonly class` — valid since PHP 8.2
-                let span = parser.current_span();
-                parser.require_version(PhpVersion::Php82, "abstract readonly class", span);
-                parser.advance(); // consume 'readonly'
-                return class::parse_class(parser, class_modifiers(true, false, true), attributes);
-            } else if parser.check(TokenKind::Final) {
-                parser.advance();
-                parser.forbid(
-                    ForbiddenRule::AbstractFinalConflict,
-                    "cannot use 'abstract' and 'final' together on a class",
-                    parser.span_from(start),
-                );
-                if parser.check(TokenKind::Class) {
-                    return class::parse_class(
-                        parser,
-                        class_modifiers(true, true, false),
-                        attributes,
-                    );
-                } else {
-                    class_modifier_error(parser, start)
-                }
-            } else {
-                class_modifier_error(parser, start)
-            }
-        }
-        TokenKind::Final => {
-            let start = parser.start_span();
-            parser.advance();
-            if parser.check(TokenKind::Class) {
-                class::parse_class(parser, class_modifiers(false, true, false), attributes)
-            } else if parser.check(TokenKind::Readonly) {
-                let span = parser.current_span();
-                parser.require_version(PhpVersion::Php82, "readonly class", span);
-                parser.advance();
-                class::parse_class(parser, class_modifiers(false, true, true), attributes)
-            } else if parser.check(TokenKind::Abstract) {
-                parser.advance();
-                parser.forbid(
-                    ForbiddenRule::AbstractFinalConflict,
-                    "cannot use 'abstract' and 'final' together on a class",
-                    parser.span_from(start),
-                );
-                if parser.check(TokenKind::Class) {
-                    class::parse_class(parser, class_modifiers(true, true, false), attributes)
-                } else {
-                    class_modifier_error(parser, start)
-                }
-            } else {
-                class_modifier_error(parser, start)
-            }
-        }
-        TokenKind::Readonly => {
-            let readonly_span = parser.current_span();
-            parser.advance();
-            if parser.check(TokenKind::Class) {
-                parser.require_version(PhpVersion::Php82, "readonly class", readonly_span);
-                class::parse_class(parser, class_modifiers(false, false, true), attributes)
-            } else if parser.check(TokenKind::Final) && parser.peek_kind() == Some(TokenKind::Class)
-            {
-                // `readonly final class` — same as `final readonly class`
-                parser.require_version(PhpVersion::Php82, "readonly class", readonly_span);
-                parser.advance(); // consume 'final'
-                return class::parse_class(parser, class_modifiers(false, true, true), attributes);
-            } else if parser.check(TokenKind::Abstract)
-                && parser.peek_kind() == Some(TokenKind::Class)
-            {
-                // `readonly abstract class` — valid since PHP 8.2
-                parser.require_version(PhpVersion::Php82, "abstract readonly class", readonly_span);
-                parser.advance(); // consume 'abstract'
-                return class::parse_class(parser, class_modifiers(true, false, true), attributes);
-            } else {
-                parser.error(ParseError::Expected {
-                    expected: "'class'".into(),
-                    found: parser.current_kind().description().into(),
-                    span: parser.current_span(),
-                });
-                parser.synchronize();
-                Stmt {
-                    kind: StmtKind::Error,
-                    span: parser.span_from(readonly_span.start),
-                    doc_comment: None,
-                }
-            }
+        TokenKind::Abstract | TokenKind::Final | TokenKind::Readonly => {
+            parse_modified_class(parser, attributes)
         }
         TokenKind::Interface => return class::parse_interface(parser, attributes),
         TokenKind::Trait => return class::parse_trait(parser, attributes),

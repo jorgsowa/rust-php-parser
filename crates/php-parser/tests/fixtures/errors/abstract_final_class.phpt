@@ -3,8 +3,8 @@
 abstract final class Foo {}
 final abstract class Bar {}
 ===errors===
-cannot use 'abstract' and 'final' together on a class
-cannot use 'abstract' and 'final' together on a class
+Cannot use the final modifier on an abstract class
+Cannot use the final modifier on an abstract class
 ===php_error===
 PHP Fatal error:  Cannot use the final modifier on an abstract class in Standard input code on line 2
 ===ast===
