@@ -35,6 +35,7 @@ PHP Parse error:  syntax error, unexpected '\' (T_NS_SEPARATOR), expecting ident
                   "name": null,
                   "by_ref": false,
                   "params": [],
+                  "missing_param_list": true,
                   "return_type": null,
                   "body": null,
                   "attributes": []

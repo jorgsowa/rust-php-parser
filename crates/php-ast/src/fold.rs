@@ -630,6 +630,7 @@ pub fn fold_expr<'new, 'src, F: Fold<'src> + ?Sized>(
                 is_static: closure.is_static,
                 by_ref: closure.by_ref,
                 params: fold_params(folder, arena, &closure.params),
+                missing_param_list: closure.missing_param_list,
                 use_vars,
                 return_type: closure
                     .return_type
@@ -645,6 +646,7 @@ pub fn fold_expr<'new, 'src, F: Fold<'src> + ?Sized>(
                 is_static: arrow.is_static,
                 by_ref: arrow.by_ref,
                 params: fold_params(folder, arena, &arrow.params),
+                missing_param_list: arrow.missing_param_list,
                 return_type: arrow
                     .return_type
                     .as_ref()
@@ -1015,6 +1017,7 @@ fn fold_function_decl<'new, 'src, F: Fold<'src> + ?Sized>(
     FunctionDecl {
         name: func.name,
         params: fold_params(folder, arena, &func.params),
+        missing_param_list: func.missing_param_list,
         body: arena.alloc(folder.fold_block(arena, func.body)),
         return_type: func
             .return_type
@@ -1036,6 +1039,7 @@ fn fold_method_decl<'new, 'src, F: Fold<'src> + ?Sized>(
         modifiers: method.modifiers,
         by_ref: method.by_ref,
         params: fold_params(folder, arena, &method.params),
+        missing_param_list: method.missing_param_list,
         return_type: method
             .return_type
             .as_ref()

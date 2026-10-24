@@ -20,6 +20,7 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "(" in Standard 
             }
           },
           "params": [],
+          "missing_param_list": true,
           "body": [],
           "return_type": null,
           "by_ref": false,

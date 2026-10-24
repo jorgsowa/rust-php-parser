@@ -70,9 +70,7 @@ impl<'src> Printer<'src> {
             self.w("&");
         }
         self.w(func.name.or_error());
-        self.w("(");
-        self.print_params(&func.params);
-        self.w(")");
+        self.print_param_list(&func.params, func.missing_param_list);
         if let Some(ret) = &func.return_type {
             self.w(": ");
             self.print_type_hint(ret);
@@ -250,9 +248,7 @@ impl<'src> Printer<'src> {
             self.w("&");
         }
         self.w(method.name.or_error());
-        self.w("(");
-        self.print_params(&method.params);
-        self.w(")");
+        self.print_param_list(&method.params, method.missing_param_list);
         if let Some(ret) = &method.return_type {
             self.w(": ");
             self.print_type_hint(ret);
@@ -521,6 +517,16 @@ impl<'src> Printer<'src> {
             EnumMemberKind::Property(prop) => self.print_property(prop),
             _ => self.unsupported("enum member"),
         }
+    }
+
+    /// A list missing its `(` prints without parentheses, so the output keeps PHP's error.
+    pub(crate) fn print_param_list(&mut self, params: &[Param], missing: bool) {
+        if missing {
+            return;
+        }
+        self.w("(");
+        self.print_params(params);
+        self.w(")");
     }
 
     pub(crate) fn print_params(&mut self, params: &[Param]) {

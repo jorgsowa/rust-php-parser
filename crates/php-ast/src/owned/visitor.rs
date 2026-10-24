@@ -1393,6 +1393,7 @@ mod tests {
             kind: StmtKind::Function(Box::new(FunctionDecl {
                 name: crate::owned::Ident::new("foo", Span::DUMMY),
                 params: Box::from([]),
+                missing_param_list: false,
                 body: block_of([expr_stmt(inner)]),
                 return_type: None,
                 by_ref: false,
@@ -1440,6 +1441,7 @@ mod tests {
                 },
                 by_ref: false,
                 params: Box::from([]),
+                missing_param_list: false,
                 return_type: None,
                 body: Some(block_of([expr_stmt(dummy_var("x"))])),
                 attributes: Box::from([]),

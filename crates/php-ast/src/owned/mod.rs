@@ -1585,6 +1585,9 @@ pub struct ClosureExpr {
     pub by_ref: bool,
     /// Parameters.
     pub params: Box<[Param]>,
+    /// `true` when the parameter list is missing its `(`, which PHP rejects.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
+    pub missing_param_list: bool,
     /// Captured variables.
     pub use_vars: Box<[ClosureUseVar]>,
     /// Declared return type.
@@ -1603,6 +1606,7 @@ impl ClosureExpr {
             is_static: false,
             by_ref: false,
             params: Box::new([]),
+            missing_param_list: false,
             use_vars: Box::new([]),
             return_type: None,
             body,
@@ -1634,6 +1638,9 @@ pub struct ArrowFunctionExpr {
     pub by_ref: bool,
     /// Parameters.
     pub params: Box<[Param]>,
+    /// `true` when the parameter list is missing its `(`, which PHP rejects.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
+    pub missing_param_list: bool,
     /// Declared return type.
     pub return_type: Option<TypeHint>,
     /// Result expression.
@@ -1650,6 +1657,7 @@ impl ArrowFunctionExpr {
             is_static: false,
             by_ref: false,
             params: Box::new([]),
+            missing_param_list: false,
             return_type: None,
             body,
             attributes: Box::new([]),
@@ -1770,6 +1778,9 @@ pub struct FunctionDecl {
     pub name: Ident,
     /// Parameters.
     pub params: Box<[Param]>,
+    /// `true` when the parameter list is missing its `(`, which PHP rejects.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
+    pub missing_param_list: bool,
     /// Function body.
     pub body: Box<Block>,
     /// Declared return type.
@@ -1790,6 +1801,7 @@ impl FunctionDecl {
         Self {
             name,
             params: Box::new([]),
+            missing_param_list: false,
             body,
             return_type: None,
             by_ref: false,
@@ -2038,6 +2050,9 @@ pub struct MethodDecl {
     pub by_ref: bool,
     /// Parameters.
     pub params: Box<[Param]>,
+    /// `true` when the parameter list is missing its `(`, which PHP rejects.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
+    pub missing_param_list: bool,
     /// Declared return type.
     pub return_type: Option<TypeHint>,
     /// Method body; `None` for abstract or interface methods.
@@ -2058,6 +2073,7 @@ impl MethodDecl {
             modifiers: Modifiers::new(),
             by_ref: false,
             params: Box::new([]),
+            missing_param_list: false,
             return_type: None,
             body: None,
             attributes: Box::new([]),
@@ -2610,6 +2626,7 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
             is_static: c.is_static,
             by_ref: c.by_ref,
             params: owned_params(&c.params),
+            missing_param_list: c.missing_param_list,
             use_vars: c
                 .use_vars
                 .iter()
@@ -2629,6 +2646,7 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
                 is_static: f.is_static,
                 by_ref: f.by_ref,
                 params: owned_params(&f.params),
+                missing_param_list: f.missing_param_list,
                 return_type: f.return_type.as_ref().map(owned_type_hint),
                 body: Box::new(owned_expr(f.body)),
                 attributes: owned_attrs(&f.attributes),
@@ -3058,6 +3076,7 @@ fn owned_function_decl(f: &arena_ast::FunctionDecl<'_, '_>) -> FunctionDecl {
     FunctionDecl {
         name: owned_ident(f.name),
         params: owned_params(&f.params),
+        missing_param_list: f.missing_param_list,
         body: Box::new(owned_block(f.body)),
         return_type: f.return_type.as_ref().map(owned_type_hint),
         by_ref: f.by_ref,
@@ -3088,6 +3107,7 @@ fn owned_class_member(m: &arena_ast::ClassMember<'_, '_>) -> ClassMember {
                 modifiers: m.modifiers,
                 by_ref: m.by_ref,
                 params: owned_params(&m.params),
+                missing_param_list: m.missing_param_list,
                 return_type: m.return_type.as_ref().map(owned_type_hint),
                 body: m.body.map(|b| Box::new(owned_block(b))),
                 attributes: owned_attrs(&m.attributes),
@@ -3254,6 +3274,7 @@ fn owned_enum_decl(en: &arena_ast::EnumDecl<'_, '_>) -> EnumDecl {
                                 modifiers: m.modifiers,
                                 by_ref: m.by_ref,
                                 params: owned_params(&m.params),
+                                missing_param_list: m.missing_param_list,
                                 return_type: m.return_type.as_ref().map(owned_type_hint),
                                 body: m.body.map(|b| Box::new(owned_block(b))),
                                 attributes: owned_attrs(&m.attributes),
@@ -3598,6 +3619,7 @@ fn av_leaf_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
             is_static: c.is_static,
             by_ref: c.by_ref,
             params: av_params(arena, &c.params),
+            missing_param_list: c.missing_param_list,
             use_vars: {
                 let mut v = arena_ast::ArenaVec::with_capacity_in(c.use_vars.len(), arena);
                 for uv in c.use_vars.iter() {
@@ -3618,6 +3640,7 @@ fn av_leaf_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
                 is_static: f.is_static,
                 by_ref: f.by_ref,
                 params: av_params(arena, &f.params),
+                missing_param_list: f.missing_param_list,
                 return_type: f.return_type.as_ref().map(|t| av_type_hint(arena, t)),
                 body: arena.alloc(av_expr(arena, &f.body)),
                 attributes: av_attrs(arena, &f.attributes),
@@ -4189,6 +4212,7 @@ fn av_function_decl<'a>(
     arena_ast::FunctionDecl {
         name: av_ident(arena, &f.name),
         params: av_params(arena, &f.params),
+        missing_param_list: f.missing_param_list,
         body: &*arena.alloc(av_block(arena, &f.body)),
         return_type: f.return_type.as_ref().map(|t| av_type_hint(arena, t)),
         by_ref: f.by_ref,
@@ -4225,6 +4249,7 @@ fn av_class_member<'a>(
                     modifiers: m.modifiers,
                     by_ref: m.by_ref,
                     params: av_params(arena, &m.params),
+                    missing_param_list: m.missing_param_list,
                     return_type: m.return_type.as_ref().map(|t| av_type_hint(arena, t)),
                     body: m.body.as_deref().map(|b| &*arena.alloc(av_block(arena, b))),
                     attributes: av_attrs(arena, &m.attributes),
@@ -4394,6 +4419,7 @@ fn av_enum_decl<'a>(arena: &'a bumpalo::Bump, en: &EnumDecl) -> arena_ast::EnumD
                         modifiers: m.modifiers,
                         by_ref: m.by_ref,
                         params: av_params(arena, &m.params),
+                        missing_param_list: m.missing_param_list,
                         return_type: m.return_type.as_ref().map(|t| av_type_hint(arena, t)),
                         body: m.body.as_deref().map(|b| &*arena.alloc(av_block(arena, b))),
                         attributes: av_attrs(arena, &m.attributes),

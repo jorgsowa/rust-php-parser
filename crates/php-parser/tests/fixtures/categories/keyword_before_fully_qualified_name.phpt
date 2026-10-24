@@ -136,6 +136,7 @@ PHP Parse error:  syntax error, unexpected '\' (T_NS_SEPARATOR), expecting '(' i
               "is_static": false,
               "by_ref": false,
               "params": [],
+              "missing_param_list": true,
               "return_type": null,
               "body": {
                 "kind": {

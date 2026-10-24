@@ -715,6 +715,9 @@ pub struct ClosureExpr<'arena, 'src> {
     pub by_ref: bool,
     /// Declared parameters.
     pub params: ArenaVec<'arena, Param<'arena, 'src>>,
+    /// `true` when the parameter list is missing its `(`, which PHP rejects.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
+    pub missing_param_list: bool,
     /// Variables captured by `use (...)`.
     pub use_vars: ArenaVec<'arena, ClosureUseVar<'src>>,
     /// Declared return type, if any.
@@ -733,6 +736,7 @@ impl<'arena, 'src> ClosureExpr<'arena, 'src> {
             is_static: false,
             by_ref: false,
             params: ArenaVec::new_in(arena),
+            missing_param_list: false,
             use_vars: ArenaVec::new_in(arena),
             return_type: None,
             body,
@@ -764,6 +768,9 @@ pub struct ArrowFunctionExpr<'arena, 'src> {
     pub by_ref: bool,
     /// Declared parameters.
     pub params: ArenaVec<'arena, Param<'arena, 'src>>,
+    /// `true` when the parameter list is missing its `(`, which PHP rejects.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
+    pub missing_param_list: bool,
     /// Declared return type, if any.
     pub return_type: Option<TypeHint<'arena, 'src>>,
     /// Single result expression.
@@ -780,6 +787,7 @@ impl<'arena, 'src> ArrowFunctionExpr<'arena, 'src> {
             is_static: false,
             by_ref: false,
             params: ArenaVec::new_in(arena),
+            missing_param_list: false,
             return_type: None,
             body,
             attributes: ArenaVec::new_in(arena),

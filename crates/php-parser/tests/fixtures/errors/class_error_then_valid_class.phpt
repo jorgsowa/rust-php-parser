@@ -36,6 +36,7 @@ PHP Parse error:  syntax error, unexpected token "}" in Standard input code on l
                   },
                   "by_ref": false,
                   "params": [],
+                  "missing_param_list": true,
                   "return_type": null,
                   "body": null,
                   "attributes": []

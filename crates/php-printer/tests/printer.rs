@@ -584,6 +584,30 @@ fn empty_short_echo_stays_invalid() {
     }
 }
 
+/// A parameter list missing its `(` prints without one, so the output keeps the source's error.
+#[test]
+fn missing_param_list_stays_invalid() {
+    for (source, printed) in [
+        ("<?php function f {}", "<?php\nfunction f\n{}"),
+        ("<?php $x = function &{};", "<?php\n$x = function & {};"),
+        ("<?php $x = fn => 1;", "<?php\n$x = fn => 1;"),
+        (
+            "<?php interface I { public function f; }",
+            "<?php\ninterface I\n{\n    public function f;\n}",
+        ),
+    ] {
+        let result = php_rs_parser::parse(source);
+        assert!(!result.errors.is_empty(), "{source:?}");
+        let out = php_printer::pretty_print(&result.program);
+        assert_eq!(out, printed, "{source:?}");
+        assert_eq!(
+            messages(&php_rs_parser::parse(&out).errors),
+            messages(&result.errors),
+            "{source:?}"
+        );
+    }
+}
+
 #[test]
 fn owned_program_keeps_comments() {
     let result = php_rs_parser::parse("<?php\n// greet\necho 'hi';");

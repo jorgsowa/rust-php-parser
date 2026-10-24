@@ -1562,6 +1562,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
     let saved_class_keywords = parser.unresolve_class_keywords();
 
+    let missing_param_list = !parser.check(TokenKind::LeftParen);
     let params = if parser.expect(TokenKind::LeftParen).is_some() {
         let params = stmt::parse_param_list(parser);
         parser.expect(TokenKind::RightParen);
@@ -1635,6 +1636,7 @@ pub(crate) fn parse_closure<'arena, 'src>(
     Expr {
         kind: ExprKind::Closure(parser.alloc({
             let mut built = ClosureExpr::new(parser.arena, body);
+            built.missing_param_list = missing_param_list;
             built.is_static = is_static;
             built.by_ref = by_ref;
             built.params = params;
@@ -1723,6 +1725,7 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
 
     let by_ref = parser.eat(TokenKind::Ampersand).is_some();
 
+    let missing_param_list = !parser.check(TokenKind::LeftParen);
     let params = if parser.expect(TokenKind::LeftParen).is_some() {
         let params = stmt::parse_param_list(parser);
         parser.expect(TokenKind::RightParen);
@@ -1776,6 +1779,7 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
     Expr {
         kind: ExprKind::ArrowFunction(parser.alloc({
             let mut built = ArrowFunctionExpr::new(parser.arena, parser.alloc(body));
+            built.missing_param_list = missing_param_list;
             built.is_static = is_static;
             built.by_ref = by_ref;
             built.params = params;

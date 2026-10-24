@@ -1837,6 +1837,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
             method.modifiers.is_final = mods.is_final;
             method.by_ref = by_ref;
             method.params = params;
+            method.missing_param_list = open_paren.is_none();
             method.return_type = return_type;
             method.body = body;
             method.attributes = member_attrs;

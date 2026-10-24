@@ -14,6 +14,9 @@ pub struct FunctionDecl<'arena, 'src> {
     pub name: Ident<'src>,
     /// Declared parameters.
     pub params: ArenaVec<'arena, Param<'arena, 'src>>,
+    /// `true` when the parameter list is missing its `(`, which PHP rejects.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
+    pub missing_param_list: bool,
     /// Function body.
     pub body: &'arena Block<'arena, 'src>,
     /// Declared return type, if any.
@@ -43,6 +46,7 @@ impl<'arena, 'src> FunctionDecl<'arena, 'src> {
         Self {
             name,
             params: ArenaVec::new_in(arena),
+            missing_param_list: false,
             body,
             return_type: None,
             by_ref: false,
@@ -387,6 +391,9 @@ pub struct MethodDecl<'arena, 'src> {
     pub by_ref: bool,
     /// Declared parameters.
     pub params: ArenaVec<'arena, Param<'arena, 'src>>,
+    /// `true` when the parameter list is missing its `(`, which PHP rejects.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "super::is_false"))]
+    pub missing_param_list: bool,
     /// Declared return type, if any.
     pub return_type: Option<TypeHint<'arena, 'src>>,
     /// `None` for an abstract/interface method.
@@ -408,6 +415,7 @@ impl<'arena, 'src> MethodDecl<'arena, 'src> {
             modifiers: Modifiers::new(),
             by_ref: false,
             params: ArenaVec::new_in(arena),
+            missing_param_list: false,
             return_type: None,
             body: None,
             attributes: ArenaVec::new_in(arena),

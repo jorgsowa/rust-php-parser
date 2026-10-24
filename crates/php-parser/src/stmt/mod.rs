@@ -1185,6 +1185,7 @@ fn parse_function<'arena, 'src>(
 
     // A function declared in a method body has no class scope.
     let saved_class_scope = parser.class_scope.take();
+    let missing_param_list = !parser.check(TokenKind::LeftParen);
     let params = if let Some(open_paren) = parser.expect(TokenKind::LeftParen) {
         let params = parse_param_list(parser);
         parser.expect_closing(TokenKind::RightParen, open_paren.span);
@@ -1253,6 +1254,7 @@ fn parse_function<'arena, 'src>(
         kind: StmtKind::Function(parser.alloc({
             let mut built = FunctionDecl::new(parser.arena, name, body);
             built.params = params;
+            built.missing_param_list = missing_param_list;
             built.return_type = return_type;
             built.by_ref = by_ref;
             built.attributes = attributes;

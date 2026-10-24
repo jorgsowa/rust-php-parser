@@ -30,6 +30,7 @@ PHP Parse error:  syntax error, unexpected token "=>", expecting "(" in Standard
                     "is_static": false,
                     "by_ref": false,
                     "params": [],
+                    "missing_param_list": true,
                     "return_type": null,
                     "body": {
                       "kind": {

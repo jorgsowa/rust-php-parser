@@ -512,9 +512,7 @@ impl<'src> Printer<'src> {
         if closure.by_ref {
             self.w(" &");
         }
-        self.w("(");
-        self.print_params(&closure.params);
-        self.w(")");
+        self.print_param_list(&closure.params, closure.missing_param_list);
         if !closure.use_vars.is_empty() {
             self.w(" use (");
             for (i, var) in closure.use_vars.iter().enumerate() {
@@ -548,9 +546,7 @@ impl<'src> Printer<'src> {
         if af.by_ref {
             self.w("&");
         }
-        self.w("(");
-        self.print_params(&af.params);
-        self.w(")");
+        self.print_param_list(&af.params, af.missing_param_list);
         if let Some(ret) = &af.return_type {
             self.w(": ");
             self.print_type_hint(ret);

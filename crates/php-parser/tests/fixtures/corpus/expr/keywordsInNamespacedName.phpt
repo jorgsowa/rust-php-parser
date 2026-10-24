@@ -139,6 +139,7 @@ PHP Parse error:  syntax error, unexpected 'fn' (T_FN), expecting '{' in Standar
               "is_static": false,
               "by_ref": false,
               "params": [],
+              "missing_param_list": true,
               "return_type": null,
               "body": {
                 "kind": {

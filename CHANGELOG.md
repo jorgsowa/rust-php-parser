@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `PropertyDecl::empty_hook_list` and `Param::empty_hook_list` for an empty hook list `{}` (`php-ast`).
+- `FunctionDecl::missing_param_list`, `MethodDecl::missing_param_list`, `ClosureExpr::missing_param_list` and `ArrowFunctionExpr::missing_param_list` for a parameter list missing its `(` (`php-ast`).
 - `LexerErrorKind::UnexpectedCharacter` (`php-lexer`) and `ForbiddenRule::UnexpectedCharacter` (`php-rs-parser`) for a control character in code.
 - `PrinterConfig::php_version`, the PHP version the output is for (`php-printer`).
 
@@ -52,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A function missing its `(`, as in `function f {}`, has no parameters, so its body is no longer read as a parameter's property hook list (`php-rs-parser`).
 - A closure missing its `(`, as in `function {}`, has no parameters, so its body is no longer read as a parameter's property hook list (`php-rs-parser`).
 - An arrow function missing its `(`, as in `fn => 1`, has no parameters instead of an empty placeholder (`php-rs-parser`).
+- A function, method, closure or arrow function missing its `(` prints without `()`, so the printed code keeps PHP's error instead of becoming valid (`php-printer`).
 - Recovery from an invalid class or enum member skips over a `{ ... }` block, so the block's `}` no longer ends the class, as in `public function @return f() {}` (`php-rs-parser`).
 
 ## [0.25.1] - 2026-10-22
