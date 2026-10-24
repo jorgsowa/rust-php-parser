@@ -71,6 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A grouped constant or property is split into declarations that keep their own doc comments, instead of moving `/** q */` in `public $p, /** q */ $q;` to the next member (`php-printer`).
 - A comment before a property hook, such as a doc comment on `set(int $value) {}` or `// c` before `get`, prints before the hook instead of between its parameter list or keyword and its body (`php-printer`).
 - A heredoc line whose escapes decode to the closing label, as `\x45OT` in `<<<EOT`, prints with its first byte escaped instead of ending the heredoc early (`php-printer`).
+- A control character in a string, backtick or heredoc literal prints as `\xNN` instead of the raw byte, so `"a\0b"` prints as `"a\x00b"` instead of a single-quoted string holding a NUL, consistent with `\e`, `\f` and `\v` (`php-printer`).
 - A function, method, closure or arrow function missing its `(` prints without `()`, so the printed code keeps PHP's error instead of becoming valid (`php-printer`).
 - A syntax error at the closing `}` of a `{$...}` interpolation, as in `"{$a->}"`, reports `found '}'` at the `}` instead of `found end of file` (`php-rs-parser`).
 - Recovery from an invalid class or enum member skips over a `{ ... }` block, so the block's `}` no longer ends the class, as in `public function @return f() {}` (`php-rs-parser`).

@@ -71,15 +71,25 @@ pub(crate) fn enum_member_doc_comment<'a>(member: &'a EnumMember) -> Option<&'a 
     }
 }
 
-/// Whether a string literal must be written in double quotes: it holds a character that needs a
-/// double-quoted escape, or bytes that are not valid UTF-8 and are written as `\xNN`.
+/// Whether a string literal must be written in double quotes: it holds a control character or
+/// `$`, which need a double-quoted escape, or bytes that are not valid UTF-8 and are written as
+/// `\xNN`.
 pub(crate) fn needs_double_quotes(bytes: &[u8]) -> bool {
-    bytes.iter().any(|b| {
-        matches!(
-            b,
-            b'\n' | b'\r' | b'\t' | b'\x1b' | b'\x0c' | b'\x0b' | b'$'
-        )
-    }) || std::str::from_utf8(bytes).is_err()
+    bytes.iter().any(|&b| b == b'$' || is_control(b)) || std::str::from_utf8(bytes).is_err()
+}
+
+fn is_control(byte: u8) -> bool {
+    byte < 0x20 || byte == 0x7f
+}
+
+/// Writes a control character with no named escape as `\xNN`.
+fn push_control_escape(out: &mut String, ch: char) -> bool {
+    if ch.is_ascii() && is_control(ch as u8) {
+        out.push_str(&format!("\\x{:02x}", ch as u8));
+        true
+    } else {
+        false
+    }
 }
 
 /// Escapes `bytes` with `escape`, writing every byte that is not part of a valid UTF-8 sequence as
@@ -123,6 +133,8 @@ pub(crate) fn escape_heredoc(s: &str) -> String {
             '\\' => out.push_str("\\\\"),
             '$' => out.push_str("\\$"),
             '\r' => out.push_str("\\r"),
+            '\n' | '\t' => out.push(ch),
+            _ if push_control_escape(&mut out, ch) => {}
             _ => out.push(ch),
         }
     }
@@ -173,6 +185,7 @@ pub(crate) fn escape_double_quoted(s: &str) -> String {
             '\x1b' => out.push_str("\\e"),
             '\x0c' => out.push_str("\\f"),
             '\x0b' => out.push_str("\\v"),
+            _ if push_control_escape(&mut out, ch) => {}
             _ => out.push(ch),
         }
     }
@@ -181,8 +194,8 @@ pub(crate) fn escape_double_quoted(s: &str) -> String {
 
 /// Escape a literal segment of a backtick shell execution string.
 ///
-/// Backticks handle escapes differently than double-quoted strings. Only `\\` and `\$`
-/// are recognized escapes. To include a backtick in the literal, it must appear as `\``
+/// Backticks decode the escapes of a double-quoted string, which writes control characters as
+/// `\xNN`, but `"` needs no escape. To include a backtick in the literal, it must appear as `\``
 /// where the backslash doesn't form a recognized escape, so both characters are treated
 /// as literals by the parser.
 pub(crate) fn escape_shell_exec(s: &str) -> String {
@@ -210,6 +223,8 @@ pub(crate) fn escape_shell_exec(s: &str) -> String {
                 out.push('\\');
                 out.push('`');
             }
+            '\n' | '\t' => out.push(ch),
+            _ if push_control_escape(&mut out, ch) => {}
             _ => {
                 out.push(ch);
             }
