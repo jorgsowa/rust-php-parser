@@ -2746,12 +2746,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
         for stmt in stmts {
             let is_ns = matches!(stmt.kind, StmtKind::Namespace(_));
+            // Inline HTML is output, so it counts as code before or between namespaces.
             let is_skippable = matches!(
                 stmt.kind,
-                StmtKind::Declare(_)
-                    | StmtKind::InlineHtml(_)
-                    | StmtKind::Nop
-                    | StmtKind::HaltCompiler(_)
+                StmtKind::Declare(_) | StmtKind::Nop | StmtKind::HaltCompiler(_)
             );
 
             if let StmtKind::Namespace(decl) = stmt.kind {
