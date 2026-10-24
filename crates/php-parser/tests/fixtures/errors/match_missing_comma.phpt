@@ -4,11 +4,11 @@
 'match expressions' requires PHP 8.0 or higher
 expected '}', found integer
 expected ';' after expression
-expected expression, found '}'
+unmatched '}'
 ===errors >=8.0===
 expected '}', found integer
 expected ';' after expression
-expected expression, found '}'
+unmatched '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in Standard input code on line 1
 ===php_error >=8.0===
@@ -92,13 +92,6 @@ PHP Parse error:  syntax error, unexpected integer "2", expecting "}" in Standar
       "kind": "Error",
       "span": {
         "start": 29,
-        "end": 35
-      }
-    },
-    {
-      "kind": "Error",
-      "span": {
-        "start": 35,
         "end": 35
       }
     }

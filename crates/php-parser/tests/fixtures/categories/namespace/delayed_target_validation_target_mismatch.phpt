@@ -5,23 +5,15 @@
     #[DelayedTargetValidation] #[NoDiscard] const X = 1;
 }
 ===errors <=7.4===
-expected expression, found '}'
+unmatched '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '}', expecting end of file in Standard input code on line 5
 ===ast <=7.4===
 {
-  "stmts": [
-    {
-      "kind": "Error",
-      "span": {
-        "start": 5,
-        "end": 5
-      }
-    }
-  ],
+  "stmts": [],
   "span": {
     "start": 0,
-    "end": 5
+    "end": 169
   }
 }
 ===ast >=8.0===

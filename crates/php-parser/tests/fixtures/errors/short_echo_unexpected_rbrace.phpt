@@ -25,13 +25,6 @@ PHP Parse error:  Unmatched '}' in Standard input code on line 1
         "start": 0,
         "end": 3
       }
-    },
-    {
-      "kind": "Error",
-      "span": {
-        "start": 3,
-        "end": 3
-      }
     }
   ],
   "span": {

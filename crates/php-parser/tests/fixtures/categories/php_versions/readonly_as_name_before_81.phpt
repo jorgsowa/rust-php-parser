@@ -30,10 +30,6 @@ Cannot use "Readonly" as interface name, as it is reserved
 cannot use 'readonly' as interface name
 cannot use 'readonly' as trait name
 cannot use 'readonly' as constant name as it is reserved
-Cannot declare promoted property outside a constructor
-readonly promoted property must have type
-Cannot declare promoted property outside a constructor
-readonly promoted property must have type
 expected variable, found '|'
 expected ';' after expression
 expected ';' after expression

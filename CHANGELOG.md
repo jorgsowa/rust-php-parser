@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `LexerErrorKind::UnexpectedCharacter` (`php-lexer`) and `ForbiddenRule::UnexpectedCharacter` (`php-rs-parser`) for a control character in code.
 - `PrinterConfig::php_version`, the PHP version the output is for (`php-printer`).
 - `ForbiddenRule::CallResultWrite` and `ForbiddenRule::ListAsForeachKey` (`php-rs-parser`).
+- `ParseError::UnmatchedDelimiter` for a `}` that closes nothing (`php-rs-parser`).
 
 ### Changed
 
@@ -23,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `break` or `continue` outside a loop or `switch` reports PHP's `'break' not in the 'loop' or 'switch' context` instead of `Cannot 'break' 1 level` (`php-rs-parser`).
 - A repeated member or promoted-parameter modifier reports PHP's message, such as `Multiple access type modifiers are not allowed` for `public public` or `public private(set) protected(set)` and `Multiple static modifiers are not allowed` (`php-rs-parser`).
 - A repeated class modifier, as in `readonly readonly class` or `abstract readonly abstract class`, reports PHP's `Multiple readonly modifiers are not allowed` instead of a syntax error, and `abstract final class` PHP's `Cannot use the final modifier on an abstract class` (`php-rs-parser`).
+- A `}` at the top level that closes nothing reports `unmatched '}'`, as PHP's `Unmatched '}'`, instead of `expected expression, found '}'` and `No code may exist outside of namespace {}` (`php-rs-parser`).
+- A `try` whose body is missing its `{` or `}` no longer also reports a missing `catch` or `finally` clause, and compile errors inside an unclosed parameter list, such as `Cannot declare promoted property outside a constructor` for `function f(int $x { }`, are dropped, since PHP stops at the syntax error (`php-rs-parser`).
 - A repeated property hook reports PHP's message, `Cannot redeclare property hook "get"`, with the hook name as written, instead of `duplicate 'get' hook` (`php-rs-parser`).
 - `PhpVersion` lives in `php-ast`; `php-rs-parser` re-exports it at the same paths (`php-ast`, `php-rs-parser`).
 - A `?>` that is a statement of its own, as after `;`, `}`, `:` or another tag, is a `Nop` with the span of the `?>`; a `?>` that ends the statement before it adds nothing, and `?><?php` no longer adds a `Nop` (`php-rs-parser`).

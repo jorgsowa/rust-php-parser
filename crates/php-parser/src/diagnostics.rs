@@ -57,6 +57,16 @@ pub enum ParseError {
         span: Span,
     },
 
+    /// A closing delimiter with no delimiter open, such as a `}` after the last block.
+    #[error("unmatched {delimiter}")]
+    #[non_exhaustive]
+    UnmatchedDelimiter {
+        /// The closing delimiter, e.g. `"'}'"`.
+        delimiter: Cow<'static, str>,
+        /// Source range of the error.
+        span: Span,
+    },
+
     /// A construct that is syntactically valid but semantically forbidden
     /// (e.g. `(unset)` cast, deprecated syntax). Equivalent to a PHP fatal.
     #[error("{message}")]
@@ -116,6 +126,7 @@ impl ParseError {
             | ParseError::UnterminatedString { span }
             | ParseError::ExpectedAfter { span, .. }
             | ParseError::UnclosedDelimiter { span, .. }
+            | ParseError::UnmatchedDelimiter { span, .. }
             | ParseError::Forbidden { span, .. }
             | ParseError::NestingTooDeep { span }
             | ParseError::SourceTooLarge { span, .. }
@@ -138,6 +149,7 @@ impl ParseError {
             ParseError::UnterminatedString { .. } => "unterminated-string",
             ParseError::ExpectedAfter { .. } => "expected-after",
             ParseError::UnclosedDelimiter { .. } => "unclosed-delimiter",
+            ParseError::UnmatchedDelimiter { .. } => "unmatched-delimiter",
             ParseError::Forbidden { rule, .. } => rule.as_str(),
             ParseError::NestingTooDeep { .. } => "nesting-too-deep",
             ParseError::SourceTooLarge { .. } => "source-too-large",
@@ -957,6 +969,10 @@ mod tests {
             ParseError::UnclosedDelimiter {
                 delimiter: "')'".into(),
                 opened_at: span,
+                span,
+            },
+            ParseError::UnmatchedDelimiter {
+                delimiter: "'}'".into(),
                 span,
             },
             ParseError::NestingTooDeep { span },

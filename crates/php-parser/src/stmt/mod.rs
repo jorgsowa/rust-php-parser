@@ -1345,6 +1345,7 @@ pub fn parse_param_list<'arena, 'src>(
     if parser.check(TokenKind::RightParen) {
         return params;
     }
+    let list_start = parser.start_span();
 
     // Floor for parameter leading doc comments (PHP 8.6): end of the most
     // recently consumed `(` or `,`, so the first parameter can't claim the
@@ -1701,6 +1702,11 @@ pub fn parse_param_list<'arena, 'src>(
             );
         }
     }
+    // PHP stops at an unclosed list, so it never compiles the parameters, as in `f(int $x { }`.
+    if !parser.check(TokenKind::RightParen) {
+        let span = parser.span_from(list_start);
+        parser.uncompiled_spans.push(span);
+    }
 
     params
 }
@@ -2052,7 +2058,8 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
             parser.advance();
         }
     }
-    parser.expect_body_close(open);
+    let closed = parser.expect_body_close(open);
+    let body_closed = open.is_some() && closed.is_some();
     let body = parser.alloc(Block {
         stmts: body_stmts,
         span: parser.span_from(body_brace_start),
@@ -2162,7 +2169,8 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         (None, None)
     };
 
-    if catches.is_empty() && finally.is_none() {
+    // A body with a syntax error is where PHP stops, so it never asks for a clause.
+    if catches.is_empty() && finally.is_none() && body_closed {
         parser.error(ParseError::Expected {
             expected: "catch or finally clause".into(),
             found: parser.current_kind().description().into(),

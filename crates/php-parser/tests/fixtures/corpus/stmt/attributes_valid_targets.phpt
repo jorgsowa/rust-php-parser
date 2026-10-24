@@ -33,7 +33,6 @@ class H {
 }
 ===errors <=7.4===
 Cannot use expression as assignment target.
-Constant expression contains invalid operations
 missing closing ')'
 expected ';', found '{'
 expected ';' after expression

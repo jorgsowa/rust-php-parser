@@ -97,7 +97,8 @@ pub struct Parser<'arena, 'src> {
     pub(crate) finally_loop_depth: Option<u32>,
     /// True once the current function body or top-level code contains a `goto` or a label.
     pub(crate) has_goto_or_label: bool,
-    /// Right operands that PHP never compiles: `false && …`, `true || …`.
+    /// Code that PHP never compiles: the right operand of `false && …` or `true || …`, or an
+    /// unclosed parameter list.
     pub(crate) uncompiled_spans: Vec<Span>,
     /// Function/method/closure nesting depth — tracks valid yield context.
     /// Incremented when entering a function/method/closure, decremented when exiting.
@@ -2548,6 +2549,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 )
             {
                 self.top_level_code_seen = true;
+            }
+            if self.check(TokenKind::RightBrace) {
+                let brace = self.advance();
+                self.error(ParseError::UnmatchedDelimiter {
+                    delimiter: "'}'".into(),
+                    span: brace.span,
+                });
+                continue;
             }
             let first_new = stmts.len();
             stmt::push_stmt(self, &mut stmts);

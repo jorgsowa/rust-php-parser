@@ -218,6 +218,7 @@ See [`crates/php-parser/src/diagnostics.rs`](crates/php-parser/src/diagnostics.r
 | `UnterminatedString { span }` | A string literal was opened but never closed. |
 | `ExpectedAfter { expected, after, span }` | A required token was absent after a named construct. |
 | `UnclosedDelimiter { delimiter, opened_at, span }` | A `(`, `[`, or `{` was opened and never closed. |
+| `UnmatchedDelimiter { delimiter, span }` | A `}` closes nothing, as after the last block of a file. |
 | `Forbidden { message, span }` | A syntactically valid but semantically illegal construct (e.g. wrong modifiers, invalid destructuring target). Equivalent to a PHP fatal error. |
 | `VersionTooLow { feature, required, used, span }` | Syntax that requires a newer PHP version than the parse target. |
 

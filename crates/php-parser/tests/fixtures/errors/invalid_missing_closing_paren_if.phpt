@@ -5,11 +5,11 @@ if ($x > 1 {
 }
 ===errors <=7.4===
 expected expression, found 'echo'
-expected expression, found '}'
+unmatched '}'
 ===errors >=8.0===
 expected expression, found 'echo'
 Array and string offset access syntax with curly braces is no longer supported
-expected expression, found '}'
+unmatched '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '{' in Standard input code on line 2
 ===php_error >=8.0===
@@ -91,13 +91,6 @@ PHP Parse error:  syntax error, unexpected token "{" in Standard input code on l
       },
       "span": {
         "start": 6,
-        "end": 36
-      }
-    },
-    {
-      "kind": "Error",
-      "span": {
-        "start": 36,
         "end": 36
       }
     }
