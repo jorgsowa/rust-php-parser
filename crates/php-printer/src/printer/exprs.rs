@@ -63,6 +63,26 @@ impl<'src> Printer<'src> {
         needs_parens
     }
 
+    /// Whether the source spells `outer` with an operand that `at_edge` says shares its start or
+    /// end, so the operand has no parentheses; a hand-built tree without source has none to keep.
+    fn written_unparenthesized(&self, outer: &Expr, at_edge: bool) -> bool {
+        at_edge && outer.span.start < outer.span.end && outer.span.end as usize <= self.source.len()
+    }
+
+    /// The precedence `operand` of `parent` prints at. A ternary written without parentheses as
+    /// the condition of another prints as written, so the error PHP 8.0 reports for it is kept.
+    fn source_operand_prec(&self, parent: &Expr, operand: &Expr, prec: i8) -> i8 {
+        let nested_ternary = matches!(parent.kind, ExprKind::Ternary(_))
+            && matches!(operand.kind, ExprKind::Ternary(_));
+        if nested_ternary
+            && self.written_unparenthesized(parent, operand.span.start == parent.span.start)
+        {
+            PREC_TERNARY
+        } else {
+            prec
+        }
+    }
+
     /// Print the chain operand of `expr` (see `chain_operand`), which may itself
     /// be a chain of any length. Rather than recursing per link, open each
     /// link's parenthesis on the way down, print the innermost node, then emit
@@ -71,6 +91,7 @@ impl<'src> Printer<'src> {
         let Some((mut node, mut prec)) = chain_operand(&expr.kind) else {
             return;
         };
+        prec = self.source_operand_prec(expr, node, prec);
         let needs_parens = self.open_paren(node, prec);
         let Some(next) = linked_operand(node) else {
             // A single link, by far the most common chain: no stack needed.
@@ -82,12 +103,15 @@ impl<'src> Printer<'src> {
         };
         let mut chain = LinkStack::new();
         chain.push((node, needs_parens));
+        let mut parent = node;
         (node, prec) = next;
         loop {
+            prec = self.source_operand_prec(parent, node, prec);
             let needs_parens = self.open_paren(node, prec);
             match linked_operand(node) {
                 Some(next) => {
                     chain.push((node, needs_parens));
+                    parent = node;
                     (node, prec) = next;
                 }
                 None => {
@@ -246,6 +270,7 @@ impl<'src> Printer<'src> {
                 self.w(" ");
                 if binary.op == BinaryOp::Pipe
                     && matches!(binary.right.kind, ExprKind::ArrowFunction(_))
+                    && !self.written_unparenthesized(expr, binary.right.span.end == expr.span.end)
                 {
                     self.w("(");
                     self.print_expr(binary.right, PREC_LOWEST);

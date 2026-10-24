@@ -76,6 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - An empty alternative-syntax body, as in `foreach ($a as &$v): endforeach;` or `if ($a): endif;`, prints without a blank line (`php-printer`).
 - A blank line follows a function, class-like or namespace declaration as it precedes one, instead of only before it (`php-printer`).
 - A property declared with `var` prints as `var` instead of `public` (`php-printer`).
+- With the source given, a nested ternary or an arrow function after `|>` that the source writes without parentheses prints without them, so `$a ? $b : $c ? $d : $e` and `1 |> fn($x) => $x` keep PHP's error instead of becoming valid; without the source, the printer still adds the parentheses (`php-printer`).
 - A function, method, closure or arrow function missing its `(` prints without `()`, so the printed code keeps PHP's error instead of becoming valid (`php-printer`).
 - A syntax error at the closing `}` of a `{$...}` interpolation, as in `"{$a->}"`, reports `found '}'` at the `}` instead of `found end of file` (`php-rs-parser`).
 - Recovery from an invalid class or enum member skips over a `{ ... }` block, so the block's `}` no longer ends the class, as in `public function @return f() {}` (`php-rs-parser`).
