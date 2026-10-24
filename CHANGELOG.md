@@ -48,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A `?>` where a statement is expected, as in `if ($a) ?>x<?php`, is the empty body and the HTML after it runs unconditionally, as in PHP (`php-rs-parser`).
 - Printing keeps whether a `declare(encoding=...)` or `declare(strict_types=...)` after an empty statement is valid, instead of making a `?>` that ends a statement before one an error (`php-printer`).
 - A method missing its `(` has no parameters instead of an empty placeholder (`php-rs-parser`).
+- A function missing its `(`, as in `function f {}`, has no parameters, so its body is no longer read as a parameter's property hook list (`php-rs-parser`).
 - Recovery from an invalid class or enum member skips over a `{ ... }` block, so the block's `}` no longer ends the class, as in `public function @return f() {}` (`php-rs-parser`).
 
 ## [0.25.1] - 2026-10-22

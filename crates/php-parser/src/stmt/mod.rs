@@ -1185,10 +1185,13 @@ fn parse_function<'arena, 'src>(
 
     // A function declared in a method body has no class scope.
     let saved_class_scope = parser.class_scope.take();
-    let open_paren = parser.expect(TokenKind::LeftParen);
-    let open_paren_span = open_paren.map(|t| t.span).unwrap_or(parser.current_span());
-    let params = parse_param_list(parser);
-    parser.expect_closing(TokenKind::RightParen, open_paren_span);
+    let params = if let Some(open_paren) = parser.expect(TokenKind::LeftParen) {
+        let params = parse_param_list(parser);
+        parser.expect_closing(TokenKind::RightParen, open_paren.span);
+        params
+    } else {
+        parser.alloc_vec()
+    };
 
     let return_type = if parser.eat(TokenKind::Colon).is_some() {
         Some(parser.parse_type_hint())
