@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.26.0] - 2026-10-24
+
+Error messages and recovery follow PHP more closely, spans are ordered and stay inside their parent, and the printer keeps invalid code invalid.
+
 ### Added
 
 - `PropertyDecl::empty_hook_list` and `Param::empty_hook_list` for an empty hook list `{}` (`php-ast`).
