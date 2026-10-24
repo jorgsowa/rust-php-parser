@@ -2549,6 +2549,16 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     let paren_start = self.current_span().start;
                     match crate::expr::parse_arg_list_or_callable(self) {
                         crate::expr::ArgListResult::Args(args) => {
+                            let placeholder = args.iter().find(|arg| arg.is_placeholder());
+                            if let Some(placeholder) =
+                                placeholder.filter(|_| self.version >= PhpVersion::Php86)
+                            {
+                                self.forbid(
+                                    ForbiddenRule::AttributeArgumentClosure,
+                                    "Cannot create Closure as attribute argument",
+                                    placeholder.span,
+                                );
+                            }
                             for arg in args.iter() {
                                 if arg.is_spread() {
                                     self.forbid(

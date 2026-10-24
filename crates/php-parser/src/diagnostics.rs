@@ -325,6 +325,8 @@ forbidden_rules! {
     SwitchLeadingSemicolons = "switch-leading-semicolons", Parse;
     /// Partial function application is used in a `new` expression.
     PartialApplicationInNew = "partial-application-in-new", Parse;
+    /// A call combines a `?` or `...` placeholder with argument unpacking.
+    PartialApplicationWithUnpacking = "partial-application-with-unpacking", Compile;
     /// `new A()` is dereferenced without parentheses before PHP 8.4.
     UnparenthesizedNewDereference = "unparenthesized-new-dereference", Parse;
     /// `static` is used as a standalone expression.
@@ -637,6 +639,12 @@ mod tests {
     /// `(rule, version, source, reported span text)` for sites that report only at some versions.
     const VERSION_GATED: &[(ForbiddenRule, PhpVersion, &str, &str)] = &[
         (
+            ForbiddenRule::PartialApplicationWithUnpacking,
+            PhpVersion::Php86,
+            "<?php f(...$a, ?);",
+            "?",
+        ),
+        (
             ForbiddenRule::NeverReturn,
             PhpVersion::Php81,
             "<?php $f = fn(): never => 1;",
@@ -903,7 +911,9 @@ mod tests {
             ForbiddenRule::NoDiscardWithoutReturnValue => &[("<?php #[NoDiscard] function f(): void {}", "NoDiscard"),],
             ForbiddenRule::UnexpectedCharacter => &[("<?php $a\x01\x02 = 1;", "\x01\x02"), ("<?php $a =\x0c1;", "\x0c"),],
             ForbiddenRule::UnexpectedCast => &[("<?php foo(int);", "(int)"), ("<?php if ( float ) {}", "( float )"),],
-            ForbiddenRule::DynamicClassFetch | ForbiddenRule::Other => &[],
+            ForbiddenRule::DynamicClassFetch
+            | ForbiddenRule::PartialApplicationWithUnpacking
+            | ForbiddenRule::Other => &[],
         }
     }
 

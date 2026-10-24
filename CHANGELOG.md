@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::PrivateFinalPropertyHook` and `ForbiddenRule::SetHookParameterDefault` (`php-rs-parser`).
+- `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::PrivateFinalPropertyHook`, `ForbiddenRule::SetHookParameterDefault` and `ForbiddenRule::PartialApplicationWithUnpacking` (`php-rs-parser`).
 - `ForeachStmt::key_by_ref` for a key taken by reference, `invalid_modifier` on a trait alias for `static`, `abstract` or `readonly`, and `PropertyHook::empty_param_list` for a hook written with `()` (`php-ast`).
 
 ### Changed
@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- From PHP 8.6, a placeholder with argument unpacking, as in `f(...$a, ?)`, reports PHP's `Cannot combine partial application and unpacking`, a placeholder in an attribute argument list `Cannot create Closure as attribute argument`, and a placeholder in `new A(?)` PHP's `Cannot create Closure for new expression` (`php-rs-parser`).
 - A `final` hook on a private property reports PHP's `Property hook cannot be both final and private`, a `set` hook parameter with a default value `Parameter $value of set hook A::$x must not have a default value`, and from PHP 8.6 asymmetric visibility on a virtual property says `get-only` or `set-only` as PHP does (`php-rs-parser`).
 - Inline HTML before the first namespace, as in `x<?php namespace A;`, or after a braced namespace reports PHP's namespace errors (`php-rs-parser`).
 - A `use` whose implicit alias is a special class name, as in `use A\int;`, `use A\{self};` or, from PHP 8.5, `use A\array;`, reports PHP's `Cannot use A\int as int because 'int' is a special class name` (`php-rs-parser`).

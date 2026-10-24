@@ -28,6 +28,7 @@ Constant expression contains invalid operations
 ===errors >=8.6===
 Constant expression contains invalid operations
 Constant expression contains invalid operations
+Cannot combine partial application and unpacking
 Argument unpacking in constant expressions is not supported
 Cannot use dynamic function name in constant expression
 Cannot use dynamic function name in constant expression

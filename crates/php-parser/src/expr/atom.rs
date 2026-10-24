@@ -2120,6 +2120,16 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
         }
     }
 
+    if parser.version >= PhpVersion::Php86 && args.iter().any(|arg| arg.is_spread()) {
+        if let Some(placeholder) = args.iter().find(|arg| arg.is_placeholder()) {
+            parser.forbid(
+                ForbiddenRule::PartialApplicationWithUnpacking,
+                "Cannot combine partial application and unpacking",
+                placeholder.span,
+            );
+        }
+    }
+
     parser.expect(TokenKind::RightParen);
     ArgListResult::Args(args)
 }
@@ -2130,7 +2140,7 @@ fn reject_pfa_placeholders_in_new(parser: &mut Parser<'_, '_>, args: &[Arg]) {
         if arg.is_placeholder() {
             parser.forbid(
                 ForbiddenRule::PartialApplicationInNew,
-                "Cannot use partial function application in new expression",
+                "Cannot create Closure for new expression",
                 arg.span,
             );
         }

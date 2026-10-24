@@ -3,9 +3,9 @@
 new Foo(?);
 ===errors <=8.5===
 'partial function application' requires PHP 8.6 or higher
-Cannot use partial function application in new expression
+Cannot create Closure for new expression
 ===errors >=8.6===
-Cannot use partial function application in new expression
+Cannot create Closure for new expression
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '?' in Standard input code on line 2
 ===php_error 8.0-8.5===
