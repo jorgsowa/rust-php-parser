@@ -854,7 +854,7 @@ mod tests {
             ForbiddenRule::NullsafeWrite => &[("<?php $a?->b = 1;", "$a?->b"), ("<?php $a?->b++;", "$a?->b"), ("<?php unset($a?->b);", "$a?->b"),],
             ForbiddenRule::ReferenceToNullsafe => &[("<?php $x = &$a?->b;", "$a?->b"), ("<?php [&$x] = $a?->b;", "$a?->b"), ("<?php function &f() { return $a?->b; }", "$a?->b"),],
             ForbiddenRule::NullsafeClosureCreation => &[("<?php $a?->b(...);", "$a?->b(...)"),],
-            ForbiddenRule::UnwritableDestructuringElement => &[("<?php [f()] = $a;", "f()"), ("<?php foreach ($a as [f()]) {}", "[f()]"),],
+            ForbiddenRule::UnwritableDestructuringElement => &[("<?php [f()] = $a;", "f()"), ("<?php foreach ($a as [f()]) {}", "f()"),],
             ForbiddenRule::UnsetThis => &[("<?php function f() { unset($this); }", "$this"),],
             ForbiddenRule::ClosureUseShadowsParameter => &[("<?php $f = function ($a) use ($a) {};", "$a"),],
             ForbiddenRule::DuplicateClosureUseVariable => &[("<?php $f = function () use ($a, $a) {};", "$a"),],

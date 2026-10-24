@@ -1,8 +1,7 @@
 ===source===
 <?php list(...$x) = $arr;
 ===errors===
-expected expression, found '...'
-list() can only be used as an assignment or foreach target
+Spread operator is not supported in assignments
 ===php_error===
 PHP Fatal error:  Spread operator is not supported in assignments in Standard input code on line 1
 ===ast===
@@ -12,40 +11,55 @@ PHP Fatal error:  Spread operator is not supported in assignments in Standard in
       "kind": {
         "Expression": {
           "kind": {
-            "Array": [
-              {
-                "key": null,
+            "Assign": {
+              "target": {
                 "kind": {
-                  "Value": {
-                    "kind": "Error",
-                    "span": {
-                      "start": 11,
-                      "end": 11
+                  "Array": [
+                    {
+                      "key": null,
+                      "kind": {
+                        "Spread": {
+                          "kind": {
+                            "Variable": "x"
+                          },
+                          "span": {
+                            "start": 14,
+                            "end": 16
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 11,
+                        "end": 16
+                      }
                     }
-                  }
+                  ]
                 },
                 "span": {
-                  "start": 11,
-                  "end": 11
+                  "start": 6,
+                  "end": 17
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "Variable": "arr"
+                },
+                "span": {
+                  "start": 20,
+                  "end": 24
                 }
               }
-            ]
+            }
           },
           "span": {
             "start": 6,
-            "end": 11
+            "end": 24
           }
         }
       },
       "span": {
         "start": 6,
-        "end": 11
-      }
-    },
-    {
-      "kind": "Error",
-      "span": {
-        "start": 11,
         "end": 25
       }
     }

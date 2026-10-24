@@ -2497,11 +2497,22 @@ fn element_kind<'arena, 'src>(
 }
 
 /// Parse a single element in a list() or short list destructuring.
-/// Handles: `$var`, `&$var`, `'key' => $var`, `'key' => &$var`, `list($a, $b)`, etc.
+/// Handles: `$var`, `&$var`, `'key' => $var`, `'key' => &$var`, `list($a, $b)`, `...$var`, etc.
 fn parse_list_element<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
 ) -> ArrayElement<'arena, 'src> {
     let elem_start = parser.start_span();
+
+    // PHP's grammar accepts `...$var` here and rejects it when compiling the assignment.
+    if parser.eat(TokenKind::Ellipsis).is_some() {
+        let value = parse_expr(parser);
+        let elem_span = parser.span_to(elem_start, value.span);
+        return ArrayElement {
+            key: None,
+            kind: element_kind(value, true, false),
+            span: elem_span,
+        };
+    }
 
     // Handle &$var (by-reference)
     if parser.eat(TokenKind::Ampersand).is_some() {

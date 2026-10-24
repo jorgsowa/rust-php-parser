@@ -134,15 +134,42 @@ pub(crate) fn check_write_target(
             ForbiddenRule::InvalidWriteContext,
             "Can't use this expression in write context",
         )
-    } else if !is_valid_destructure_element(&target.kind, parser.version) {
-        (
-            ForbiddenRule::UnwritableDestructuringElement,
-            "Assignments can only happen to writable values",
-        )
     } else {
+        if let ExprKind::Array(elems) = &target.kind {
+            check_destructure_elements(parser, elems);
+        }
         return;
     };
     parser.forbid(rule, message, target.span);
+}
+
+/// Report each element of a destructuring list that PHP cannot assign to, in nested lists too.
+fn check_destructure_elements(parser: &mut Parser<'_, '_>, elems: &[ArrayElement<'_, '_>]) {
+    for el in elems.iter() {
+        if el.is_spread() {
+            parser.forbid(
+                ForbiddenRule::SpreadInDestructuring,
+                "Spread operator is not supported in assignments",
+                el.span,
+            );
+            continue;
+        }
+        // PHP rejects `($a) = …` but accepts `[($a)] = …`.
+        let mut value = el.value();
+        while let ExprKind::Parenthesized(inner) = &value.kind {
+            value = inner;
+        }
+        match &value.kind {
+            ExprKind::Omit => {}
+            ExprKind::Array(nested) => check_destructure_elements(parser, nested),
+            kind if !is_valid_destructure_element(kind, parser.version) => parser.forbid(
+                ForbiddenRule::UnwritableDestructuringElement,
+                "Assignments can only happen to writable values",
+                el.value().span,
+            ),
+            _ => {}
+        }
+    }
 }
 
 /// How a write reaches its target; PHP rejects different writes to `$this` and `$GLOBALS`.
@@ -537,23 +564,11 @@ fn nullsafe_link(kind: &ExprKind<'_, '_>, this_is_exempt: bool) -> bool {
     }
 }
 
-/// True if a destructuring-element value is itself a writable target.
-/// `Omit` (the gap slot in `[$a, , $c]`) is allowed; nested destructuring
-/// (`Array`) recurses; everything else falls back to the lvalue rule.
+/// True if a destructuring-element value other than a nested list is a writable target.
 fn is_valid_destructure_element(kind: &ExprKind<'_, '_>, version: PhpVersion) -> bool {
-    match kind {
-        ExprKind::Omit => true,
-        ExprKind::Array(elems) => elems
-            .iter()
-            .all(|el| !el.is_spread() && is_valid_destructure_element(&el.value().kind, version)),
-        // PHP rejects `($a) = …` but accepts `[($a)] = …`.
-        ExprKind::Parenthesized(inner) => is_valid_destructure_element(&inner.kind, version),
-        _ => {
-            is_valid_assignment_target(kind)
-                && !has_nullsafe_link(kind)
-                && temporary_write_message(kind, version).is_none()
-        }
-    }
+    is_valid_assignment_target(kind)
+        && !has_nullsafe_link(kind)
+        && temporary_write_message(kind, version).is_none()
 }
 
 /// Report a `return` or `yield` of a nullsafe fetch in a function that returns by reference.
@@ -1332,24 +1347,7 @@ fn parse_assign_continuation<'arena, 'src>(
         parser.retract_destructuring_errors_within(lhs.span);
         if is_plain_assign {
             check_list_entries(parser, &lhs);
-            // Each non-omitted element must itself be a writable target. PHP
-            // rejects e.g. `[null, $b] = …` and `list(1 + 1) = …` with
-            // "Assignments can only happen to writable values".
-            for el in elems.iter() {
-                if el.is_spread() {
-                    parser.forbid(
-                        ForbiddenRule::SpreadInDestructuring,
-                        "Spread operator is not supported in assignments",
-                        el.span,
-                    );
-                } else if !is_valid_destructure_element(&el.value().kind, parser.version) {
-                    parser.forbid(
-                        ForbiddenRule::UnwritableDestructuringElement,
-                        "Assignments can only happen to writable values",
-                        el.value().span,
-                    );
-                }
-            }
+            check_destructure_elements(parser, elems);
         }
     }
     check_mixed_list_short_syntax(parser, &lhs);
