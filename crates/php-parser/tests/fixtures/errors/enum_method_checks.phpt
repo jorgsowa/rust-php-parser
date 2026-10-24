@@ -13,8 +13,11 @@ Cannot take reference of a nullsafe chain
 'enums' requires PHP 8.1 or higher
 A void function must not return a value
 Cannot take reference of a nullsafe chain
-===errors >=8.1===
+===errors 8.1-8.3===
 A void function must not return a value
+Cannot take reference of a nullsafe chain
+===errors >=8.4===
+A void method must not return a value
 Cannot take reference of a nullsafe chain
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'E' (T_STRING) in Standard input code on line 2

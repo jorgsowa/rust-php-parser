@@ -1341,6 +1341,33 @@ fn admits_null(ty: &TypeHint<'_, '_>) -> bool {
     }
 }
 
+/// How PHP names a function-like in its return errors: from 8.4, "method" for one compiled in a
+/// class, including a closure in a method.
+pub(crate) fn function_kind_word(parser: &Parser<'_, '_>, in_class: bool) -> &'static str {
+    if in_class && parser.version >= PhpVersion::Php84 {
+        "method"
+    } else {
+        "function"
+    }
+}
+
+pub(crate) fn void_return_message(what: &str, value: &Expr<'_, '_>) -> String {
+    let mut value = value;
+    while let ExprKind::Parenthesized(inner) = &value.kind {
+        value = inner;
+    }
+    let hint = if matches!(value.kind, ExprKind::Null) {
+        " (did you mean \"return;\" instead of \"return null;\"?)"
+    } else {
+        ""
+    };
+    format!("A void {what} must not return a value{hint}")
+}
+
+pub(crate) fn never_return_message(what: &str) -> String {
+    format!("A never-returning {what} must not return")
+}
+
 /// Check the `return` statements of a function-like `body` against its declared return type:
 /// a value from `void`, any `return` from `never`, and a bare `return;` from any other type.
 /// A generator is checked for a return type that admits `Generator` instead. `in_class` selects
@@ -1356,12 +1383,8 @@ pub(crate) fn check_returns_against_type<'arena, 'src>(
         check_generator_return_type(parser, return_type);
         return;
     }
+    let what = function_kind_word(parser, in_class);
     let bare_return_message: std::borrow::Cow<'static, str> = {
-        let what = if in_class && parser.version >= PhpVersion::Php84 {
-            "method"
-        } else {
-            "function"
-        };
         let hint = if admits_null(return_type) {
             " (did you mean \"return null;\" instead of \"return;\"?)"
         } else {
@@ -1370,13 +1393,13 @@ pub(crate) fn check_returns_against_type<'arena, 'src>(
         format!("A {what} with return type must return a value{hint}").into()
     };
     let rule = match classify_void_or_never(return_type) {
-        Some(true) => ReturnRule::Void,
-        Some(false) => ReturnRule::Never,
+        Some(true) => ReturnRule::Void(what),
+        Some(false) => ReturnRule::Never(what),
         None => ReturnRule::Value(bare_return_message),
     };
     enum ReturnRule {
-        Void,
-        Never,
+        Void(&'static str),
+        Never(&'static str),
         Value(std::borrow::Cow<'static, str>),
     }
     fn walk<'arena, 'src>(
@@ -1388,13 +1411,13 @@ pub(crate) fn check_returns_against_type<'arena, 'src>(
             match &stmt.kind {
                 StmtKind::Return(value) => {
                     let (rule, message) = match (rule, value) {
-                        (ReturnRule::Void, Some(_)) => (
+                        (ReturnRule::Void(what), Some(value)) => (
                             ForbiddenRule::VoidReturnValue,
-                            "A void function must not return a value".into(),
+                            void_return_message(what, value).into(),
                         ),
-                        (ReturnRule::Never, _) => (
+                        (ReturnRule::Never(what), _) => (
                             ForbiddenRule::NeverReturn,
-                            "A never-returning function must not return".into(),
+                            never_return_message(what).into(),
                         ),
                         (ReturnRule::Value(message), None) => {
                             (ForbiddenRule::MissingReturnValue, message.clone())

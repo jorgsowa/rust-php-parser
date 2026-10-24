@@ -1757,9 +1757,10 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
     if let (true, Some(rt)) = (is_generator, &return_type) {
         stmt::check_generator_return_type(parser, rt);
     } else if return_type.as_ref().is_some_and(stmt::is_void_type) {
+        let what = stmt::function_kind_word(parser, parser.class_scope.is_some());
         parser.forbid(
             ForbiddenRule::VoidReturnValue,
-            "A void function must not return a value",
+            stmt::void_return_message(what, &body),
             body.span,
         );
     }
@@ -1767,7 +1768,7 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
     if parser.version < PhpVersion::Php82 && return_type.as_ref().is_some_and(stmt::is_never_type) {
         parser.forbid(
             ForbiddenRule::NeverReturn,
-            "A never-returning function must not return",
+            stmt::never_return_message("function"),
             body.span,
         );
     }

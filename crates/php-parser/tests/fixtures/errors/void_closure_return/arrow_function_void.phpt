@@ -7,13 +7,13 @@ fn(): void => throw new E;
 ===errors <=7.4===
 A void function must not return a value
 A void function must not return a value
-A void function must not return a value
+A void function must not return a value (did you mean "return;" instead of "return null;"?)
 'throw expressions' requires PHP 8.0 or higher
 A void function must not return a value
 ===errors >=8.0===
 A void function must not return a value
 A void function must not return a value
-A void function must not return a value
+A void function must not return a value (did you mean "return;" instead of "return null;"?)
 A void function must not return a value
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'throw' (T_THROW) in Standard input code on line 5

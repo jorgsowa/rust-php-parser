@@ -2,7 +2,7 @@
 <?php
 $f = function(): void { return null; };
 ===errors===
-A void function must not return a value
+A void function must not return a value (did you mean "return;" instead of "return null;"?)
 ===php_error===
 PHP Fatal error:  A void function must not return a value (did you mean "return;" instead of "return null;"?) in Standard input code on line 2
 ===ast===

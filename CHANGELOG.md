@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The messages for a positional or unpacked argument after a named one, an unparenthesized nested ternary and an unparenthesized arrow function after `|>` match PHP's (`php-rs-parser`).
 - A write to a call result, as in `f() = 1`, `$a->f()++`, `unset(f())` or `[f()] = $a`, reports PHP's `Can't use function return value in write context` or `Can't use method return value in write context`, and a list as a `foreach` key `Cannot use list as key element` (`php-rs-parser`).
+- From PHP 8.4, a `void` or `never` return error in a method, or in a closure or arrow function inside a class, says "method" as PHP does (`A void method must not return a value`), and `return null;` from a `void` function adds PHP's `(did you mean "return;" instead of "return null;"?)` (`php-rs-parser`).
 - A repeated property hook reports PHP's message, `Cannot redeclare property hook "get"`, with the hook name as written, instead of `duplicate 'get' hook` (`php-rs-parser`).
 - `PhpVersion` lives in `php-ast`; `php-rs-parser` re-exports it at the same paths (`php-ast`, `php-rs-parser`).
 - A `?>` that is a statement of its own, as after `;`, `}`, `:` or another tag, is a `Nop` with the span of the `?>`; a `?>` that ends the statement before it adds nothing, and `?><?php` no longer adds a `Nop` (`php-rs-parser`).
