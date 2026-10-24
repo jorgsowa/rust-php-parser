@@ -23,6 +23,14 @@ new class {}();
 'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
 'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
 'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
+'dereferencing a new expression without parentheses' requires PHP 8.4 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard input code on line 3
 ===php_error 8.0-8.3===

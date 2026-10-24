@@ -1411,6 +1411,9 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
             kind: ExprKind::AnonymousClass(parser.alloc(class_decl)),
             span: Span::new(start, end),
         };
+        if new_dereference_follows(parser) {
+            require_new_dereference_version(parser);
+        }
 
         return Expr {
             kind: ExprKind::New(NewExpr {
@@ -1530,22 +1533,9 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         parser.alloc_vec()
     };
 
-    // A `new` expression immediately followed by `->`, `?->`, `::`, or `[` is a
-    // dereference of the freshly-constructed object.
-    if matches!(
-        parser.current_kind(),
-        TokenKind::Arrow
-            | TokenKind::NullsafeArrow
-            | TokenKind::DoubleColon
-            | TokenKind::LeftBracket
-    ) {
+    if new_dereference_follows(parser) {
         if had_parens {
-            // `new Foo()->bar`, `new Foo()::C`, `new Foo()[0]` — PHP 8.4+.
-            parser.require_version(
-                crate::version::PhpVersion::Php84,
-                "dereferencing a new expression without parentheses",
-                parser.current_span(),
-            );
+            require_new_dereference_version(parser);
         } else if matches!(class.kind, ExprKind::Name(_)) {
             // The class is still a bare *name* (any `new_variable` tail such as
             // `Name::$prop` was already consumed above). A parenless `new` with a
@@ -1563,6 +1553,27 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         }),
         span,
     }
+}
+
+/// A `new` expression followed by `->`, `?->`, `::`, `[` or `(` dereferences the new object.
+fn new_dereference_follows(parser: &Parser<'_, '_>) -> bool {
+    matches!(
+        parser.current_kind(),
+        TokenKind::Arrow
+            | TokenKind::NullsafeArrow
+            | TokenKind::DoubleColon
+            | TokenKind::LeftBracket
+            | TokenKind::LeftParen
+    )
+}
+
+/// `new Foo()->bar`, `new Foo()()`, `new class {}->bar` — PHP 8.4+.
+fn require_new_dereference_version(parser: &mut Parser<'_, '_>) {
+    parser.require_version(
+        crate::version::PhpVersion::Php84,
+        "dereferencing a new expression without parentheses",
+        parser.current_span(),
+    );
 }
 
 // =============================================================================
