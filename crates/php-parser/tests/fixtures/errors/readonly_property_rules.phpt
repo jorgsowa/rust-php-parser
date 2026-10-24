@@ -292,7 +292,7 @@ PHP Fatal error:  Readonly property A::$e must have type in Standard input code 
                 }
               },
               "span": {
-                "start": 52,
+                "start": 76,
                 "end": 82
               }
             },
@@ -1089,7 +1089,7 @@ PHP Fatal error:  Readonly property A::$e must have type in Standard input code 
                 }
               },
               "span": {
-                "start": 52,
+                "start": 76,
                 "end": 82
               }
             },

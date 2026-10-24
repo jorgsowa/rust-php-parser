@@ -57,7 +57,7 @@ PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FU
               },
               "span": {
                 "start": 35,
-                "end": 61
+                "end": 53
               }
             },
             {
@@ -86,7 +86,7 @@ PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FU
                 }
               },
               "span": {
-                "start": 35,
+                "start": 55,
                 "end": 61
               }
             }
@@ -237,7 +237,7 @@ PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FU
               },
               "span": {
                 "start": 20,
-                "end": 61
+                "end": 53
               }
             },
             {
@@ -330,7 +330,7 @@ PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FU
                 }
               },
               "span": {
-                "start": 20,
+                "start": 55,
                 "end": 61
               }
             }
@@ -397,7 +397,7 @@ PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FU
               },
               "span": {
                 "start": 78,
-                "end": 102
+                "end": 94
               }
             },
             {
@@ -441,7 +441,7 @@ PHP Parse error:  syntax error, unexpected end of file, expecting function (T_FU
                 }
               },
               "span": {
-                "start": 78,
+                "start": 96,
                 "end": 102
               }
             }

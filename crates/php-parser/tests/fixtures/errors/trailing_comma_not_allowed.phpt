@@ -506,7 +506,7 @@ PHP Parse error:  syntax error, unexpected token ";", expecting identifier or fu
                 }
               },
               "span": {
-                "start": 234,
+                "start": 245,
                 "end": 247
               }
             }

@@ -108,7 +108,7 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
                 }
               },
               "span": {
-                "start": 24,
+                "start": 37,
                 "end": 64
               }
             }

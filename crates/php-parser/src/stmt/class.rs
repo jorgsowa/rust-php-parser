@@ -1539,6 +1539,7 @@ fn parse_class_const_member<'arena, 'src>(
 
     let mut const_items = parser.alloc_vec();
     loop {
+        let item_start = parser.start_span();
         let const_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
             Ident::new(text, span)
         } else {
@@ -1567,7 +1568,11 @@ fn parse_class_const_member<'arena, 'src>(
         if let (Some(ty), Some(name)) = (&const_type, const_name.as_str()) {
             check_typed_const_value(parser, ty, name, &value);
         }
-        const_items.push((const_name, value));
+        const_items.push((
+            const_name,
+            value,
+            Span::new(item_start, parser.previous_end()),
+        ));
         if parser.eat(TokenKind::Comma).is_none() {
             break;
         }
@@ -1578,7 +1583,7 @@ fn parse_class_const_member<'arena, 'src>(
     }
     parser.expect_member_end();
     let span = parser.span_from(member_start);
-    if let (true, Some(Visibility::Private), Some((name, _))) =
+    if let (true, Some(Visibility::Private), Some((name, _, _))) =
         (mods.is_final, mods.visibility, const_items.first())
     {
         let class = parser.class_member_prefix();
@@ -1586,7 +1591,7 @@ fn parse_class_const_member<'arena, 'src>(
                 "Private constant {class}{name} cannot be final as it is not visible to other classes"
             ), span);
     }
-    if let (true, Some(Visibility::Protected | Visibility::Private), Some((name, _))) =
+    if let (true, Some(Visibility::Protected | Visibility::Private), Some((name, _, _))) =
         (in_interface, mods.visibility, const_items.first())
     {
         let class = parser.class_member_prefix();
@@ -1599,8 +1604,17 @@ fn parse_class_const_member<'arena, 'src>(
     // Allocate the type hint into the arena so all items can share a reference
     let shared_type_hint: Option<&'arena _> = const_type.map(|th| parser.alloc(th));
     parser.check_attributes(&member_attrs, &AttrSite::new(AttrTarget::ClassConst));
-    let mut const_iter = const_items.into_iter();
-    if let Some((first_name, first_value)) = const_iter.next() {
+    let last = const_items.len().saturating_sub(1);
+    let mut const_iter = const_items.into_iter().enumerate();
+    if let Some((_, (first_name, first_value, first_item))) = const_iter.next() {
+        // Each constant of a group spans its own item; the first also its modifiers, the last the `;`.
+        let item_span = |i: usize, item: Span| {
+            Span::new(
+                if i == 0 { member_start } else { item.start },
+                if i == last { span.end } else { item.end },
+            )
+        };
+        let mut prev_end = first_item.end;
         members.push(ClassMember {
             kind: ClassMemberKind::ClassConst({
                 let mut built = ClassConstDecl::new(parser.arena, first_name, first_value);
@@ -1610,9 +1624,9 @@ fn parse_class_const_member<'arena, 'src>(
                 built.doc_comment = parser.take_doc_comment(member_start);
                 built
             }),
-            span,
+            span: item_span(0, first_item),
         });
-        for (rest_name, rest_value) in const_iter {
+        for (i, (rest_name, rest_value, item)) in const_iter {
             let ClassMemberKind::ClassConst(first) = &members[members.len() - 1].kind else {
                 unreachable!()
             };
@@ -1623,11 +1637,12 @@ fn parse_class_const_member<'arena, 'src>(
                     built.modifiers = const_modifiers(mods);
                     built.type_hint = shared_type_hint;
                     built.attributes = attributes;
-                    built.doc_comment = None;
+                    built.doc_comment = parser.take_doc_comment_from(item.start, prev_end);
                     built
                 }),
-                span,
+                span: item_span(i, item),
             });
+            prev_end = item.end;
         }
     }
 }
@@ -2286,11 +2301,13 @@ pub(super) fn parse_property_member<'arena, 'src>(
     if had_hooks_block {
         // Property with hooks block — no comma separation or semicolon needed
     } else if parser.eat(TokenKind::Comma).is_some() {
+        let mut prev_end = span.end;
         loop {
             if !parser.check(TokenKind::Variable) {
                 parser.trailing_comma_error("variable");
                 break;
             }
+            let item_start = parser.start_span();
             let var_token = parser.advance();
             let pname = parser.variable_ident(var_token);
 
@@ -2316,7 +2333,10 @@ pub(super) fn parse_property_member<'arena, 'src>(
             } else {
                 parser.alloc_vec()
             };
-            let pspan = parser.span_from(member_start);
+            // Each property of a group spans its own item; the first also the modifiers.
+            let pspan = parser.span_from(item_start);
+            let pdoc_comment = parser.take_doc_comment_from(item_start, prev_end);
+            prev_end = pspan.end;
             // Every item of `public int $a, $b;` gets its own copy of the shared type and attributes.
             let ClassMemberKind::Property(first) = &members[first_index].kind else {
                 unreachable!()
@@ -2335,7 +2355,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
                     built.attributes = pattributes;
                     built.empty_hook_list = phas_hooks_block && phooks.is_empty();
                     built.hooks = phooks;
-                    built.doc_comment = None;
+                    built.doc_comment = pdoc_comment;
                     built
                 }),
                 span: pspan,

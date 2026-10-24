@@ -210,7 +210,7 @@ PHP Fatal error:  Readonly property A::$a cannot have default value in Standard 
                 }
               },
               "span": {
-                "start": 52,
+                "start": 82,
                 "end": 91
               }
             }

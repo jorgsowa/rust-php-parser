@@ -94,7 +94,7 @@ PHP Fatal error:  Cannot redefine class constant C::A in Standard input code on 
               },
               "span": {
                 "start": 37,
-                "end": 56
+                "end": 48
               }
             },
             {
@@ -120,7 +120,7 @@ PHP Fatal error:  Cannot redefine class constant C::A in Standard input code on 
                 }
               },
               "span": {
-                "start": 37,
+                "start": 50,
                 "end": 56
               }
             },

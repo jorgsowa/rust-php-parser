@@ -1068,7 +1068,7 @@ PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard 
                                                         }
                                                       },
                                                       "span": {
-                                                        "start": 415,
+                                                        "start": 430,
                                                         "end": 432
                                                       }
                                                     },

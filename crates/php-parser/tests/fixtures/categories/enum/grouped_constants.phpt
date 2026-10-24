@@ -85,7 +85,7 @@ PHP Parse error:  syntax error, unexpected identifier "P", expecting "=" in Stan
               },
               "span": {
                 "start": 69,
-                "end": 99
+                "end": 91
               }
             },
             {
@@ -132,7 +132,7 @@ PHP Parse error:  syntax error, unexpected identifier "P", expecting "=" in Stan
                 }
               },
               "span": {
-                "start": 69,
+                "start": 93,
                 "end": 99
               }
             }
@@ -217,7 +217,7 @@ PHP Parse error:  syntax error, unexpected identifier "P", expecting "=" in Stan
               },
               "span": {
                 "start": 34,
-                "end": 64
+                "end": 50
               }
             },
             {
@@ -289,7 +289,7 @@ PHP Parse error:  syntax error, unexpected identifier "P", expecting "=" in Stan
                 }
               },
               "span": {
-                "start": 34,
+                "start": 52,
                 "end": 64
               }
             },
@@ -338,7 +338,7 @@ PHP Parse error:  syntax error, unexpected identifier "P", expecting "=" in Stan
               },
               "span": {
                 "start": 69,
-                "end": 99
+                "end": 91
               }
             },
             {
@@ -385,7 +385,7 @@ PHP Parse error:  syntax error, unexpected identifier "P", expecting "=" in Stan
                 }
               },
               "span": {
-                "start": 69,
+                "start": 93,
                 "end": 99
               }
             }

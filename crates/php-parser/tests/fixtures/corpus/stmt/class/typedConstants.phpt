@@ -133,7 +133,7 @@ PHP Parse error:  syntax error, unexpected identifier "X", expecting "=" in Stan
               },
               "span": {
                 "start": 44,
-                "end": 82
+                "end": 72
               }
             },
             {
@@ -180,7 +180,7 @@ PHP Parse error:  syntax error, unexpected identifier "X", expecting "=" in Stan
                 }
               },
               "span": {
-                "start": 44,
+                "start": 74,
                 "end": 82
               }
             },

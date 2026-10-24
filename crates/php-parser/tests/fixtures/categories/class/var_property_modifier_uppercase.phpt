@@ -98,7 +98,7 @@ class A {
                 }
               },
               "span": {
-                "start": 32,
+                "start": 44,
                 "end": 46
               }
             }

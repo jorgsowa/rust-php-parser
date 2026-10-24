@@ -261,7 +261,9 @@ pub(super) fn parse_enum<'arena, 'src>(
             let first_index = members.len();
             parser.check_attributes(&member_attrs, &AttrSite::new(AttrTarget::ClassConst));
             let mut attributes = Some(member_attrs);
+            let mut prev_end = member_start;
             loop {
+                let item_start = parser.start_span();
                 let const_name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
                     Ident::new(text, span)
                 } else {
@@ -292,11 +294,15 @@ pub(super) fn parse_enum<'arena, 'src>(
                     };
                     super::class::copy_attributes(parser, &first.attributes)
                 });
-                let doc_comment = if members.len() == first_index {
+                let is_first = members.len() == first_index;
+                let doc_comment = if is_first {
                     parser.take_doc_comment(member_start)
                 } else {
-                    None
+                    parser.take_doc_comment_from(item_start, prev_end)
                 };
+                // Each constant of a group spans its own item; the first also its modifiers.
+                let span = parser.span_from(if is_first { member_start } else { item_start });
+                prev_end = span.end;
                 members.push(EnumMember {
                     kind: EnumMemberKind::ClassConst({
                         let mut built = ClassConstDecl::new(parser.arena, const_name, value);
@@ -306,16 +312,15 @@ pub(super) fn parse_enum<'arena, 'src>(
                         built.doc_comment = doc_comment;
                         built
                     }),
-                    span: parser.span_from(member_start),
+                    span,
                 });
                 if parser.eat(TokenKind::Comma).is_none() {
                     break;
                 }
             }
             parser.expect_member_end();
-            let span = parser.span_from(member_start);
-            for member in &mut members[first_index..] {
-                member.span = span;
+            if let Some(last) = members.last_mut() {
+                last.span.end = parser.previous_end().max(last.span.end);
             }
             continue;
         }

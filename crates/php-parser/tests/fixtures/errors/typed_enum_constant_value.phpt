@@ -158,7 +158,7 @@ PHP Fatal error:  Cannot use string as value for class constant E::A of type int
               },
               "span": {
                 "start": 47,
-                "end": 75
+                "end": 65
               }
             },
             {
@@ -202,7 +202,7 @@ PHP Fatal error:  Cannot use string as value for class constant E::A of type int
                 }
               },
               "span": {
-                "start": 47,
+                "start": 67,
                 "end": 75
               }
             },

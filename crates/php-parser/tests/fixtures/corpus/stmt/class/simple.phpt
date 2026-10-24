@@ -89,7 +89,7 @@ class A extends B implements C, D {
               },
               "span": {
                 "start": 47,
-                "end": 70
+                "end": 60
               }
             },
             {
@@ -115,7 +115,7 @@ class A extends B implements C, D {
                 }
               },
               "span": {
-                "start": 47,
+                "start": 62,
                 "end": 70
               }
             },
@@ -177,7 +177,7 @@ class A extends B implements C, D {
                 }
               },
               "span": {
-                "start": 76,
+                "start": 93,
                 "end": 101
               }
             },

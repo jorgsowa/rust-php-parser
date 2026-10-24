@@ -144,7 +144,7 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
               },
               "span": {
                 "start": 51,
-                "end": 78
+                "end": 70
               }
             },
             {
@@ -173,7 +173,7 @@ PHP Fatal error:  Access type for interface constant I::A must be public in Stan
                 }
               },
               "span": {
-                "start": 51,
+                "start": 72,
                 "end": 78
               }
             },

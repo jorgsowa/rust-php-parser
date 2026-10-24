@@ -183,7 +183,7 @@ PHP Fatal error:  Enum N\E cannot include properties in Standard input code on l
                 }
               },
               "span": {
-                "start": 70,
+                "start": 78,
                 "end": 84
               }
             },
@@ -506,7 +506,7 @@ PHP Fatal error:  Enum N\E cannot include properties in Standard input code on l
                 }
               },
               "span": {
-                "start": 70,
+                "start": 78,
                 "end": 84
               }
             },

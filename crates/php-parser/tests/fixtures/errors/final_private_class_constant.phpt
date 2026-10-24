@@ -110,7 +110,7 @@ PHP Fatal error:  Private constant A::X cannot be final as it is not visible to 
               },
               "span": {
                 "start": 51,
-                "end": 84
+                "end": 76
               }
             },
             {
@@ -140,7 +140,7 @@ PHP Fatal error:  Private constant A::X cannot be final as it is not visible to 
                 }
               },
               "span": {
-                "start": 51,
+                "start": 78,
                 "end": 84
               }
             }

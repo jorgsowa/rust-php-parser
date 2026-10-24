@@ -257,7 +257,7 @@ PHP Fatal error:  New expressions are not supported in this context in Standard 
                 }
               },
               "span": {
-                "start": 77,
+                "start": 88,
                 "end": 100
               }
             },

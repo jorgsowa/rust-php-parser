@@ -132,7 +132,7 @@ PHP Fatal error:  Class constant A::A cannot have type void in Standard input co
               },
               "span": {
                 "start": 20,
-                "end": 44
+                "end": 36
               }
             },
             {
@@ -176,7 +176,7 @@ PHP Fatal error:  Class constant A::A cannot have type void in Standard input co
                 }
               },
               "span": {
-                "start": 20,
+                "start": 38,
                 "end": 44
               }
             },
