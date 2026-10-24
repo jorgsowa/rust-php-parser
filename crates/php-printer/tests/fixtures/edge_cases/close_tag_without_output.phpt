@@ -9,6 +9,5 @@
 echo 1;
 echo 2;
 if ($a):
-
 endif;
 echo 3;

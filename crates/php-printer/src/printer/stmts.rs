@@ -401,10 +401,14 @@ impl<'src> Printer<'src> {
         if let StmtKind::Block(block) = &body.kind {
             self.newline();
             self.indent();
+            let body_start = self.output.len();
             // If the body ends in HTML mode, re-enter PHP inline (same line as last HTML)
             // so the caller's closing keyword (endif, endforeach, etc.) is valid PHP.
             self.print_stmts_ensure_php(&block.stmts, false);
-            self.newline();
+            // An empty body prints no blank line.
+            if self.output.len() > body_start {
+                self.newline();
+            }
             self.dedent();
             self.write_indent();
         }
