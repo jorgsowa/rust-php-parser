@@ -34,7 +34,7 @@ EOT]}";
 $x = "{$a[0 /* " */]}";
 $x = "{$a["{$b}" . '"']}";
 ===errors <=7.4===
-expected expression, found end of file
+expected expression, found '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ';', expecting ')' in Standard input code on line 32
 ===ast <=7.4===

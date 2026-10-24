@@ -1070,7 +1070,8 @@ fn parse_complex_interpolation<'arena, 'src>(
     errors.extend(
         sub.into_errors()
             .into_iter()
-            .filter(|e| report_syntax_errors || matches!(e, ParseError::NestingTooDeep { .. })),
+            .filter(|e| report_syntax_errors || matches!(e, ParseError::NestingTooDeep { .. }))
+            .map(|e| closing_brace_for_end(e, end)),
     );
     if matches!(expr.kind, ExprKind::Error) {
         Expr {
@@ -1079,6 +1080,19 @@ fn parse_complex_interpolation<'arena, 'src>(
         }
     } else {
         expr
+    }
+}
+
+/// The sub-parser's source stops before the closing `}`, so what it reports as the end of
+/// the file is that `}`.
+fn closing_brace_for_end(error: ParseError, end: u32) -> ParseError {
+    match error {
+        ParseError::Expected { expected, span, .. } if span.start == end => ParseError::Expected {
+            expected,
+            found: TokenKind::RightBrace.description().into(),
+            span: Span::new(end, end + 1),
+        },
+        e => e,
     }
 }
 

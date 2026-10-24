@@ -59,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A closure missing its `(`, as in `function {}`, has no parameters, so its body is no longer read as a parameter's property hook list (`php-rs-parser`).
 - An arrow function missing its `(`, as in `fn => 1`, has no parameters instead of an empty placeholder (`php-rs-parser`).
 - A function, method, closure or arrow function missing its `(` prints without `()`, so the printed code keeps PHP's error instead of becoming valid (`php-printer`).
+- A syntax error at the closing `}` of a `{$...}` interpolation, as in `"{$a->}"`, reports `found '}'` at the `}` instead of `found end of file` (`php-rs-parser`).
 - Recovery from an invalid class or enum member skips over a `{ ... }` block, so the block's `}` no longer ends the class, as in `public function @return f() {}` (`php-rs-parser`).
 - A spread in `list()`, as in `list(...$x) = $a`, or in a `foreach` destructuring target reports PHP's `Spread operator is not supported in assignments` instead of a syntax error or `Assignments can only happen to writable values`; an element of a nested list is reported at the element (`php-rs-parser`).
 
