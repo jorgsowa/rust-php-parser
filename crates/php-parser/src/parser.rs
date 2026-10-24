@@ -1003,10 +1003,31 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     self.advance();
                     break;
                 }
+                TokenKind::LeftBrace => self.skip_braced_block(),
                 _ => {
                     self.advance();
                 }
             }
+        }
+    }
+
+    /// Skip a `{ ... }` block with its nested blocks, so its `}` doesn't end the enclosing body.
+    fn skip_braced_block(&mut self) {
+        let mut depth = 0u32;
+        loop {
+            match self.current_kind() {
+                TokenKind::Eof => return,
+                TokenKind::LeftBrace => depth += 1,
+                TokenKind::RightBrace => {
+                    depth -= 1;
+                    if depth == 0 {
+                        self.advance();
+                        return;
+                    }
+                }
+                _ => {}
+            }
+            self.advance();
         }
     }
 
@@ -1033,6 +1054,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     self.advance();
                     break;
                 }
+                TokenKind::LeftBrace => self.skip_braced_block(),
                 _ => {
                     self.advance();
                 }

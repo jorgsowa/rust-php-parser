@@ -22,15 +22,7 @@ namespace {
 Property hook list must not be empty
 Interfaces may only include hooked properties
 expected class member, found 'class'
-'property hooks' requires PHP 8.4 or higher
-Cannot use the public modifier on a property hook
-expected 'get' or 'set', found identifier
-Property hook list must not be empty
-Interfaces may only include hooked properties
-'property hooks' requires PHP 8.4 or higher
-Property hook list must not be empty
 missing closing '}'
-Namespace declarations cannot be nested
 ===errors 8.0-8.3===
 'property hooks' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
@@ -140,30 +132,6 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                           "start": 73,
                           "end": 111
                         }
-                      },
-                      {
-                        "kind": {
-                          "Property": {
-                            "name": {
-                              "name": "b",
-                              "span": {
-                                "start": 141,
-                                "end": 143
-                              }
-                            },
-                            "modifiers": {
-                              "visibility": "Public"
-                            },
-                            "type_hint": null,
-                            "default": null,
-                            "attributes": [],
-                            "empty_hook_list": true
-                          }
-                        },
-                        "span": {
-                          "start": 134,
-                          "end": 356
-                        }
                       }
                     ],
                     "attributes": []
@@ -171,72 +139,6 @@ PHP Fatal error:  #[\NoDiscard] is not supported for property hooks in Standard 
                 },
                 "span": {
                   "start": 51,
-                  "end": 358
-                }
-              },
-              {
-                "kind": {
-                  "Namespace": {
-                    "name": null,
-                    "body": {
-                      "Braced": [
-                        {
-                          "kind": {
-                            "Class": {
-                              "name": {
-                                "name": "B",
-                                "span": {
-                                  "start": 381,
-                                  "end": 382
-                                }
-                              },
-                              "modifiers": {
-                                "is_abstract": false,
-                                "is_final": false,
-                                "is_readonly": false
-                              },
-                              "extends": null,
-                              "implements": [],
-                              "members": [
-                                {
-                                  "kind": {
-                                    "Property": {
-                                      "name": {
-                                        "name": "f",
-                                        "span": {
-                                          "start": 400,
-                                          "end": 402
-                                        }
-                                      },
-                                      "modifiers": {
-                                        "visibility": "Public"
-                                      },
-                                      "type_hint": null,
-                                      "default": null,
-                                      "attributes": [],
-                                      "empty_hook_list": true
-                                    }
-                                  },
-                                  "span": {
-                                    "start": 393,
-                                    "end": 435
-                                  }
-                                }
-                              ],
-                              "attributes": []
-                            }
-                          },
-                          "span": {
-                            "start": 375,
-                            "end": 437
-                          }
-                        }
-                      ]
-                    }
-                  }
-                },
-                "span": {
-                  "start": 359,
                   "end": 437
                 }
               }

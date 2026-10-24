@@ -2,7 +2,6 @@
 <?php class A { public function @return f() {} }
 ===errors===
 expected method name, found '@'
-expected expression, found '}'
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '@' in Standard input code on line 1
 ===php_error >=8.0===
@@ -53,19 +52,12 @@ PHP Parse error:  syntax error, unexpected token "@" in Standard input code on l
       },
       "span": {
         "start": 6,
-        "end": 46
-      }
-    },
-    {
-      "kind": "Error",
-      "span": {
-        "start": 46,
-        "end": 46
+        "end": 48
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 46
+    "end": 48
   }
 }

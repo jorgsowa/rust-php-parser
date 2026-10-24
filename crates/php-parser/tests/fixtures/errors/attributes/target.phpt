@@ -28,9 +28,6 @@ enum E {
 ===errors <=7.4===
 expected '{', found identifier
 expected class member, found '{'
-'property hooks' requires PHP 8.4 or higher
-Property hook list must not be empty
-expected class member, found identifier
 expected ';' after expression
 ===errors 8.0===
 Attribute "Attribute" cannot target function (allowed targets: class)
@@ -224,32 +221,7 @@ PHP Fatal error:  Attribute "Attribute" cannot target function (allowed targets:
                                       },
                                       "extends": null,
                                       "implements": [],
-                                      "members": [
-                                        {
-                                          "kind": {
-                                            "Property": {
-                                              "name": {
-                                                "name": "r",
-                                                "span": {
-                                                  "start": 504,
-                                                  "end": 506
-                                                }
-                                              },
-                                              "modifiers": {
-                                                "visibility": "Public"
-                                              },
-                                              "type_hint": null,
-                                              "default": null,
-                                              "attributes": [],
-                                              "empty_hook_list": true
-                                            }
-                                          },
-                                          "span": {
-                                            "start": 497,
-                                            "end": 535
-                                          }
-                                        }
-                                      ],
+                                      "members": [],
                                       "attributes": []
                                     }
                                   },
