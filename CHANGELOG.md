@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- From PHP 8.6, a pipe is compiled as the call it makes, so its result can be written to like a call's, as in `(1 |> f(...))->p ??= 99;` and `(1 |> f(...))[0] = 1;` (`php-rs-parser`).
 - Before PHP 8.3, `yield` and `from` separated by a comment are `yield` of the constant `from`, so `yield /**/ from [1];` yields `from[1]` and `yield/**/from;` is valid (`php-rs-parser`).
 - A `yield` key or value that starts with the constant `from` is parenthesized, so it is not printed as `yield from` (`php-printer`).
 - The right operand of `&&`, `||`, `and` or `or` no longer reports compile errors when PHP may fold the left operand away: `exit` before PHP 8.4, `empty()` of a literal and a literal `instanceof` fold exactly, and a literal condition whose value is not computed, such as `1 < 2`, `~1`, `@1`, `+print $a`, `M_PI`, `self::class` in a class, or `0 != 9 or $a`, is assumed to skip it (`php-rs-parser`).

@@ -1804,6 +1804,8 @@ fn temporary_write_message(
         | ExprKind::StaticMethodCallDynamic(_)
         | ExprKind::CloneWith(..)
         | ExprKind::Error => None,
+        // From 8.6 PHP compiles a pipe as the call it makes.
+        ExprKind::Binary(b) if b.op == BinaryOp::Pipe && version >= PhpVersion::Php86 => None,
         _ => Some((
             ForbiddenRule::TemporaryExpressionWrite,
             "Cannot use temporary expression in write context",
