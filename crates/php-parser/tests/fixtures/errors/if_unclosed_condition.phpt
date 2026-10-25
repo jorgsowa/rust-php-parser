@@ -2,8 +2,14 @@
 <?php if ( { }
 ===errors <=7.4===
 expected expression, found '{'
+expected expression, found '}'
 missing closing ')'
-===errors >=8.0===
+===errors 8.0-8.3===
+expected expression, found '{'
+expected expression, found '}'
+Array and string offset access syntax with curly braces is no longer supported
+missing closing ')'
+===errors >=8.4===
 expected expression, found '{'
 Array and string offset access syntax with curly braces is no longer supported
 missing closing ')'

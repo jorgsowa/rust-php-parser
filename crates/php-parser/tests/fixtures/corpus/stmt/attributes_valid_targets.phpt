@@ -34,6 +34,7 @@ class H {
 ===errors <=7.4===
 Cannot use expression as assignment target.
 missing closing ')'
+expected expression, found '}'
 expected ';', found '{'
 expected ';' after expression
 expected variable, found '}'

@@ -2589,6 +2589,10 @@ fn parse_expr_rest<'arena, 'src>(
             let brace_span = parser.current_span();
             parser.advance(); // consume {
             let index = if parser.check(TokenKind::RightBrace) {
+                // From 8.4 PHP's error is at the `{`, reported below.
+                if parser.version < PhpVersion::Php84 {
+                    parser.error_expected("expression");
+                }
                 None
             } else {
                 let e = parse_expr(parser);
