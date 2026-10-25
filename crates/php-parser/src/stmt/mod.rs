@@ -1354,6 +1354,11 @@ pub(crate) fn check_returns<'arena, 'src>(
             StmtKind::DoWhile(d) => check_returns(parser, std::slice::from_ref(d.body), rule),
             StmtKind::For(f) => check_returns(parser, std::slice::from_ref(f.body), rule),
             StmtKind::Foreach(f) => check_returns(parser, std::slice::from_ref(f.body), rule),
+            StmtKind::Declare(d) => {
+                if let Some(body) = d.body {
+                    check_returns(parser, std::slice::from_ref(body), rule);
+                }
+            }
             StmtKind::Switch(s) => {
                 for c in s.body.cases.iter() {
                     check_returns(parser, &c.body, rule);
