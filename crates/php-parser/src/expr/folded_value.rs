@@ -206,7 +206,7 @@ fn fold_array(
     ArrayFold::Folded
 }
 
-fn is_literal_concat(expr: &Expr<'_, '_>) -> bool {
+pub(super) fn is_literal_concat(expr: &Expr<'_, '_>) -> bool {
     let token = |e: &Expr<'_, '_>| {
         matches!(
             unparenthesized(e).kind,

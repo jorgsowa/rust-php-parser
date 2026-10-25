@@ -1326,13 +1326,24 @@ impl ConstExprChecker<'_, '_, '_> {
 
     /// The function a constant expression makes a closure of.
     fn callable_function(&self, name: &Expr<'_, '_>) -> Result<(), ConstExprError> {
-        if matches!(name.kind, ExprKind::Name(_)) || is_literal(name) {
-            Ok(())
-        } else {
-            Err(ConstExprError::Forbidden(
+        // PHP takes a name or a literal, which the parser joins when concatenated; a name in
+        // parentheses is a constant.
+        if matches!(name.kind, ExprKind::Name(_)) {
+            return Ok(());
+        }
+        let name = unparenthesized(name);
+        match &name.kind {
+            ExprKind::String(_) | ExprKind::Nowdoc { .. } => Ok(()),
+            ExprKind::Heredoc { parts, .. } if is_literal_parts(parts) => Ok(()),
+            _ if folded_value::is_literal_concat(name) => Ok(()),
+            ExprKind::Int(_) | ExprKind::Float(_) => Err(ConstExprError::Forbidden(
+                "Illegal function name",
+                name.span,
+            )),
+            _ => Err(ConstExprError::Forbidden(
                 "Cannot use dynamic function name in constant expression",
                 name.span,
-            ))
+            )),
         }
     }
 
