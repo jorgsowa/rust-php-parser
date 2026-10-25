@@ -13,7 +13,6 @@ final class Value {
 }
 ===errors <=7.4===
 'constructor property promotion' requires PHP 8.0 or higher
-'mixed type' requires PHP 8.0 or higher
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'private' (T_PRIVATE), expecting variable (T_VARIABLE) in Standard input code on line 11
 ===ast===

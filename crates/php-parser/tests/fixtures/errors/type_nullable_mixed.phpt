@@ -2,8 +2,6 @@
 <?php
 function foo(?mixed $x) { }
 
-===errors <=7.4===
-'mixed type' requires PHP 8.0 or higher
 ===errors >=8.0===
 Type mixed cannot be marked as nullable since mixed already includes null
 ===php_error >=8.0===

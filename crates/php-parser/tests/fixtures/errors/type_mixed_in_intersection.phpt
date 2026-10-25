@@ -3,9 +3,7 @@
 function foo(mixed&Foo $x) { }
 
 ===errors <=7.4===
-'mixed type' requires PHP 8.0 or higher
 'intersection types' requires PHP 8.1 or higher
-Type mixed cannot be part of an intersection type
 ===errors 8.0===
 'intersection types' requires PHP 8.1 or higher
 Type mixed cannot be part of an intersection type

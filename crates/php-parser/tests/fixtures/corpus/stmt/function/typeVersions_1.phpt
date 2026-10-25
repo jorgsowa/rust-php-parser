@@ -10,7 +10,6 @@ function test(
 ): void {} // PHP 7.1
 function test2(): never {} // PHP 8.1
 ===errors <=7.4===
-'mixed type' requires PHP 8.0 or higher
 'null type' requires PHP 8.0 or higher
 'null as standalone type' requires PHP 8.2 or higher
 'false type' requires PHP 8.0 or higher

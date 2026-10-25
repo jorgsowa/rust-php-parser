@@ -22,10 +22,10 @@ class A {
     public static array $f = [];
 }
 ===errors <=7.4===
-'mixed type' requires PHP 8.0 or higher
+Default value for parameters with a class type can only be NULL
 'union types' requires PHP 8.0 or higher
 'trailing comma in parameter list' requires PHP 8.0 or higher
-'mixed type' requires PHP 8.0 or higher
+Default value for property of type mixed may not be null. Use the nullable type ?mixed to allow null default value
 'union types' requires PHP 8.0 or higher
 'false type' requires PHP 8.0 or higher
 ===php_error <=7.4===

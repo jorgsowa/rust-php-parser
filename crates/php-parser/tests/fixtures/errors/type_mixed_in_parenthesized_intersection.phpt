@@ -3,11 +3,9 @@
 function foo((mixed&Foo)|Bar $x) { }
 
 ===errors <=7.4===
-'mixed type' requires PHP 8.0 or higher
 'intersection types' requires PHP 8.1 or higher
 'union types' requires PHP 8.0 or higher
 'DNF types' requires PHP 8.2 or higher
-Type mixed cannot be part of an intersection type
 ===errors 8.0===
 'intersection types' requires PHP 8.1 or higher
 'DNF types' requires PHP 8.2 or higher

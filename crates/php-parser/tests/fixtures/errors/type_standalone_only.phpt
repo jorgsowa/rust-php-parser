@@ -16,9 +16,7 @@ Void can only be used as a standalone type
 'null type' requires PHP 8.0 or higher
 Void can only be used as a standalone type
 'union types' requires PHP 8.0 or higher
-'mixed type' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
-Type mixed can only be used as a standalone type
 'null type' requires PHP 8.0 or higher
 null cannot be marked as nullable
 Void can only be used as a standalone type

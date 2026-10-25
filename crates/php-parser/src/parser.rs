@@ -1954,8 +1954,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         | "void"
                         | "iterable"
                         | "object"
-                        | "mixed"
-                ) || (last == "never" && self.version >= PhpVersion::Php81);
+                ) || (last == "mixed" && self.version >= PhpVersion::Php80)
+                    || (last == "never" && self.version >= PhpVersion::Php81);
                 // PHP lexes `array` and `callable` as keywords, which a qualified name may end
                 // in before 8.5.
                 let reserved = builtin
@@ -2417,9 +2417,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 "string" => Some(BuiltinType::String),
                 "bool" => Some(BuiltinType::Bool),
                 "void" => Some(BuiltinType::Void),
-                // Before 8.1 `never` is a class name.
+                // Before 8.1 `never` and before 8.0 `mixed` are class names.
                 "never" if self.version >= PhpVersion::Php81 => Some(BuiltinType::Never),
-                "mixed" => Some(BuiltinType::Mixed),
+                "mixed" if self.version >= PhpVersion::Php80 => Some(BuiltinType::Mixed),
                 "object" => Some(BuiltinType::Object),
                 "iterable" => Some(BuiltinType::Iterable),
                 "callable" => Some(BuiltinType::Callable),
@@ -2427,9 +2427,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             };
             if let Some(builtin) = builtin {
                 let token = self.advance();
-                if builtin == BuiltinType::Mixed {
-                    self.require_version(PhpVersion::Php80, "mixed type", token.span);
-                }
                 return TypeHint {
                     kind: TypeHintKind::Keyword(builtin, token.span),
                     span: token.span,

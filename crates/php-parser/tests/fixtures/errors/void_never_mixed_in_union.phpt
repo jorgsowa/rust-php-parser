@@ -8,8 +8,6 @@ function c(): int|mixed {}
 Void can only be used as a standalone type
 'union types' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
-'mixed type' requires PHP 8.0 or higher
-Type mixed can only be used as a standalone type
 ===errors 8.0===
 Void can only be used as a standalone type
 Type mixed can only be used as a standalone type

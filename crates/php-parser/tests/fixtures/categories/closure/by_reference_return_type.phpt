@@ -6,8 +6,6 @@ function &getValue(): string {
 function &getReference(array &$arr): mixed {
     return $arr[0];
 }
-===errors <=7.4===
-'mixed type' requires PHP 8.0 or higher
 ===ast===
 {
   "stmts": [

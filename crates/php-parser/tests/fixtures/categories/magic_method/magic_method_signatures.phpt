@@ -38,7 +38,7 @@ enum E {
 function __get() {}
 ===errors <=7.4===
 'union types' requires PHP 8.0 or higher
-'mixed type' requires PHP 8.0 or higher
+A::__set(): Parameter #1 ($n) must be of type string when declared
 A::__set(): Return type must be void when declared
 'true type' requires PHP 8.2 or higher
 'null type' requires PHP 8.0 or higher

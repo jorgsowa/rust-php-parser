@@ -23,7 +23,6 @@ class C {
 }
 ===errors <=7.4===
 A::__clone(): Return type must be void when declared
-'mixed type' requires PHP 8.0 or higher
 A::__set(): Return type must be void when declared
 A::__unset(): Return type must be void when declared
 'union types' requires PHP 8.0 or higher

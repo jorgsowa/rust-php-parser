@@ -1,8 +1,6 @@
 ===source===
 <?php
 function test(bool $a, Int $b, FLOAT $c, StRiNg $d, iterable $e, object $f, mixed $g) : void {}
-===errors <=7.4===
-'mixed type' requires PHP 8.0 or higher
 ===ast===
 {
   "stmts": [
