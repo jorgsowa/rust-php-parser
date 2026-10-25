@@ -716,6 +716,9 @@ fn operand_74(expr: &Expr<'_, '_>) -> Option<Operand74> {
     match &expr.kind {
         ExprKind::Bool(b) => return Some(Operand74::Bool(*b)),
         ExprKind::Null => return Some(Operand74::Null),
+        ExprKind::UnaryPrefix(u) if u.op == UnaryPrefixOp::BooleanNot => {
+            return const_truth(u.operand, PhpVersion::Php74).map(|truth| Operand74::Bool(!truth));
+        }
         ExprKind::Array(elements) => {
             let simple = |e: &Expr<'_, '_>| {
                 operand_74(e).is_some() || matches!(literal_scalar(e), Some(Scalar::String(_)))

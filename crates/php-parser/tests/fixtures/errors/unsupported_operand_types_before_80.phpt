@@ -8,10 +8,12 @@ $a = -[];
 $b = ~null;
 $c = ([] + []) * 2;
 $d = [] / "1e3";
+$f = ~!2;
 if (false) {
     $e = ~true;
 }
 ===errors <=7.4===
+Unsupported operand types
 Unsupported operand types
 Unsupported operand types
 Unsupported operand types
@@ -412,14 +414,73 @@ PHP Fatal error:  Unsupported operand types in Standard input code on line 3
     },
     {
       "kind": {
+        "Expression": {
+          "kind": {
+            "Assign": {
+              "target": {
+                "kind": {
+                  "Variable": "f"
+                },
+                "span": {
+                  "start": 123,
+                  "end": 125
+                }
+              },
+              "op": "Assign",
+              "value": {
+                "kind": {
+                  "UnaryPrefix": {
+                    "op": "BitwiseNot",
+                    "operand": {
+                      "kind": {
+                        "UnaryPrefix": {
+                          "op": "BooleanNot",
+                          "operand": {
+                            "kind": {
+                              "Int": 2
+                            },
+                            "span": {
+                              "start": 130,
+                              "end": 131
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 129,
+                        "end": 131
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 128,
+                  "end": 131
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 123,
+            "end": 131
+          }
+        }
+      },
+      "span": {
+        "start": 123,
+        "end": 132
+      }
+    },
+    {
+      "kind": {
         "If": {
           "condition": {
             "kind": {
               "Bool": false
             },
             "span": {
-              "start": 127,
-              "end": 132
+              "start": 137,
+              "end": 142
             }
           },
           "then_branch": {
@@ -435,8 +496,8 @@ PHP Fatal error:  Unsupported operand types in Standard input code on line 3
                               "Variable": "e"
                             },
                             "span": {
-                              "start": 140,
-                              "end": 142
+                              "start": 150,
+                              "end": 152
                             }
                           },
                           "op": "Assign",
@@ -449,35 +510,35 @@ PHP Fatal error:  Unsupported operand types in Standard input code on line 3
                                     "Bool": true
                                   },
                                   "span": {
-                                    "start": 146,
-                                    "end": 150
+                                    "start": 156,
+                                    "end": 160
                                   }
                                 }
                               }
                             },
                             "span": {
-                              "start": 145,
-                              "end": 150
+                              "start": 155,
+                              "end": 160
                             }
                           }
                         }
                       },
                       "span": {
-                        "start": 140,
-                        "end": 150
+                        "start": 150,
+                        "end": 160
                       }
                     }
                   },
                   "span": {
-                    "start": 140,
-                    "end": 151
+                    "start": 150,
+                    "end": 161
                   }
                 }
               ]
             },
             "span": {
-              "start": 134,
-              "end": 153
+              "start": 144,
+              "end": 163
             }
           },
           "elseif_branches": [],
@@ -485,13 +546,13 @@ PHP Fatal error:  Unsupported operand types in Standard input code on line 3
         }
       },
       "span": {
-        "start": 123,
-        "end": 153
+        "start": 133,
+        "end": 163
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 153
+    "end": 163
   }
 }
