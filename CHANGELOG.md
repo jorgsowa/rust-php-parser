@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- When printing for PHP 7.4, `.` is parenthesized at the precedence of `+` and `-`, so `1 . (2 << 1)` keeps its parentheses (`php-printer`).
 - On PHP 7.4, `.` has the precedence of `+` and `-` and binds tighter than `<<` and `>>`, so `"a" . 1 + 2` parses as `("a" . 1) + 2` and `1 . 2 << 1` as `(1 . 2) << 1` (`php-rs-parser`).
 - On PHP 8.0 and 8.1, yielding a nullsafe chain from a by-reference generator (`function &f() { yield $a?->b; }`) is accepted; PHP checks it from 8.2 (`php-rs-parser`).
 - Before PHP 8.4, `parent::$prop::get()` is an ordinary static call on a static property, so outside a class it no longer reports `Cannot use "parent" when no class scope is active` or the property hook call errors (`php-rs-parser`).

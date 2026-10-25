@@ -1,4 +1,5 @@
 use php_ast::ast::{AssignOp, BinaryOp, ExprKind, UnaryPrefixOp};
+use php_ast::PhpVersion;
 
 /// Precedence levels matching PHP's operator precedence table.
 /// Higher number = tighter binding.
@@ -41,11 +42,13 @@ pub const PREC_DEREFERENCE: i8 = 127;
 /// Left-associative: lhs = prec, rhs = prec + 1
 /// Right-associative: lhs = prec + 1, rhs = prec
 /// Non-associative: lhs = prec + 1, rhs = prec + 1
-pub fn binary_op_precedence(op: BinaryOp) -> (i8, i8, i8) {
+pub fn binary_op_precedence(op: BinaryOp, version: PhpVersion) -> (i8, i8, i8) {
     match op {
         BinaryOp::Pow => (PREC_POW, PREC_POW + 1, PREC_POW),
         BinaryOp::Mul | BinaryOp::Div | BinaryOp::Mod => (PREC_MUL, PREC_MUL, PREC_MUL + 1),
         BinaryOp::Add | BinaryOp::Sub => (PREC_ADD, PREC_ADD, PREC_ADD + 1),
+        // Before PHP 8.0, `.` shares the precedence of `+` and `-`.
+        BinaryOp::Concat if version < PhpVersion::Php80 => (PREC_ADD, PREC_ADD, PREC_ADD + 1),
         BinaryOp::Concat => (PREC_CONCAT, PREC_CONCAT, PREC_CONCAT + 1),
         BinaryOp::ShiftLeft | BinaryOp::ShiftRight => (PREC_SHIFT, PREC_SHIFT, PREC_SHIFT + 1),
         BinaryOp::Less | BinaryOp::Greater | BinaryOp::LessOrEqual | BinaryOp::GreaterOrEqual => {
@@ -89,9 +92,9 @@ pub fn assign_op_precedence(_op: AssignOp) -> (i8, i8, i8) {
 }
 
 /// Returns the precedence level of an expression for parenthesization decisions.
-pub fn expr_precedence(kind: &ExprKind) -> i8 {
+pub fn expr_precedence(kind: &ExprKind, version: PhpVersion) -> i8 {
     match kind {
-        ExprKind::Binary(b) => binary_op_precedence(b.op).0,
+        ExprKind::Binary(b) => binary_op_precedence(b.op, version).0,
         ExprKind::Assign(a) => assign_op_precedence(a.op).0,
         ExprKind::Ternary(_) => PREC_TERNARY,
         ExprKind::NullCoalesce(_) => PREC_NULL_COALESCE,

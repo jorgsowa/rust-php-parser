@@ -1,4 +1,5 @@
 use php_ast::ast::*;
+use php_ast::PhpVersion;
 
 use crate::precedence::*;
 
@@ -51,7 +52,7 @@ impl<'src> Printer<'src> {
                         | ExprKind::StaticPropertyAccessDynamic { .. }
                 )
         } else {
-            let my_prec = expr_precedence(&expr.kind);
+            let my_prec = expr_precedence(&expr.kind, self.php_version);
             my_prec < parent_prec && my_prec != PREC_PRIMARY
                 || matches!(expr.kind, ExprKind::ArrowFunction(_))
                     && parent_prec > PREC_LOWEST
@@ -112,12 +113,12 @@ impl<'src> Printer<'src> {
     /// link's parenthesis on the way down, print the innermost node, then emit
     /// each link's remainder on the way back up.
     fn print_chain_operand(&mut self, expr: &Expr) {
-        let Some((mut node, mut prec)) = chain_operand(&expr.kind) else {
+        let Some((mut node, mut prec)) = chain_operand(&expr.kind, self.php_version) else {
             return;
         };
         prec = self.source_operand_prec(expr, node, prec);
         let needs_parens = self.open_paren(node, prec);
-        let Some(next) = linked_operand(node) else {
+        let Some(next) = linked_operand(node, self.php_version) else {
             // A single link, by far the most common chain: no stack needed.
             self.print_expr_inner(node);
             if needs_parens {
@@ -132,7 +133,7 @@ impl<'src> Printer<'src> {
         loop {
             prec = self.source_operand_prec(parent, node, prec);
             let needs_parens = self.open_paren(node, prec);
-            match linked_operand(node) {
+            match linked_operand(node, self.php_version) {
                 Some(next) => {
                     chain.push((node, needs_parens));
                     parent = node;
@@ -170,7 +171,7 @@ impl<'src> Printer<'src> {
                 self.separate_prefix_op(outer_op, operand_start);
             }
             let operand_start = self.output.len();
-            let prec = expr_precedence(&node.kind);
+            let prec = expr_precedence(&node.kind, self.php_version);
             node = unary.operand;
             if matches!(node.kind, ExprKind::UnaryPrefix(_)) {
                 self.flush_inline_comments(node.span.start);
@@ -288,7 +289,7 @@ impl<'src> Printer<'src> {
                 self.print_expr(assign.value, rhs_prec);
             }
             ExprKind::Binary(binary) => {
-                let (_, _, rhs_prec) = binary_op_precedence(binary.op);
+                let (_, _, rhs_prec) = binary_op_precedence(binary.op, self.php_version);
                 self.w(" ");
                 self.w(binary_op_str(binary.op));
                 self.w(" ");
@@ -935,9 +936,10 @@ fn extends_simple_variable(next: Option<&StringPart>) -> bool {
 #[inline]
 fn linked_operand<'a, 'arena, 'src>(
     node: &'a Expr<'arena, 'src>,
+    version: PhpVersion,
 ) -> Option<(&'a Expr<'arena, 'src>, i8)> {
     if is_chain(&node.kind) {
-        chain_operand(&node.kind)
+        chain_operand(&node.kind, version)
     } else {
         None
     }
@@ -1009,12 +1011,15 @@ impl<T: Copy> LinkStack<T> {
 /// chains were printed iteratively; `print_expr_inner` prints the rest.
 fn chain_operand<'a, 'arena, 'src>(
     kind: &'a ExprKind<'arena, 'src>,
+    version: PhpVersion,
 ) -> Option<(&'a Expr<'arena, 'src>, i8)> {
     let operand = match kind {
         ExprKind::Assign(assign) => {
             return Some((assign.target, assign_op_precedence(assign.op).1))
         }
-        ExprKind::Binary(binary) => return Some((binary.left, binary_op_precedence(binary.op).1)),
+        ExprKind::Binary(binary) => {
+            return Some((binary.left, binary_op_precedence(binary.op, version).1))
+        }
         ExprKind::Ternary(ternary) => return Some((ternary.condition, PREC_TERNARY + 1)),
         ExprKind::NullCoalesce(nc) => return Some((nc.left, PREC_NULL_COALESCE + 1)),
         ExprKind::UnaryPostfix(unary) => return Some((unary.operand, PREC_PRIMARY)),
