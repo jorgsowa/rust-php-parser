@@ -18,22 +18,8 @@ class A extends B {
 ===errors <=8.0===
 'property hooks' requires PHP 8.4 or higher
 'first-class callable syntax' requires PHP 8.1 or higher
-Cannot use "parent" when no class scope is active
-Cannot use "parent" when no class scope is active
-Must not use parent::$a::get() outside a property hook
-Must not use parent::$b::get() in a different property ($a)
-Must not use parent::$a::get() in a different property hook (set)
-Must not use parent::$a::set() outside a property hook
-Cannot create Closure for parent property hook call
 ===errors 8.1-8.3===
 'property hooks' requires PHP 8.4 or higher
-Cannot use "parent" when no class scope is active
-Cannot use "parent" when no class scope is active
-Must not use parent::$a::get() outside a property hook
-Must not use parent::$b::get() in a different property ($a)
-Must not use parent::$a::get() in a different property hook (set)
-Must not use parent::$a::set() outside a property hook
-Cannot create Closure for parent property hook call
 ===errors >=8.4===
 Cannot use "parent" when no class scope is active
 Cannot use "parent" when no class scope is active

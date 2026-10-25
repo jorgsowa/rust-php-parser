@@ -3872,6 +3872,8 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
         scope: Scope<'src>,
         /// Before PHP 8.3 a static variable's initializer is a constant expression.
         static_init_is_const_expr: bool,
+        /// Property hooks, and with them `parent::$x::get()` hook calls, exist from PHP 8.4.
+        parent_hook_calls: bool,
         errors: Vec<(ForbiddenRule, String, Span)>,
     }
     impl<'src> ClassRefs<'src> {
@@ -3929,6 +3931,9 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
             span: Span,
             callable: bool,
         ) -> bool {
+            if !self.parent_hook_calls {
+                return false;
+            }
             let (prop_class, property) = match &class.kind {
                 ExprKind::StaticPropertyAccess(prop) => match &prop.member.kind {
                     ExprKind::Identifier(property) => {
@@ -4260,6 +4265,7 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
             const_expr: false,
         },
         static_init_is_const_expr: parser.version < PhpVersion::Php83,
+        parent_hook_calls: parser.version >= PhpVersion::Php84,
         errors: Vec::new(),
     };
     for stmt in stmts {
