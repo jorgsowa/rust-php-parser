@@ -583,6 +583,8 @@ forbidden_rules! {
     LiteralClassName = "literal-class-name", Compile;
     /// `::class` is applied to `true`, `false`, `null` or an array literal.
     ClassFetchOnLiteral = "class-fetch-on-literal", Compile;
+    /// `::class` is applied to a value PHP folds at compile time, e.g. `(-1)::class`.
+    ClassFetchOnFoldedValue = "class-fetch-on-folded-value", Compile;
     /// `::class` is applied to a dynamic class name before PHP 8.0.
     DynamicClassFetch = "dynamic-class-fetch", Compile;
     /// PHP 7.4 folds arithmetic on an array, or `~` on a bool, null or array, e.g. `[] - 1`.
@@ -921,6 +923,7 @@ mod tests {
             ForbiddenRule::DuplicateClosureUseVariable => &[("<?php $f = function () use ($a, $a) {};", "$a"),],
             ForbiddenRule::LiteralClassName => &[("<?php (1)::A;", "(1)"), ("<?php (1)::class;", "(1)"),],
             ForbiddenRule::ClassFetchOnLiteral => &[("<?php (null)::class;", "(null)"),],
+            ForbiddenRule::ClassFetchOnFoldedValue => &[("<?php echo (-1)::class;", "(-1)"),],
             ForbiddenRule::InvalidConstantExpression => &[("<?php const X = $a;", "$a"),],
             ForbiddenRule::EmptyList => &[("<?php [] = $a;", "[]"),],
             ForbiddenRule::EmptyKeyedArrayEntry => &[("<?php ['a' => $y, , 'b' => $z] = $a;", ","),],

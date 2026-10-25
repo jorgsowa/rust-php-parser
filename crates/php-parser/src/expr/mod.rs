@@ -539,6 +539,72 @@ fn check_class_name_fetch_literal(parser: &mut Parser<'_, '_>, class: &Expr<'_, 
     parser.forbid(rule, message, class.span);
 }
 
+/// The value PHP 8 folds an expression before `::class` to, named as its error names it, as in
+/// `(-1)::class`; `None` for a literal, which is checked as a class name, or an unfolded value.
+fn folded_class_fetch_value(class: &Expr<'_, '_>, version: PhpVersion) -> Option<&'static str> {
+    if !matches!(class.kind, ExprKind::Parenthesized(_)) {
+        return None;
+    }
+    let expr = unparenthesized(class);
+    match &expr.kind {
+        ExprKind::Int(_)
+        | ExprKind::Float(_)
+        | ExprKind::String(_)
+        | ExprKind::Nowdoc { .. }
+        | ExprKind::Heredoc { .. }
+        | ExprKind::Bool(_)
+        | ExprKind::Null
+        | ExprKind::Array(_) => None,
+        ExprKind::MagicConst(MagicConstKind::Line) => Some("int"),
+        ExprKind::MagicConst(MagicConstKind::File | MagicConstKind::Dir) => Some("string"),
+        ExprKind::UnaryPrefix(u) if u.op == UnaryPrefixOp::BooleanNot => {
+            let truth = const_truth(expr, version)?;
+            Some(match version {
+                v if v < PhpVersion::Php83 => "bool",
+                _ if truth => "true",
+                _ => "false",
+            })
+        }
+        ExprKind::ClassConstAccess(access) => {
+            let resolved = matches!(&access.member.kind, ExprKind::Identifier(m) if m.eq_ignore_ascii_case("class"))
+                && matches!(&access.class.kind, ExprKind::Name(name) if !is_class_keyword_name(name));
+            resolved.then_some("string")
+        }
+        ExprKind::UnaryPrefix(u)
+            if u.op == UnaryPrefixOp::BitwiseNot
+                && match literal_scalar(u.operand)? {
+                    Scalar::Int(_) => true,
+                    // From PHP 8.1 a float's lost fraction is deprecated, so `~` runs at run time.
+                    Scalar::Float(_) => version < PhpVersion::Php81,
+                    Scalar::String(_) => false,
+                } =>
+        {
+            Some("int")
+        }
+        ExprKind::Binary(b)
+            if b.op == BinaryOp::Spaceship
+                && literal_scalar(b.left).is_some()
+                && literal_scalar(b.right).is_some() =>
+        {
+            Some("int")
+        }
+        ExprKind::Binary(b)
+            if b.op == BinaryOp::Concat
+                && version < PhpVersion::Php82
+                && literal_scalar(b.left).is_some()
+                && literal_scalar(b.right).is_some() =>
+        {
+            Some("string")
+        }
+        _ => match literal_scalar(expr)? {
+            Scalar::Int(_) => Some("int"),
+            Scalar::Float(_) => Some("float"),
+            // From PHP 8.2 a concatenation before `::class` is left to run time.
+            Scalar::String(_) => (version < PhpVersion::Php82).then_some("string"),
+        },
+    }
+}
+
 /// PHP 7.4 resolves `::class` at compile time on a name, which includes an unparenthesized
 /// `true`, `false` or `null`, or on a literal, as in `"Foo"::class`; a literal that is no
 /// string is an illegal class name.
@@ -965,6 +1031,12 @@ fn report_const_expr(
         substitutes_constants,
     };
     let result = checker.check(expr);
+    // A constant expression is not compiled as code, so PHP folds no `::class` operand in it.
+    let range = expr.span;
+    parser.errors_mut().retain(|e| {
+        !matches!(e, ParseError::Forbidden { rule: ForbiddenRule::ClassFetchOnFoldedValue, span, .. }
+            if span.start >= range.start && span.end <= range.end)
+    });
     match result {
         Ok(()) => {}
         Err(ConstExprError::Forbidden(message, span)) => {
@@ -2434,6 +2506,13 @@ fn parse_expr_rest<'arena, 'src>(
                         "Cannot use ::class with dynamic class name",
                         lhs.span,
                     );
+                } else if let Some(value) = folded_class_fetch_value(&lhs, parser.version) {
+                    let message = if parser.version >= PhpVersion::Php83 {
+                        format!("Cannot use \"::class\" on {value}")
+                    } else {
+                        format!("Cannot use \"::class\" on value of type {value}")
+                    };
+                    parser.forbid(ForbiddenRule::ClassFetchOnFoldedValue, message, lhs.span);
                 }
                 let token = parser.advance();
                 let span = Span::new(lhs.span.start, token.span.end);
