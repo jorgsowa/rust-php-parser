@@ -31,6 +31,8 @@ pub const PREC_INSTANCEOF: i8 = 24;
 pub const PREC_UNARY: i8 = 25;
 pub const PREC_POW: i8 = 26;
 pub const PREC_CLONE: i8 = 27;
+/// The class before `::`, which also takes a bare `true`, `false` or `null` as a name.
+pub const PREC_STATIC_CLASS: i8 = 124;
 pub const PREC_PRIMARY: i8 = 125;
 /// The callee of a call: dereferencable, and not a property fetch, which
 /// would read as a method call.

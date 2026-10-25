@@ -42,6 +42,10 @@ impl<'src> Printer<'src> {
     fn open_paren(&mut self, expr: &Expr, parent_prec: i8) -> bool {
         let needs_parens = if parent_prec == PREC_DEREFERENCE {
             !is_dereferencable(&expr.kind)
+        } else if parent_prec == PREC_STATIC_CLASS {
+            // A bare `true`, `false` or `null` before `::` is a class name; in parentheses, a value.
+            !is_dereferencable(&expr.kind)
+                && !matches!(expr.kind, ExprKind::Bool(_) | ExprKind::Null)
         } else if parent_prec == PREC_CALLEE {
             !is_dereferencable(&expr.kind)
                 || matches!(
@@ -1058,16 +1062,22 @@ fn chain_operand<'a, 'arena, 'src>(
             access.object
         }
         ExprKind::MethodCall(call) | ExprKind::NullsafeMethodCall(call) => call.object,
-        ExprKind::StaticPropertyAccess(access) | ExprKind::ClassConstAccess(access) => access.class,
+        ExprKind::StaticPropertyAccess(access) | ExprKind::ClassConstAccess(access) => {
+            return Some((access.class, PREC_STATIC_CLASS))
+        }
         ExprKind::ClassConstAccessDynamic { class, .. }
-        | ExprKind::StaticPropertyAccessDynamic { class, .. } => class,
-        ExprKind::StaticMethodCall(call) => call.class,
-        ExprKind::StaticMethodCallDynamic(call) => call.class,
+        | ExprKind::StaticPropertyAccessDynamic { class, .. } => {
+            return Some((class, PREC_STATIC_CLASS))
+        }
+        ExprKind::StaticMethodCall(call) => return Some((call.class, PREC_STATIC_CLASS)),
+        ExprKind::StaticMethodCallDynamic(call) => return Some((call.class, PREC_STATIC_CLASS)),
         ExprKind::CallableCreate(cc) => match &cc.kind {
             CallableCreateKind::Function(name) => name,
             CallableCreateKind::Method { object, .. }
             | CallableCreateKind::NullsafeMethod { object, .. } => object,
-            CallableCreateKind::StaticMethod { class, .. } => class,
+            CallableCreateKind::StaticMethod { class, .. } => {
+                return Some((class, PREC_STATIC_CLASS))
+            }
             _ => return None,
         },
         _ => return None,

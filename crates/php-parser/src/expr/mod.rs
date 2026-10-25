@@ -539,6 +539,22 @@ fn check_class_name_fetch_literal(parser: &mut Parser<'_, '_>, class: &Expr<'_, 
     parser.forbid(rule, message, class.span);
 }
 
+/// PHP 7.4 resolves `::class` at compile time on a name, which includes an unparenthesized
+/// `true`, `false` or `null`, or on a literal, as in `"Foo"::class`; a literal that is no
+/// string is an illegal class name.
+fn is_compile_time_class(class: &Expr<'_, '_>) -> bool {
+    if matches!(
+        class.kind,
+        ExprKind::Name(_) | ExprKind::Bool(_) | ExprKind::Null
+    ) {
+        return true;
+    }
+    matches!(
+        unparenthesized(class).kind,
+        ExprKind::String(_) | ExprKind::Int(_) | ExprKind::Float(_)
+    )
+}
+
 /// Whether a literal expression folds to a string, when that is known without evaluating it.
 fn literal_is_string(expr: &Expr<'_, '_>, version: PhpVersion) -> Option<bool> {
     folded_type(expr, version).map(|t| matches!(t, Folded::Str { .. }))
@@ -2409,7 +2425,7 @@ fn parse_expr_rest<'arena, 'src>(
                 }
             } else if parser.check(TokenKind::Class) {
                 // Special: Class::class (class name resolution)
-                if parser.version < PhpVersion::Php80 && !matches!(lhs.kind, ExprKind::Name(_)) {
+                if parser.version < PhpVersion::Php80 && !is_compile_time_class(&lhs) {
                     parser.forbid(
                         ForbiddenRule::DynamicClassFetch,
                         "Cannot use ::class with dynamic class name",

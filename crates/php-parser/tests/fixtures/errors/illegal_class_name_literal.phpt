@@ -33,7 +33,6 @@ Illegal class name
 Illegal class name
 'instanceof with an expression' requires PHP 8.0 or higher
 Illegal class name
-Cannot use ::class with dynamic class name
 Cannot use "::class" on null
 Cannot use ::class with dynamic class name
 Cannot use "::class" on true
