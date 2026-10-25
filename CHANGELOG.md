@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- On PHP 7.4, `readonly` followed by `\` is the start of a name, so `private readonly \Closure $x;` declares a property of type `readonly\Closure` (`php-rs-parser`).
 - An unqualified import named by a keyword, such as `use Class;`, `use A\{B, List};`, `use const Var;` or, from PHP 8.0, `use function match;`, reports an error (`php-rs-parser`).
 - On PHP 7.4, `match` is a name, so `function match() {}`, `match($x);`, `Match::X`, `class Match {}`, `const MATCH = 1;` and the label `match:` are valid; only `match (...) {` reports that match expressions need PHP 8.0 (`php-rs-parser`).
 - A trait named after a reserved type, such as `trait int {}` or, from PHP 8.0, `trait mixed {}`, reports an error (`php-rs-parser`).

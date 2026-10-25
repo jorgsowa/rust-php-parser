@@ -521,14 +521,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     }
 
     /// Before PHP 8.1 `readonly` is a plain name. It keeps its keyword kind when a modifier's
-    /// follower comes next, so that modifier use still reports the version it needs.
+    /// follower comes next, so that modifier use still reports the version it needs. Before 8.0
+    /// PHP lexes `\` apart, so `readonly \Foo` is the name `readonly\Foo`.
     fn readonly_kind(&self, follower: TokenKind) -> TokenKind {
         let modifier_follower = matches!(
             follower,
             TokenKind::Identifier
                 | TokenKind::Question
                 | TokenKind::LeftParen
-                | TokenKind::Backslash
                 | TokenKind::Namespace
                 | TokenKind::Array
                 | TokenKind::Static
@@ -546,7 +546,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 | TokenKind::Class
                 | TokenKind::Function
                 | TokenKind::Fn_
-        );
+        ) || (follower == TokenKind::Backslash
+            && self.version >= PhpVersion::Php80);
         if self.version < PhpVersion::Php81 && !modifier_follower {
             TokenKind::Identifier
         } else {
