@@ -23,7 +23,10 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
             let value = parser.current_text();
             let span = parser.advance().span;
             Name::Simple { value, span }
+        } else if parser.peek_kind() == Some(TokenKind::DoubleColon) {
+            parser.parse_class_ref_name()
         } else {
+            // A bare method name, where PHP takes any keyword.
             parser.parse_name()
         };
 
@@ -50,7 +53,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
                 parser.advance(); // consume `insteadof`
                 let mut insteadof = {
                     let mut _v = parser.alloc_vec_with_capacity(1);
-                    _v.push(parser.parse_name());
+                    _v.push(parser.parse_class_ref_name());
                     _v
                 };
                 while parser.eat(TokenKind::Comma).is_some() {
@@ -58,7 +61,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
                         parser.trailing_comma_error("trait name");
                         break;
                     }
-                    insteadof.push(parser.parse_name());
+                    insteadof.push(parser.parse_class_ref_name());
                 }
                 for name in insteadof.iter() {
                     super::validate_class_ref(parser, name, "trait");
