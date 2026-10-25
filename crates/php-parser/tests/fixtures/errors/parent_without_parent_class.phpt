@@ -25,17 +25,6 @@ enum E {
 Cannot use int as value for class constant A::C of type parent
 'property hooks' requires PHP 8.4 or higher
 'enums' requires PHP 8.1 or higher
-Cannot use "parent" when current class scope has no parent
-Cannot use "parent" when current class scope has no parent
-Cannot use "parent" when current class scope has no parent
-Cannot use "parent" when current class scope has no parent
-Cannot use "parent" when current class scope has no parent
-Cannot use "parent" when current class scope has no parent
-Cannot use "parent" when current class scope has no parent
-Cannot use "parent" when current class scope has no parent
-Cannot use "parent" when current class scope has no parent
-Cannot use "parent" when current class scope has no parent
-Cannot use "parent" when current class scope has no parent
 ===errors 8.0===
 'typed class constants' requires PHP 8.3 or higher
 Cannot use int as value for class constant A::C of type parent

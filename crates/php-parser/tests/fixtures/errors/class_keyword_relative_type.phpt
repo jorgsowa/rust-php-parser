@@ -11,7 +11,6 @@ class A {
 Cannot use "self" when no class scope is active
 Cannot use "static" when no class scope is active
 Cannot use "parent" when no class scope is active
-Cannot use "parent" when current class scope has no parent
 ===errors 8.0-8.4===
 Cannot use "self" when no class scope is active
 Cannot use "static" when no class scope is active

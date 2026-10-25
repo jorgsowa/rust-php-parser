@@ -3912,6 +3912,8 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
         scope: Scope<'src>,
         /// Before PHP 8.3 a static variable's initializer is a constant expression.
         static_init_is_const_expr: bool,
+        /// Before PHP 8.0 `parent` in a class without a parent is resolved at runtime.
+        parent_needs_parent_class: bool,
         /// Property hooks, and with them `parent::$x::get()` hook calls, exist from PHP 8.4.
         parent_hook_calls: bool,
         errors: Vec<(ForbiddenRule, String, Span)>,
@@ -4073,10 +4075,16 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
                     ForbiddenRule::ClassKeywordOutsideClass,
                     format!("Cannot use \"{keyword}\" when no class scope is active"),
                 ),
-                Some(class) if keyword == "parent" && !class.has_parent => (
-                    ForbiddenRule::ParentWithoutParentClass,
-                    "Cannot use \"parent\" when current class scope has no parent".to_string(),
-                ),
+                Some(class)
+                    if keyword == "parent"
+                        && !class.has_parent
+                        && self.parent_needs_parent_class =>
+                {
+                    (
+                        ForbiddenRule::ParentWithoutParentClass,
+                        "Cannot use \"parent\" when current class scope has no parent".to_string(),
+                    )
+                }
                 Some(_) => return,
             };
             self.errors.push((rule, message, span));
@@ -4305,6 +4313,7 @@ pub(crate) fn check_class_keyword_refs<'arena, 'src>(
             const_expr: false,
         },
         static_init_is_const_expr: parser.version < PhpVersion::Php83,
+        parent_needs_parent_class: parser.version >= PhpVersion::Php80,
         parent_hook_calls: parser.version >= PhpVersion::Php84,
         errors: Vec::new(),
     };
