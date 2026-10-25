@@ -1615,7 +1615,8 @@ fn folded_truth(expr: &Expr<'_, '_>, version: PhpVersion) -> Option<bool> {
         // PHP compiles `print` to the constant 1, and `exit` to true until it is a function in 8.4.
         ExprKind::Print(_) => Some(true),
         ExprKind::Exit(_) if version < PhpVersion::Php84 => Some(true),
-        ExprKind::Empty(operand) => const_truth(operand, version).map(|truth| !truth),
+        // PHP compiles `empty()` of a non-variable as `!`.
+        ExprKind::Empty(operand) => folded_not(operand, version),
         // A literal is never an object.
         ExprKind::Binary(b)
             if b.op == BinaryOp::Instanceof && const_truth(b.left, version).is_some() =>
@@ -1623,13 +1624,7 @@ fn folded_truth(expr: &Expr<'_, '_>, version: PhpVersion) -> Option<bool> {
             Some(false)
         }
         ExprKind::UnaryPrefix(u) if u.op == UnaryPrefixOp::BooleanNot => {
-            // PHP 8.5 leaves `!` on a float to run time, where a NAN warns.
-            if version >= PhpVersion::Php85
-                && matches!(literal_scalar(u.operand), Some(Scalar::Float(_)))
-            {
-                return None;
-            }
-            const_truth(u.operand, version).map(|truth| !truth)
+            folded_not(u.operand, version)
         }
         ExprKind::Array(elements) if is_literal(expr) => {
             let mut truth = false;
@@ -1670,6 +1665,15 @@ fn folded_truth(expr: &Expr<'_, '_>, version: PhpVersion) -> Option<bool> {
         }
         _ => None,
     }
+}
+
+/// The truthiness PHP folds `!operand` to.
+fn folded_not(operand: &Expr<'_, '_>, version: PhpVersion) -> Option<bool> {
+    // PHP 8.5 leaves `!` on a float to run time, where a NAN warns.
+    if version >= PhpVersion::Php85 && matches!(literal_scalar(operand), Some(Scalar::Float(_))) {
+        return None;
+    }
+    const_truth(operand, version).map(|truth| !truth)
 }
 
 /// Whether PHP folds `expr` from literals, or with `constants` also the names it may substitute.
