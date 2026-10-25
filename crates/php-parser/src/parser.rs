@@ -1303,7 +1303,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// name. (Member names — methods, class constants — are unrestricted and
     /// must not use this check.)
     pub fn is_reserved_keyword_as_decl_name(&self) -> bool {
-        self.is_semi_reserved_keyword() && !self.check(TokenKind::Enum_)
+        self.is_semi_reserved_keyword()
+            && !self.check(TokenKind::Enum_)
+            && !(self.check(TokenKind::Match_) && self.version < PhpVersion::Php80)
     }
 
     // =========================================================================
@@ -2521,6 +2523,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             // `enum` is a semi-reserved keyword — as a type hint it refers to a
             // user-defined class named `Enum` (common in Magento / GraphQL libs).
             TokenKind::Enum_ => true,
+            TokenKind::Match_ => self.version < PhpVersion::Php80,
             TokenKind::Namespace => {
                 // namespace\Foo is a type
                 matches!(self.peek_kind(), Some(TokenKind::Backslash))

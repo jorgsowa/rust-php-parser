@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- On PHP 7.4, `match` is a name, so `function match() {}`, `match($x);`, `Match::X`, `class Match {}`, `const MATCH = 1;` and the label `match:` are valid; only `match (...) {` reports that match expressions need PHP 8.0 (`php-rs-parser`).
 - A trait named after a reserved type, such as `trait int {}` or, from PHP 8.0, `trait mixed {}`, reports an error (`php-rs-parser`).
 - On PHP 7.4, `mixed` is a class name, so `class mixed {}`, `use A\B as mixed;` and `function f(mixed $a)` are valid and no longer report `'mixed type' requires PHP 8.0` (`php-rs-parser`).
 - From PHP 8.6, a pipe is compiled as the call it makes, so its result can be written to like a call's, as in `(1 |> f(...))->p ??= 99;` and `(1 |> f(...))[0] = 1;` (`php-rs-parser`).

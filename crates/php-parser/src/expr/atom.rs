@@ -752,6 +752,8 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             parse_arrow_function(parser, false, start, parser.alloc_vec())
         }
 
+        TokenKind::Match_ if parser.version < PhpVersion::Php80 => parse_match_before_80(parser),
+
         // Match expression — PHP 8.0+
         TokenKind::Match_ => {
             let span = parser.current_span();
@@ -1837,7 +1839,51 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     parser.expect(TokenKind::LeftParen);
     let subject = parse_expr(parser);
     parser.expect(TokenKind::RightParen);
+    parse_match_arms(parser, start, subject)
+}
 
+/// Before PHP 8.0 `match` is a name, as in `match($x)` or `Match::X`; only `match (...) {`
+/// is read as a match expression, to report the version it needs.
+fn parse_match_before_80<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
+    let start = parser.start_span();
+    let keyword_span = parser.current_span();
+    let name = parser.parse_name();
+    let is_simple = matches!(name, Name::Simple { .. });
+    let name = name_expr(name);
+    if !is_simple || !parser.check(TokenKind::LeftParen) {
+        return name;
+    }
+    let call = parse_function_call(parser, name);
+    let single_value = matches!(
+        &call.kind,
+        ExprKind::FunctionCall(f) if matches!(
+            &f.args[..],
+            [Arg { name: None, kind: ArgKind::Value(_), .. }]
+        )
+    );
+    if !single_value || !parser.check(TokenKind::LeftBrace) {
+        return call;
+    }
+    let ExprKind::FunctionCall(f) = call.kind else {
+        unreachable!("checked above");
+    };
+    let Some(Arg {
+        kind: ArgKind::Value(subject),
+        ..
+    }) = f.args.into_iter().next()
+    else {
+        unreachable!("checked above");
+    };
+    parser.require_version(PhpVersion::Php80, "match expressions", keyword_span);
+    parse_match_arms(parser, start, subject)
+}
+
+/// The `{ arms }` of a match expression whose subject is parsed.
+fn parse_match_arms<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    start: u32,
+    subject: Expr<'arena, 'src>,
+) -> Expr<'arena, 'src> {
     let brace_span = parser.current_span();
     parser.expect(TokenKind::LeftBrace);
 

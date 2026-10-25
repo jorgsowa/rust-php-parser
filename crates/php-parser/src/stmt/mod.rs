@@ -125,7 +125,7 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
     }
 
     match parser.current_kind() {
-        kind if is_label_name(kind)
+        kind if is_label_name(kind, parser.version)
             && kind != TokenKind::Identifier
             && parser.peek_kind() == Some(TokenKind::Colon) =>
         {
@@ -2265,7 +2265,7 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
 fn parse_goto<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena, 'src> {
     let start = parser.start_span();
     parser.advance();
-    let name = if is_label_name(parser.current_kind()) {
+    let name = if is_label_name(parser.current_kind(), parser.version) {
         let text = parser.current_text();
         Ident::new(text, parser.advance().span)
     } else {
@@ -3206,7 +3206,7 @@ fn reject_relative_import(parser: &mut Parser<'_, '_>, name: &Name<'_, '_>) {
 /// `as alias` after an imported name.
 fn parse_use_alias<'arena, 'src>(parser: &mut Parser<'arena, 'src>) -> Option<Ident<'src>> {
     parser.eat(TokenKind::As)?;
-    if !is_label_name(parser.current_kind()) {
+    if !is_label_name(parser.current_kind(), parser.version) {
         parser.expect(TokenKind::Identifier);
         return None;
     }
@@ -3215,7 +3215,7 @@ fn parse_use_alias<'arena, 'src>(parser: &mut Parser<'arena, 'src>) -> Option<Id
 }
 
 /// Tokens PHP lexes as a plain name where a goto label or a `use` alias is allowed.
-fn is_label_name(kind: TokenKind) -> bool {
+fn is_label_name(kind: TokenKind, version: PhpVersion) -> bool {
     matches!(
         kind,
         TokenKind::Identifier
@@ -3225,7 +3225,7 @@ fn is_label_name(kind: TokenKind) -> bool {
             | TokenKind::Enum_
             | TokenKind::Self_
             | TokenKind::Parent_
-    )
+    ) || (kind == TokenKind::Match_ && version < PhpVersion::Php80)
 }
 
 /// `name:` where `name` is a keyword token that PHP lexes as a plain name.
