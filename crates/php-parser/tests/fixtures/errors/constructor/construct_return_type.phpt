@@ -5,7 +5,9 @@ PHP rejects a return type on __construct with "Method A::__construct() cannot de
 class A {
     public function __construct(): self {}
 }
-===errors===
+===errors <=7.4===
+Constructor A::__construct() cannot declare a return type
+===errors >=8.0===
 Method A::__construct() cannot declare a return type
 ===php_error <=7.4===
 PHP Fatal error:  Constructor A::__construct() cannot declare a return type in Standard input code on line 2

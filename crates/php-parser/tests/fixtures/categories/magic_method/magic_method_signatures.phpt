@@ -37,9 +37,8 @@ enum E {
 }
 function __get() {}
 ===errors <=7.4===
+Clone method A::__clone() cannot declare a return type
 'union types' requires PHP 8.0 or higher
-A::__set(): Parameter #1 ($n) must be of type string when declared
-A::__set(): Return type must be void when declared
 'true type' requires PHP 8.2 or higher
 'null type' requires PHP 8.0 or higher
 'null as standalone type' requires PHP 8.2 or higher
@@ -48,7 +47,6 @@ A::__set(): Return type must be void when declared
 'union types' requires PHP 8.0 or higher
 'intersection types' requires PHP 8.1 or higher
 'DNF types' requires PHP 8.2 or higher
-A::__sleep(): Return type must be array when declared
 'false type' requires PHP 8.0 or higher
 'false as standalone type' requires PHP 8.2 or higher
 'intersection types' requires PHP 8.1 or higher

@@ -8,7 +8,11 @@ trait T { function __get() {} }
 class C { function __call($n, int $a) {} }
 $x = new class { function __set(int $n, $v) {} };
 enum E { function __call($a) {} }
-===errors <=8.0===
+===errors <=7.4===
+Method N\T::__get() must take exactly 1 argument
+'enums' requires PHP 8.1 or higher
+Method N\E::__call() must take exactly 2 arguments
+===errors 8.0===
 N\I::__toString(): Return type must be string when declared
 Method N\T::__get() must take exactly 1 argument
 N\C::__call(): Parameter #2 ($a) must be of type array when declared

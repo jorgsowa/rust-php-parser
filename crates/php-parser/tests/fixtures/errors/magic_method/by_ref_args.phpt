@@ -6,7 +6,11 @@ class A {
     function __call(string &$n, array $a) {}
     static function __set_state(array &$a) {}
 }
-===errors===
+===errors <=7.4===
+Method A::__get() cannot take arguments by reference
+Method A::__set() cannot take arguments by reference
+Method A::__call() cannot take arguments by reference
+===errors >=8.0===
 Method A::__get() cannot take arguments by reference
 Method A::__set() cannot take arguments by reference
 Method A::__call() cannot take arguments by reference

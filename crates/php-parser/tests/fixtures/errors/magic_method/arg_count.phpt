@@ -20,7 +20,19 @@ class A {
 class B {
     function __GET(...$n) {}
 }
-===errors===
+===errors <=7.4===
+Destructor A::__destruct() cannot take arguments
+Method A::__clone() cannot accept any arguments
+Method A::__get() must take exactly 1 argument
+Method A::__set() must take exactly 2 arguments
+Method A::__unset() must take exactly 1 argument
+Method A::__isset() must take exactly 1 argument
+Method A::__call() must take exactly 2 arguments
+Method A::__callStatic() must take exactly 2 arguments
+Method A::__tostring() cannot take arguments
+Method A::__debuginfo() cannot take arguments
+Method B::__get() must take exactly 1 argument
+===errors >=8.0===
 Method A::__destruct() cannot take arguments
 Method A::__clone() cannot take arguments
 Method A::__get() must take exactly 1 argument

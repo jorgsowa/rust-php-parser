@@ -6,7 +6,10 @@ class A {
 interface I {
     public function __DESTRUCT(): int;
 }
-===errors===
+===errors <=7.4===
+Destructor A::__destruct() cannot declare a return type
+Destructor I::__DESTRUCT() cannot declare a return type
+===errors >=8.0===
 Method A::__destruct() cannot declare a return type
 Method I::__DESTRUCT() cannot declare a return type
 ===php_error <=7.4===

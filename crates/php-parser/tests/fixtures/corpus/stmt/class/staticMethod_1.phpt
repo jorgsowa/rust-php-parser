@@ -1,6 +1,8 @@
 ===source===
 <?php class A { static function __construct() {} }
-===errors===
+===errors <=7.4===
+Constructor A::__construct() cannot be static
+===errors >=8.0===
 Method A::__construct() cannot be static
 ===php_error <=7.4===
 PHP Fatal error:  Constructor A::__construct() cannot be static in Standard input code on line 1

@@ -16,21 +16,10 @@ class B {
     function __set(iterable $n, $v) {}
 }
 ===errors <=7.4===
-A::__get(): Parameter #1 ($n) must be of type string when declared
-A::__set(): Parameter #1 ($n) must be of type string when declared
-A::__unset(): Parameter #1 ($n) must be of type string when declared
 'intersection types' requires PHP 8.1 or higher
-A::__isset(): Parameter #1 ($n) must be of type string when declared
-A::__call(): Parameter #1 ($n) must be of type string when declared
-A::__call(): Parameter #2 ($a) must be of type array when declared
-A::__callStatic(): Parameter #2 ($a) must be of type array when declared
-A::__unserialize(): Parameter #1 ($a) must be of type array when declared
-A::__set_state(): Parameter #1 ($a) must be of type array when declared
 'false type' requires PHP 8.0 or higher
 'false as standalone type' requires PHP 8.2 or higher
-B::__get(): Parameter #1 ($n) must be of type string when declared
 'union types' requires PHP 8.0 or higher
-B::__set(): Parameter #1 ($n) must be of type string when declared
 ===errors 8.0===
 A::__get(): Parameter #1 ($n) must be of type string when declared
 A::__set(): Parameter #1 ($n) must be of type string when declared

@@ -4,7 +4,10 @@ class A {
     function __destruct(): void {}
     function __construct(): never {}
 }
-===errors===
+===errors <=7.4===
+Destructor A::__destruct() cannot declare a return type
+Constructor A::__construct() cannot declare a return type
+===errors >=8.0===
 Method A::__destruct() cannot declare a return type
 Method A::__construct() cannot declare a return type
 ===php_error <=7.4===

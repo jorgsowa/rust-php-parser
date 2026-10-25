@@ -8,11 +8,9 @@ class A {
     function __destruct(&$a): void {}
 }
 ===errors <=7.4===
-A::__get(): Parameter #1 ($n) must be of type string when declared
 Method A::__set() must take exactly 2 arguments
-A::__set(): Return type must be void when declared
-Method A::__destruct() cannot take arguments
-Method A::__destruct() cannot declare a return type
+Destructor A::__destruct() cannot declare a return type
+Destructor A::__destruct() cannot take arguments
 ===errors >=8.0===
 Method A::__get() cannot be static
 A::__get(): Parameter #1 ($n) must be of type string when declared

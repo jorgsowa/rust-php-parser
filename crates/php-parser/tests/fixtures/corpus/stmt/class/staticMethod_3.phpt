@@ -1,6 +1,8 @@
 ===source===
 <?php class A { static function __clone() {} }
-===errors===
+===errors <=7.4===
+Clone method A::__clone() cannot be static
+===errors >=8.0===
 Method A::__clone() cannot be static
 ===php_error <=7.4===
 PHP Fatal error:  Clone method A::__clone() cannot be static in Standard input code on line 1

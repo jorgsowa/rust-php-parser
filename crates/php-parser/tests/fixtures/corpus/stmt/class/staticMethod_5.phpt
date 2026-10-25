@@ -1,6 +1,8 @@
 ===source===
 <?php class A { static function __Destruct() {} }
-===errors===
+===errors <=7.4===
+Destructor A::__Destruct() cannot be static
+===errors >=8.0===
 Method A::__Destruct() cannot be static
 ===php_error <=7.4===
 PHP Fatal error:  Destructor A::__Destruct() cannot be static in Standard input code on line 1

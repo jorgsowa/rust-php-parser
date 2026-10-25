@@ -2216,6 +2216,17 @@ fn check_magic_method(
 ) {
     // PHP leaves a variadic parameter out of the argument count.
     let fixed_params: Vec<&Param> = params.iter().filter(|p| !p.variadic).collect();
+    if parser.version < PhpVersion::Php80 {
+        check_magic_method_74(
+            parser,
+            method_label,
+            mods,
+            &fixed_params,
+            return_type,
+            member_span,
+        );
+        return;
+    }
     if let Some(expected) = signature.arg_count {
         if fixed_params.len() != expected {
             let message = match expected {
@@ -2237,13 +2248,8 @@ fn check_magic_method(
         }
     }
 
-    // PHP 7.4 rejects only a static constructor, destructor or `__clone`; it warns about the rest.
     let lower_label = method_label.to_ascii_lowercase();
-    let static_checked = parser.version >= PhpVersion::Php80
-        || ["::__construct()", "::__destruct()", "::__clone()"]
-            .iter()
-            .any(|m| lower_label.ends_with(m));
-    if mods.is_static != signature.is_static && static_checked {
+    if mods.is_static != signature.is_static {
         let requirement = if signature.is_static {
             "must be static"
         } else {
@@ -2302,6 +2308,85 @@ fn check_magic_method(
                 );
             }
         }
+    }
+}
+
+/// PHP 7.4 checks the argument count of the property, call and conversion methods, and that a
+/// constructor, destructor or `__clone` is not static and declares no return type.
+fn check_magic_method_74(
+    parser: &mut Parser<'_, '_>,
+    method_label: &str,
+    mods: &Modifiers,
+    fixed_params: &[&Param<'_, '_>],
+    return_type: Option<&TypeHint<'_, '_>>,
+    member_span: Span,
+) {
+    let label = method_label.trim_end_matches("()");
+    let (class, method) = label.rsplit_once("::").unwrap_or(("", label));
+    let lower = method.to_ascii_lowercase();
+    let role = match lower.as_str() {
+        "__construct" => "Constructor",
+        "__destruct" => "Destructor",
+        "__clone" => "Clone method",
+        _ => "",
+    };
+    if !role.is_empty() {
+        if mods.is_static {
+            parser.forbid(
+                ForbiddenRule::MagicMethodStatic,
+                format!("{role} {class}::{method}() cannot be static"),
+                member_span,
+            );
+        }
+        if let Some(rt) = return_type {
+            parser.forbid(
+                ForbiddenRule::MagicMethodReturnType,
+                format!("{role} {class}::{method}() cannot declare a return type"),
+                rt.span,
+            );
+        }
+    }
+    // PHP 7.4 names these methods in lowercase, except `__callStatic`.
+    let shown = if lower == "__callstatic" {
+        "__callStatic"
+    } else {
+        lower.as_str()
+    };
+    let (expected, message) = match shown {
+        "__destruct" => (
+            0,
+            format!("Destructor {class}::__destruct() cannot take arguments"),
+        ),
+        "__clone" => (
+            0,
+            format!("Method {class}::__clone() cannot accept any arguments"),
+        ),
+        "__tostring" | "__debuginfo" => (
+            0,
+            format!("Method {class}::{shown}() cannot take arguments"),
+        ),
+        "__get" | "__unset" | "__isset" => (
+            1,
+            format!("Method {class}::{shown}() must take exactly 1 argument"),
+        ),
+        "__set" | "__call" | "__callStatic" => (
+            2,
+            format!("Method {class}::{shown}() must take exactly 2 arguments"),
+        ),
+        _ => return,
+    };
+    if fixed_params.len() != expected {
+        parser.forbid(
+            ForbiddenRule::MagicMethodArgumentCount,
+            message,
+            member_span,
+        );
+    } else if let Some(param) = fixed_params.iter().find(|p| p.by_ref) {
+        parser.forbid(
+            ForbiddenRule::MagicMethodByReference,
+            format!("Method {class}::{shown}() cannot take arguments by reference"),
+            param.span,
+        );
     }
 }
 
