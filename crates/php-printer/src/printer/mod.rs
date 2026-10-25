@@ -116,6 +116,8 @@ pub(crate) struct Printer<'src> {
     pub(crate) in_chain_continuation: bool,
     /// Set inside a destructuring target that mixes `list()` and `[]`, which keeps both spellings.
     pub(crate) keep_list_spelling: bool,
+    /// Set for an array printed as an element of an array that mixes no `list()` and `[]`.
+    pub(crate) array_known_unmixed: bool,
 }
 
 impl<'src> Printer<'src> {
@@ -145,6 +147,7 @@ impl<'src> Printer<'src> {
             doc_comment_node_start: None,
             in_chain_continuation: false,
             keep_list_spelling: false,
+            array_known_unmixed: false,
         }
     }
 

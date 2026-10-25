@@ -330,11 +330,13 @@ impl<'src> Printer<'src> {
                 self.w(")");
             }
             ExprKind::Array(elements) => {
-                let keep_list = self.keep_list_spelling || self.mixes_list_spelling(expr);
+                let known_unmixed = std::mem::take(&mut self.array_known_unmixed);
+                let keep_list =
+                    self.keep_list_spelling || (!known_unmixed && self.mixes_list_spelling(expr));
                 let outer_keep_list = std::mem::replace(&mut self.keep_list_spelling, keep_list);
                 let as_list = keep_list && self.written_as_list(expr);
                 self.w(if as_list { "list(" } else { "[" });
-                self.print_array_elements(elements, expr.span);
+                self.print_array_elements(elements, expr.span, !keep_list);
                 self.w(if as_list { ")" } else { "]" });
                 self.keep_list_spelling = outer_keep_list;
             }
@@ -748,7 +750,12 @@ impl<'src> Printer<'src> {
 
     /// Elements go one per line when a comment inside the brackets of `span` needs a line
     /// of its own, so each comment keeps its place among them.
-    fn print_array_elements(&mut self, elements: &[ArrayElement], span: php_ast::Span) {
+    fn print_array_elements(
+        &mut self,
+        elements: &[ArrayElement],
+        span: php_ast::Span,
+        unmixed: bool,
+    ) {
         let last_end = elements.last().map_or(span.start, |e| e.span.end);
         let multi_line = self.comments_need_own_lines(span.start, span.end, last_end);
         if multi_line {
@@ -766,6 +773,8 @@ impl<'src> Printer<'src> {
                 if elem.is_by_ref() {
                     self.w("&");
                 }
+                self.array_known_unmixed =
+                    unmixed && matches!(elem.value().kind, ExprKind::Array(_));
                 self.print_expr(elem.value(), PREC_LOWEST);
                 self.w(",");
                 self.flush_same_line_comments(elem.span.end);
@@ -788,6 +797,8 @@ impl<'src> Printer<'src> {
                 if elem.is_by_ref() {
                     self.w("&");
                 }
+                self.array_known_unmixed =
+                    unmixed && matches!(elem.value().kind, ExprKind::Array(_));
                 self.print_expr(elem.value(), PREC_LOWEST);
                 if i == elements.len() - 1 && matches!(elem.value().kind, ExprKind::Omit) {
                     self.w(",");
