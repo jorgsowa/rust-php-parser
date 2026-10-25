@@ -1056,7 +1056,7 @@ impl ConstExprChecker<'_, '_, '_> {
             ExprKind::Binary(b) if !matches!(b.op, BinaryOp::Instanceof | BinaryOp::Pipe) => {
                 self.check(b.left)?;
                 // PHP folds `false && $x` before checking, dropping the right operand.
-                let folded_away = match (b.op, const_truth(b.left)) {
+                let folded_away = match (b.op, const_truth(b.left, self.version)) {
                     (BinaryOp::BooleanAnd | BinaryOp::LogicalAnd, Some(truth)) => !truth,
                     (BinaryOp::BooleanOr | BinaryOp::LogicalOr, Some(truth)) => truth,
                     (
@@ -1075,7 +1075,7 @@ impl ConstExprChecker<'_, '_, '_> {
             }
             ExprKind::Ternary(t) => {
                 self.check(t.condition)?;
-                match const_truth(t.condition) {
+                match const_truth(t.condition, self.version) {
                     Some(true) => t
                         .then_expr
                         .map_or(Ok(()), |then_expr| self.check(then_expr)),
@@ -1396,8 +1396,8 @@ fn is_short_circuit(op: BinaryOp) -> bool {
 }
 
 /// [`folded_truth`], also folding the arithmetic and concatenation of literals.
-fn const_truth(expr: &Expr<'_, '_>) -> Option<bool> {
-    folded_truth(expr).or_else(|| match literal_scalar(expr)? {
+fn const_truth(expr: &Expr<'_, '_>, version: PhpVersion) -> Option<bool> {
+    folded_truth(expr, version).or_else(|| match literal_scalar(expr)? {
         Scalar::Int(n) => Some(n != 0),
         Scalar::Float(f) => Some(f != 0.0),
         Scalar::String(s) => Some(!matches!(s.as_slice(), b"" | b"0")),
@@ -1455,7 +1455,7 @@ fn literal_scalar(expr: &Expr<'_, '_>) -> Option<Scalar> {
 }
 
 /// The truthiness PHP gives `expr` when it folds `?:`, `&&` and `||` at compile time.
-fn folded_truth(expr: &Expr<'_, '_>) -> Option<bool> {
+fn folded_truth(expr: &Expr<'_, '_>, version: PhpVersion) -> Option<bool> {
     let expr = unparenthesized(expr);
     match &expr.kind {
         ExprKind::Int(n) => Some(*n != 0),
@@ -1467,13 +1467,19 @@ fn folded_truth(expr: &Expr<'_, '_>) -> Option<bool> {
         // PHP compiles `print` to the constant 1.
         ExprKind::Print(_) => Some(true),
         ExprKind::UnaryPrefix(u) if u.op == UnaryPrefixOp::BooleanNot => {
-            const_truth(u.operand).map(|truth| !truth)
+            // PHP 8.5 leaves `!` on a float to run time, where a NAN warns.
+            if version >= PhpVersion::Php85
+                && matches!(literal_scalar(u.operand), Some(Scalar::Float(_)))
+            {
+                return None;
+            }
+            const_truth(u.operand, version).map(|truth| !truth)
         }
         ExprKind::Array(elements) if is_literal(expr) => {
             let mut truth = false;
             for el in elements.iter() {
                 match &el.kind {
-                    ArrayElementKind::Spread(inner) => truth |= folded_truth(inner)?,
+                    ArrayElementKind::Spread(inner) => truth |= folded_truth(inner, version)?,
                     _ => return Some(true),
                 }
             }
@@ -1494,14 +1500,14 @@ fn folded_truth(expr: &Expr<'_, '_>) -> Option<bool> {
                 }
                 spine.push(inner);
             }
-            let mut truth = const_truth(spine[spine.len() - 1].left)?;
+            let mut truth = const_truth(spine[spine.len() - 1].left, version)?;
             for link in spine.iter().rev() {
                 let decided = match link.op {
                     BinaryOp::BooleanAnd | BinaryOp::LogicalAnd => !truth,
                     _ => truth,
                 };
                 if !decided {
-                    truth = const_truth(link.right)?;
+                    truth = const_truth(link.right, version)?;
                 }
             }
             Some(truth)
@@ -1543,6 +1549,13 @@ fn foldable(expr: &Expr<'_, '_>, constants: Option<&ConstExprChecker<'_, '_, '_>
             }
         }),
         ExprKind::Parenthesized(inner) => operand(inner),
+        ExprKind::UnaryPrefix(u)
+            if u.op == UnaryPrefixOp::BooleanNot
+                && constants.is_some_and(|c| c.version >= PhpVersion::Php85)
+                && matches!(literal_scalar(u.operand), Some(Scalar::Float(_))) =>
+        {
+            false
+        }
         ExprKind::UnaryPrefix(u) => {
             !matches!(
                 u.op,
@@ -2546,7 +2559,7 @@ fn parse_expr_rest<'arena, 'src>(
             let lhs_truth = match chain_truth {
                 _ if !is_short_circuit(op) => None,
                 Some((span, truth)) if span == lhs.span => truth,
-                _ => const_truth(&lhs),
+                _ => const_truth(&lhs, parser.version),
             };
             let short_circuits = match (op, lhs_truth) {
                 (BinaryOp::BooleanAnd | BinaryOp::LogicalAnd, Some(truth)) => !truth,
@@ -2593,7 +2606,7 @@ fn parse_expr_rest<'arena, 'src>(
             if is_short_circuit(op) {
                 let truth = match lhs_truth {
                     Some(truth) if short_circuits => Some(truth),
-                    Some(_) => const_truth(&rhs),
+                    Some(_) => const_truth(&rhs, parser.version),
                     None => None,
                 };
                 chain_truth = Some((span, truth));

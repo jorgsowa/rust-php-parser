@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- From PHP 8.5, `!` on a float is not folded at compile time, so `!1.5 and isset(1 + 1);` and `const A = !1.5 && $a;` report PHP's errors (`php-rs-parser`).
 - On PHP 7.4, arithmetic that PHP folds at compile time on an array literal, such as `[] - 1`, `[1] + 1` or `-[]`, and `~` on `true`, `false`, `null` or an array report `Unsupported operand types` (`php-rs-parser`).
 - A `print` expression or literal arithmetic and concatenation on the left of `&&`, `||`, `and` or `or` folds as in PHP, so the right operand it skips no longer reports compile errors, as in `print $a or isset(1 + 1);` and `-1 || $a ? 1 : 2 ? 3 : 4;` (`php-rs-parser`).
 - When printing for PHP 7.4, `.` is parenthesized at the precedence of `+` and `-`, so `1 . (2 << 1)` keeps its parentheses (`php-printer`).
