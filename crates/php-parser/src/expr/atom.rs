@@ -995,7 +995,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             // `clone(args)` (function-call / first-class-callable form). A `(` that
             // starts a cast is followed by a cast keyword and a `)`.
             let looks_like_cast =
-                parser.check(TokenKind::LeftParen) && cast_kind_ahead(parser).is_some();
+                parser.check(TokenKind::LeftParen) && parser.cast_ahead().is_some();
             if !looks_like_cast && parser.check(TokenKind::LeftParen) {
                 let src = parser.source;
                 let name_text = Name::Simple {
@@ -2717,35 +2717,6 @@ fn parse_list_element<'arena, 'src>(
     }
 }
 
-/// The cast spelled by the current `(` and the next two tokens. PHP lexes a cast as one token,
-/// so only spaces and tabs may surround the keyword; anything else is a parenthesized constant.
-fn cast_kind_ahead(parser: &mut Parser<'_, '_>) -> Option<CastKind> {
-    let cast_kind = match parser.peek_kind() {
-        Some(TokenKind::Identifier) => {
-            let peek_text = parser.peek_text()?;
-            CAST_KEYWORDS
-                .iter()
-                .find(|(kw, _)| kw.eq_ignore_ascii_case(peek_text))
-                .map(|(_, ck)| *ck)
-        }
-        Some(TokenKind::Array) => Some(CastKind::Array),
-        Some(TokenKind::Unset) => Some(CastKind::Unset),
-        _ => None,
-    }?;
-    if parser.peek2_kind() != Some(TokenKind::RightParen) {
-        return None;
-    }
-    let blank = |from: u32, to: u32| {
-        parser.source[from as usize..to as usize]
-            .bytes()
-            .all(|b| b == b' ' || b == b'\t')
-    };
-    let keyword = parser.peek_span();
-    (blank(parser.current_span().end, keyword.start)
-        && blank(keyword.end, parser.peek2_span().start))
-    .then_some(cast_kind)
-}
-
 /// Whether the current token starts an operand rather than continuing an expression.
 fn operand_follows(parser: &mut Parser<'_, '_>) -> bool {
     let kind = parser.current_kind();
@@ -2777,7 +2748,7 @@ fn operand_follows(parser: &mut Parser<'_, '_>) -> bool {
 fn try_parse_cast<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
 ) -> Option<Expr<'arena, 'src>> {
-    let cast_kind = cast_kind_ahead(parser)?;
+    let cast_kind = parser.cast_ahead()?;
 
     let start = parser.start_span();
     parser.reading_cast = true;

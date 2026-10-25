@@ -469,39 +469,53 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         prev
     }
 
-    /// PHP lexes `(int)` as one cast token everywhere, so after any `(` that does not start a
-    /// cast, as in `foo(int)` or `if (int)`, it is a syntax error.
+    /// PHP lexes `(int)` as one cast token everywhere, so after a `(` that starts no cast it is an error.
     #[cold]
     fn check_stray_cast(&mut self, open: Span) {
-        let keyword = self.current;
-        if !matches!(
-            keyword.kind,
-            TokenKind::Identifier | TokenKind::Array | TokenKind::Unset
-        ) || self.next.kind != TokenKind::RightParen
-        {
+        let Some(kind) = self.cast_token(open, self.current, self.next) else {
+            return;
+        };
+        if kind == CastKind::Void && self.version < PhpVersion::Php85 {
             return;
         }
+        let keyword = self.current.span;
+        let text = &self.source[keyword.start as usize..keyword.end as usize];
+        self.forbid(
+            ForbiddenRule::UnexpectedCast,
+            format!("unexpected token \"({})\"", text.to_ascii_lowercase()),
+            Span::new(open.start, self.next.span.end),
+        );
+    }
+
+    /// The cast at the current `(` and the two tokens after it, if PHP lexes them as one token.
+    pub(crate) fn cast_ahead(&self) -> Option<CastKind> {
+        self.cast_token(self.current.span, self.next, self.next2)
+    }
+
+    /// The cast `open`, `keyword` and `close` spell; only spaces and tabs may surround the keyword.
+    fn cast_token(&self, open: Span, keyword: Token, close: Token) -> Option<CastKind> {
+        if close.kind != TokenKind::RightParen {
+            return None;
+        }
+        let kind = match keyword.kind {
+            TokenKind::Identifier => {
+                let text = &self.source[keyword.span.start as usize..keyword.span.end as usize];
+                crate::expr::CAST_KEYWORDS
+                    .iter()
+                    .find(|(kw, _)| kw.eq_ignore_ascii_case(text))
+                    .map(|(_, kind)| *kind)?
+            }
+            TokenKind::Array => CastKind::Array,
+            TokenKind::Unset => CastKind::Unset,
+            _ => return None,
+        };
         let blank = |from: u32, to: u32| {
             self.source[from as usize..to as usize]
                 .bytes()
                 .all(|b| b == b' ' || b == b'\t')
         };
-        let text = &self.source[keyword.span.start as usize..keyword.span.end as usize];
-        let is_cast = crate::expr::CAST_KEYWORDS
-            .iter()
-            .any(|(kw, _)| kw.eq_ignore_ascii_case(text))
-            && (self.version >= PhpVersion::Php85 || !text.eq_ignore_ascii_case("void"));
-        if is_cast
-            && blank(open.end, keyword.span.start)
-            && blank(keyword.span.end, self.next.span.start)
-        {
-            let span = Span::new(open.start, self.next.span.end);
-            self.forbid(
-                ForbiddenRule::UnexpectedCast,
-                format!("unexpected token \"({})\"", text.to_ascii_lowercase()),
-                span,
-            );
-        }
+        (blank(open.end, keyword.span.start) && blank(keyword.span.end, close.span.start))
+            .then_some(kind)
     }
 
     /// Before PHP 8.0 a name is lexed per segment, so the lexer's `keyword\` name segment is a keyword.
@@ -821,18 +835,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     #[inline]
     pub fn peek2_kind(&mut self) -> Option<TokenKind> {
         Some(self.next2.kind)
-    }
-
-    /// Span of the peeked token (one token ahead of current).
-    #[inline]
-    pub fn peek_span(&self) -> Span {
-        self.next.span
-    }
-
-    /// Span of the token two tokens ahead of current.
-    #[inline]
-    pub fn peek2_span(&self) -> Span {
-        self.next2.span
     }
 
     /// Get the text of the peeked token (one token ahead of current).
