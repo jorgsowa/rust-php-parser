@@ -433,6 +433,19 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
             property_type,
             property_name,
         );
+        if let (PropertyHookBody::Block(block), false) = (&body, is_generator) {
+            match (kind, property_type) {
+                (PropertyHookKind::Get, Some(ty)) => {
+                    super::check_returns_against_type(parser, block, ty, false, true)
+                }
+                (PropertyHookKind::Set, _) => super::check_returns(
+                    parser,
+                    &block.stmts,
+                    &super::ReturnRule::Void(super::function_kind_word(parser, true)),
+                ),
+                _ => {}
+            }
+        }
         let mut hook_modifiers = Modifiers::new();
         hook_modifiers.is_final = is_final;
         hooks.push({
@@ -923,7 +936,7 @@ pub fn parse_class_members<'arena, 'src>(
             && !mods.is_abstract
             && !mods.is_final
             && !mods.is_readonly
-            && parser.check(TokenKind::Identifier)
+            && (parser.check(TokenKind::Identifier) || parser.check(TokenKind::Array))
             && parser.peek_kind() == Some(TokenKind::Variable)
         {
             let span = parser.current_span();
@@ -1553,6 +1566,8 @@ fn type_accepts_literal(ty: &TypeHint<'_, '_>, value: &Expr<'_, '_>, value_type:
 /// The declaration a typed default value belongs to: a parameter or a property, by name.
 pub(super) enum DefaultOwner<'a> {
     Param(&'a str),
+    /// A null default doesn't make a promoted parameter's type nullable.
+    PromotedParam(&'a str),
     Property(&'a str),
 }
 
@@ -1603,7 +1618,7 @@ pub(super) fn check_typed_default(
             };
             message
         }
-        DefaultOwner::Param(name) => {
+        DefaultOwner::Param(name) | DefaultOwner::PromotedParam(name) => {
             format!("Cannot use {value_type} as default value for parameter ${name} of type {type_name}")
         }
         DefaultOwner::Property(name) => {
@@ -1644,7 +1659,7 @@ fn default_type_message_74(
         None | Some(BuiltinType::Self_ | BuiltinType::Parent_)
     );
     Some(match owner {
-        DefaultOwner::Param(_) => {
+        DefaultOwner::Param(_) | DefaultOwner::PromotedParam(_) => {
             let rule = match builtin {
                 _ if is_class => "a class type can only be NULL",
                 Some(BuiltinType::Int) => "a int type can only be int or NULL",

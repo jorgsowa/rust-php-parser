@@ -1306,69 +1306,72 @@ pub(crate) fn check_returns_against_type<'arena, 'src>(
         Some(false) => ReturnRule::Never(what),
         None => ReturnRule::Value(bare_return_message),
     };
-    enum ReturnRule {
-        Void(&'static str),
-        Never(&'static str),
-        Value(std::borrow::Cow<'static, str>),
-    }
-    fn walk<'arena, 'src>(
-        parser: &mut Parser<'arena, 'src>,
-        stmts: &[Stmt<'arena, 'src>],
-        rule: &ReturnRule,
-    ) {
-        for stmt in stmts {
-            match &stmt.kind {
-                StmtKind::Return(value) => {
-                    let (rule, message) = match (rule, value) {
-                        (ReturnRule::Void(what), Some(value)) => (
-                            ForbiddenRule::VoidReturnValue,
-                            void_return_message(what, value).into(),
-                        ),
-                        (ReturnRule::Never(what), _) => (
-                            ForbiddenRule::NeverReturn,
-                            never_return_message(what).into(),
-                        ),
-                        (ReturnRule::Value(message), None) => {
-                            (ForbiddenRule::MissingReturnValue, message.clone())
-                        }
-                        _ => continue,
-                    };
-                    parser.forbid(rule, message, stmt.span);
-                }
-                StmtKind::Block(b) => walk(parser, &b.stmts, rule),
-                StmtKind::If(if_) => {
-                    walk(parser, std::slice::from_ref(if_.then_branch), rule);
-                    for eb in if_.elseif_branches.iter() {
-                        walk(parser, std::slice::from_ref(&eb.body), rule);
+    check_returns(parser, &body.stmts, &rule);
+}
+
+pub(crate) enum ReturnRule {
+    Void(&'static str),
+    Never(&'static str),
+    Value(std::borrow::Cow<'static, str>),
+}
+
+/// Report the `return` statements in `stmts` that break `rule`, skipping nested function-likes.
+pub(crate) fn check_returns<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    stmts: &[Stmt<'arena, 'src>],
+    rule: &ReturnRule,
+) {
+    for stmt in stmts {
+        match &stmt.kind {
+            StmtKind::Return(value) => {
+                let (rule, message) = match (rule, value) {
+                    (ReturnRule::Void(what), Some(value)) => (
+                        ForbiddenRule::VoidReturnValue,
+                        void_return_message(what, value).into(),
+                    ),
+                    (ReturnRule::Never(what), _) => (
+                        ForbiddenRule::NeverReturn,
+                        never_return_message(what).into(),
+                    ),
+                    (ReturnRule::Value(message), None) => {
+                        (ForbiddenRule::MissingReturnValue, message.clone())
                     }
-                    if let Some(eb) = if_.else_branch {
-                        walk(parser, std::slice::from_ref(eb), rule);
-                    }
-                }
-                StmtKind::While(w) => walk(parser, std::slice::from_ref(w.body), rule),
-                StmtKind::DoWhile(d) => walk(parser, std::slice::from_ref(d.body), rule),
-                StmtKind::For(f) => walk(parser, std::slice::from_ref(f.body), rule),
-                StmtKind::Foreach(f) => walk(parser, std::slice::from_ref(f.body), rule),
-                StmtKind::Switch(s) => {
-                    for c in s.body.cases.iter() {
-                        walk(parser, &c.body, rule);
-                    }
-                }
-                StmtKind::TryCatch(t) => {
-                    walk(parser, &t.body.stmts, rule);
-                    for c in t.catches.iter() {
-                        walk(parser, &c.body.stmts, rule);
-                    }
-                    if let Some(fin) = t.finally {
-                        walk(parser, &fin.stmts, rule);
-                    }
-                }
-                // Nested function-like declarations have their own returns.
-                _ => {}
+                    _ => continue,
+                };
+                parser.forbid(rule, message, stmt.span);
             }
+            StmtKind::Block(b) => check_returns(parser, &b.stmts, rule),
+            StmtKind::If(if_) => {
+                check_returns(parser, std::slice::from_ref(if_.then_branch), rule);
+                for eb in if_.elseif_branches.iter() {
+                    check_returns(parser, std::slice::from_ref(&eb.body), rule);
+                }
+                if let Some(eb) = if_.else_branch {
+                    check_returns(parser, std::slice::from_ref(eb), rule);
+                }
+            }
+            StmtKind::While(w) => check_returns(parser, std::slice::from_ref(w.body), rule),
+            StmtKind::DoWhile(d) => check_returns(parser, std::slice::from_ref(d.body), rule),
+            StmtKind::For(f) => check_returns(parser, std::slice::from_ref(f.body), rule),
+            StmtKind::Foreach(f) => check_returns(parser, std::slice::from_ref(f.body), rule),
+            StmtKind::Switch(s) => {
+                for c in s.body.cases.iter() {
+                    check_returns(parser, &c.body, rule);
+                }
+            }
+            StmtKind::TryCatch(t) => {
+                check_returns(parser, &t.body.stmts, rule);
+                for c in t.catches.iter() {
+                    check_returns(parser, &c.body.stmts, rule);
+                }
+                if let Some(fin) = t.finally {
+                    check_returns(parser, &fin.stmts, rule);
+                }
+            }
+            // Nested function-like declarations have their own returns.
+            _ => {}
         }
     }
-    walk(parser, &body.stmts, &rule);
 }
 
 fn check_param_name(
@@ -1627,7 +1630,13 @@ pub fn parse_param_list<'arena, 'src>(
             let default = parser.with_no_brace_subscript(expr::parse_expr);
             expr::check_param_default(parser, &default);
             if let (Some(ty), Some(name), false) = (&type_hint, name.as_str(), variadic) {
-                class::check_typed_default(parser, ty, &default, class::DefaultOwner::Param(name));
+                let owner = if first_modifier_span.is_some() && parser.version >= PhpVersion::Php80
+                {
+                    class::DefaultOwner::PromotedParam(name)
+                } else {
+                    class::DefaultOwner::Param(name)
+                };
+                class::check_typed_default(parser, ty, &default, owner);
             }
             Some(default)
         } else {
@@ -2459,14 +2468,15 @@ fn parse_declare<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
             parser.trailing_comma_error("identifier");
             break;
         }
-        if let Some(t) = parser.eat(TokenKind::Identifier) {
-            let src = parser.source;
-            let name = &src[t.span.start as usize..t.span.end as usize];
-            parser.expect(TokenKind::Equals);
-            let value = expr::parse_expr(parser);
-            directives.push((name, value));
-            directive_spans.push(parser.span_from(t.span.start));
-        }
+        let Some(t) = parser.expect(TokenKind::Identifier) else {
+            break;
+        };
+        let src = parser.source;
+        let name = &src[t.span.start as usize..t.span.end as usize];
+        parser.expect(TokenKind::Equals);
+        let value = expr::parse_expr(parser);
+        directives.push((name, value));
+        directive_spans.push(parser.span_from(t.span.start));
         if parser.eat(TokenKind::Comma).is_none() {
             break;
         }
