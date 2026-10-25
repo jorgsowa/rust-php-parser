@@ -2786,6 +2786,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
 
     // Parse first name to check for group use
     let item_start = parser.start_span();
+    check_use_name_keyword(parser);
     let first_name = parser.parse_name_with(true);
     reject_relative_import(parser, &first_name);
 
@@ -2842,6 +2843,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             } else {
                 None
             };
+            check_use_name_keyword(parser);
             let sub_name = parser.parse_name();
             reject_relative_import(parser, &sub_name);
 
@@ -2922,6 +2924,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                 break;
             }
             let next_start = parser.start_span();
+            check_use_name_keyword(parser);
             let name = parser.parse_name();
             reject_relative_import(parser, &name);
 
@@ -3199,6 +3202,43 @@ fn reject_relative_import(parser: &mut Parser<'_, '_>, name: &Name<'_, '_>) {
             expected: "name".into(),
             found: "namespace-relative name".into(),
             span: name.span(),
+        });
+    }
+}
+
+/// Report an unqualified import named by a word PHP lexes as a keyword, as in `use Class;`.
+fn check_use_name_keyword(parser: &mut Parser<'_, '_>) {
+    let is_word = parser
+        .current_text()
+        .bytes()
+        .next()
+        .is_some_and(|b| b.is_ascii_alphabetic() || b == b'_');
+    let text = parser.current_text();
+    let lexed_as_name = match parser.current_kind() {
+        // Keywords in PHP that this lexer reads as names.
+        TokenKind::Identifier => !["callable", "insteadof", "var"]
+            .iter()
+            .any(|k| text.eq_ignore_ascii_case(k)),
+        TokenKind::Enum_
+        | TokenKind::Self_
+        | TokenKind::Parent_
+        | TokenKind::Null
+        | TokenKind::True
+        | TokenKind::False => true,
+        TokenKind::Match_ => parser.version < PhpVersion::Php80,
+        TokenKind::Readonly => parser.version < PhpVersion::Php81,
+        TokenKind::MagicProperty => parser.version < PhpVersion::Php84,
+        _ => !is_word,
+    };
+    if !lexed_as_name && parser.peek_kind() != Some(TokenKind::Backslash) {
+        let found = match parser.current_kind() {
+            TokenKind::Identifier => format!("'{}'", text.to_ascii_lowercase()),
+            kind => kind.description().into(),
+        };
+        parser.error(ParseError::Expected {
+            expected: "identifier".into(),
+            found: found.into(),
+            span: parser.current_span(),
         });
     }
 }
