@@ -730,7 +730,7 @@ impl<'src> Printer<'src> {
             if i + 1 < args.len() {
                 self.w(",");
             }
-            self.flush_same_line_comments(arg.span.end);
+            self.flush_same_line_comments(arg.span.end, true);
             self.newline();
         }
         self.flush_leading_comments(until);
@@ -776,7 +776,7 @@ impl<'src> Printer<'src> {
                     unmixed && matches!(elem.value().kind, ExprKind::Array(_));
                 self.print_expr(elem.value(), PREC_LOWEST);
                 self.w(",");
-                self.flush_same_line_comments(elem.span.end);
+                self.flush_same_line_comments(elem.span.end, true);
                 self.newline();
             }
             self.flush_leading_comments(span.end);

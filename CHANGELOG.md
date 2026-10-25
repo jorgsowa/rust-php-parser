@@ -74,6 +74,7 @@ These constructs were reported and are now accepted, as PHP does (`php-rs-parser
 - A bare `true`, `false` or `null` before `::` is printed without parentheses, so `true::class` is not printed as the invalid `(true)::class` (`php-printer`).
 - A `yield` key or value that starts with the constant `from` is parenthesized, so it is not printed as `yield from` (`php-printer`).
 - A blank line between a doc comment and its `use` no longer splits a run of imports, so sorting them is stable on a second print (`php-printer`).
+- A comment after the comma of a grouped property or constant, as in `public $a, /* a */ $b;`, is printed before the member it precedes instead of moving on each print (`php-printer`).
 - With `PrettyPrinter::syntax_errors(true)`, source with a syntax error no longer prints as valid code, as it did for `var public $x;`, a trait alias whose name recovery dropped, an error node printed as `/* error */`, a heredoc whose closing marker is indented past its body, and `$a = 1 $b = 2;`. The playground passes it (`php-printer`, `php-wasm`).
 
 ## [0.26.0] - 2026-10-24

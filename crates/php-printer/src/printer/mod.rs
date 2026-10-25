@@ -287,18 +287,24 @@ impl<'src> Printer<'src> {
         }
     }
 
+    /// True if only spaces and tabs, or also commas after a list item, separate `from` and `to`.
+    fn same_line_gap(&self, from: u32, to: u32, after_list_item: bool) -> bool {
+        self.source
+            .as_bytes()
+            .get(from as usize..to as usize)
+            .is_some_and(|g| {
+                g.iter()
+                    .all(|&b| matches!(b, b' ' | b'\t') || after_list_item && b == b',')
+            })
+    }
+
     /// End of the comments that follow `after` on the same source line, or `after` if none.
     pub(crate) fn same_line_comments_end(&self, mut after: u32) -> u32 {
         let first = self.comments.partition_point(|c| c.span.start < after);
         for c in &self.comments[first..] {
-            let gap = self
-                .source
-                .as_bytes()
-                .get(after as usize..c.span.start as usize);
-            if !gap.is_some_and(|g| g.iter().all(|b| matches!(b, b' ' | b'\t' | b','))) {
-                break;
-            }
-            if c.kind == php_ast::CommentKind::Doc {
+            if !self.same_line_gap(after, c.span.start, false)
+                || c.kind == php_ast::CommentKind::Doc
+            {
                 break;
             }
             after = c.span.end;
@@ -307,16 +313,14 @@ impl<'src> Printer<'src> {
     }
 
     /// Print pending comments that follow `after` on the same source line, separated from it
-    /// only by spaces and commas. A line comment leaves the caller to start a new line.
-    pub(crate) fn flush_same_line_comments(&mut self, mut after: u32) {
+    /// only by spaces, and by commas after a list item. A line comment leaves the caller to
+    /// start a new line.
+    pub(crate) fn flush_same_line_comments(&mut self, mut after: u32, after_list_item: bool) {
         use php_ast::CommentKind;
         while let Some(c) = self.comments.get(self.comment_cursor) {
-            let gap = self
-                .source
-                .as_bytes()
-                .get(after as usize..c.span.start as usize);
-            let same_line = gap.is_some_and(|g| g.iter().all(|b| matches!(b, b' ' | b'\t' | b',')));
-            if !same_line || c.kind == CommentKind::Doc {
+            if !self.same_line_gap(after, c.span.start, after_list_item)
+                || c.kind == CommentKind::Doc
+            {
                 break;
             }
             self.w(" ");
@@ -545,7 +549,7 @@ impl<'src> Printer<'src> {
             }
             self.print_stmt(stmt);
             if !is_inline_html {
-                self.flush_same_line_comments(stmt.span.end);
+                self.flush_same_line_comments(stmt.span.end, false);
             }
 
             if let Some(g) = in_group {

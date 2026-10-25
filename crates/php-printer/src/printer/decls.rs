@@ -205,7 +205,7 @@ impl<'src> Printer<'src> {
             self.flush_comments_before_node(member.span().start, doc_start);
             self.write_indent();
             member.print(self);
-            self.flush_same_line_comments(member.span().end);
+            self.flush_same_line_comments(member.span().end, false);
             self.newline();
         }
         if order.is_some() {
