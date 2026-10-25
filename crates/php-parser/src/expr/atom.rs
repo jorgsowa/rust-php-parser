@@ -1841,11 +1841,12 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     parser.expect(TokenKind::LeftParen);
     let subject = parse_expr(parser);
     parser.expect(TokenKind::RightParen);
-    parse_match_arms(parser, start, subject)
+    let brace_span = parser.current_span();
+    parser.expect(TokenKind::LeftBrace);
+    parse_match_arms(parser, start, subject, brace_span, None)
 }
 
-/// Before PHP 8.0 `match` is a name, as in `match($x)` or `Match::X`; only `match (...) {`
-/// is read as a match expression, to report the version it needs.
+/// Before PHP 8.0 `match` is a name; only `match (...) {` with arms reports the version it needs.
 fn parse_match_before_80<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     let start = parser.start_span();
     let keyword_span = parser.current_span();
@@ -1866,6 +1867,29 @@ fn parse_match_before_80<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
     if !single_value || !parser.check(TokenKind::LeftBrace) {
         return call;
     }
+    let brace_span = parser.current_span();
+    parser.advance(); // consume {
+    let first_condition = if parser.no_brace_subscript
+        || parser.check(TokenKind::RightBrace)
+        || parser.check(TokenKind::Default)
+        || parser.check(TokenKind::Eof)
+    {
+        None
+    } else {
+        let index = parse_expr(parser);
+        // `match($x){0}` is a curly offset on the call's result.
+        if parser.eat(TokenKind::RightBrace).is_some() {
+            let span = parser.span_from(start);
+            return Expr {
+                kind: ExprKind::ArrayAccess(ArrayAccessExpr {
+                    array: parser.alloc(call),
+                    index: Some(parser.alloc(index)),
+                }),
+                span,
+            };
+        }
+        Some(index)
+    };
     let ExprKind::FunctionCall(f) = call.kind else {
         unreachable!("checked above");
     };
@@ -1877,24 +1901,29 @@ fn parse_match_before_80<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         unreachable!("checked above");
     };
     parser.require_version(PhpVersion::Php80, "match expressions", keyword_span);
-    parse_match_arms(parser, start, subject)
+    parse_match_arms(parser, start, subject, brace_span, first_condition)
 }
 
-/// The `{ arms }` of a match expression whose subject is parsed.
+/// The arms of a match expression after its `{`, starting with `first_condition` if it is parsed.
 fn parse_match_arms<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     start: u32,
     subject: Expr<'arena, 'src>,
+    brace_span: Span,
+    mut first_condition: Option<Expr<'arena, 'src>>,
 ) -> Expr<'arena, 'src> {
-    let brace_span = parser.current_span();
-    parser.expect(TokenKind::LeftBrace);
-
     let mut arms = parser.alloc_vec_with_capacity(4);
     let mut seen_default = false;
-    while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
-        let arm_start = parser.start_span();
+    while first_condition.is_some()
+        || (!parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof))
+    {
+        let arm_start = first_condition
+            .as_ref()
+            .map_or_else(|| parser.start_span(), |c| c.span.start);
 
-        let conditions = if let Some(tok) = parser.eat(TokenKind::Default) {
+        let conditions = if let Some(first) = first_condition.take() {
+            Some(parse_match_conditions(parser, first))
+        } else if let Some(tok) = parser.eat(TokenKind::Default) {
             if seen_default {
                 parser.forbid(
                     ForbiddenRule::DuplicateMatchDefault,
@@ -1907,15 +1936,8 @@ fn parse_match_arms<'arena, 'src>(
             parser.eat(TokenKind::Comma);
             None
         } else {
-            let mut conds = parser.alloc_vec_with_capacity(2);
-            conds.push(parse_expr(parser));
-            while parser.eat(TokenKind::Comma).is_some() {
-                if parser.check(TokenKind::FatArrow) {
-                    break;
-                }
-                conds.push(parse_expr(parser));
-            }
-            Some(conds)
+            let first = parse_expr(parser);
+            Some(parse_match_conditions(parser, first))
         };
 
         parser.expect(TokenKind::FatArrow);
@@ -1951,6 +1973,22 @@ fn parse_match_arms<'arena, 'src>(
         kind: ExprKind::Match(MatchExpr::new(parser.alloc(subject), arms, brace_span)),
         span: Span::new(start, end),
     }
+}
+
+/// The conditions of a match arm whose first condition is parsed.
+fn parse_match_conditions<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    first: Expr<'arena, 'src>,
+) -> ArenaVec<'arena, Expr<'arena, 'src>> {
+    let mut conds = parser.alloc_vec_with_capacity(2);
+    conds.push(first);
+    while parser.eat(TokenKind::Comma).is_some() {
+        if parser.check(TokenKind::FatArrow) {
+            break;
+        }
+        conds.push(parse_expr(parser));
+    }
+    conds
 }
 
 // =============================================================================
