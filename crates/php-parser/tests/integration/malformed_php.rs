@@ -43,11 +43,8 @@ fn assert_depth_exceeded(code: &str) {
     let arena = bumpalo::Bump::new();
     let result = php_rs_parser::parse_arena(&arena, code);
     assert!(
-        result
-            .errors
-            .iter()
-            .any(|e| matches!(e, ParseError::NestingTooDeep { .. })),
-        "expected depth-limit error, got:\n{}",
+        matches!(result.errors[..], [ParseError::NestingTooDeep { .. }]),
+        "expected one depth-limit error, got:\n{}",
         format_errors(&result)
     );
 }
@@ -55,11 +52,8 @@ fn assert_depth_exceeded(code: &str) {
 fn assert_depth_exceeded_owned(code: &str) {
     let result = php_rs_parser::parse(code);
     assert!(
-        result
-            .errors
-            .iter()
-            .any(|e| matches!(e, ParseError::NestingTooDeep { .. })),
-        "(owned) expected depth-limit error, got:\n{:?}",
+        matches!(result.errors[..], [ParseError::NestingTooDeep { .. }]),
+        "(owned) expected one depth-limit error, got:\n{:?}",
         result.errors
     );
 }

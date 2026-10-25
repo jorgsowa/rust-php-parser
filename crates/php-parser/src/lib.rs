@@ -254,6 +254,9 @@ impl ParseOptions {
 ///
 /// Use [`parse_arena`] when you need the raw arena-allocated AST for maximum
 /// throughput (no allocation copying).
+///
+/// `source` must be UTF-8: convert legacy-encoded files first, or read them with
+/// [`String::from_utf8_lossy`] and accept that spans after an invalid byte are shifted.
 pub fn parse(source: &str) -> ParseResult {
     parse_with(source, &ParseOptions::default())
 }

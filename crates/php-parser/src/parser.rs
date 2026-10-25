@@ -131,6 +131,8 @@ pub struct Parser<'arena, 'src> {
     errors: Vec<ParseError>,
     /// Set when [`error`](Self::error) discards an error because the cap was reached.
     errors_dropped: bool,
+    /// Set once the nesting budget is exhausted; later errors are fallout of the cut-off subtree.
+    nesting_overflowed: bool,
     /// Set while the `(` of a cast is consumed, so it is not reported as a stray cast token.
     pub(crate) reading_cast: bool,
     /// All comments found in the source, collected during lexing.
@@ -255,6 +257,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             source,
             errors: Vec::new(),
             errors_dropped: false,
+            nesting_overflowed: false,
             reading_cast: false,
             comments,
             depth: 0,
@@ -316,6 +319,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             source,
             errors: Vec::new(),
             errors_dropped: false,
+            nesting_overflowed: false,
             reading_cast: false,
             comments,
             depth: 0,
@@ -841,6 +845,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     // =========================================================================
 
     pub fn error(&mut self, err: ParseError) {
+        if self.nesting_overflowed {
+            return;
+        }
         // PHP stops at its first syntax error, so recovery errors at the same token are cascades.
         if err.leaves_ast_incomplete()
             && self
@@ -881,6 +888,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         if self.nesting_depth >= MAX_NESTING_DEPTH {
             let span = self.current_span();
             self.error(ParseError::NestingTooDeep { span });
+            self.nesting_overflowed = true;
             return false;
         }
         self.nesting_depth += 1;

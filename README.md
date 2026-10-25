@@ -37,6 +37,8 @@ let pos = result.source_map.offset_to_line_col(6);
 
 `parse` returns a [`ParseResult`] with no lifetime parameters — the AST is fully owned and can be stored anywhere.
 
+The source must be UTF-8. Convert files in legacy encodings (Latin-1, Windows-1252, Shift JIS…) first, or read them with `String::from_utf8_lossy` and accept that every span after an invalid byte is shifted, since each replacement character takes three bytes.
+
 ## ParseResult fields
 
 | Field | Type | Description |
