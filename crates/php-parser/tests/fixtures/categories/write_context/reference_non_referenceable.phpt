@@ -18,8 +18,15 @@ Cannot assign reference to non referenceable value
 Cannot assign reference to non referenceable value
 Cannot assign reference to non referenceable value
 'nullsafe operator (?->)' requires PHP 8.0 or higher
-Cannot take reference of a nullsafe chain
-===errors 8.0-8.5===
+===errors 8.0===
+Cannot assign reference to non referenceable value
+Cannot assign reference to non referenceable value
+Cannot use temporary expression in write context
+Cannot assign reference to non referenceable value
+Cannot assign reference to non referenceable value
+Cannot assign reference to non referenceable value
+Cannot assign reference to non referenceable value
+===errors 8.1-8.5===
 Cannot assign reference to non referenceable value
 Cannot assign reference to non referenceable value
 Cannot use temporary expression in write context

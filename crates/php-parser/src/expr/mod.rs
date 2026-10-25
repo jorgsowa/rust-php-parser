@@ -1993,7 +1993,8 @@ fn parse_assign_continuation<'arena, 'src>(
         while let ExprKind::Parenthesized(inner) = source {
             source = &inner.kind;
         }
-        let error = if has_nullsafe_link(source) {
+        // PHP checks a nullsafe source of a by-reference destructuring from 8.1.
+        let error = if parser.version >= PhpVersion::Php81 && has_nullsafe_link(source) {
             Some((
                 ForbiddenRule::ReferenceToNullsafe,
                 "Cannot take reference of a nullsafe chain",
