@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::PrivateFinalPropertyHook`, `ForbiddenRule::SetHookParameterDefault`, `ForbiddenRule::PartialApplicationWithUnpacking`, `ForbiddenRule::EnumCaseValueType` and `ForbiddenRule::DuplicateEnumCaseValue` (`php-rs-parser`).
+- `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::ClassFetchOnFoldedValue`, `ForbiddenRule::UnsupportedOperandTypes`, `ForbiddenRule::PrivateFinalPropertyHook`, `ForbiddenRule::SetHookParameterDefault`, `ForbiddenRule::PartialApplicationWithUnpacking`, `ForbiddenRule::EnumCaseValueType` and `ForbiddenRule::DuplicateEnumCaseValue` (`php-rs-parser`).
 - `ForeachStmt::key_by_ref` for a key taken by reference, `invalid_modifier` on a trait alias for `static`, `abstract` or `readonly`, and `PropertyHook::empty_param_list` for a hook written with `()` (`php-ast`).
 
 ### Changed
@@ -18,48 +18,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Nesting past the depth limit reports one `NestingTooDeep` error instead of a cascade of up to 100 errors (`php-rs-parser`).
-- From PHP 8.0, `::class` on a parenthesized expression PHP folds to a value, such as `(-1)::class`, `(!1)::class`, `(Foo::class)::class` or, before 8.2, `(1 . 2)::class`, reports `Cannot use "::class" on value of type int` (`on int` from 8.3) (`php-rs-parser`).
-- On PHP 7.4, magic methods are checked as PHP 7.4 checks them: a constructor, destructor or `__clone` cannot be static or declare a return type, the property, call and conversion methods take their argument count and no references, and parameter and return types are not checked, with PHP 7.4's messages (`php-rs-parser`).
-- On PHP 7.4, a control character before or after a simple string offset, as in `"$a[\x01x]"`, is skipped with a warning as PHP's lexer does, instead of making the offset invalid (`php-rs-parser`).
-- On PHP 7.4, `#[` inside a `{$…}` interpolation starts a comment, as everywhere else in PHP 7.4 code, so `"{$a[1 #[x` followed by a newline and `]}"` reads `$a[1]` (`php-rs-parser`).
-- On PHP 7.4, functions, imports and classes, interfaces and traits that PHP binds at compile time may come before the first `namespace` declaration (`php-rs-parser`).
-- On PHP 7.4, `parent` in a class without a parent is resolved at run time, so `parent::f()`, `new parent` and a `parent` type there no longer report `Cannot use "parent" when current class scope has no parent` (`php-rs-parser`).
-- On PHP 7.4, `::class` on a string literal or an unparenthesized `true`, `false` or `null`, as in `"Foo"::class` or `('Foo')::class`, is resolved at compile time and no longer reports a dynamic class name (`php-rs-parser`).
-- A bare `true`, `false` or `null` before `::` is printed without parentheses, so `true::class` is not printed as the invalid `(true)::class` (`php-printer`).
-- On PHP 7.4, `readonly` followed by `\` is the start of a name, so `private readonly \Closure $x;` declares a property of type `readonly\Closure` (`php-rs-parser`).
-- An unqualified import named by a keyword, such as `use Class;`, `use A\{B, List};`, `use const Var;` or, from PHP 8.0, `use function match;`, reports an error (`php-rs-parser`).
-- On PHP 7.4, `match` is a name, so `function match() {}`, `match($x);`, `Match::X`, `class Match {}`, `const MATCH = 1;` and the label `match:` are valid; only `match (...) {` reports that match expressions need PHP 8.0 (`php-rs-parser`).
-- A trait named after a reserved type, such as `trait int {}` or, from PHP 8.0, `trait mixed {}`, reports an error (`php-rs-parser`).
-- On PHP 7.4, `mixed` is a class name, so `class mixed {}`, `use A\B as mixed;` and `function f(mixed $a)` are valid and no longer report `'mixed type' requires PHP 8.0` (`php-rs-parser`).
-- From PHP 8.6, a pipe is compiled as the call it makes, so its result can be written to like a call's, as in `(1 |> f(...))->p ??= 99;` and `(1 |> f(...))[0] = 1;` (`php-rs-parser`).
-- Before PHP 8.3, `yield` and `from` separated by a comment are `yield` of the constant `from`, so `yield /**/ from [1];` yields `from[1]` and `yield/**/from;` is valid (`php-rs-parser`).
-- A `yield` key or value that starts with the constant `from` is parenthesized, so it is not printed as `yield from` (`php-printer`).
-- The right operand of `&&`, `||`, `and` or `or` no longer reports compile errors when PHP may fold the left operand away: `exit` before PHP 8.4, `empty()` of a literal and a literal `instanceof` fold exactly, and a literal condition whose value is not computed, such as `1 < 2`, `~1`, `@1`, `+print $a`, `M_PI`, `self::class` in a class, or `0 != 9 or $a`, is assumed to skip it (`php-rs-parser`).
-- From PHP 8.5, `!` on a float is not folded at compile time, so `!1.5 and isset(1 + 1);` and `const A = !1.5 && $a;` report PHP's errors (`php-rs-parser`).
-- On PHP 7.4, arithmetic that PHP folds at compile time on an array literal, such as `[] - 1`, `[1] + 1` or `-[]`, and `~` on `true`, `false`, `null`, a folded `!` such as `~!2`, or an array report `Unsupported operand types` (`php-rs-parser`).
-- A `print` expression or literal arithmetic and concatenation on the left of `&&`, `||`, `and` or `or` folds as in PHP, so the right operand it skips no longer reports compile errors, as in `print $a or isset(1 + 1);` and `-1 || $a ? 1 : 2 ? 3 : 4;` (`php-rs-parser`).
-- When printing for PHP 7.4, `.` is parenthesized at the precedence of `+` and `-`, so `1 . (2 << 1)` keeps its parentheses (`php-printer`).
+#### Parser: invalid code PHP rejects
+
+These constructs were accepted and are now reported with PHP's wording (`php-rs-parser`):
+
+- Names and imports: an unqualified import named by a keyword, such as `use Class;`, `use A\{B, List};`, `use const Var;` or, from PHP 8.0, `use function match;`; a `use` whose implicit alias is a special class name, as in `use A\int;`, `use A\{self};` or, from PHP 8.5, `use A\array;` (`Cannot use A\int as int because 'int' is a special class name`); a trait named after a reserved type, such as `trait int {}` or, from PHP 8.0, `trait mixed {}`; and a reserved keyword where PHP expects a class name, as in `new fn`, `new match`, `new array`, `catch (array $e)`, `extends fn` or `use fn;` in a class body.
+- `readonly` after `new` starts an anonymous class from PHP 8.1, so `new readonly;` reports the missing `class` and `new readonly readonly class {}` reports `Multiple readonly modifiers are not allowed`.
+- Syntax: a cast token where no cast can start, as in `foo(int)`, `if (int) {}` or, from PHP 8.5, `foo(void)` (`unexpected token "(int)"`); an intersection type without parentheses in a union, as in `A&B|C $a` or `: A&B|C`; and a number offset in simple interpolation with a misplaced `_`, as in `"$a[1_]"`, `"$a[1__2]"` or `"$a[0x_1]"`, or an `0o` octal before PHP 8.1.
+- Before PHP 8.4, calling a new object without wrapping parentheses (`new Foo()()`) and dereferencing a new anonymous class (`new class {}->foo`, `new class {}()`) (`'dereferencing a new expression without parentheses' requires PHP 8.4 or higher`).
+- Inline HTML before the first namespace, as in `x<?php namespace A;`, or after a braced namespace.
+- Default values: a literal default that a parameter's or property's type rejects, as in `int $x = 'a'`, `array $a = 1`, `Foo $f = 1` or a property `int $p = null`, with PHP 7.4's wording there and PHP 8.1's `Cannot use null as default value` for an intersection type. A typed class constant also checks array values, and messages spell `iterable` as `Traversable|array` only from PHP 8.2.
+- Constant expressions fold only what PHP folds: literals and their arithmetic and concatenation, magic constants, `X::class`, and outside parameter defaults the internal constants PHP substitutes (unqualified outside a namespace, or fully qualified) and earlier constants of the class being declared. So `const A = FOO ?? $x;`, `FOO ? 1 : $x`, `-0.0 || $x`, `(1-1) ? 1 : $x`, `function f($a = PHP_INT_MAX ?? $x)`, `(B)::C`, `B::C::D`, `new (B)` and `('a' ? 'b' : 'c')::class` are reported.
+- Folded values: from PHP 8.0, `::class` on a parenthesized expression PHP folds to a value, such as `(-1)::class`, `(!1)::class`, `(Foo::class)::class` or, before 8.2, `(1 . 2)::class` (`Cannot use "::class" on value of type int`, `on int` from 8.3); from PHP 8.5, `!` on a float is not folded, so `!1.5 and isset(1 + 1);` and `const A = !1.5 && $a;` are reported; and on PHP 7.4, folded arithmetic on an array literal, such as `[] - 1`, `[1] + 1` or `-[]`, and `~` on `true`, `false`, `null`, a folded `!` such as `~!2`, or an array (`Unsupported operand types`).
+- Enum members read their modifiers like class members, so `public public function`, `public private function`, `final final function` and `public(set) const` in an enum are reported instead of passing or cascading. Abstract enum methods report PHP's message for the version (`Enum method E::f() must not be abstract` from PHP 8.5). `private(set)` on a method or constant reports `Cannot use the private(set) modifier on a method`.
+- On PHP 7.4, an abstract private method in a trait (`Abstract function T::f() cannot be declared private`). On PHP 8.1, a literal backed enum case value of the wrong type or one that repeats an earlier case (`Enum case type string does not match enum backing type int`, `Duplicate value in enum E for cases A and B`).
+- Property hooks: a `final` hook on a private property (`Property hook cannot be both final and private`) and a `set` hook parameter with a default value (`Parameter $value of set hook A::$x must not have a default value`).
+- From PHP 8.6, a placeholder with argument unpacking, as in `f(...$a, ?)` (`Cannot combine partial application and unpacking`), in an attribute argument list (`Cannot create Closure as attribute argument`) or in `new A(?)` (`Cannot create Closure for new expression`).
+
+#### Parser: valid code PHP accepts
+
+These constructs were reported and are now accepted, as PHP does (`php-rs-parser`):
+
+- On PHP 7.4, names PHP 8 reserves: `match`, so `function match() {}`, `match($x);`, `Match::X`, `class Match {}`, `const MATCH = 1;` and the label `match:` are valid and only `match (...) {` reports that match expressions need PHP 8.0; `mixed`, so `class mixed {}`, `use A\B as mixed;` and `function f(mixed $a)` no longer report `'mixed type' requires PHP 8.0`; and `readonly` followed by `\`, so `private readonly \Closure $x;` declares a property of type `readonly\Closure`.
+- On PHP 7.4, checks PHP 7.4 leaves to run time or does not have: functions, imports and classes, interfaces and traits that PHP binds at compile time may come before the first `namespace` declaration; `parent` in a class without a parent, as in `parent::f()`, `new parent` or a `parent` type, which no longer reports `Cannot use "parent" when current class scope has no parent`; `::class` on a string literal or an unparenthesized `true`, `false` or `null`, as in `"Foo"::class` or `('Foo')::class`; and parameter and return types of magic methods. The magic method checks PHP 7.4 has (static or typed constructor, destructor and `__clone`, argument counts, by-reference arguments) use PHP 7.4's messages.
+- On PHP 7.4, strings lexed as PHP 7.4 does: a control character before or after a simple string offset, as in `"$a[\x01x]"`, is skipped with a warning, and `#[` inside a `{$…}` interpolation starts a comment, so `"{$a[1 #[x` followed by a newline and `]}"` reads `$a[1]`.
+- Before PHP 8.3, `yield` and `from` separated by a comment are `yield` of the constant `from`, so `yield /**/ from [1];` yields `from[1]` and `yield/**/from;` is valid.
+- Before PHP 8.4, `parent::$prop::get()` is an ordinary static call on a static property, so outside a class it no longer reports `Cannot use "parent" when no class scope is active` or the property hook call errors.
+- On PHP 8.0 and 8.1, yielding a nullsafe chain from a by-reference generator (`function &f() { yield $a?->b; }`); PHP checks it from 8.2.
+- On PHP 8.0 to 8.3, a curly brace offset that is the base of another fetch or call, as in `$a{0}->b`, `$a{0}[1]`, `$a{0}::$c` or `$a{0}->m()`; PHP checks it only where it folds an array literal or a PHP 8.3 `static` initializer (`[$a{0}->b]` from PHP 8.2).
+- From PHP 8.6, a pipe is compiled as the call it makes, so its result can be written to like a call's, as in `(1 |> f(...))->p ??= 99;` and `(1 |> f(...))[0] = 1;`.
+- The right operand of `&&`, `||`, `and` or `or` no longer reports compile errors when PHP may fold the left operand away. A `print` expression, literal arithmetic and concatenation, `exit` before PHP 8.4, `empty()` of a literal and a literal `instanceof` fold exactly, as in `print $a or isset(1 + 1);` and `-1 || $a ? 1 : 2 ? 3 : 4;`; a literal condition whose value is not computed, such as `1 < 2`, `~1`, `@1`, `+print $a`, `M_PI`, `self::class` in a class, or `0 != 9 or $a`, is assumed to skip it.
+- `++` and `--` bind tighter than `**`, so `--$a ** 2` parses as `(--$a) ** 2` instead of reporting `Cannot increment or decrement an expression that is not a variable`.
+
+#### Parser: wrong trees
+
 - On PHP 7.4, `.` has the precedence of `+` and `-` and binds tighter than `<<` and `>>`, so `"a" . 1 + 2` parses as `("a" . 1) + 2` and `1 . 2 << 1` as `(1 . 2) << 1` (`php-rs-parser`).
-- On PHP 8.0 and 8.1, yielding a nullsafe chain from a by-reference generator (`function &f() { yield $a?->b; }`) is accepted; PHP checks it from 8.2 (`php-rs-parser`).
-- Before PHP 8.4, `parent::$prop::get()` is an ordinary static call on a static property, so outside a class it no longer reports `Cannot use "parent" when no class scope is active` or the property hook call errors (`php-rs-parser`).
-- On PHP 8.0 to 8.3, a curly brace offset that is the base of another fetch or call, as in `$a{0}->b`, `$a{0}[1]`, `$a{0}::$c` or `$a{0}->m()`, is accepted as PHP does; PHP checks it only where it folds an array literal or a PHP 8.3 `static` initializer (`[$a{0}->b]` from PHP 8.2) (`php-rs-parser`).
-- Before PHP 8.4, calling a new object without wrapping parentheses (`new Foo()()`) and dereferencing a new anonymous class (`new class {}->foo`, `new class {}()`) report `'dereferencing a new expression without parentheses' requires PHP 8.4 or higher` (`php-rs-parser`).
-- `++` and `--` bind tighter than `**`, so `--$a ** 2` parses as `(--$a) ** 2` instead of reporting `Cannot increment or decrement an expression that is not a variable` (`php-rs-parser`).
-- Constant expressions fold only what PHP folds: literals and their arithmetic and concatenation, magic constants, `X::class`, and outside parameter defaults the internal constants PHP substitutes (unqualified outside a namespace, or fully qualified) and earlier constants of the class being declared. So `const A = FOO ?? $x;`, `FOO ? 1 : $x`, `-0.0 || $x`, `(1-1) ? 1 : $x`, `function f($a = PHP_INT_MAX ?? $x)`, `(B)::C`, `B::C::D`, `new (B)` and `('a' ? 'b' : 'c')::class` report PHP's errors (`php-rs-parser`).
-- Enum methods and constants read their modifiers like class members, so `public public function`, `public private function`, `final final function` and `public(set) const` in an enum report PHP's errors instead of passing or cascading. Abstract enum methods report PHP's message for the version (`Enum method E::f() must not be abstract` from PHP 8.5). Modifier errors use PHP's wording for the version: `Cannot use 'static' as constant modifier` before PHP 8.3, `Cannot use the static modifier on a class constant` from it, likewise for `abstract` and `readonly` constants and readonly methods, and `Cannot use the final modifier on an abstract method` or `abstract class member`. `private(set)` on a method or constant reports `Cannot use the private(set) modifier on a method` (`php-rs-parser`).
-- On PHP 7.4, an abstract private method in a trait reports `Abstract function T::f() cannot be declared private`. On PHP 8.1, a literal backed enum case value of the wrong type or one that repeats an earlier case reports PHP 8.1's `Enum case type string does not match enum backing type int` or `Duplicate value in enum E for cases A and B`. A value on a case of a pure enum says `non-backed enum` with the namespaced name, as PHP does (`php-rs-parser`).
+
+#### Parser: messages and recovery
+
+- Nesting past the depth limit reports one `NestingTooDeep` error instead of a cascade of up to 100 errors (`php-rs-parser`).
+- Modifier errors use PHP's wording for the version: `Cannot use 'static' as constant modifier` before PHP 8.3 and `Cannot use the static modifier on a class constant` from it, likewise for `abstract` and `readonly` constants and readonly methods, and `Cannot use the final modifier on an abstract method` or `abstract class member` (`php-rs-parser`).
+- A value on a case of a pure enum says `non-backed enum` with the namespaced name, and from PHP 8.6 asymmetric visibility on a virtual property says `get-only` or `set-only`, as PHP does (`php-rs-parser`).
 - On PHP 8.4, `#[\Deprecated]` on a class, interface, trait or enum reports PHP's `Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)`; classes and constants are targets from PHP 8.5. Attributes on a constant before PHP 8.5 report only the version error (`php-rs-parser`).
-- From PHP 8.6, a placeholder with argument unpacking, as in `f(...$a, ?)`, reports PHP's `Cannot combine partial application and unpacking`, a placeholder in an attribute argument list `Cannot create Closure as attribute argument`, and a placeholder in `new A(?)` PHP's `Cannot create Closure for new expression` (`php-rs-parser`).
-- A `final` hook on a private property reports PHP's `Property hook cannot be both final and private`, a `set` hook parameter with a default value `Parameter $value of set hook A::$x must not have a default value`, and from PHP 8.6 asymmetric visibility on a virtual property says `get-only` or `set-only` as PHP does (`php-rs-parser`).
-- Inline HTML before the first namespace, as in `x<?php namespace A;`, or after a braced namespace reports PHP's namespace errors (`php-rs-parser`).
-- A `use` whose implicit alias is a special class name, as in `use A\int;`, `use A\{self};` or, from PHP 8.5, `use A\array;`, reports PHP's `Cannot use A\int as int because 'int' is a special class name` (`php-rs-parser`).
-- A literal default value that a parameter's or property's type rejects, as in `int $x = 'a'`, `array $a = 1`, `Foo $f = 1` or a property `int $p = null`, reports PHP's error for the target version, including PHP 7.4's wording and PHP 8.1's `Cannot use null as default value` for an intersection type. A typed class constant also checks array values, and messages spell `iterable` as `Traversable|array` only from PHP 8.2, as PHP does (`php-rs-parser`).
-- A number offset in simple interpolation with a misplaced `_`, as in `"$a[1_]"`, `"$a[1__2]"` or `"$a[0x_1]"`, or an `0o` octal before PHP 8.1, is an error, as in PHP (`php-rs-parser`).
-- A cast token where no cast can start, as in `foo(int)`, `if (int) {}` or, from PHP 8.5, `foo(void)`, reports PHP's `unexpected token "(int)"` (`php-rs-parser`).
-- An intersection type without parentheses in a union, as in `A&B|C $a` or `: A&B|C`, is a syntax error, as in PHP (`php-rs-parser`).
-- A reserved keyword where PHP expects a class name, as in `new fn`, `new match`, `new array`, `catch (array $e)`, `extends fn` or `use fn;` in a class body, is a syntax error, and from PHP 8.1 `readonly` after `new` starts an anonymous class, so `new readonly;` reports the missing `class` and `new readonly readonly class {}` PHP's `Multiple readonly modifiers are not allowed` (`php-rs-parser`).
+
+#### Printer
+
 - The printer keeps PHP's error instead of printing valid code for a foreach key taken by reference, a trait alias with `static`, `abstract` or `readonly`, `new Foo(...)`, `#[Foo(...)]`, a property hook with an empty `()`, a redeclared hook spelled in another case, such as `set {} SET {}`, and, when given the source, a destructuring target that mixes `list()` and `[]` (`php-printer`).
+- When printing for PHP 7.4, `.` is parenthesized at the precedence of `+` and `-`, so `1 . (2 << 1)` keeps its parentheses (`php-printer`).
+- A bare `true`, `false` or `null` before `::` is printed without parentheses, so `true::class` is not printed as the invalid `(true)::class` (`php-printer`).
+- A `yield` key or value that starts with the constant `from` is parenthesized, so it is not printed as `yield from` (`php-printer`).
 
 ## [0.26.0] - 2026-10-24
 
