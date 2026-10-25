@@ -520,6 +520,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             validate_heredoc_indentation(
                 raw_body,
                 true,
+                parser.version >= PhpVersion::Php80,
                 &indent,
                 indent_span,
                 body_offset,
@@ -602,6 +603,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             validate_heredoc_indentation(
                 raw_body,
                 false,
+                parser.version >= PhpVersion::Php80,
                 &indent,
                 indent_span,
                 body_offset,
@@ -2879,9 +2881,11 @@ fn strip_heredoc_indent(raw_body: &str, indent_len: usize) -> String {
 /// Validate that every body line of an indented heredoc (`interpolated`) or nowdoc starts with
 /// `indent`, as PHP does.
 /// Emits `ParseError::Forbidden` for each line that violates the indentation requirement.
+#[allow(clippy::too_many_arguments)]
 fn validate_heredoc_indentation(
     raw_body: &str,
     interpolated: bool,
+    attributes: bool,
     indent: &str,
     indent_span: Span,
     body_offset: u32,
@@ -2931,10 +2935,10 @@ fn validate_heredoc_indentation(
             }
             b'\\' if interpolated && !matches!(bytes.get(i + 1), Some(b'\n' | b'\r')) => i + 2,
             b'{' if interpolated && bytes.get(i + 1) == Some(&b'$') => {
-                interpolation_end(bytes, i).unwrap_or(bytes.len())
+                interpolation_end(bytes, i, attributes).unwrap_or(bytes.len())
             }
             b'$' if interpolated && bytes.get(i + 1) == Some(&b'{') => {
-                interpolation_end(bytes, i + 1).unwrap_or(bytes.len())
+                interpolation_end(bytes, i + 1, attributes).unwrap_or(bytes.len())
             }
             _ => i + 1,
         }

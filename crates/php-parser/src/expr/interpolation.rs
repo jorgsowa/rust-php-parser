@@ -203,7 +203,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                 }
 
                 let brace_offset = base_offset + i as u32;
-                let close = interpolation_end(bytes, i);
+                let close = interpolation_end(bytes, i, version >= PhpVersion::Php80);
                 let closed = close.is_some();
                 let expr_start = i + 1;
                 // position of } or end of string
@@ -453,7 +453,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                     literal.clear();
                 }
                 let brace_offset = body_offset + i as u32;
-                let close = interpolation_end(bytes, i);
+                let close = interpolation_end(bytes, i, version >= PhpVersion::Php80);
                 let closed = close.is_some();
                 let expr_start = i + 1;
                 let expr_end = close.map_or(len, |after| after - 1);
@@ -902,7 +902,7 @@ fn parse_dollar_brace<'arena, 'src>(
 ) -> (Expr<'arena, 'src>, usize) {
     let bytes = text.as_bytes();
     let content_start = dollar + 2;
-    let (close, closed) = match interpolation_end(bytes, dollar + 1) {
+    let (close, closed) = match interpolation_end(bytes, dollar + 1, version >= PhpVersion::Php80) {
         Some(after) => (after - 1, true),
         None => (bytes.len(), false),
     };
@@ -940,7 +940,7 @@ fn parse_dollar_brace<'arena, 'src>(
     }
     // Whitespace and comments may separate the closing `]` from the `}`.
     let bracket_end = if name_end < close && bytes[name_end] == b'[' {
-        last_token_end(&text[..close], name_end)
+        last_token_end(&text[..close], name_end, version >= PhpVersion::Php80)
     } else {
         close
     };
@@ -997,8 +997,8 @@ fn parse_dollar_brace<'arena, 'src>(
 }
 
 /// End of the last token in `code` after `from`, ignoring comments; `from` when there is none.
-fn last_token_end(code: &str, from: usize) -> usize {
-    let mut lexer = Lexer::new_at(code, from);
+fn last_token_end(code: &str, from: usize, attributes: bool) -> usize {
+    let mut lexer = Lexer::new_at(code, from).with_attributes(attributes);
     let mut end = from;
     loop {
         let token = lexer.next_token();

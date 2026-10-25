@@ -159,8 +159,8 @@ fn label_len(s: &str) -> usize {
 /// heredocs, where the expression body may itself contain nested strings.
 /// Returns the byte index immediately after the matching `}`; on EOF returns
 /// `bytes.len()` so the caller's unterminated-string branch fires.
-fn skip_complex_interp(bytes: &[u8], p: usize) -> usize {
-    interpolation_end(bytes, p).unwrap_or(bytes.len())
+fn skip_complex_interp(bytes: &[u8], p: usize, attributes: bool) -> usize {
+    interpolation_end(bytes, p, attributes).unwrap_or(bytes.len())
 }
 
 /// What the scan in [`interpolation_end`] is inside of.
@@ -177,10 +177,11 @@ enum InterpFrame<'a> {
 /// interpolation, or `None` when the input ends first. The code inside is scanned the way PHP
 /// lexes it: strings, comments and heredocs may contain braces, and strings may nest further
 /// interpolations. Nesting is tracked with an explicit stack rather than recursion, because its
-/// depth is controlled by the input and would otherwise overflow the native stack.
+/// depth is controlled by the input and would otherwise overflow the native stack. Without
+/// `attributes` (before PHP 8.0) `#[` starts a comment.
 /// Public for the parser crate; outside semver.
 #[doc(hidden)]
-pub fn interpolation_end(bytes: &[u8], mut p: usize) -> Option<usize> {
+pub fn interpolation_end(bytes: &[u8], mut p: usize, attributes: bool) -> Option<usize> {
     debug_assert!(bytes.get(p) == Some(&b'{'));
     let mut stack = vec![InterpFrame::Code(0)];
     while p < bytes.len() {
@@ -210,7 +211,7 @@ pub fn interpolation_end(bytes: &[u8], mut p: usize) -> Option<usize> {
                         p += 1;
                     }
                     b'\'' => p = skip_nested_squoted(bytes, p),
-                    b'#' if bytes.get(p + 1) != Some(&b'[') => {
+                    b'#' if !(attributes && bytes.get(p + 1) == Some(&b'[')) => {
                         p += 1;
                         Lexer::skip_line_comment_body(bytes, &mut p);
                     }
@@ -326,13 +327,17 @@ fn newline_len(bytes: &[u8]) -> Option<usize> {
 
 /// Start of the heredoc body line after the one at `p`. A line break inside a `{$...}` or
 /// `${...}` interpolation does not start a line, so the closing label cannot match there.
-fn next_heredoc_line(bytes: &[u8], mut p: usize) -> usize {
+fn next_heredoc_line(bytes: &[u8], mut p: usize, attributes: bool) -> usize {
     while p < bytes.len() {
         match bytes[p] {
             b'\n' | b'\r' => return p + newline_len(&bytes[p..]).unwrap_or(1),
             b'\\' if !matches!(bytes.get(p + 1), Some(b'\n' | b'\r')) => p += 2,
-            b'{' if bytes.get(p + 1) == Some(&b'$') => p = skip_complex_interp(bytes, p),
-            b'$' if bytes.get(p + 1) == Some(&b'{') => p = skip_complex_interp(bytes, p + 1),
+            b'{' if bytes.get(p + 1) == Some(&b'$') => {
+                p = skip_complex_interp(bytes, p, attributes)
+            }
+            b'$' if bytes.get(p + 1) == Some(&b'{') => {
+                p = skip_complex_interp(bytes, p + 1, attributes)
+            }
             _ => p += 1,
         }
     }
@@ -1114,9 +1119,9 @@ impl<'src> Lexer<'src> {
                     // balanced-brace scan that respects string quoting. A `{`
                     // before `segment` was escaped.
                     if p > segment && bytes[p - 1] == b'{' {
-                        p = skip_complex_interp(bytes, p - 1);
+                        p = skip_complex_interp(bytes, p - 1, self.attributes);
                     } else if bytes.get(p + 1) == Some(&b'{') {
-                        p = skip_complex_interp(bytes, p + 1);
+                        p = skip_complex_interp(bytes, p + 1, self.attributes);
                     } else {
                         p += 1;
                     }
@@ -1165,10 +1170,10 @@ impl<'src> Lexer<'src> {
                             }
                         }
                         b'$' if p > segment && bytes[p - 1] == b'{' => {
-                            p = skip_complex_interp(bytes, p - 1);
+                            p = skip_complex_interp(bytes, p - 1, self.attributes);
                         }
                         b'$' if bytes.get(p + 1) == Some(&b'{') => {
-                            p = skip_complex_interp(bytes, p + 1);
+                            p = skip_complex_interp(bytes, p + 1, self.attributes);
                         }
                         b'$' => p += 1,
                         _ => {
@@ -1545,7 +1550,7 @@ impl<'src> Lexer<'src> {
             search_pos = if is_nowdoc {
                 line_end + newline_len(&body.as_bytes()[line_end..]).unwrap_or(0)
             } else {
-                next_heredoc_line(body.as_bytes(), line_start)
+                next_heredoc_line(body.as_bytes(), line_start, self.attributes)
             };
         }
 

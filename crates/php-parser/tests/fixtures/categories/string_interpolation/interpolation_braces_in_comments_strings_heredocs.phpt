@@ -34,7 +34,9 @@ EOT]}";
 $x = "{$a[0 /* " */]}";
 $x = "{$a["{$b}" . '"']}";
 ===errors <=7.4===
-expected expression, found '}'
+unterminated string literal
+unclosed '{' in string interpolation
+expected ';' after expression
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ';', expecting ')' in Standard input code on line 32
 ===ast <=7.4===
@@ -1356,16 +1358,103 @@ PHP Parse error:  syntax error, unexpected ';', expecting ')' in Standard input 
                                       "name": null,
                                       "kind": {
                                         "Value": {
-                                          "kind": "Error",
+                                          "kind": {
+                                            "Assign": {
+                                              "target": {
+                                                "kind": {
+                                                  "Variable": "x"
+                                                },
+                                                "span": {
+                                                  "start": 444,
+                                                  "end": 446
+                                                }
+                                              },
+                                              "op": "Assign",
+                                              "value": {
+                                                "kind": {
+                                                  "InterpolatedString": [
+                                                    {
+                                                      "Expr": {
+                                                        "kind": {
+                                                          "ArrayAccess": {
+                                                            "array": {
+                                                              "kind": {
+                                                                "Variable": "a"
+                                                              },
+                                                              "span": {
+                                                                "start": 451,
+                                                                "end": 453
+                                                              }
+                                                            },
+                                                            "index": {
+                                                              "kind": {
+                                                                "Heredoc": {
+                                                                  "label": "EOT",
+                                                                  "parts": [
+                                                                    {
+                                                                      "Expr": {
+                                                                        "kind": {
+                                                                          "ArrayAccess": {
+                                                                            "array": {
+                                                                              "kind": {
+                                                                                "Variable": "b"
+                                                                              },
+                                                                              "span": {
+                                                                                "start": 462,
+                                                                                "end": 464
+                                                                              }
+                                                                            },
+                                                                            "index": {
+                                                                              "kind": {
+                                                                                "String": "}"
+                                                                              },
+                                                                              "span": {
+                                                                                "start": 465,
+                                                                                "end": 468
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        },
+                                                                        "span": {
+                                                                          "start": 462,
+                                                                          "end": 469
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  ]
+                                                                }
+                                                              },
+                                                              "span": {
+                                                                "start": 454,
+                                                                "end": 474
+                                                              }
+                                                            }
+                                                          }
+                                                        },
+                                                        "span": {
+                                                          "start": 451,
+                                                          "end": 475
+                                                        }
+                                                      }
+                                                    }
+                                                  ]
+                                                },
+                                                "span": {
+                                                  "start": 449,
+                                                  "end": 477
+                                                }
+                                              }
+                                            }
+                                          },
                                           "span": {
-                                            "start": 424,
-                                            "end": 424
+                                            "start": 444,
+                                            "end": 477
                                           }
                                         }
                                       },
                                       "span": {
-                                        "start": 424,
-                                        "end": 424
+                                        "start": 444,
+                                        "end": 477
                                       }
                                     }
                                   ]
@@ -1373,14 +1462,14 @@ PHP Parse error:  syntax error, unexpected ';', expecting ')' in Standard input 
                               },
                               "span": {
                                 "start": 422,
-                                "end": 424
+                                "end": 477
                               }
                             }
                           }
                         },
                         "span": {
                           "start": 419,
-                          "end": 424
+                          "end": 477
                         }
                       }
                     }
@@ -1388,289 +1477,19 @@ PHP Parse error:  syntax error, unexpected ';', expecting ')' in Standard input 
                 },
                 "span": {
                   "start": 417,
-                  "end": 442
+                  "end": 529
                 }
               }
             }
           },
           "span": {
             "start": 412,
-            "end": 442
+            "end": 529
           }
         }
       },
       "span": {
         "start": 412,
-        "end": 443
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Assign": {
-              "target": {
-                "kind": {
-                  "Variable": "x"
-                },
-                "span": {
-                  "start": 444,
-                  "end": 446
-                }
-              },
-              "op": "Assign",
-              "value": {
-                "kind": {
-                  "InterpolatedString": [
-                    {
-                      "Expr": {
-                        "kind": {
-                          "ArrayAccess": {
-                            "array": {
-                              "kind": {
-                                "Variable": "a"
-                              },
-                              "span": {
-                                "start": 451,
-                                "end": 453
-                              }
-                            },
-                            "index": {
-                              "kind": {
-                                "Heredoc": {
-                                  "label": "EOT",
-                                  "parts": [
-                                    {
-                                      "Expr": {
-                                        "kind": {
-                                          "ArrayAccess": {
-                                            "array": {
-                                              "kind": {
-                                                "Variable": "b"
-                                              },
-                                              "span": {
-                                                "start": 462,
-                                                "end": 464
-                                              }
-                                            },
-                                            "index": {
-                                              "kind": {
-                                                "String": "}"
-                                              },
-                                              "span": {
-                                                "start": 465,
-                                                "end": 468
-                                              }
-                                            }
-                                          }
-                                        },
-                                        "span": {
-                                          "start": 462,
-                                          "end": 469
-                                        }
-                                      }
-                                    }
-                                  ]
-                                }
-                              },
-                              "span": {
-                                "start": 454,
-                                "end": 474
-                              }
-                            }
-                          }
-                        },
-                        "span": {
-                          "start": 451,
-                          "end": 475
-                        }
-                      }
-                    }
-                  ]
-                },
-                "span": {
-                  "start": 449,
-                  "end": 477
-                }
-              }
-            }
-          },
-          "span": {
-            "start": 444,
-            "end": 477
-          }
-        }
-      },
-      "span": {
-        "start": 444,
-        "end": 478
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Assign": {
-              "target": {
-                "kind": {
-                  "Variable": "x"
-                },
-                "span": {
-                  "start": 479,
-                  "end": 481
-                }
-              },
-              "op": "Assign",
-              "value": {
-                "kind": {
-                  "InterpolatedString": [
-                    {
-                      "Expr": {
-                        "kind": {
-                          "ArrayAccess": {
-                            "array": {
-                              "kind": {
-                                "Variable": "a"
-                              },
-                              "span": {
-                                "start": 486,
-                                "end": 488
-                              }
-                            },
-                            "index": {
-                              "kind": {
-                                "Int": 0
-                              },
-                              "span": {
-                                "start": 489,
-                                "end": 490
-                              }
-                            }
-                          }
-                        },
-                        "span": {
-                          "start": 486,
-                          "end": 499
-                        }
-                      }
-                    }
-                  ]
-                },
-                "span": {
-                  "start": 484,
-                  "end": 501
-                }
-              }
-            }
-          },
-          "span": {
-            "start": 479,
-            "end": 501
-          }
-        }
-      },
-      "span": {
-        "start": 479,
-        "end": 502
-      }
-    },
-    {
-      "kind": {
-        "Expression": {
-          "kind": {
-            "Assign": {
-              "target": {
-                "kind": {
-                  "Variable": "x"
-                },
-                "span": {
-                  "start": 503,
-                  "end": 505
-                }
-              },
-              "op": "Assign",
-              "value": {
-                "kind": {
-                  "InterpolatedString": [
-                    {
-                      "Expr": {
-                        "kind": {
-                          "ArrayAccess": {
-                            "array": {
-                              "kind": {
-                                "Variable": "a"
-                              },
-                              "span": {
-                                "start": 510,
-                                "end": 512
-                              }
-                            },
-                            "index": {
-                              "kind": {
-                                "Binary": {
-                                  "left": {
-                                    "kind": {
-                                      "InterpolatedString": [
-                                        {
-                                          "Expr": {
-                                            "kind": {
-                                              "Variable": "b"
-                                            },
-                                            "span": {
-                                              "start": 515,
-                                              "end": 517
-                                            }
-                                          }
-                                        }
-                                      ]
-                                    },
-                                    "span": {
-                                      "start": 513,
-                                      "end": 519
-                                    }
-                                  },
-                                  "op": "Concat",
-                                  "right": {
-                                    "kind": {
-                                      "String": "\""
-                                    },
-                                    "span": {
-                                      "start": 522,
-                                      "end": 525
-                                    }
-                                  }
-                                }
-                              },
-                              "span": {
-                                "start": 513,
-                                "end": 525
-                              }
-                            }
-                          }
-                        },
-                        "span": {
-                          "start": 510,
-                          "end": 526
-                        }
-                      }
-                    }
-                  ]
-                },
-                "span": {
-                  "start": 508,
-                  "end": 528
-                }
-              }
-            }
-          },
-          "span": {
-            "start": 503,
-            "end": 528
-          }
-        }
-      },
-      "span": {
-        "start": 503,
         "end": 529
       }
     }
