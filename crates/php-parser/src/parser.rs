@@ -2770,7 +2770,8 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             let is_skippable = matches!(
                 stmt.kind,
                 StmtKind::Declare(_) | StmtKind::Nop | StmtKind::HaltCompiler(_)
-            );
+            ) || (self.version < PhpVersion::Php80
+                && compiles_to_no_opcode(stmt));
 
             if let StmtKind::Namespace(decl) = stmt.kind {
                 let kind = match decl.body {
@@ -2888,6 +2889,25 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 }
             }
         }
+    }
+}
+
+/// PHP 7.4 finds code before a namespace by the opcodes compiled so far, and declarations it binds
+/// at compile time compile to none. A class with a parent is bound early when PHP knows the parent,
+/// which needs symbols, so it counts as bound.
+fn compiles_to_no_opcode(stmt: &Stmt<'_, '_>) -> bool {
+    let uses_trait = |body: &php_ast::ClassBody<'_, '_>| {
+        body.members
+            .iter()
+            .any(|m| matches!(m.kind, php_ast::ClassMemberKind::TraitUse(_)))
+    };
+    match &stmt.kind {
+        StmtKind::Function(_) | StmtKind::Use(_) => true,
+        StmtKind::Class(class) => class.implements.is_empty() && !uses_trait(&class.body),
+        StmtKind::Interface(interface) => interface.extends.is_empty(),
+        StmtKind::Trait(t) => !uses_trait(&t.body),
+        StmtKind::Block(block) => block.stmts.iter().all(compiles_to_no_opcode),
+        _ => false,
     }
 }
 
