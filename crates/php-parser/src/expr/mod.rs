@@ -2393,7 +2393,13 @@ fn parse_expr_rest<'arena, 'src>(
         }
 
         // Infix binary operators
-        if let Some((left_bp, right_bp)) = precedence::infix_binding_power(kind) {
+        // Before PHP 8.0, `.` shares the precedence of `+` and `-`.
+        let bp_kind = if kind == TokenKind::Dot && parser.version < PhpVersion::Php80 {
+            TokenKind::Plus
+        } else {
+            kind
+        };
+        if let Some((left_bp, right_bp)) = precedence::infix_binding_power(bp_kind) {
             if left_bp < min_bp {
                 break;
             }
