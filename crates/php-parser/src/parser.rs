@@ -935,7 +935,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     pub fn retract_destructuring_errors_within(&mut self, within: Span) {
         self.errors.retain(|e| {
             !matches!(e, ParseError::Forbidden { rule, span, .. }
-                if matches!(rule, ForbiddenRule::EmptyArrayElement | ForbiddenRule::ListOutsideDestructuring)
+                if matches!(rule, ForbiddenRule::EmptyArrayElement | ForbiddenRule::ListOutsideDestructuring | ForbiddenRule::UnpackNonArray)
                     && span.start >= within.start
                     && span.end <= within.end)
         });

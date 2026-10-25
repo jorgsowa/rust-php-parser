@@ -361,6 +361,22 @@ fn allow_curly_base(parser: &mut Parser<'_, '_>, base: &Expr<'_, '_>) {
 }
 
 /// PHP 8.0 to 8.3 check every `{}` offset an array literal fold reaches, base of a fetch or not.
+/// Report unpacking a non-array in the array literal `elements` when PHP folds it.
+pub(crate) fn check_constant_unpack(
+    parser: &mut Parser<'_, '_>,
+    elements: &[ArrayElement<'_, '_>],
+) {
+    let Some((span, given)) = folded_value::constant_unpack_error(parser, elements) else {
+        return;
+    };
+    let message = if parser.version >= PhpVersion::Php84 {
+        format!("Only arrays and Traversables can be unpacked, {given} given")
+    } else {
+        "Only arrays and Traversables can be unpacked".to_string()
+    };
+    parser.forbid(ForbiddenRule::UnpackNonArray, message, span);
+}
+
 pub(crate) fn check_folded_curly_offsets(parser: &mut Parser<'_, '_>, expr: &Expr<'_, '_>) {
     if parser.curly_bases.is_empty() {
         return;

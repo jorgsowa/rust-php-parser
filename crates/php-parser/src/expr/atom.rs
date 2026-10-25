@@ -2515,6 +2515,7 @@ fn parse_array_literal<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Ex
     let end = parser.previous_end();
     let span = Span::new(start, end);
 
+    super::check_constant_unpack(parser, &elements);
     let array = Expr {
         kind: ExprKind::Array(elements),
         span,
@@ -2554,6 +2555,7 @@ fn parse_array_call<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     let end = parser.previous_end();
     let span = Span::new(start, end);
 
+    super::check_constant_unpack(parser, &elements);
     let array = Expr {
         kind: ExprKind::Array(elements),
         span,

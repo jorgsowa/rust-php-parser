@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::ClassFetchOnFoldedValue`, `ForbiddenRule::UnsupportedOperandTypes`, `ForbiddenRule::PrivateFinalPropertyHook`, `ForbiddenRule::SetHookParameterDefault`, `ForbiddenRule::PartialApplicationWithUnpacking`, `ForbiddenRule::EnumCaseValueType`, `ForbiddenRule::DuplicateEnumCaseValue`, `ForbiddenRule::CustomAssertFunction`, `ForbiddenRule::PositionalAfterUnpacking`, `ForbiddenRule::MethodNameNotString` and `ForbiddenRule::LongArrayInDestructuring` (`php-rs-parser`).
+- `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::ClassFetchOnFoldedValue`, `ForbiddenRule::UnsupportedOperandTypes`, `ForbiddenRule::PrivateFinalPropertyHook`, `ForbiddenRule::SetHookParameterDefault`, `ForbiddenRule::PartialApplicationWithUnpacking`, `ForbiddenRule::EnumCaseValueType`, `ForbiddenRule::DuplicateEnumCaseValue`, `ForbiddenRule::CustomAssertFunction`, `ForbiddenRule::PositionalAfterUnpacking`, `ForbiddenRule::MethodNameNotString`, `ForbiddenRule::LongArrayInDestructuring` and `ForbiddenRule::UnpackNonArray` (`php-rs-parser`).
 - `ForeachStmt::key_by_ref` for a key taken by reference, `invalid_modifier` on a trait alias for `static`, `abstract` or `readonly`, and `PropertyHook::empty_param_list` for a hook written with `()` (`php-ast`).
 - `PrettyPrinter::syntax_errors`: for source with a syntax error, the output starts with a syntax error so it stays invalid (`php-printer`). `ParseError::phase` tells syntax errors from compile errors (`php-rs-parser`).
 
@@ -43,6 +43,7 @@ These constructs were accepted and are now reported with PHP's wording (`php-rs-
 - From PHP 8.0, a function named `assert`, as in `namespace A; function assert() {}` (`Defining a custom assert() function is not allowed, as the function has special semantics`).
 - A positional argument after argument unpacking, as in `var_dump(...[1, 2, 3], 4);` (`Cannot use positional argument after argument unpacking`).
 - A method name PHP folds to a value other than a string, as in `$o->{1}()`, `$o->{true}()` or `A::{1 + 1}()` (`Method name must be a string`).
+- Unpacking a constant that is not an array in an array literal PHP folds, as in `[...1]` or `const C = [...true];` (`Only arrays and Traversables can be unpacked`, with `, int given` from PHP 8.4).
 - A nested destructuring target written with `array()`, as in `[array($a)] = $b;` (`Cannot assign to array(), use [] instead`), and a foreach target that mixes `list()` and `[]`, as in `foreach ($x as [list($a)])` (`Cannot mix [] and list()`).
 - From PHP 8.3, a static variable named like a `use` variable of its closure, as in `function () use (&$a) { static $a; }` (`Duplicate declaration of static variable $a`).
 

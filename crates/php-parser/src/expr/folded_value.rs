@@ -110,6 +110,102 @@ pub(super) fn folds_to_non_string(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) 
     folded_value(parser, expr, 0).is_some_and(|value| !matches!(value, Value::Str(_)))
 }
 
+/// The spread element of the array literal `elements` that unpacks a non-array, and the type
+/// PHP names for it, when PHP folds the array at compile time.
+pub(super) fn constant_unpack_error(
+    parser: &Parser<'_, '_>,
+    elements: &[ArrayElement<'_, '_>],
+) -> Option<(Span, &'static str)> {
+    if !elements.iter().any(|el| el.is_spread()) {
+        return None;
+    }
+    match fold_array(parser, elements, 0) {
+        ArrayFold::UnpackError(span, given) => Some((span, given)),
+        _ => None,
+    }
+}
+
+enum ArrayFold {
+    NotFolded,
+    Folded,
+    UnpackError(Span, &'static str),
+}
+
+enum Folded {
+    Array,
+    Scalar(Value),
+}
+
+fn folded(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>, depth: usize) -> Option<Folded> {
+    match &unparenthesized(expr).kind {
+        ExprKind::Array(elements) => match fold_array(parser, elements, depth + 1) {
+            ArrayFold::Folded => Some(Folded::Array),
+            _ => None,
+        },
+        _ => folded_value(parser, expr, depth + 1).map(Folded::Scalar),
+    }
+}
+
+/// PHP folds an array literal only if every element is constant, then adds them in order.
+fn fold_array(
+    parser: &Parser<'_, '_>,
+    elements: &[ArrayElement<'_, '_>],
+    depth: usize,
+) -> ArrayFold {
+    if depth > MAX_DEPTH {
+        return ArrayFold::NotFolded;
+    }
+    let mut values = Vec::with_capacity(elements.len());
+    for el in elements {
+        let (ArrayElementKind::Value(value) | ArrayElementKind::Spread(value)) = &el.kind else {
+            return ArrayFold::NotFolded;
+        };
+        let key = match &el.key {
+            Some(key) => match folded(parser, key, depth) {
+                Some(key) => Some(key),
+                None => return ArrayFold::NotFolded,
+            },
+            None => None,
+        };
+        let Some(value) = folded(parser, value, depth) else {
+            return ArrayFold::NotFolded;
+        };
+        values.push((key, value));
+    }
+    let version = parser.version;
+    for (el, (key, value)) in elements.iter().zip(values) {
+        if el.is_spread() {
+            let Folded::Scalar(value) = value else {
+                continue;
+            };
+            let given = match value {
+                Value::Int(_) => "int",
+                Value::Float(_) => "float",
+                Value::Str(_) => "string",
+                Value::Null => "null",
+                Value::Bool(Some(true)) => "true",
+                Value::Bool(Some(false)) => "false",
+                Value::Bool(None) => "bool",
+            };
+            return ArrayFold::UnpackError(el.value().span, given);
+        }
+        // Keys PHP leaves to run time, where they warn or fail, stop the fold.
+        let left_to_run_time = match key {
+            Some(Folded::Array) => true,
+            Some(Folded::Scalar(Value::Null)) => version >= PhpVersion::Php85,
+            Some(Folded::Scalar(Value::Float(f))) => {
+                version >= PhpVersion::Php81
+                    && !f.is_some_and(|f| f.fract() == 0.0 && f.abs() < 9.0e18)
+            }
+            _ => false,
+        };
+        if left_to_run_time {
+            return ArrayFold::NotFolded;
+        }
+    }
+    ArrayFold::Folded
+}
+
 fn is_literal_concat(expr: &Expr<'_, '_>) -> bool {
     let token = |e: &Expr<'_, '_>| {
         matches!(

@@ -615,6 +615,8 @@ forbidden_rules! {
     LongArrayInDestructuring = "long-array-in-destructuring", Compile;
     /// A destructuring list uses `...`.
     SpreadInDestructuring = "spread-in-destructuring", Compile;
+    /// An array literal PHP folds unpacks a value that is not an array, as in `[...1]`.
+    UnpackNonArray = "unpack-non-array", Compile;
     /// Nested ternaries are not parenthesized, e.g. `a ? b : c ? d : e`.
     UnparenthesizedNestedTernary = "unparenthesized-nested-ternary", Compile;
     /// An arrow function on the right of `|>` is not parenthesized.
@@ -948,6 +950,7 @@ mod tests {
             ForbiddenRule::MixedListSyntax => &[("<?php [list($a)] = $b;", "list($a)"),],
             ForbiddenRule::LongArrayInDestructuring => &[("<?php [array($a)] = $b;", "array($a)"),],
             ForbiddenRule::SpreadInDestructuring => &[("<?php [...$a] = $b;", "...$a"),],
+            ForbiddenRule::UnpackNonArray => &[("<?php $a = [1, ...2];", "2"),],
             ForbiddenRule::UnparenthesizedNestedTernary => &[("<?php $x = 1 ? 2 : 3 ? 4 : 5;", "?"),],
             ForbiddenRule::UnparenthesizedArrowInPipe => &[("<?php $x = 1 |> fn($a) => $a;", "fn($a) => $a"),],
             ForbiddenRule::InvalidCurlyInterpolation => &[("<?php echo \"{$a + 1}\";", "$a + 1"),],
