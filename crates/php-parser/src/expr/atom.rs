@@ -1636,6 +1636,12 @@ pub(crate) fn parse_closure<'arena, 'src>(
     parser.function_depth += 1;
     let saved_by_ref = std::mem::replace(&mut parser.by_ref_function, by_ref);
     let saved_static_vars = std::mem::take(&mut parser.static_vars);
+    // From 8.3 PHP stores the closure's `use` variables as its static variables.
+    if parser.version >= PhpVersion::Php83 {
+        parser
+            .static_vars
+            .extend(use_vars.iter().filter_map(|var| var.name.as_str()));
+    }
     let saved_has_yield = std::mem::take(&mut parser.has_yield);
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         let span_before = parser.current_span();

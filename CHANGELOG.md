@@ -43,6 +43,7 @@ These constructs were accepted and are now reported with PHP's wording (`php-rs-
 - A positional argument after argument unpacking, as in `var_dump(...[1, 2, 3], 4);` (`Cannot use positional argument after argument unpacking`).
 - A method name PHP folds to a value other than a string, as in `$o->{1}()`, `$o->{true}()` or `A::{1 + 1}()` (`Method name must be a string`).
 - A nested destructuring target written with `array()`, as in `[array($a)] = $b;` (`Cannot assign to array(), use [] instead`), and a foreach target that mixes `list()` and `[]`, as in `foreach ($x as [list($a)])` (`Cannot mix [] and list()`).
+- From PHP 8.3, a static variable named like a `use` variable of its closure, as in `function () use (&$a) { static $a; }` (`Duplicate declaration of static variable $a`).
 
 #### Parser: valid code PHP accepts
 
