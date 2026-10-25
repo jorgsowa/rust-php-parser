@@ -38,6 +38,7 @@ These constructs were accepted and are now reported with PHP's wording (`php-rs-
 - From PHP 8.0, a `null` default on a promoted parameter whose type is not nullable, as in `public function __construct(private int $a = null)` (`Cannot use null as default value for parameter $a of type int`), since promotion does not make the type implicitly nullable.
 - A class property of type `array` without a modifier, as in `array $a;`, and an empty `declare` directive, as in `declare(strict_types=1, , ticks=1);` (`expected identifier`, which `declare(` at the end of the file also reports instead of `expected ')'`).
 - From PHP 8.6, a placeholder with argument unpacking, as in `f(...$a, ?)` (`Cannot combine partial application and unpacking`), in an attribute argument list (`Cannot create Closure as attribute argument`) or in `new A(?)` (`Cannot create Closure for new expression`).
+- From PHP 8.5, `#[\NoDiscard]` on a magic method that returns nothing: `__destruct`, `__clone`, `__set`, `__unset`, `__unserialize` or `__wakeup` (`Method A::__clone cannot be #[\NoDiscard]`).
 
 #### Parser: valid code PHP accepts
 

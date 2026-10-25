@@ -347,20 +347,35 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     }
                     return;
                 }
-                if let Some(name) = site.method_name {
-                    if name.eq_ignore_ascii_case("__construct") {
-                        self.forbid(
-                            ForbiddenRule::NoDiscardOnInvalidTarget,
-                            format!("Method {}::{name} cannot be #[\\NoDiscard]", site.member_of),
-                            span,
-                        );
-                        return;
-                    }
-                }
                 let kind = match site.return_type.map(|t| &t.kind) {
                     Some(TypeHintKind::Keyword(BuiltinType::Void, _)) => "void",
                     Some(TypeHintKind::Keyword(BuiltinType::Never, _)) => "never returning",
-                    _ => return,
+                    _ => {
+                        // Magic methods that return nothing.
+                        let no_result = [
+                            "__construct",
+                            "__destruct",
+                            "__clone",
+                            "__set",
+                            "__unset",
+                            "__unserialize",
+                            "__wakeup",
+                        ];
+                        if let Some(name) = site
+                            .method_name
+                            .filter(|name| no_result.iter().any(|m| name.eq_ignore_ascii_case(m)))
+                        {
+                            self.forbid(
+                                ForbiddenRule::NoDiscardOnInvalidTarget,
+                                format!(
+                                    "Method {}::{name} cannot be #[\\NoDiscard]",
+                                    site.member_of
+                                ),
+                                span,
+                            );
+                        }
+                        return;
+                    }
                 };
                 let callable = if site.target == AttrTarget::Method {
                     "method"
