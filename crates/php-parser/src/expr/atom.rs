@@ -1300,8 +1300,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
     } else {
         parser.alloc_vec()
     };
-    // From PHP 8.1 `readonly` after `new` can only start an anonymous class; PHP 8.1 alone
-    // lexes `readonly(` as a name.
+    // From PHP 8.1 `readonly` after `new` starts an anonymous class; 8.1 lexes `readonly(` as a name.
     let anon_readonly = parser.check(TokenKind::Readonly)
         && match parser.peek_kind() {
             Some(TokenKind::Class) => true,

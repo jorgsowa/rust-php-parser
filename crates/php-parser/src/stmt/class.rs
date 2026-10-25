@@ -2326,8 +2326,7 @@ fn check_magic_method(
     }
 }
 
-/// PHP 7.4 checks the argument count of the property, call and conversion methods, and that a
-/// constructor, destructor or `__clone` is not static and declares no return type.
+/// PHP 7.4's magic method checks: argument counts, and no `static` or return type on lifecycle methods.
 fn check_magic_method_74(
     parser: &mut Parser<'_, '_>,
     method_label: &str,

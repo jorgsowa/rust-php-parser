@@ -2960,8 +2960,7 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             continue;
         }
         let explicit_alias = item.alias.and_then(|a| a.as_str());
-        // An imported `readonly`, or before PHP 8.5 `array` or `callable`, is only a keyword
-        // as an explicit alias.
+        // `readonly`, and before PHP 8.5 `array` or `callable`, is a keyword only as an explicit alias.
         let implicit_alias = item.name.parts_slice().last().copied().filter(|last| {
             let is = |word: &str| last.eq_ignore_ascii_case(word);
             !is("readonly")

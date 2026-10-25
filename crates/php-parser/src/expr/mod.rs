@@ -360,8 +360,7 @@ fn allow_curly_base(parser: &mut Parser<'_, '_>, base: &Expr<'_, '_>) {
     parser.curly_bases.push(span);
 }
 
-/// PHP 8.0 to 8.3 fold array literal elements at compile time, which checks every `{}` offset
-/// the fold reaches, base of a fetch or not.
+/// PHP 8.0 to 8.3 check every `{}` offset an array literal fold reaches, base of a fetch or not.
 pub(crate) fn check_folded_curly_offsets(parser: &mut Parser<'_, '_>, expr: &Expr<'_, '_>) {
     if parser.curly_bases.is_empty() {
         return;
@@ -542,9 +541,7 @@ fn check_class_name_fetch_literal(parser: &mut Parser<'_, '_>, class: &Expr<'_, 
     parser.forbid(rule, message, class.span);
 }
 
-/// PHP 7.4 resolves `::class` at compile time on a name, which includes an unparenthesized
-/// `true`, `false` or `null`, or on a literal, as in `"Foo"::class`; a literal that is no
-/// string is an illegal class name.
+/// PHP 7.4 resolves `::class` at compile time on a name, a bare `true`, `false` or `null`, or a literal.
 fn is_compile_time_class(class: &Expr<'_, '_>) -> bool {
     if matches!(
         class.kind,
@@ -1171,14 +1168,12 @@ impl ConstExprChecker<'_, '_, '_> {
                 if !is_class_name {
                     return self.class_const_class(class);
                 }
-                // `static::class` is reported with the class scope checks, and before PHP 8.0
-                // any other expression by the `::class` checks of every expression.
+                // `static::class` and, before PHP 8.0, any other expression are reported elsewhere.
                 if matches!(class.kind, ExprKind::Name(_)) || self.version < PhpVersion::Php80 {
                     return Ok(());
                 }
                 match &unparenthesized(class).kind {
-                    // A literal other than a string is reported by the `::class` checks of
-                    // every expression.
+                    // The `::class` checks of every expression report a literal that is no string.
                     ExprKind::Int(_)
                     | ExprKind::Float(_)
                     | ExprKind::String(_)
@@ -1430,8 +1425,7 @@ fn may_fold_at_runtime(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> bool {
     }
 }
 
-/// Whether `expr` is a possibly negated `static::` fetch, or a `self::` or `parent::` one outside
-/// a class, which PHP never resolves at compile time.
+/// Whether `expr` is a possibly negated class keyword fetch PHP never resolves at compile time.
 fn is_unresolved_class_keyword_fetch(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> bool {
     match &unparenthesized(expr).kind {
         ExprKind::UnaryPrefix(u) if u.op == UnaryPrefixOp::BooleanNot => {

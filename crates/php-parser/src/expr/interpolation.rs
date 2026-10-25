@@ -784,8 +784,7 @@ fn is_utf8_continuation(b: u8) -> bool {
     (b & 0xC0) == 0x80
 }
 
-/// Before PHP 8.0 the lexer skips an unexpected character with a warning, so one around a
-/// simple offset, as in `"$a[x\x01]"`, is not part of it.
+/// Before PHP 8.0 an unexpected character around a simple offset, as in `"$a[x\x01]"`, is skipped.
 fn drop_unexpected_chars(start: usize, idx: &str, version: PhpVersion) -> (usize, &str) {
     if version >= PhpVersion::Php80 {
         return (start, idx);

@@ -147,8 +147,7 @@ pub struct Parser<'arena, 'src> {
     /// Used when parsing property/parameter default values so that a following hook block
     /// `{ get => ...; }` is not consumed as part of the default expression.
     pub(crate) no_brace_subscript: bool,
-    /// Spans of `{}` offset errors retracted because the offset is the base of a fetch or call,
-    /// which PHP 8.0 to 8.3 allow unless an array literal fold reaches them.
+    /// `{}` offsets that are a fetch or call base, which PHP 8.0 to 8.3 allow unless a fold reaches them.
     pub(crate) curly_bases: Vec<Span>,
     /// Spans of `{}` offset errors PHP 8.0 to 8.3 retract if the offset becomes such a base.
     pub(crate) retractable_curly: Vec<Span>,
@@ -2926,9 +2925,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     }
 }
 
-/// PHP 7.4 finds code before a namespace by the opcodes compiled so far, and declarations it binds
-/// at compile time compile to none. A class with a parent is bound early when PHP knows the parent,
-/// which needs symbols, so it counts as bound.
+/// Whether PHP 7.4 binds `stmt` at compile time, so it is no code before a namespace.
 fn compiles_to_no_opcode(stmt: &Stmt<'_, '_>) -> bool {
     let uses_trait = |body: &php_ast::ClassBody<'_, '_>| {
         body.members
@@ -2937,6 +2934,7 @@ fn compiles_to_no_opcode(stmt: &Stmt<'_, '_>) -> bool {
     };
     match &stmt.kind {
         StmtKind::Function(_) | StmtKind::Use(_) => true,
+        // A parent PHP knows is bound early too, which needs symbols, so `extends` counts as bound.
         StmtKind::Class(class) => class.implements.is_empty() && !uses_trait(&class.body),
         StmtKind::Interface(interface) => interface.extends.is_empty(),
         StmtKind::Trait(t) => !uses_trait(&t.body),

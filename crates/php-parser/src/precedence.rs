@@ -136,8 +136,7 @@ pub fn prefix_binding_power(kind: TokenKind) -> Option<u8> {
         // +u, -u, ~, casts and @ sit ABOVE instanceof per PHP's precedence table.
         TokenKind::Minus | TokenKind::Plus => Some(HIGH_PREFIX_BP),
         TokenKind::Tilde => Some(HIGH_PREFIX_BP),
-        // PHP's grammar gives `++`/`--` a variable, never a binary expression: `--$a ** 2`
-        // is `(--$a) ** 2`.
+        // PHP's grammar gives `++`/`--` a variable, so `--$a ** 2` is `(--$a) ** 2`.
         TokenKind::PlusPlus | TokenKind::MinusMinus => Some(CLONE_BP),
         _ => None,
     }

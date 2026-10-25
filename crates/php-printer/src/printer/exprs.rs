@@ -84,8 +84,7 @@ impl<'src> Printer<'src> {
                 .is_some_and(|b| b.eq_ignore_ascii_case(&b'l'))
     }
 
-    /// Whether an array nested in the array `expr` is spelled differently from it, which PHP
-    /// rejects as "Cannot mix [] and list()".
+    /// Whether `expr` nests an array spelled differently, which PHP rejects: "Cannot mix [] and list()".
     fn mixes_list_spelling(&self, expr: &Expr) -> bool {
         let ExprKind::Array(elements) = &expr.kind else {
             return false;
