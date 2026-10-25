@@ -7,6 +7,10 @@
 M_PI or isset(1+1);
 1 instanceof Foo and isset(1+1);
 empty("") or isset(1+1);
+@1 or isset(1+1);
++print $a or isset(1+1);
+6 instanceof Foo <> 3 or isset(1+1);
+0 != 9 or $a or isset(1+1);
 class C extends D {
     function f() {
         self::class or isset(1+1);
@@ -618,12 +622,396 @@ class C extends D {
     },
     {
       "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "ErrorSuppress": {
+                    "kind": {
+                      "Int": 1
+                    },
+                    "span": {
+                      "start": 182,
+                      "end": 183
+                    }
+                  }
+                },
+                "span": {
+                  "start": 181,
+                  "end": 183
+                }
+              },
+              "op": "LogicalOr",
+              "right": {
+                "kind": {
+                  "Isset": [
+                    {
+                      "kind": {
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 193,
+                              "end": 194
+                            }
+                          },
+                          "op": "Add",
+                          "right": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 195,
+                              "end": 196
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 193,
+                        "end": 196
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 187,
+                  "end": 197
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 181,
+            "end": 197
+          }
+        }
+      },
+      "span": {
+        "start": 181,
+        "end": 198
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "UnaryPrefix": {
+                    "op": "Plus",
+                    "operand": {
+                      "kind": {
+                        "Print": {
+                          "kind": {
+                            "Variable": "a"
+                          },
+                          "span": {
+                            "start": 206,
+                            "end": 208
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 200,
+                        "end": 208
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 199,
+                  "end": 208
+                }
+              },
+              "op": "LogicalOr",
+              "right": {
+                "kind": {
+                  "Isset": [
+                    {
+                      "kind": {
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 218,
+                              "end": 219
+                            }
+                          },
+                          "op": "Add",
+                          "right": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 220,
+                              "end": 221
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 218,
+                        "end": 221
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 212,
+                  "end": 222
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 199,
+            "end": 222
+          }
+        }
+      },
+      "span": {
+        "start": 199,
+        "end": 223
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "Int": 6
+                            },
+                            "span": {
+                              "start": 224,
+                              "end": 225
+                            }
+                          },
+                          "op": "Instanceof",
+                          "right": {
+                            "kind": {
+                              "Name": {
+                                "parts": [
+                                  "Foo"
+                                ],
+                                "kind": "Unqualified",
+                                "span": {
+                                  "start": 237,
+                                  "end": 240
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 237,
+                              "end": 240
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 224,
+                        "end": 240
+                      }
+                    },
+                    "op": "NotEqual",
+                    "right": {
+                      "kind": {
+                        "Int": 3
+                      },
+                      "span": {
+                        "start": 244,
+                        "end": 245
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 224,
+                  "end": 245
+                }
+              },
+              "op": "LogicalOr",
+              "right": {
+                "kind": {
+                  "Isset": [
+                    {
+                      "kind": {
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 255,
+                              "end": 256
+                            }
+                          },
+                          "op": "Add",
+                          "right": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 257,
+                              "end": 258
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 255,
+                        "end": 258
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 249,
+                  "end": 259
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 224,
+            "end": 259
+          }
+        }
+      },
+      "span": {
+        "start": 224,
+        "end": 260
+      }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "Binary": {
+              "left": {
+                "kind": {
+                  "Binary": {
+                    "left": {
+                      "kind": {
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "Int": 0
+                            },
+                            "span": {
+                              "start": 261,
+                              "end": 262
+                            }
+                          },
+                          "op": "NotEqual",
+                          "right": {
+                            "kind": {
+                              "Int": 9
+                            },
+                            "span": {
+                              "start": 266,
+                              "end": 267
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 261,
+                        "end": 267
+                      }
+                    },
+                    "op": "LogicalOr",
+                    "right": {
+                      "kind": {
+                        "Variable": "a"
+                      },
+                      "span": {
+                        "start": 271,
+                        "end": 273
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 261,
+                  "end": 273
+                }
+              },
+              "op": "LogicalOr",
+              "right": {
+                "kind": {
+                  "Isset": [
+                    {
+                      "kind": {
+                        "Binary": {
+                          "left": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 283,
+                              "end": 284
+                            }
+                          },
+                          "op": "Add",
+                          "right": {
+                            "kind": {
+                              "Int": 1
+                            },
+                            "span": {
+                              "start": 285,
+                              "end": 286
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 283,
+                        "end": 286
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 277,
+                  "end": 287
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 261,
+            "end": 287
+          }
+        }
+      },
+      "span": {
+        "start": 261,
+        "end": 288
+      }
+    },
+    {
+      "kind": {
         "Class": {
           "name": {
             "name": "C",
             "span": {
-              "start": 187,
-              "end": 188
+              "start": 295,
+              "end": 296
             }
           },
           "modifiers": {
@@ -637,8 +1025,8 @@ class C extends D {
             ],
             "kind": "Unqualified",
             "span": {
-              "start": 197,
-              "end": 198
+              "start": 305,
+              "end": 306
             }
           },
           "implements": [],
@@ -649,8 +1037,8 @@ class C extends D {
                   "name": {
                     "name": "f",
                     "span": {
-                      "start": 214,
-                      "end": 215
+                      "start": 322,
+                      "end": 323
                     }
                   },
                   "by_ref": false,
@@ -673,14 +1061,14 @@ class C extends D {
                                           ],
                                           "kind": "Unqualified",
                                           "span": {
-                                            "start": 228,
-                                            "end": 232
+                                            "start": 336,
+                                            "end": 340
                                           }
                                         }
                                       },
                                       "span": {
-                                        "start": 228,
-                                        "end": 232
+                                        "start": 336,
+                                        "end": 340
                                       }
                                     },
                                     "member": {
@@ -688,15 +1076,15 @@ class C extends D {
                                         "Identifier": "class"
                                       },
                                       "span": {
-                                        "start": 234,
-                                        "end": 239
+                                        "start": 342,
+                                        "end": 347
                                       }
                                     }
                                   }
                                 },
                                 "span": {
-                                  "start": 228,
-                                  "end": 239
+                                  "start": 336,
+                                  "end": 347
                                 }
                               },
                               "op": "LogicalOr",
@@ -711,8 +1099,8 @@ class C extends D {
                                               "Int": 1
                                             },
                                             "span": {
-                                              "start": 249,
-                                              "end": 250
+                                              "start": 357,
+                                              "end": 358
                                             }
                                           },
                                           "op": "Add",
@@ -721,35 +1109,35 @@ class C extends D {
                                               "Int": 1
                                             },
                                             "span": {
-                                              "start": 251,
-                                              "end": 252
+                                              "start": 359,
+                                              "end": 360
                                             }
                                           }
                                         }
                                       },
                                       "span": {
-                                        "start": 249,
-                                        "end": 252
+                                        "start": 357,
+                                        "end": 360
                                       }
                                     }
                                   ]
                                 },
                                 "span": {
-                                  "start": 243,
-                                  "end": 253
+                                  "start": 351,
+                                  "end": 361
                                 }
                               }
                             }
                           },
                           "span": {
-                            "start": 228,
-                            "end": 253
+                            "start": 336,
+                            "end": 361
                           }
                         }
                       },
                       "span": {
-                        "start": 228,
-                        "end": 254
+                        "start": 336,
+                        "end": 362
                       }
                     },
                     {
@@ -768,14 +1156,14 @@ class C extends D {
                                           ],
                                           "kind": "Unqualified",
                                           "span": {
-                                            "start": 263,
-                                            "end": 269
+                                            "start": 371,
+                                            "end": 377
                                           }
                                         }
                                       },
                                       "span": {
-                                        "start": 263,
-                                        "end": 269
+                                        "start": 371,
+                                        "end": 377
                                       }
                                     },
                                     "member": {
@@ -783,15 +1171,15 @@ class C extends D {
                                         "Identifier": "class"
                                       },
                                       "span": {
-                                        "start": 271,
-                                        "end": 276
+                                        "start": 379,
+                                        "end": 384
                                       }
                                     }
                                   }
                                 },
                                 "span": {
-                                  "start": 263,
-                                  "end": 276
+                                  "start": 371,
+                                  "end": 384
                                 }
                               },
                               "op": "LogicalOr",
@@ -806,8 +1194,8 @@ class C extends D {
                                               "Int": 1
                                             },
                                             "span": {
-                                              "start": 286,
-                                              "end": 287
+                                              "start": 394,
+                                              "end": 395
                                             }
                                           },
                                           "op": "Add",
@@ -816,35 +1204,35 @@ class C extends D {
                                               "Int": 1
                                             },
                                             "span": {
-                                              "start": 288,
-                                              "end": 289
+                                              "start": 396,
+                                              "end": 397
                                             }
                                           }
                                         }
                                       },
                                       "span": {
-                                        "start": 286,
-                                        "end": 289
+                                        "start": 394,
+                                        "end": 397
                                       }
                                     }
                                   ]
                                 },
                                 "span": {
-                                  "start": 280,
-                                  "end": 290
+                                  "start": 388,
+                                  "end": 398
                                 }
                               }
                             }
                           },
                           "span": {
-                            "start": 263,
-                            "end": 290
+                            "start": 371,
+                            "end": 398
                           }
                         }
                       },
                       "span": {
-                        "start": 263,
-                        "end": 291
+                        "start": 371,
+                        "end": 399
                       }
                     }
                   ],
@@ -852,8 +1240,8 @@ class C extends D {
                 }
               },
               "span": {
-                "start": 205,
-                "end": 297
+                "start": 313,
+                "end": 405
               }
             }
           ],
@@ -861,13 +1249,13 @@ class C extends D {
         }
       },
       "span": {
-        "start": 181,
-        "end": 299
+        "start": 289,
+        "end": 407
       }
     }
   ],
   "span": {
     "start": 0,
-    "end": 299
+    "end": 407
   }
 }

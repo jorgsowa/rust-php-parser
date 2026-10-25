@@ -1366,6 +1366,49 @@ fn is_class_keyword_name(name: &Name<'_, '_>) -> bool {
         if ["self", "parent", "static"].iter().any(|k| value.eq_ignore_ascii_case(k)))
 }
 
+/// Whether PHP may fold `expr` outside a constant expression, which decides a short-circuit alone.
+fn may_fold_at_runtime(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> bool {
+    let checker = ConstExprChecker {
+        parser,
+        version: parser.version,
+        allow_new: false,
+        substitutes_constants: true,
+    };
+    if checker.may_fold(expr) {
+        return !is_unresolved_class_keyword_fetch(parser, expr);
+    }
+    let operand = |e: &Expr<'_, '_>| may_fold_at_runtime(parser, e);
+    match &unparenthesized(expr).kind {
+        // PHP compiles `print` to the constant 1, and `@` keeps a constant operand.
+        ExprKind::Print(_) => true,
+        ExprKind::ErrorSuppress(inner) => operand(inner),
+        ExprKind::UnaryPrefix(u) => match u.op {
+            UnaryPrefixOp::PreIncrement | UnaryPrefixOp::PreDecrement => false,
+            UnaryPrefixOp::BooleanNot
+                if parser.version >= PhpVersion::Php85
+                    && matches!(literal_scalar(u.operand), Some(Scalar::Float(_))) =>
+            {
+                false
+            }
+            _ => operand(u.operand),
+        },
+        // A literal is never an object.
+        ExprKind::Binary(b) if b.op == BinaryOp::Instanceof => operand(b.left),
+        ExprKind::Binary(b) if is_short_circuit(b.op) => {
+            let decides = |truth: bool| match b.op {
+                BinaryOp::BooleanAnd | BinaryOp::LogicalAnd => !truth,
+                _ => truth,
+            };
+            match const_truth(b.left, parser.version) {
+                Some(truth) => decides(truth) || operand(b.right),
+                None => operand(b.left),
+            }
+        }
+        ExprKind::Binary(b) if b.op != BinaryOp::Pipe => operand(b.left) && operand(b.right),
+        _ => false,
+    }
+}
+
 /// Whether `expr` is a possibly negated `static::` fetch, or a `self::` or `parent::` one outside
 /// a class, which PHP never resolves at compile time.
 fn is_unresolved_class_keyword_fetch(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> bool {
@@ -2590,16 +2633,7 @@ fn parse_expr_rest<'arena, 'src>(
             };
             // A condition PHP may fold, whose value is not computed here, may skip the right side too.
             let may_skip = short_circuits
-                || is_short_circuit(op)
-                    && lhs_truth.is_none()
-                    && ConstExprChecker {
-                        parser,
-                        version: parser.version,
-                        allow_new: false,
-                        substitutes_constants: true,
-                    }
-                    .may_fold(&lhs)
-                    && !is_unresolved_class_keyword_fetch(parser, &lhs);
+                || is_short_circuit(op) && lhs_truth.is_none() && may_fold_at_runtime(parser, &lhs);
             if op == BinaryOp::Instanceof && parser.check(TokenKind::LeftParen) {
                 let span = parser.current_span();
                 parser.require_version(PhpVersion::Php80, "instanceof with an expression", span);
