@@ -9,6 +9,8 @@ use crate::version::PhpVersion;
 use std::borrow::Cow;
 
 const MAX_ERRORS: usize = 100;
+/// Errors held while parsing; above `MAX_ERRORS` so errors that checks later retract leave room.
+const ERROR_CAPACITY: usize = 4 * MAX_ERRORS;
 /// Maximum recursion depth shared by statements, expressions and the
 /// sub-parsers that handle string interpolation. Each nested statement,
 /// expression or variable-variable `$` consumes one unit; exceeding the budget
@@ -103,6 +105,8 @@ pub struct Parser<'arena, 'src> {
     /// Function/method/closure nesting depth — tracks valid yield context.
     /// Incremented when entering a function/method/closure, decremented when exiting.
     pub(crate) function_depth: u32,
+    /// The `function_depth` of the constant expression being parsed, which PHP does not compile.
+    const_expr_depth: Option<u32>,
     /// True inside the body of a function, method, closure or hook that returns by reference.
     pub(crate) by_ref_function: bool,
     /// Names declared by `static` in the current function body or top-level code.
@@ -146,6 +150,8 @@ pub struct Parser<'arena, 'src> {
     /// Spans of `{}` offset errors retracted because the offset is the base of a fetch or call,
     /// which PHP 8.0 to 8.3 allow unless an array literal fold reaches them.
     pub(crate) curly_bases: Vec<Span>,
+    /// Spans of `{}` offset errors PHP 8.0 to 8.3 retract if the offset becomes such a base.
+    pub(crate) retractable_curly: Vec<Span>,
     /// The `curly_bases` an array literal fold reported again.
     pub(crate) folded_curly: Vec<Span>,
     /// End position of the most recently consumed `{` or `}` token.
@@ -268,6 +274,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             has_goto_or_label: false,
             uncompiled_spans: Vec::new(),
             function_depth: 0,
+            const_expr_depth: None,
             by_ref_function: false,
             static_vars: Vec::new(),
             has_yield: false,
@@ -279,6 +286,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             version,
             no_brace_subscript: false,
             curly_bases: Vec::new(),
+            retractable_curly: Vec::new(),
             folded_curly: Vec::new(),
             last_scope_close: 0,
             last_stmt_end: 0,
@@ -330,6 +338,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             has_goto_or_label: false,
             uncompiled_spans: Vec::new(),
             function_depth: 0,
+            const_expr_depth: None,
             by_ref_function: false,
             static_vars: Vec::new(),
             has_yield: false,
@@ -341,6 +350,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             version,
             no_brace_subscript: false,
             curly_bases: Vec::new(),
+            retractable_curly: Vec::new(),
             folded_curly: Vec::new(),
             last_scope_close: 0,
             last_stmt_end: 0,
@@ -790,6 +800,18 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         result
     }
 
+    /// Run `f` to parse a constant expression; a function declared inside it is compiled.
+    pub(crate) fn in_const_expr<R>(&mut self, f: impl FnOnce(&mut Self) -> R) -> R {
+        let outer = self.const_expr_depth.replace(self.function_depth);
+        let result = f(self);
+        self.const_expr_depth = outer;
+        result
+    }
+
+    pub(crate) fn parsing_const_expr(&self) -> bool {
+        self.const_expr_depth == Some(self.function_depth)
+    }
+
     /// Expect a closing delimiter, reporting where the opening was.
     pub fn expect_closing(&mut self, kind: TokenKind, opened_at: Span) -> Option<Token> {
         if self.check(kind) {
@@ -862,7 +884,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         {
             return;
         }
-        if self.errors.len() < MAX_ERRORS {
+        if self.errors.len() < ERROR_CAPACITY {
             self.errors.push(err);
         } else {
             self.errors_dropped = true;
@@ -2569,7 +2591,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
                 let args = if self.check(TokenKind::LeftParen) {
                     let paren_start = self.current_span().start;
-                    match crate::expr::parse_arg_list_or_callable(self) {
+                    match self.in_const_expr(crate::expr::parse_arg_list_or_callable) {
                         crate::expr::ArgListResult::Args(args) => {
                             let placeholder = args.iter().find(|arg| arg.is_placeholder());
                             if let Some(placeholder) =

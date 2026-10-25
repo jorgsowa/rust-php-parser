@@ -128,7 +128,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                 };
             let equals_token = parser.eat(TokenKind::Equals);
             let value = if equals_token.is_some() {
-                let value = expr::parse_expr(parser);
+                let value = parser.in_const_expr(expr::parse_expr);
                 expr::check_const_expr(parser, &value, false);
                 Some(value)
             } else {

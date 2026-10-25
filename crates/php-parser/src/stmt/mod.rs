@@ -1632,7 +1632,7 @@ pub fn parse_param_list<'arena, 'src>(
         let default = if parser.eat(TokenKind::Equals).is_some() {
             // Suppress `{` subscript so a following hook block `{ get => ...; }`
             // is not consumed as part of the default expression.
-            let default = parser.with_no_brace_subscript(expr::parse_expr);
+            let default = parser.in_const_expr(|p| p.with_no_brace_subscript(expr::parse_expr));
             expr::check_param_default(parser, &default);
             if let (Some(ty), Some(name), false) = (&type_hint, name.as_str(), variadic) {
                 let owner = if first_modifier_span.is_some() && parser.version >= PhpVersion::Php80
@@ -3038,7 +3038,7 @@ fn parse_const_with_attrs<'arena, 'src>(
             parser.missing_ident()
         };
         parser.expect(TokenKind::Equals);
-        let value = expr::parse_expr(parser);
+        let value = parser.in_const_expr(expr::parse_expr);
         expr::check_const_expr(parser, &value, true);
         let item_span = parser.span_to(item_start, value.span);
         let item_attrs = pending_attrs.take().unwrap_or_else(|| parser.alloc_vec());
@@ -3169,8 +3169,12 @@ fn parse_static_var<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
         }
 
         let default = if parser.eat(TokenKind::Equals).is_some() {
-            let value = expr::parse_expr(parser);
             // Before 8.3 the initializer is a constant expression, which permits `new` from 8.1.
+            let value = if parser.version < PhpVersion::Php83 {
+                parser.in_const_expr(expr::parse_expr)
+            } else {
+                expr::parse_expr(parser)
+            };
             if parser.version < PhpVersion::Php83 {
                 expr::check_const_expr(parser, &value, true);
             } else {

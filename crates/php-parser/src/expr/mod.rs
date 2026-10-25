@@ -343,19 +343,21 @@ fn allow_curly_base(parser: &mut Parser<'_, '_>, base: &Expr<'_, '_>) {
         a.array.span.end,
         a.index.map_or(base.span.end, |index| index.span.start),
     );
-    let mut retracted = Vec::new();
-    parser.errors_mut().retain(|e| match e {
-        ParseError::Forbidden {
-            rule: ForbiddenRule::CurlyOffsetAccess,
-            span,
-            ..
-        } if span.start >= brace.start && span.end <= brace.end => {
-            retracted.push(*span);
-            false
-        }
-        _ => true,
-    });
-    parser.curly_bases.extend(retracted);
+    let Some(i) = parser
+        .retractable_curly
+        .iter()
+        .rposition(|s| s.start >= brace.start && s.end <= brace.end)
+    else {
+        return;
+    };
+    let span = parser.retractable_curly.swap_remove(i);
+    let errors = parser.errors_mut();
+    if let Some(j) = errors.iter().rposition(|e| {
+        matches!(e, ParseError::Forbidden { rule: ForbiddenRule::CurlyOffsetAccess, span: s, .. } if *s == span)
+    }) {
+        errors.remove(j);
+    }
+    parser.curly_bases.push(span);
 }
 
 /// PHP 8.0 to 8.3 fold array literal elements at compile time, which checks every `{}` offset
@@ -965,14 +967,7 @@ fn report_const_expr(
         allow_new,
         substitutes_constants,
     };
-    let result = checker.check(expr);
-    // A constant expression is not compiled as code, so PHP folds no `::class` operand in it.
-    let range = expr.span;
-    parser.errors_mut().retain(|e| {
-        !matches!(e, ParseError::Forbidden { rule: ForbiddenRule::ClassFetchOnFoldedValue, span, .. }
-            if span.start >= range.start && span.end <= range.end)
-    });
-    match result {
+    match checker.check(expr) {
         Ok(()) => {}
         Err(ConstExprError::Forbidden(message, span)) => {
             parser.forbid(ForbiddenRule::InvalidConstantExpression, message, span)
@@ -2585,6 +2580,9 @@ fn parse_expr_rest<'arena, 'src>(
                     CURLY_OFFSET_REMOVED,
                     brace_span,
                 );
+                if parser.version < PhpVersion::Php84 {
+                    parser.retractable_curly.push(brace_span);
+                }
             } else if matches!(
                 lhs.kind,
                 ExprKind::Name(_)

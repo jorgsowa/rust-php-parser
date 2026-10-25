@@ -69,7 +69,8 @@ pub(super) fn folded_class_fetch_value(
     parser: &Parser<'_, '_>,
     class: &Expr<'_, '_>,
 ) -> Option<&'static str> {
-    if !matches!(class.kind, ExprKind::Parenthesized(_)) {
+    // A constant expression is not compiled as code, so PHP folds no `::class` operand in it.
+    if !matches!(class.kind, ExprKind::Parenthesized(_)) || parser.parsing_const_expr() {
         return None;
     }
     let expr = unparenthesized(class);

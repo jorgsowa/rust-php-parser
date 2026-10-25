@@ -60,6 +60,7 @@ These constructs were reported and are now accepted, as PHP does (`php-rs-parser
 #### Parser: messages and recovery
 
 - Nesting past the depth limit reports one `NestingTooDeep` error instead of a cascade of up to 100 errors (`php-rs-parser`).
+- Errors that a later check withdraws, such as an empty array element before `=` makes the array a destructuring target, no longer count toward the 100-error limit, so they do not crowd out later errors or set `errors_truncated` (`php-rs-parser`).
 - Modifier errors use PHP's wording for the version: `Cannot use 'static' as constant modifier` before PHP 8.3 and `Cannot use the static modifier on a class constant` from it, likewise for `abstract` and `readonly` constants and readonly methods, and `Cannot use the final modifier on an abstract method` or `abstract class member` (`php-rs-parser`).
 - A value on a case of a pure enum says `non-backed enum` with the namespaced name, and from PHP 8.6 asymmetric visibility on a virtual property says `get-only` or `set-only`, as PHP does (`php-rs-parser`).
 - On PHP 8.4, `#[\Deprecated]` on a class, interface, trait or enum reports PHP's `Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)`; classes and constants are targets from PHP 8.5. Attributes on a constant before PHP 8.5 report only the version error (`php-rs-parser`).

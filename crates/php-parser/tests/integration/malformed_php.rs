@@ -533,6 +533,22 @@ fn errors_truncated_only_when_errors_were_dropped() {
 }
 
 #[test]
+fn retracted_errors_do_not_count_toward_the_cap() {
+    // Each empty element is reported until `=` makes the array a destructuring target.
+    let source = format!("<?php [{}$a] = $b; foo(1 2);", ", ".repeat(150));
+    let result = php_rs_parser::parse(&source);
+    let alone = php_rs_parser::parse("<?php foo(1 2);");
+    assert_eq!(
+        result.errors.len(),
+        alone.errors.len(),
+        "{:?}",
+        result.errors
+    );
+    assert_eq!(result.errors[0].to_string(), "expected ')', found integer");
+    assert!(!result.errors_truncated);
+}
+
+#[test]
 fn version_too_low_carries_typed_versions() {
     use php_rs_parser::PhpVersion;
     let result = php_rs_parser::parse_with(

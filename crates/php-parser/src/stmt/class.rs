@@ -1799,7 +1799,7 @@ pub(super) fn parse_class_const_member<'arena, 'src>(
             parser.reject_member_type(ty, "Class constant", name);
         }
         parser.expect(TokenKind::Equals);
-        let value = expr::parse_expr(parser);
+        let value = parser.in_const_expr(expr::parse_expr);
         expr::check_const_expr(parser, &value, false);
         if let (Some(ty), Some(name)) = (&const_type, const_name.as_str()) {
             check_typed_const_value(parser, ty, name, &value);
@@ -2435,7 +2435,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
     let default = if parser.eat(TokenKind::Equals).is_some() {
         // Suppress `{` subscript so a following hook block `{ get => ...; }`
         // is not consumed as part of the default expression.
-        let e = parser.with_no_brace_subscript(expr::parse_expr);
+        let e = parser.in_const_expr(|p| p.with_no_brace_subscript(expr::parse_expr));
         expr::check_const_expr(parser, &e, false);
         if let (Some(ty), Some(name)) = (&type_hint, prop_name.as_str()) {
             check_typed_default(parser, ty, &e, DefaultOwner::Property(name));
@@ -2648,7 +2648,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
             let pname = parser.variable_ident(var_token);
 
             let pdefault = if parser.eat(TokenKind::Equals).is_some() {
-                let e = expr::parse_expr(parser);
+                let e = parser.in_const_expr(expr::parse_expr);
                 expr::check_const_expr(parser, &e, false);
                 if let (ClassMemberKind::Property(first), Some(name)) =
                     (&members[first_index].kind, pname.as_str())
