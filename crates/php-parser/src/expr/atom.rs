@@ -2209,6 +2209,12 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
                         arg.span,
                     );
                 }
+            } else if seen_spread && !arg.is_spread() && !arg.is_placeholder() {
+                parser.forbid(
+                    ForbiddenRule::PositionalAfterUnpacking,
+                    "Cannot use positional argument after argument unpacking",
+                    arg.span,
+                );
             } else if seen_named && !is_rest_placeholder {
                 let message = if !arg.is_spread() {
                     "Cannot use positional argument after named argument"

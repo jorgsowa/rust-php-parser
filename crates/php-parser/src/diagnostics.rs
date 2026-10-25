@@ -565,6 +565,8 @@ forbidden_rules! {
     YieldFromInByReferenceGenerator = "yield-from-in-by-reference-generator", Compile;
     /// A positional argument follows a named one.
     PositionalAfterNamedArgument = "positional-after-named-argument", Compile;
+    /// A positional argument follows argument unpacking, as in `f(...$a, 1)`.
+    PositionalAfterUnpacking = "positional-after-unpacking", Compile;
     /// An `(unset)` cast is used.
     UnsetCast = "unset-cast", Compile;
     /// The result of a builtin such as `clone` is written to.
@@ -919,6 +921,7 @@ mod tests {
             ForbiddenRule::YieldOutsideFunction => &[("<?php yield 1;", "yield"),],
             ForbiddenRule::YieldFromInByReferenceGenerator => &[("<?php function &f() { yield from g(); }", "yield from g()"),],
             ForbiddenRule::PositionalAfterNamedArgument => &[("<?php f(a: 1, 2);", "2"),],
+            ForbiddenRule::PositionalAfterUnpacking => &[("<?php f(...$a, 2);", "2"),],
             ForbiddenRule::UnsetCast => &[("<?php $x = (unset) 1;", "unset"),],
             ForbiddenRule::BuiltinResultWrite => &[("<?php (clone $a)->b = 1;", "(clone $a)->b"), ("<?php $x = &f(...);", "f(...)"),],
             ForbiddenRule::CallResultWrite => &[("<?php f() = 1;", "f()"), ("<?php $a->f()++;", "$a->f()"), ("<?php unset(A::f());", "A::f()"), ("<?php [f(...)] = $a;", "f(...)"), ("<?php foreach ($a as $k => $b?->f()) {}", "$b?->f()"),],
