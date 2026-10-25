@@ -228,6 +228,7 @@ pub(crate) struct ClassScope {
     /// Namespace-qualified name used in messages; `class@anonymous` for anonymous classes.
     pub(crate) name: String,
     pub(crate) is_anonymous: bool,
+    pub(crate) is_trait: bool,
     /// What `self` resolves to at compile time; `None` in traits and closures.
     pub(crate) self_name: Option<String>,
     /// What `parent` resolves to at compile time.
@@ -1548,6 +1549,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         };
         ClassScope {
             is_anonymous: name_is_none,
+            is_trait,
             self_name: (!is_trait).then(|| name.clone()),
             parent_name: parent.map(|p| self.resolve_class_name(p)),
             name,
