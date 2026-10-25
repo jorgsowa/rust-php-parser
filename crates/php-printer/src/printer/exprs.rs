@@ -518,13 +518,17 @@ impl<'src> Printer<'src> {
                     self.w("yield");
                     if let Some(key) = &y.key {
                         self.w(" ");
-                        self.print_expr(key, PREC_YIELD + 1);
+                        self.print_yield_operand(key, PREC_YIELD + 1);
                         self.w(" => ");
                     } else if y.value.is_some() {
                         self.w(" ");
                     }
                     if let Some(val) = &y.value {
-                        self.print_expr(val, PREC_YIELD);
+                        if y.key.is_some() {
+                            self.print_expr(val, PREC_YIELD);
+                        } else {
+                            self.print_yield_operand(val, PREC_YIELD);
+                        }
                     }
                 }
             }
@@ -650,6 +654,17 @@ impl<'src> Printer<'src> {
         };
         self.print_expr(key, prec);
         self.w(" => ");
+    }
+
+    /// Print the first operand of `yield`, parenthesized when it would start with `from`.
+    fn print_yield_operand(&mut self, expr: &Expr, prec: i8) {
+        if starts_with_from(expr, self.php_version) {
+            self.w("(");
+            self.print_expr(expr, PREC_LOWEST);
+            self.w(")");
+        } else {
+            self.print_expr(expr, prec);
+        }
     }
 
     pub(crate) fn print_args(&mut self, args: &[Arg]) {
@@ -930,6 +945,20 @@ fn extends_simple_variable(next: Option<&StringPart>) -> bool {
         .is_some_and(|b| b.is_ascii_alphanumeric() || *b == b'_' || *b == b'[' || !b.is_ascii())
         || bytes.starts_with(b"->")
         || bytes.starts_with(b"?->")
+}
+
+/// Whether `expr` is printed starting with the bare name `from`, which would read as `yield from`.
+fn starts_with_from(expr: &Expr, version: PhpVersion) -> bool {
+    let mut node = expr;
+    loop {
+        if let ExprKind::Name(Name::Simple { value, .. }) = &node.kind {
+            return value.eq_ignore_ascii_case("from");
+        }
+        match chain_operand(&node.kind, version) {
+            Some((operand, _)) => node = operand,
+            None => return false,
+        }
+    }
 }
 
 /// The chain operand of `node`, checking the cheap [`is_chain`] first.

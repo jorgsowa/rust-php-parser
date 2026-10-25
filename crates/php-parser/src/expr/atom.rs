@@ -1930,7 +1930,15 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     }
 
     // `from` is an ordinary name everywhere else, so the lexer has no keyword for it.
-    if parser.check(TokenKind::Identifier) && parser.current_text().eq_ignore_ascii_case("from") {
+    // Before 8.3 PHP lexes `yield from` only with whitespace between the words.
+    let yield_end = parser.previous_end() as usize;
+    if parser.check(TokenKind::Identifier)
+        && parser.current_text().eq_ignore_ascii_case("from")
+        && (parser.version >= PhpVersion::Php83
+            || parser.source()[yield_end..parser.current_span().start as usize]
+                .bytes()
+                .all(|b| matches!(b, b' ' | b'\t' | b'\n' | b'\r')))
+    {
         parser.advance();
         let value = parse_expr_bp(parser, precedence::YIELD_OPERAND_BP);
         let span = parser.span_to(start, value.span);

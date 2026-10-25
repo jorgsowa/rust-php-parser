@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Before PHP 8.3, `yield` and `from` separated by a comment are `yield` of the constant `from`, so `yield /**/ from [1];` yields `from[1]` and `yield/**/from;` is valid (`php-rs-parser`).
+- A `yield` key or value that starts with the constant `from` is parenthesized, so it is not printed as `yield from` (`php-printer`).
 - The right operand of `&&`, `||`, `and` or `or` no longer reports compile errors when PHP may fold the left operand away: `exit` before PHP 8.4, `empty()` of a literal and a literal `instanceof` fold exactly, and a literal condition whose value is not computed, such as `1 < 2`, `~1`, `@1`, `+print $a`, `M_PI`, `self::class` in a class, or `0 != 9 or $a`, is assumed to skip it (`php-rs-parser`).
 - From PHP 8.5, `!` on a float is not folded at compile time, so `!1.5 and isset(1 + 1);` and `const A = !1.5 && $a;` report PHP's errors (`php-rs-parser`).
 - On PHP 7.4, arithmetic that PHP folds at compile time on an array literal, such as `[] - 1`, `[1] + 1` or `-[]`, and `~` on `true`, `false`, `null` or an array report `Unsupported operand types` (`php-rs-parser`).
