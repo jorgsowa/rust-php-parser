@@ -2705,7 +2705,7 @@ pub(super) fn parse_trait<'arena, 'src>(
     parser.advance();
     let name_is_reserved_kw = parser.is_reserved_keyword_as_decl_name();
     let name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-        if name_is_reserved_kw {
+        if name_is_reserved_kw || is_reserved_class_name(text, parser.version) {
             parser.forbid(
                 ForbiddenRule::KeywordAsDeclarationName,
                 format!("cannot use '{}' as trait name", text),
