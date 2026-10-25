@@ -904,6 +904,16 @@ pub(crate) fn check_reference_return(parser: &mut Parser<'_, '_>, value: &Expr<'
     }
 }
 
+fn check_method_name(parser: &mut Parser<'_, '_>, method: &Expr<'_, '_>) {
+    if folded_value::folds_to_non_string(parser, method) {
+        parser.forbid(
+            ForbiddenRule::MethodNameNotString,
+            "Method name must be a string",
+            method.span,
+        );
+    }
+}
+
 /// True if `kind` is a variable, a fetch or a call: what PHP can take a reference of.
 pub(crate) fn is_variable_or_call(kind: &ExprKind<'_, '_>) -> bool {
     matches!(
@@ -2179,10 +2189,14 @@ fn parse_expr_rest<'arena, 'src>(
                 parser.advance(); // consume -> or ?->
 
                 // Parse member name (identifier or keyword or variable for dynamic)
+                let braced = parser.check(TokenKind::LeftBrace);
                 let member = parse_member_name(parser);
 
                 // Check if it's a method call
                 if parser.check(TokenKind::LeftParen) {
+                    if braced {
+                        check_method_name(parser, &member);
+                    }
                     match parse_arg_list_or_callable(parser) {
                         ArgListResult::CallableMarker(_) => {
                             let span = parser.span_from(lhs.span.start);
@@ -2384,6 +2398,7 @@ fn parse_expr_rest<'arena, 'src>(
                 parser.expect(TokenKind::RightBrace);
                 if parser.check(TokenKind::LeftParen) {
                     // Dynamic static method call: A::{'b'}()
+                    check_method_name(parser, &member);
                     match parse_arg_list_or_callable(parser) {
                         ArgListResult::CallableMarker(_) => {
                             let span = parser.span_from(lhs.span.start);

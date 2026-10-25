@@ -105,6 +105,11 @@ pub(super) fn folded_class_fetch_value(
     })
 }
 
+/// True if PHP folds `expr` to a value other than a string, as in the method name of `$o->{1}()`.
+pub(super) fn folds_to_non_string(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> bool {
+    folded_value(parser, expr, 0).is_some_and(|value| !matches!(value, Value::Str(_)))
+}
+
 fn is_literal_concat(expr: &Expr<'_, '_>) -> bool {
     let token = |e: &Expr<'_, '_>| {
         matches!(
