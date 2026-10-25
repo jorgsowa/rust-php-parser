@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::ClassFetchOnFoldedValue`, `ForbiddenRule::UnsupportedOperandTypes`, `ForbiddenRule::PrivateFinalPropertyHook`, `ForbiddenRule::SetHookParameterDefault`, `ForbiddenRule::PartialApplicationWithUnpacking`, `ForbiddenRule::EnumCaseValueType` and `ForbiddenRule::DuplicateEnumCaseValue` (`php-rs-parser`).
+- `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::ClassFetchOnFoldedValue`, `ForbiddenRule::UnsupportedOperandTypes`, `ForbiddenRule::PrivateFinalPropertyHook`, `ForbiddenRule::SetHookParameterDefault`, `ForbiddenRule::PartialApplicationWithUnpacking`, `ForbiddenRule::EnumCaseValueType`, `ForbiddenRule::DuplicateEnumCaseValue` and `ForbiddenRule::CustomAssertFunction` (`php-rs-parser`).
 - `ForeachStmt::key_by_ref` for a key taken by reference, `invalid_modifier` on a trait alias for `static`, `abstract` or `readonly`, and `PropertyHook::empty_param_list` for a hook written with `()` (`php-ast`).
 - `PrettyPrinter::syntax_errors`: for source with a syntax error, the output starts with a syntax error so it stays invalid (`php-printer`). `ParseError::phase` tells syntax errors from compile errors (`php-rs-parser`).
 
@@ -39,6 +39,7 @@ These constructs were accepted and are now reported with PHP's wording (`php-rs-
 - A class property of type `array` without a modifier, as in `array $a;`, and an empty `declare` directive, as in `declare(strict_types=1, , ticks=1);` (`expected identifier`, which `declare(` at the end of the file also reports instead of `expected ')'`).
 - From PHP 8.6, a placeholder with argument unpacking, as in `f(...$a, ?)` (`Cannot combine partial application and unpacking`), in an attribute argument list (`Cannot create Closure as attribute argument`) or in `new A(?)` (`Cannot create Closure for new expression`).
 - From PHP 8.5, `#[\NoDiscard]` on a magic method that returns nothing: `__destruct`, `__clone`, `__set`, `__unset`, `__unserialize` or `__wakeup` (`Method A::__clone cannot be #[\NoDiscard]`).
+- From PHP 8.0, a function named `assert`, as in `namespace A; function assert() {}` (`Defining a custom assert() function is not allowed, as the function has special semantics`).
 
 #### Parser: valid code PHP accepts
 

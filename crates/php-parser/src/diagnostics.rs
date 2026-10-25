@@ -281,6 +281,8 @@ forbidden_rules! {
     ModifierNotAllowed = "modifier-not-allowed", Parse;
     /// A reserved keyword names a declaration.
     KeywordAsDeclarationName = "keyword-as-declaration-name", Parse;
+    /// A function is named `assert`, which PHP compiles specially.
+    CustomAssertFunction = "custom-assert-function", Compile;
     /// A reserved type name names a class.
     ReservedClassName = "reserved-class-name", Parse;
     /// A statement that must be at the outermost scope is nested.
@@ -778,6 +780,7 @@ mod tests {
             ForbiddenRule::InvalidConstantModifier => &[("<?php class A { static const X = 1; }", "const"), ("<?php enum E { static const X = 1; }", "const"),],
             ForbiddenRule::ModifierNotAllowed => &[("<?php function f(static $x) {}", "static"), ("<?php class A { readonly function f() {} }", "readonly function f() {}"), ("<?php trait T { function f() {} } class A { use T { f as readonly g; } }", "readonly"),],
             ForbiddenRule::KeywordAsDeclarationName => &[("<?php function list() {}", "list"), ("<?php interface list {}", "list"), ("<?php #[A] enum list {}", "list"),],
+            ForbiddenRule::CustomAssertFunction => &[("<?php namespace A; function Assert() {}", "Assert"),],
             ForbiddenRule::ReservedClassName => &[("<?php class int {}", "int"),],
             ForbiddenRule::OutermostScopeOnly => &[("<?php function f() { __halt_compiler(); }", "__halt_compiler"),],
             ForbiddenRule::UnparenthesizedIntersectionInUnion => &[("<?php function f((A|B)&C $x) {}", "(A|B)"),],

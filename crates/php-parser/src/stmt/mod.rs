@@ -1090,6 +1090,12 @@ fn parse_function<'arena, 'src>(
                 format!("cannot use '{}' as function name; it is reserved", text),
                 span,
             );
+        } else if parser.version >= PhpVersion::Php80 && text.eq_ignore_ascii_case("assert") {
+            parser.forbid(
+                ForbiddenRule::CustomAssertFunction,
+                "Defining a custom assert() function is not allowed, as the function has special semantics",
+                span,
+            );
         }
         Ident::new(text, span)
     } else {
