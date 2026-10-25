@@ -3,7 +3,7 @@ use std::ops::Range;
 
 use php_ast::ast::*;
 
-use super::Printer;
+use super::{helpers, Printer};
 
 /// Output order of a statement list whose runs of `use` imports are sorted.
 pub(crate) struct SortedImports {
@@ -111,7 +111,10 @@ impl Printer<'_> {
             let mut end = start + 1;
             while end < stmts.len()
                 && as_use(&stmts[end]).is_some()
-                && !self.blank_line_before(stmts[end].span.start, stmts[end - 1].span.end)
+                && !self.blank_line_before(
+                    helpers::stmt_doc_comment_start(&stmts[end]).unwrap_or(stmts[end].span.start),
+                    stmts[end - 1].span.end,
+                )
             {
                 end += 1;
             }
