@@ -1908,6 +1908,13 @@ fn parse_match_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
 // Yield expression
 // =============================================================================
 
+/// PHP checks a value yielded by reference for a nullsafe chain from 8.2.
+fn check_reference_yield(parser: &mut Parser<'_, '_>, value: &Expr<'_, '_>) {
+    if parser.version >= PhpVersion::Php82 {
+        super::check_reference_return(parser, value);
+    }
+}
+
 fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'arena, 'src> {
     let start = parser.start_span();
     parser.advance(); // consume 'yield'
@@ -1979,7 +1986,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     // yield key => value
     if parser.eat(TokenKind::FatArrow).is_some() {
         let value = parse_expr_bp(parser, precedence::YIELD_OPERAND_BP);
-        super::check_reference_return(parser, &value);
+        check_reference_yield(parser, &value);
         let span = parser.span_to(start, value.span);
         return Expr {
             kind: ExprKind::Yield(YieldExpr {
@@ -1992,7 +1999,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     }
 
     // yield value
-    super::check_reference_return(parser, &first);
+    check_reference_yield(parser, &first);
     let span = parser.span_to(start, first.span);
     Expr {
         kind: ExprKind::Yield(YieldExpr {

@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- On PHP 8.0 and 8.1, yielding a nullsafe chain from a by-reference generator (`function &f() { yield $a?->b; }`) is accepted; PHP checks it from 8.2 (`php-rs-parser`).
 - Before PHP 8.4, `parent::$prop::get()` is an ordinary static call on a static property, so outside a class it no longer reports `Cannot use "parent" when no class scope is active` or the property hook call errors (`php-rs-parser`).
 - On PHP 8.0 to 8.3, a curly brace offset that is the base of another fetch or call, as in `$a{0}->b`, `$a{0}[1]`, `$a{0}::$c` or `$a{0}->m()`, is accepted as PHP does; PHP checks it only where it folds an array literal or a PHP 8.3 `static` initializer (`[$a{0}->b]` from PHP 8.2) (`php-rs-parser`).
 - Before PHP 8.4, calling a new object without wrapping parentheses (`new Foo()()`) and dereferencing a new anonymous class (`new class {}->foo`, `new class {}()`) report `'dereferencing a new expression without parentheses' requires PHP 8.4 or higher` (`php-rs-parser`).

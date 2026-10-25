@@ -16,9 +16,7 @@ $f = fn&($a) => $a?->b;
 'nullsafe operator (?->)' requires PHP 8.0 or higher
 'nullsafe operator (?->)' requires PHP 8.0 or higher
 'nullsafe operator (?->)' requires PHP 8.0 or higher
-Cannot take reference of a nullsafe chain
 'nullsafe operator (?->)' requires PHP 8.0 or higher
-Cannot take reference of a nullsafe chain
 'nullsafe operator (?->)' requires PHP 8.0 or higher
 Cannot take reference of a nullsafe chain
 'nullsafe operator (?->)' requires PHP 8.0 or higher
@@ -27,7 +25,12 @@ Cannot take reference of a nullsafe chain
 Cannot take reference of a nullsafe chain
 'nullsafe operator (?->)' requires PHP 8.0 or higher
 Cannot take reference of a nullsafe chain
-===errors 8.0-8.3===
+===errors 8.0-8.1===
+Cannot take reference of a nullsafe chain
+'property hooks' requires PHP 8.4 or higher
+Cannot take reference of a nullsafe chain
+Cannot take reference of a nullsafe chain
+===errors 8.2-8.3===
 Cannot take reference of a nullsafe chain
 Cannot take reference of a nullsafe chain
 Cannot take reference of a nullsafe chain
