@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::ClassFetchOnFoldedValue`, `ForbiddenRule::UnsupportedOperandTypes`, `ForbiddenRule::PrivateFinalPropertyHook`, `ForbiddenRule::SetHookParameterDefault`, `ForbiddenRule::PartialApplicationWithUnpacking`, `ForbiddenRule::EnumCaseValueType` and `ForbiddenRule::DuplicateEnumCaseValue` (`php-rs-parser`).
 - `ForeachStmt::key_by_ref` for a key taken by reference, `invalid_modifier` on a trait alias for `static`, `abstract` or `readonly`, and `PropertyHook::empty_param_list` for a hook written with `()` (`php-ast`).
+- `PrettyPrinter::syntax_errors`: for source with a syntax error, the output starts with a syntax error so it stays invalid (`php-printer`). `ParseError::phase` tells syntax errors from compile errors (`php-rs-parser`).
 
 ### Changed
 
@@ -72,6 +73,7 @@ These constructs were reported and are now accepted, as PHP does (`php-rs-parser
 - When printing for PHP 7.4, `.` is parenthesized at the precedence of `+` and `-`, so `1 . (2 << 1)` keeps its parentheses (`php-printer`).
 - A bare `true`, `false` or `null` before `::` is printed without parentheses, so `true::class` is not printed as the invalid `(true)::class` (`php-printer`).
 - A `yield` key or value that starts with the constant `from` is parenthesized, so it is not printed as `yield from` (`php-printer`).
+- With `PrettyPrinter::syntax_errors(true)`, source with a syntax error no longer prints as valid code, as it did for `var public $x;`, a trait alias whose name recovery dropped, an error node printed as `/* error */`, a heredoc whose closing marker is indented past its body, and `$a = 1 $b = 2;`. The playground passes it (`php-printer`, `php-wasm`).
 
 ## [0.26.0] - 2026-10-24
 

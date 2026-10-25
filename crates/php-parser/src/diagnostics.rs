@@ -142,6 +142,12 @@ impl ParseError {
         }
     }
 
+    /// When PHP reports the error: [`Phase::Compile`] only for a compile-time [`ForbiddenRule`].
+    pub fn phase(&self) -> Phase {
+        self.forbidden_rule()
+            .map_or(Phase::Parse, ForbiddenRule::phase)
+    }
+
     /// Stable kebab-case identifier: the variant's, or the rule's for [`ParseError::Forbidden`].
     pub fn code(&self) -> &'static str {
         match self {

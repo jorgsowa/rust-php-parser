@@ -63,6 +63,9 @@ impl Default for PrinterConfig {
     }
 }
 
+/// Keeps the output of a source with a syntax error invalid in every PHP version.
+const SYNTAX_ERROR: &str = "syntax error;";
+
 const SPACES: [&str; 17] = [
     "",
     " ",
@@ -444,18 +447,23 @@ impl<'src> Printer<'src> {
     // Top-level
     // =========================================================================
 
-    pub fn print_program(&mut self, program: &php_ast::ast::Program) {
+    pub fn print_program(&mut self, program: &php_ast::ast::Program, syntax_errors: bool) {
         // Check if first statement is InlineHtml at position 0 (truly starts with HTML, no PHP before it).
         // If span.start > 0, there was PHP content before this statement.
         let html_at_start = matches!(
             program.stmts.first().map(|s| (s.span.start, &s.kind)),
             Some((0, php_ast::ast::StmtKind::InlineHtml(_)))
         );
-        if html_at_start {
+        if html_at_start && !syntax_errors {
             self.in_html_mode = true;
-        } else if helpers::has_output(&program.stmts) || !self.comments.is_empty() {
+        } else if syntax_errors || helpers::has_output(&program.stmts) || !self.comments.is_empty()
+        {
             self.w("<?php");
             self.newline();
+            if syntax_errors {
+                self.w(SYNTAX_ERROR);
+                self.newline();
+            }
             self.has_php_content = true;
         }
         self.print_stmts(&program.stmts, false);

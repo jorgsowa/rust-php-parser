@@ -101,6 +101,7 @@ pub struct PrettyPrinter<'src> {
     source: &'src str,
     comments: Vec<Comment<'src>>,
     trailing_newline: bool,
+    syntax_errors: bool,
 }
 
 impl<'src> PrettyPrinter<'src> {
@@ -138,6 +139,13 @@ impl<'src> PrettyPrinter<'src> {
         self
     }
 
+    /// Whether the source has a syntax error, one PHP reports while parsing; the tree can't keep
+    /// it, so the output then starts with a syntax error of its own and stays invalid.
+    pub fn syntax_errors(mut self, syntax_errors: bool) -> Self {
+        self.syntax_errors = syntax_errors;
+        self
+    }
+
     /// Prints `program`.
     pub fn print(&self, program: &impl Printable) -> String {
         sealed::Printable::print(program, self)
@@ -145,7 +153,7 @@ impl<'src> PrettyPrinter<'src> {
 
     fn print_arena(&self, program: &Program<'_, '_>) -> String {
         let mut p = printer::Printer::with_comments(&self.config, self.source, &self.comments);
-        p.print_program(program);
+        p.print_program(program, self.syntax_errors);
         let mut out = p.into_output();
         if self.trailing_newline {
             out.push_str(self.config.newline.as_str());

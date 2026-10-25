@@ -175,7 +175,10 @@ fn print_fixture(fixture: &PrinterFixture, source: &str) -> (String, u64, Vec<Pa
     let arena = bumpalo::Bump::new();
     let options = php_rs_parser::ParseOptions::default().version(fixture.version);
     let result = php_rs_parser::parse_arena_with(&arena, source, &options);
-    let mut printer = PrettyPrinter::new().config(fixture.config.clone());
+    let syntax_errors = result.errors.iter().any(|e| e.phase() == Phase::Parse);
+    let mut printer = PrettyPrinter::new()
+        .config(fixture.config.clone())
+        .syntax_errors(syntax_errors);
     if !fixture.no_source {
         printer = printer.comments(result.source, &result.comments);
     }
@@ -208,10 +211,7 @@ fn compile_error_problem(
     if source_errors.is_empty() {
         return Some("source has no errors".to_string());
     }
-    if let Some(error) = source_errors
-        .iter()
-        .find(|e| e.forbidden_rule().map(|rule| rule.phase()) != Some(Phase::Compile))
-    {
+    if let Some(error) = source_errors.iter().find(|e| e.phase() != Phase::Compile) {
         return Some(format!("source has a non-compile error `{error}`"));
     }
     let source_messages = messages(source_errors);
@@ -229,6 +229,7 @@ fn compile_error_problem(
 /// Every fixture must print stably. Fixtures under `edge_cases/` must also
 /// re-parse without errors to the same tree, spans and parentheses aside, and
 /// those under `compile_errors/` to the same tree with the same errors.
+/// Fixtures under `syntax_errors/` must print with a syntax error, and need not be stable.
 ///
 /// Set `UPDATE_FIXTURES=1` to regenerate expected output.
 #[test]
@@ -293,6 +294,24 @@ fn fixtures() {
                     .push(format!("{problem} in {rel}\n{actual}"));
                 return;
             }
+        } else if rel.starts_with("syntax_errors") {
+            let has_syntax_error =
+                |errors: &[ParseError]| errors.iter().any(|e| e.phase() == Phase::Parse);
+            let problem = if !has_syntax_error(&source_errors) {
+                Some("source has no syntax error")
+            } else if !has_syntax_error(&printed_errors) {
+                Some("output has no syntax error")
+            } else {
+                None
+            };
+            if let Some(problem) = problem {
+                failures
+                    .lock()
+                    .unwrap()
+                    .push(format!("{problem} in {rel}\n{actual}"));
+            }
+            // Each print adds a syntax error, so the output is not stable.
+            return;
         } else if fixture.php_error.is_some() {
             failures
                 .lock()

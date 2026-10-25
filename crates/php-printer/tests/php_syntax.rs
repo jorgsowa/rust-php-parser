@@ -25,26 +25,20 @@ fn without_line(error: &str) -> String {
     out
 }
 
-/// The printed `source`, or `None` when it has a syntax error, which the tree cannot keep.
-fn print(source: &str, version: php_rs_parser::PhpVersion) -> Option<String> {
+/// The printed `source`, and whether it has a syntax error, which the tree cannot keep.
+fn print(source: &str, version: php_rs_parser::PhpVersion) -> (String, bool) {
     let arena = bumpalo::Bump::new();
     let options = php_rs_parser::ParseOptions::default().version(version);
     let result = php_rs_parser::parse_arena_with(&arena, source, &options);
-    if result
-        .errors
-        .iter()
-        .any(|e| e.forbidden_rule().map(|rule| rule.phase()) != Some(Phase::Compile))
-    {
-        return None;
-    }
+    let syntax_errors = result.errors.iter().any(|e| e.phase() == Phase::Parse);
     let mut config = PrinterConfig::default();
     config.php_version = version;
-    Some(
-        PrettyPrinter::new()
-            .config(config)
-            .comments(source, &result.comments)
-            .print(&result.program),
-    )
+    let printed = PrettyPrinter::new()
+        .config(config)
+        .comments(source, &result.comments)
+        .syntax_errors(syntax_errors)
+        .print(&result.program);
+    (printed, syntax_errors)
 }
 
 fn fixture_sources(root: &Path) -> Vec<(PathBuf, Result<String, String>)> {
@@ -72,7 +66,7 @@ fn fixture_sources(root: &Path) -> Vec<(PathBuf, Result<String, String>)> {
         .collect()
 }
 
-/// Printing for the `php` on `PATH` keeps the `php -l` result of each fixture without a syntax error.
+/// Printing for the `php` on `PATH` keeps the `php -l` result of each fixture.
 #[test]
 fn printed_fixtures_keep_php_l_result() {
     let Some(php) = installed_php() else {
@@ -107,12 +101,11 @@ fn printed_fixtures_keep_php_l_result() {
                     return;
                 }
             };
-            let Some(printed) = print(source, version) else {
-                return;
-            };
+            let (printed, syntax_errors) = print(source, version);
             let expected = php_lint(source).map(|e| without_line(&e));
             let actual = php_lint(&printed).map(|e| without_line(&e));
-            if expected == actual {
+            // Printing keeps a syntax error, though not its message.
+            if expected == actual || syntax_errors && expected.is_some() == actual.is_some() {
                 return;
             }
             let verdict = |e: &Option<String>| e.clone().unwrap_or_else(|| "passes".to_string());
