@@ -993,6 +993,7 @@ fn parse_foreach<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'ar
     expr::check_write_target(parser, &value, true);
     expr::check_special_variable_write(parser, &value, expr::WriteKind::Assign);
     expr::check_list_entries(parser, &value);
+    expr::check_mixed_list_short_syntax(parser, &value);
 
     // The `as` target(s) are destructuring positions, so empty array slots
     // (`foreach ($x as [$a, , $c])`) are legal — retract the eager errors.

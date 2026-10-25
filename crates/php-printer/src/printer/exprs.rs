@@ -84,6 +84,36 @@ impl<'src> Printer<'src> {
                 .is_some_and(|b| b.eq_ignore_ascii_case(&b'l'))
     }
 
+    /// Whether the source spells the array `expr` with `array(...)`.
+    fn written_as_long_array(&self, expr: &Expr) -> bool {
+        expr.span.end as usize <= self.source.len()
+            && self
+                .source
+                .as_bytes()
+                .get(expr.span.start as usize)
+                .is_some_and(|b| b.eq_ignore_ascii_case(&b'a'))
+    }
+
+    /// Whether the destructuring target `expr` nests an `array(...)`, which PHP rejects.
+    pub(crate) fn nests_long_array(&self, expr: &Expr) -> bool {
+        let ExprKind::Array(elements) = &expr.kind else {
+            return false;
+        };
+        elements.iter().any(|e| {
+            matches!(e.value().kind, ExprKind::Array(_))
+                && (self.written_as_long_array(e.value()) || self.nests_long_array(e.value()))
+        })
+    }
+
+    /// Print `target` keeping a nested `array(...)` spelling, so the output keeps PHP's error.
+    pub(crate) fn print_destructuring_target(&mut self, target: &Expr) {
+        let keep = self.nests_long_array(target);
+        let outer = self.keep_long_array_spelling;
+        self.keep_long_array_spelling |= keep;
+        self.print_expr(target, PREC_LOWEST);
+        self.keep_long_array_spelling = outer;
+    }
+
     /// Whether `expr` nests an array spelled differently, which PHP rejects: "Cannot mix [] and list()".
     fn mixes_list_spelling(&self, expr: &Expr) -> bool {
         let ExprKind::Array(elements) = &expr.kind else {
@@ -116,6 +146,15 @@ impl<'src> Printer<'src> {
     /// link's parenthesis on the way down, print the innermost node, then emit
     /// each link's remainder on the way back up.
     fn print_chain_operand(&mut self, expr: &Expr) {
+        let long_array_target =
+            matches!(&expr.kind, ExprKind::Assign(assign) if self.nests_long_array(assign.target));
+        let outer = self.keep_long_array_spelling;
+        self.keep_long_array_spelling |= long_array_target;
+        self.print_chain_links(expr);
+        self.keep_long_array_spelling = outer;
+    }
+
+    fn print_chain_links(&mut self, expr: &Expr) {
         let Some((mut node, mut prec)) = chain_operand(&expr.kind, self.php_version) else {
             return;
         };
@@ -334,9 +373,16 @@ impl<'src> Printer<'src> {
                     self.keep_list_spelling || (!known_unmixed && self.mixes_list_spelling(expr));
                 let outer_keep_list = std::mem::replace(&mut self.keep_list_spelling, keep_list);
                 let as_list = keep_list && self.written_as_list(expr);
-                self.w(if as_list { "list(" } else { "[" });
+                let as_long = self.keep_long_array_spelling && self.written_as_long_array(expr);
+                self.w(if as_list {
+                    "list("
+                } else if as_long {
+                    "array("
+                } else {
+                    "["
+                });
                 self.print_array_elements(elements, expr.span, !keep_list);
-                self.w(if as_list { ")" } else { "]" });
+                self.w(if as_list || as_long { ")" } else { "]" });
                 self.keep_list_spelling = outer_keep_list;
             }
             ExprKind::ArrayAccess(access) => {

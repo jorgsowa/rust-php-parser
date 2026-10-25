@@ -113,7 +113,7 @@ impl<'src> Printer<'src> {
                 if f.by_ref {
                     self.w("&");
                 }
-                self.print_expr(&f.value, PREC_LOWEST);
+                self.print_destructuring_target(&f.value);
                 if f.uses_alternative {
                     self.w("):");
                     self.print_alt_section(f.body);

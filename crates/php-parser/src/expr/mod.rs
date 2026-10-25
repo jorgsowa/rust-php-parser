@@ -1732,9 +1732,9 @@ fn is_list_syntax(source: &str, span: Span) -> bool {
         .unwrap_or(false)
 }
 
-/// Walk the destructure target (top-level `Array(_)`) and report mixing of
-/// `list(...)` and `[...]` syntax — PHP fatals "Cannot mix [] and list()".
-fn check_mixed_list_short_syntax<'arena, 'src>(
+/// Walk the destructure target (top-level `Array(_)`) and report a nested `array()`
+/// or a mix of `list(...)` and `[...]` syntax, stopping at the first, as PHP does.
+pub(crate) fn check_mixed_list_short_syntax<'arena, 'src>(
     parser: &mut Parser<'arena, 'src>,
     lhs: &Expr<'arena, 'src>,
 ) {
@@ -1746,26 +1746,38 @@ fn check_mixed_list_short_syntax<'arena, 'src>(
         parser: &mut Parser<'arena, 'src>,
         expr: &Expr<'arena, 'src>,
         outer_is_list: bool,
-    ) {
-        if let ExprKind::Array(elems) = &expr.kind {
-            if is_list_syntax(parser.source(), expr.span) != outer_is_list {
-                parser.forbid(
-                    ForbiddenRule::MixedListSyntax,
-                    "Cannot mix [] and list()",
-                    expr.span,
-                );
-                return;
-            }
-            for el in elems.iter() {
-                walk(parser, el.value(), outer_is_list);
-            }
-        }
-    }
-    if let ExprKind::Array(elems) = &lhs.kind {
+    ) -> bool {
+        let ExprKind::Array(elems) = &expr.kind else {
+            return true;
+        };
         for el in elems.iter() {
-            walk(parser, el.value(), outer_is_list);
+            let value = el.value();
+            if matches!(value.kind, ExprKind::Array(_)) {
+                let first = parser.source().as_bytes().get(value.span.start as usize);
+                if first.is_some_and(|b| b.eq_ignore_ascii_case(&b'a')) {
+                    parser.forbid(
+                        ForbiddenRule::LongArrayInDestructuring,
+                        "Cannot assign to array(), use [] instead",
+                        value.span,
+                    );
+                    return false;
+                }
+                if is_list_syntax(parser.source(), value.span) != outer_is_list {
+                    parser.forbid(
+                        ForbiddenRule::MixedListSyntax,
+                        "Cannot mix [] and list()",
+                        value.span,
+                    );
+                    return false;
+                }
+            }
+            if !walk(parser, value, outer_is_list) {
+                return false;
+            }
         }
+        true
     }
+    walk(parser, lhs, outer_is_list);
 }
 
 /// True if `kind` is an index or property fetch chain whose base is not a variable or a

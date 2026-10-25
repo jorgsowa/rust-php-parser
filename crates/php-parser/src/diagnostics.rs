@@ -611,6 +611,8 @@ forbidden_rules! {
     MixedKeyedEntries = "mixed-keyed-entries", Compile;
     /// A destructuring pattern mixes `[]` and `list()`.
     MixedListSyntax = "mixed-list-syntax", Compile;
+    /// A nested destructuring target is written with `array()`, as in `[array($a)] = $b`.
+    LongArrayInDestructuring = "long-array-in-destructuring", Compile;
     /// A destructuring list uses `...`.
     SpreadInDestructuring = "spread-in-destructuring", Compile;
     /// Nested ternaries are not parenthesized, e.g. `a ? b : c ? d : e`.
@@ -944,6 +946,7 @@ mod tests {
             ForbiddenRule::EmptyKeyedArrayEntry => &[("<?php ['a' => $y, , 'b' => $z] = $a;", ","),],
             ForbiddenRule::MixedKeyedEntries => &[("<?php ['a' => $x, $y] = $a;", "$y"),],
             ForbiddenRule::MixedListSyntax => &[("<?php [list($a)] = $b;", "list($a)"),],
+            ForbiddenRule::LongArrayInDestructuring => &[("<?php [array($a)] = $b;", "array($a)"),],
             ForbiddenRule::SpreadInDestructuring => &[("<?php [...$a] = $b;", "...$a"),],
             ForbiddenRule::UnparenthesizedNestedTernary => &[("<?php $x = 1 ? 2 : 3 ? 4 : 5;", "?"),],
             ForbiddenRule::UnparenthesizedArrowInPipe => &[("<?php $x = 1 |> fn($a) => $a;", "fn($a) => $a"),],

@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::ClassFetchOnFoldedValue`, `ForbiddenRule::UnsupportedOperandTypes`, `ForbiddenRule::PrivateFinalPropertyHook`, `ForbiddenRule::SetHookParameterDefault`, `ForbiddenRule::PartialApplicationWithUnpacking`, `ForbiddenRule::EnumCaseValueType`, `ForbiddenRule::DuplicateEnumCaseValue`, `ForbiddenRule::CustomAssertFunction`, `ForbiddenRule::PositionalAfterUnpacking` and `ForbiddenRule::MethodNameNotString` (`php-rs-parser`).
+- `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::ClassFetchOnFoldedValue`, `ForbiddenRule::UnsupportedOperandTypes`, `ForbiddenRule::PrivateFinalPropertyHook`, `ForbiddenRule::SetHookParameterDefault`, `ForbiddenRule::PartialApplicationWithUnpacking`, `ForbiddenRule::EnumCaseValueType`, `ForbiddenRule::DuplicateEnumCaseValue`, `ForbiddenRule::CustomAssertFunction`, `ForbiddenRule::PositionalAfterUnpacking`, `ForbiddenRule::MethodNameNotString` and `ForbiddenRule::LongArrayInDestructuring` (`php-rs-parser`).
 - `ForeachStmt::key_by_ref` for a key taken by reference, `invalid_modifier` on a trait alias for `static`, `abstract` or `readonly`, and `PropertyHook::empty_param_list` for a hook written with `()` (`php-ast`).
 - `PrettyPrinter::syntax_errors`: for source with a syntax error, the output starts with a syntax error so it stays invalid (`php-printer`). `ParseError::phase` tells syntax errors from compile errors (`php-rs-parser`).
 
@@ -42,6 +42,7 @@ These constructs were accepted and are now reported with PHP's wording (`php-rs-
 - From PHP 8.0, a function named `assert`, as in `namespace A; function assert() {}` (`Defining a custom assert() function is not allowed, as the function has special semantics`).
 - A positional argument after argument unpacking, as in `var_dump(...[1, 2, 3], 4);` (`Cannot use positional argument after argument unpacking`).
 - A method name PHP folds to a value other than a string, as in `$o->{1}()`, `$o->{true}()` or `A::{1 + 1}()` (`Method name must be a string`).
+- A nested destructuring target written with `array()`, as in `[array($a)] = $b;` (`Cannot assign to array(), use [] instead`), and a foreach target that mixes `list()` and `[]`, as in `foreach ($x as [list($a)])` (`Cannot mix [] and list()`).
 
 #### Parser: valid code PHP accepts
 
@@ -79,6 +80,7 @@ These constructs were reported and are now accepted, as PHP does (`php-rs-parser
 - A `yield` key or value that starts with the constant `from` is parenthesized, so it is not printed as `yield from` (`php-printer`).
 - A blank line between a doc comment and its `use` no longer splits a run of imports, so sorting them is stable on a second print (`php-printer`).
 - A comment after the comma of a grouped property or constant, as in `public $a, /* a */ $b;`, is printed before the member it precedes instead of moving on each print (`php-printer`).
+- A nested `array()` in a destructuring target keeps that spelling, so `[array($a)] = $b;` is not printed as the valid `[[$a]] = $b;` (`php-printer`).
 - With `PrettyPrinter::syntax_errors(true)`, source with a syntax error no longer prints as valid code, as it did for `var public $x;`, a trait alias whose name recovery dropped, an error node printed as `/* error */`, a heredoc whose closing marker is indented past its body, and `$a = 1 $b = 2;`. The playground passes it (`php-printer`, `php-wasm`).
 
 ## [0.26.0] - 2026-10-24
