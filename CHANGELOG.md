@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- On PHP 7.4, a control character before or after a simple string offset, as in `"$a[\x01x]"`, is skipped with a warning as PHP's lexer does, instead of making the offset invalid (`php-rs-parser`).
 - On PHP 7.4, `#[` inside a `{$…}` interpolation starts a comment, as everywhere else in PHP 7.4 code, so `"{$a[1 #[x` followed by a newline and `]}"` reads `$a[1]` (`php-rs-parser`).
 - On PHP 7.4, functions, imports and classes, interfaces and traits that PHP binds at compile time may come before the first `namespace` declaration (`php-rs-parser`).
 - On PHP 7.4, `parent` in a class without a parent is resolved at run time, so `parent::f()`, `new parent` and a `parent` type there no longer report `Cannot use "parent" when current class scope has no parent` (`php-rs-parser`).

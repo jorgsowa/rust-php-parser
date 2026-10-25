@@ -133,7 +133,8 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                             i += 1;
                         }
                         if i < len && bytes[i] == b']' {
-                            let idx_str = &inner[idx_start..i];
+                            let (idx_start, idx_str) =
+                                drop_unexpected_chars(idx_start, &inner[idx_start..i], version);
                             i += 1; // skip ]
 
                             if idx_str.is_empty() {
@@ -147,7 +148,7 @@ pub fn parse_interpolated_parts<'arena, 'src>(
                                 });
                             } else {
                                 let idx_offset = base_offset + idx_start as u32;
-                                let idx_end = base_offset + (i - 1) as u32;
+                                let idx_end = idx_offset + idx_str.len() as u32;
                                 check_simple_offset(
                                     idx_str,
                                     Span::new(idx_offset, idx_end),
@@ -398,7 +399,8 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                             i += 1;
                         }
                         if i < len && bytes[i] == b']' {
-                            let idx_str = &raw_body[idx_start..i];
+                            let (idx_start, idx_str) =
+                                drop_unexpected_chars(idx_start, &raw_body[idx_start..i], version);
                             i += 1; // skip ]
                             if idx_str.is_empty() {
                                 errors.push(ParseError::Forbidden {
@@ -411,7 +413,7 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                                 });
                             } else {
                                 let idx_offset = body_offset + idx_start as u32;
-                                let idx_end = body_offset + (i - 1) as u32;
+                                let idx_end = idx_offset + idx_str.len() as u32;
                                 check_simple_offset(
                                     idx_str,
                                     Span::new(idx_offset, idx_end),
@@ -780,6 +782,20 @@ fn is_var_char(b: u8) -> bool {
 
 fn is_utf8_continuation(b: u8) -> bool {
     (b & 0xC0) == 0x80
+}
+
+/// Before PHP 8.0 the lexer skips an unexpected character with a warning, so one around a
+/// simple offset, as in `"$a[x\x01]"`, is not part of it.
+fn drop_unexpected_chars(start: usize, idx: &str, version: PhpVersion) -> (usize, &str) {
+    if version >= PhpVersion::Php80 {
+        return (start, idx);
+    }
+    let unexpected = |c: char| c.is_ascii_control() && !matches!(c, ' ' | '\t' | '\n' | '\r');
+    let trimmed = idx.trim_start_matches(unexpected);
+    (
+        start + idx.len() - trimmed.len(),
+        trimmed.trim_end_matches(unexpected),
+    )
 }
 
 /// Report an offset in `"$a[...]"` that PHP's lexer does not accept there: only a name, a
