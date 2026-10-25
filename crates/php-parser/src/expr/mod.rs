@@ -1366,6 +1366,20 @@ fn is_class_keyword_name(name: &Name<'_, '_>) -> bool {
         if ["self", "parent", "static"].iter().any(|k| value.eq_ignore_ascii_case(k)))
 }
 
+/// Whether `expr` is a possibly negated `static::` fetch, or a `self::` or `parent::` one outside
+/// a class, which PHP never resolves at compile time.
+fn is_unresolved_class_keyword_fetch(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> bool {
+    match &unparenthesized(expr).kind {
+        ExprKind::UnaryPrefix(u) if u.op == UnaryPrefixOp::BooleanNot => {
+            is_unresolved_class_keyword_fetch(parser, u.operand)
+        }
+        ExprKind::ClassConstAccess(access) => matches!(&access.class.kind,
+            ExprKind::Name(name) if is_class_keyword_name(name)
+                && (is_static_name(name) || parser.class_scope.is_none())),
+        _ => false,
+    }
+}
+
 fn is_static_name(name: &Name<'_, '_>) -> bool {
     matches!(name, Name::Simple { value, .. } if value.eq_ignore_ascii_case("static"))
 }
@@ -1464,8 +1478,16 @@ fn folded_truth(expr: &Expr<'_, '_>, version: PhpVersion) -> Option<bool> {
         ExprKind::Nowdoc { value, .. } => Some(!matches!(*value, "" | "0")),
         ExprKind::Bool(b) => Some(*b),
         ExprKind::Null => Some(false),
-        // PHP compiles `print` to the constant 1.
+        // PHP compiles `print` to the constant 1, and `exit` to true until it is a function in 8.4.
         ExprKind::Print(_) => Some(true),
+        ExprKind::Exit(_) if version < PhpVersion::Php84 => Some(true),
+        ExprKind::Empty(operand) => const_truth(operand, version).map(|truth| !truth),
+        // A literal is never an object.
+        ExprKind::Binary(b)
+            if b.op == BinaryOp::Instanceof && const_truth(b.left, version).is_some() =>
+        {
+            Some(false)
+        }
         ExprKind::UnaryPrefix(u) if u.op == UnaryPrefixOp::BooleanNot => {
             // PHP 8.5 leaves `!` on a float to run time, where a NAN warns.
             if version >= PhpVersion::Php85
@@ -2566,6 +2588,18 @@ fn parse_expr_rest<'arena, 'src>(
                 (BinaryOp::BooleanOr | BinaryOp::LogicalOr, Some(truth)) => truth,
                 _ => false,
             };
+            // A condition PHP may fold, whose value is not computed here, may skip the right side too.
+            let may_skip = short_circuits
+                || is_short_circuit(op)
+                    && lhs_truth.is_none()
+                    && ConstExprChecker {
+                        parser,
+                        version: parser.version,
+                        allow_new: false,
+                        substitutes_constants: true,
+                    }
+                    .may_fold(&lhs)
+                    && !is_unresolved_class_keyword_fetch(parser, &lhs);
             if op == BinaryOp::Instanceof && parser.check(TokenKind::LeftParen) {
                 let span = parser.current_span();
                 parser.require_version(PhpVersion::Php80, "instanceof with an expression", span);
@@ -2584,7 +2618,7 @@ fn parse_expr_rest<'arena, 'src>(
             if parser.current_kind().is_assignment_op() {
                 rhs = parse_assign_continuation(parser, rhs);
             }
-            if short_circuits {
+            if may_skip {
                 parser.uncompiled_spans.push(rhs.span);
             }
             if op == BinaryOp::Instanceof {
