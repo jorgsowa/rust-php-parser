@@ -17,6 +17,9 @@ $x instanceof (~[]);
 ===errors <=7.4===
 'new with an expression' requires PHP 8.0 or higher
 'instanceof with an expression' requires PHP 8.0 or higher
+Unsupported operand types
+Unsupported operand types
+Unsupported operand types
 Illegal class name
 Illegal class name
 ===errors 8.0===

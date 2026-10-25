@@ -585,6 +585,8 @@ forbidden_rules! {
     ClassFetchOnLiteral = "class-fetch-on-literal", Compile;
     /// `::class` is applied to a dynamic class name before PHP 8.0.
     DynamicClassFetch = "dynamic-class-fetch", Compile;
+    /// PHP 7.4 folds arithmetic on an array, or `~` on a bool, null or array, e.g. `[] - 1`.
+    UnsupportedOperandTypes = "unsupported-operand-types", Compile;
     /// A constant expression contains something PHP cannot evaluate at compile time.
     InvalidConstantExpression = "invalid-constant-expression", Compile;
     /// A destructuring list is empty.
@@ -671,6 +673,12 @@ mod tests {
             PhpVersion::Php74,
             "<?php $a::class;",
             "$a",
+        ),
+        (
+            ForbiddenRule::UnsupportedOperandTypes,
+            PhpVersion::Php74,
+            "<?php $a = [] - 1;",
+            "[] - 1",
         ),
         (
             ForbiddenRule::QualifiedBuiltinType,
@@ -928,6 +936,7 @@ mod tests {
             ForbiddenRule::UnexpectedCharacter => &[("<?php $a\x01\x02 = 1;", "\x01\x02"), ("<?php $a =\x0c1;", "\x0c"),],
             ForbiddenRule::UnexpectedCast => &[("<?php foo(int);", "(int)"), ("<?php if ( float ) {}", "( float )"),],
             ForbiddenRule::DynamicClassFetch
+            | ForbiddenRule::UnsupportedOperandTypes
             | ForbiddenRule::PartialApplicationWithUnpacking
             | ForbiddenRule::EnumCaseValueType
             | ForbiddenRule::DuplicateEnumCaseValue

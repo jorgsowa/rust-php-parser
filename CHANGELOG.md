@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- On PHP 7.4, arithmetic that PHP folds at compile time on an array literal, such as `[] - 1`, `[1] + 1` or `-[]`, and `~` on `true`, `false`, `null` or an array report `Unsupported operand types` (`php-rs-parser`).
 - A `print` expression or literal arithmetic and concatenation on the left of `&&`, `||`, `and` or `or` folds as in PHP, so the right operand it skips no longer reports compile errors, as in `print $a or isset(1 + 1);` and `-1 || $a ? 1 : 2 ? 3 : 4;` (`php-rs-parser`).
 - When printing for PHP 7.4, `.` is parenthesized at the precedence of `+` and `-`, so `1 . (2 << 1)` keeps its parentheses (`php-printer`).
 - On PHP 7.4, `.` has the precedence of `+` and `-` and binds tighter than `<<` and `>>`, so `"a" . 1 + 2` parses as `("a" . 1) + 2` and `1 . 2 << 1` as `(1 . 2) << 1` (`php-rs-parser`).

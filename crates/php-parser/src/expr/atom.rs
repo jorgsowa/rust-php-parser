@@ -182,6 +182,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                 }),
                 span,
             };
+            super::check_unsupported_operands(parser, &expr);
             operand = match ops.last() {
                 Some(&(_, outer_bp)) => parse_expr_continue(parser, expr, outer_bp),
                 None => return expr,

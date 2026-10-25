@@ -667,6 +667,114 @@ fn folded_type(expr: &Expr<'_, '_>, version: PhpVersion) -> Option<Folded> {
     Some(folded)
 }
 
+/// An operand PHP 7.4 folds at compile time, as far as its operand type errors need.
+#[derive(Clone, Copy)]
+enum Operand74 {
+    /// An array; `Some(true)` if it is known to be empty.
+    Array(Option<bool>),
+    Bool(bool),
+    Null,
+    /// A number or numeric string; `Some(true)` if it is known to convert to the integer 0.
+    Number(Option<bool>),
+}
+
+impl Operand74 {
+    fn is_array(self) -> bool {
+        matches!(self, Operand74::Array(_))
+    }
+
+    /// Whether the operand converts to the integer 0, which PHP never folds a division by.
+    fn is_zero(self) -> Option<bool> {
+        match self {
+            Operand74::Array(empty) | Operand74::Number(empty) => empty,
+            Operand74::Bool(b) => Some(!b),
+            Operand74::Null => Some(true),
+        }
+    }
+}
+
+/// The operand `expr` folds to on PHP 7.4, or `None` when that is unknown or PHP leaves it to run time.
+fn operand_74(expr: &Expr<'_, '_>) -> Option<Operand74> {
+    let float_is_zero = |f: f64| (f.is_finite() && f.abs() < 9.0e18).then_some(f.trunc() == 0.0);
+    let expr = unparenthesized(expr);
+    match &expr.kind {
+        ExprKind::Bool(b) => return Some(Operand74::Bool(*b)),
+        ExprKind::Null => return Some(Operand74::Null),
+        ExprKind::Array(elements) => {
+            let simple = |e: &Expr<'_, '_>| {
+                operand_74(e).is_some() || matches!(literal_scalar(e), Some(Scalar::String(_)))
+            };
+            let constant = elements.iter().all(|el| {
+                !el.is_by_ref()
+                    && !matches!(el.kind, ArrayElementKind::Spread(_))
+                    && el.key.as_ref().is_none_or(simple)
+                    && simple(el.value())
+            });
+            return constant.then_some(Operand74::Array(Some(elements.is_empty())));
+        }
+        ExprKind::Binary(b) if b.op == BinaryOp::Add => {
+            if let (Some(Operand74::Array(l)), Some(Operand74::Array(r))) =
+                (operand_74(b.left), operand_74(b.right))
+            {
+                let empty = match (l, r) {
+                    (Some(false), _) | (_, Some(false)) => Some(false),
+                    (Some(true), Some(true)) => Some(true),
+                    _ => None,
+                };
+                return Some(Operand74::Array(empty));
+            }
+        }
+        _ => {}
+    }
+    Some(Operand74::Number(match literal_scalar(expr)? {
+        Scalar::Int(n) => Some(n == 0),
+        Scalar::Float(f) => float_is_zero(f),
+        // PHP 7.4 leaves arithmetic on a non-numeric string, or one with trailing whitespace, to run time.
+        Scalar::String(s) => {
+            let trailing_space = s.last().is_some_and(|b| b.is_ascii_whitespace());
+            if trailing_space || !is_numeric_string(&s) {
+                return None;
+            }
+            float_is_zero(std::str::from_utf8(&s).ok()?.trim().parse().ok()?)
+        }
+    }))
+}
+
+/// PHP 7.4 folds arithmetic on literals at compile time, failing on operand types it cannot take.
+pub(crate) fn check_unsupported_operands(parser: &mut Parser<'_, '_>, expr: &Expr<'_, '_>) {
+    if parser.version >= PhpVersion::Php80 {
+        return;
+    }
+    let unsupported = match &expr.kind {
+        ExprKind::Binary(b) => {
+            let (Some(left), Some(right)) = (operand_74(b.left), operand_74(b.right)) else {
+                return;
+            };
+            match b.op {
+                BinaryOp::Add => left.is_array() != right.is_array(),
+                BinaryOp::Sub | BinaryOp::Mul => left.is_array() || right.is_array(),
+                BinaryOp::Div => {
+                    (left.is_array() || right.is_array()) && right.is_zero() == Some(false)
+                }
+                _ => false,
+            }
+        }
+        ExprKind::UnaryPrefix(u) => match (u.op, operand_74(u.operand)) {
+            (UnaryPrefixOp::Negate | UnaryPrefixOp::Plus, Some(operand)) => operand.is_array(),
+            (UnaryPrefixOp::BitwiseNot, Some(operand)) => !matches!(operand, Operand74::Number(_)),
+            _ => false,
+        },
+        _ => false,
+    };
+    if unsupported {
+        parser.forbid(
+            ForbiddenRule::UnsupportedOperandTypes,
+            "Unsupported operand types",
+            expr.span,
+        );
+    }
+}
+
 /// PHP's numeric string: optional surrounding whitespace around a decimal integer or float.
 fn is_numeric_string(s: &[u8]) -> bool {
     let is_space = |b: &u8| matches!(b, b' ' | b'\t' | b'\n' | b'\r' | b'\x0B' | b'\x0C');
@@ -2498,6 +2606,7 @@ fn parse_expr_rest<'arena, 'src>(
                 }),
                 span,
             };
+            check_unsupported_operands(parser, &lhs);
             continue;
         }
 
