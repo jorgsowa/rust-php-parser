@@ -1287,7 +1287,7 @@ fn is_short_circuit(op: BinaryOp) -> bool {
     )
 }
 
-/// [`folded_truth`], also folding the arithmetic and concatenation of literals in constants.
+/// [`folded_truth`], also folding the arithmetic and concatenation of literals.
 fn const_truth(expr: &Expr<'_, '_>) -> Option<bool> {
     folded_truth(expr).or_else(|| match literal_scalar(expr)? {
         Scalar::Int(n) => Some(n != 0),
@@ -1356,8 +1356,10 @@ fn folded_truth(expr: &Expr<'_, '_>) -> Option<bool> {
         ExprKind::Nowdoc { value, .. } => Some(!matches!(*value, "" | "0")),
         ExprKind::Bool(b) => Some(*b),
         ExprKind::Null => Some(false),
+        // PHP compiles `print` to the constant 1.
+        ExprKind::Print(_) => Some(true),
         ExprKind::UnaryPrefix(u) if u.op == UnaryPrefixOp::BooleanNot => {
-            folded_truth(u.operand).map(|truth| !truth)
+            const_truth(u.operand).map(|truth| !truth)
         }
         ExprKind::Array(elements) if is_literal(expr) => {
             let mut truth = false;
@@ -1384,14 +1386,14 @@ fn folded_truth(expr: &Expr<'_, '_>) -> Option<bool> {
                 }
                 spine.push(inner);
             }
-            let mut truth = folded_truth(spine[spine.len() - 1].left)?;
+            let mut truth = const_truth(spine[spine.len() - 1].left)?;
             for link in spine.iter().rev() {
                 let decided = match link.op {
                     BinaryOp::BooleanAnd | BinaryOp::LogicalAnd => !truth,
                     _ => truth,
                 };
                 if !decided {
-                    truth = folded_truth(link.right)?;
+                    truth = const_truth(link.right)?;
                 }
             }
             Some(truth)
@@ -2436,7 +2438,7 @@ fn parse_expr_rest<'arena, 'src>(
             let lhs_truth = match chain_truth {
                 _ if !is_short_circuit(op) => None,
                 Some((span, truth)) if span == lhs.span => truth,
-                _ => folded_truth(&lhs),
+                _ => const_truth(&lhs),
             };
             let short_circuits = match (op, lhs_truth) {
                 (BinaryOp::BooleanAnd | BinaryOp::LogicalAnd, Some(truth)) => !truth,
@@ -2483,7 +2485,7 @@ fn parse_expr_rest<'arena, 'src>(
             if is_short_circuit(op) {
                 let truth = match lhs_truth {
                     Some(truth) if short_circuits => Some(truth),
-                    Some(_) => folded_truth(&rhs),
+                    Some(_) => const_truth(&rhs),
                     None => None,
                 };
                 chain_truth = Some((span, truth));
