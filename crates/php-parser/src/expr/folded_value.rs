@@ -97,7 +97,7 @@ pub(super) fn folded_class_fetch_value(
     if literal || (parser.version >= PhpVersion::Php82 && is_literal_concat(expr)) {
         return None;
     }
-    Some(match folded_value(parser, expr, 0)? {
+    Some(match folded_value(parser, expr, 0, false)? {
         Value::Int(_) => "int",
         Value::Float(_) => "float",
         Value::Str(_) => "string",
@@ -116,7 +116,7 @@ pub(super) fn folded_class_fetch_value(
 
 /// True if PHP folds `expr` to a value other than a string, as in the method name of `$o->{1}()`.
 pub(super) fn folds_to_non_string(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> bool {
-    folded_value(parser, expr, 0).is_some_and(|value| !matches!(value, Value::Str(_)))
+    folded_value(parser, expr, 0, false).is_some_and(|value| !matches!(value, Value::Str(_)))
 }
 
 /// Why PHP cannot unpack a spread element of an array literal it folds.
@@ -163,13 +163,13 @@ fn fold_array(
             return ArrayFold::NotFolded;
         };
         let key = match &el.key {
-            Some(key) => match folded_value(parser, key, depth + 1) {
+            Some(key) => match folded_value(parser, key, depth + 1, true) {
                 Some(key) => Some(key),
                 None => return ArrayFold::NotFolded,
             },
             None => None,
         };
-        let Some(value) = folded_value(parser, value, depth + 1) else {
+        let Some(value) = folded_value(parser, value, depth + 1, true) else {
             return ArrayFold::NotFolded;
         };
         values.push((key, value));
@@ -238,12 +238,12 @@ fn is_integer_key(bytes: &[u8]) -> bool {
 
 /// The truthiness of the value PHP folds `expr` to, when it is computed here.
 pub(super) fn folded_value_truth(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> Option<bool> {
-    folded_value(parser, expr, 0)?.truth()
+    folded_value(parser, expr, 0, false)?.truth()
 }
 
 /// The bytes of the string PHP folds `expr` to, when they are computed here.
 pub(super) fn folded_string(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> Option<Vec<u8>> {
-    match folded_value(parser, expr, 0)? {
+    match folded_value(parser, expr, 0, false)? {
         Value::Str(bytes) => bytes,
         _ => None,
     }
@@ -275,7 +275,14 @@ pub(super) fn is_literal_concat(expr: &Expr<'_, '_>) -> bool {
 /// Operand nesting past which a value is left unknown, to bound recursion on long chains.
 const MAX_DEPTH: usize = 64;
 
-fn folded_value(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>, depth: usize) -> Option<Value> {
+/// `conditionals` is set where PHP evaluates `expr` as a constant expression, as it does the
+/// elements of an array literal, which also folds `?:` and `??`.
+fn folded_value(
+    parser: &Parser<'_, '_>,
+    expr: &Expr<'_, '_>,
+    depth: usize,
+    conditionals: bool,
+) -> Option<Value> {
     if depth > MAX_DEPTH {
         return None;
     }
@@ -313,9 +320,9 @@ fn folded_value(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>, depth: usize) -> O
             }
             Value::Str(None)
         }
-        ExprKind::ErrorSuppress(inner) => folded_value(parser, inner, depth + 1)?,
+        ExprKind::ErrorSuppress(inner) => folded_value(parser, inner, depth + 1, conditionals)?,
         ExprKind::UnaryPrefix(u) => {
-            let operand = folded_value(parser, u.operand, depth + 1)?;
+            let operand = folded_value(parser, u.operand, depth + 1, conditionals)?;
             match u.op {
                 UnaryPrefixOp::BooleanNot => {
                     // PHP 8.5 leaves `!` on a float to run time, where a NAN warns.
@@ -341,7 +348,21 @@ fn folded_value(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>, depth: usize) -> O
                 _ => return None,
             }
         }
-        ExprKind::Binary(b) => binary_value(parser, b, depth + 1)?,
+        ExprKind::Binary(b) => binary_value(parser, b, depth + 1, conditionals)?,
+        ExprKind::Ternary(t) if conditionals => {
+            let condition = folded_value(parser, t.condition, depth + 1, true)?;
+            match (condition.truth()?, t.then_expr) {
+                (true, None) => condition,
+                (true, Some(then_expr)) => folded_value(parser, then_expr, depth + 1, true)?,
+                (false, _) => folded_value(parser, t.else_expr, depth + 1, true)?,
+            }
+        }
+        ExprKind::NullCoalesce(n) if conditionals => {
+            match folded_value(parser, n.left, depth + 1, true)? {
+                Value::Null => folded_value(parser, n.right, depth + 1, true)?,
+                left => left,
+            }
+        }
         _ => return None,
     })
 }
@@ -375,9 +396,14 @@ fn constant_value(parser: &Parser<'_, '_>, name: &Name<'_, '_>) -> Option<Value>
     })
 }
 
-fn binary_value(parser: &Parser<'_, '_>, b: &BinaryExpr<'_, '_>, depth: usize) -> Option<Value> {
+fn binary_value(
+    parser: &Parser<'_, '_>,
+    b: &BinaryExpr<'_, '_>,
+    depth: usize,
+    conditionals: bool,
+) -> Option<Value> {
     let version = parser.version;
-    let left = folded_value(parser, b.left, depth)?;
+    let left = folded_value(parser, b.left, depth, conditionals)?;
     // A left operand that decides `&&` or `||` leaves the right one out.
     if let Some(truth) = left.truth() {
         let decided = match b.op {
@@ -389,7 +415,7 @@ fn binary_value(parser: &Parser<'_, '_>, b: &BinaryExpr<'_, '_>, depth: usize) -
             return Some(Value::Bool(Some(truth)));
         }
     }
-    let right = folded_value(parser, b.right, depth)?;
+    let right = folded_value(parser, b.right, depth, conditionals)?;
     Some(match b.op {
         BinaryOp::BooleanAnd | BinaryOp::LogicalAnd => {
             Value::Bool(left.truth().zip(right.truth()).map(|(l, r)| l && r))
