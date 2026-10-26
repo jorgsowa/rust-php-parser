@@ -50,6 +50,7 @@ These constructs were accepted and are now reported with PHP's wording (`php-rs-
 - A nested destructuring target written with `array()`, as in `[array($a)] = $b;` (`Cannot assign to array(), use [] instead`), and a foreach target that mixes `list()` and `[]`, as in `foreach ($x as [list($a)])` (`Cannot mix [] and list()`).
 - From PHP 8.3, a static variable named like a `use` variable of its closure, as in `function () use (&$a) { static $a; }` (`Duplicate declaration of static variable $a`).
 - A branch PHP keeps after folding `__CLASS__` in a constant expression, as in `class C { const X = __CLASS__ ? $a : 1; }` or, in a function declared inside a method, where `__CLASS__` is empty, `function f($p = __CLASS__ ? 1 : $a) {}` (`Constant expression contains invalid operations`).
+- The right operand of `&&`, `||`, `and` or `or` when PHP folds the left one to a value that does not skip it, as in `1 < 2 && isset(1 + 1);` or `const C = __CLASS__ && $x;`, and in a parameter default after an internal constant, which PHP does not substitute there, as in `function f($p = PHP_EOL !== 1 && $x) {}`.
 
 #### Parser: valid code PHP accepts
 
@@ -64,7 +65,7 @@ These constructs were reported and are now accepted, as PHP does (`php-rs-parser
 - On PHP 8.0, destructuring a nullsafe chain by reference, as in `[&$y] = $y->y?->y;`; PHP checks it from 8.1.
 - On PHP 8.0 to 8.3, a curly brace offset that is the base of another fetch or call, as in `$a{0}->b`, `$a{0}[1]`, `$a{0}::$c` or `$a{0}->m()`; PHP checks it only where it folds an array literal or a PHP 8.3 `static` initializer (`[$a{0}->b]` from PHP 8.2).
 - From PHP 8.6, a pipe is compiled as the call it makes, so its result can be written to like a call's, as in `(1 |> f(...))->p ??= 99;` and `(1 |> f(...))[0] = 1;`.
-- The right operand of `&&`, `||`, `and` or `or` no longer reports compile errors when PHP may fold the left operand away. A `print` expression, literal arithmetic and concatenation, `exit` before PHP 8.4, `empty()` of a literal and a literal `instanceof` fold exactly, as in `print $a or isset(1 + 1);` and `-1 || $a ? 1 : 2 ? 3 : 4;`; a literal condition whose value is not computed, such as `1 < 2`, `~1`, `@1`, `+print $a`, `M_PI`, `self::class` in a class, or `0 != 9 or $a`, is assumed to skip it.
+- The right operand of `&&`, `||`, `and` or `or` no longer reports compile errors when PHP may fold the left operand away. A `print` expression, literal arithmetic and concatenation, `exit` before PHP 8.4, `empty()` of a literal and a literal `instanceof` fold exactly, as in `print $a or isset(1 + 1);` and `-1 || $a ? 1 : 2 ? 3 : 4;`; comparisons and other operators on literals fold as PHP computes them, as in `1 > 2 && isset(1 + 1);`, and a condition whose value is not computed, such as `M_PI`, `+print $a` or `self::class` in a class, is assumed to skip it.
 - `++` and `--` bind tighter than `**`, so `--$a ** 2` parses as `(--$a) ** 2` instead of reporting `Cannot increment or decrement an expression that is not a variable`.
 
 #### Parser: wrong trees

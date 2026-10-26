@@ -107,6 +107,8 @@ pub struct Parser<'arena, 'src> {
     pub(crate) function_depth: u32,
     /// The `function_depth` of the constant expression being parsed, which PHP does not compile.
     const_expr_depth: Option<u32>,
+    /// True while parsing a parameter default, where PHP substitutes no constant while folding.
+    param_default: bool,
     /// True inside the body of a function, method, closure or hook that returns by reference.
     pub(crate) by_ref_function: bool,
     /// Names declared by `static` in the current function body or top-level code.
@@ -274,6 +276,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             uncompiled_spans: Vec::new(),
             function_depth: 0,
             const_expr_depth: None,
+            param_default: false,
             by_ref_function: false,
             static_vars: Vec::new(),
             has_yield: false,
@@ -338,6 +341,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             uncompiled_spans: Vec::new(),
             function_depth: 0,
             const_expr_depth: None,
+            param_default: false,
             by_ref_function: false,
             static_vars: Vec::new(),
             has_yield: false,
@@ -809,6 +813,19 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
     pub(crate) fn parsing_const_expr(&self) -> bool {
         self.const_expr_depth == Some(self.function_depth)
+    }
+
+    /// [`in_const_expr`](Self::in_const_expr) for a parameter default.
+    pub(crate) fn in_param_default<R>(&mut self, f: impl FnOnce(&mut Self) -> R) -> R {
+        let outer = std::mem::replace(&mut self.param_default, true);
+        let result = self.in_const_expr(f);
+        self.param_default = outer;
+        result
+    }
+
+    /// Whether PHP substitutes internal constants while folding the expression being parsed.
+    pub(crate) fn substitutes_constants(&self) -> bool {
+        !(self.param_default && self.parsing_const_expr())
     }
 
     /// Expect a closing delimiter, reporting where the opening was.

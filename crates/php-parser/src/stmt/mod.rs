@@ -1639,7 +1639,7 @@ pub fn parse_param_list<'arena, 'src>(
         let default = if parser.eat(TokenKind::Equals).is_some() {
             // Suppress `{` subscript so a following hook block `{ get => ...; }`
             // is not consumed as part of the default expression.
-            let default = parser.in_const_expr(|p| p.with_no_brace_subscript(expr::parse_expr));
+            let default = parser.in_param_default(|p| p.with_no_brace_subscript(expr::parse_expr));
             expr::check_param_default(parser, &default);
             if let (Some(ty), Some(name), false) = (&type_hint, name.as_str(), variadic) {
                 let owner = if first_modifier_span.is_some() && parser.version >= PhpVersion::Php80

@@ -1440,7 +1440,7 @@ fn may_fold_at_runtime(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> bool {
         parser,
         version: parser.version,
         allow_new: false,
-        substitutes_constants: true,
+        substitutes_constants: parser.substitutes_constants(),
     };
     if checker.may_fold(expr) {
         return !is_unresolved_class_keyword_fetch(parser, expr);
@@ -1475,6 +1475,15 @@ fn may_fold_at_runtime(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> bool {
         ExprKind::Binary(b) if b.op != BinaryOp::Pipe => operand(b.left) && operand(b.right),
         _ => false,
     }
+}
+
+/// The truthiness PHP folds the left operand of `&&` or `||` to, when it is computed here.
+fn short_circuit_truth(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> Option<bool> {
+    const_truth(expr, parser.version).or_else(|| {
+        may_fold_at_runtime(parser, expr)
+            .then(|| folded_value::folded_value_truth(parser, expr))
+            .flatten()
+    })
 }
 
 /// Whether `expr` is a possibly negated class keyword fetch PHP never resolves at compile time.
@@ -2765,7 +2774,7 @@ fn parse_expr_rest<'arena, 'src>(
             let lhs_truth = match chain_truth {
                 _ if !is_short_circuit(op) => None,
                 Some((span, truth)) if span == lhs.span => truth,
-                _ => const_truth(&lhs, parser.version),
+                _ => short_circuit_truth(parser, &lhs),
             };
             let short_circuits = match (op, lhs_truth) {
                 (BinaryOp::BooleanAnd | BinaryOp::LogicalAnd, Some(truth)) => !truth,
@@ -2815,7 +2824,7 @@ fn parse_expr_rest<'arena, 'src>(
             if is_short_circuit(op) {
                 let truth = match lhs_truth {
                     Some(truth) if short_circuits => Some(truth),
-                    Some(_) => const_truth(&rhs, parser.version),
+                    Some(_) => short_circuit_truth(parser, &rhs),
                     None => None,
                 };
                 chain_truth = Some((span, truth));
