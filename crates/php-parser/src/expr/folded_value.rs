@@ -292,7 +292,7 @@ pub(super) fn is_literal_concat(expr: &Expr<'_, '_>) -> bool {
     false
 }
 
-/// Operand nesting past which a value is left unknown, to bound recursion on long chains.
+/// Operand nesting past which a value is left unknown, to bound recursion.
 const MAX_DEPTH: usize = 64;
 
 /// `conditionals` is set where PHP evaluates `expr` as a constant expression, as it does the
@@ -368,7 +368,19 @@ fn folded_value(
                 _ => return None,
             }
         }
-        ExprKind::Binary(b) => binary_value(parser, b, depth + 1, conditionals)?,
+        ExprKind::Binary(b) => {
+            // Walk the left spine iteratively: chains are built in a loop and can be very long.
+            let mut spine = vec![b];
+            while let ExprKind::Binary(inner) = &unparenthesized(spine[spine.len() - 1].left).kind {
+                spine.push(inner);
+            }
+            let mut value =
+                folded_value(parser, spine[spine.len() - 1].left, depth + 1, conditionals)?;
+            for link in spine.iter().rev() {
+                value = binary_value(parser, link, value, depth + 1, conditionals)?;
+            }
+            value
+        }
         ExprKind::Ternary(t) if conditionals => {
             let condition = folded_value(parser, t.condition, depth + 1, true)?;
             match (condition.truth()?, t.then_expr) {
@@ -439,14 +451,15 @@ fn constant_value(parser: &Parser<'_, '_>, name: &Name<'_, '_>) -> Option<Value>
     })
 }
 
+/// The value of `b`, whose left operand folds to `left`.
 fn binary_value(
     parser: &Parser<'_, '_>,
     b: &BinaryExpr<'_, '_>,
+    left: Value,
     depth: usize,
     conditionals: bool,
 ) -> Option<Value> {
     let version = parser.version;
-    let left = folded_value(parser, b.left, depth, conditionals)?;
     // A left operand that decides `&&` or `||` leaves the right one out.
     if let Some(truth) = left.truth() {
         let decided = match b.op {
