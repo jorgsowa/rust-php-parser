@@ -45,6 +45,7 @@ These constructs were accepted and are now reported with PHP's wording (`php-rs-
 - A method name PHP folds to a value other than a string, as in `$o->{1}()`, `$o->{true}()` or `A::{1 + 1}()` (`Method name must be a string`).
 - Unpacking a constant that is not an array in an array literal PHP folds, as in `[...1]` or `const C = [...true];` (`Only arrays and Traversables can be unpacked`, with `, int given` from PHP 8.4).
 - From PHP 8.5, a first-class callable in a constant expression named by a number, as in `const C = (0)(...);` (`Illegal function name`), or by a folded expression such as `(1 + 1)(...)` or `(true)(...)` (`Cannot use dynamic function name in constant expression`).
+- Writing to or taking a reference to the result of a call PHP compiles as a built-in, as in `strlen("foo")[0] = 1;`, `$x = &count($a);` or, from PHP 8.4, `sprintf("%s", $a)[0] = 1;`, and from PHP 8.6 the functions it calls without a frame, such as `str_contains($a, $b)[0] = 1;` (`Cannot use result of built-in function in write context`).
 - A nested destructuring target written with `array()`, as in `[array($a)] = $b;` (`Cannot assign to array(), use [] instead`), and a foreach target that mixes `list()` and `[]`, as in `foreach ($x as [list($a)])` (`Cannot mix [] and list()`).
 - From PHP 8.3, a static variable named like a `use` variable of its closure, as in `function () use (&$a) { static $a; }` (`Duplicate declaration of static variable $a`).
 

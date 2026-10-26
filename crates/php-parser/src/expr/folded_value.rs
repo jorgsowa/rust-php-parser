@@ -206,6 +206,14 @@ fn fold_array(
     ArrayFold::Folded
 }
 
+/// The bytes of the string PHP folds `expr` to, when they are computed here.
+pub(super) fn folded_string(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> Option<Vec<u8>> {
+    match folded_value(parser, expr, 0)? {
+        Value::Str(bytes) => bytes,
+        _ => None,
+    }
+}
+
 pub(super) fn is_literal_concat(expr: &Expr<'_, '_>) -> bool {
     let token = |e: &Expr<'_, '_>| {
         matches!(

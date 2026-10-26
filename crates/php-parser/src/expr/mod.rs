@@ -14,6 +14,7 @@ mod atom;
 mod folded_value;
 mod internal_constants;
 pub(crate) mod interpolation;
+mod special_calls;
 
 // Re-exports so external callers' paths don't change
 pub(crate) use atom::{
@@ -124,7 +125,7 @@ pub(crate) fn check_increment_operand(parser: &mut Parser<'_, '_>, operand: &Exp
             ForbiddenRule::IncDecNonVariable,
             "Cannot increment or decrement an expression that is not a variable",
         )
-    } else if let Some(error) = temporary_write_message(&operand.kind, parser.version) {
+    } else if let Some(error) = write_message(parser, &operand.kind) {
         error
     } else if has_nullsafe_link(&operand.kind) {
         (
@@ -145,8 +146,7 @@ pub(crate) fn check_write_target(
     target: &Expr<'_, '_>,
     allow_list: bool,
 ) {
-    let (rule, message) = if let Some(error) = temporary_write_message(&target.kind, parser.version)
-    {
+    let (rule, message) = if let Some(error) = write_message(parser, &target.kind) {
         error
     } else if let Some(message) = call_result_write_message(&target.kind) {
         (ForbiddenRule::CallResultWrite, message)
@@ -193,6 +193,12 @@ fn check_destructure_elements(parser: &mut Parser<'_, '_>, elems: &[ArrayElement
             kind => {
                 if let Some(message) = call_result_write_message(kind) {
                     parser.forbid(ForbiddenRule::CallResultWrite, message, value.span);
+                } else if builtin_call_base(parser, kind, false) {
+                    parser.forbid(
+                        ForbiddenRule::BuiltinResultWrite,
+                        "Cannot use result of built-in function in write context",
+                        value.span,
+                    );
                 } else if !is_valid_destructure_element(kind, parser.version) {
                     parser.forbid(
                         ForbiddenRule::UnwritableDestructuringElement,
@@ -1807,6 +1813,41 @@ pub(crate) fn check_mixed_list_short_syntax<'arena, 'src>(
     walk(parser, lhs, outer_is_list);
 }
 
+/// [`temporary_write_message`], also for a fetch from a call PHP compiles as a built-in, as in
+/// `strlen($a)[0] = 1`.
+fn write_message(
+    parser: &Parser<'_, '_>,
+    kind: &ExprKind<'_, '_>,
+) -> Option<(ForbiddenRule, &'static str)> {
+    temporary_write_message(kind, parser.version).or_else(|| {
+        builtin_call_base(parser, kind, false).then_some((
+            ForbiddenRule::BuiltinResultWrite,
+            "Cannot use result of built-in function in write context",
+        ))
+    })
+}
+
+/// True if `kind` is a call PHP compiles as a built-in, or with `bare` false, a fetch from one.
+fn builtin_call_base(parser: &Parser<'_, '_>, kind: &ExprKind<'_, '_>, bare: bool) -> bool {
+    let mut cur = kind;
+    let mut saw_access = bare;
+    loop {
+        match cur {
+            ExprKind::ArrayAccess(a) => cur = &a.array.kind,
+            ExprKind::PropertyAccess(p) => cur = &p.object.kind,
+            ExprKind::Parenthesized(inner) => {
+                cur = &inner.kind;
+                continue;
+            }
+            ExprKind::FunctionCall(call) => {
+                return saw_access && special_calls::is_special_builtin_call(parser, call)
+            }
+            _ => return false,
+        }
+        saw_access = true;
+    }
+}
+
 /// True if `kind` is an index or property fetch chain whose base is not a variable or a
 /// call, such as `[0, 1][0]`, `FOO->a` or `(new A)->b`. PHP rejects writes to these with
 /// "Cannot use temporary expression in write context"; for `f(...)` bases, and `clone $a`
@@ -1922,7 +1963,7 @@ fn parse_assign_continuation<'arena, 'src>(
             "Cannot use increment/decrement as an assignment target.",
             span,
         );
-    } else if let Some((rule, message)) = temporary_write_message(&lhs.kind, parser.version) {
+    } else if let Some((rule, message)) = write_message(parser, &lhs.kind) {
         parser.forbid(rule, message, lhs.span);
     } else if matches!(lhs.kind, ExprKind::Array(_)) && !is_plain_assign {
         parser.forbid(
@@ -2024,15 +2065,16 @@ fn parse_assign_continuation<'arena, 'src>(
             "Cannot assign reference to non referenceable value",
             rhs.span,
         );
-    } else if by_ref && matches!(rhs.kind, ExprKind::CallableCreate(_)) {
+    } else if by_ref
+        && (matches!(rhs.kind, ExprKind::CallableCreate(_))
+            || builtin_call_base(parser, &rhs.kind, true))
+    {
         parser.forbid(
             ForbiddenRule::BuiltinResultWrite,
             "Cannot use result of built-in function in write context",
             rhs.span,
         );
-    } else if let Some((rule, message)) = by_ref
-        .then(|| temporary_write_message(&rhs.kind, parser.version))
-        .flatten()
+    } else if let Some((rule, message)) = by_ref.then(|| write_message(parser, &rhs.kind)).flatten()
     {
         parser.forbid(rule, message, rhs.span);
     } else if by_ref {
