@@ -418,10 +418,20 @@ fn constant_value(parser: &Parser<'_, '_>, name: &Name<'_, '_>) -> Option<Value>
         "PHP_ZTS" | "PHP_DEBUG" => return Some(Value::Int(Some(0))),
         _ => {}
     }
-    let index = internal_constants::INTERNAL_CONSTANT_TYPES
-        .binary_search_by(|(n, _)| n.cmp(word))
-        .ok()?;
-    Some(match internal_constants::INTERNAL_CONSTANT_TYPES[index].1 {
+    let ty =
+        match internal_constants::INTERNAL_CONSTANT_TYPES.binary_search_by(|(n, _)| n.cmp(word)) {
+            Ok(index) => internal_constants::INTERNAL_CONSTANT_TYPES[index].1,
+            Err(_) => {
+                let deprecated = internal_constants::DEPRECATED_CONSTANT_TYPES;
+                let index = deprecated.binary_search_by(|(n, ..)| n.cmp(word)).ok()?;
+                let (_, ty, until) = deprecated[index];
+                if parser.version > until {
+                    return None;
+                }
+                ty
+            }
+        };
+    Some(match ty {
         ConstType::Int => Value::Int(None),
         ConstType::Float => Value::Float(None),
         ConstType::Str => Value::Str(None),
