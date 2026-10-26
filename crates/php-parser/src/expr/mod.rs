@@ -372,15 +372,24 @@ pub(crate) fn check_constant_unpack(
     parser: &mut Parser<'_, '_>,
     elements: &[ArrayElement<'_, '_>],
 ) {
-    let Some((span, given)) = folded_value::constant_unpack_error(parser, elements) else {
+    let Some((span, error)) = folded_value::constant_unpack_error(parser, elements) else {
         return;
     };
-    let message = if parser.version >= PhpVersion::Php84 {
-        format!("Only arrays and Traversables can be unpacked, {given} given")
-    } else {
-        "Only arrays and Traversables can be unpacked".to_string()
+    let (rule, message) = match error {
+        folded_value::UnpackError::StringKeys => (
+            ForbiddenRule::UnpackStringKeys,
+            "Cannot unpack array with string keys".to_string(),
+        ),
+        folded_value::UnpackError::NonArray(given) if parser.version >= PhpVersion::Php84 => (
+            ForbiddenRule::UnpackNonArray,
+            format!("Only arrays and Traversables can be unpacked, {given} given"),
+        ),
+        folded_value::UnpackError::NonArray(_) => (
+            ForbiddenRule::UnpackNonArray,
+            "Only arrays and Traversables can be unpacked".to_string(),
+        ),
     };
-    parser.forbid(ForbiddenRule::UnpackNonArray, message, span);
+    parser.forbid(rule, message, span);
 }
 
 pub(crate) fn check_folded_curly_offsets(parser: &mut Parser<'_, '_>, expr: &Expr<'_, '_>) {

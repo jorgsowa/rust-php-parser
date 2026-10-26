@@ -617,6 +617,8 @@ forbidden_rules! {
     SpreadInDestructuring = "spread-in-destructuring", Compile;
     /// An array literal PHP folds unpacks a value that is not an array, as in `[...1]`.
     UnpackNonArray = "unpack-non-array", Compile;
+    /// Before PHP 8.1, an array literal PHP folds unpacks an array with a string key.
+    UnpackStringKeys = "unpack-string-keys", Compile;
     /// Nested ternaries are not parenthesized, e.g. `a ? b : c ? d : e`.
     UnparenthesizedNestedTernary = "unparenthesized-nested-ternary", Compile;
     /// An arrow function on the right of `|>` is not parenthesized.
@@ -685,6 +687,12 @@ mod tests {
             PhpVersion::Php81,
             "<?php $f = fn(): never => 1;",
             "1",
+        ),
+        (
+            ForbiddenRule::UnpackStringKeys,
+            PhpVersion::Php80,
+            "<?php $a = [...['a' => 1]];",
+            "['a' => 1]",
         ),
         (
             ForbiddenRule::DynamicClassFetch,
@@ -960,6 +968,7 @@ mod tests {
             ForbiddenRule::UnexpectedCharacter => &[("<?php $a\x01\x02 = 1;", "\x01\x02"), ("<?php $a =\x0c1;", "\x0c"),],
             ForbiddenRule::UnexpectedCast => &[("<?php foo(int);", "(int)"), ("<?php if ( float ) {}", "( float )"),],
             ForbiddenRule::DynamicClassFetch
+            | ForbiddenRule::UnpackStringKeys
             | ForbiddenRule::UnsupportedOperandTypes
             | ForbiddenRule::PartialApplicationWithUnpacking
             | ForbiddenRule::EnumCaseValueType

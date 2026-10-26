@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::ClassFetchOnFoldedValue`, `ForbiddenRule::UnsupportedOperandTypes`, `ForbiddenRule::PrivateFinalPropertyHook`, `ForbiddenRule::SetHookParameterDefault`, `ForbiddenRule::PartialApplicationWithUnpacking`, `ForbiddenRule::EnumCaseValueType`, `ForbiddenRule::DuplicateEnumCaseValue`, `ForbiddenRule::CustomAssertFunction`, `ForbiddenRule::PositionalAfterUnpacking`, `ForbiddenRule::MethodNameNotString`, `ForbiddenRule::LongArrayInDestructuring` and `ForbiddenRule::UnpackNonArray` (`php-rs-parser`).
+- `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::ClassFetchOnFoldedValue`, `ForbiddenRule::UnsupportedOperandTypes`, `ForbiddenRule::PrivateFinalPropertyHook`, `ForbiddenRule::SetHookParameterDefault`, `ForbiddenRule::PartialApplicationWithUnpacking`, `ForbiddenRule::EnumCaseValueType`, `ForbiddenRule::DuplicateEnumCaseValue`, `ForbiddenRule::CustomAssertFunction`, `ForbiddenRule::PositionalAfterUnpacking`, `ForbiddenRule::MethodNameNotString`, `ForbiddenRule::LongArrayInDestructuring`, `ForbiddenRule::UnpackNonArray` and `ForbiddenRule::UnpackStringKeys` (`php-rs-parser`).
 - `ForeachStmt::key_by_ref` for a key taken by reference, `invalid_modifier` on a trait alias for `static`, `abstract` or `readonly`, and `PropertyHook::empty_param_list` for a hook written with `()` (`php-ast`).
 - `PrettyPrinter::syntax_errors`: for source with a syntax error, the output starts with a syntax error so it stays invalid (`php-printer`). `ParseError::phase` tells syntax errors from compile errors (`php-rs-parser`).
 
@@ -44,6 +44,7 @@ These constructs were accepted and are now reported with PHP's wording (`php-rs-
 - A positional argument after argument unpacking, as in `var_dump(...[1, 2, 3], 4);` (`Cannot use positional argument after argument unpacking`).
 - A method name PHP folds to a value other than a string, as in `$o->{1}()`, `$o->{true}()`, `A::{1 + 1}()`, `$o->{[]}()` or `$o->{[] + [1]}()` (`Method name must be a string`).
 - Unpacking a constant that is not an array in an array literal PHP folds, as in `[...1]` or `const C = [...true];` (`Only arrays and Traversables can be unpacked`, with `, int given` from PHP 8.4).
+- Before PHP 8.1, unpacking an array with a string key in an array literal PHP folds, as in `[...['a' => 1]]` or `const C = [...[null => 1]];` (`Cannot unpack array with string keys`).
 - From PHP 8.5, a first-class callable in a constant expression named by a number, as in `const C = (0)(...);` (`Illegal function name`), or by a folded expression such as `(1 + 1)(...)` or `(true)(...)` (`Cannot use dynamic function name in constant expression`).
 - Writing to or taking a reference to the result of a call PHP compiles as a built-in, as in `strlen("foo")[0] = 1;`, `$x = &count($a);` or, from PHP 8.4, `sprintf("%s", $a)[0] = 1;`, and from PHP 8.6 the functions it calls without a frame, such as `str_contains($a, $b)[0] = 1;` (`Cannot use result of built-in function in write context`).
 - An append fetch passed to a parameter that takes its value, as in `function test($v) {} test($arr[]);`, when the function is declared unconditionally at the top level earlier in the file (`Cannot use [] for reading`).

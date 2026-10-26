@@ -13,8 +13,11 @@ enum Value {
     Str(Option<Vec<u8>>),
     Bool(Option<bool>),
     Null,
-    /// An array and its number of elements.
-    Array(Option<usize>),
+    /// An array, its number of elements and whether any of its keys is a string.
+    Array {
+        count: Option<usize>,
+        string_keys: Option<bool>,
+    },
 }
 
 impl Value {
@@ -25,7 +28,7 @@ impl Value {
             Value::Str(s) => s.as_ref().map(|s| !matches!(s.as_slice(), b"" | b"0")),
             Value::Bool(b) => *b,
             Value::Null => Some(false),
-            Value::Array(count) => count.map(|c| c > 0),
+            Value::Array { count, .. } => count.map(|c| c > 0),
         }
     }
 
@@ -64,7 +67,7 @@ impl Value {
             // PHP's float formatting is not reproduced.
             Value::Float(_) => None,
             // Converting an array to a string warns, so PHP leaves it to run time.
-            Value::Array(_) => return None,
+            Value::Array { .. } => return None,
         })
     }
 }
@@ -99,7 +102,7 @@ pub(super) fn folded_class_fetch_value(
         Value::Float(_) => "float",
         Value::Str(_) => "string",
         Value::Null => "null",
-        Value::Array(_) => "array",
+        Value::Array { .. } => "array",
         Value::Bool(_) if parser.version < PhpVersion::Php83 => "bool",
         Value::Bool(b) => {
             if b? {
@@ -116,25 +119,33 @@ pub(super) fn folds_to_non_string(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) 
     folded_value(parser, expr, 0).is_some_and(|value| !matches!(value, Value::Str(_)))
 }
 
-/// The spread element of the array literal `elements` that unpacks a non-array, and the type
-/// PHP names for it, when PHP folds the array at compile time.
+/// Why PHP cannot unpack a spread element of an array literal it folds.
+pub(super) enum UnpackError {
+    /// The value is not an array; the type PHP names for it.
+    NonArray(&'static str),
+    /// Before PHP 8.1, the array has a string key.
+    StringKeys,
+}
+
+/// The spread element of the array literal `elements` that PHP cannot unpack when it folds the
+/// array at compile time.
 pub(super) fn constant_unpack_error(
     parser: &Parser<'_, '_>,
     elements: &[ArrayElement<'_, '_>],
-) -> Option<(Span, &'static str)> {
+) -> Option<(Span, UnpackError)> {
     if !elements.iter().any(|el| el.is_spread()) {
         return None;
     }
     match fold_array(parser, elements, 0) {
-        ArrayFold::UnpackError(span, given) => Some((span, given)),
+        ArrayFold::UnpackError(span, error) => Some((span, error)),
         _ => None,
     }
 }
 
 enum ArrayFold {
     NotFolded,
-    Folded(Option<usize>),
-    UnpackError(Span, &'static str),
+    Folded(Value),
+    UnpackError(Span, UnpackError),
 }
 
 /// PHP folds an array literal only if every element is constant, then adds them in order.
@@ -164,10 +175,19 @@ fn fold_array(
         values.push((key, value));
     }
     let version = parser.version;
+    let mut has_string_key = false;
+    let mut string_keys_known = true;
     for (el, (key, value)) in elements.iter().zip(values) {
         if el.is_spread() {
             let given = match value {
-                Value::Array(_) => continue,
+                Value::Array { string_keys, .. } => {
+                    if version < PhpVersion::Php81 && string_keys == Some(true) {
+                        return ArrayFold::UnpackError(el.value().span, UnpackError::StringKeys);
+                    }
+                    string_keys_known &= string_keys.is_some();
+                    has_string_key |= string_keys == Some(true);
+                    continue;
+                }
                 Value::Int(_) => "int",
                 Value::Float(_) => "float",
                 Value::Str(_) => "string",
@@ -176,11 +196,17 @@ fn fold_array(
                 Value::Bool(Some(false)) => "false",
                 Value::Bool(None) => "bool",
             };
-            return ArrayFold::UnpackError(el.value().span, given);
+            return ArrayFold::UnpackError(el.value().span, UnpackError::NonArray(given));
+        }
+        match &key {
+            Some(Value::Str(Some(bytes))) => has_string_key |= !is_integer_key(bytes),
+            Some(Value::Str(None)) => string_keys_known = false,
+            Some(Value::Null) => has_string_key = true,
+            _ => {}
         }
         // Keys PHP leaves to run time, where they warn or fail, stop the fold.
         let left_to_run_time = match key {
-            Some(Value::Array(_)) => true,
+            Some(Value::Array { .. }) => true,
             Some(Value::Null) => version >= PhpVersion::Php85,
             Some(Value::Float(f)) => {
                 version >= PhpVersion::Php81
@@ -196,7 +222,18 @@ fn fold_array(
     let counted = elements
         .iter()
         .all(|el| el.key.is_none() && !el.is_spread());
-    ArrayFold::Folded(counted.then_some(elements.len()))
+    ArrayFold::Folded(Value::Array {
+        count: counted.then_some(elements.len()),
+        string_keys: (has_string_key || string_keys_known).then_some(has_string_key),
+    })
+}
+
+/// Whether PHP stores the string key `bytes` as an integer key, as it does `"1"` but not `"01"`.
+fn is_integer_key(bytes: &[u8]) -> bool {
+    std::str::from_utf8(bytes)
+        .ok()
+        .and_then(|s| s.parse::<i64>().ok().map(|n| n.to_string() == s))
+        .unwrap_or(false)
 }
 
 /// The truthiness of the value PHP folds `expr` to, when it is computed here.
@@ -252,7 +289,7 @@ fn folded_value(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>, depth: usize) -> O
         ExprKind::Bool(b) => Value::Bool(Some(*b)),
         ExprKind::Null => Value::Null,
         ExprKind::Array(elements) => match fold_array(parser, elements, depth + 1) {
-            ArrayFold::Folded(count) => Value::Array(count),
+            ArrayFold::Folded(value) => value,
             _ => return None,
         },
         ExprKind::MagicConst(kind) => match kind {
@@ -389,10 +426,21 @@ fn binary_value(parser: &Parser<'_, '_>, b: &BinaryExpr<'_, '_>, depth: usize) -
             }))
         }
         BinaryOp::Spaceship => Value::Int(compare(&left, &right).map(|o| o as i64)),
-        BinaryOp::Add if matches!((&left, &right), (Value::Array(_), Value::Array(_))) => {
+        BinaryOp::Add if matches!((&left, &right), (Value::Array { .. }, Value::Array { .. })) => {
             match (left, right) {
-                (Value::Array(Some(0)), other) | (other, Value::Array(Some(0))) => other,
-                _ => Value::Array(None),
+                (Value::Array { count: Some(0), .. }, other)
+                | (other, Value::Array { count: Some(0), .. }) => other,
+                (Value::Array { string_keys: l, .. }, Value::Array { string_keys: r, .. }) => {
+                    Value::Array {
+                        count: None,
+                        string_keys: match (l, r) {
+                            (Some(true), _) | (_, Some(true)) => Some(true),
+                            (Some(false), Some(false)) => Some(false),
+                            _ => None,
+                        },
+                    }
+                }
+                _ => return None,
             }
         }
         BinaryOp::Add | BinaryOp::Sub | BinaryOp::Mul => match (left.number()?, right.number()?) {
@@ -519,7 +567,7 @@ fn identical(left: &Value, right: &Value) -> Option<bool> {
         (Value::Str(l), Value::Str(r)) => l.as_ref()? == r.as_ref()?,
         (Value::Bool(l), Value::Bool(r)) => l.as_ref()? == r.as_ref()?,
         (Value::Null, Value::Null) => true,
-        (Value::Array(_), Value::Array(_)) => return None,
+        (Value::Array { .. }, Value::Array { .. }) => return None,
         _ => false,
     })
 }
