@@ -32,19 +32,39 @@ impl Value {
         }
     }
 
-    /// The operand of arithmetic, which PHP folds on numbers, booleans and null.
-    fn number(&self) -> Option<Value> {
+    /// The operand of arithmetic, which PHP folds on numbers, booleans, null and numeric strings;
+    /// before PHP 8.0 trailing whitespace makes a string only leading-numeric.
+    fn number(&self, version: PhpVersion) -> Option<Value> {
         match self {
             Value::Int(Some(_)) | Value::Float(Some(_)) => Some(self.clone()),
             Value::Bool(Some(b)) => Some(Value::Int(Some(*b as i64))),
             Value::Null => Some(Value::Int(Some(0))),
+            Value::Str(Some(s))
+                if is_numeric_string(s)
+                    && (version >= PhpVersion::Php80
+                        || !s
+                            .last()
+                            .is_some_and(|b| b.is_ascii_whitespace() || *b == b'\x0B')) =>
+            {
+                let text = std::str::from_utf8(s).ok()?.trim_matches(|c: char| {
+                    matches!(c, ' ' | '\t' | '\n' | '\r' | '\x0B' | '\x0C')
+                });
+                let float = || text.parse::<f64>().ok().map(|f| Value::Float(Some(f)));
+                if text.contains(['.', 'e', 'E']) {
+                    return float();
+                }
+                text.parse::<i64>()
+                    .ok()
+                    .map(|n| Value::Int(Some(n)))
+                    .or_else(float)
+            }
             _ => None,
         }
     }
 
     /// The operand of `%`, bitwise and shift operators, when PHP converts it without a diagnostic.
     fn integer(&self, version: PhpVersion) -> Option<i64> {
-        match self.number()? {
+        match self.number(version)? {
             Value::Int(n) => n,
             // From PHP 8.1 a float's lost fraction is deprecated, so it is left to run time.
             Value::Float(Some(f))
@@ -331,8 +351,8 @@ fn folded_value(
                     }
                     Value::Bool(operand.truth().map(|t| !t))
                 }
-                UnaryPrefixOp::Plus => operand.number()?,
-                UnaryPrefixOp::Negate => match operand.number()? {
+                UnaryPrefixOp::Plus => operand.number(version)?,
+                UnaryPrefixOp::Negate => match operand.number(version)? {
                     Value::Int(Some(n)) => match n.checked_neg() {
                         Some(n) => Value::Int(Some(n)),
                         None => Value::Float(Some(-(n as f64))),
@@ -469,28 +489,30 @@ fn binary_value(
                 _ => return None,
             }
         }
-        BinaryOp::Add | BinaryOp::Sub | BinaryOp::Mul => match (left.number()?, right.number()?) {
-            (Value::Int(Some(l)), Value::Int(Some(r))) => {
-                let exact = match b.op {
-                    BinaryOp::Add => l.checked_add(r),
-                    BinaryOp::Sub => l.checked_sub(r),
-                    _ => l.checked_mul(r),
-                };
-                match exact {
-                    Some(n) => Value::Int(Some(n)),
-                    None => Value::Float(None),
+        BinaryOp::Add | BinaryOp::Sub | BinaryOp::Mul => {
+            match (left.number(version)?, right.number(version)?) {
+                (Value::Int(Some(l)), Value::Int(Some(r))) => {
+                    let exact = match b.op {
+                        BinaryOp::Add => l.checked_add(r),
+                        BinaryOp::Sub => l.checked_sub(r),
+                        _ => l.checked_mul(r),
+                    };
+                    match exact {
+                        Some(n) => Value::Int(Some(n)),
+                        None => Value::Float(None),
+                    }
+                }
+                (l, r) => {
+                    let (l, r) = (as_float(&l)?, as_float(&r)?);
+                    Value::Float(Some(match b.op {
+                        BinaryOp::Add => l + r,
+                        BinaryOp::Sub => l - r,
+                        _ => l * r,
+                    }))
                 }
             }
-            (l, r) => {
-                let (l, r) = (as_float(&l)?, as_float(&r)?);
-                Value::Float(Some(match b.op {
-                    BinaryOp::Add => l + r,
-                    BinaryOp::Sub => l - r,
-                    _ => l * r,
-                }))
-            }
-        },
-        BinaryOp::Div => match (left.number()?, right.number()?) {
+        }
+        BinaryOp::Div => match (left.number(version)?, right.number(version)?) {
             (Value::Int(Some(l)), Value::Int(Some(r))) if r != 0 => {
                 match (l.checked_rem(r), l.checked_div(r)) {
                     (Some(0), Some(q)) => Value::Int(Some(q)),
@@ -514,7 +536,7 @@ fn binary_value(
             }
         }
         BinaryOp::Pow => {
-            let (base, exponent) = (left.number()?, right.number()?);
+            let (base, exponent) = (left.number(version)?, right.number(version)?);
             // From PHP 8.4 raising zero to a negative power is deprecated.
             if version >= PhpVersion::Php84 && as_float(&base)? == 0.0 && as_float(&exponent)? < 0.0
             {
