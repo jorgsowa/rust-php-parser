@@ -3395,11 +3395,11 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         in_namespace: bool,
     }
 
-    /// A function declared unconditionally at the top level, which PHP knows from there on.
+    /// A function declared unconditionally at the top level, which PHP knows once its body is compiled.
     struct KnownFunction {
         /// Lowercase name with its namespace.
         name: String,
-        start: u32,
+        end: u32,
         /// Name, by-reference and variadic flags of each parameter.
         params: Vec<(String, bool, bool)>,
     }
@@ -3426,7 +3426,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
             let lower = name.parts_slice().join("\\").to_ascii_lowercase();
             self.known_functions
                 .iter()
-                .find(|f| f.start < at && f.name == lower)
+                .find(|f| f.end <= at && f.name == lower)
                 .map(|f| f.params.as_slice())
         }
 
@@ -3790,7 +3790,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
                 Some(namespace) => format!("{namespace}\\{name}"),
                 None => name,
             },
-            start: stmt.span.start,
+            end: stmt.span.end,
             params: f
                 .params
                 .iter()
