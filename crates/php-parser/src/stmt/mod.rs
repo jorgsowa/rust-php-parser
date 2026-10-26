@@ -3408,8 +3408,13 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         /// `return` and `yield` values writes.
         by_ref: Vec<bool>,
         known_functions: Vec<KnownFunction>,
-        /// Whether the statement being visited is in a namespace other than the global one.
-        in_namespace: bool,
+        /// Lowercase namespace of the statement being visited; `None` in the global one.
+        namespace: Option<String>,
+        /// Arguments that fetch from the result of a built-in, from the parser.
+        builtin_fetch_args: Vec<Span>,
+        /// Whether PHP fetches an argument for writing when the callee is unknown, as before 8.1.
+        unknown_args_write: bool,
+        builtin_writes: Vec<Span>,
     }
 
     /// A function declared unconditionally at the top level, which PHP knows once its body is compiled.
@@ -3431,16 +3436,15 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
             let ExprKind::Name(name) = &call.name.kind else {
                 return None;
             };
-            // An unqualified call in a namespace may fall back to a global function at run time.
-            let known = match name.kind() {
-                NameKind::FullyQualified => true,
-                NameKind::Unqualified => !self.in_namespace,
-                _ => false,
+            let parts = name.parts_slice().join("\\").to_ascii_lowercase();
+            let lower = match (name.kind(), &self.namespace) {
+                (NameKind::FullyQualified, _) | (NameKind::Unqualified, None) => parts,
+                // An unqualified call in a namespace may fall back to a global function at run time.
+                (NameKind::Unqualified, Some(_)) => return None,
+                (NameKind::Relative, None) => parts,
+                (NameKind::Relative, Some(namespace)) => format!("{namespace}\\{parts}"),
+                _ => return None,
             };
-            if !known {
-                return None;
-            }
-            let lower = name.parts_slice().join("\\").to_ascii_lowercase();
             self.known_functions
                 .iter()
                 .find(|f| f.end <= at && f.name == lower)
@@ -3451,7 +3455,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         fn known_args(&mut self, args: &[Arg<'_, '_>], params: &[(String, bool, bool)]) {
             for (i, arg) in args.iter().enumerate() {
                 let ArgKind::Value(value) = &arg.kind else {
-                    self.args(std::slice::from_ref(arg));
+                    self.args(std::slice::from_ref(arg), false);
                     continue;
                 };
                 let param = match &arg.name {
@@ -3463,11 +3467,11 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
                         .or_else(|| params.last().filter(|(_, _, variadic)| *variadic)),
                 };
                 match param {
-                    Some((_, true, _)) => self.args(std::slice::from_ref(arg)),
+                    Some((_, true, _)) => self.args(std::slice::from_ref(arg), true),
                     Some(_) => {
                         let _ = self.visit_expr(value);
                     }
-                    None if arg.name.is_some() => self.args(std::slice::from_ref(arg)),
+                    None if arg.name.is_some() => self.args(std::slice::from_ref(arg), false),
                     None => {
                         let _ = self.visit_expr(value);
                     }
@@ -3591,13 +3595,20 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
             }
         }
 
-        fn args(&mut self, args: &[Arg<'_, '_>]) {
+        /// Arguments of a call; `by_ref` when the callee takes them by reference, not just
+        /// possibly so.
+        fn args(&mut self, args: &[Arg<'_, '_>], by_ref: bool) {
             for arg in args {
                 let Some(value) = arg.value() else { continue };
                 match value.kind {
                     ExprKind::ArrayAccess(_) | ExprKind::PropertyAccess(_)
                         if !matches!(arg.kind, ArgKind::Spread(_)) =>
                     {
+                        if (by_ref || self.unknown_args_write)
+                            && self.builtin_fetch_args.contains(&value.span)
+                        {
+                            self.builtin_writes.push(value.span);
+                        }
                         self.write(value)
                     }
                     _ => {
@@ -3741,27 +3752,27 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
                             let params = params.to_vec();
                             self.known_args(&c.args, &params);
                         }
-                        None => self.args(&c.args),
+                        None => self.args(&c.args, false),
                     }
                 }
                 ExprKind::MethodCall(c) | ExprKind::NullsafeMethodCall(c) => {
                     let _ = self.visit_expr(c.object);
                     let _ = self.visit_expr(c.method);
-                    self.args(&c.args);
+                    self.args(&c.args, false);
                 }
                 ExprKind::StaticMethodCall(c) => {
                     let _ = self.visit_expr(c.class);
                     let _ = self.visit_expr(c.method);
-                    self.args(&c.args);
+                    self.args(&c.args, false);
                 }
                 ExprKind::StaticMethodCallDynamic(c) => {
                     let _ = self.visit_expr(c.class);
                     let _ = self.visit_expr(c.method);
-                    self.args(&c.args);
+                    self.args(&c.args, false);
                 }
                 ExprKind::New(n) => {
                     let _ = self.visit_expr(n.class);
-                    self.args(&n.args);
+                    self.args(&n.args, false);
                 }
                 ExprKind::Closure(c) => {
                     self.by_ref.push(c.by_ref);
@@ -3852,18 +3863,24 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         globals_read_only: parser.version >= PhpVersion::Php81,
         by_ref: Vec::new(),
         known_functions,
-        in_namespace: false,
+        namespace: None,
+        builtin_fetch_args: std::mem::take(&mut parser.builtin_fetch_args),
+        unknown_args_write: parser.version < PhpVersion::Php81,
+        builtin_writes: Vec::new(),
     };
     for stmt in stmts {
         if let StmtKind::Namespace(ns) = &stmt.kind {
-            let named = ns.name.is_some();
+            let name = ns
+                .name
+                .as_ref()
+                .map(|n| n.to_string_repr().to_ascii_lowercase());
             if matches!(ns.body, NamespaceBody::Braced(_)) {
-                let outer = std::mem::replace(&mut finder.in_namespace, named);
+                let outer = std::mem::replace(&mut finder.namespace, name);
                 let _ = finder.visit_stmt(stmt);
-                finder.in_namespace = outer;
+                finder.namespace = outer;
                 continue;
             }
-            finder.in_namespace = named;
+            finder.namespace = name;
         }
         let _ = finder.visit_stmt(stmt);
     }
@@ -3885,6 +3902,11 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
             finder.globals_append,
             ForbiddenRule::InvalidGlobalsWrite,
             "Cannot append to $GLOBALS",
+        ),
+        (
+            finder.builtin_writes,
+            ForbiddenRule::BuiltinResultWrite,
+            "Cannot use result of built-in function in write context",
         ),
     ] {
         for span in spans {

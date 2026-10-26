@@ -175,6 +175,9 @@ pub struct Parser<'arena, 'src> {
     /// Number of `$a[]` fetches parsed so far; the walk that reports reads of them only
     /// runs when there is one.
     pub(crate) empty_dim_count: u32,
+    /// Arguments that fetch from the result of a call PHP compiles as a built-in, as in
+    /// `f(strlen($a)[0])`, which PHP rejects where it passes them by reference.
+    pub(crate) builtin_fetch_args: Vec<Span>,
     /// Set once `self`, `parent` or `static` is used as a class name or type, which turns on
     /// the walk that checks them against the enclosing class scope.
     pub(crate) has_class_keyword_ref: bool,
@@ -296,6 +299,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             last_stmt_end: 0,
             void_cast_count: 0,
             empty_dim_count: 0,
+            builtin_fetch_args: Vec::new(),
             has_class_keyword_ref: false,
             namespace: None,
             class_imports: std::collections::HashMap::new(),
@@ -362,6 +366,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             last_stmt_end: 0,
             void_cast_count: 0,
             empty_dim_count: 0,
+            builtin_fetch_args: Vec::new(),
             has_class_keyword_ref: false,
             namespace: None,
             class_imports: std::collections::HashMap::new(),
@@ -2771,7 +2776,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         if self.void_cast_count > 0 {
             crate::stmt::check_void_casts(self, &stmts);
         }
-        if self.empty_dim_count > 0 {
+        if self.empty_dim_count > 0 || !self.builtin_fetch_args.is_empty() {
             crate::stmt::check_empty_dims(self, &stmts, &[]);
         }
         if self.has_goto_or_label {

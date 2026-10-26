@@ -2202,6 +2202,15 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
                 break; // trailing comma
             }
             let arg = parse_arg(parser);
+            if let ArgKind::Value(value) = &arg.kind {
+                if matches!(
+                    value.kind,
+                    ExprKind::ArrayAccess(_) | ExprKind::PropertyAccess(_)
+                ) && super::builtin_call_base(parser, &value.kind, false)
+                {
+                    parser.builtin_fetch_args.push(value.span);
+                }
+            }
             // The PHP 8.6 rest placeholder (bare `...`) is always last and is
             // explicitly allowed after named arguments, e.g. `stuff(a: 1, ...)`.
             let is_rest_placeholder = matches!(arg.kind, ArgKind::SpreadPlaceholder);

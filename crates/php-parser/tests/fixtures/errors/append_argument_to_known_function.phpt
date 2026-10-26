@@ -8,7 +8,9 @@ function g() {
 }
 function refs($a, &$b, ...$rest) {}
 refs($a[], $b[], $c[]);
+namespace\test($arr[]);
 ===errors===
+cannot use [] for reading
 cannot use [] for reading
 cannot use [] for reading
 cannot use [] for reading
@@ -523,10 +525,77 @@ PHP Fatal error:  Cannot use [] for reading in Standard input code on line 3
         "start": 133,
         "end": 156
       }
+    },
+    {
+      "kind": {
+        "Expression": {
+          "kind": {
+            "FunctionCall": {
+              "name": {
+                "kind": {
+                  "Name": {
+                    "parts": [
+                      "test"
+                    ],
+                    "kind": "Relative",
+                    "span": {
+                      "start": 157,
+                      "end": 171
+                    }
+                  }
+                },
+                "span": {
+                  "start": 157,
+                  "end": 171
+                }
+              },
+              "args": [
+                {
+                  "name": null,
+                  "kind": {
+                    "Value": {
+                      "kind": {
+                        "ArrayAccess": {
+                          "array": {
+                            "kind": {
+                              "Variable": "arr"
+                            },
+                            "span": {
+                              "start": 172,
+                              "end": 176
+                            }
+                          },
+                          "index": null
+                        }
+                      },
+                      "span": {
+                        "start": 172,
+                        "end": 178
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 172,
+                    "end": 178
+                  }
+                }
+              ]
+            }
+          },
+          "span": {
+            "start": 157,
+            "end": 179
+          }
+        }
+      },
+      "span": {
+        "start": 157,
+        "end": 180
+      }
     }
   ],
   "span": {
     "start": 0,
-    "end": 156
+    "end": 180
   }
 }
