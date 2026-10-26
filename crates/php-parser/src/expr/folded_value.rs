@@ -206,6 +206,11 @@ fn fold_array(
     ArrayFold::Folded
 }
 
+/// The truthiness of the value PHP folds `expr` to, when it is computed here.
+pub(super) fn folded_value_truth(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> Option<bool> {
+    folded_value(parser, expr, 0)?.truth()
+}
+
 /// The bytes of the string PHP folds `expr` to, when they are computed here.
 pub(super) fn folded_string(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> Option<Vec<u8>> {
     match folded_value(parser, expr, 0)? {
@@ -259,7 +264,8 @@ fn folded_value(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>, depth: usize) -> O
             MagicConstKind::Class => match parser.class_scope.as_ref() {
                 None => Value::Str(Some(Vec::new())),
                 Some(scope) if scope.is_trait => return None,
-                Some(_) => Value::Str(None),
+                Some(scope) if scope.is_anonymous => Value::Str(None),
+                Some(scope) => Value::Str(Some(scope.name.as_bytes().to_vec())),
             },
             MagicConstKind::Property => return None,
             _ => Value::Str(None),

@@ -49,6 +49,7 @@ These constructs were accepted and are now reported with PHP's wording (`php-rs-
 - An append fetch passed to a parameter that takes its value, as in `function test($v) {} test($arr[]);`, when the function is declared unconditionally at the top level earlier in the file (`Cannot use [] for reading`).
 - A nested destructuring target written with `array()`, as in `[array($a)] = $b;` (`Cannot assign to array(), use [] instead`), and a foreach target that mixes `list()` and `[]`, as in `foreach ($x as [list($a)])` (`Cannot mix [] and list()`).
 - From PHP 8.3, a static variable named like a `use` variable of its closure, as in `function () use (&$a) { static $a; }` (`Duplicate declaration of static variable $a`).
+- A branch PHP keeps after folding `__CLASS__` in a constant expression, as in `class C { const X = __CLASS__ ? $a : 1; }` or, in a function declared inside a method, where `__CLASS__` is empty, `function f($p = __CLASS__ ? 1 : $a) {}` (`Constant expression contains invalid operations`).
 
 #### Parser: valid code PHP accepts
 

@@ -1020,6 +1020,15 @@ impl ConstExprChecker<'_, '_, '_> {
         foldable(expr, Some(self))
     }
 
+    /// The truthiness PHP folds `expr` to, when it is computed here.
+    fn truth(&self, expr: &Expr<'_, '_>) -> Option<bool> {
+        const_truth(expr, self.version).or_else(|| {
+            self.may_fold(expr)
+                .then(|| folded_value::folded_value_truth(self.parser, expr))
+                .flatten()
+        })
+    }
+
     /// Whether `name` may be an internal constant, which PHP substitutes while folding.
     fn may_be_internal_constant(&self, name: &Name<'_, '_>) -> bool {
         let parts = name.parts_slice();
@@ -1106,7 +1115,7 @@ impl ConstExprChecker<'_, '_, '_> {
             ExprKind::Binary(b) if !matches!(b.op, BinaryOp::Instanceof | BinaryOp::Pipe) => {
                 self.check(b.left)?;
                 // PHP folds `false && $x` before checking, dropping the right operand.
-                let folded_away = match (b.op, const_truth(b.left, self.version)) {
+                let folded_away = match (b.op, self.truth(b.left)) {
                     (BinaryOp::BooleanAnd | BinaryOp::LogicalAnd, Some(truth)) => !truth,
                     (BinaryOp::BooleanOr | BinaryOp::LogicalOr, Some(truth)) => truth,
                     (
@@ -1125,7 +1134,7 @@ impl ConstExprChecker<'_, '_, '_> {
             }
             ExprKind::Ternary(t) => {
                 self.check(t.condition)?;
-                match const_truth(t.condition, self.version) {
+                match self.truth(t.condition) {
                     Some(true) => t
                         .then_expr
                         .map_or(Ok(()), |then_expr| self.check(then_expr)),
