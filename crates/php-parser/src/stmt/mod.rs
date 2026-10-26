@@ -2705,6 +2705,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         let saved_stmt_depth = std::mem::take(&mut parser.stmt_depth);
         let saved_namespace = parser.namespace.take();
         let saved_imports = std::mem::take(&mut parser.class_imports);
+        let saved_function_imports = std::mem::take(&mut parser.function_imports);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             push_stmt(parser, &mut stmts);
@@ -2715,6 +2716,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         parser.stmt_depth = saved_stmt_depth;
         parser.namespace = saved_namespace;
         parser.class_imports = saved_imports;
+        parser.function_imports = saved_function_imports;
         parser.expect_body_close(open);
         let end = parser.previous_end();
         let block = parser.alloc(Block {
@@ -2750,6 +2752,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         let saved_stmt_depth = std::mem::take(&mut parser.stmt_depth);
         let saved_namespace = parser.namespace.replace(name.parts_slice().join("\\"));
         let saved_imports = std::mem::take(&mut parser.class_imports);
+        let saved_function_imports = std::mem::take(&mut parser.function_imports);
         while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
             let span_before = parser.current_span();
             push_stmt(parser, &mut stmts);
@@ -2760,6 +2763,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         parser.stmt_depth = saved_stmt_depth;
         parser.namespace = saved_namespace;
         parser.class_imports = saved_imports;
+        parser.function_imports = saved_function_imports;
         parser.expect_body_close(open);
         let end = parser.previous_end();
         let block = parser.alloc(Block {
@@ -2777,6 +2781,7 @@ fn parse_namespace<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
         // Simple namespace: namespace Foo\Bar;
         parser.namespace = Some(name.parts_slice().join("\\"));
         parser.class_imports.clear();
+        parser.function_imports.clear();
         parser.expect_statement_end();
         let span = parser.span_from(start);
         Stmt {
@@ -2963,6 +2968,18 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
     }
 
     for item in uses.iter() {
+        if item.kind.unwrap_or(kind) == UseKind::Function {
+            let local = match &item.alias {
+                Some(alias) => alias.as_str(),
+                None => item.name.parts_slice().last().copied(),
+            };
+            if let Some(local) = local {
+                let target = item.name.parts_slice().join("\\");
+                parser
+                    .function_imports
+                    .insert(local.to_ascii_lowercase(), target);
+            }
+        }
         if item.kind.unwrap_or(kind) != UseKind::Normal {
             continue;
         }

@@ -42,15 +42,19 @@ pub(super) fn is_special_builtin_call(
     let ExprKind::Name(name) = &call.name.kind else {
         return false;
     };
-    let [word] = name.parts_slice() else {
-        return false;
+    let word = match (name.kind(), name.parts_slice()) {
+        (NameKind::FullyQualified, [word]) => *word,
+        (NameKind::Unqualified, [word]) => {
+            match parser.function_imports.get(&word.to_ascii_lowercase()) {
+                Some(target) => target.as_str(),
+                None if parser.namespace.is_none() => *word,
+                None => return false,
+            }
+        }
+        _ => return false,
     };
-    let global = match name.kind() {
-        NameKind::FullyQualified => true,
-        NameKind::Unqualified => parser.namespace.is_none(),
-        _ => false,
-    };
-    if !global
+    // An import of a namespaced function names no built-in.
+    if word.contains('\\')
         || call
             .args
             .iter()

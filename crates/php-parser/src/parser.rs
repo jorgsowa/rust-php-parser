@@ -182,6 +182,8 @@ pub struct Parser<'arena, 'src> {
     pub(crate) namespace: Option<String>,
     /// Class imports (`use A\B as C`) of the current namespace, keyed by lowercase alias.
     pub(crate) class_imports: std::collections::HashMap<String, String>,
+    /// Function imports (`use function A\b as c`) of the current namespace, keyed by lowercase alias.
+    pub(crate) function_imports: std::collections::HashMap<String, String>,
     /// The class, interface, trait or enum whose body is being parsed.
     pub(crate) class_scope: Option<ClassScope>,
 }
@@ -297,6 +299,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             has_class_keyword_ref: false,
             namespace: None,
             class_imports: std::collections::HashMap::new(),
+            function_imports: std::collections::HashMap::new(),
             class_scope: None,
         };
         parser.demote_initial_keywords();
@@ -362,6 +365,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             has_class_keyword_ref: false,
             namespace: None,
             class_imports: std::collections::HashMap::new(),
+            function_imports: std::collections::HashMap::new(),
             class_scope: None,
         };
         parser.demote_initial_keywords();
