@@ -13,6 +13,7 @@ use php_ast::span::Span;
 mod atom;
 mod folded_value;
 mod internal_constants;
+pub(crate) mod internal_functions;
 pub(crate) mod interpolation;
 mod special_calls;
 

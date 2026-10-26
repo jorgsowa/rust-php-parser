@@ -3414,6 +3414,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         builtin_fetch_args: Vec<Span>,
         /// Whether PHP fetches an argument for writing when the callee is unknown, as before 8.1.
         unknown_args_write: bool,
+        version: PhpVersion,
         builtin_writes: Vec<Span>,
     }
 
@@ -3432,7 +3433,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
             &self,
             call: &FunctionCallExpr<'_, '_>,
             at: u32,
-        ) -> Option<&[(String, bool, bool)]> {
+        ) -> Option<Vec<(String, bool, bool)>> {
             let ExprKind::Name(name) = &call.name.kind else {
                 return None;
             };
@@ -3445,10 +3446,22 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
                 (NameKind::Relative, Some(namespace)) => format!("{namespace}\\{parts}"),
                 _ => return None,
             };
-            self.known_functions
+            if let Some(f) = self
+                .known_functions
                 .iter()
                 .find(|f| f.end <= at && f.name == lower)
-                .map(|f| f.params.as_slice())
+            {
+                return Some(f.params.clone());
+            }
+            let params =
+                crate::expr::internal_functions::internal_function_params(&lower, self.version)?;
+            // Parameter names differ between versions, so named arguments stay unknown.
+            Some(
+                params
+                    .into_iter()
+                    .map(|(by_ref, variadic)| (String::new(), by_ref, variadic))
+                    .collect(),
+            )
         }
 
         /// Arguments of a call to a known function: one its parameter takes by value is a read.
@@ -3748,10 +3761,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
                 ExprKind::FunctionCall(c) => {
                     let _ = self.visit_expr(c.name);
                     match self.known_params(c, expr.span.start) {
-                        Some(params) => {
-                            let params = params.to_vec();
-                            self.known_args(&c.args, &params);
-                        }
+                        Some(params) => self.known_args(&c.args, &params),
                         None => self.args(&c.args, false),
                     }
                 }
@@ -3866,6 +3876,7 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         namespace: None,
         builtin_fetch_args: std::mem::take(&mut parser.builtin_fetch_args),
         unknown_args_write: parser.version < PhpVersion::Php81,
+        version: parser.version,
         builtin_writes: Vec::new(),
     };
     for stmt in stmts {
