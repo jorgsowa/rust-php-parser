@@ -405,11 +405,17 @@ fn constant_value(parser: &Parser<'_, '_>, name: &Name<'_, '_>) -> Option<Value>
     if !global {
         return None;
     }
-    // Values of a 64-bit build.
+    // Values of a 64-bit build without thread safety or debugging.
     match *word {
         "PHP_INT_MAX" => return Some(Value::Int(Some(i64::MAX))),
         "PHP_INT_MIN" => return Some(Value::Int(Some(i64::MIN))),
         "PHP_INT_SIZE" => return Some(Value::Int(Some(8))),
+        "ZEND_THREAD_SAFE" | "ZEND_DEBUG_BUILD" => return Some(Value::Bool(Some(false))),
+        // PHP 8.4 made these booleans.
+        "PHP_ZTS" | "PHP_DEBUG" if parser.version >= PhpVersion::Php84 => {
+            return Some(Value::Bool(Some(false)))
+        }
+        "PHP_ZTS" | "PHP_DEBUG" => return Some(Value::Int(Some(0))),
         _ => {}
     }
     let index = internal_constants::INTERNAL_CONSTANT_TYPES
