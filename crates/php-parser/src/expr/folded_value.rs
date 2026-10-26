@@ -13,6 +13,8 @@ enum Value {
     Str(Option<Vec<u8>>),
     Bool(Option<bool>),
     Null,
+    /// An array and its number of elements.
+    Array(Option<usize>),
 }
 
 impl Value {
@@ -23,6 +25,7 @@ impl Value {
             Value::Str(s) => s.as_ref().map(|s| !matches!(s.as_slice(), b"" | b"0")),
             Value::Bool(b) => *b,
             Value::Null => Some(false),
+            Value::Array(count) => count.map(|c| c > 0),
         }
     }
 
@@ -60,6 +63,8 @@ impl Value {
             Value::Null => Some(Vec::new()),
             // PHP's float formatting is not reproduced.
             Value::Float(_) => None,
+            // Converting an array to a string warns, so PHP leaves it to run time.
+            Value::Array(_) => return None,
         })
     }
 }
@@ -94,6 +99,7 @@ pub(super) fn folded_class_fetch_value(
         Value::Float(_) => "float",
         Value::Str(_) => "string",
         Value::Null => "null",
+        Value::Array(_) => "array",
         Value::Bool(_) if parser.version < PhpVersion::Php83 => "bool",
         Value::Bool(b) => {
             if b? {
@@ -127,23 +133,8 @@ pub(super) fn constant_unpack_error(
 
 enum ArrayFold {
     NotFolded,
-    Folded,
+    Folded(Option<usize>),
     UnpackError(Span, &'static str),
-}
-
-enum Folded {
-    Array,
-    Scalar(Value),
-}
-
-fn folded(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>, depth: usize) -> Option<Folded> {
-    match &unparenthesized(expr).kind {
-        ExprKind::Array(elements) => match fold_array(parser, elements, depth + 1) {
-            ArrayFold::Folded => Some(Folded::Array),
-            _ => None,
-        },
-        _ => folded_value(parser, expr, depth + 1).map(Folded::Scalar),
-    }
 }
 
 /// PHP folds an array literal only if every element is constant, then adds them in order.
@@ -161,13 +152,13 @@ fn fold_array(
             return ArrayFold::NotFolded;
         };
         let key = match &el.key {
-            Some(key) => match folded(parser, key, depth) {
+            Some(key) => match folded_value(parser, key, depth + 1) {
                 Some(key) => Some(key),
                 None => return ArrayFold::NotFolded,
             },
             None => None,
         };
-        let Some(value) = folded(parser, value, depth) else {
+        let Some(value) = folded_value(parser, value, depth + 1) else {
             return ArrayFold::NotFolded;
         };
         values.push((key, value));
@@ -175,10 +166,8 @@ fn fold_array(
     let version = parser.version;
     for (el, (key, value)) in elements.iter().zip(values) {
         if el.is_spread() {
-            let Folded::Scalar(value) = value else {
-                continue;
-            };
             let given = match value {
+                Value::Array(_) => continue,
                 Value::Int(_) => "int",
                 Value::Float(_) => "float",
                 Value::Str(_) => "string",
@@ -191,9 +180,9 @@ fn fold_array(
         }
         // Keys PHP leaves to run time, where they warn or fail, stop the fold.
         let left_to_run_time = match key {
-            Some(Folded::Array) => true,
-            Some(Folded::Scalar(Value::Null)) => version >= PhpVersion::Php85,
-            Some(Folded::Scalar(Value::Float(f))) => {
+            Some(Value::Array(_)) => true,
+            Some(Value::Null) => version >= PhpVersion::Php85,
+            Some(Value::Float(f)) => {
                 version >= PhpVersion::Php81
                     && !f.is_some_and(|f| f.fract() == 0.0 && f.abs() < 9.0e18)
             }
@@ -203,7 +192,11 @@ fn fold_array(
             return ArrayFold::NotFolded;
         }
     }
-    ArrayFold::Folded
+    // Keys may overwrite each other and unpacked arrays add their own elements.
+    let counted = elements
+        .iter()
+        .all(|el| el.key.is_none() && !el.is_spread());
+    ArrayFold::Folded(counted.then_some(elements.len()))
 }
 
 /// The truthiness of the value PHP folds `expr` to, when it is computed here.
@@ -258,6 +251,10 @@ fn folded_value(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>, depth: usize) -> O
         ExprKind::Nowdoc { value, .. } => Value::Str(Some(value.as_bytes().to_vec())),
         ExprKind::Bool(b) => Value::Bool(Some(*b)),
         ExprKind::Null => Value::Null,
+        ExprKind::Array(elements) => match fold_array(parser, elements, depth + 1) {
+            ArrayFold::Folded(count) => Value::Array(count),
+            _ => return None,
+        },
         ExprKind::MagicConst(kind) => match kind {
             MagicConstKind::Line => Value::Int(None),
             // A trait's `__CLASS__` is the class that uses it.
@@ -392,6 +389,12 @@ fn binary_value(parser: &Parser<'_, '_>, b: &BinaryExpr<'_, '_>, depth: usize) -
             }))
         }
         BinaryOp::Spaceship => Value::Int(compare(&left, &right).map(|o| o as i64)),
+        BinaryOp::Add if matches!((&left, &right), (Value::Array(_), Value::Array(_))) => {
+            match (left, right) {
+                (Value::Array(Some(0)), other) | (other, Value::Array(Some(0))) => other,
+                _ => Value::Array(None),
+            }
+        }
         BinaryOp::Add | BinaryOp::Sub | BinaryOp::Mul => match (left.number()?, right.number()?) {
             (Value::Int(Some(l)), Value::Int(Some(r))) => {
                 let exact = match b.op {
@@ -516,6 +519,7 @@ fn identical(left: &Value, right: &Value) -> Option<bool> {
         (Value::Str(l), Value::Str(r)) => l.as_ref()? == r.as_ref()?,
         (Value::Bool(l), Value::Bool(r)) => l.as_ref()? == r.as_ref()?,
         (Value::Null, Value::Null) => true,
+        (Value::Array(_), Value::Array(_)) => return None,
         _ => false,
     })
 }
