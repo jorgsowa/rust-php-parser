@@ -45,9 +45,11 @@ cannot use [] for reading
 cannot use [] for reading
 cannot use [] for reading
 cannot use [] for reading
+cannot use [] for reading
 cannot use [] for unsetting
 cannot use [] for unsetting
 ===errors 8.0===
+cannot use [] for reading
 cannot use [] for reading
 cannot use [] for reading
 cannot use [] for reading

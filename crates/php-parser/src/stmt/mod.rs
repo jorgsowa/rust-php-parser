@@ -3390,8 +3390,74 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         /// Whether each enclosing function returns by reference, which makes its
         /// `return` and `yield` values writes.
         by_ref: Vec<bool>,
+        known_functions: Vec<KnownFunction>,
+        /// Whether the statement being visited is in a namespace other than the global one.
+        in_namespace: bool,
     }
+
+    /// A function declared unconditionally at the top level, which PHP knows from there on.
+    struct KnownFunction {
+        /// Lowercase name with its namespace.
+        name: String,
+        start: u32,
+        /// Name, by-reference and variadic flags of each parameter.
+        params: Vec<(String, bool, bool)>,
+    }
+
     impl EmptyDims {
+        /// The parameters of the function `call` names, if PHP knows it when compiling the call.
+        fn known_params(
+            &self,
+            call: &FunctionCallExpr<'_, '_>,
+            at: u32,
+        ) -> Option<&[(String, bool, bool)]> {
+            let ExprKind::Name(name) = &call.name.kind else {
+                return None;
+            };
+            // An unqualified call in a namespace may fall back to a global function at run time.
+            let known = match name.kind() {
+                NameKind::FullyQualified => true,
+                NameKind::Unqualified => !self.in_namespace,
+                _ => false,
+            };
+            if !known {
+                return None;
+            }
+            let lower = name.parts_slice().join("\\").to_ascii_lowercase();
+            self.known_functions
+                .iter()
+                .find(|f| f.start < at && f.name == lower)
+                .map(|f| f.params.as_slice())
+        }
+
+        /// Arguments of a call to a known function: one its parameter takes by value is a read.
+        fn known_args(&mut self, args: &[Arg<'_, '_>], params: &[(String, bool, bool)]) {
+            for (i, arg) in args.iter().enumerate() {
+                let ArgKind::Value(value) = &arg.kind else {
+                    self.args(std::slice::from_ref(arg));
+                    continue;
+                };
+                let param = match &arg.name {
+                    Some(name) => params
+                        .iter()
+                        .find(|(p, ..)| name.to_string_repr() == p.as_str()),
+                    None => params
+                        .get(i)
+                        .or_else(|| params.last().filter(|(_, _, variadic)| *variadic)),
+                };
+                match param {
+                    Some((_, true, _)) => self.args(std::slice::from_ref(arg)),
+                    Some(_) => {
+                        let _ = self.visit_expr(value);
+                    }
+                    None if arg.name.is_some() => self.args(std::slice::from_ref(arg)),
+                    None => {
+                        let _ = self.visit_expr(value);
+                    }
+                }
+            }
+        }
+
         fn is_globals(&self, expr: &Expr<'_, '_>) -> bool {
             self.globals_read_only && is_globals(expr)
         }
@@ -3653,7 +3719,13 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
                 ExprKind::UnaryPostfix(u) => self.write(u.operand),
                 ExprKind::FunctionCall(c) => {
                     let _ = self.visit_expr(c.name);
-                    self.args(&c.args);
+                    match self.known_params(c, expr.span.start) {
+                        Some(params) => {
+                            let params = params.to_vec();
+                            self.known_args(&c.args, &params);
+                        }
+                        None => self.args(&c.args),
+                    }
                 }
                 ExprKind::MethodCall(c) | ExprKind::NullsafeMethodCall(c) => {
                     let _ = self.visit_expr(c.object);
@@ -3708,14 +3780,74 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         }
     }
 
+    fn known_function(namespace: Option<&str>, stmt: &Stmt<'_, '_>) -> Option<KnownFunction> {
+        let StmtKind::Function(f) = &stmt.kind else {
+            return None;
+        };
+        let name = f.name.as_str()?.to_ascii_lowercase();
+        Some(KnownFunction {
+            name: match namespace {
+                Some(namespace) => format!("{namespace}\\{name}"),
+                None => name,
+            },
+            start: stmt.span.start,
+            params: f
+                .params
+                .iter()
+                .map(|p| {
+                    (
+                        p.name.as_str().unwrap_or_default().to_string(),
+                        p.by_ref,
+                        p.variadic,
+                    )
+                })
+                .collect(),
+        })
+    }
+
+    let mut known_functions = Vec::new();
+    let mut namespace: Option<String> = None;
+    for stmt in stmts {
+        match &stmt.kind {
+            StmtKind::Namespace(ns) => {
+                let name = ns
+                    .name
+                    .as_ref()
+                    .map(|n| n.to_string_repr().to_ascii_lowercase());
+                match &ns.body {
+                    NamespaceBody::Braced(block) => known_functions.extend(
+                        block
+                            .stmts
+                            .iter()
+                            .filter_map(|s| known_function(name.as_deref(), s)),
+                    ),
+                    _ => namespace = name,
+                }
+            }
+            _ => known_functions.extend(known_function(namespace.as_deref(), stmt)),
+        }
+    }
+
     let mut finder = EmptyDims {
         read: Vec::new(),
         unset: Vec::new(),
         globals_append: Vec::new(),
         globals_read_only: parser.version >= PhpVersion::Php81,
         by_ref: Vec::new(),
+        known_functions,
+        in_namespace: false,
     };
     for stmt in stmts {
+        if let StmtKind::Namespace(ns) = &stmt.kind {
+            let named = ns.name.is_some();
+            if matches!(ns.body, NamespaceBody::Braced(_)) {
+                let outer = std::mem::replace(&mut finder.in_namespace, named);
+                let _ = finder.visit_stmt(stmt);
+                finder.in_namespace = outer;
+                continue;
+            }
+            finder.in_namespace = named;
+        }
         let _ = finder.visit_stmt(stmt);
     }
     for expr in exprs {
