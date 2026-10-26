@@ -622,7 +622,11 @@ fn identical(left: &Value, right: &Value) -> Option<bool> {
         (Value::Str(l), Value::Str(r)) => l.as_ref()? == r.as_ref()?,
         (Value::Bool(l), Value::Bool(r)) => l.as_ref()? == r.as_ref()?,
         (Value::Null, Value::Null) => true,
-        (Value::Array { .. }, Value::Array { .. }) => return None,
+        (Value::Array { count: l, .. }, Value::Array { count: r, .. }) => match (l, r) {
+            (Some(0), Some(0)) => true,
+            (Some(l), Some(r)) if l != r => false,
+            _ => return None,
+        },
         _ => false,
     })
 }
@@ -638,6 +642,13 @@ fn compare(left: &Value, right: &Value) -> Option<std::cmp::Ordering> {
         {
             Some(left.truth()?.cmp(&right.truth()?))
         }
+        // An array has more elements than another, or is greater than a number or string.
+        (Value::Array { count: l, .. }, Value::Array { count: r, .. }) => match (l, r) {
+            (Some(l), Some(r)) if l != r || *l == 0 => Some(l.cmp(r)),
+            _ => None,
+        },
+        (Value::Array { .. }, _) => Some(std::cmp::Ordering::Greater),
+        (_, Value::Array { .. }) => Some(std::cmp::Ordering::Less),
         (Value::Int(Some(l)), Value::Int(Some(r))) => Some(l.cmp(r)),
         (Value::Int(_) | Value::Float(_), Value::Int(_) | Value::Float(_)) => {
             let exact = |v: &Value| match v {
