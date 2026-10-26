@@ -405,6 +405,13 @@ fn constant_value(parser: &Parser<'_, '_>, name: &Name<'_, '_>) -> Option<Value>
     if !global {
         return None;
     }
+    // Values of a 64-bit build.
+    match *word {
+        "PHP_INT_MAX" => return Some(Value::Int(Some(i64::MAX))),
+        "PHP_INT_MIN" => return Some(Value::Int(Some(i64::MIN))),
+        "PHP_INT_SIZE" => return Some(Value::Int(Some(8))),
+        _ => {}
+    }
     let index = internal_constants::INTERNAL_CONSTANT_TYPES
         .binary_search_by(|(n, _)| n.cmp(word))
         .ok()?;
