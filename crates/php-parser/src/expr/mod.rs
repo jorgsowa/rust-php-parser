@@ -1659,7 +1659,7 @@ fn foldable(expr: &Expr<'_, '_>, constants: Option<&ConstExprChecker<'_, '_, '_>
             c.parser
                 .class_scope
                 .as_ref()
-                .is_none_or(|scope| scope.self_name.is_some() || scope.is_anonymous)
+                .is_none_or(|scope| !scope.is_trait)
         }),
         ExprKind::MagicConst(_) => constants.is_some(),
         ExprKind::Name(name) => constants.is_some_and(|c| c.may_be_internal_constant(name)),
