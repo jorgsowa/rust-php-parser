@@ -3466,15 +3466,19 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
 
         /// Arguments of a call to a known function: one its parameter takes by value is a read.
         fn known_args(&mut self, args: &[Arg<'_, '_>], params: &[(String, bool, bool)]) {
+            let mut unpacked = false;
             for (i, arg) in args.iter().enumerate() {
                 let ArgKind::Value(value) = &arg.kind else {
+                    unpacked |= matches!(arg.kind, ArgKind::Spread(_));
                     self.args(std::slice::from_ref(arg), false);
                     continue;
                 };
                 let param = match &arg.name {
+                    // PHP binds a name only to a non-variadic parameter, and not after unpacking.
+                    Some(_) if unpacked => None,
                     Some(name) => params
                         .iter()
-                        .find(|(p, ..)| name.to_string_repr() == p.as_str()),
+                        .find(|(p, _, variadic)| !variadic && name.to_string_repr() == p.as_str()),
                     None => params
                         .get(i)
                         .or_else(|| params.last().filter(|(_, _, variadic)| *variadic)),

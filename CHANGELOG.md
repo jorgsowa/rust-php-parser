@@ -68,6 +68,7 @@ These constructs were reported and are now accepted, as PHP does (`php-rs-parser
 - On PHP 8.0 to 8.3, a curly brace offset that is the base of another fetch or call, as in `$a{0}->b`, `$a{0}[1]`, `$a{0}::$c` or `$a{0}->m()`; PHP checks it only where it folds an array literal or a PHP 8.3 `static` initializer (`[$a{0}->b]` from PHP 8.2).
 - From PHP 8.6, a pipe is compiled as the call it makes, so its result can be written to like a call's, as in `(1 |> f(...))->p ??= 99;` and `(1 |> f(...))[0] = 1;`.
 - The right operand of `&&`, `||`, `and` or `or` no longer reports compile errors when PHP may fold the left operand away. A `print` expression, literal arithmetic and concatenation, `exit` before PHP 8.4, `empty()` of a literal and a literal `instanceof` fold exactly, as in `print $a or isset(1 + 1);` and `-1 || $a ? 1 : 2 ? 3 : 4;`; comparisons and other operators on literals fold as PHP computes them, as in `1 > 2 && isset(1 + 1);`, and a condition whose value is not computed, such as `M_PI`, `+print $a` or `self::class` in a class, is assumed to skip it.
+- An append fetch passed by name to a variadic parameter or after argument unpacking, which PHP binds at run time, as in `f(v: $a[])` for `function f($x, ...$v)` or `f(...$y, x: $a[])`, no longer reports `Cannot use [] for reading`.
 - `++` and `--` bind tighter than `**`, so `--$a ** 2` parses as `(--$a) ** 2` instead of reporting `Cannot increment or decrement an expression that is not a variable`.
 
 #### Parser: wrong trees
