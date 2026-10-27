@@ -124,13 +124,10 @@ pub(super) fn folded_class_fetch_value(
         Value::Null => "null",
         Value::Array { .. } => "array",
         Value::Bool(_) if parser.version < PhpVersion::Php83 => "bool",
-        Value::Bool(b) => {
-            if b? {
-                "true"
-            } else {
-                "false"
-            }
-        }
+        Value::Bool(Some(true)) => "true",
+        Value::Bool(Some(false)) => "false",
+        // PHP names the value, which may depend on the build, as for `ZEND_THREAD_SAFE`.
+        Value::Bool(None) => "bool",
     })
 }
 
@@ -417,18 +414,13 @@ fn constant_value(parser: &Parser<'_, '_>, name: &Name<'_, '_>) -> Option<Value>
     if !global {
         return None;
     }
-    // Values of a 64-bit build without thread safety or debugging.
-    match *word {
-        "PHP_INT_MAX" => return Some(Value::Int(Some(i64::MAX))),
-        "PHP_INT_MIN" => return Some(Value::Int(Some(i64::MIN))),
-        "PHP_INT_SIZE" => return Some(Value::Int(Some(8))),
-        "ZEND_THREAD_SAFE" | "ZEND_DEBUG_BUILD" => return Some(Value::Bool(Some(false))),
-        // PHP 8.4 made these booleans.
-        "PHP_ZTS" | "PHP_DEBUG" if parser.version >= PhpVersion::Php84 => {
-            return Some(Value::Bool(Some(false)))
-        }
-        "PHP_ZTS" | "PHP_DEBUG" => return Some(Value::Int(Some(0))),
-        _ => {}
+    // PHP 8.4 made these booleans.
+    if matches!(*word, "PHP_ZTS" | "PHP_DEBUG") {
+        return Some(if parser.version >= PhpVersion::Php84 {
+            Value::Bool(None)
+        } else {
+            Value::Int(None)
+        });
     }
     let ty =
         match internal_constants::INTERNAL_CONSTANT_TYPES.binary_search_by(|(n, _)| n.cmp(word)) {

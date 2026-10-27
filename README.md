@@ -263,6 +263,7 @@ A few constructs `php -l` rejects are accepted, because catching them would mean
 
 - `[]` passed by name to a by-value parameter of an internal function, as in `strlen(string: $a[])`: parameter names of internal functions are not tracked.
 - Constant expressions fold literals, magic constants, `X::class`, `!` and the arithmetic and comparisons of folded values, but not `!` on an anonymous class's `__CLASS__`, numeric-string equality (`'10' == '1e1'`), PHP 7.4's string-to-number comparisons (`'abc' == 0`), or an operand PHP leaves to run time (`1 / 0`). The operand of `&&`, `||`, `?:` or `??` that PHP keeps after such a condition is not checked, as in `const X = ('10' == '1e1') && $a;`.
+- Constants whose value depends on how PHP was built, such as `PHP_INT_MAX`, `ZEND_THREAD_SAFE` or `PHP_ZTS`, fold to their type but not their value, so `const X = ZEND_THREAD_SAFE || $a;` and `(PHP_INT_MAX + 1)::class` are accepted.
 
 ## Versioning
 
