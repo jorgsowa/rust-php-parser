@@ -179,6 +179,8 @@ If the feature is version-gated:
 
 For complex new syntax, read an existing feature (e.g., match expressions in `expr.rs`, enums in `stmt.rs`) to understand the pattern before writing new code.
 
+`crates/php-parser/src/expr/internal_functions.rs` and `internal_constants.rs` are generated from a PHP binary for each supported version. After adding a version, add it to `VERSIONS` in `scripts/gen_internal_tables.py` and run the script (it uses the Homebrew `php@X.Y` binaries unless given `X.Y=/path/to/php`).
+
 ---
 
 ## Visitor API
