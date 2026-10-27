@@ -257,6 +257,13 @@ The arena-form `Visitor`, `ScopeVisitor`, and `Fold<'src>` traits operate direct
 - **Version-checked:** too-new syntax is parsed and reported as `VersionTooLow`.
 - **Normalized printing:** the printer doesn't preserve formatting.
 
+### Known limits
+
+A few constructs `php -l` rejects are accepted, because catching them would mean reproducing more of PHP's compiler than a parser should carry:
+
+- `[]` passed by name to a by-value parameter of an internal function, as in `strlen(string: $a[])`: parameter names of internal functions are not tracked.
+- Constant expressions fold literals, magic constants, `X::class`, `!` and the arithmetic and comparisons of folded values, but not `!` on an anonymous class's `__CLASS__`, numeric-string equality (`'10' == '1e1'`), PHP 7.4's string-to-number comparisons (`'abc' == 0`), or an operand PHP leaves to run time (`1 / 0`). The operand of `&&`, `||`, `?:` or `??` that PHP keeps after such a condition is not checked, as in `const X = ('10' == '1e1') && $a;`.
+
 ## Versioning
 
 The crates follow [Semantic Versioning](https://semver.org/) for their Rust API. The JSON/serde shape of the AST (from `serde::Serialize`, behind the opt-in `serde` feature, also used by the playground) is **not** covered: it is meant for debugging, snapshots and tooling, and may change in any release. `Deserialize` is not implemented.
