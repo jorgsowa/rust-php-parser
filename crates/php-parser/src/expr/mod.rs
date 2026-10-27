@@ -1024,19 +1024,105 @@ struct ConstExprChecker<'p, 'arena, 'src> {
     substitutes_constants: bool,
 }
 
+/// How PHP folds an expression: [`const_truth`], the truthiness of its folded value, and whether
+/// PHP may fold it at all.
+#[derive(Clone, Copy)]
+struct Folding {
+    const_truth: Option<bool>,
+    folded_truth: Option<bool>,
+    may_fold: bool,
+}
+
+impl Folding {
+    /// The truthiness PHP folds the expression to, when it is computed here.
+    fn truth(self) -> Option<bool> {
+        self.const_truth
+            .or(self.folded_truth.filter(|_| self.may_fold))
+    }
+}
+
 impl ConstExprChecker<'_, '_, '_> {
     /// Whether PHP may fold `expr` at compile time, substituting the constants it knows.
     fn may_fold(&self, expr: &Expr<'_, '_>) -> bool {
         foldable(expr, Some(self))
     }
 
-    /// The truthiness PHP folds `expr` to, when it is computed here.
-    fn truth(&self, expr: &Expr<'_, '_>) -> Option<bool> {
-        const_truth(expr, self.version).or_else(|| {
-            self.may_fold(expr)
-                .then(|| folded_value::folded_value_truth(self.parser, expr))
-                .flatten()
-        })
+    fn folding(&self, expr: &Expr<'_, '_>) -> Folding {
+        Folding {
+            const_truth: const_truth(expr, self.version),
+            folded_truth: folded_value::folded_value_truth(self.parser, expr),
+            may_fold: self.may_fold(expr),
+        }
+    }
+
+    /// [`Self::check`], also returning how PHP folds `expr`, which a short-circuit or condition
+    /// builds from its operands so that a long chain is walked once.
+    fn check_folding(&self, expr: &Expr<'_, '_>) -> Result<Folding, ConstExprError> {
+        // Only whether an operand PHP folds away may fold matters.
+        let unchecked = |may_fold| Folding {
+            const_truth: None,
+            folded_truth: None,
+            may_fold,
+        };
+        match &expr.kind {
+            ExprKind::Parenthesized(inner) => self.check_folding(inner),
+            ExprKind::Binary(b) if is_short_circuit(b.op) => {
+                let left = self.check_folding(b.left)?;
+                let decides = |truth: bool| match b.op {
+                    BinaryOp::BooleanAnd | BinaryOp::LogicalAnd => !truth,
+                    _ => truth,
+                };
+                // PHP folds `false && $x` before checking, dropping the right operand.
+                let folded_away = left.truth().map_or(left.may_fold, decides);
+                let right = if folded_away {
+                    unchecked(self.may_fold(b.right))
+                } else {
+                    self.check_folding(b.right)?
+                };
+                let combine = |l: Option<bool>, r: Option<bool>| {
+                    l.and_then(|truth| if decides(truth) { Some(truth) } else { r })
+                };
+                Ok(Folding {
+                    const_truth: combine(left.const_truth, right.const_truth),
+                    folded_truth: combine(left.folded_truth, right.folded_truth),
+                    may_fold: left.may_fold && right.may_fold,
+                })
+            }
+            ExprKind::Ternary(t) => {
+                let condition = self.check_folding(t.condition)?;
+                let (then_checked, else_checked) = match condition.truth() {
+                    Some(truth) => (truth, !truth),
+                    None => (!condition.may_fold, !condition.may_fold),
+                };
+                let branch = |e, checked| {
+                    Ok::<_, ConstExprError>(if checked {
+                        self.check_folding(e)?.may_fold
+                    } else {
+                        self.may_fold(e)
+                    })
+                };
+                let then_folds = match t.then_expr {
+                    Some(then_expr) => branch(then_expr, then_checked)?,
+                    None => true,
+                };
+                let else_folds = branch(t.else_expr, else_checked)?;
+                Ok(unchecked(condition.may_fold && then_folds && else_folds))
+            }
+            ExprKind::NullCoalesce(n) => {
+                let left = self.check_folding(n.left)?;
+                let left_is_null = matches!(unparenthesized(n.left).kind, ExprKind::Null);
+                let right_folds = if !left_is_null && left.may_fold {
+                    self.may_fold(n.right)
+                } else {
+                    self.check_folding(n.right)?.may_fold
+                };
+                Ok(unchecked(left.may_fold && right_folds))
+            }
+            _ => {
+                self.check(expr)?;
+                Ok(self.folding(expr))
+            }
+        }
     }
 
     /// Whether `name` may be an internal constant, which PHP substitutes while folding.
@@ -1122,49 +1208,13 @@ impl ConstExprChecker<'_, '_, '_> {
             {
                 self.check(u.operand)
             }
+            ExprKind::Binary(b) if is_short_circuit(b.op) => self.check_folding(expr).map(|_| ()),
             ExprKind::Binary(b) if !matches!(b.op, BinaryOp::Instanceof | BinaryOp::Pipe) => {
                 self.check(b.left)?;
-                // PHP folds `false && $x` before checking, dropping the right operand.
-                let folded_away = match (b.op, self.truth(b.left)) {
-                    (BinaryOp::BooleanAnd | BinaryOp::LogicalAnd, Some(truth)) => !truth,
-                    (BinaryOp::BooleanOr | BinaryOp::LogicalOr, Some(truth)) => truth,
-                    (
-                        BinaryOp::BooleanAnd
-                        | BinaryOp::BooleanOr
-                        | BinaryOp::LogicalAnd
-                        | BinaryOp::LogicalOr,
-                        None,
-                    ) => self.may_fold(b.left),
-                    _ => false,
-                };
-                if folded_away {
-                    return Ok(());
-                }
                 self.check(b.right)
             }
-            ExprKind::Ternary(t) => {
-                self.check(t.condition)?;
-                match self.truth(t.condition) {
-                    Some(true) => t
-                        .then_expr
-                        .map_or(Ok(()), |then_expr| self.check(then_expr)),
-                    Some(false) => self.check(t.else_expr),
-                    None if self.may_fold(t.condition) => Ok(()),
-                    None => {
-                        if let Some(then_expr) = t.then_expr {
-                            self.check(then_expr)?;
-                        }
-                        self.check(t.else_expr)
-                    }
-                }
-            }
-            ExprKind::NullCoalesce(n) => {
-                self.check(n.left)?;
-                let left_is_null = matches!(unparenthesized(n.left).kind, ExprKind::Null);
-                if !left_is_null && self.may_fold(n.left) {
-                    return Ok(());
-                }
-                self.check(n.right)
+            ExprKind::Ternary(_) | ExprKind::NullCoalesce(_) => {
+                self.check_folding(expr).map(|_| ())
             }
             ExprKind::Array(elements) => {
                 for el in elements.iter() {
@@ -1444,56 +1494,150 @@ fn is_class_keyword_name(name: &Name<'_, '_>) -> bool {
         if ["self", "parent", "static"].iter().any(|k| value.eq_ignore_ascii_case(k)))
 }
 
-/// Whether PHP may fold `expr` outside a constant expression, which decides a short-circuit alone.
-fn may_fold_at_runtime(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> bool {
-    let checker = ConstExprChecker {
+/// How PHP may fold an expression outside a constant expression, built from its operands so
+/// that a long chain is walked once.
+#[derive(Clone, Copy)]
+struct RuntimeFolding {
+    /// [`foldable`] with the constants PHP substitutes.
+    foldable: bool,
+    /// Whether PHP may fold the expression, which decides a short-circuit alone.
+    may_fold: bool,
+    /// [`const_truth`] of a short-circuit.
+    chain_truth: Option<Option<bool>>,
+}
+
+fn runtime_checker<'p, 'arena, 'src>(
+    parser: &'p Parser<'arena, 'src>,
+) -> ConstExprChecker<'p, 'arena, 'src> {
+    ConstExprChecker {
         parser,
         version: parser.version,
         allow_new: false,
         substitutes_constants: parser.substitutes_constants(),
-    };
-    if checker.may_fold(expr) {
-        return !is_unresolved_class_keyword_fetch(parser, expr);
     }
-    let operand = |e: &Expr<'_, '_>| may_fold_at_runtime(parser, e);
-    match &unparenthesized(expr).kind {
+}
+
+fn runtime_folding(checker: &ConstExprChecker<'_, '_, '_>, expr: &Expr<'_, '_>) -> RuntimeFolding {
+    let operand = |e: &Expr<'_, '_>| runtime_folding(checker, e);
+    let expr = unparenthesized(expr);
+    if let ExprKind::Binary(b) = &expr.kind {
+        // Walk the left spine iteratively: chains are built in a loop and can be very long.
+        let mut spine = vec![b];
+        while let ExprKind::Binary(inner) = &unparenthesized(spine[spine.len() - 1].left).kind {
+            spine.push(inner);
+        }
+        let mut folding = operand(spine[spine.len() - 1].left);
+        for link in spine.iter().rev() {
+            folding = binary_folding(checker, link, folding);
+        }
+        return folding;
+    }
+    let (foldable, may_fold_unless_foldable) = match &expr.kind {
         // PHP compiles `print` to the constant 1, and `@` keeps a constant operand.
-        ExprKind::Print(_) => true,
-        ExprKind::ErrorSuppress(inner) => operand(inner),
+        ExprKind::Print(_) => (false, true),
+        ExprKind::ErrorSuppress(inner) => (false, operand(inner).may_fold),
         ExprKind::UnaryPrefix(u) => match u.op {
-            UnaryPrefixOp::PreIncrement | UnaryPrefixOp::PreDecrement => false,
+            UnaryPrefixOp::PreIncrement | UnaryPrefixOp::PreDecrement => (false, false),
             UnaryPrefixOp::BooleanNot
-                if parser.version >= PhpVersion::Php85
+                if checker.version >= PhpVersion::Php85
                     && matches!(literal_scalar(u.operand), Some(Scalar::Float(_))) =>
             {
-                false
+                (false, false)
             }
-            _ => operand(u.operand),
+            _ => {
+                let inner = operand(u.operand);
+                (inner.foldable, inner.may_fold)
+            }
         },
+        _ => (checker.may_fold(expr), false),
+    };
+    RuntimeFolding {
+        foldable,
+        may_fold: if foldable {
+            !is_unresolved_class_keyword_fetch(checker.parser, expr)
+        } else {
+            may_fold_unless_foldable
+        },
+        chain_truth: None,
+    }
+}
+
+/// [`RuntimeFolding`] of `b`, whose left operand folds as `left`.
+fn binary_folding(
+    checker: &ConstExprChecker<'_, '_, '_>,
+    b: &BinaryExpr<'_, '_>,
+    left: RuntimeFolding,
+) -> RuntimeFolding {
+    let (foldable, may_fold) = match b.op {
         // A literal is never an object.
-        ExprKind::Binary(b) if b.op == BinaryOp::Instanceof => operand(b.left),
-        ExprKind::Binary(b) if is_short_circuit(b.op) => {
-            let decides = |truth: bool| match b.op {
-                BinaryOp::BooleanAnd | BinaryOp::LogicalAnd => !truth,
-                _ => truth,
-            };
-            match const_truth(b.left, parser.version) {
-                Some(truth) => decides(truth) || operand(b.right),
-                None => operand(b.left),
-            }
+        BinaryOp::Instanceof => (false, left.may_fold),
+        BinaryOp::Pipe => (false, false),
+        op if is_short_circuit(op) => {
+            return short_circuit_folding(checker, b, left, runtime_folding(checker, b.right));
         }
-        ExprKind::Binary(b) if b.op != BinaryOp::Pipe => operand(b.left) && operand(b.right),
-        _ => false,
+        _ => {
+            let right = runtime_folding(checker, b.right);
+            let foldable = left.foldable && right.foldable;
+            (foldable, foldable || left.may_fold && right.may_fold)
+        }
+    };
+    RuntimeFolding {
+        foldable,
+        may_fold,
+        chain_truth: None,
+    }
+}
+
+/// [`RuntimeFolding`] of the short-circuit `b` from that of its operands.
+fn short_circuit_folding(
+    checker: &ConstExprChecker<'_, '_, '_>,
+    b: &BinaryExpr<'_, '_>,
+    left: RuntimeFolding,
+    right: RuntimeFolding,
+) -> RuntimeFolding {
+    let decides = |truth: bool| match b.op {
+        BinaryOp::BooleanAnd | BinaryOp::LogicalAnd => !truth,
+        _ => truth,
+    };
+    let truth_of = |folding: RuntimeFolding, e| {
+        folding
+            .chain_truth
+            .unwrap_or_else(|| const_truth(e, checker.version))
+    };
+    let left_truth = truth_of(left, b.left);
+    let foldable = left.foldable && right.foldable;
+    RuntimeFolding {
+        foldable,
+        may_fold: foldable
+            || match left_truth {
+                Some(truth) => decides(truth) || right.may_fold,
+                None => left.may_fold,
+            },
+        chain_truth: Some(left_truth.and_then(|truth| {
+            if decides(truth) {
+                Some(truth)
+            } else {
+                truth_of(right, b.right)
+            }
+        })),
     }
 }
 
 /// The truthiness PHP folds the left operand of `&&` or `||` to, when it is computed here.
-fn short_circuit_truth(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> Option<bool> {
-    const_truth(expr, parser.version).or_else(|| {
-        may_fold_at_runtime(parser, expr)
-            .then(|| folded_value::folded_value_truth(parser, expr))
-            .flatten()
-    })
+fn short_circuit_truth(
+    parser: &Parser<'_, '_>,
+    expr: &Expr<'_, '_>,
+    folding: RuntimeFolding,
+) -> Option<bool> {
+    folding
+        .chain_truth
+        .unwrap_or_else(|| const_truth(expr, parser.version))
+        .or_else(|| {
+            folding
+                .may_fold
+                .then(|| folded_value::folded_value_truth(parser, expr))
+                .flatten()
+        })
 }
 
 /// Whether `expr` is a possibly negated class keyword fetch PHP never resolves at compile time.
@@ -2186,8 +2330,9 @@ fn parse_expr_rest<'arena, 'src>(
     mut lhs: Expr<'arena, 'src>,
     min_bp: u8,
 ) -> Expr<'arena, 'src> {
-    // The folded truth of the last `&&`/`||` built here, so a long chain is not re-walked per link.
-    let mut chain_truth: Option<(Span, Option<bool>)> = None;
+    // The folded truth and folding of the last `&&`/`||` built here, so a long chain is not
+    // re-walked per link.
+    let mut chain: Option<(Span, Option<bool>, RuntimeFolding)> = None;
     loop {
         let kind = parser.current_kind();
 
@@ -2781,10 +2926,14 @@ fn parse_expr_rest<'arena, 'src>(
             //      `$a + $b + $c = 5` → `$a + $b + ($c = 5)`
             // parse_expr_bp with right_bp > ASSIGNMENT_BP won't consume the assignment,
             // so we explicitly apply it here (same pattern as the `??` branch above).
-            let lhs_truth = match chain_truth {
-                _ if !is_short_circuit(op) => None,
-                Some((span, truth)) if span == lhs.span => truth,
-                _ => short_circuit_truth(parser, &lhs),
+            let chained = chain.filter(|(span, ..)| *span == lhs.span);
+            let (lhs_truth, lhs_folding) = match chained {
+                _ if !is_short_circuit(op) => (None, None),
+                Some((_, truth, folding)) => (truth, Some(folding)),
+                None => {
+                    let folding = runtime_folding(&runtime_checker(parser), &lhs);
+                    (short_circuit_truth(parser, &lhs, folding), Some(folding))
+                }
             };
             let short_circuits = match (op, lhs_truth) {
                 (BinaryOp::BooleanAnd | BinaryOp::LogicalAnd, Some(truth)) => !truth,
@@ -2793,7 +2942,7 @@ fn parse_expr_rest<'arena, 'src>(
             };
             // A condition PHP may fold, whose value is not computed here, may skip the right side too.
             let may_skip = short_circuits
-                || is_short_circuit(op) && lhs_truth.is_none() && may_fold_at_runtime(parser, &lhs);
+                || lhs_truth.is_none() && lhs_folding.is_some_and(|folding| folding.may_fold);
             if op == BinaryOp::Instanceof && parser.check(TokenKind::LeftParen) {
                 let span = parser.current_span();
                 parser.require_version(PhpVersion::Php80, "instanceof with an expression", span);
@@ -2831,14 +2980,12 @@ fn parse_expr_rest<'arena, 'src>(
                 );
             }
             let span = lhs.span.merge(rhs.span);
-            if is_short_circuit(op) {
-                let truth = match lhs_truth {
-                    Some(truth) if short_circuits => Some(truth),
-                    Some(_) => short_circuit_truth(parser, &rhs),
-                    None => None,
-                };
-                chain_truth = Some((span, truth));
-            }
+            let rhs_folding = lhs_folding.map(|_| runtime_folding(&runtime_checker(parser), &rhs));
+            let truth = match (lhs_truth, rhs_folding) {
+                (Some(truth), _) if short_circuits => Some(truth),
+                (Some(_), Some(folding)) => short_circuit_truth(parser, &rhs, folding),
+                _ => None,
+            };
             lhs = Expr {
                 kind: ExprKind::Binary(BinaryExpr {
                     left: parser.alloc(lhs),
@@ -2847,6 +2994,12 @@ fn parse_expr_rest<'arena, 'src>(
                 }),
                 span,
             };
+            if let (Some(left), Some(right), ExprKind::Binary(b)) =
+                (lhs_folding, rhs_folding, &lhs.kind)
+            {
+                let folding = short_circuit_folding(&runtime_checker(parser), b, left, right);
+                chain = Some((span, truth, folding));
+            }
             check_unsupported_operands(parser, &lhs);
             continue;
         }
