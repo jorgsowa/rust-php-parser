@@ -964,6 +964,11 @@ pub fn parse_class_members<'arena, 'src>(
                 &mods,
                 in_interface,
             );
+            // Before PHP 8.2, "Traits cannot have constants" stops PHP before it compiles them.
+            if in_trait && parser.version < PhpVersion::Php82 {
+                let span = parser.span_from(member_start);
+                parser.uncompiled_spans.push(span);
+            }
             continue;
         }
 

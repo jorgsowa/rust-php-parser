@@ -77,6 +77,7 @@ These constructs were reported and are now accepted, as PHP does (`php-rs-parser
 
 #### Parser: messages and recovery
 
+- Before PHP 8.2, a trait constant reports only that constants in traits require PHP 8.2, not errors in its declaration, such as `Constant expression contains invalid operations`, since PHP stops at `Traits cannot have constants` (`php-rs-parser`).
 - Nesting past the depth limit reports one `NestingTooDeep` error instead of a cascade of up to 100 errors (`php-rs-parser`).
 - Errors that a later check withdraws, such as an empty array element before `=` makes the array a destructuring target, no longer count toward the 100-error limit, so they do not crowd out later errors or set `errors_truncated` (`php-rs-parser`).
 - Modifier errors use PHP's wording for the version: `Cannot use 'static' as constant modifier` before PHP 8.3 and `Cannot use the static modifier on a class constant` from it, likewise for `abstract` and `readonly` constants and readonly methods, and `Cannot use the final modifier on an abstract method` or `abstract class member` (`php-rs-parser`).

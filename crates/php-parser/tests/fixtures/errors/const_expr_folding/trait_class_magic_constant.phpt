@@ -5,7 +5,6 @@ trait T {
 }
 ===errors <=8.1===
 'constants in traits' requires PHP 8.2 or higher
-Constant expression contains invalid operations
 ===errors >=8.2===
 Constant expression contains invalid operations
 ===php_error <=8.1===
