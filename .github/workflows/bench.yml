@@ -25,7 +25,7 @@ jobs:
           git clone --depth 1 --quiet https://github.com/WordPress/WordPress crates/php-parser/benches/corpus/wordpress
 
       - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2.9.2
+      - uses: Swatinem/rust-cache@v2.9.3
         with:
           save-if: "false"  # bench jobs only restore; CI workflow owns the rust cache
 
