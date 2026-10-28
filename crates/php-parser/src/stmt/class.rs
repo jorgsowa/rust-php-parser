@@ -927,6 +927,8 @@ pub fn parse_class_members<'arena, 'src>(
             continue;
         }
 
+        // PHP keeps the last doc comment before the declaration, so one after the attributes wins.
+        let doc_comment = parser.take_doc_comment(parser.current_span().start);
         let mods = parse_class_member_modifiers(parser, member_start);
 
         // Detect unknown modifier: bare identifier before $variable with no modifiers set.
@@ -961,6 +963,7 @@ pub fn parse_class_members<'arena, 'src>(
                 &mut members,
                 member_attrs,
                 member_start,
+                doc_comment,
                 &mods,
                 in_interface,
             );
@@ -977,6 +980,7 @@ pub fn parse_class_members<'arena, 'src>(
                 parser,
                 member_attrs,
                 member_start,
+                doc_comment,
                 &mods,
                 in_interface,
                 in_trait,
@@ -1048,6 +1052,7 @@ pub fn parse_class_members<'arena, 'src>(
                 &mut members,
                 member_attrs,
                 member_start,
+                doc_comment,
                 &mods,
                 type_hint,
                 in_interface,
@@ -1736,6 +1741,7 @@ pub(super) fn parse_class_const_member<'arena, 'src>(
     members: &mut ArenaVec<'arena, ClassMember<'arena, 'src>>,
     member_attrs: ArenaVec<'arena, Attribute<'arena, 'src>>,
     member_start: u32,
+    doc_comment: Option<Comment<'src>>,
     mods: &Modifiers,
     in_interface: bool,
 ) {
@@ -1862,7 +1868,7 @@ pub(super) fn parse_class_const_member<'arena, 'src>(
                 built.modifiers = const_modifiers(mods);
                 built.type_hint = shared_type_hint;
                 built.attributes = member_attrs;
-                built.doc_comment = parser.take_doc_comment(member_start);
+                built.doc_comment = doc_comment;
                 built
             }),
             span: item_span(0, first_item),
@@ -1892,6 +1898,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     member_attrs: ArenaVec<'arena, Attribute<'arena, 'src>>,
     member_start: u32,
+    doc_comment: Option<Comment<'src>>,
     mods: &Modifiers,
     in_interface: bool,
     in_trait: bool,
@@ -1949,8 +1956,6 @@ pub(super) fn parse_method_member<'arena, 'src>(
     } else {
         None
     };
-
-    let doc_comment = parser.take_doc_comment(member_start);
 
     let mut terminated_without_body = false;
     let mut is_generator = false;
@@ -2423,11 +2428,13 @@ pub(super) fn copy_attributes<'arena, 'src>(
     out
 }
 
+#[allow(clippy::too_many_arguments)]
 pub(super) fn parse_property_member<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
     members: &mut ArenaVec<'arena, ClassMember<'arena, 'src>>,
     member_attrs: ArenaVec<'arena, Attribute<'arena, 'src>>,
     member_start: u32,
+    doc_comment: Option<Comment<'src>>,
     mods: &Modifiers,
     type_hint: Option<TypeHint<'arena, 'src>>,
     in_interface: bool,
@@ -2632,7 +2639,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
             built.attributes = member_attrs;
             built.empty_hook_list = had_hooks_block && hooks.is_empty();
             built.hooks = hooks;
-            built.doc_comment = parser.take_doc_comment(member_start);
+            built.doc_comment = doc_comment;
             built
         }),
         span,

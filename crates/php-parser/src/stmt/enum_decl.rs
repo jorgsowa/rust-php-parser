@@ -103,6 +103,9 @@ pub(super) fn parse_enum<'arena, 'src>(
             continue;
         }
 
+        // PHP keeps the last doc comment before the declaration, so one after the attributes wins.
+        let member_doc = parser.take_doc_comment(parser.current_span().start);
+
         // Enum case
         if parser.check(TokenKind::Case) {
             parser.advance();
@@ -181,7 +184,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                     let mut built = EnumCase::new(parser.arena, case_name);
                     built.value = value;
                     built.attributes = member_attrs;
-                    built.doc_comment = parser.take_doc_comment(member_start);
+                    built.doc_comment = member_doc;
                     built
                 }),
                 span,
@@ -198,6 +201,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                 &mut consts,
                 member_attrs,
                 member_start,
+                member_doc,
                 &mods,
                 false,
             );
@@ -218,6 +222,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                 parser,
                 member_attrs,
                 member_start,
+                member_doc,
                 &mods,
                 false,
                 false,
@@ -291,6 +296,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                     &mut properties,
                     member_attrs,
                     member_start,
+                    member_doc,
                     &mods,
                     type_hint,
                     false,

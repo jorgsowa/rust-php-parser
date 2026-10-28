@@ -75,6 +75,7 @@ These constructs were reported and are now accepted, as PHP does (`php-rs-parser
 #### Parser: wrong trees
 
 - On PHP 7.4, `.` has the precedence of `+` and `-` and binds tighter than `<<` and `>>`, so `"a" . 1 + 2` parses as `("a" . 1) + 2` and `1 . 2 << 1` as `(1 . 2) << 1` (`php-rs-parser`).
+- A doc comment written after the attributes of a class or enum member or a parameter, as in `#[A] /** doc */ public function f()`, belongs to that declaration, as PHP reads it, instead of being dropped or moved to the next member (`php-rs-parser`).
 
 #### Parser: messages and recovery
 

@@ -1463,11 +1463,12 @@ pub fn parse_param_list<'arena, 'src>(
             }
         }
 
-        // Doc comment directly preceding this parameter (PHP 8.6).
-        let leading_doc_comment = parser.take_doc_comment_from(param_start, param_list_floor);
-
         // Optional parameter attributes
         let param_attrs = parser.parse_attributes();
+
+        // Doc comment directly preceding this parameter, after its attributes if any (PHP 8.6).
+        let leading_doc_comment =
+            parser.take_doc_comment_from(parser.current_span().start, param_list_floor);
 
         // Optional modifiers for promoted properties: visibility, asymmetric
         // set-visibility, `final`, and `readonly` — PHP accepts them in any
