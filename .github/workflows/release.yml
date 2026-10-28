@@ -115,7 +115,7 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2.9.2
 
-      - uses: taiki-e/install-action@v2.87.29
+      - uses: taiki-e/install-action@v2.87.31
         with:
           tool: cargo-semver-checks
 
