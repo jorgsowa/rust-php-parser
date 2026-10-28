@@ -905,6 +905,8 @@ pub fn parse_class_members<'arena, 'src>(
             continue;
         }
 
+        // A doc comment left over before an earlier member belongs to no later one.
+        parser.mark_stmt_end(parser.previous_end());
         let member_start = parser.start_span();
         let member_attrs = parser.parse_attributes();
 
