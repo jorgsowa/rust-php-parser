@@ -42,6 +42,8 @@ while IFS= read -r fixture; do
         fi
     elif [ -n "$php_error" ] && echo "$output" | grep -qF "PHP Fatal error:  $php_error in "; then
         echo "✓ $name (fails with the expected error)"
+    elif [[ "$name" == syntax_errors/* ]] && echo "$output" | grep -qF "PHP Parse error:  "; then
+        echo "✓ $name (fails with a parse error)"
     else
         echo "✗ FAIL (PHP $PHP_VERSION): $name"
         echo "$output"
