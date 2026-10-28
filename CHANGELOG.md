@@ -7,11 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.27.0] - 2026-10-28
+
+Compile-time checks and constant folding follow PHP's for each version, and the printer keeps code with a syntax error invalid.
+
 ### Added
 
 - `ForbiddenRule::UnexpectedCast`, `ForbiddenRule::DefaultValueType`, `ForbiddenRule::ClassFetchOnFoldedValue`, `ForbiddenRule::UnsupportedOperandTypes`, `ForbiddenRule::PrivateFinalPropertyHook`, `ForbiddenRule::SetHookParameterDefault`, `ForbiddenRule::PartialApplicationWithUnpacking`, `ForbiddenRule::EnumCaseValueType`, `ForbiddenRule::DuplicateEnumCaseValue`, `ForbiddenRule::CustomAssertFunction`, `ForbiddenRule::PositionalAfterUnpacking`, `ForbiddenRule::MethodNameNotString`, `ForbiddenRule::LongArrayInDestructuring`, `ForbiddenRule::UnpackNonArray` and `ForbiddenRule::UnpackStringKeys` (`php-rs-parser`).
 - `ForeachStmt::key_by_ref` for a key taken by reference, `invalid_modifier` on a trait alias for `static`, `abstract` or `readonly`, and `PropertyHook::empty_param_list` for a hook written with `()` (`php-ast`).
-- `PrettyPrinter::syntax_errors`: for source with a syntax error, the output starts with a syntax error so it stays invalid (`php-printer`). `ParseError::phase` tells syntax errors from compile errors (`php-rs-parser`).
+- `PrettyPrinter::syntax_errors`: for source with a syntax error, the output starts with a syntax error so it stays invalid (`php-printer`).
+- `ParseError::phase` tells syntax errors from compile errors (`php-rs-parser`).
 
 ### Changed
 
@@ -31,9 +36,12 @@ These constructs were accepted and are now reported with PHP's wording (`php-rs-
 - Inline HTML before the first namespace, as in `x<?php namespace A;`, or after a braced namespace.
 - Default values: a literal default that a parameter's or property's type rejects, as in `int $x = 'a'`, `array $a = 1`, `Foo $f = 1` or a property `int $p = null`, with PHP 7.4's wording there and PHP 8.1's `Cannot use null as default value` for an intersection type. A typed class constant also checks array values, and messages spell `iterable` as `Traversable|array` only from PHP 8.2.
 - Constant expressions fold only what PHP folds: literals and their arithmetic and concatenation, magic constants, `X::class`, and outside parameter defaults the internal constants PHP substitutes (unqualified outside a namespace, or fully qualified) and earlier constants of the class being declared. So `const A = FOO ?? $x;`, `FOO ? 1 : $x`, `-0.0 || $x`, `(1-1) ? 1 : $x`, `function f($a = PHP_INT_MAX ?? $x)`, `(B)::C`, `B::C::D`, `new (B)` and `('a' ? 'b' : 'c')::class` are reported.
-- Folded values: from PHP 8.0, `::class` on a parenthesized expression PHP folds to a value, such as `(-1)::class`, `(1 < 2)::class`, `(1 / 2)::class`, `(__NAMESPACE__)::class`, `(PHP_INT_MAX)::class`, comparisons of arrays such as `([] == [])::class`, build flags such as `(ZEND_THREAD_SAFE)::class` (`on bool` from 8.3, since the value depends on the build), more constants of the extensions every build has such as `(HASH_HMAC)::class` or, before PHP 8.5 deprecates it, `(MHASH_SHA1)::class`, arithmetic on numeric strings such as `(1 + '1')::class`, operator chains of any length or, before 8.2, `(1 . 2)::class` (`Cannot use "::class" on value of type int`, `on int` from 8.3); from PHP 8.5, `!` on a float is not folded, so `!1.5 and isset(1 + 1);` and `const A = !1.5 && $a;` are reported; and on PHP 7.4, folded arithmetic on an array literal, such as `[] - 1`, `[1] + 1` or `-[]`, and `~` on `true`, `false`, `null`, a folded `!` such as `~!2`, or an array (`Unsupported operand types`).
+- From PHP 8.0, `::class` on a parenthesized expression PHP folds to a value, such as `(-1)::class`, `(1 < 2)::class`, `(1 / 2)::class`, `(__NAMESPACE__)::class`, `(PHP_INT_MAX)::class`, comparisons of arrays such as `([] == [])::class`, build flags such as `(ZEND_THREAD_SAFE)::class` (`on bool` from 8.3, since the value depends on the build), more constants of the extensions every build has such as `(HASH_HMAC)::class` or, before PHP 8.5 deprecates it, `(MHASH_SHA1)::class`, arithmetic on numeric strings such as `(1 + '1')::class`, operator chains of any length or, before 8.2, `(1 . 2)::class` (`Cannot use "::class" on value of type int`, `on int` from 8.3).
+- From PHP 8.5, `!` on a float is not folded, so `!1.5 and isset(1 + 1);` and `const A = !1.5 && $a;` are reported.
+- On PHP 7.4, folded arithmetic on an array literal, such as `[] - 1`, `[1] + 1` or `-[]`, and `~` on `true`, `false`, `null`, a folded `!` such as `~!2`, or an array (`Unsupported operand types`).
 - Enum members read their modifiers like class members, so `public public function`, `public private function`, `final final function` and `public(set) const` in an enum are reported instead of passing or cascading. Abstract enum methods report PHP's message for the version (`Enum method E::f() must not be abstract` from PHP 8.5). `private(set)` on a method or constant reports `Cannot use the private(set) modifier on a method`.
-- On PHP 7.4, an abstract private method in a trait (`Abstract function T::f() cannot be declared private`). On PHP 8.1, a literal backed enum case value of the wrong type or one that repeats an earlier case (`Enum case type string does not match enum backing type int`, `Duplicate value in enum E for cases A and B`).
+- On PHP 7.4, an abstract private method in a trait (`Abstract function T::f() cannot be declared private`).
+- On PHP 8.1, a literal backed enum case value of the wrong type or one that repeats an earlier case (`Enum case type string does not match enum backing type int`, `Duplicate value in enum E for cases A and B`).
 - Property hooks: a `final` hook on a private property (`Property hook cannot be both final and private`), a `set` hook parameter with a default value (`Parameter $value of set hook A::$x must not have a default value`), a bare `return;` in a `get` hook of a typed property (`A method with return type must return a value`) and a returned value in a `set` hook (`A void method must not return a value`).
 - A `return` inside a `declare` block that the return type rejects, as in `function f(): int { declare(ticks=1) { return; } }` (`A function with return type must return a value`).
 - From PHP 8.0, a `null` default on a promoted parameter whose type is not nullable, as in `public function __construct(private int $a = null)` (`Cannot use null as default value for parameter $a of type int`), since promotion does not make the type implicitly nullable.
@@ -851,7 +859,8 @@ No user-facing changes.
 
 Initial release: a recursive descent PHP parser for PHP 8.3 syntax with arena allocation, zero-copy string borrowing, error recovery and nikic/PHP-Parser corpus compatibility.
 
-[Unreleased]: https://github.com/jorgsowa/rust-php-parser/compare/v0.26.0...HEAD
+[Unreleased]: https://github.com/jorgsowa/rust-php-parser/compare/v0.27.0...HEAD
+[0.27.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.26.0...v0.27.0
 [0.26.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.25.1...v0.26.0
 [0.25.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.25.0...v0.25.1
 [0.25.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.24.1...v0.25.0
