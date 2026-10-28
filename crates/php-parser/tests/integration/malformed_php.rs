@@ -533,6 +533,27 @@ fn errors_truncated_only_when_errors_were_dropped() {
 }
 
 #[test]
+fn compile_errors_do_not_crowd_out_a_syntax_error() {
+    use php_rs_parser::diagnostics::Phase;
+    for count in [150, 500] {
+        let source = format!("<?php {} foo(1 2);", "(unset) $a;".repeat(count));
+        let result = php_rs_parser::parse(&source);
+        assert_eq!(result.errors.len(), 100);
+        assert!(result.errors_truncated);
+        let syntax: Vec<String> = result
+            .errors
+            .iter()
+            .filter(|e| e.phase() == Phase::Parse)
+            .map(|e| e.to_string())
+            .collect();
+        assert!(
+            syntax.iter().any(|e| e == "expected ')', found integer"),
+            "{syntax:?}"
+        );
+    }
+}
+
+#[test]
 fn retracted_errors_do_not_count_toward_the_cap() {
     // Each empty element is reported until `=` makes the array a destructuring target.
     let source = format!("<?php [{}$a] = $b; foo(1 2);", ", ".repeat(150));
