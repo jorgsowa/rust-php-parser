@@ -134,7 +134,7 @@ jobs:
         include:
           # MSRV, kept in sync with `rust-version` in Cargo.toml.
           - os: ubuntu-latest
-            toolchain: '1.88'
+            toolchain: '1.89'
     steps:
       # Fixtures compare byte-for-byte, so stop Git on Windows from rewriting line endings.
       - name: Disable autocrlf

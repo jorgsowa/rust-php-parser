@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The minimum supported Rust version is 1.89.
+
 ### Fixed
 
 - A doc comment left unused before a class constant, property or enum case, as in `/** a */ #[A] /** b */ const K = 1;`, no longer attaches to the next member (`php-rs-parser`).
