@@ -1932,7 +1932,7 @@ fn parse_match_arms<'arena, 'src>(
             if seen_default {
                 parser.forbid(
                     ForbiddenRule::DuplicateMatchDefault,
-                    "match expression may only contain one default arm",
+                    "Match expressions may only contain one default arm",
                     tok.span,
                 );
             }
@@ -2015,7 +2015,7 @@ fn parse_yield_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<
     if parser.function_depth == 0 {
         parser.forbid(
             ForbiddenRule::YieldOutsideFunction,
-            "'yield' can only be used inside a function",
+            "The \"yield\" expression can only be used inside a function",
             parser.span_from(start),
         );
     }
@@ -2796,7 +2796,7 @@ fn try_parse_cast<'arena, 'src>(
     if cast_kind == CastKind::Unset && parser.version >= PhpVersion::Php80 {
         parser.forbid(
             ForbiddenRule::UnsetCast,
-            "the (unset) cast is no longer supported",
+            "The (unset) cast is no longer supported",
             kw_span,
         );
     }

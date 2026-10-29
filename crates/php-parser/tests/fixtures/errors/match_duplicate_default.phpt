@@ -2,9 +2,9 @@
 <?php $x = match ($v) { 1 => 'one', default => 'first', default => 'second' };
 ===errors <=7.4===
 'match expressions' requires PHP 8.0 or higher
-match expression may only contain one default arm
+Match expressions may only contain one default arm
 ===errors >=8.0===
-match expression may only contain one default arm
+Match expressions may only contain one default arm
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in Standard input code on line 1
 ===php_error >=8.0===

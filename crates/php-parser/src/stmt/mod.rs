@@ -1235,12 +1235,17 @@ pub(crate) fn check_generator_return_type(
         _ => false,
     });
     if !admits_generator {
+        let shown = parser.type_display(return_type);
+        let message = if parser.version >= PhpVersion::Php80 {
+            format!("Generator return type must be a supertype of Generator, {shown} given")
+        } else {
+            // PHP 7.4 names a nullable type without its `?`.
+            let shown = shown.trim_start_matches('?');
+            format!("Generators may only declare a return type of Generator, Iterator, Traversable, or iterable, {shown} is not permitted")
+        };
         parser.forbid(
             ForbiddenRule::GeneratorReturnType,
-            format!(
-                "Generator return type must be a supertype of Generator, {} given",
-                parser.type_display(return_type)
-            ),
+            message,
             return_type.span,
         );
     }
@@ -1711,7 +1716,7 @@ pub fn parse_param_list<'arena, 'src>(
         if let Some(hook) = hooks.first().filter(|_| is_readonly) {
             parser.forbid(
                 ForbiddenRule::ReadonlyPropertyHooks,
-                "A readonly property cannot declare hooks",
+                "Hooked properties cannot be readonly",
                 hook.span,
             );
         }
@@ -3907,12 +3912,12 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         (
             finder.read,
             ForbiddenRule::AppendOutsideWrite,
-            "cannot use [] for reading",
+            "Cannot use [] for reading",
         ),
         (
             finder.unset,
             ForbiddenRule::AppendOutsideWrite,
-            "cannot use [] for unsetting",
+            "Cannot use [] for unsetting",
         ),
         (
             finder.globals_append,

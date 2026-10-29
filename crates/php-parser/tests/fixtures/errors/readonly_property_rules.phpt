@@ -27,7 +27,7 @@ Readonly property cannot have default value
 'constructor property promotion' requires PHP 8.0 or higher
 'readonly parameters' requires PHP 8.1 or higher
 'property hooks' requires PHP 8.4 or higher
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
 'trailing comma in parameter list' requires PHP 8.0 or higher
 'readonly class' requires PHP 8.2 or higher
 'property hooks' requires PHP 8.4 or higher
@@ -36,8 +36,8 @@ A readonly property cannot declare hooks
 'constructor property promotion' requires PHP 8.0 or higher
 Readonly property cannot have default value
 static properties cannot be readonly
-A readonly property cannot declare hooks
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
+Hooked properties cannot be readonly
 'readonly anonymous classes' requires PHP 8.3 or higher
 Readonly property cannot have default value
 ===errors 8.0===
@@ -48,14 +48,14 @@ Readonly property cannot have default value
 'readonly parameters' requires PHP 8.1 or higher
 'readonly parameters' requires PHP 8.1 or higher
 'property hooks' requires PHP 8.4 or higher
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
 'readonly class' requires PHP 8.2 or higher
 'property hooks' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
 Readonly property cannot have default value
 static properties cannot be readonly
-A readonly property cannot declare hooks
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
+Hooked properties cannot be readonly
 'readonly anonymous classes' requires PHP 8.3 or higher
 Readonly property cannot have default value
 ===errors 8.1===
@@ -63,7 +63,7 @@ Readonly property cannot have default value
 Readonly property cannot have default value
 readonly promoted property must have type
 'property hooks' requires PHP 8.4 or higher
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
 'readonly class' requires PHP 8.2 or higher
 'property hooks' requires PHP 8.4 or higher
 readonly property must have type
@@ -71,8 +71,8 @@ readonly property must have type
 readonly promoted property must have type
 Readonly property cannot have default value
 static properties cannot be readonly
-A readonly property cannot declare hooks
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
+Hooked properties cannot be readonly
 'readonly anonymous classes' requires PHP 8.3 or higher
 Readonly property cannot have default value
 ===errors 8.2===
@@ -80,15 +80,15 @@ Readonly property cannot have default value
 Readonly property cannot have default value
 readonly promoted property must have type
 'property hooks' requires PHP 8.4 or higher
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
 'property hooks' requires PHP 8.4 or higher
 readonly property must have type
 'property hooks' requires PHP 8.4 or higher
 readonly promoted property must have type
 Readonly property cannot have default value
 static properties cannot be readonly
-A readonly property cannot declare hooks
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
+Hooked properties cannot be readonly
 'readonly anonymous classes' requires PHP 8.3 or higher
 Readonly property cannot have default value
 ===errors 8.3===
@@ -96,36 +96,36 @@ Readonly property cannot have default value
 Readonly property cannot have default value
 readonly promoted property must have type
 'property hooks' requires PHP 8.4 or higher
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
 'property hooks' requires PHP 8.4 or higher
 readonly property must have type
 'property hooks' requires PHP 8.4 or higher
 readonly promoted property must have type
 Readonly property cannot have default value
 static properties cannot be readonly
-A readonly property cannot declare hooks
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
+Hooked properties cannot be readonly
 Readonly property cannot have default value
 ===errors 8.4-8.5===
 Readonly property cannot have default value
 Readonly property cannot have default value
 readonly promoted property must have type
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
 readonly property must have type
 readonly promoted property must have type
 Readonly property cannot have default value
 static properties cannot be readonly
-A readonly property cannot declare hooks
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
+Hooked properties cannot be readonly
 Readonly property cannot have default value
 ===errors >=8.6===
 readonly promoted property must have type
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
 readonly property must have type
 readonly promoted property must have type
 static properties cannot be readonly
-A readonly property cannot declare hooks
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
+Hooked properties cannot be readonly
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'int' (T_STRING), expecting variable (T_VARIABLE) in Standard input code on line 3
 ===php_error 8.0===

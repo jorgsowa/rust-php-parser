@@ -1,7 +1,10 @@
 ===source===
 <?php
 class A { public int $x { get { yield 1; } } }
-===errors <=8.3===
+===errors <=7.4===
+'property hooks' requires PHP 8.4 or higher
+Generators may only declare a return type of Generator, Iterator, Traversable, or iterable, int is not permitted
+===errors 8.0-8.3===
 'property hooks' requires PHP 8.4 or higher
 Generator return type must be a supertype of Generator, int given
 ===errors >=8.4===

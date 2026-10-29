@@ -1,7 +1,11 @@
 ===source===
 <?php class Foo { abstract public string $bar; }
-===errors===
-properties cannot be abstract
+===errors <=8.2===
+Properties cannot be declared abstract
+===errors 8.3===
+Cannot use the abstract modifier on a property
+===errors >=8.4===
+Only hooked properties may be declared abstract
 ===php_error <=8.2===
 PHP Fatal error:  Properties cannot be declared abstract in Standard input code on line 1
 ===php_error 8.3===

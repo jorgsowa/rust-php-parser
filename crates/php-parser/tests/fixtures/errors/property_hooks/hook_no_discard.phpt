@@ -20,7 +20,7 @@ namespace {
 ===errors <=7.4===
 'property hooks' requires PHP 8.4 or higher
 Property hook list must not be empty
-Interfaces may only include hooked properties
+Interfaces may not include member variables
 expected class member, found 'class'
 missing closing '}'
 ===errors 8.0-8.3===

@@ -10,12 +10,12 @@ function refs($a, &$b, ...$rest) {}
 refs($a[], $b[], $c[]);
 namespace\test($arr[]);
 ===errors===
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
 ===php_error===
 PHP Fatal error:  Cannot use [] for reading in Standard input code on line 3
 ===ast===

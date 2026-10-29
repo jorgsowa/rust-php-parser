@@ -4,7 +4,7 @@ $a = <<<X
 {$b[]}
 X;
 ===errors===
-cannot use [] for reading
+Cannot use [] for reading
 ===php_error===
 PHP Fatal error:  Cannot use [] for reading in Standard input code on line 3
 ===ast===

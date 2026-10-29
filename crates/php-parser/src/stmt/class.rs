@@ -1129,7 +1129,7 @@ pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[Clas
                 if let Some(hook) = p.hooks.first() {
                     parser.forbid(
                         ForbiddenRule::ReadonlyPropertyHooks,
-                        "A readonly property cannot declare hooks",
+                        "Hooked properties cannot be readonly",
                         hook.span,
                     );
                 }
@@ -1156,7 +1156,7 @@ pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[Clas
                     if let Some(hook) = param.hooks.first() {
                         parser.forbid(
                             ForbiddenRule::ReadonlyPropertyHooks,
-                            "A readonly property cannot declare hooks",
+                            "Hooked properties cannot be readonly",
                             hook.span,
                         );
                     }
@@ -2490,7 +2490,11 @@ pub(super) fn parse_property_member<'arena, 'src>(
         // abstract is only valid on properties with hooks (abstract property hooks, PHP 8.4+)
         parser.forbid(
             ForbiddenRule::AbstractPropertyWithoutAbstractHook,
-            "properties cannot be abstract",
+            match parser.version {
+                v if v >= PhpVersion::Php84 => "Only hooked properties may be declared abstract",
+                PhpVersion::Php83 => "Cannot use the abstract modifier on a property",
+                _ => "Properties cannot be declared abstract",
+            },
             parser.span_from(member_start),
         );
     }
@@ -2596,7 +2600,11 @@ pub(super) fn parse_property_member<'arena, 'src>(
     if in_interface && hooks.is_empty() {
         parser.forbid(
             ForbiddenRule::InterfacePropertyWithoutHooks,
-            "Interfaces may only include hooked properties",
+            match parser.version {
+                v if v >= PhpVersion::Php84 => "Interfaces may only include hooked properties",
+                v if v >= PhpVersion::Php81 => "Interfaces may not include properties",
+                _ => "Interfaces may not include member variables",
+            },
             parser.span_from(member_start),
         );
     }
@@ -2626,7 +2634,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
         if let Some(hook) = hooks.first() {
             parser.forbid(
                 ForbiddenRule::ReadonlyPropertyHooks,
-                "A readonly property cannot declare hooks",
+                "Hooked properties cannot be readonly",
                 hook.span,
             );
         }

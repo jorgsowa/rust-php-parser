@@ -11,10 +11,10 @@
 ===errors 8.1===
 'readonly class' requires PHP 8.2 or higher
 ===errors 8.2-8.3===
-Cannot apply #[\AllowDynamicProperties] to readonly class R
+Cannot apply #[AllowDynamicProperties] to readonly class R
 ===errors 8.4===
 Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
-Cannot apply #[\AllowDynamicProperties] to readonly class R
+Cannot apply #[AllowDynamicProperties] to readonly class R
 Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
 ===php_error 8.0===
 PHP Parse error:  syntax error, unexpected identifier "readonly" in Standard input code on line 4

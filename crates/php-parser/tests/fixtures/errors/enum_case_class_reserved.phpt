@@ -2,9 +2,9 @@
 <?php enum Suit { case class; }
 ===errors <=8.0===
 'enums' requires PHP 8.1 or higher
-'class' cannot be used as an enum case name
+A class constant must not be called 'class'; it is reserved for class name fetching
 ===errors >=8.1===
-'class' cannot be used as an enum case name
+A class constant must not be called 'class'; it is reserved for class name fetching
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'Suit' (T_STRING) in Standard input code on line 1
 ===php_error 8.0===

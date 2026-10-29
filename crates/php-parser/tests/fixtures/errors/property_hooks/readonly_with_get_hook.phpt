@@ -8,12 +8,12 @@ class Foo {
 ===errors <=8.0===
 'readonly properties' requires PHP 8.1 or higher
 'property hooks' requires PHP 8.4 or higher
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
 ===errors 8.1-8.3===
 'property hooks' requires PHP 8.4 or higher
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
 ===errors >=8.4===
-A readonly property cannot declare hooks
+Hooked properties cannot be readonly
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'string' (T_STRING), expecting variable (T_VARIABLE) in Standard input code on line 3
 ===php_error 8.0===

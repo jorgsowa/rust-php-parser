@@ -9,14 +9,14 @@ $x = [&$a[]];
 f([$a[]]);
 unset($a[]['k']);
 ===errors===
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for unsetting
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for unsetting
 ===php_error===
 PHP Fatal error:  Cannot use [] for reading in Standard input code on line 2
 ===ast===

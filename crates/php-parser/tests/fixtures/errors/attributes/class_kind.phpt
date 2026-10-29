@@ -29,27 +29,27 @@ expected identifier, found end of file
 'readonly class' requires PHP 8.2 or higher
 'readonly anonymous classes' requires PHP 8.3 or higher
 ===errors 8.2===
-Cannot apply #[\AllowDynamicProperties] to interface J
-Cannot apply #[\AllowDynamicProperties] to trait U
-Cannot apply #[\AllowDynamicProperties] to readonly class R
+Cannot apply #[AllowDynamicProperties] to interface
+Cannot apply #[AllowDynamicProperties] to trait
+Cannot apply #[AllowDynamicProperties] to readonly class R
 'readonly anonymous classes' requires PHP 8.3 or higher
-Cannot apply #[\AllowDynamicProperties] to readonly class class@anonymous
+Cannot apply #[AllowDynamicProperties] to readonly class class@anonymous
 ===errors 8.3===
-Cannot apply #[\AllowDynamicProperties] to interface J
-Cannot apply #[\AllowDynamicProperties] to trait U
-Cannot apply #[\AllowDynamicProperties] to readonly class R
-Cannot apply #[\AllowDynamicProperties] to readonly class class@anonymous
+Cannot apply #[AllowDynamicProperties] to interface
+Cannot apply #[AllowDynamicProperties] to trait
+Cannot apply #[AllowDynamicProperties] to readonly class R
+Cannot apply #[AllowDynamicProperties] to readonly class class@anonymous
 ===errors 8.4===
-Cannot apply #[\AllowDynamicProperties] to interface J
-Cannot apply #[\AllowDynamicProperties] to trait U
-Cannot apply #[\AllowDynamicProperties] to enum F
-Cannot apply #[\AllowDynamicProperties] to readonly class R
+Cannot apply #[AllowDynamicProperties] to interface J
+Cannot apply #[AllowDynamicProperties] to trait U
+Cannot apply #[AllowDynamicProperties] to enum F
+Cannot apply #[AllowDynamicProperties] to readonly class R
 Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
 Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
 Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
 Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
 Attribute "Deprecated" cannot target class (allowed targets: function, method, class constant)
-Cannot apply #[\AllowDynamicProperties] to readonly class class@anonymous
+Cannot apply #[AllowDynamicProperties] to readonly class class@anonymous
 ===errors >=8.5===
 Cannot apply #[\Attribute] to interface I
 Cannot apply #[\Attribute] to trait T

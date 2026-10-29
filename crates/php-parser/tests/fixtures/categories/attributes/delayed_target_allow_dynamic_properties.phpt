@@ -22,14 +22,14 @@ enum DemoEnum {}
 ===errors 8.1===
 'readonly class' requires PHP 8.2 or higher
 ===errors 8.2-8.3===
-Cannot apply #[\AllowDynamicProperties] to trait DemoTrait
-Cannot apply #[\AllowDynamicProperties] to interface DemoInterface
-Cannot apply #[\AllowDynamicProperties] to readonly class DemoReadonly
+Cannot apply #[AllowDynamicProperties] to trait
+Cannot apply #[AllowDynamicProperties] to interface
+Cannot apply #[AllowDynamicProperties] to readonly class DemoReadonly
 ===errors 8.4===
-Cannot apply #[\AllowDynamicProperties] to trait DemoTrait
-Cannot apply #[\AllowDynamicProperties] to interface DemoInterface
-Cannot apply #[\AllowDynamicProperties] to readonly class DemoReadonly
-Cannot apply #[\AllowDynamicProperties] to enum DemoEnum
+Cannot apply #[AllowDynamicProperties] to trait DemoTrait
+Cannot apply #[AllowDynamicProperties] to interface DemoInterface
+Cannot apply #[AllowDynamicProperties] to readonly class DemoReadonly
+Cannot apply #[AllowDynamicProperties] to enum DemoEnum
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'class' (T_CLASS) in Standard input code on line 13
 ===php_error 8.0===

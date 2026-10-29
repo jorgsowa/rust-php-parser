@@ -330,11 +330,19 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                     ("deprecated", ClassKind::Class { .. }) => "class",
                     _ => return,
                 };
-                self.forbid(
-                    rule,
-                    format!("Cannot apply #[\\{attribute}] to {described} {name}"),
-                    span,
-                );
+                // Before 8.5 the attribute has no leading `\`; 8.2 and 8.3 omit an interface's or trait's name.
+                let message = match self.version {
+                    v if v >= PhpVersion::Php85 => {
+                        format!("Cannot apply #[\\{attribute}] to {described} {name}")
+                    }
+                    PhpVersion::Php82 | PhpVersion::Php83
+                        if matches!(kind, ClassKind::Interface | ClassKind::Trait) =>
+                    {
+                        format!("Cannot apply #[{attribute}] to {described}")
+                    }
+                    _ => format!("Cannot apply #[{attribute}] to {described} {name}"),
+                };
+                self.forbid(rule, message, span);
             }
             "nodiscard" => {
                 if site.is_hook {

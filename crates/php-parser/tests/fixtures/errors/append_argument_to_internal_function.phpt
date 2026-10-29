@@ -20,22 +20,22 @@ namespace A {
     namespace\strlen($a[]);
 }
 ===errors <=7.4===
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
 ===errors >=8.0===
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
-cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
+Cannot use [] for reading
 ===php_error===
 PHP Fatal error:  Cannot use [] for reading in Standard input code on line 3
 ===ast===

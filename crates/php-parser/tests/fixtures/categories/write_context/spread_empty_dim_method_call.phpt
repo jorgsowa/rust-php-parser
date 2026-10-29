@@ -2,7 +2,7 @@
 <?php
 $o->m(...$a[]);
 ===errors===
-cannot use [] for reading
+Cannot use [] for reading
 ===php_error <=8.1===
 PHP Fatal error:  Cannot use [] for reading in Standard input code on line 2
 ===php_error 8.2===

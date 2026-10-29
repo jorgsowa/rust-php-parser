@@ -45,9 +45,10 @@ pub(super) fn parse_enum<'arena, 'src>(
         let is_int_or_string = matches!(ty, Name::Simple { value, .. }
             if value.eq_ignore_ascii_case("int") || value.eq_ignore_ascii_case("string"));
         if !is_int_or_string {
+            let given = backing_type_display(parser, &ty, &name);
             parser.forbid(
                 ForbiddenRule::InvalidEnumBackingType,
-                "Enum backing type must be int or string",
+                format!("Enum backing type must be int or string, {given} given"),
                 ty.span(),
             );
         }
@@ -115,7 +116,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                 let span = parser.current_span();
                 parser.forbid(
                     ForbiddenRule::EnumCaseNamedClass,
-                    "'class' cannot be used as an enum case name",
+                    "A class constant must not be called 'class'; it is reserved for class name fetching",
                     span,
                 );
             }
@@ -412,6 +413,31 @@ fn check_case_value_81(
         return;
     }
     case_values.push((case_name.to_string(), key));
+}
+
+/// How PHP names a rejected backing type: a builtin type in lowercase, a class name resolved.
+fn backing_type_display(
+    parser: &Parser<'_, '_>,
+    ty: &Name<'_, '_>,
+    enum_name: &Ident<'_>,
+) -> String {
+    if let Name::Simple { value, .. } = ty {
+        let lower = value.to_ascii_lowercase();
+        match lower.as_str() {
+            "iterable" if parser.version >= PhpVersion::Php82 => return "Traversable|array".into(),
+            "float" | "bool" | "void" | "never" | "mixed" | "object" | "iterable" | "callable"
+            | "array" | "null" | "false" | "true" => return lower,
+            "self" if parser.version >= PhpVersion::Php85 => {
+                return match parser.namespace.as_deref() {
+                    Some(namespace) => format!("{namespace}\\{enum_name}"),
+                    None => enum_name.to_string(),
+                };
+            }
+            "self" | "parent" | "static" => return value.to_string(),
+            _ => {}
+        }
+    }
+    parser.resolve_class_name(ty)
 }
 
 /// Report abstract enum methods, one by one from PHP 8.5 and as one error before.

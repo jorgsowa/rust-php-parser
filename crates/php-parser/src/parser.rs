@@ -2151,9 +2151,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 .iter()
                 .any(|t| matches!(t.kind, TypeHintKind::Keyword(BuiltinType::False, _)));
             if has_true && has_false {
+                let verb = if self.version >= PhpVersion::Php84 {
+                    "must"
+                } else {
+                    "should"
+                };
                 self.forbid(
                     ForbiddenRule::RedundantType,
-                    "Type contains both true and false, bool must be used instead",
+                    format!("Type contains both true and false, bool {verb} be used instead"),
                     span,
                 );
             }

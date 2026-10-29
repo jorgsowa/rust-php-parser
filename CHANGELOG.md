@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - The minimum supported Rust version is 1.89.
+- Compile error messages follow PHP's wording for each version, as in `Cannot use [] for reading`, `Hooked properties cannot be readonly` and `Enum backing type must be int or string, bool given` (`php-rs-parser`).
 
 ### Fixed
 

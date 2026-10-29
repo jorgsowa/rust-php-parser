@@ -4,7 +4,9 @@
 enum E {}
 ===errors <=8.0===
 'enums' requires PHP 8.1 or higher
-===errors >=8.4===
+===errors 8.4===
+Cannot apply #[AllowDynamicProperties] to enum E
+===errors >=8.5===
 Cannot apply #[\AllowDynamicProperties] to enum E
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'E' (T_STRING) in Standard input code on line 3

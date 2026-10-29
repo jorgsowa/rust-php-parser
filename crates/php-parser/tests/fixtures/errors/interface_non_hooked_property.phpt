@@ -5,7 +5,11 @@ PHP rejects a property without hooks in an interface with "Interfaces may only i
 interface I {
     public int $x;
 }
-===errors===
+===errors <=8.0===
+Interfaces may not include member variables
+===errors 8.1-8.3===
+Interfaces may not include properties
+===errors >=8.4===
 Interfaces may only include hooked properties
 ===php_error <=8.0===
 PHP Fatal error:  Interfaces may not include member variables in Standard input code on line 3
