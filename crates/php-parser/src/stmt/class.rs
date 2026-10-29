@@ -2097,6 +2097,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
             &params,
             return_type.as_ref(),
             member_span,
+            in_interface,
         );
     }
 
@@ -2232,6 +2233,7 @@ fn type_members(ty: &TypeHint<'_, '_>, builtins: &mut Vec<BuiltinType>) -> bool 
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn check_magic_method(
     parser: &mut Parser<'_, '_>,
     signature: &MagicSignature,
@@ -2240,6 +2242,7 @@ fn check_magic_method(
     params: &[Param<'_, '_>],
     return_type: Option<&TypeHint<'_, '_>>,
     member_span: Span,
+    in_interface: bool,
 ) {
     // PHP leaves a variadic parameter out of the argument count.
     let fixed_params: Vec<&Param> = params.iter().filter(|p| !p.variadic).collect();
@@ -2251,6 +2254,7 @@ fn check_magic_method(
             &fixed_params,
             return_type,
             member_span,
+            in_interface,
         );
         return;
     }
@@ -2338,7 +2342,7 @@ fn check_magic_method(
     }
 }
 
-/// PHP 7.4's magic method checks: argument counts, and no `static` or return type on lifecycle methods.
+/// PHP 7.4's magic method checks: argument counts, and no `static` or return type on lifecycle methods outside interfaces.
 fn check_magic_method_74(
     parser: &mut Parser<'_, '_>,
     method_label: &str,
@@ -2346,6 +2350,7 @@ fn check_magic_method_74(
     fixed_params: &[&Param<'_, '_>],
     return_type: Option<&TypeHint<'_, '_>>,
     member_span: Span,
+    in_interface: bool,
 ) {
     let label = method_label.trim_end_matches("()");
     let (class, method) = label.rsplit_once("::").unwrap_or(("", label));
@@ -2356,7 +2361,7 @@ fn check_magic_method_74(
         "__clone" => "Clone method",
         _ => "",
     };
-    if !role.is_empty() {
+    if !role.is_empty() && !in_interface {
         if mods.is_static {
             parser.forbid(
                 ForbiddenRule::MagicMethodStatic,

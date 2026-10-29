@@ -8,7 +8,6 @@ interface I {
 }
 ===errors <=7.4===
 Destructor A::__destruct() cannot declare a return type
-Destructor I::__DESTRUCT() cannot declare a return type
 ===errors >=8.0===
 Method A::__destruct() cannot declare a return type
 Method I::__DESTRUCT() cannot declare a return type

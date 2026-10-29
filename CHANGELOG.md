@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - A doc comment left unused before a class constant, property or enum case, as in `/** a */ #[A] /** b */ const K = 1;`, no longer attaches to the next member (`php-rs-parser`).
 - Compile errors no longer push a syntax error out of the 100 errors `ParseResult::errors` keeps (`php-rs-parser`).
+- PHP 7.4 accepts a `static` or return-typed `__construct`, `__destruct` or `__clone` in an interface, as in `interface I { function __clone(): void; }` (`php-rs-parser`).
 
 ## [0.27.0] - 2026-10-28
 
