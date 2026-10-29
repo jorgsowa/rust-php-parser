@@ -4,11 +4,11 @@ function foo(int|string|int|string $x) { }
 
 ===errors <=7.4===
 'union types' requires PHP 8.0 or higher
-Duplicate type 'int' in union type
-Duplicate type 'string' in union type
+Duplicate type int is redundant
+Duplicate type string is redundant
 ===errors >=8.0===
-Duplicate type 'int' in union type
-Duplicate type 'string' in union type
+Duplicate type int is redundant
+Duplicate type string is redundant
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in Standard input code on line 2
 ===php_error >=8.0===

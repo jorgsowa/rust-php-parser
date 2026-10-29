@@ -21,10 +21,10 @@ class A extends B {
 ===errors 8.1===
 'DNF types' requires PHP 8.2 or higher
 ===errors >=8.5===
-Duplicate type 'self' in union type
-Duplicate type '\N\A' in union type
+Duplicate type N\A is redundant
+Duplicate type N\A is redundant
 Type N\A&N\X is redundant as it is more restrictive than type N\A
-Duplicate type 'parent' in union type
+Duplicate type N\B is redundant
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '|', expecting ';' or '{' in Standard input code on line 5
 ===php_error 8.0-8.1===

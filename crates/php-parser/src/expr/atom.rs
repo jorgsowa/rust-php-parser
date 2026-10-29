@@ -1387,7 +1387,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         parser.check_attributes(&anon_attributes, &AttrSite::class(kind, &scope.name));
         let class_name = scope.name.clone();
         let members = stmt::parse_class_members(parser, false, false, scope);
-        stmt::check_abstract_hooks(parser, &class_name, &members);
+        stmt::check_abstract_members(parser, &class_name, &members, true);
         if anon_readonly {
             stmt::check_readonly_class_members(parser, &class_name, &members);
         }

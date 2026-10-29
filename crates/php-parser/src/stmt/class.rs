@@ -61,14 +61,38 @@ pub(crate) fn validate_class_ref<'arena, 'src>(
         if super::class_keyword(value).is_none() {
             return;
         }
-        (
-            ForbiddenRule::ReservedClassReference,
-            format!("Cannot use \"{value}\" as {kind} name, as it is reserved"),
-        )
+        // PHP lowercases `static`, a keyword token, but keeps the case of `self` and `parent`.
+        let value = if value.eq_ignore_ascii_case("static") {
+            "static"
+        } else {
+            value
+        };
+        let message = match parser.version {
+            v if v >= PhpVersion::Php84 => {
+                format!("Cannot use \"{value}\" as {kind} name, as it is reserved")
+            }
+            PhpVersion::Php74 => format!("Cannot use '{value}' as {kind} name as it is reserved"),
+            _ => format!("Cannot use '{value}' as {kind} name, as it is reserved"),
+        };
+        (ForbiddenRule::ReservedClassReference, message)
     } else {
         return;
     };
     parser.forbid(rule, message, name.span());
+}
+
+/// PHP's error for a class, interface, trait or enum declared with a reserved name.
+pub(super) fn reserved_decl_name_message(version: PhpVersion, name: &str, kind: &str) -> String {
+    // Before 8.4 PHP calls every kind of declaration a class.
+    if version < PhpVersion::Php84 {
+        return format!("Cannot use '{name}' as class name as it is reserved");
+    }
+    let article = if kind.starts_with(['a', 'e', 'i', 'o', 'u']) {
+        "an"
+    } else {
+        "a"
+    };
+    format!("Cannot use \"{name}\" as {article} {kind} name as it is reserved")
 }
 
 pub(super) fn parse_class<'arena, 'src>(
@@ -106,7 +130,13 @@ pub(super) fn parse_class<'arena, 'src>(
     };
 
     if let Some(text) = name.as_str() {
-        if is_reserved_class_name(text, parser.version) || name_is_reserved_kw {
+        if is_reserved_class_name(text, parser.version) {
+            parser.forbid(
+                ForbiddenRule::ReservedClassName,
+                reserved_decl_name_message(parser.version, text, "class"),
+                name_span,
+            );
+        } else if name_is_reserved_kw {
             parser.forbid(
                 ForbiddenRule::ReservedClassName,
                 format!("Cannot use \"{}\" as a class name as it is reserved", text),
@@ -148,7 +178,7 @@ pub(super) fn parse_class<'arena, 'src>(
     let class_name = scope.name.clone();
     let members = parse_class_members(parser, false, false, scope);
     if !modifiers.is_abstract {
-        check_abstract_methods(parser, &class_name, &members);
+        check_abstract_members(parser, &class_name, &members, false);
     }
     if modifiers.is_readonly {
         check_readonly_class_members(parser, &class_name, &members);
@@ -805,89 +835,78 @@ pub(super) fn check_hook_bodies(
     }
 }
 
-/// Report abstract methods in a class that is not declared abstract.
-fn check_abstract_methods(
+/// Report abstract methods and property hooks in a class that is not declared abstract.
+pub(crate) fn check_abstract_members(
     parser: &mut Parser<'_, '_>,
     class_name: &str,
     members: &[ClassMember<'_, '_>],
+    is_anonymous: bool,
 ) {
-    let abstract_methods: Vec<(&str, Span)> = members
-        .iter()
-        .filter_map(|m| match &m.kind {
-            ClassMemberKind::Method(decl) if decl.modifiers.is_abstract => {
-                Some((decl.name.as_str()?, m.span))
-            }
-            _ => None,
-        })
-        .collect();
-    let Some(&(first, span)) = abstract_methods.first() else {
-        check_abstract_hooks(parser, class_name, members);
-        return;
-    };
-    let message = if parser.version >= PhpVersion::Php85 {
-        format!("Class {class_name} declares abstract method {first}() and must therefore be declared abstract")
-    } else {
-        let count = abstract_methods.len();
-        let names: Vec<String> = abstract_methods
-            .iter()
-            .take(3)
-            .map(|(name, _)| format!("{class_name}::{name}"))
-            .collect();
-        format!(
-            "Class {class_name} contains {count} abstract method{} and must therefore be declared abstract or implement the remaining methods ({}{})",
-            if count == 1 { "" } else { "s" },
-            names.join(", "),
-            if count > 3 { ", ..." } else { "" }
-        )
-    };
-    parser.forbid(ForbiddenRule::AbstractMemberInConcreteClass, message, span);
-}
-
-/// Report abstract property hooks in a class that is not declared abstract.
-pub(crate) fn check_abstract_hooks(
-    parser: &mut Parser<'_, '_>,
-    class_name: &str,
-    members: &[ClassMember<'_, '_>],
-) {
-    let mut abstract_hooks: Vec<(&str, &str)> = Vec::new();
-    let mut span = None;
+    let mut methods: Vec<(String, Span)> = Vec::new();
+    let mut hooks: Vec<(String, Span)> = Vec::new();
     for member in members {
-        let ClassMemberKind::Property(prop) = &member.kind else {
-            continue;
-        };
-        if !prop.modifiers.is_abstract {
-            continue;
-        }
-        for hook in prop.hooks.iter() {
-            if matches!(hook.body, PropertyHookBody::Abstract) {
-                span.get_or_insert(member.span);
-                let kind = match hook.kind {
-                    PropertyHookKind::Get => "get",
-                    _ => "set",
-                };
-                abstract_hooks.push((prop.name.as_str().unwrap_or_default(), kind));
+        match &member.kind {
+            ClassMemberKind::Method(decl) if decl.modifiers.is_abstract => {
+                if let Some(name) = decl.name.as_str() {
+                    methods.push((name.to_owned(), member.span));
+                }
             }
+            ClassMemberKind::Property(prop) if prop.modifiers.is_abstract => {
+                for hook in prop.hooks.iter() {
+                    if matches!(hook.body, PropertyHookBody::Abstract) {
+                        let kind = match hook.kind {
+                            PropertyHookKind::Get => "get",
+                            _ => "set",
+                        };
+                        hooks.push((format!("${}::{kind}", prop.name), member.span));
+                    }
+                }
+            }
+            _ => {}
         }
     }
-    let Some(span) = span else { return };
-    let count = abstract_hooks.len();
-    let names: Vec<String> = abstract_hooks
+    // From PHP 8.5 an anonymous class reports each abstract method where it is declared.
+    if is_anonymous && parser.version >= PhpVersion::Php85 {
+        methods.clear();
+    }
+    let (listed, plural_remaining) = if parser.version >= PhpVersion::Php85 {
+        if let Some((first, span)) = methods.first() {
+            let message = format!(
+                "Class {class_name} declares abstract method {first}() and must therefore be declared abstract"
+            );
+            parser.forbid(ForbiddenRule::AbstractMemberInConcreteClass, message, *span);
+            return;
+        }
+        (hooks, false)
+    } else {
+        // Before 8.5 PHP lists the abstract methods, then the hooks, in one error.
+        methods.extend(hooks);
+        (methods, true)
+    };
+    let Some(&(_, span)) = listed.first() else {
+        return;
+    };
+    let count = listed.len();
+    let plural = if count == 1 { "" } else { "s" };
+    let remaining = if plural_remaining { "s" } else { plural };
+    let names: Vec<String> = listed
         .iter()
         .take(3)
-        .map(|(name, kind)| format!("{class_name}::${name}::{kind}"))
+        .map(|(name, _)| format!("{class_name}::{name}"))
         .collect();
-    parser.error(ParseError::Forbidden {
-        rule: ForbiddenRule::AbstractMemberInConcreteClass,
-        message: format!(
-            "Class {class_name} contains {count} abstract method{} and must therefore be declared abstract or implement the remaining method{} ({}{})",
-            if count == 1 { "" } else { "s" },
-            if count == 1 { "" } else { "s" },
-            names.join(", "),
-            if count > 3 { ", ..." } else { "" }
+    let more = if count > 3 { ", ..." } else { "" };
+    let message = if is_anonymous && parser.version >= PhpVersion::Php85 {
+        format!(
+            "Class {class_name} must implement {count} abstract method{plural} ({}{more})",
+            names.join(", ")
         )
-        .into(),
-        span,
-    });
+    } else {
+        format!(
+        "Class {class_name} contains {count} abstract method{plural} and must therefore be declared abstract or implement the remaining method{remaining} ({}{more})",
+        names.join(", ")
+    )
+    };
+    parser.forbid(ForbiddenRule::AbstractMemberInConcreteClass, message, span);
 }
 
 pub fn parse_class_members<'arena, 'src>(
@@ -2056,7 +2075,9 @@ pub(super) fn parse_method_member<'arena, 'src>(
             member_span,
         );
     } else if mods.is_abstract {
-        if parser.class_scope.as_ref().is_some_and(|s| s.is_anonymous) {
+        let is_anonymous = parser.class_scope.as_ref().is_some_and(|s| s.is_anonymous);
+        // Before 8.5 PHP reports them with the class's other abstract members.
+        if is_anonymous && parser.version >= PhpVersion::Php85 {
             parser.forbid(
                 ForbiddenRule::AbstractAnonymousClassMethod,
                 format!("Anonymous class method {method_name}() must not be abstract"),
@@ -2782,7 +2803,13 @@ pub(super) fn parse_interface<'arena, 'src>(
     };
 
     if let Some(text) = name.as_str() {
-        if is_reserved_class_name(text, parser.version) || name_is_reserved_kw {
+        if is_reserved_class_name(text, parser.version) {
+            parser.forbid(
+                ForbiddenRule::KeywordAsDeclarationName,
+                reserved_decl_name_message(parser.version, text, "interface"),
+                name_span,
+            );
+        } else if name_is_reserved_kw {
             parser.forbid(
                 ForbiddenRule::KeywordAsDeclarationName,
                 format!("cannot use '{}' as interface name", text),
@@ -2846,7 +2873,13 @@ pub(super) fn parse_trait<'arena, 'src>(
     parser.advance();
     let name_is_reserved_kw = parser.is_reserved_keyword_as_decl_name();
     let name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-        if name_is_reserved_kw || is_reserved_class_name(text, parser.version) {
+        if is_reserved_class_name(text, parser.version) {
+            parser.forbid(
+                ForbiddenRule::KeywordAsDeclarationName,
+                reserved_decl_name_message(parser.version, text, "trait"),
+                span,
+            );
+        } else if name_is_reserved_kw {
             parser.forbid(
                 ForbiddenRule::KeywordAsDeclarationName,
                 format!("cannot use '{}' as trait name", text),

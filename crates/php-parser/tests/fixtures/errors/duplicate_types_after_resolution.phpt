@@ -19,39 +19,47 @@ namespace {
 }
 ===errors <=7.4===
 'union types' requires PHP 8.0 or higher
-Duplicate type 'F' in union type
+Duplicate type N\F is redundant
 'union types' requires PHP 8.0 or higher
-Duplicate type 'G' in union type
+Duplicate type N\G is redundant
 'union types' requires PHP 8.0 or higher
-Duplicate type 'B' in union type
+Duplicate type X\A is redundant
 'union types' requires PHP 8.0 or higher
-Duplicate type '\X\C' in union type
+Duplicate type X\C is redundant
 'union types' requires PHP 8.0 or higher
-Duplicate type 'E' in union type
+Duplicate type X\D is redundant
 'union types' requires PHP 8.0 or higher
-Duplicate type '\Traversable' in union type
+Type Traversable|iterable contains both iterable and Traversable, which is redundant
 'union types' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
-Duplicate type 'Foo' in union type
-===errors 8.0-8.4===
-Duplicate type 'F' in union type
-Duplicate type 'G' in union type
-Duplicate type 'B' in union type
-Duplicate type '\X\C' in union type
-Duplicate type 'E' in union type
-Duplicate type '\Traversable' in union type
-Duplicate type 'Foo' in union type
+Duplicate type Foo is redundant
+===errors 8.0-8.1===
+Duplicate type N\F is redundant
+Duplicate type N\G is redundant
+Duplicate type X\A is redundant
+Duplicate type X\C is redundant
+Duplicate type X\D is redundant
+Type Traversable|iterable contains both iterable and Traversable, which is redundant
+Duplicate type Foo is redundant
+===errors 8.2-8.4===
+Duplicate type N\F is redundant
+Duplicate type N\G is redundant
+Duplicate type X\A is redundant
+Duplicate type X\C is redundant
+Duplicate type X\D is redundant
+Duplicate type Traversable is redundant
+Duplicate type Foo is redundant
 ===errors >=8.5===
-Duplicate type 'F' in union type
-Duplicate type 'G' in union type
-Duplicate type 'B' in union type
-Duplicate type '\X\C' in union type
-Duplicate type 'E' in union type
-Duplicate type '\Traversable' in union type
-Duplicate type 'self' in union type
-Duplicate type '\X\A' in union type
-Duplicate type 'Foo' in union type
+Duplicate type N\F is redundant
+Duplicate type N\G is redundant
+Duplicate type X\A is redundant
+Duplicate type X\C is redundant
+Duplicate type X\D is redundant
+Duplicate type Traversable is redundant
+Duplicate type N\K is redundant
+Duplicate type X\A is redundant
+Duplicate type Foo is redundant
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '|', expecting '{' in Standard input code on line 5
 ===php_error >=8.0===

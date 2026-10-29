@@ -1,7 +1,9 @@
 ===source===
 <?php
 class A { use T { T::a as static; } }
-===errors===
+===errors <=8.2===
+Cannot use 'static' as method modifier
+===errors >=8.3===
 Cannot use "static" as method modifier in trait alias
 ===php_error <=8.2===
 PHP Fatal error:  Cannot use 'static' as method modifier in Standard input code on line 2

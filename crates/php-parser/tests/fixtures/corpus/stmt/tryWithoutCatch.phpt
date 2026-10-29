@@ -5,7 +5,7 @@ try {
     foo();
 }
 ===errors===
-expected catch or finally clause, found end of file
+Cannot use try without catch or finally
 ===php_error===
 PHP Fatal error:  Cannot use try without catch or finally in Standard input code on line 3
 ===ast===

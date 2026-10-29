@@ -9,7 +9,19 @@ class A {
         parent::h as i;
     }
 }
-===errors===
+===errors <=7.4===
+Cannot use 'self' as trait name as it is reserved
+'\parent' is an invalid class name
+Cannot use 'static' as trait name as it is reserved
+Cannot use 'self' as trait name as it is reserved
+Cannot use 'parent' as trait name as it is reserved
+===errors 8.0-8.3===
+Cannot use 'self' as trait name, as it is reserved
+'\parent' is an invalid class name
+Cannot use 'static' as trait name, as it is reserved
+Cannot use 'self' as trait name, as it is reserved
+Cannot use 'parent' as trait name, as it is reserved
+===errors >=8.4===
 Cannot use "self" as trait name, as it is reserved
 '\parent' is an invalid class name
 Cannot use "static" as trait name, as it is reserved

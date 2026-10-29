@@ -2077,10 +2077,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// Report a type listed twice in a union or intersection, comparing resolved class names
     /// case-insensitively; `bool` covers `true` and `false`, `iterable` covers `array`.
     fn check_duplicate_types(&mut self, type_hint: &TypeHint<'arena, 'src>) {
-        let (types, kind) = match &type_hint.kind {
-            TypeHintKind::Union(types) => (types, "union"),
-            TypeHintKind::Intersection(types) => (types, "intersection"),
-            _ => return,
+        let (TypeHintKind::Union(types) | TypeHintKind::Intersection(types)) = &type_hint.kind
+        else {
+            return;
         };
         let keys: Vec<Option<String>> = types.iter().map(|t| self.type_hint_key(t)).collect();
         let has = |name: &str| keys.iter().any(|k| k.as_deref() == Some(name));
@@ -2088,13 +2087,29 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         let mut seen = std::collections::HashSet::new();
         for (ty, key) in types.iter().zip(&keys) {
             let Some(key) = key else { continue };
-            let covered = has_bool && matches!(key.as_str(), "true" | "false")
-                || has_iterable && matches!(key.as_str(), "array" | "\\traversable");
-            if !seen.insert(key.clone()) || covered {
-                let text = &self.source[ty.span.start as usize..ty.span.end as usize];
+            let covered_by_iterable =
+                has_iterable && matches!(key.as_str(), "array" | "\\traversable");
+            let covered = has_bool && matches!(key.as_str(), "true" | "false");
+            if covered_by_iterable && self.version < PhpVersion::Php82 {
+                let message = format!(
+                    "Type {} contains both iterable and {}, which is redundant",
+                    self.type_display(type_hint),
+                    self.type_display(ty)
+                );
+                self.forbid(ForbiddenRule::DuplicateType, message, ty.span);
+            } else if !seen.insert(key.clone()) || covered || covered_by_iterable {
+                // From 8.2 `iterable` is `Traversable|array`, and PHP names the `array` it repeats.
+                let shown = match ty.kind {
+                    TypeHintKind::Keyword(BuiltinType::Iterable, _)
+                        if self.version >= PhpVersion::Php82 =>
+                    {
+                        "array".to_owned()
+                    }
+                    _ => self.type_display(ty),
+                };
                 self.forbid(
                     ForbiddenRule::DuplicateType,
-                    format!("Duplicate type '{text}' in {kind} type"),
+                    format!("Duplicate type {shown} is redundant"),
                     ty.span,
                 );
             }

@@ -25,7 +25,7 @@ pub(super) fn parse_enum<'arena, 'src>(
         } else if super::class::is_reserved_class_name(text, parser.version) {
             parser.forbid(
                 ForbiddenRule::ReservedEnumName,
-                format!("Cannot use \"{text}\" as an enum name as it is reserved"),
+                super::class::reserved_decl_name_message(parser.version, text, "enum"),
                 span,
             );
         }

@@ -4,7 +4,9 @@ $o = new class {
     abstract function f();
     abstract protected static function g();
 };
-===errors===
+===errors <=8.4===
+Class class@anonymous contains 2 abstract methods and must therefore be declared abstract or implement the remaining methods (class@anonymous::f, class@anonymous::g)
+===errors >=8.5===
 Anonymous class method f() must not be abstract
 Anonymous class method g() must not be abstract
 ===php_error <=8.4===

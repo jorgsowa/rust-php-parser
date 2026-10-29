@@ -1,6 +1,10 @@
 ===source===
 <?php class A extends PARENT {}
-===errors===
+===errors <=7.4===
+Cannot use 'PARENT' as class name as it is reserved
+===errors 8.0-8.3===
+Cannot use 'PARENT' as class name, as it is reserved
+===errors >=8.4===
 Cannot use "PARENT" as class name, as it is reserved
 ===php_error <=7.4===
 PHP Fatal error:  Cannot use 'PARENT' as class name as it is reserved in Standard input code on line 1

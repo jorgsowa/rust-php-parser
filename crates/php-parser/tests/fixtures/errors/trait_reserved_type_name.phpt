@@ -5,17 +5,22 @@ trait Mixed {}
 trait never {}
 trait iterable {}
 ===errors <=7.4===
-cannot use 'int' as trait name
-cannot use 'iterable' as trait name
+Cannot use 'int' as class name as it is reserved
+Cannot use 'iterable' as class name as it is reserved
 ===errors 8.0===
-cannot use 'int' as trait name
-cannot use 'Mixed' as trait name
-cannot use 'iterable' as trait name
-===errors >=8.1===
-cannot use 'int' as trait name
-cannot use 'Mixed' as trait name
-cannot use 'never' as trait name
-cannot use 'iterable' as trait name
+Cannot use 'int' as class name as it is reserved
+Cannot use 'Mixed' as class name as it is reserved
+Cannot use 'iterable' as class name as it is reserved
+===errors 8.1-8.3===
+Cannot use 'int' as class name as it is reserved
+Cannot use 'Mixed' as class name as it is reserved
+Cannot use 'never' as class name as it is reserved
+Cannot use 'iterable' as class name as it is reserved
+===errors >=8.4===
+Cannot use "int" as a trait name as it is reserved
+Cannot use "Mixed" as a trait name as it is reserved
+Cannot use "never" as a trait name as it is reserved
+Cannot use "iterable" as a trait name as it is reserved
 ===php_error <=8.3===
 PHP Fatal error:  Cannot use 'int' as class name as it is reserved in Standard input code on line 2
 ===php_error >=8.4===

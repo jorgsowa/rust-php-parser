@@ -8,14 +8,14 @@ function e(): (A&B)|(B&A) {}
 function f(int|string $x, ?Foo $y): (A&B)|(A&C)|null {}
 ===errors <=7.4===
 'union types' requires PHP 8.0 or higher
-Duplicate type 'FOO' in union type
+Duplicate type FOO is redundant
 'intersection types' requires PHP 8.1 or higher
-Duplicate type 'FOO' in intersection type
+Duplicate type FOO is redundant
 'union types' requires PHP 8.0 or higher
 'true type' requires PHP 8.2 or higher
-Duplicate type 'true' in union type
+Duplicate type true is redundant
 'union types' requires PHP 8.0 or higher
-Duplicate type 'array' in union type
+Type iterable|array contains both iterable and array, which is redundant
 'intersection types' requires PHP 8.1 or higher
 'union types' requires PHP 8.0 or higher
 'intersection types' requires PHP 8.1 or higher
@@ -28,12 +28,12 @@ Type B&A is redundant with type A&B
 'null type' requires PHP 8.0 or higher
 'DNF types' requires PHP 8.2 or higher
 ===errors 8.0===
-Duplicate type 'FOO' in union type
+Duplicate type FOO is redundant
 'intersection types' requires PHP 8.1 or higher
-Duplicate type 'FOO' in intersection type
+Duplicate type FOO is redundant
 'true type' requires PHP 8.2 or higher
-Duplicate type 'true' in union type
-Duplicate type 'array' in union type
+Duplicate type true is redundant
+Type iterable|array contains both iterable and array, which is redundant
 'intersection types' requires PHP 8.1 or higher
 'intersection types' requires PHP 8.1 or higher
 'DNF types' requires PHP 8.2 or higher
@@ -42,19 +42,19 @@ Type B&A is redundant with type A&B
 'intersection types' requires PHP 8.1 or higher
 'DNF types' requires PHP 8.2 or higher
 ===errors 8.1===
-Duplicate type 'FOO' in union type
-Duplicate type 'FOO' in intersection type
+Duplicate type FOO is redundant
+Duplicate type FOO is redundant
 'true type' requires PHP 8.2 or higher
-Duplicate type 'true' in union type
-Duplicate type 'array' in union type
+Duplicate type true is redundant
+Type iterable|array contains both iterable and array, which is redundant
 'DNF types' requires PHP 8.2 or higher
 Type B&A is redundant with type A&B
 'DNF types' requires PHP 8.2 or higher
 ===errors >=8.2===
-Duplicate type 'FOO' in union type
-Duplicate type 'FOO' in intersection type
-Duplicate type 'true' in union type
-Duplicate type 'array' in union type
+Duplicate type FOO is redundant
+Duplicate type FOO is redundant
+Duplicate type true is redundant
+Duplicate type array is redundant
 Type B&A is redundant with type A&B
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '|', expecting '{' in Standard input code on line 2

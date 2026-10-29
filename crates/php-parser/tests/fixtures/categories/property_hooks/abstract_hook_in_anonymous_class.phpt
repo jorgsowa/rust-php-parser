@@ -3,9 +3,11 @@
 new class { abstract public $p { get; } };
 ===errors <=8.3===
 'property hooks' requires PHP 8.4 or higher
-Class class@anonymous contains 1 abstract method and must therefore be declared abstract or implement the remaining method (class@anonymous::$p::get)
-===errors >=8.4===
-Class class@anonymous contains 1 abstract method and must therefore be declared abstract or implement the remaining method (class@anonymous::$p::get)
+Class class@anonymous contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (class@anonymous::$p::get)
+===errors 8.4===
+Class class@anonymous contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (class@anonymous::$p::get)
+===errors >=8.5===
+Class class@anonymous must implement 1 abstract method (class@anonymous::$p::get)
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 2
 ===php_error 8.0-8.2===

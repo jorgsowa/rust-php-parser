@@ -1,7 +1,7 @@
 ===source===
 <?php try { $x = 1; } echo 'after';
 ===errors===
-expected catch or finally clause, found 'echo'
+Cannot use try without catch or finally
 ===php_error===
 PHP Fatal error:  Cannot use try without catch or finally in Standard input code on line 1
 ===ast===

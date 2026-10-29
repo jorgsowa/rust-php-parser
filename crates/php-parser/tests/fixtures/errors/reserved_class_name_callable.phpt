@@ -1,7 +1,9 @@
 ===source===
 <?php
 class callable {}
-===errors===
+===errors <=8.3===
+Cannot use 'callable' as class name as it is reserved
+===errors >=8.4===
 Cannot use "callable" as a class name as it is reserved
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'callable' (T_CALLABLE), expecting identifier (T_STRING) in Standard input code on line 2

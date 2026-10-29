@@ -12,7 +12,7 @@ mod class;
 mod enum_decl;
 mod trait_use;
 
-pub(crate) use class::check_abstract_hooks;
+pub(crate) use class::check_abstract_members;
 pub(crate) use class::validate_class_ref;
 pub use class::{check_readonly_class_members, parse_class_members, parse_name_list};
 
@@ -2263,11 +2263,11 @@ fn parse_try_catch<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'
 
     // A body with a syntax error is where PHP stops, so it never asks for a clause.
     if catches.is_empty() && finally.is_none() && body_closed {
-        parser.error(ParseError::Expected {
-            expected: "catch or finally clause".into(),
-            found: parser.current_kind().description().into(),
-            span: parser.span_from(start),
-        });
+        parser.forbid(
+            ForbiddenRule::TryWithoutCatchOrFinally,
+            "Cannot use try without catch or finally",
+            parser.span_from(start),
+        );
     }
 
     let span = parser.span_from(start);

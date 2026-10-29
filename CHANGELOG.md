@@ -7,16 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `ForbiddenRule::TryWithoutCatchOrFinally` (`php-rs-parser`).
+
 ### Changed
 
 - The minimum supported Rust version is 1.89.
 - Compile error messages follow PHP's wording for each version, as in `Cannot use [] for reading`, `Hooked properties cannot be readonly` and `Enum backing type must be int or string, bool given` (`php-rs-parser`).
 - Readonly, set visibility and property hook errors name the property, as in `Readonly property C::$x must have type` (`php-rs-parser`).
+- Reserved class names, duplicate types and trait alias modifiers are reported in PHP's wording for each version, as in `Cannot use 'self' as class name as it is reserved` before 8.4 and `Duplicate type int is redundant` (`php-rs-parser`).
+- A `try` without `catch` or `finally` is a compile error, `Cannot use try without catch or finally`, not a syntax error (`php-rs-parser`).
 
 ### Fixed
 
 - A doc comment left unused before a class constant, property or enum case, as in `/** a */ #[A] /** b */ const K = 1;`, no longer attaches to the next member (`php-rs-parser`).
 - Compile errors no longer push a syntax error out of the 100 errors `ParseResult::errors` keeps (`php-rs-parser`).
+- Before PHP 8.5, abstract property hooks are counted with the abstract methods of a class in one error, and an anonymous class's abstract methods are reported together; from 8.5 an anonymous class reports `must implement N abstract methods` (`php-rs-parser`).
 - PHP 7.4 accepts a `static` or return-typed `__construct`, `__destruct` or `__clone` in an interface, as in `interface I { function __clone(): void; }` (`php-rs-parser`).
 - PHP 8.1's hint for a value on a non-backed enum case names the value's type, `: int` or `: string`, and is left out for other values, as in `enum E { case A = 1.5; }` (`php-rs-parser`).
 

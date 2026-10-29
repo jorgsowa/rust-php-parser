@@ -1,6 +1,10 @@
 ===source===
 <?php class A extends static {}
-===errors===
+===errors <=7.4===
+Cannot use 'static' as class name as it is reserved
+===errors 8.0-8.3===
+Cannot use 'static' as class name, as it is reserved
+===errors >=8.4===
 Cannot use "static" as class name, as it is reserved
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'static' (T_STATIC), expecting identifier (T_STRING) or namespace (T_NAMESPACE) or \\ (T_NS_SEPARATOR) in Standard input code on line 1
