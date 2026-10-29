@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `NameResolver` resolves a qualified name with one segment, which error recovery keeps for `Foo\` with nothing after the backslash, to `ResolvedName::Error` instead of a name ending in `\` (`php-ast`).
+
 ## [0.28.0] - 2026-10-29
 
 Error messages use PHP's newest wording, enum declarations parse as PHP's do, and owned AST nodes are smaller and allocate less.

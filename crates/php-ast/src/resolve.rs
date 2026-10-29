@@ -172,7 +172,7 @@ impl NameResolver {
                     Some(target) => ResolvedName::Fqn(format!("{target}\\{rest}")),
                     None => ResolvedName::Fqn(self.prefix_namespace(name.as_str())),
                 },
-                None => self.resolve(ctx, name.kind, &[name.as_str()]),
+                None => ResolvedName::Error,
             },
             _ => self.resolve_unqualified(ctx, name.as_str()),
         }
@@ -192,7 +192,11 @@ impl NameResolver {
                 .collect::<Vec<_>>()
                 .join("\\")
         };
-        if parts.is_empty() || kind == NameKind::Error {
+        // A qualified name with one part is what the parser keeps for `Foo\` with no segment after it.
+        if parts.is_empty()
+            || kind == NameKind::Error
+            || (kind == NameKind::Qualified && parts.len() < 2)
+        {
             return ResolvedName::Error;
         }
         match kind {
@@ -364,6 +368,20 @@ mod tests {
         let r = NameResolver::new();
         assert_eq!(
             r.resolve::<&str>(NameContext::Class, NameKind::Error, &[]),
+            ResolvedName::Error
+        );
+    }
+
+    #[test]
+    fn qualified_name_with_one_part() {
+        let r = resolver();
+        assert_eq!(
+            r.resolve(NameContext::Class, NameKind::Qualified, &["Foo"]),
+            ResolvedName::Error
+        );
+        let name = owned::Name::new("Foo", NameKind::Qualified, crate::Span::new(0, 4));
+        assert_eq!(
+            r.resolve_owned_name(&name, NameContext::Class),
             ResolvedName::Error
         );
     }

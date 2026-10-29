@@ -162,11 +162,12 @@ pub struct Name {
 impl Name {
     /// A name from its `\`-joined segments.
     pub fn new(text: impl Into<SmallStr>, kind: NameKind, span: Span) -> Self {
-        Self {
-            text: text.into(),
-            kind,
-            span,
-        }
+        let text = text.into();
+        debug_assert!(
+            !text.starts_with('\\') && !text.ends_with('\\') && !text.contains("\\\\"),
+            "name text has an empty segment: {text:?}"
+        );
+        Self { text, kind, span }
     }
 
     /// A name from its segments.
