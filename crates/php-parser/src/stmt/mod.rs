@@ -1639,15 +1639,6 @@ pub fn parse_param_list<'arena, 'src>(
             // is not consumed as part of the default expression.
             let default = parser.in_param_default(|p| p.with_no_brace_subscript(expr::parse_expr));
             expr::check_param_default(parser, &default);
-            if let (Some(ty), Some(name), false) = (&type_hint, name.as_str(), variadic) {
-                let owner = if first_modifier_span.is_some() && parser.version >= PhpVersion::Php80
-                {
-                    class::DefaultOwner::PromotedParam(name)
-                } else {
-                    class::DefaultOwner::Param(name)
-                };
-                class::check_typed_default(parser, ty, &default, owner);
-            }
             Some(default)
         } else {
             None
@@ -1703,6 +1694,18 @@ pub fn parse_param_list<'arena, 'src>(
         } else {
             parser.alloc_vec()
         };
+        // Hooks follow the default, so the promoted check waits for them.
+        if let (Some(default), Some(ty), Some(name), false) =
+            (&default, &type_hint, name.as_str(), variadic)
+        {
+            let promoted = first_modifier_span.is_some() || !hooks.is_empty();
+            let owner = if promoted && parser.version >= PhpVersion::Php80 {
+                class::DefaultOwner::PromotedParam(name)
+            } else {
+                class::DefaultOwner::Param(name)
+            };
+            class::check_typed_default(parser, ty, default, owner);
+        }
         class::check_hook_bodies(parser, &hooks, false, false, false);
 
         if let Some(hook) = hooks.first().filter(|_| is_readonly) {
