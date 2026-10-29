@@ -28,7 +28,7 @@ enum Tag {
     L13,
     L14,
     L15,
-    Heap = 0xFF,
+    Heap = 16,
 }
 
 impl Tag {
