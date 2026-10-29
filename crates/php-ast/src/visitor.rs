@@ -362,6 +362,9 @@ pub fn walk_stmt<'arena, 'src, V: Visitor<'arena, 'src> + ?Sized>(
             if let Some(scalar_type) = &enum_decl.scalar_type {
                 visitor.visit_name(scalar_type)?;
             }
+            if let Some(scalar_type) = &enum_decl.invalid_scalar_type {
+                visitor.visit_type_hint(scalar_type)?;
+            }
             for name in enum_decl.implements.iter() {
                 visitor.visit_name(name)?;
             }

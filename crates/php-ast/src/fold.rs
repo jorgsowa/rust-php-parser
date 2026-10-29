@@ -1181,6 +1181,10 @@ fn fold_enum_decl<'new, 'src, F: Fold<'src> + ?Sized>(
     EnumDecl {
         name: e.name,
         scalar_type: e.scalar_type.as_ref().map(|n| folder.fold_name(arena, n)),
+        invalid_scalar_type: e
+            .invalid_scalar_type
+            .as_ref()
+            .map(|t| folder.fold_type_hint(arena, t)),
         implements: {
             let mut v = ArenaVec::with_capacity_in(e.implements.len(), arena);
             for n in e.implements.iter() {

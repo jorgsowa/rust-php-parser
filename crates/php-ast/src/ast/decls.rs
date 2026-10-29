@@ -640,6 +640,9 @@ pub struct EnumDecl<'arena, 'src> {
     pub name: Ident<'src>,
     /// Backing type of a backed enum.
     pub scalar_type: Option<Name<'arena, 'src>>,
+    /// A backing type that is not a single name, as in `enum E: ?int`; always an error.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
+    pub invalid_scalar_type: Option<TypeHint<'arena, 'src>>,
     /// Implemented interfaces.
     pub implements: ArenaVec<'arena, Name<'arena, 'src>>,
     /// Enum body, flattened on serialization.
@@ -663,6 +666,7 @@ impl<'arena, 'src> EnumDecl<'arena, 'src> {
         Self {
             name,
             scalar_type: None,
+            invalid_scalar_type: None,
             implements: ArenaVec::new_in(arena),
             body,
             attributes: ArenaVec::new_in(arena),

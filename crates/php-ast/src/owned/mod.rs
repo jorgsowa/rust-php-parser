@@ -2299,6 +2299,9 @@ pub struct EnumDecl {
     pub name: Ident,
     /// Backing type of a backed enum.
     pub scalar_type: Option<Name>,
+    /// A backing type that is not a single name, as in `enum E: ?int`; always an error.
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
+    pub invalid_scalar_type: Option<TypeHint>,
     /// Implemented interfaces.
     pub implements: Box<[Name]>,
     /// Enum body.
@@ -2318,6 +2321,7 @@ impl EnumDecl {
         Self {
             name,
             scalar_type: None,
+            invalid_scalar_type: None,
             implements: Box::new([]),
             body,
             attributes: Box::new([]),
@@ -3281,6 +3285,7 @@ fn owned_enum_decl(en: &arena_ast::EnumDecl<'_, '_>) -> EnumDecl {
     EnumDecl {
         name: owned_ident(en.name),
         scalar_type: en.scalar_type.as_ref().map(owned_name),
+        invalid_scalar_type: en.invalid_scalar_type.as_ref().map(owned_type_hint),
         implements: en
             .implements
             .iter()
@@ -4480,6 +4485,10 @@ fn av_enum_decl<'a>(arena: &'a bumpalo::Bump, en: &EnumDecl) -> arena_ast::EnumD
     arena_ast::EnumDecl {
         name: av_ident(arena, &en.name),
         scalar_type: en.scalar_type.as_ref().map(|n| av_name(arena, n)),
+        invalid_scalar_type: en
+            .invalid_scalar_type
+            .as_ref()
+            .map(|t| av_type_hint(arena, t)),
         implements,
         body: arena_ast::EnumBody {
             members,

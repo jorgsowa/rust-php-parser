@@ -958,6 +958,7 @@ fn fold_owned_enum_decl<F: OwnedFold + ?Sized>(folder: &mut F, en: EnumDecl) -> 
     EnumDecl {
         name: en.name,
         scalar_type: en.scalar_type.map(|n| folder.fold_name(n)),
+        invalid_scalar_type: en.invalid_scalar_type.map(|t| folder.fold_type_hint(t)),
         implements: fold_owned_names(folder, en.implements),
         body: EnumBody {
             members: map_slice(en.body.members, |m| folder.fold_enum_member(m)),

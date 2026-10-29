@@ -39,23 +39,37 @@ pub(super) fn parse_enum<'arena, 'src>(
         parser.missing_ident()
     };
 
-    // Backed enum: enum Foo: string — the backing type must be `int` or `string`.
-    let scalar_type = if parser.eat(TokenKind::Colon).is_some() {
-        let ty = parser.parse_name();
-        let is_int_or_string = matches!(ty, Name::Simple { value, .. }
-            if value.eq_ignore_ascii_case("int") || value.eq_ignore_ascii_case("string"));
-        if !is_int_or_string {
-            let given = backing_type_display(parser, &ty, &name);
+    // Backed enum: enum Foo: string — PHP parses any type but accepts only `int` or `string`.
+    let mut scalar_type = None;
+    let mut invalid_scalar_type = None;
+    if parser.eat(TokenKind::Colon).is_some() {
+        let ty = parser.parse_type_hint();
+        let rejected = match backing_type_name(parser, ty) {
+            Ok(ty) => {
+                let is_int_or_string = matches!(ty, Name::Simple { value, .. }
+                    if value.eq_ignore_ascii_case("int") || value.eq_ignore_ascii_case("string"));
+                let rejected = (!is_int_or_string)
+                    .then(|| (backing_type_display(parser, &ty, &name), ty.span()));
+                scalar_type = Some(ty);
+                rejected
+            }
+            Err(ty) => {
+                let rejected = (parser.type_display(&ty), ty.span);
+                invalid_scalar_type = Some(ty);
+                Some(rejected)
+            }
+        };
+        // `int|int` and `\int` resolve to `int` and are reported for the type itself.
+        if let Some((given, span)) =
+            rejected.filter(|(given, _)| given != "int" && given != "string")
+        {
             parser.forbid(
                 ForbiddenRule::InvalidEnumBackingType,
                 format!("Enum backing type must be int or string, {given} given"),
-                ty.span(),
+                span,
             );
         }
-        Some(ty)
-    } else {
-        None
-    };
+    }
 
     let implements = if parser.eat(TokenKind::Implements).is_some() {
         let names = super::class::parse_name_list(parser);
@@ -81,6 +95,7 @@ pub(super) fn parse_enum<'arena, 'src>(
     let mut seen_methods = std::collections::HashSet::new();
     let mut case_values = Vec::new();
     let mut abstract_methods = Vec::new();
+    let is_backed = scalar_type.is_some() || invalid_scalar_type.is_some();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         if parser.check(TokenKind::Semicolon) {
             parser.error_expected("class member");
@@ -144,13 +159,13 @@ pub(super) fn parse_enum<'arena, 'src>(
                 .class_scope
                 .as_ref()
                 .map_or_else(String::new, |scope| scope.name.clone());
-            if scalar_type.is_some() && value.is_none() {
+            if is_backed && value.is_none() {
                 parser.forbid(
                     ForbiddenRule::MissingEnumCaseValue,
                     format!("Case {case_name} of backed enum {enum_name} must have a value"),
                     case_name_span,
                 );
-            } else if scalar_type.is_none() && value.is_some() {
+            } else if !is_backed && value.is_some() {
                 // If value.is_some(), then equals_token must be Some since value is only set when equals_token.is_some()
                 let span = equals_token
                     .expect("value.is_some() guarantees equals_token.is_some()")
@@ -338,6 +353,7 @@ pub(super) fn parse_enum<'arena, 'src>(
                 },
             );
             built.scalar_type = scalar_type;
+            built.invalid_scalar_type = invalid_scalar_type;
             built.implements = implements;
             built.attributes = attributes;
             built.doc_comment = doc_comment;
@@ -404,6 +420,24 @@ fn check_case_value_81(
         return;
     }
     case_values.push((case_name.to_string(), key));
+}
+
+/// The backing type as a name, or the type itself when it is not a single name.
+fn backing_type_name<'arena, 'src>(
+    parser: &Parser<'arena, 'src>,
+    ty: TypeHint<'arena, 'src>,
+) -> Result<Name<'arena, 'src>, TypeHint<'arena, 'src>> {
+    match ty.kind {
+        TypeHintKind::Named(name) => Ok(name),
+        TypeHintKind::Keyword(_, span) => Ok(Name::Simple {
+            value: &parser.source[span.start as usize..span.end as usize],
+            span,
+        }),
+        kind => Err(TypeHint {
+            kind,
+            span: ty.span,
+        }),
+    }
 }
 
 /// How PHP names a rejected backing type: a builtin type in lowercase, a class name resolved.

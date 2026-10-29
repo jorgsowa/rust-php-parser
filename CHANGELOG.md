@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `ForbiddenRule::TryWithoutCatchOrFinally` (`php-rs-parser`).
+- `EnumDecl::invalid_scalar_type` holds a backing type that is not a single name, as in `enum E: ?int` (`php-ast`, `php-rs-parser`, `php-printer`).
 
 ### Changed
 
@@ -28,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PHP 7.4 accepts a `static` or return-typed `__construct`, `__destruct` or `__clone` in an interface, as in `interface I { function __clone(): void; }` (`php-rs-parser`).
 - A constructor parameter with property hooks but no modifier is checked as a promoted property, so `int $z = null { get => 1; }` reports `Cannot use null as default value for parameter $z of type int` (`php-rs-parser`).
 - `enum self {}` and `enum parent {}` declare an enum and report `Cannot use "self" as an enum name as it is reserved` (`php-rs-parser`).
+- A nullable, union or intersection enum backing type, as in `enum E: ?int` or `enum E: Bar|int`, reports `Enum backing type must be int or string, ?int given` and parses the rest of the enum (`php-rs-parser`).
 
 ## [0.27.0] - 2026-10-28
 

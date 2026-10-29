@@ -501,6 +501,9 @@ impl<'src> Printer<'src> {
         if let Some(scalar) = &enum_decl.scalar_type {
             self.w(": ");
             self.print_name(scalar);
+        } else if let Some(scalar) = &enum_decl.invalid_scalar_type {
+            self.w(": ");
+            self.print_type_hint(scalar);
         }
         if !enum_decl.implements.is_empty() {
             self.w(" implements ");
