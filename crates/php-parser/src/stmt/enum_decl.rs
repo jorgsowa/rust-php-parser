@@ -60,9 +60,9 @@ pub(super) fn parse_enum<'arena, 'src>(
             }
         };
         // `int|int` and `\int` resolve to `int` and are reported for the type itself.
-        if let Some((given, span)) =
-            rejected.filter(|(given, _)| given != "int" && given != "string")
-        {
+        if let Some((given, span)) = rejected.filter(|(given, _)| {
+            !given.eq_ignore_ascii_case("int") && !given.eq_ignore_ascii_case("string")
+        }) {
             parser.forbid(
                 ForbiddenRule::InvalidEnumBackingType,
                 format!("Enum backing type must be int or string, {given} given"),
