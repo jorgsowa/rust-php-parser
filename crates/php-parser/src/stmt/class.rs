@@ -825,13 +825,14 @@ pub(crate) fn check_abstract_members(
     members: &[ClassMember<'_, '_>],
     is_anonymous: bool,
 ) {
-    let mut methods: Vec<(String, Span)> = Vec::new();
+    let mut first_method: Option<(&str, Span)> = None;
     let mut hooks: Vec<(String, Span)> = Vec::new();
     for member in members {
         match &member.kind {
-            ClassMemberKind::Method(decl) if decl.modifiers.is_abstract => {
-                if let Some(name) = decl.name.as_str() {
-                    methods.push((name.to_owned(), member.span));
+            // An anonymous class reports each abstract method where it is declared.
+            ClassMemberKind::Method(decl) if decl.modifiers.is_abstract && !is_anonymous => {
+                if let (None, Some(name)) = (first_method, decl.name.as_str()) {
+                    first_method = Some((name, member.span));
                 }
             }
             ClassMemberKind::Property(prop) if prop.modifiers.is_abstract => {
@@ -848,15 +849,12 @@ pub(crate) fn check_abstract_members(
             _ => {}
         }
     }
-    // An anonymous class reports each abstract method where it is declared.
-    if !is_anonymous {
-        if let Some((first, span)) = methods.first() {
-            let message = format!(
-                "Class {class_name} declares abstract method {first}() and must therefore be declared abstract"
-            );
-            parser.forbid(ForbiddenRule::AbstractMemberInConcreteClass, message, *span);
-            return;
-        }
+    if let Some((first, span)) = first_method {
+        let message = format!(
+            "Class {class_name} declares abstract method {first}() and must therefore be declared abstract"
+        );
+        parser.forbid(ForbiddenRule::AbstractMemberInConcreteClass, message, span);
+        return;
     }
     let Some(&(_, span)) = hooks.first() else {
         return;

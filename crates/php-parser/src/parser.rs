@@ -2090,14 +2090,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             let covered_by_iterable =
                 has_iterable && matches!(key.as_str(), "array" | "\\traversable");
             let covered = has_bool && matches!(key.as_str(), "true" | "false");
-            if covered_by_iterable && self.version < PhpVersion::Php82 {
-                let message = format!(
-                    "Type {} contains both iterable and {}, which is redundant",
-                    self.type_display(type_hint),
-                    self.type_display(ty)
-                );
-                self.forbid(ForbiddenRule::DuplicateType, message, ty.span);
-            } else if !seen.insert(key.clone()) || covered || covered_by_iterable {
+            if !seen.insert(key.clone()) || covered || covered_by_iterable {
                 // From 8.2 `iterable` is `Traversable|array`, and PHP names the `array` it repeats.
                 let shown = match ty.kind {
                     TypeHintKind::Keyword(BuiltinType::Iterable, _)

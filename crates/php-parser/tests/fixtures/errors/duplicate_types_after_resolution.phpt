@@ -29,20 +29,12 @@ Duplicate type X\C is redundant
 'union types' requires PHP 8.0 or higher
 Duplicate type X\D is redundant
 'union types' requires PHP 8.0 or higher
-Type Traversable|iterable contains both iterable and Traversable, which is redundant
+Duplicate type Traversable is redundant
 'union types' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
 'union types' requires PHP 8.0 or higher
 Duplicate type Foo is redundant
-===errors 8.0-8.1===
-Duplicate type N\F is redundant
-Duplicate type N\G is redundant
-Duplicate type X\A is redundant
-Duplicate type X\C is redundant
-Duplicate type X\D is redundant
-Type Traversable|iterable contains both iterable and Traversable, which is redundant
-Duplicate type Foo is redundant
-===errors 8.2-8.4===
+===errors 8.0-8.4===
 Duplicate type N\F is redundant
 Duplicate type N\G is redundant
 Duplicate type X\A is redundant

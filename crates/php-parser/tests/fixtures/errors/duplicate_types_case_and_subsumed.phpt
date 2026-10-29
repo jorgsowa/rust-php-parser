@@ -15,7 +15,7 @@ Duplicate type FOO is redundant
 'true type' requires PHP 8.2 or higher
 Duplicate type true is redundant
 'union types' requires PHP 8.0 or higher
-Type iterable|array contains both iterable and array, which is redundant
+Duplicate type array is redundant
 'intersection types' requires PHP 8.1 or higher
 'union types' requires PHP 8.0 or higher
 'intersection types' requires PHP 8.1 or higher
@@ -33,7 +33,7 @@ Duplicate type FOO is redundant
 Duplicate type FOO is redundant
 'true type' requires PHP 8.2 or higher
 Duplicate type true is redundant
-Type iterable|array contains both iterable and array, which is redundant
+Duplicate type array is redundant
 'intersection types' requires PHP 8.1 or higher
 'intersection types' requires PHP 8.1 or higher
 'DNF types' requires PHP 8.2 or higher
@@ -46,7 +46,7 @@ Duplicate type FOO is redundant
 Duplicate type FOO is redundant
 'true type' requires PHP 8.2 or higher
 Duplicate type true is redundant
-Type iterable|array contains both iterable and array, which is redundant
+Duplicate type array is redundant
 'DNF types' requires PHP 8.2 or higher
 Type B&A is redundant with type A&B
 'DNF types' requires PHP 8.2 or higher
