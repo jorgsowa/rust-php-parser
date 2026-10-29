@@ -448,7 +448,7 @@ impl Serialize for TypeHintKind {
 #[non_exhaustive]
 pub struct Arg {
     /// Name of a named argument.
-    pub name: Option<Name>,
+    pub name: Option<Box<Name>>,
     /// What the argument passes.
     pub kind: ArgKind,
     /// Source span.
@@ -458,7 +458,7 @@ pub struct Arg {
 impl Arg {
     /// Builds a `Arg` from its identifying fields with every other field empty. Set
     /// the rest by assignment, as with `Param::new`.
-    pub fn new(name: Option<Name>, kind: ArgKind, span: Span) -> Self {
+    pub fn new(name: Option<Box<Name>>, kind: ArgKind, span: Span) -> Self {
         Self { name, kind, span }
     }
 }
@@ -561,7 +561,7 @@ pub struct Stmt {
     pub span: Span,
     /// Preceding doc comment.
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Option::is_none"))]
-    pub doc_comment: Option<Comment>,
+    pub doc_comment: Option<Box<Comment>>,
 }
 
 impl Stmt {
@@ -628,9 +628,9 @@ pub enum StmtKind {
     /// A `switch` statement.
     Switch(Box<SwitchStmt>),
     /// `goto` with target label.
-    Goto(Ident),
+    Goto(Box<Ident>),
     /// A `label:` definition.
-    Label(Ident),
+    Label(Box<Ident>),
     /// A `declare(...)` statement.
     Declare(Box<DeclareStmt>),
     /// `unset(...)` targets.
@@ -1100,6 +1100,26 @@ impl Expr {
     }
 }
 
+/// Heredoc string.
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
+pub struct HeredocExpr {
+    /// Heredoc delimiter.
+    pub label: SmallStr,
+    /// Body segments.
+    pub parts: Box<[StringPart]>,
+}
+
+/// Nowdoc string.
+#[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
+pub struct NowdocExpr {
+    /// Nowdoc delimiter.
+    pub label: SmallStr,
+    /// Raw body text.
+    pub value: SmallStr,
+}
+
 /// The kind of an expression.
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
@@ -1114,19 +1134,9 @@ pub enum ExprKind {
     /// Double-quoted string with interpolation.
     InterpolatedString(Box<[StringPart]>),
     /// Heredoc string.
-    Heredoc {
-        /// Heredoc delimiter.
-        label: SmallStr,
-        /// Body segments.
-        parts: Box<[StringPart]>,
-    },
+    Heredoc(Box<HeredocExpr>),
     /// Nowdoc string.
-    Nowdoc {
-        /// Nowdoc delimiter.
-        label: SmallStr,
-        /// Raw body text.
-        value: SmallStr,
-    },
+    Nowdoc(Box<NowdocExpr>),
     /// Backtick shell command.
     ShellExec(Box<[StringPart]>),
     /// `true` or `false`.
@@ -1140,25 +1150,25 @@ pub enum ExprKind {
     /// Member name after `->`, `?->` or `::`.
     Identifier(SmallStr),
     /// Reference to a function, class or constant.
-    Name(Name),
+    Name(Box<Name>),
     /// Assignment.
-    Assign(AssignExpr),
+    Assign(Box<AssignExpr>),
     /// Binary operation.
-    Binary(BinaryExpr),
+    Binary(Box<BinaryExpr>),
     /// Prefix unary operation.
     UnaryPrefix(UnaryPrefixExpr),
     /// Postfix unary operation.
     UnaryPostfix(UnaryPostfixExpr),
     /// Ternary conditional.
-    Ternary(TernaryExpr),
+    Ternary(Box<TernaryExpr>),
     /// `??` expression.
-    NullCoalesce(NullCoalesceExpr),
+    NullCoalesce(Box<NullCoalesceExpr>),
     /// Function call.
-    FunctionCall(FunctionCallExpr),
+    FunctionCall(Box<FunctionCallExpr>),
     /// Array literal.
     Array(Box<[ArrayElement]>),
     /// Array offset access.
-    ArrayAccess(ArrayAccessExpr),
+    ArrayAccess(Box<ArrayAccessExpr>),
     /// `print` expression.
     Print(Box<Expr>),
     /// Parenthesized expression.
@@ -1184,23 +1194,23 @@ pub enum ExprKind {
     /// `clone` with property overrides.
     CloneWith(Box<Expr>, Box<Expr>),
     /// `new` expression.
-    New(NewExpr),
+    New(Box<NewExpr>),
     /// `->` property access.
-    PropertyAccess(PropertyAccessExpr),
+    PropertyAccess(Box<PropertyAccessExpr>),
     /// `?->` property access.
-    NullsafePropertyAccess(PropertyAccessExpr),
+    NullsafePropertyAccess(Box<PropertyAccessExpr>),
     /// `->` method call.
     MethodCall(Box<MethodCallExpr>),
     /// `?->` method call.
     NullsafeMethodCall(Box<MethodCallExpr>),
     /// `Class::$prop` access.
-    StaticPropertyAccess(StaticAccessExpr),
+    StaticPropertyAccess(Box<StaticAccessExpr>),
     /// `Class::method()` call.
     StaticMethodCall(Box<StaticMethodCallExpr>),
     /// `Class::$method()` call.
     StaticMethodCallDynamic(Box<StaticMethodCallDynamicExpr>),
     /// `Class::CONST` access.
-    ClassConstAccess(StaticAccessExpr),
+    ClassConstAccess(Box<StaticAccessExpr>),
     /// `Class::{expr}` constant access.
     ClassConstAccessDynamic {
         /// Class expression.
@@ -1220,15 +1230,15 @@ pub enum ExprKind {
     /// Arrow function.
     ArrowFunction(Box<ArrowFunctionExpr>),
     /// `match` expression.
-    Match(MatchExpr),
+    Match(Box<MatchExpr>),
     /// `throw` used as an expression.
     Throw(Box<Expr>),
     /// `yield` expression.
-    Yield(YieldExpr),
+    Yield(Box<YieldExpr>),
     /// `new class { ... }`.
     AnonymousClass(Box<ClassDecl>),
     /// First-class callable syntax.
-    CallableCreate(CallableCreateExpr),
+    CallableCreate(Box<CallableCreateExpr>),
     /// Skipped slot in a list destructuring pattern.
     Omit,
     /// Placeholder for an expression that failed to parse.
@@ -1459,11 +1469,11 @@ fn owned_chain_operand_mut(k: &mut ExprKind) -> Option<&mut Expr> {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct AssignExpr {
     /// Assignment target.
-    pub target: Box<Expr>,
+    pub target: Expr,
     /// Assignment operator.
     pub op: AssignOp,
     /// Assigned value.
-    pub value: Box<Expr>,
+    pub value: Expr,
     /// Whether this is a reference assignment (`=&`).
     #[cfg_attr(feature = "serde", serde(skip_serializing_if = "is_false"))]
     pub by_ref: bool,
@@ -1474,11 +1484,11 @@ pub struct AssignExpr {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct BinaryExpr {
     /// Left operand.
-    pub left: Box<Expr>,
+    pub left: Expr,
     /// Operator.
     pub op: BinaryOp,
     /// Right operand.
-    pub right: Box<Expr>,
+    pub right: Expr,
 }
 
 /// A prefix unary operation.
@@ -1506,11 +1516,11 @@ pub struct UnaryPostfixExpr {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct TernaryExpr {
     /// Condition.
-    pub condition: Box<Expr>,
+    pub condition: Expr,
     /// Value when true; `None` for `?:`.
-    pub then_expr: Option<Box<Expr>>,
+    pub then_expr: Option<Expr>,
     /// Value when false.
-    pub else_expr: Box<Expr>,
+    pub else_expr: Expr,
 }
 
 /// A `??` expression.
@@ -1518,9 +1528,9 @@ pub struct TernaryExpr {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct NullCoalesceExpr {
     /// Value tested for null.
-    pub left: Box<Expr>,
+    pub left: Expr,
     /// Fallback value.
-    pub right: Box<Expr>,
+    pub right: Expr,
 }
 
 /// A function call.
@@ -1528,7 +1538,7 @@ pub struct NullCoalesceExpr {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct FunctionCallExpr {
     /// Callee expression.
-    pub name: Box<Expr>,
+    pub name: Expr,
     /// Call arguments.
     pub args: Box<[Arg]>,
 }
@@ -1593,9 +1603,9 @@ impl ArrayElement {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct ArrayAccessExpr {
     /// Accessed expression.
-    pub array: Box<Expr>,
+    pub array: Expr,
     /// Offset; `None` for `$a[]`.
-    pub index: Option<Box<Expr>>,
+    pub index: Option<Expr>,
 }
 
 /// A `new` expression.
@@ -1603,7 +1613,7 @@ pub struct ArrayAccessExpr {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct NewExpr {
     /// Class name or expression.
-    pub class: Box<Expr>,
+    pub class: Expr,
     /// Constructor arguments.
     pub args: Box<[Arg]>,
 }
@@ -1613,9 +1623,9 @@ pub struct NewExpr {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct PropertyAccessExpr {
     /// Object expression.
-    pub object: Box<Expr>,
+    pub object: Expr,
     /// Property name or expression.
-    pub property: Box<Expr>,
+    pub property: Expr,
 }
 
 /// A `->` or `?->` method call.
@@ -1623,9 +1633,9 @@ pub struct PropertyAccessExpr {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct MethodCallExpr {
     /// Object expression.
-    pub object: Box<Expr>,
+    pub object: Expr,
     /// Method name or expression.
-    pub method: Box<Expr>,
+    pub method: Expr,
     /// Call arguments.
     pub args: Box<[Arg]>,
 }
@@ -1635,9 +1645,9 @@ pub struct MethodCallExpr {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct StaticAccessExpr {
     /// Class expression.
-    pub class: Box<Expr>,
+    pub class: Expr,
     /// Member name or expression.
-    pub member: Box<Expr>,
+    pub member: Expr,
 }
 
 /// A `Class::method()` call.
@@ -1645,9 +1655,9 @@ pub struct StaticAccessExpr {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct StaticMethodCallExpr {
     /// Class expression.
-    pub class: Box<Expr>,
+    pub class: Expr,
     /// Method name.
-    pub method: Box<Expr>,
+    pub method: Expr,
     /// Call arguments.
     pub args: Box<[Arg]>,
 }
@@ -1657,9 +1667,9 @@ pub struct StaticMethodCallExpr {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct StaticMethodCallDynamicExpr {
     /// Class expression.
-    pub class: Box<Expr>,
+    pub class: Expr,
     /// Method name expression.
-    pub method: Box<Expr>,
+    pub method: Expr,
     /// Call arguments.
     pub args: Box<[Arg]>,
 }
@@ -1761,7 +1771,7 @@ impl ArrowFunctionExpr {
 #[non_exhaustive]
 pub struct MatchExpr {
     /// Matched expression.
-    pub subject: Box<Expr>,
+    pub subject: Expr,
     /// Match arms.
     pub arms: Box<[MatchArm]>,
     /// The opening `{`. Printer layout detail, outside semver; not serialized.
@@ -1773,7 +1783,7 @@ pub struct MatchExpr {
 impl MatchExpr {
     /// Builds a `MatchExpr` from its identifying fields with every other field empty. Set
     /// the rest by assignment, as with `Param::new`.
-    pub fn new(subject: Box<Expr>, arms: Box<[MatchArm]>, brace_span: Span) -> Self {
+    pub fn new(subject: Expr, arms: Box<[MatchArm]>, brace_span: Span) -> Self {
         Self {
             subject,
             arms,
@@ -1799,9 +1809,9 @@ pub struct MatchArm {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct YieldExpr {
     /// Yielded key, if any.
-    pub key: Option<Box<Expr>>,
+    pub key: Option<Expr>,
     /// Yielded value, if any.
-    pub value: Option<Box<Expr>>,
+    pub value: Option<Expr>,
     /// Whether this is `yield from`.
     pub is_from: bool,
 }
@@ -2529,7 +2539,7 @@ fn owned_type_hint_kind(k: &arena_ast::TypeHintKind<'_, '_>) -> TypeHintKind {
 
 fn owned_arg(arg: &arena_ast::Arg<'_, '_>) -> Arg {
     Arg {
-        name: arg.name.as_ref().map(owned_name),
+        name: arg.name.as_ref().map(|n| Box::new(owned_name(n))),
         kind: match &arg.kind {
             arena_ast::ArgKind::Value(e) => ArgKind::Value(owned_expr(e)),
             arena_ast::ArgKind::Spread(e) => ArgKind::Spread(owned_expr(e)),
@@ -2659,14 +2669,14 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
         arena_ast::ExprKind::InterpolatedString(parts) => {
             ExprKind::InterpolatedString(owned_string_parts(parts))
         }
-        arena_ast::ExprKind::Heredoc { label, parts } => ExprKind::Heredoc {
+        arena_ast::ExprKind::Heredoc { label, parts } => ExprKind::Heredoc(Box::new(HeredocExpr {
             label: SmallStr::from(*label),
             parts: owned_string_parts(parts),
-        },
-        arena_ast::ExprKind::Nowdoc { label, value } => ExprKind::Nowdoc {
+        })),
+        arena_ast::ExprKind::Nowdoc { label, value } => ExprKind::Nowdoc(Box::new(NowdocExpr {
             label: SmallStr::from(*label),
             value: SmallStr::from(*value),
-        },
+        })),
         arena_ast::ExprKind::ShellExec(parts) => ExprKind::ShellExec(owned_string_parts(parts)),
         arena_ast::ExprKind::Bool(v) => ExprKind::Bool(*v),
         arena_ast::ExprKind::Null => ExprKind::Null,
@@ -2675,7 +2685,7 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
             ExprKind::VariableVariable(Box::new(owned_expr(inner)))
         }
         arena_ast::ExprKind::Identifier(s) => ExprKind::Identifier(s.as_str().into()),
-        arena_ast::ExprKind::Name(name) => ExprKind::Name(owned_name(name)),
+        arena_ast::ExprKind::Name(name) => ExprKind::Name(Box::new(owned_name(name))),
         arena_ast::ExprKind::Array(elems) => ExprKind::Array(
             elems
                 .iter()
@@ -2711,10 +2721,10 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
         arena_ast::ExprKind::CloneWith(obj, props) => {
             ExprKind::CloneWith(Box::new(owned_expr(obj)), Box::new(owned_expr(props)))
         }
-        arena_ast::ExprKind::New(n) => ExprKind::New(NewExpr {
-            class: Box::new(owned_expr(n.class)),
+        arena_ast::ExprKind::New(n) => ExprKind::New(Box::new(NewExpr {
+            class: owned_expr(n.class),
             args: owned_args(&n.args),
-        }),
+        })),
         arena_ast::ExprKind::Closure(c) => ExprKind::Closure(Box::new(ClosureExpr {
             is_static: c.is_static,
             by_ref: c.by_ref,
@@ -2745,8 +2755,8 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
                 attributes: owned_attrs(&f.attributes),
             }))
         }
-        arena_ast::ExprKind::Match(m) => ExprKind::Match(MatchExpr {
-            subject: Box::new(owned_expr(m.subject)),
+        arena_ast::ExprKind::Match(m) => ExprKind::Match(Box::new(MatchExpr {
+            subject: owned_expr(m.subject),
             arms: m
                 .arms
                 .iter()
@@ -2758,13 +2768,13 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
                 .collect::<Vec<_>>()
                 .into_boxed_slice(),
             brace_span: m.brace_span,
-        }),
+        })),
         arena_ast::ExprKind::Throw(e) => ExprKind::Throw(Box::new(owned_expr(e))),
-        arena_ast::ExprKind::Yield(y) => ExprKind::Yield(YieldExpr {
-            key: y.key.map(|e| Box::new(owned_expr(e))),
-            value: y.value.map(|e| Box::new(owned_expr(e))),
+        arena_ast::ExprKind::Yield(y) => ExprKind::Yield(Box::new(YieldExpr {
+            key: y.key.map(|e| owned_expr(e)),
+            value: y.value.map(|e| owned_expr(e)),
             is_from: y.is_from,
-        }),
+        })),
         arena_ast::ExprKind::AnonymousClass(cls) => {
             ExprKind::AnonymousClass(Box::new(owned_class_decl(cls)))
         }
@@ -2797,17 +2807,17 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
 /// Convert a chain link, given its already-converted chain operand.
 fn owned_link_kind(k: &arena_ast::ExprKind<'_, '_>, operand: Expr) -> ExprKind {
     match k {
-        arena_ast::ExprKind::Assign(a) => ExprKind::Assign(AssignExpr {
-            target: Box::new(operand),
+        arena_ast::ExprKind::Assign(a) => ExprKind::Assign(Box::new(AssignExpr {
+            target: operand,
             op: a.op,
-            value: Box::new(owned_expr(a.value)),
+            value: owned_expr(a.value),
             by_ref: a.by_ref,
-        }),
-        arena_ast::ExprKind::Binary(b) => ExprKind::Binary(BinaryExpr {
-            left: Box::new(operand),
+        })),
+        arena_ast::ExprKind::Binary(b) => ExprKind::Binary(Box::new(BinaryExpr {
+            left: operand,
             op: b.op,
-            right: Box::new(owned_expr(b.right)),
-        }),
+            right: owned_expr(b.right),
+        })),
         arena_ast::ExprKind::UnaryPrefix(u) => ExprKind::UnaryPrefix(UnaryPrefixExpr {
             op: u.op,
             operand: Box::new(operand),
@@ -2816,69 +2826,77 @@ fn owned_link_kind(k: &arena_ast::ExprKind<'_, '_>, operand: Expr) -> ExprKind {
             operand: Box::new(operand),
             op: u.op,
         }),
-        arena_ast::ExprKind::Ternary(t) => ExprKind::Ternary(TernaryExpr {
-            condition: Box::new(operand),
-            then_expr: t.then_expr.map(|e| Box::new(owned_expr(e))),
-            else_expr: Box::new(owned_expr(t.else_expr)),
-        }),
-        arena_ast::ExprKind::NullCoalesce(n) => ExprKind::NullCoalesce(NullCoalesceExpr {
-            left: Box::new(operand),
-            right: Box::new(owned_expr(n.right)),
-        }),
-        arena_ast::ExprKind::FunctionCall(f) => ExprKind::FunctionCall(FunctionCallExpr {
-            name: Box::new(operand),
-            args: owned_args(&f.args),
-        }),
-        arena_ast::ExprKind::ArrayAccess(a) => ExprKind::ArrayAccess(ArrayAccessExpr {
-            array: Box::new(operand),
-            index: a.index.map(|e| Box::new(owned_expr(e))),
-        }),
-        arena_ast::ExprKind::PropertyAccess(p) => ExprKind::PropertyAccess(PropertyAccessExpr {
-            object: Box::new(operand),
-            property: Box::new(owned_expr(p.property)),
-        }),
+        arena_ast::ExprKind::Ternary(t) => ExprKind::Ternary(Box::new(TernaryExpr {
+            condition: operand,
+            then_expr: t.then_expr.map(|e| owned_expr(e)),
+            else_expr: owned_expr(t.else_expr),
+        })),
+        arena_ast::ExprKind::NullCoalesce(n) => {
+            ExprKind::NullCoalesce(Box::new(NullCoalesceExpr {
+                left: operand,
+                right: owned_expr(n.right),
+            }))
+        }
+        arena_ast::ExprKind::FunctionCall(f) => {
+            ExprKind::FunctionCall(Box::new(FunctionCallExpr {
+                name: operand,
+                args: owned_args(&f.args),
+            }))
+        }
+        arena_ast::ExprKind::ArrayAccess(a) => ExprKind::ArrayAccess(Box::new(ArrayAccessExpr {
+            array: operand,
+            index: a.index.map(|e| owned_expr(e)),
+        })),
+        arena_ast::ExprKind::PropertyAccess(p) => {
+            ExprKind::PropertyAccess(Box::new(PropertyAccessExpr {
+                object: operand,
+                property: owned_expr(p.property),
+            }))
+        }
         arena_ast::ExprKind::NullsafePropertyAccess(p) => {
-            ExprKind::NullsafePropertyAccess(PropertyAccessExpr {
-                object: Box::new(operand),
-                property: Box::new(owned_expr(p.property)),
-            })
+            ExprKind::NullsafePropertyAccess(Box::new(PropertyAccessExpr {
+                object: operand,
+                property: owned_expr(p.property),
+            }))
         }
         arena_ast::ExprKind::MethodCall(m) => ExprKind::MethodCall(Box::new(MethodCallExpr {
-            object: Box::new(operand),
-            method: Box::new(owned_expr(m.method)),
+            object: operand,
+            method: owned_expr(m.method),
             args: owned_args(&m.args),
         })),
         arena_ast::ExprKind::NullsafeMethodCall(m) => {
             ExprKind::NullsafeMethodCall(Box::new(MethodCallExpr {
-                object: Box::new(operand),
-                method: Box::new(owned_expr(m.method)),
+                object: operand,
+                method: owned_expr(m.method),
                 args: owned_args(&m.args),
             }))
         }
         arena_ast::ExprKind::StaticPropertyAccess(s) => {
-            ExprKind::StaticPropertyAccess(StaticAccessExpr {
-                class: Box::new(operand),
-                member: Box::new(owned_expr(s.member)),
-            })
+            ExprKind::StaticPropertyAccess(Box::new(StaticAccessExpr {
+                class: operand,
+                member: owned_expr(s.member),
+            }))
         }
         arena_ast::ExprKind::StaticMethodCall(s) => {
             ExprKind::StaticMethodCall(Box::new(StaticMethodCallExpr {
-                class: Box::new(operand),
-                method: Box::new(owned_expr(s.method)),
+                class: operand,
+                method: owned_expr(s.method),
                 args: owned_args(&s.args),
             }))
         }
         arena_ast::ExprKind::StaticMethodCallDynamic(s) => {
             ExprKind::StaticMethodCallDynamic(Box::new(StaticMethodCallDynamicExpr {
-                class: Box::new(operand),
-                method: Box::new(owned_expr(s.method)),
+                class: operand,
+                method: owned_expr(s.method),
                 args: owned_args(&s.args),
             }))
         }
-        arena_ast::ExprKind::ClassConstAccess(s) => ExprKind::ClassConstAccess(StaticAccessExpr {
-            class: Box::new(operand),
-            member: Box::new(owned_expr(s.member)),
-        }),
+        arena_ast::ExprKind::ClassConstAccess(s) => {
+            ExprKind::ClassConstAccess(Box::new(StaticAccessExpr {
+                class: operand,
+                member: owned_expr(s.member),
+            }))
+        }
         arena_ast::ExprKind::ClassConstAccessDynamic { member, .. } => {
             ExprKind::ClassConstAccessDynamic {
                 class: Box::new(operand),
@@ -2891,31 +2909,33 @@ fn owned_link_kind(k: &arena_ast::ExprKind<'_, '_>, operand: Expr) -> ExprKind {
                 member: Box::new(owned_expr(member)),
             }
         }
-        arena_ast::ExprKind::CallableCreate(c) => ExprKind::CallableCreate(CallableCreateExpr {
-            kind: match &c.kind {
-                arena_ast::CallableCreateKind::Function(_) => {
-                    CallableCreateKind::Function(Box::new(operand))
-                }
-                arena_ast::CallableCreateKind::Method { method, .. } => {
-                    CallableCreateKind::Method {
-                        object: Box::new(operand),
-                        method: Box::new(owned_expr(method)),
+        arena_ast::ExprKind::CallableCreate(c) => {
+            ExprKind::CallableCreate(Box::new(CallableCreateExpr {
+                kind: match &c.kind {
+                    arena_ast::CallableCreateKind::Function(_) => {
+                        CallableCreateKind::Function(Box::new(operand))
                     }
-                }
-                arena_ast::CallableCreateKind::NullsafeMethod { method, .. } => {
-                    CallableCreateKind::NullsafeMethod {
-                        object: Box::new(operand),
-                        method: Box::new(owned_expr(method)),
+                    arena_ast::CallableCreateKind::Method { method, .. } => {
+                        CallableCreateKind::Method {
+                            object: Box::new(operand),
+                            method: Box::new(owned_expr(method)),
+                        }
                     }
-                }
-                arena_ast::CallableCreateKind::StaticMethod { method, .. } => {
-                    CallableCreateKind::StaticMethod {
-                        class: Box::new(operand),
-                        method: Box::new(owned_expr(method)),
+                    arena_ast::CallableCreateKind::NullsafeMethod { method, .. } => {
+                        CallableCreateKind::NullsafeMethod {
+                            object: Box::new(operand),
+                            method: Box::new(owned_expr(method)),
+                        }
                     }
-                }
-            },
-        }),
+                    arena_ast::CallableCreateKind::StaticMethod { method, .. } => {
+                        CallableCreateKind::StaticMethod {
+                            class: Box::new(operand),
+                            method: Box::new(owned_expr(method)),
+                        }
+                    }
+                },
+            }))
+        }
         _ => unreachable!("not a chain link"),
     }
 }
@@ -3000,7 +3020,7 @@ fn owned_stmt(stmt: &arena_ast::Stmt<'_, '_>) -> Stmt {
     Stmt {
         kind: owned_stmt_kind(&stmt.kind),
         span: stmt.span,
-        doc_comment: stmt.doc_comment.map(owned_comment),
+        doc_comment: stmt.doc_comment.map(|c| Box::new(owned_comment(c))),
     }
 }
 
@@ -3074,8 +3094,8 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
             },
             uses_alternative: s.uses_alternative,
         })),
-        arena_ast::StmtKind::Goto(ident) => StmtKind::Goto(owned_ident(*ident)),
-        arena_ast::StmtKind::Label(ident) => StmtKind::Label(owned_ident(*ident)),
+        arena_ast::StmtKind::Goto(ident) => StmtKind::Goto(Box::new(owned_ident(*ident))),
+        arena_ast::StmtKind::Label(ident) => StmtKind::Label(Box::new(owned_ident(*ident))),
         arena_ast::StmtKind::Declare(d) => StmtKind::Declare(Box::new(DeclareStmt {
             directives: d
                 .directives
@@ -3650,13 +3670,13 @@ fn av_leaf_kind<'a>(arena: &'a bumpalo::Bump, k: &ExprKind) -> arena_ast::ExprKi
         ExprKind::InterpolatedString(parts) => {
             arena_ast::ExprKind::InterpolatedString(av_string_parts(arena, parts))
         }
-        ExprKind::Heredoc { label, parts } => arena_ast::ExprKind::Heredoc {
-            label: arena.alloc_str(label),
-            parts: av_string_parts(arena, parts),
+        ExprKind::Heredoc(h) => arena_ast::ExprKind::Heredoc {
+            label: arena.alloc_str(&h.label),
+            parts: av_string_parts(arena, &h.parts),
         },
-        ExprKind::Nowdoc { label, value } => arena_ast::ExprKind::Nowdoc {
-            label: arena.alloc_str(label),
-            value: arena.alloc_str(value),
+        ExprKind::Nowdoc(n) => arena_ast::ExprKind::Nowdoc {
+            label: arena.alloc_str(&n.label),
+            value: arena.alloc_str(&n.value),
         },
         ExprKind::ShellExec(parts) => arena_ast::ExprKind::ShellExec(av_string_parts(arena, parts)),
         ExprKind::Bool(v) => arena_ast::ExprKind::Bool(*v),

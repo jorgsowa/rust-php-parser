@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A `try` without `catch` or `finally` is a compile error, `Cannot use try without catch or finally`, not a syntax error (`php-rs-parser`).
 - Owned AST strings are `SmallStr`, which stores up to 15 bytes inline instead of allocating; `ByteString` does the same. `SmallStr` dereferences to `str` and is the size of `Box<str>` (`php-ast`).
 - `owned::Name` stores its segments joined with `\` in `text`, replacing `parts`. Read it with `as_str`, `parts`, `last_part` or `part_count`, and build one with `Name::new` or `Name::from_parts`; the serialized form is unchanged (`php-ast`).
+- Owned expressions are 32 bytes, down from 48, and converting to the owned AST allocates about half as often. Assignment, binary, ternary, `??`, call, `new`, property, static and array access, `match` and `yield` nodes are boxed in `ExprKind` and hold their operands as `Expr` rather than `Box<Expr>`; `ExprKind::Name` and `ExprKind::CallableCreate` are boxed, and `Heredoc` and `Nowdoc` hold a boxed `HeredocExpr` and `NowdocExpr`. `Stmt::doc_comment`, `StmtKind::Goto`, `StmtKind::Label` and `Arg::name` are boxed, so `Stmt` is 40 bytes and `Arg` 56 (`php-ast`).
 
 ### Fixed
 

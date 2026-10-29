@@ -448,11 +448,11 @@ fn fold_owned_expr_kind<F: OwnedFold + ?Sized>(folder: &mut F, k: ExprKind) -> E
         ExprKind::InterpolatedString(parts) => {
             ExprKind::InterpolatedString(fold_owned_string_parts(folder, parts))
         }
-        ExprKind::Heredoc { label, parts } => ExprKind::Heredoc {
-            label,
-            parts: fold_owned_string_parts(folder, parts),
-        },
-        ExprKind::Nowdoc { label, value } => ExprKind::Nowdoc { label, value },
+        ExprKind::Heredoc(mut h) => {
+            h.parts = fold_owned_string_parts(folder, std::mem::take(&mut h.parts));
+            ExprKind::Heredoc(h)
+        }
+        ExprKind::Nowdoc(n) => ExprKind::Nowdoc(n),
         ExprKind::ShellExec(parts) => ExprKind::ShellExec(fold_owned_string_parts(folder, parts)),
         ExprKind::Bool(v) => ExprKind::Bool(v),
         ExprKind::Null => ExprKind::Null,
@@ -461,18 +461,18 @@ fn fold_owned_expr_kind<F: OwnedFold + ?Sized>(folder: &mut F, k: ExprKind) -> E
             ExprKind::VariableVariable(fold_boxed_expr(folder, inner))
         }
         ExprKind::Identifier(s) => ExprKind::Identifier(s),
-        ExprKind::Name(name) => ExprKind::Name(folder.fold_name(name)),
-        ExprKind::Assign(a) => ExprKind::Assign(AssignExpr {
-            target: fold_boxed_expr(folder, a.target),
+        ExprKind::Name(name) => ExprKind::Name(Box::new(folder.fold_name(*name))),
+        ExprKind::Assign(a) => ExprKind::Assign(Box::new(AssignExpr {
+            target: folder.fold_expr(a.target),
             op: a.op,
-            value: fold_boxed_expr(folder, a.value),
+            value: folder.fold_expr(a.value),
             by_ref: a.by_ref,
-        }),
-        ExprKind::Binary(b) => ExprKind::Binary(BinaryExpr {
-            left: fold_boxed_expr(folder, b.left),
+        })),
+        ExprKind::Binary(b) => ExprKind::Binary(Box::new(BinaryExpr {
+            left: folder.fold_expr(b.left),
             op: b.op,
-            right: fold_boxed_expr(folder, b.right),
-        }),
+            right: folder.fold_expr(b.right),
+        })),
         ExprKind::UnaryPrefix(u) => ExprKind::UnaryPrefix(UnaryPrefixExpr {
             op: u.op,
             operand: fold_boxed_expr(folder, u.operand),
@@ -481,19 +481,19 @@ fn fold_owned_expr_kind<F: OwnedFold + ?Sized>(folder: &mut F, k: ExprKind) -> E
             operand: fold_boxed_expr(folder, u.operand),
             op: u.op,
         }),
-        ExprKind::Ternary(t) => ExprKind::Ternary(TernaryExpr {
-            condition: fold_boxed_expr(folder, t.condition),
-            then_expr: fold_opt_boxed_expr(folder, t.then_expr),
-            else_expr: fold_boxed_expr(folder, t.else_expr),
-        }),
-        ExprKind::NullCoalesce(n) => ExprKind::NullCoalesce(NullCoalesceExpr {
-            left: fold_boxed_expr(folder, n.left),
-            right: fold_boxed_expr(folder, n.right),
-        }),
-        ExprKind::FunctionCall(f) => ExprKind::FunctionCall(FunctionCallExpr {
-            name: fold_boxed_expr(folder, f.name),
+        ExprKind::Ternary(t) => ExprKind::Ternary(Box::new(TernaryExpr {
+            condition: folder.fold_expr(t.condition),
+            then_expr: t.then_expr.map(|e| folder.fold_expr(e)),
+            else_expr: folder.fold_expr(t.else_expr),
+        })),
+        ExprKind::NullCoalesce(n) => ExprKind::NullCoalesce(Box::new(NullCoalesceExpr {
+            left: folder.fold_expr(n.left),
+            right: folder.fold_expr(n.right),
+        })),
+        ExprKind::FunctionCall(f) => ExprKind::FunctionCall(Box::new(FunctionCallExpr {
+            name: folder.fold_expr(f.name),
             args: fold_owned_args(folder, f.args),
-        }),
+        })),
         ExprKind::Array(elems) => ExprKind::Array(map_slice(elems, |e| ArrayElement {
             key: e.key.map(|k| folder.fold_expr(k)),
             kind: match e.kind {
@@ -503,10 +503,10 @@ fn fold_owned_expr_kind<F: OwnedFold + ?Sized>(folder: &mut F, k: ExprKind) -> E
             },
             span: e.span,
         })),
-        ExprKind::ArrayAccess(a) => ExprKind::ArrayAccess(ArrayAccessExpr {
-            array: fold_boxed_expr(folder, a.array),
-            index: fold_opt_boxed_expr(folder, a.index),
-        }),
+        ExprKind::ArrayAccess(a) => ExprKind::ArrayAccess(Box::new(ArrayAccessExpr {
+            array: folder.fold_expr(a.array),
+            index: a.index.map(|e| folder.fold_expr(e)),
+        })),
         ExprKind::Print(e) => ExprKind::Print(fold_boxed_expr(folder, e)),
         ExprKind::Parenthesized(e) => ExprKind::Parenthesized(fold_boxed_expr(folder, e)),
         ExprKind::Cast(kind, e) => ExprKind::Cast(kind, fold_boxed_expr(folder, e)),
@@ -521,60 +521,62 @@ fn fold_owned_expr_kind<F: OwnedFold + ?Sized>(folder: &mut F, k: ExprKind) -> E
         ExprKind::CloneWith(obj, props) => {
             ExprKind::CloneWith(fold_boxed_expr(folder, obj), fold_boxed_expr(folder, props))
         }
-        ExprKind::New(n) => ExprKind::New(NewExpr {
-            class: fold_boxed_expr(folder, n.class),
+        ExprKind::New(n) => ExprKind::New(Box::new(NewExpr {
+            class: folder.fold_expr(n.class),
             args: fold_owned_args(folder, n.args),
-        }),
-        ExprKind::PropertyAccess(p) => ExprKind::PropertyAccess(PropertyAccessExpr {
-            object: fold_boxed_expr(folder, p.object),
-            property: fold_boxed_expr(folder, p.property),
-        }),
+        })),
+        ExprKind::PropertyAccess(p) => ExprKind::PropertyAccess(Box::new(PropertyAccessExpr {
+            object: folder.fold_expr(p.object),
+            property: folder.fold_expr(p.property),
+        })),
         ExprKind::NullsafePropertyAccess(p) => {
-            ExprKind::NullsafePropertyAccess(PropertyAccessExpr {
-                object: fold_boxed_expr(folder, p.object),
-                property: fold_boxed_expr(folder, p.property),
-            })
+            ExprKind::NullsafePropertyAccess(Box::new(PropertyAccessExpr {
+                object: folder.fold_expr(p.object),
+                property: folder.fold_expr(p.property),
+            }))
         }
         ExprKind::MethodCall(m) => {
             let m = *m;
             ExprKind::MethodCall(Box::new(MethodCallExpr {
-                object: fold_boxed_expr(folder, m.object),
-                method: fold_boxed_expr(folder, m.method),
+                object: folder.fold_expr(m.object),
+                method: folder.fold_expr(m.method),
                 args: fold_owned_args(folder, m.args),
             }))
         }
         ExprKind::NullsafeMethodCall(m) => {
             let m = *m;
             ExprKind::NullsafeMethodCall(Box::new(MethodCallExpr {
-                object: fold_boxed_expr(folder, m.object),
-                method: fold_boxed_expr(folder, m.method),
+                object: folder.fold_expr(m.object),
+                method: folder.fold_expr(m.method),
                 args: fold_owned_args(folder, m.args),
             }))
         }
-        ExprKind::StaticPropertyAccess(s) => ExprKind::StaticPropertyAccess(StaticAccessExpr {
-            class: fold_boxed_expr(folder, s.class),
-            member: fold_boxed_expr(folder, s.member),
-        }),
+        ExprKind::StaticPropertyAccess(s) => {
+            ExprKind::StaticPropertyAccess(Box::new(StaticAccessExpr {
+                class: folder.fold_expr(s.class),
+                member: folder.fold_expr(s.member),
+            }))
+        }
         ExprKind::StaticMethodCall(s) => {
             let s = *s;
             ExprKind::StaticMethodCall(Box::new(StaticMethodCallExpr {
-                class: fold_boxed_expr(folder, s.class),
-                method: fold_boxed_expr(folder, s.method),
+                class: folder.fold_expr(s.class),
+                method: folder.fold_expr(s.method),
                 args: fold_owned_args(folder, s.args),
             }))
         }
         ExprKind::StaticMethodCallDynamic(s) => {
             let s = *s;
             ExprKind::StaticMethodCallDynamic(Box::new(StaticMethodCallDynamicExpr {
-                class: fold_boxed_expr(folder, s.class),
-                method: fold_boxed_expr(folder, s.method),
+                class: folder.fold_expr(s.class),
+                method: folder.fold_expr(s.method),
                 args: fold_owned_args(folder, s.args),
             }))
         }
-        ExprKind::ClassConstAccess(s) => ExprKind::ClassConstAccess(StaticAccessExpr {
-            class: fold_boxed_expr(folder, s.class),
-            member: fold_boxed_expr(folder, s.member),
-        }),
+        ExprKind::ClassConstAccess(s) => ExprKind::ClassConstAccess(Box::new(StaticAccessExpr {
+            class: folder.fold_expr(s.class),
+            member: folder.fold_expr(s.member),
+        })),
         ExprKind::ClassConstAccessDynamic { class, member } => ExprKind::ClassConstAccessDynamic {
             class: fold_boxed_expr(folder, class),
             member: fold_boxed_expr(folder, member),
@@ -610,21 +612,21 @@ fn fold_owned_expr_kind<F: OwnedFold + ?Sized>(folder: &mut F, k: ExprKind) -> E
                 attributes: fold_owned_attrs(folder, f.attributes),
             }))
         }
-        ExprKind::Match(m) => ExprKind::Match(MatchExpr {
-            subject: fold_boxed_expr(folder, m.subject),
+        ExprKind::Match(m) => ExprKind::Match(Box::new(MatchExpr {
+            subject: folder.fold_expr(m.subject),
             arms: map_slice(m.arms, |arm| folder.fold_match_arm(arm)),
             brace_span: m.brace_span,
-        }),
+        })),
         ExprKind::Throw(e) => ExprKind::Throw(fold_boxed_expr(folder, e)),
-        ExprKind::Yield(y) => ExprKind::Yield(YieldExpr {
-            key: fold_opt_boxed_expr(folder, y.key),
-            value: fold_opt_boxed_expr(folder, y.value),
+        ExprKind::Yield(y) => ExprKind::Yield(Box::new(YieldExpr {
+            key: y.key.map(|e| folder.fold_expr(e)),
+            value: y.value.map(|e| folder.fold_expr(e)),
             is_from: y.is_from,
-        }),
+        })),
         ExprKind::AnonymousClass(cls) => {
             ExprKind::AnonymousClass(Box::new(fold_owned_class_decl(folder, *cls)))
         }
-        ExprKind::CallableCreate(c) => ExprKind::CallableCreate(CallableCreateExpr {
+        ExprKind::CallableCreate(c) => ExprKind::CallableCreate(Box::new(CallableCreateExpr {
             kind: match c.kind {
                 CallableCreateKind::Function(e) => {
                     CallableCreateKind::Function(fold_boxed_expr(folder, e))
@@ -646,7 +648,7 @@ fn fold_owned_expr_kind<F: OwnedFold + ?Sized>(folder: &mut F, k: ExprKind) -> E
                     }
                 }
             },
-        }),
+        })),
         ExprKind::Omit => ExprKind::Omit,
         ExprKind::Error => ExprKind::Error,
     }
@@ -672,7 +674,7 @@ pub fn fold_owned_param<F: OwnedFold + ?Sized>(folder: &mut F, p: Param) -> Para
 /// Folds an argument, recursing into its children.
 pub fn fold_owned_arg<F: OwnedFold + ?Sized>(folder: &mut F, arg: Arg) -> Arg {
     Arg {
-        name: arg.name.map(|n| folder.fold_name(n)),
+        name: arg.name.map(|n| Box::new(folder.fold_name(*n))),
         kind: match arg.kind {
             ArgKind::Value(e) => ArgKind::Value(folder.fold_expr(e)),
             ArgKind::Spread(e) => ArgKind::Spread(folder.fold_expr(e)),
@@ -995,12 +997,12 @@ mod tests {
 
     fn assign(target: Expr, value: Expr) -> Expr {
         Expr {
-            kind: ExprKind::Assign(AssignExpr {
-                target: Box::new(target),
+            kind: ExprKind::Assign(Box::new(AssignExpr {
+                target,
                 op: AssignOp::Assign,
-                value: Box::new(value),
+                value,
                 by_ref: false,
-            }),
+            })),
             span: Span::DUMMY,
         }
     }

@@ -555,8 +555,8 @@ pub fn walk_owned_expr<V: OwnedVisitor + ?Sized>(
                 }
             }
         }
-        ExprKind::Heredoc { parts, .. } => {
-            for part in parts.iter() {
+        ExprKind::Heredoc(h) => {
+            for part in h.parts.iter() {
                 if let StringPart::Expr(e) = part {
                     visitor.visit_expr(e)?;
                 }
@@ -1290,11 +1290,7 @@ mod tests {
 
     fn binary(left: Expr, op: BinaryOp, right: Expr) -> Expr {
         Expr {
-            kind: ExprKind::Binary(BinaryExpr {
-                left: Box::new(left),
-                op,
-                right: Box::new(right),
-            }),
+            kind: ExprKind::Binary(Box::new(BinaryExpr { left, op, right })),
             span: Span::DUMMY,
         }
     }
@@ -1339,12 +1335,12 @@ mod tests {
     fn counts_variables() {
         // $x = $y + $z;
         let p = program([expr_stmt(Expr {
-            kind: ExprKind::Assign(AssignExpr {
-                target: Box::new(dummy_var("x")),
+            kind: ExprKind::Assign(Box::new(AssignExpr {
+                target: dummy_var("x"),
                 op: AssignOp::Assign,
-                value: Box::new(binary(dummy_var("y"), BinaryOp::Add, dummy_var("z"))),
+                value: binary(dummy_var("y"), BinaryOp::Add, dummy_var("z")),
                 by_ref: false,
-            }),
+            })),
             span: Span::DUMMY,
         })]);
         let mut v = VarCounter { count: 0 };

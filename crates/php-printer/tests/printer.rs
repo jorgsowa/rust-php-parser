@@ -526,20 +526,14 @@ fn chain_operands_get_parentheses_from_precedence() {
         span: Span::DUMMY,
     };
     let var = |name: &str| expr(ExprKind::Variable(name.into()));
-    let binary = |left, op, right| {
-        expr(ExprKind::Binary(BinaryExpr {
-            left: Box::new(left),
-            op,
-            right: Box::new(right),
-        }))
-    };
+    let binary = |left, op, right| expr(ExprKind::Binary(Box::new(BinaryExpr { left, op, right })));
     // (($a + $b) * $c)->m() with no Parenthesized nodes: every chain link
     // binds looser than its parent and needs parentheses supplied.
     let sum = binary(var("a"), BinaryOp::Add, var("b"));
     let product = binary(sum, BinaryOp::Mul, var("c"));
     let call = expr(ExprKind::MethodCall(Box::new(MethodCallExpr {
-        object: Box::new(product),
-        method: Box::new(expr(ExprKind::Identifier("m".into()))),
+        object: product,
+        method: expr(ExprKind::Identifier("m".into())),
         args: Box::new([]),
     })));
     let program = Program {
