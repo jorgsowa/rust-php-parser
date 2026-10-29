@@ -23,6 +23,8 @@ pub(crate) use atom::{
     ArgListResult, CAST_KEYWORDS,
 };
 
+pub(crate) use folded_value::folded_case_value_type;
+
 use atom::{parse_atom, parse_function_call};
 
 /// Returns the "chain group" binding power for a non-associative token, if applicable.

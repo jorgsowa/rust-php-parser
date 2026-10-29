@@ -253,6 +253,18 @@ fn is_integer_key(bytes: &[u8]) -> bool {
         .unwrap_or(false)
 }
 
+/// `int` or `string` when constant expression `expr` folds to that type, as an enum case value must.
+pub(crate) fn folded_case_value_type(
+    parser: &Parser<'_, '_>,
+    expr: &Expr<'_, '_>,
+) -> Option<&'static str> {
+    match folded_value(parser, expr, 0, true)? {
+        Value::Int(_) => Some("int"),
+        Value::Str(_) => Some("string"),
+        _ => None,
+    }
+}
+
 /// The truthiness of the value PHP folds `expr` to, when it is computed here.
 pub(super) fn folded_value_truth(parser: &Parser<'_, '_>, expr: &Expr<'_, '_>) -> Option<bool> {
     folded_value(parser, expr, 0, false)?.truth()

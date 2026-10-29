@@ -154,11 +154,13 @@ pub(super) fn parse_enum<'arena, 'src>(
                 let span = equals_token
                     .expect("value.is_some() guarantees equals_token.is_some()")
                     .span;
-                let hint = if parser.version == PhpVersion::Php81 {
-                    ", try adding \": int\" to the enum declaration"
-                } else {
-                    ""
-                };
+                let hint = value
+                    .as_ref()
+                    .filter(|_| parser.version == PhpVersion::Php81)
+                    .and_then(|value| expr::folded_case_value_type(parser, value))
+                    .map_or_else(String::new, |ty| {
+                        format!(", try adding \": {ty}\" to the enum declaration")
+                    });
                 parser.forbid(
                     ForbiddenRule::PureEnumCaseValue,
                     format!("Case {case_name} of non-backed enum {enum_name} must not have a value{hint}"),
