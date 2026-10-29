@@ -16,16 +16,16 @@ pub(super) fn parse_enum<'arena, 'src>(
 
     let name_is_reserved_kw = parser.is_reserved_keyword_as_decl_name();
     let name = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
-        if name_is_reserved_kw {
-            parser.forbid(
-                ForbiddenRule::KeywordAsDeclarationName,
-                format!("cannot use '{}' as enum name", text),
-                span,
-            );
-        } else if super::class::is_reserved_class_name(text, parser.version) {
+        if super::class::is_reserved_class_name(text, parser.version) {
             parser.forbid(
                 ForbiddenRule::ReservedEnumName,
                 super::class::reserved_decl_name_message(text, "enum"),
+                span,
+            );
+        } else if name_is_reserved_kw {
+            parser.forbid(
+                ForbiddenRule::KeywordAsDeclarationName,
+                format!("cannot use '{}' as enum name", text),
                 span,
             );
         }

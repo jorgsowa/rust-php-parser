@@ -208,10 +208,16 @@ fn parse_stmt_inner<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<
             // followed by a label as a plain identifier, so `enum Enum {}` is a
             // valid declaration). Fully-reserved words like `match`/`list`/`fn`
             // cannot name an enum, so they correctly fall through to expression
-            // parsing here.
+            // parsing here. PHP lexes `self` and `parent` as plain names, so they
+            // start a declaration that is rejected for its reserved name.
             if matches!(
                 parser.peek_kind(),
-                Some(TokenKind::Identifier | TokenKind::Enum_)
+                Some(
+                    TokenKind::Identifier
+                        | TokenKind::Enum_
+                        | TokenKind::Self_
+                        | TokenKind::Parent_
+                )
             ) {
                 let span = parser.current_span();
                 parser.require_version(PhpVersion::Php81, "enums", span);

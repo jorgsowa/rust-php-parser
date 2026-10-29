@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - An abstract method in a concrete class is reported where it is declared, and an anonymous class with abstract property hooks reports `must implement N abstract methods` (`php-rs-parser`).
 - PHP 7.4 accepts a `static` or return-typed `__construct`, `__destruct` or `__clone` in an interface, as in `interface I { function __clone(): void; }` (`php-rs-parser`).
 - A constructor parameter with property hooks but no modifier is checked as a promoted property, so `int $z = null { get => 1; }` reports `Cannot use null as default value for parameter $z of type int` (`php-rs-parser`).
+- `enum self {}` and `enum parent {}` declare an enum and report `Cannot use "self" as an enum name as it is reserved` (`php-rs-parser`).
 
 ## [0.27.0] - 2026-10-28
 
