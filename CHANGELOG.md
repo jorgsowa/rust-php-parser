@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - An error that newer PHP versions reword is reported in the newest wording for every target version, as in `Cannot use "::class" on int` for PHP 8.0; the wording differs by version only where it names a feature the version lacks (`php-rs-parser`).
 - A `try` without `catch` or `finally` is a compile error, `Cannot use try without catch or finally`, not a syntax error (`php-rs-parser`).
 - Owned AST strings are `SmallStr`, which stores up to 15 bytes inline instead of allocating; `ByteString` does the same. `SmallStr` dereferences to `str` and is the size of `Box<str>` (`php-ast`).
+- `owned::Name` stores its segments joined with `\` in `text`, replacing `parts`. Read it with `as_str`, `parts`, `last_part` or `part_count`, and build one with `Name::new` or `Name::from_parts`; the serialized form is unchanged (`php-ast`).
 
 ### Fixed
 

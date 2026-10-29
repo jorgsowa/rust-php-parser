@@ -19,7 +19,7 @@ impl OwnedVisitor for Linter {
             ExprKind::Eval(_) => self.findings.push((expr.span.start, "avoid eval()")),
             ExprKind::FunctionCall(call) => {
                 if let ExprKind::Name(name) = &call.name.kind {
-                    if DEBUG_FUNCTIONS.contains(&&*name.parts.join("\\")) {
+                    if DEBUG_FUNCTIONS.contains(&name.as_str()) {
                         self.findings.push((expr.span.start, "leftover debug call"));
                     }
                 }

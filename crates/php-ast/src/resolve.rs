@@ -139,14 +139,13 @@ impl NameResolver {
     pub fn observe_owned_stmt(&mut self, stmt: &owned::Stmt) {
         match &stmt.kind {
             owned::StmtKind::Namespace(ns) => {
-                let name = ns.name.as_ref().map(|n| n.parts.join("\\"));
-                self.enter_namespace(name.as_deref());
+                self.enter_namespace(ns.name.as_ref().map(|n| n.as_str()));
             }
             owned::StmtKind::Use(decl) => {
                 for item in decl.uses.iter() {
                     self.add_import(
                         item.kind.unwrap_or(decl.kind),
-                        &item.name.parts.join("\\"),
+                        item.name.as_str(),
                         item.alias.as_ref().and_then(|a| a.as_str()),
                     );
                 }
@@ -162,7 +161,21 @@ impl NameResolver {
 
     /// Resolves an owned-AST name.
     pub fn resolve_owned_name(&self, name: &owned::Name, ctx: NameContext) -> ResolvedName {
-        self.resolve(ctx, name.kind, &name.parts)
+        if name.text.is_empty() || name.kind == NameKind::Error {
+            return ResolvedName::Error;
+        }
+        match name.kind {
+            NameKind::FullyQualified => ResolvedName::Fqn(name.join_parts()),
+            NameKind::Relative => ResolvedName::Fqn(self.prefix_namespace(name.as_str())),
+            NameKind::Qualified => match name.as_str().split_once('\\') {
+                Some((first, rest)) => match self.classes.get(&first.to_ascii_lowercase()) {
+                    Some(target) => ResolvedName::Fqn(format!("{target}\\{rest}")),
+                    None => ResolvedName::Fqn(self.prefix_namespace(name.as_str())),
+                },
+                None => self.resolve(ctx, name.kind, &[name.as_str()]),
+            },
+            _ => self.resolve_unqualified(ctx, name.as_str()),
+        }
     }
 
     /// Resolves a name given as its kind and `\`-separated segments.

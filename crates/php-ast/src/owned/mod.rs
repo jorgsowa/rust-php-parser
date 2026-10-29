@@ -145,16 +145,14 @@ impl PartialEq<&str> for Ident {
 //
 // `Name<'arena, 'src>` has three variants (Simple, Complex, Error) and a
 // custom Serialize that always emits `{"parts":[...],"kind":"...","span":{…}}`.
-// The owned version flattens them into a single struct and derives Serialize —
-// the JSON output is identical.
+// The owned version stores the joined text and serializes the same JSON.
 // ---------------------------------------------------------------------------
 
 /// A possibly qualified PHP name.
 #[derive(Debug, Clone)]
-#[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Name {
-    /// Name segments split on `\`.
-    pub parts: Box<[SmallStr]>,
+    /// Segments joined with `\`, without a leading `\` or `namespace\`; empty for an error name.
+    pub text: SmallStr,
     /// Qualification style.
     pub kind: NameKind,
     /// Source span.
@@ -162,6 +160,20 @@ pub struct Name {
 }
 
 impl Name {
+    /// A name from its `\`-joined segments.
+    pub fn new(text: impl Into<SmallStr>, kind: NameKind, span: Span) -> Self {
+        Self {
+            text: text.into(),
+            kind,
+            span,
+        }
+    }
+
+    /// A name from its segments.
+    pub fn from_parts<S: AsRef<str>>(parts: &[S], kind: NameKind, span: Span) -> Self {
+        Self::new(SmallStr::joined(parts), kind, span)
+    }
+
     /// Source range of the name.
     pub fn span(&self) -> Span {
         self.span
@@ -172,10 +184,40 @@ impl Name {
         self.kind
     }
 
+    /// The segments joined with `\`, without any leading backslash.
+    pub fn as_str(&self) -> &str {
+        &self.text
+    }
+
+    /// The segments split on `\`; none for an error name.
+    pub fn parts(&self) -> impl DoubleEndedIterator<Item = &str> + Clone + '_ {
+        (!self.text.is_empty())
+            .then(|| self.text.split('\\'))
+            .into_iter()
+            .flatten()
+    }
+
+    /// Number of segments.
+    pub fn part_count(&self) -> usize {
+        if self.text.is_empty() {
+            0
+        } else {
+            self.text.bytes().filter(|&b| b == b'\\').count() + 1
+        }
+    }
+
+    /// The last segment, the short name of a qualified name.
+    pub fn last_part(&self) -> &str {
+        self.text.rsplit('\\').next().unwrap_or("")
+    }
+
     /// Joins all parts with `\` and prepends `\` if fully qualified; empty for an error name.
     pub fn to_string_repr(&self) -> String {
         if self.kind == NameKind::FullyQualified {
-            crate::ast::fully_qualified(&self.parts)
+            let mut s = String::with_capacity(self.text.len() + 1);
+            s.push('\\');
+            s.push_str(&self.text);
+            s
         } else {
             self.join_parts()
         }
@@ -183,7 +225,25 @@ impl Name {
 
     /// Joins all parts with `\` without any leading backslash.
     pub fn join_parts(&self) -> String {
-        self.parts.join("\\")
+        self.text.to_string()
+    }
+}
+
+#[cfg(feature = "serde")]
+impl Serialize for Name {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+        use serde::ser::SerializeStruct;
+        struct Parts<'a>(&'a Name);
+        impl Serialize for Parts<'_> {
+            fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+                s.collect_seq(self.0.parts())
+            }
+        }
+        let mut st = s.serialize_struct("Name", 3)?;
+        st.serialize_field("parts", &Parts(self))?;
+        st.serialize_field("kind", &self.kind)?;
+        st.serialize_field("span", &self.span)?;
+        st.end()
     }
 }
 
@@ -2418,25 +2478,9 @@ fn owned_ident(ident: arena_ast::Ident<'_>) -> Ident {
 
 fn owned_name(name: &arena_ast::Name<'_, '_>) -> Name {
     match name {
-        arena_ast::Name::Simple { value, span } => Name {
-            parts: vec![SmallStr::from(*value)].into_boxed_slice(),
-            kind: NameKind::Unqualified,
-            span: *span,
-        },
-        arena_ast::Name::Complex { parts, kind, span } => Name {
-            parts: parts
-                .iter()
-                .map(|s| SmallStr::from(*s))
-                .collect::<Vec<_>>()
-                .into_boxed_slice(),
-            kind: *kind,
-            span: *span,
-        },
-        arena_ast::Name::Error { span } => Name {
-            parts: Box::from([]),
-            kind: NameKind::Error,
-            span: *span,
-        },
+        arena_ast::Name::Simple { value, span } => Name::new(*value, NameKind::Unqualified, *span),
+        arena_ast::Name::Complex { parts, kind, span } => Name::from_parts(parts, *kind, *span),
+        arena_ast::Name::Error { span } => Name::new(SmallStr::default(), NameKind::Error, *span),
     }
 }
 
@@ -3407,14 +3451,14 @@ fn av_name<'a>(arena: &'a bumpalo::Bump, name: &Name) -> arena_ast::Name<'a, 'a>
     if name.kind == NameKind::Error {
         return arena_ast::Name::Error { span: name.span };
     }
-    if name.parts.len() == 1 && name.kind == NameKind::Unqualified {
+    if name.kind == NameKind::Unqualified && !name.text.contains('\\') {
         return arena_ast::Name::Simple {
-            value: arena.alloc_str(&name.parts[0]),
+            value: arena.alloc_str(&name.text),
             span: name.span,
         };
     }
-    let mut parts = arena_ast::ArenaVec::with_capacity_in(name.parts.len(), arena);
-    for p in name.parts.iter() {
+    let mut parts = arena_ast::ArenaVec::with_capacity_in(name.part_count(), arena);
+    for p in name.parts() {
         parts.push(arena.alloc_str(p) as &str);
     }
     arena_ast::Name::Complex {

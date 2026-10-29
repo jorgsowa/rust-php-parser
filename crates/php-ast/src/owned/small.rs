@@ -205,6 +205,36 @@ impl SmallStr {
     }
 }
 
+impl SmallStr {
+    pub(crate) fn joined<S: AsRef<str>>(parts: &[S]) -> Self {
+        let len =
+            parts.iter().map(|p| p.as_ref().len()).sum::<usize>() + parts.len().saturating_sub(1);
+        let mut inline = [0u8; INLINE_CAP];
+        let mut heap = Vec::new();
+        let buf: &mut [u8] = if len <= INLINE_CAP {
+            &mut inline[..len]
+        } else {
+            heap.resize(len, 0);
+            &mut heap
+        };
+        let mut at = 0;
+        for (i, p) in parts.iter().enumerate() {
+            if i > 0 {
+                buf[at] = b'\\';
+                at += 1;
+            }
+            let p = p.as_ref().as_bytes();
+            buf[at..at + p.len()].copy_from_slice(p);
+            at += p.len();
+        }
+        if len <= INLINE_CAP {
+            Self(SmallBytes::inline(&inline[..len]))
+        } else {
+            Self(SmallBytes::heap(heap.into_boxed_slice()))
+        }
+    }
+}
+
 impl Default for SmallStr {
     fn default() -> Self {
         Self(SmallBytes::inline(&[]))

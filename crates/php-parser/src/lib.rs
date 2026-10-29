@@ -116,7 +116,7 @@ pub use version::PhpVersion;
 /// Lifetime-free result of parsing a PHP source string.
 ///
 /// This is the primary return type of [`parse`] and [`parse_with`]. The
-/// AST is fully owned (`Box<str>`, `Box<[T]>`) so it can be stored in a
+/// AST is fully owned (`SmallStr`, `Box<[T]>`) so it can be stored in a
 /// `HashMap`, sent across threads, or cached alongside other data without
 /// fighting the borrow checker.
 ///

@@ -1066,16 +1066,10 @@ impl<V: OwnedScopeVisitor> OwnedScopeWalker<V> {
 }
 
 fn owned_name_repr(name: &Name) -> Option<String> {
-    if name.parts.is_empty() {
+    if name.text.is_empty() {
         return None;
     }
-    Some(
-        name.parts
-            .iter()
-            .map(|s| s.as_ref())
-            .collect::<Vec<_>>()
-            .join("\\"),
-    )
+    Some(name.text.to_string())
 }
 
 impl<V: OwnedScopeVisitor> OwnedVisitor for OwnedScopeWalker<V> {

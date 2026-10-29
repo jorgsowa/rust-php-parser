@@ -2,11 +2,7 @@ use php_ast::owned::{Expr, ExprKind, Ident, Name};
 use php_ast::{NameKind, Span};
 
 fn name(parts: &[&str], kind: NameKind) -> Name {
-    Name {
-        parts: parts.iter().map(|p| (*p).into()).collect(),
-        kind,
-        span: Span::new(2, 9),
-    }
+    Name::from_parts(parts, kind, Span::new(2, 9))
 }
 
 #[test]

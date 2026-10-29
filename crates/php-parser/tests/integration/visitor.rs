@@ -929,7 +929,7 @@ fn visits_namespace_named_arg_and_trait_adaptation_names() {
     impl php_ast::owned::OwnedVisitor for OwnedNameCollector {
         type Break = ();
         fn visit_name(&mut self, name: &php_ast::owned::Name) -> ControlFlow<()> {
-            self.names.push(name.parts.join("\\"));
+            self.names.push(name.join_parts());
             ControlFlow::Continue(())
         }
     }
@@ -1298,7 +1298,7 @@ fn owned_scope_visitor_visits_names_and_blocks_with_scope() {
         type Break = ();
         fn visit_name(&mut self, name: &OwnedName, scope: &OwnedScope) -> ControlFlow<()> {
             self.names
-                .push((name.parts.join("\\"), scope.class_name.clone()));
+                .push((name.join_parts(), scope.class_name.clone()));
             ControlFlow::Continue(())
         }
         fn visit_block(&mut self, _block: &OwnedBlock, scope: &OwnedScope) -> ControlFlow<()> {
