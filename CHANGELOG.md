@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.28.0] - 2026-10-29
+
+Error messages use PHP's newest wording, enum declarations parse as PHP's do, and owned AST nodes are smaller and allocate less.
+
 ### Added
 
 - `ForbiddenRule::TryWithoutCatchOrFinally` (`php-rs-parser`).
@@ -14,10 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- The minimum supported Rust version is 1.89.
-- Compile error messages follow PHP's wording, as in `Cannot use [] for reading`, `Hooked properties cannot be readonly` and `Enum backing type must be int or string, bool given` (`php-rs-parser`).
+- Compile error messages follow PHP's wording, including for reserved class names, duplicate types and trait alias modifiers, as in `Cannot use [] for reading`, `Hooked properties cannot be readonly`, `Enum backing type must be int or string, bool given`, `Cannot use "self" as a class name as it is reserved` and `Duplicate type int is redundant` (`php-rs-parser`).
 - Readonly, set visibility and property hook errors name the property, as in `Readonly property C::$x must have type` (`php-rs-parser`).
-- Reserved class names, duplicate types and trait alias modifiers are reported in PHP's wording, as in `Cannot use "self" as a class name as it is reserved` and `Duplicate type int is redundant` (`php-rs-parser`).
 - An error that newer PHP versions reword is reported in the newest wording for every target version, as in `Cannot use "::class" on int` for PHP 8.0; the wording differs by version only where it names a feature the version lacks (`php-rs-parser`).
 - A `try` without `catch` or `finally` is a compile error, `Cannot use try without catch or finally`, not a syntax error (`php-rs-parser`).
 - Owned AST strings are `SmallStr`, which stores up to 15 bytes inline instead of allocating; `ByteString` does the same. `SmallStr` dereferences to `str` and is the size of `Box<str>` (`php-ast`).
@@ -26,8 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- A doc comment left unused before a class constant, property or enum case, as in `/** a */ #[A] /** b */ const K = 1;`, no longer attaches to the next member (`php-rs-parser`).
-- Compile errors no longer push a syntax error out of the 100 errors `ParseResult::errors` keeps (`php-rs-parser`).
 - An abstract method in a concrete class is reported where it is declared, and an anonymous class with abstract property hooks reports `must implement N abstract methods` (`php-rs-parser`).
 - PHP 7.4 accepts a `static` or return-typed `__construct`, `__destruct` or `__clone` in an interface, as in `interface I { function __clone(): void; }` (`php-rs-parser`).
 - A constructor parameter with property hooks but no modifier is checked as a promoted property, so `int $z = null { get => 1; }` reports `Cannot use null as default value for parameter $z of type int` (`php-rs-parser`).
@@ -49,6 +49,7 @@ Compile-time checks and constant folding follow PHP's for each version, and the 
 
 ### Changed
 
+- The minimum supported Rust version is 1.89.
 - `new Foo(...)` and `#[Foo(...)]` keep the `...` as an `ArgKind::SpreadPlaceholder` argument instead of no arguments (`php-rs-parser`).
 
 ### Fixed
@@ -113,9 +114,11 @@ These constructs were reported and are now accepted, as PHP does (`php-rs-parser
 
 - On PHP 7.4, `.` has the precedence of `+` and `-` and binds tighter than `<<` and `>>`, so `"a" . 1 + 2` parses as `("a" . 1) + 2` and `1 . 2 << 1` as `(1 . 2) << 1` (`php-rs-parser`).
 - A doc comment written after the attributes of a class or enum member or a parameter, as in `#[A] /** doc */ public function f()`, belongs to that declaration, as PHP reads it, instead of being dropped or moved to the next member (`php-rs-parser`).
+- A doc comment left unused before a class constant, property or enum case, as in `/** a */ #[A] /** b */ const K = 1;`, no longer attaches to the next member (`php-rs-parser`).
 
 #### Parser: messages and recovery
 
+- Compile errors no longer push a syntax error out of the 100 errors `ParseResult::errors` keeps (`php-rs-parser`).
 - Before PHP 8.2, a trait constant reports only that constants in traits require PHP 8.2, not errors in its declaration, such as `Constant expression contains invalid operations`, since PHP stops at `Traits cannot have constants` (`php-rs-parser`).
 - Nesting past the depth limit reports one `NestingTooDeep` error instead of a cascade of up to 100 errors (`php-rs-parser`).
 - Errors that a later check withdraws, such as an empty array element before `=` makes the array a destructuring target, no longer count toward the 100-error limit, so they do not crowd out later errors or set `errors_truncated` (`php-rs-parser`).
@@ -888,7 +891,8 @@ No user-facing changes.
 
 Initial release: a recursive descent PHP parser for PHP 8.3 syntax with arena allocation, zero-copy string borrowing, error recovery and nikic/PHP-Parser corpus compatibility.
 
-[Unreleased]: https://github.com/jorgsowa/rust-php-parser/compare/v0.27.0...HEAD
+[Unreleased]: https://github.com/jorgsowa/rust-php-parser/compare/v0.28.0...HEAD
+[0.28.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.27.0...v0.28.0
 [0.27.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.26.0...v0.27.0
 [0.26.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.25.1...v0.26.0
 [0.25.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.25.0...v0.25.1
