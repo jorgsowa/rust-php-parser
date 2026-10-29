@@ -3,7 +3,7 @@
 //! Arena-allocated types (`Program<'arena, 'src>`, etc.) cannot be stored in a
 //! struct alongside the `bumpalo::Bump` arena that owns them — the borrow checker
 //! rejects the self-referential pattern. These owned mirrors solve that: they use
-//! `Box<str>` instead of `&str`, `Box<[T]>` instead of `ArenaVec<'arena, T>`, and
+//! `SmallStr` instead of `&str`, `Box<[T]>` instead of `ArenaVec<'arena, T>`, and
 //! `Box<T>` instead of `&'arena T`. The result is `'static` — no lifetime
 //! parameters, storeable in a `HashMap`, sendable across threads.
 //!
@@ -18,7 +18,10 @@
 //! [`to_owned_program`].
 
 pub mod fold;
+mod small;
 pub mod visitor;
+
+pub use small::SmallStr;
 
 pub use fold::{
     fold_owned_arg, fold_owned_attribute, fold_owned_block, fold_owned_catch_clause,
@@ -65,14 +68,14 @@ fn slice_is_empty<T>(v: &[T]) -> bool {
 /// Owned equivalent of [`Ident`](crate::ast::Ident), with the same API and serialized form.
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub struct Ident {
-    name: Option<Box<str>>,
+    name: Option<SmallStr>,
     /// Source range of the identifier token; includes the `$` of a variable name.
     pub span: Span,
 }
 
 impl Ident {
     /// Construct an identifier from a non-empty name.
-    pub fn new(name: impl Into<Box<str>>, span: Span) -> Self {
+    pub fn new(name: impl Into<SmallStr>, span: Span) -> Self {
         let name = name.into();
         debug_assert!(!name.is_empty(), "Ident::new() called with empty name");
         Self {
@@ -151,7 +154,7 @@ impl PartialEq<&str> for Ident {
 #[cfg_attr(feature = "serde", derive(Serialize))]
 pub struct Name {
     /// Name segments split on `\`.
-    pub parts: Box<[Box<str>]>,
+    pub parts: Box<[SmallStr]>,
     /// Qualification style.
     pub kind: NameKind,
     /// Source span.
@@ -191,71 +194,87 @@ impl Name {
 /// The value of a PHP string literal: arbitrary bytes, which need not be valid UTF-8
 /// (`"\xff"`, `"\u{D800}"`). With the `serde` feature, valid UTF-8 serializes as a JSON string
 /// and any other value as `{"bytes": [..]}`.
-#[derive(Clone, PartialEq, Eq, Hash)]
-pub struct ByteString(Box<[u8]>);
+#[derive(Clone)]
+pub struct ByteString(small::SmallBytes);
 
 impl ByteString {
     /// The bytes of the string.
     pub fn as_bytes(&self) -> &[u8] {
-        &self.0
+        self.0.as_bytes()
     }
 
     /// The value as `&str`, or `None` when it is not valid UTF-8.
     pub fn to_str(&self) -> Option<&str> {
-        std::str::from_utf8(&self.0).ok()
+        std::str::from_utf8(self.as_bytes()).ok()
     }
 
     /// The value as text, replacing invalid UTF-8 with `U+FFFD`.
     pub fn to_string_lossy(&self) -> std::borrow::Cow<'_, str> {
-        String::from_utf8_lossy(&self.0)
+        String::from_utf8_lossy(self.as_bytes())
     }
 
     /// Consumes the string and returns its bytes.
     pub fn into_bytes(self) -> Box<[u8]> {
-        self.0
+        self.0.into_box()
+    }
+}
+
+impl PartialEq for ByteString {
+    fn eq(&self, other: &Self) -> bool {
+        self.as_bytes() == other.as_bytes()
+    }
+}
+
+impl Eq for ByteString {}
+
+impl std::hash::Hash for ByteString {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.as_bytes().hash(state)
     }
 }
 
 impl std::ops::Deref for ByteString {
     type Target = [u8];
     fn deref(&self) -> &[u8] {
-        &self.0
+        self.as_bytes()
     }
 }
 
 impl From<&str> for ByteString {
     fn from(s: &str) -> Self {
-        Self(s.as_bytes().into())
+        Self(small::SmallBytes::new(s.as_bytes()))
     }
 }
 
 impl From<String> for ByteString {
     fn from(s: String) -> Self {
-        Self(s.into_bytes().into_boxed_slice())
+        Self(small::SmallBytes::from_box(
+            s.into_bytes().into_boxed_slice(),
+        ))
     }
 }
 
 impl From<&[u8]> for ByteString {
     fn from(b: &[u8]) -> Self {
-        Self(b.into())
+        Self(small::SmallBytes::new(b))
     }
 }
 
 impl From<Vec<u8>> for ByteString {
     fn from(b: Vec<u8>) -> Self {
-        Self(b.into_boxed_slice())
+        Self(small::SmallBytes::from_box(b.into_boxed_slice()))
     }
 }
 
 impl PartialEq<str> for ByteString {
     fn eq(&self, other: &str) -> bool {
-        &*self.0 == other.as_bytes()
+        self.as_bytes() == other.as_bytes()
     }
 }
 
 impl PartialEq<&str> for ByteString {
     fn eq(&self, other: &&str) -> bool {
-        &*self.0 == other.as_bytes()
+        self.as_bytes() == other.as_bytes()
     }
 }
 
@@ -263,7 +282,7 @@ impl std::fmt::Debug for ByteString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self.to_str() {
             Some(s) => std::fmt::Debug::fmt(s, f),
-            None => write!(f, "b{:?}", self.0.escape_ascii().to_string()),
+            None => write!(f, "b{:?}", self.as_bytes().escape_ascii().to_string()),
         }
     }
 }
@@ -271,7 +290,7 @@ impl std::fmt::Debug for ByteString {
 #[cfg(feature = "serde")]
 impl Serialize for ByteString {
     fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        crate::ast::serialize_bytes(&self.0, serializer)
+        crate::ast::serialize_bytes(self.as_bytes(), serializer)
     }
 }
 
@@ -286,7 +305,7 @@ pub struct Comment {
     /// Comment syntax.
     pub kind: CommentKind,
     /// Raw comment text including delimiters.
-    pub text: Box<str>,
+    pub text: SmallStr,
     /// Source span.
     pub span: Span,
 }
@@ -579,11 +598,11 @@ pub enum StmtKind {
     /// A `static` variable statement.
     StaticVar(Box<[StaticVar]>),
     /// `__halt_compiler()` with the trailing raw data.
-    HaltCompiler(Box<str>),
+    HaltCompiler(SmallStr),
     /// An empty statement (`;`).
     Nop,
     /// Text outside PHP tags.
-    InlineHtml(Box<str>),
+    InlineHtml(SmallStr),
     /// Placeholder for a statement that failed to parse.
     Error,
 }
@@ -905,7 +924,7 @@ pub enum NamespaceBody {
 #[non_exhaustive]
 pub struct DeclareStmt {
     /// Directive name and value pairs.
-    pub directives: Box<[(Box<str>, Expr)]>,
+    pub directives: Box<[(SmallStr, Expr)]>,
     /// Statement governed by the declare, if any.
     pub body: Option<Box<Stmt>>,
     /// Whether the `declare: ... enddeclare;` syntax is used.
@@ -916,7 +935,7 @@ pub struct DeclareStmt {
 impl DeclareStmt {
     /// Builds a `DeclareStmt` from its identifying fields with every other field empty. Set
     /// the rest by assignment, as with `Param::new`.
-    pub fn new(directives: Box<[(Box<str>, Expr)]>) -> Self {
+    pub fn new(directives: Box<[(SmallStr, Expr)]>) -> Self {
         Self {
             directives,
             body: None,
@@ -1037,16 +1056,16 @@ pub enum ExprKind {
     /// Heredoc string.
     Heredoc {
         /// Heredoc delimiter.
-        label: Box<str>,
+        label: SmallStr,
         /// Body segments.
         parts: Box<[StringPart]>,
     },
     /// Nowdoc string.
     Nowdoc {
         /// Nowdoc delimiter.
-        label: Box<str>,
+        label: SmallStr,
         /// Raw body text.
-        value: Box<str>,
+        value: SmallStr,
     },
     /// Backtick shell command.
     ShellExec(Box<[StringPart]>),
@@ -1055,11 +1074,11 @@ pub enum ExprKind {
     /// `null`.
     Null,
     /// Variable name without `$`.
-    Variable(Box<str>),
+    Variable(SmallStr),
     /// `$$x` or `${expr}`.
     VariableVariable(Box<Expr>),
     /// Member name after `->`, `?->` or `::`.
-    Identifier(Box<str>),
+    Identifier(SmallStr),
     /// Reference to a function, class or constant.
     Name(Name),
     /// Assignment.
@@ -2400,14 +2419,14 @@ fn owned_ident(ident: arena_ast::Ident<'_>) -> Ident {
 fn owned_name(name: &arena_ast::Name<'_, '_>) -> Name {
     match name {
         arena_ast::Name::Simple { value, span } => Name {
-            parts: vec![Box::from(*value)].into_boxed_slice(),
+            parts: vec![SmallStr::from(*value)].into_boxed_slice(),
             kind: NameKind::Unqualified,
             span: *span,
         },
         arena_ast::Name::Complex { parts, kind, span } => Name {
             parts: parts
                 .iter()
-                .map(|s| Box::from(*s))
+                .map(|s| SmallStr::from(*s))
                 .collect::<Vec<_>>()
                 .into_boxed_slice(),
             kind: *kind,
@@ -2597,12 +2616,12 @@ fn owned_leaf_kind(k: &arena_ast::ExprKind<'_, '_>) -> ExprKind {
             ExprKind::InterpolatedString(owned_string_parts(parts))
         }
         arena_ast::ExprKind::Heredoc { label, parts } => ExprKind::Heredoc {
-            label: Box::from(*label),
+            label: SmallStr::from(*label),
             parts: owned_string_parts(parts),
         },
         arena_ast::ExprKind::Nowdoc { label, value } => ExprKind::Nowdoc {
-            label: Box::from(*label),
-            value: Box::from(*value),
+            label: SmallStr::from(*label),
+            value: SmallStr::from(*value),
         },
         arena_ast::ExprKind::ShellExec(parts) => ExprKind::ShellExec(owned_string_parts(parts)),
         arena_ast::ExprKind::Bool(v) => ExprKind::Bool(*v),
@@ -3017,7 +3036,7 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
             directives: d
                 .directives
                 .iter()
-                .map(|(k, v)| (Box::from(*k), owned_expr(v)))
+                .map(|(k, v)| (SmallStr::from(*k), owned_expr(v)))
                 .collect::<Vec<_>>()
                 .into_boxed_slice(),
             body: d.body.map(|b| Box::new(owned_stmt(b))),
@@ -3099,9 +3118,9 @@ fn owned_stmt_kind(k: &arena_ast::StmtKind<'_, '_>) -> StmtKind {
                 .collect::<Vec<_>>()
                 .into_boxed_slice(),
         ),
-        arena_ast::StmtKind::HaltCompiler(s) => StmtKind::HaltCompiler(Box::from(*s)),
+        arena_ast::StmtKind::HaltCompiler(s) => StmtKind::HaltCompiler(SmallStr::from(*s)),
         arena_ast::StmtKind::Nop => StmtKind::Nop,
-        arena_ast::StmtKind::InlineHtml(s) => StmtKind::InlineHtml(Box::from(*s)),
+        arena_ast::StmtKind::InlineHtml(s) => StmtKind::InlineHtml(SmallStr::from(*s)),
         arena_ast::StmtKind::Error => StmtKind::Error,
     }
 }

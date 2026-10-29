@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reserved class names, duplicate types and trait alias modifiers are reported in PHP's wording, as in `Cannot use "self" as a class name as it is reserved` and `Duplicate type int is redundant` (`php-rs-parser`).
 - An error that newer PHP versions reword is reported in the newest wording for every target version, as in `Cannot use "::class" on int` for PHP 8.0; the wording differs by version only where it names a feature the version lacks (`php-rs-parser`).
 - A `try` without `catch` or `finally` is a compile error, `Cannot use try without catch or finally`, not a syntax error (`php-rs-parser`).
+- Owned AST strings are `SmallStr`, which stores up to 15 bytes inline instead of allocating; `ByteString` does the same. `SmallStr` dereferences to `str` and is the size of `Box<str>` (`php-ast`).
 
 ### Fixed
 

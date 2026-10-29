@@ -981,7 +981,7 @@ mod tests {
 
     fn dummy_var(name: &str) -> Expr {
         Expr {
-            kind: ExprKind::Variable(Box::from(name)),
+            kind: ExprKind::Variable(SmallStr::from(name)),
             span: Span::DUMMY,
         }
     }
@@ -1078,7 +1078,7 @@ mod tests {
                 if let ExprKind::Variable(name) = &expr.kind {
                     if name.as_ref() == "x" {
                         return Expr {
-                            kind: ExprKind::Variable(Box::from("renamed")),
+                            kind: ExprKind::Variable(SmallStr::from("renamed")),
                             span: expr.span,
                         };
                     }
