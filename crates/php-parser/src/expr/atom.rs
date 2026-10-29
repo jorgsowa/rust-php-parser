@@ -1389,7 +1389,7 @@ fn parse_new_expr<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Expr<'a
         let members = stmt::parse_class_members(parser, false, false, scope);
         stmt::check_abstract_hooks(parser, &class_name, &members);
         if anon_readonly {
-            stmt::check_readonly_class_members(parser, &members);
+            stmt::check_readonly_class_members(parser, &class_name, &members);
         }
         parser.expect_body_close(open);
         let end = parser.previous_end();

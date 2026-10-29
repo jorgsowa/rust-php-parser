@@ -6,15 +6,15 @@ class C {
 ===errors <=7.4===
 'constructor property promotion' requires PHP 8.0 or higher
 'asymmetric visibility' requires PHP 8.4 or higher
-Visibility of property must not be weaker than set visibility
+Visibility of property C::$a must not be weaker than set visibility
 'constructor property promotion' requires PHP 8.0 or higher
 'asymmetric visibility' requires PHP 8.4 or higher
 ===errors 8.0-8.3===
 'asymmetric visibility' requires PHP 8.4 or higher
-Visibility of property must not be weaker than set visibility
+Visibility of property C::$a must not be weaker than set visibility
 'asymmetric visibility' requires PHP 8.4 or higher
 ===errors >=8.4===
-Visibility of property must not be weaker than set visibility
+Visibility of property C::$a must not be weaker than set visibility
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'private' (T_PRIVATE), expecting variable (T_VARIABLE) in Standard input code on line 3
 ===php_error 8.0===

@@ -151,7 +151,7 @@ pub(super) fn parse_class<'arena, 'src>(
         check_abstract_methods(parser, &class_name, &members);
     }
     if modifiers.is_readonly {
-        check_readonly_class_members(parser, &members);
+        check_readonly_class_members(parser, &class_name, &members);
     }
     parser.expect_body_close(open);
     let end = parser.previous_end();
@@ -328,18 +328,25 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
             // Validate parameter counts against hook kind.
             // PHP rejects a parameter list on `get` regardless of contents —
             // `get()` is fatal — and requires exactly one parameter for `set`.
+            let property = format!(
+                "{}${}",
+                parser.class_member_prefix(),
+                property_name.unwrap_or_default()
+            );
             match kind {
                 PropertyHookKind::Get => {
                     parser.forbid(
                         ForbiddenRule::GetHookParameters,
-                        "get hook of property must not have a parameter list",
+                        format!("get hook of property {property} must not have a parameter list"),
                         paren_span,
                     );
                 }
                 PropertyHookKind::Set if p.len() != 1 => {
                     parser.forbid(
                         ForbiddenRule::SetHookParameterCount,
-                        "set hook must have exactly one parameter",
+                        format!(
+                            "set hook of property {property} must accept exactly one parameters"
+                        ),
                         paren_span,
                     );
                 }
@@ -1093,38 +1100,56 @@ pub fn parse_class_members<'arena, 'src>(
     members
 }
 
-fn report_readonly_default(parser: &mut Parser<'_, '_>, span: Span) {
+/// `Class::$name`, as PHP names a property in its errors.
+pub(super) fn property_label(parser: &Parser<'_, '_>, name: &Ident<'_>) -> String {
+    format!("{}${name}", parser.class_member_prefix())
+}
+
+fn report_readonly_default(parser: &mut Parser<'_, '_>, property: &str, span: Span) {
     // PHP 8.6 allows a default value on a readonly property.
     if parser.version >= PhpVersion::Php86 {
         return;
     }
     parser.forbid(
         ForbiddenRule::ReadonlyPropertyDefault,
-        "Readonly property cannot have default value",
+        format!("Readonly property {property} cannot have default value"),
+        span,
+    );
+}
+
+pub(super) fn report_untyped_readonly(parser: &mut Parser<'_, '_>, property: &str, span: Span) {
+    parser.forbid(
+        ForbiddenRule::UntypedReadonlyProperty,
+        format!("Readonly property {property} must have type"),
+        span,
+    );
+}
+
+fn report_static_readonly(parser: &mut Parser<'_, '_>, property: &str, span: Span) {
+    parser.forbid(
+        ForbiddenRule::StaticReadonlyProperty,
+        format!("Static property {property} cannot be readonly"),
         span,
     );
 }
 
 /// Report a property of a `readonly` class, declared or promoted, that breaks a readonly
 /// property rule; every property of such a class is readonly.
-pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[ClassMember<'_, '_>]) {
+pub fn check_readonly_class_members(
+    parser: &mut Parser<'_, '_>,
+    class_name: &str,
+    members: &[ClassMember<'_, '_>],
+) {
     for member in members {
         match &member.kind {
             // An explicitly readonly property was already checked where it was declared.
             ClassMemberKind::Property(p) if !p.modifiers.is_readonly => {
+                let property = format!("{class_name}::${}", p.name);
                 if p.modifiers.is_static {
-                    parser.forbid(
-                        ForbiddenRule::StaticReadonlyProperty,
-                        "static properties cannot be readonly",
-                        member.span,
-                    );
+                    report_static_readonly(parser, &property, member.span);
                 }
                 if p.type_hint.is_none() {
-                    parser.forbid(
-                        ForbiddenRule::UntypedReadonlyProperty,
-                        "readonly property must have type",
-                        member.span,
-                    );
+                    report_untyped_readonly(parser, &property, member.span);
                 }
                 if let Some(hook) = p.hooks.first() {
                     parser.forbid(
@@ -1134,7 +1159,7 @@ pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[Clas
                     );
                 }
                 if let Some(default) = &p.default {
-                    report_readonly_default(parser, default.span);
+                    report_readonly_default(parser, &property, default.span);
                 }
             }
             ClassMemberKind::Method(m)
@@ -1147,11 +1172,8 @@ pub fn check_readonly_class_members(parser: &mut Parser<'_, '_>, members: &[Clas
                         continue;
                     }
                     if param.type_hint.is_none() {
-                        parser.forbid(
-                            ForbiddenRule::UntypedReadonlyProperty,
-                            "readonly property must have type",
-                            param.span,
-                        );
+                        let property = format!("{class_name}::${}", param.name);
+                        report_untyped_readonly(parser, &property, param.span);
                     }
                     if let Some(hook) = param.hooks.first() {
                         parser.forbid(
@@ -1428,14 +1450,6 @@ pub(super) fn parse_class_member_modifiers<'arena, 'src>(
         && parser.current_text().eq_ignore_ascii_case("var")
     {
         parser.error_expected("variable");
-    }
-
-    if is_static && is_readonly {
-        parser.forbid(
-            ForbiddenRule::StaticReadonlyProperty,
-            "static properties cannot be readonly",
-            parser.span_from(member_start),
-        );
     }
 
     // Emit version check now that is_static is known.
@@ -2566,9 +2580,10 @@ pub(super) fn parse_property_member<'arena, 'src>(
     // `private public(set)` is invalid because public-set widens beyond private-get.
     if let (Some(get_vis), Some(set_vis)) = (mods.visibility, mods.set_visibility) {
         if visibility_rank(set_vis) > visibility_rank(get_vis) {
+            let property = property_label(parser, &prop_name);
             parser.forbid(
                 ForbiddenRule::SetVisibilityWiderThanVisibility,
-                "Visibility of property must not be weaker than set visibility",
+                format!("Visibility of property {property} must not be weaker than set visibility"),
                 parser.span_from(member_start),
             );
         }
@@ -2624,12 +2639,12 @@ pub(super) fn parse_property_member<'arena, 'src>(
         );
     }
     if mods.is_readonly {
+        let property = property_label(parser, &prop_name);
+        if mods.is_static {
+            report_static_readonly(parser, &property, parser.span_from(member_start));
+        }
         if type_hint.is_none() {
-            parser.forbid(
-                ForbiddenRule::UntypedReadonlyProperty,
-                "readonly property must have type",
-                parser.span_from(member_start),
-            );
+            report_untyped_readonly(parser, &property, parser.span_from(member_start));
         }
         if let Some(hook) = hooks.first() {
             parser.forbid(
@@ -2639,7 +2654,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
             );
         }
         if let Some(default) = &default {
-            report_readonly_default(parser, default.span);
+            report_readonly_default(parser, &property, default.span);
         }
     }
     parser.check_attributes(&member_attrs, &AttrSite::new(AttrTarget::Property));
@@ -2688,7 +2703,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
                 None
             };
             if let Some(default) = pdefault.as_ref().filter(|_| mods.is_readonly) {
-                report_readonly_default(parser, default.span);
+                report_readonly_default(parser, &property_label(parser, &pname), default.span);
             }
 
             let phas_hooks_block = parser.check(TokenKind::LeftBrace);

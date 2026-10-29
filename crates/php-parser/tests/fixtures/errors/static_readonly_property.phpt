@@ -5,13 +5,13 @@ class Foo {
 }
 ===errors <=8.0===
 'readonly properties' requires PHP 8.1 or higher
-static properties cannot be readonly
-Readonly property cannot have default value
+Static property Foo::$x cannot be readonly
+Readonly property Foo::$x cannot have default value
 ===errors 8.1-8.5===
-static properties cannot be readonly
-Readonly property cannot have default value
+Static property Foo::$x cannot be readonly
+Readonly property Foo::$x cannot have default value
 ===errors >=8.6===
-static properties cannot be readonly
+Static property Foo::$x cannot be readonly
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'int' (T_STRING), expecting variable (T_VARIABLE) in Standard input code on line 3
 ===php_error 8.0===

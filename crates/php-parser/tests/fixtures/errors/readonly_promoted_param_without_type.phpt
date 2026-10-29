@@ -9,7 +9,7 @@ class Foo {
 'constructor property promotion' requires PHP 8.0 or higher
 'trailing comma in parameter list' requires PHP 8.0 or higher
 ===errors >=8.1===
-readonly promoted property must have type
+Readonly property Foo::$x must have type
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC), expecting variable (T_VARIABLE) in Standard input code on line 4
 ===php_error 8.1-8.4===

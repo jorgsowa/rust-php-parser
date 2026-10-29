@@ -34,7 +34,7 @@ expected variable, found '|'
 expected ';' after expression
 expected ';' after expression
 Cannot use the readonly modifier on a method
-readonly property must have type
+Readonly property N4\C::$x must have type
 expected ';' after expression
 expected identifier, found 'readonly'
 ===php_error <=7.4===

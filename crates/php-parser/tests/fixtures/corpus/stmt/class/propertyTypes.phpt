@@ -9,9 +9,9 @@ class A {
 }
 ===errors <=8.0===
 'readonly properties' requires PHP 8.1 or higher
-static properties cannot be readonly
+Static property A::$d cannot be readonly
 ===errors >=8.1===
-static properties cannot be readonly
+Static property A::$d cannot be readonly
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'readonly' (T_STRING), expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 7
 ===php_error 8.0===

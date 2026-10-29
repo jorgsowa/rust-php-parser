@@ -4,7 +4,7 @@
 'readonly properties' requires PHP 8.1 or higher
 ===errors >=8.1===
 Multiple readonly modifiers are not allowed
-readonly property must have type
+Readonly property A::$x must have type
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'readonly' (T_STRING), expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 1
 ===php_error 8.0===

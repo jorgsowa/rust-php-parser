@@ -1570,16 +1570,6 @@ pub fn parse_param_list<'arena, 'src>(
             }
         }
 
-        if let (Some(get), Some(set)) = (visibility, set_visibility) {
-            if class::visibility_rank(set) > class::visibility_rank(get) {
-                parser.forbid(
-                    ForbiddenRule::SetVisibilityWiderThanVisibility,
-                    "Visibility of property must not be weaker than set visibility",
-                    parser.span_from(param_start),
-                );
-            }
-        }
-
         // Any modifier above promotes the param to a property — only valid
         // inside __construct. PHP rejects this with
         // "Cannot declare promoted property outside a constructor".
@@ -1607,14 +1597,6 @@ pub fn parse_param_list<'arena, 'src>(
             None
         };
 
-        // Before 8.1 `readonly` is reported as a version gate; PHP 8.0 reads it as a class type.
-        if is_readonly && type_hint.is_none() && parser.version >= PhpVersion::Php81 {
-            parser.forbid(
-                ForbiddenRule::UntypedReadonlyProperty,
-                "readonly promoted property must have type",
-                parser.span_from(param_start),
-            );
-        }
         // by-ref
         let by_ref = parser.eat(TokenKind::Ampersand).is_some();
 
@@ -1627,6 +1609,23 @@ pub fn parse_param_list<'arena, 'src>(
             .map(|t| parser.variable_ident(t))
             .unwrap_or(parser.missing_ident());
         check_param_name(parser, name, &params);
+        if let (Some(get), Some(set)) = (visibility, set_visibility) {
+            if class::visibility_rank(set) > class::visibility_rank(get) {
+                let property = class::property_label(parser, &name);
+                parser.forbid(
+                    ForbiddenRule::SetVisibilityWiderThanVisibility,
+                    format!(
+                        "Visibility of property {property} must not be weaker than set visibility"
+                    ),
+                    parser.span_from(param_start),
+                );
+            }
+        }
+        // Before 8.1 `readonly` is reported as a version gate; PHP 8.0 reads it as a class type.
+        if is_readonly && type_hint.is_none() && parser.version >= PhpVersion::Php81 {
+            let property = class::property_label(parser, &name);
+            class::report_untyped_readonly(parser, &property, parser.span_from(param_start));
+        }
         if let (Some(_), None, Some(name)) = (set_visibility, &type_hint, name.as_str()) {
             let class = parser.class_member_prefix();
             parser.forbid(

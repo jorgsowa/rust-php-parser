@@ -10,25 +10,25 @@ $x = new readonly class { public $f; };
 'readonly class' requires PHP 8.2 or higher
 'constructor property promotion' requires PHP 8.0 or higher
 'constructor property promotion' requires PHP 8.0 or higher
-readonly property must have type
-readonly property must have type
+Readonly property C::$a must have type
+Readonly property C::$c must have type
 'readonly anonymous classes' requires PHP 8.3 or higher
-readonly property must have type
+Readonly property class@anonymous::$f must have type
 ===errors 8.0-8.1===
 'readonly class' requires PHP 8.2 or higher
-readonly property must have type
-readonly property must have type
+Readonly property C::$a must have type
+Readonly property C::$c must have type
 'readonly anonymous classes' requires PHP 8.3 or higher
-readonly property must have type
+Readonly property class@anonymous::$f must have type
 ===errors 8.2===
-readonly property must have type
-readonly property must have type
+Readonly property C::$a must have type
+Readonly property C::$c must have type
 'readonly anonymous classes' requires PHP 8.3 or higher
-readonly property must have type
+Readonly property class@anonymous::$f must have type
 ===errors >=8.3===
-readonly property must have type
-readonly property must have type
-readonly property must have type
+Readonly property C::$a must have type
+Readonly property C::$c must have type
+Readonly property class@anonymous::$f must have type
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'class' (T_CLASS) in Standard input code on line 2
 ===php_error 8.0===

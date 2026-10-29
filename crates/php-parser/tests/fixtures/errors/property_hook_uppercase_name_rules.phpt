@@ -7,16 +7,16 @@ class A {
 }
 ===errors <=8.3===
 'property hooks' requires PHP 8.4 or higher
-get hook of property must not have a parameter list
+get hook of property A::$a must not have a parameter list
 'property hooks' requires PHP 8.4 or higher
-set hook must have exactly one parameter
+set hook of property A::$b must accept exactly one parameters
 'property hooks' requires PHP 8.4 or higher
 Cannot redeclare property hook "GET"
 Non-abstract property hook must have a body
 Non-abstract property hook must have a body
 ===errors >=8.4===
-get hook of property must not have a parameter list
-set hook must have exactly one parameter
+get hook of property A::$a must not have a parameter list
+set hook of property A::$b must accept exactly one parameters
 Cannot redeclare property hook "GET"
 Non-abstract property hook must have a body
 Non-abstract property hook must have a body

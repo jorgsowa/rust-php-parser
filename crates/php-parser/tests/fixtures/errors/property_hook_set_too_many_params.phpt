@@ -7,9 +7,9 @@ class Foo {
 }
 ===errors <=8.3===
 'property hooks' requires PHP 8.4 or higher
-set hook must have exactly one parameter
+set hook of property Foo::$x must accept exactly one parameters
 ===errors >=8.4===
-set hook must have exactly one parameter
+set hook of property Foo::$x must accept exactly one parameters
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 3
 ===php_error 8.0-8.3===

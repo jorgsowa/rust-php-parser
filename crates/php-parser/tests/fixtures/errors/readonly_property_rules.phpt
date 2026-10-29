@@ -19,9 +19,9 @@ readonly class B {
 $x = new readonly class { public int $m = 5; };
 ===errors <=7.4===
 'readonly properties' requires PHP 8.1 or higher
-Readonly property cannot have default value
+Readonly property A::$a cannot have default value
 'readonly properties' requires PHP 8.1 or higher
-Readonly property cannot have default value
+Readonly property A::$c cannot have default value
 'constructor property promotion' requires PHP 8.0 or higher
 'readonly parameters' requires PHP 8.1 or higher
 'constructor property promotion' requires PHP 8.0 or higher
@@ -34,17 +34,17 @@ Hooked properties cannot be readonly
 'constructor property promotion' requires PHP 8.0 or higher
 'property hooks' requires PHP 8.4 or higher
 'constructor property promotion' requires PHP 8.0 or higher
-Readonly property cannot have default value
-static properties cannot be readonly
+Readonly property B::$g cannot have default value
+Static property B::$h cannot be readonly
 Hooked properties cannot be readonly
 Hooked properties cannot be readonly
 'readonly anonymous classes' requires PHP 8.3 or higher
-Readonly property cannot have default value
+Readonly property class@anonymous::$m cannot have default value
 ===errors 8.0===
 'readonly properties' requires PHP 8.1 or higher
-Readonly property cannot have default value
+Readonly property A::$a cannot have default value
 'readonly properties' requires PHP 8.1 or higher
-Readonly property cannot have default value
+Readonly property A::$c cannot have default value
 'readonly parameters' requires PHP 8.1 or higher
 'readonly parameters' requires PHP 8.1 or higher
 'property hooks' requires PHP 8.4 or higher
@@ -52,78 +52,78 @@ Hooked properties cannot be readonly
 'readonly class' requires PHP 8.2 or higher
 'property hooks' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
-Readonly property cannot have default value
-static properties cannot be readonly
+Readonly property B::$g cannot have default value
+Static property B::$h cannot be readonly
 Hooked properties cannot be readonly
 Hooked properties cannot be readonly
 'readonly anonymous classes' requires PHP 8.3 or higher
-Readonly property cannot have default value
+Readonly property class@anonymous::$m cannot have default value
 ===errors 8.1===
-Readonly property cannot have default value
-Readonly property cannot have default value
-readonly promoted property must have type
+Readonly property A::$a cannot have default value
+Readonly property A::$c cannot have default value
+Readonly property A::$e must have type
 'property hooks' requires PHP 8.4 or higher
 Hooked properties cannot be readonly
 'readonly class' requires PHP 8.2 or higher
 'property hooks' requires PHP 8.4 or higher
-readonly property must have type
+Readonly property B::$j must have type
 'property hooks' requires PHP 8.4 or higher
-readonly promoted property must have type
-Readonly property cannot have default value
-static properties cannot be readonly
+Readonly property B::$l must have type
+Readonly property B::$g cannot have default value
+Static property B::$h cannot be readonly
 Hooked properties cannot be readonly
 Hooked properties cannot be readonly
 'readonly anonymous classes' requires PHP 8.3 or higher
-Readonly property cannot have default value
+Readonly property class@anonymous::$m cannot have default value
 ===errors 8.2===
-Readonly property cannot have default value
-Readonly property cannot have default value
-readonly promoted property must have type
+Readonly property A::$a cannot have default value
+Readonly property A::$c cannot have default value
+Readonly property A::$e must have type
 'property hooks' requires PHP 8.4 or higher
 Hooked properties cannot be readonly
 'property hooks' requires PHP 8.4 or higher
-readonly property must have type
+Readonly property B::$j must have type
 'property hooks' requires PHP 8.4 or higher
-readonly promoted property must have type
-Readonly property cannot have default value
-static properties cannot be readonly
+Readonly property B::$l must have type
+Readonly property B::$g cannot have default value
+Static property B::$h cannot be readonly
 Hooked properties cannot be readonly
 Hooked properties cannot be readonly
 'readonly anonymous classes' requires PHP 8.3 or higher
-Readonly property cannot have default value
+Readonly property class@anonymous::$m cannot have default value
 ===errors 8.3===
-Readonly property cannot have default value
-Readonly property cannot have default value
-readonly promoted property must have type
+Readonly property A::$a cannot have default value
+Readonly property A::$c cannot have default value
+Readonly property A::$e must have type
 'property hooks' requires PHP 8.4 or higher
 Hooked properties cannot be readonly
 'property hooks' requires PHP 8.4 or higher
-readonly property must have type
+Readonly property B::$j must have type
 'property hooks' requires PHP 8.4 or higher
-readonly promoted property must have type
-Readonly property cannot have default value
-static properties cannot be readonly
+Readonly property B::$l must have type
+Readonly property B::$g cannot have default value
+Static property B::$h cannot be readonly
 Hooked properties cannot be readonly
 Hooked properties cannot be readonly
-Readonly property cannot have default value
+Readonly property class@anonymous::$m cannot have default value
 ===errors 8.4-8.5===
-Readonly property cannot have default value
-Readonly property cannot have default value
-readonly promoted property must have type
+Readonly property A::$a cannot have default value
+Readonly property A::$c cannot have default value
+Readonly property A::$e must have type
 Hooked properties cannot be readonly
-readonly property must have type
-readonly promoted property must have type
-Readonly property cannot have default value
-static properties cannot be readonly
+Readonly property B::$j must have type
+Readonly property B::$l must have type
+Readonly property B::$g cannot have default value
+Static property B::$h cannot be readonly
 Hooked properties cannot be readonly
 Hooked properties cannot be readonly
-Readonly property cannot have default value
+Readonly property class@anonymous::$m cannot have default value
 ===errors >=8.6===
-readonly promoted property must have type
+Readonly property A::$e must have type
 Hooked properties cannot be readonly
-readonly property must have type
-readonly promoted property must have type
-static properties cannot be readonly
+Readonly property B::$j must have type
+Readonly property B::$l must have type
+Static property B::$h cannot be readonly
 Hooked properties cannot be readonly
 Hooked properties cannot be readonly
 ===php_error <=7.4===
