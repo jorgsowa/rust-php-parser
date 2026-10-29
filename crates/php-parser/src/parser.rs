@@ -1376,6 +1376,20 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         self.eat_identifier_or_keyword()
     }
 
+    /// Whether PHP lexes the current `enum` as its keyword: from 8.1, when a word other than
+    /// `extends` or `implements` follows.
+    pub(crate) fn enum_is_keyword(&self) -> bool {
+        if !self.check(TokenKind::Enum_) || self.version < PhpVersion::Php81 {
+            return false;
+        }
+        let next = &self.source[self.next.span.start as usize..self.next.span.end as usize];
+        next.bytes()
+            .next()
+            .is_some_and(|b| b.is_ascii_alphabetic() || b == b'_' || b >= 0x80)
+            && !next.eq_ignore_ascii_case("extends")
+            && !next.eq_ignore_ascii_case("implements")
+    }
+
     /// True if the current token is a keyword that PHP forbids as a *declaration*
     /// name (class/interface/trait/enum/global-const). PHP rejects every reserved
     /// keyword here; only the contextual `enum` keyword remains usable as a
@@ -1404,7 +1418,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
 
     /// Parse a class reference, where PHP's grammar takes no keyword token, as in `new fn`.
     pub(crate) fn parse_class_ref_name(&mut self) -> Name<'arena, 'src> {
-        if self.keyword_is_not_class_name() {
+        if self.keyword_is_not_class_name() || self.enum_is_keyword() {
             self.error_expected("class name");
         }
         self.parse_name()

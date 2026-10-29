@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `enum self {}` and `enum parent {}` declare an enum and report `Cannot use "self" as an enum name as it is reserved` (`php-rs-parser`).
 - A nullable, union or intersection enum backing type, as in `enum E: ?int` or `enum E: Bar|int`, reports `Enum backing type must be int or string, ?int given` and parses the rest of the enum (`php-rs-parser`).
 - `enum E: \INT {}` reports only `Type declaration 'int' must be unqualified`, not also an invalid backing type (`php-rs-parser`).
+- From PHP 8.1 `enum` followed by a word other than `extends` or `implements` is the keyword, as in PHP's lexer: `echo enum instanceof X;`, `$x = enum and 1;`, `use enum as E;` and `new enum instanceof X;` are syntax errors, and `enum static {}` reports one error for the name (`php-rs-parser`).
 
 ## [0.27.0] - 2026-10-28
 

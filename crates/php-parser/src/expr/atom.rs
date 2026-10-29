@@ -688,6 +688,10 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         // The statement-level enum declaration is handled earlier in stmt.rs; by the
         // time we reach a primary expression, `enum` refers to a user-named symbol.
         TokenKind::Enum_ => {
+            // From 8.1 PHP lexes `enum and 1` as the keyword, which no expression takes.
+            if parser.enum_is_keyword() {
+                parser.error_expected("expression");
+            }
             let token = parser.advance();
             let src = parser.source;
             simple_name_expr(
