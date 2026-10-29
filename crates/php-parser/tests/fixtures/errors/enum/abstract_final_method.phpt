@@ -5,18 +5,9 @@ enum E {
 }
 ===errors <=8.0===
 'enums' requires PHP 8.1 or higher
-Cannot use the final modifier on an abstract class member
-Class E contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (E::f)
-===errors 8.1===
-Cannot use the final modifier on an abstract class member
-Class E contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (E::f)
-===errors 8.2===
-Cannot use the final modifier on an abstract class member
-Enum E must implement 1 abstract private method (E::f)
-===errors 8.3-8.4===
 Cannot use the final modifier on an abstract method
-Enum E must implement 1 abstract private method (E::f)
-===errors >=8.5===
+Enum method E::f() must not be abstract
+===errors >=8.1===
 Cannot use the final modifier on an abstract method
 Enum method E::f() must not be abstract
 ===php_error <=7.4===

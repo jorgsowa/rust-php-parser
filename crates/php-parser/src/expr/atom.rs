@@ -1800,7 +1800,7 @@ pub(crate) fn parse_arrow_function<'arena, 'src>(
     if let (true, Some(rt)) = (is_generator, &return_type) {
         stmt::check_generator_return_type(parser, rt);
     } else if return_type.as_ref().is_some_and(stmt::is_void_type) {
-        let what = stmt::function_kind_word(parser, parser.class_scope.is_some());
+        let what = stmt::function_kind_word(parser.class_scope.is_some());
         parser.forbid(
             ForbiddenRule::VoidReturnValue,
             stmt::void_return_message(what, &body),
@@ -2233,8 +2233,6 @@ pub(crate) fn parse_arg_list_or_callable<'arena, 'src>(
             } else if seen_named && !is_rest_placeholder {
                 let message = if !arg.is_spread() {
                     "Cannot use positional argument after named argument"
-                } else if parser.version == PhpVersion::Php80 {
-                    "Cannot combine named arguments and argument unpacking"
                 } else {
                     "Cannot use argument unpacking after named arguments"
                 };

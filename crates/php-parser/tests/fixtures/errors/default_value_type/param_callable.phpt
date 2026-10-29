@@ -1,9 +1,7 @@
 ===source===
 <?php
 function f(callable $x = "strlen") {}
-===errors <=7.4===
-Default value for parameters with callable type can only be NULL
-===errors >=8.0===
+===errors===
 Cannot use string as default value for parameter $x of type callable
 ===php_error <=7.4===
 PHP Fatal error:  Default value for parameters with callable type can only be NULL in Standard input code on line 2

@@ -2,10 +2,8 @@
 <?php class A { readonly function foo() {} }
 ===errors <=8.0===
 'readonly properties' requires PHP 8.1 or higher
-Cannot use 'readonly' as method modifier
-===errors 8.1-8.2===
-Cannot use 'readonly' as method modifier
-===errors >=8.3===
+Cannot use the readonly modifier on a method
+===errors >=8.1===
 Cannot use the readonly modifier on a method
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'readonly' (T_STRING), expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 1

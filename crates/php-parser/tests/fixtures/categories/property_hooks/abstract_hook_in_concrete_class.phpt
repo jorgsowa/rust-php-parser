@@ -3,10 +3,8 @@
 class C { abstract public $p { get; } }
 ===errors <=8.3===
 'property hooks' requires PHP 8.4 or higher
-Class C contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (C::$p::get)
-===errors 8.4===
-Class C contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (C::$p::get)
-===errors >=8.5===
+Class C contains 1 abstract method and must therefore be declared abstract or implement the remaining method (C::$p::get)
+===errors >=8.4===
 Class C contains 1 abstract method and must therefore be declared abstract or implement the remaining method (C::$p::get)
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 2

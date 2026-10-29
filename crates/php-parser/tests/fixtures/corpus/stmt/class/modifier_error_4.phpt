@@ -1,9 +1,6 @@
 ===source===
 <?php class A { abstract abstract function a(); }
-===errors <=8.4===
-Multiple abstract modifiers are not allowed
-Class A contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (A::a)
-===errors >=8.5===
+===errors===
 Multiple abstract modifiers are not allowed
 Class A declares abstract method a() and must therefore be declared abstract
 ===php_error===

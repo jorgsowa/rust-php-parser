@@ -22,22 +22,7 @@ namespace N4 {
 }
 ===errors <=7.4===
 'union types' requires PHP 8.0 or higher
-===errors 8.1-8.3===
-expected identifier, found 'readonly'
-Cannot use 'Readonly' as class name as it is reserved
-expected class name, found 'readonly'
-expected class name, found 'readonly'
-Cannot use 'readonly' as class name as it is reserved
-Cannot use 'readonly' as class name as it is reserved
-cannot use 'readonly' as constant name as it is reserved
-expected variable, found '|'
-expected ';' after expression
-expected ';' after expression
-Cannot use the readonly modifier on a method
-Readonly property N4\C::$x must have type
-expected ';' after expression
-expected identifier, found 'readonly'
-===errors >=8.4===
+===errors >=8.1===
 expected identifier, found 'readonly'
 Cannot use "Readonly" as a class name as it is reserved
 expected class name, found 'readonly'

@@ -3,11 +3,7 @@
 class A {
     public int $x = true;
 }
-===errors <=7.4===
-Default value for property of type int can only be int
-===errors 8.0-8.2===
-Cannot use bool as default value for property A::$x of type int
-===errors >=8.3===
+===errors===
 Cannot use true as default value for property A::$x of type int
 ===php_error <=7.4===
 PHP Fatal error:  Default value for property of type int can only be int in Standard input code on line 3

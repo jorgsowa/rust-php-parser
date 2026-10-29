@@ -1,9 +1,7 @@
 ===source===
 <?php
 function f(string $x = 1) {}
-===errors <=7.4===
-Default value for parameters with a string type can only be string or NULL
-===errors >=8.0===
+===errors===
 Cannot use int as default value for parameter $x of type string
 ===php_error <=7.4===
 PHP Fatal error:  Default value for parameters with a string type can only be string or NULL in Standard input code on line 2

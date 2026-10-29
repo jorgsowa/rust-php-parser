@@ -15,17 +15,12 @@ enum E
 }
 ===errors <=8.0===
 'enums' requires PHP 8.1 or higher
-Enums may not include properties
-Enums may not include properties
-Enums may not include properties
+Enum N\E cannot include properties
+Enum N\E cannot include properties
+Enum N\E cannot include properties
 'readonly properties' requires PHP 8.1 or higher
-Enums may not include properties
-===errors 8.1===
-Enums may not include properties
-Enums may not include properties
-Enums may not include properties
-Enums may not include properties
-===errors >=8.2===
+Enum N\E cannot include properties
+===errors >=8.1===
 Enum N\E cannot include properties
 Enum N\E cannot include properties
 Enum N\E cannot include properties

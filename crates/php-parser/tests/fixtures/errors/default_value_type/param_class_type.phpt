@@ -1,9 +1,7 @@
 ===source===
 <?php
 function f(Foo $x = 1) {}
-===errors <=7.4===
-Default value for parameters with a class type can only be NULL
-===errors >=8.0===
+===errors===
 Cannot use int as default value for parameter $x of type Foo
 ===php_error <=7.4===
 PHP Fatal error:  Default value for parameters with a class type can only be NULL in Standard input code on line 2

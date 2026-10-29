@@ -8,10 +8,8 @@ class A {
     }
 }
 ===errors <=8.0===
-A function with return type must return a value
-===errors 8.1-8.3===
-A never-returning function must not return
-===errors >=8.4===
+A method with return type must return a value
+===errors >=8.1===
 A never-returning method must not return
 ===php_error <=8.0===
 PHP Fatal error:  A function with return type must return a value in Standard input code on line 5

@@ -3,9 +3,7 @@
 class A {
     public A&B $x = null;
 }
-===errors <=7.4===
-'intersection types' requires PHP 8.1 or higher
-===errors 8.0===
+===errors <=8.0===
 'intersection types' requires PHP 8.1 or higher
 Cannot use null as default value for property A::$x of type A&B
 ===errors >=8.1===

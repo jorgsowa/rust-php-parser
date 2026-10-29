@@ -6,10 +6,8 @@ enum E
 }
 ===errors <=8.0===
 'enums' requires PHP 8.1 or higher
-Enums may not include properties
-===errors 8.1===
-Enums may not include properties
-===errors >=8.2===
+Enum E cannot include properties
+===errors >=8.1===
 Enum E cannot include properties
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'E' (T_STRING) in Standard input code on line 2

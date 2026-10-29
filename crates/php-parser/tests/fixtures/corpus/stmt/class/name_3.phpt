@@ -1,8 +1,6 @@
 ===source===
 <?php class static {}
-===errors <=8.3===
-Cannot use 'static' as class name as it is reserved
-===errors >=8.4===
+===errors===
 Cannot use "static" as a class name as it is reserved
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'static' (T_STATIC), expecting identifier (T_STRING) in Standard input code on line 1

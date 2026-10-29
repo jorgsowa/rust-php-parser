@@ -2,12 +2,9 @@
 <?php enum Status { static abstract const X = 1; }
 ===errors <=8.0===
 'enums' requires PHP 8.1 or higher
-Cannot use 'static' as constant modifier
-Cannot use 'abstract' as constant modifier
-===errors 8.1-8.2===
-Cannot use 'static' as constant modifier
-Cannot use 'abstract' as constant modifier
-===errors >=8.3===
+Cannot use the static modifier on a class constant
+Cannot use the abstract modifier on a class constant
+===errors >=8.1===
 Cannot use the static modifier on a class constant
 Cannot use the abstract modifier on a class constant
 ===php_error <=7.4===

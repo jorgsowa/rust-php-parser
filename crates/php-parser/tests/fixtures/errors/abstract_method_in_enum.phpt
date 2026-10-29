@@ -2,12 +2,8 @@
 <?php enum Status { abstract public function label(): string; }
 ===errors <=8.0===
 'enums' requires PHP 8.1 or higher
-Class Status contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (Status::label)
-===errors 8.1===
-Class Status contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (Status::label)
-===errors 8.2-8.4===
-Enum Status must implement 1 abstract private method (Status::label)
-===errors >=8.5===
+Enum method Status::label() must not be abstract
+===errors >=8.1===
 Enum method Status::label() must not be abstract
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'Status' (T_STRING) in Standard input code on line 1

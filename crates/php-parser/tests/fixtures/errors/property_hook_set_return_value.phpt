@@ -9,7 +9,7 @@ class A {
 }
 ===errors <=8.3===
 'property hooks' requires PHP 8.4 or higher
-A void function must not return a value
+A void method must not return a value
 ===errors >=8.4===
 A void method must not return a value
 ===php_error <=7.4===

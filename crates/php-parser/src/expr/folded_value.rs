@@ -123,7 +123,6 @@ pub(super) fn folded_class_fetch_value(
         Value::Str(_) => "string",
         Value::Null => "null",
         Value::Array { .. } => "array",
-        Value::Bool(_) if parser.version < PhpVersion::Php83 => "bool",
         Value::Bool(Some(true)) => "true",
         Value::Bool(Some(false)) => "false",
         // PHP names the value, which may depend on the build, as for `ZEND_THREAD_SAFE`.
@@ -251,18 +250,6 @@ fn is_integer_key(bytes: &[u8]) -> bool {
         .ok()
         .and_then(|s| s.parse::<i64>().ok().map(|n| n.to_string() == s))
         .unwrap_or(false)
-}
-
-/// `int` or `string` when constant expression `expr` folds to that type, as an enum case value must.
-pub(crate) fn folded_case_value_type(
-    parser: &Parser<'_, '_>,
-    expr: &Expr<'_, '_>,
-) -> Option<&'static str> {
-    match folded_value(parser, expr, 0, true)? {
-        Value::Int(_) => Some("int"),
-        Value::Str(_) => Some("string"),
-        _ => None,
-    }
 }
 
 /// The truthiness of the value PHP folds `expr` to, when it is computed here.

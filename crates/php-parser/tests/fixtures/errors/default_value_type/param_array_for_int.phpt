@@ -1,9 +1,7 @@
 ===source===
 <?php
 function f(int $x = [1, 2]) {}
-===errors <=7.4===
-Default value for parameters with a int type can only be int or NULL
-===errors >=8.0===
+===errors===
 Cannot use array as default value for parameter $x of type int
 ===php_error <=7.4===
 PHP Fatal error:  Default value for parameters with a int type can only be int or NULL in Standard input code on line 2

@@ -10,14 +10,7 @@ namespace N2 {
     function f(mixed $a, ?mixed $b): mixed { return $a; }
     function h(\mixed $a, namespace\mixed $b) {}
 }
-===errors 8.0-8.3===
-Cannot use A\B as mixed because 'mixed' is a special class name
-Cannot use 'mixed' as class name as it is reserved
-Cannot use 'Mixed' as class name as it is reserved
-Type mixed cannot be marked as nullable since mixed already includes null
-Type declaration 'mixed' must be unqualified
-Type declaration 'mixed' must be unqualified
-===errors >=8.4===
+===errors >=8.0===
 Cannot use A\B as mixed because 'mixed' is a special class name
 Cannot use "mixed" as a class name as it is reserved
 Cannot use "Mixed" as an interface name as it is reserved

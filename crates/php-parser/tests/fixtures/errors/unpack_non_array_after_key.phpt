@@ -3,11 +3,9 @@
 $a = [null => 1, ...2];
 $b = [1.5 => 1, ...2];
 ===errors <=8.0===
-Only arrays and Traversables can be unpacked
-Only arrays and Traversables can be unpacked
-===errors 8.1-8.3===
-Only arrays and Traversables can be unpacked
-===errors 8.4===
+Only arrays and Traversables can be unpacked, int given
+Only arrays and Traversables can be unpacked, int given
+===errors 8.1-8.4===
 Only arrays and Traversables can be unpacked, int given
 ===php_error <=8.3===
 PHP Fatal error:  Only arrays and Traversables can be unpacked in Standard input code on line 2

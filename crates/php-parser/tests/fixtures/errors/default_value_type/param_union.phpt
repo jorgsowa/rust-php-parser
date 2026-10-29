@@ -4,6 +4,7 @@ function f(int|string|null $x = 1.5) {}
 ===errors <=7.4===
 'union types' requires PHP 8.0 or higher
 'null type' requires PHP 8.0 or higher
+Cannot use float as default value for parameter $x of type string|int|null
 ===errors >=8.0===
 Cannot use float as default value for parameter $x of type string|int|null
 ===php_error <=7.4===

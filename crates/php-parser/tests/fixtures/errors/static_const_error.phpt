@@ -1,8 +1,6 @@
 ===source===
 <?php class A { static const X = 1; }
-===errors <=8.2===
-Cannot use 'static' as constant modifier
-===errors >=8.3===
+===errors===
 Cannot use the static modifier on a class constant
 ===php_error <=8.2===
 PHP Fatal error:  Cannot use 'static' as constant modifier in Standard input code on line 1

@@ -6,10 +6,7 @@ class A {
     function bar() {}
     static abstract function baz() {}
 }
-===errors <=8.4===
-Abstract function A::baz() cannot contain body
-Class A contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (A::baz)
-===errors >=8.5===
+===errors===
 Abstract function A::baz() cannot contain body
 Class A declares abstract method baz() and must therefore be declared abstract
 ===php_error <=8.4===

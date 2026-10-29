@@ -15,49 +15,43 @@ class A {
 ===errors <=7.4===
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
-Read-only virtual property I::$a must not specify asymmetric visibility
+get-only virtual property I::$a must not specify asymmetric visibility
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
-Read-only virtual property A::$b must not specify asymmetric visibility
+get-only virtual property A::$b must not specify asymmetric visibility
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
-Write-only virtual property A::$c must not specify asymmetric visibility
+set-only virtual property A::$c must not specify asymmetric visibility
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
 'constructor property promotion' requires PHP 8.0 or higher
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
-Read-only virtual property A::$e must not specify asymmetric visibility
+get-only virtual property A::$e must not specify asymmetric visibility
 'constructor property promotion' requires PHP 8.0 or higher
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
-Write-only virtual property A::$f must not specify asymmetric visibility
+set-only virtual property A::$f must not specify asymmetric visibility
 'trailing comma in parameter list' requires PHP 8.0 or higher
 ===errors 8.0-8.3===
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
-Read-only virtual property I::$a must not specify asymmetric visibility
+get-only virtual property I::$a must not specify asymmetric visibility
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
-Read-only virtual property A::$b must not specify asymmetric visibility
+get-only virtual property A::$b must not specify asymmetric visibility
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
-Write-only virtual property A::$c must not specify asymmetric visibility
+set-only virtual property A::$c must not specify asymmetric visibility
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
-Read-only virtual property A::$e must not specify asymmetric visibility
+get-only virtual property A::$e must not specify asymmetric visibility
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
-Write-only virtual property A::$f must not specify asymmetric visibility
-===errors 8.4-8.5===
-Read-only virtual property I::$a must not specify asymmetric visibility
-Read-only virtual property A::$b must not specify asymmetric visibility
-Write-only virtual property A::$c must not specify asymmetric visibility
-Read-only virtual property A::$e must not specify asymmetric visibility
-Write-only virtual property A::$f must not specify asymmetric visibility
-===errors >=8.6===
+set-only virtual property A::$f must not specify asymmetric visibility
+===errors >=8.4===
 get-only virtual property I::$a must not specify asymmetric visibility
 get-only virtual property A::$b must not specify asymmetric visibility
 set-only virtual property A::$c must not specify asymmetric visibility

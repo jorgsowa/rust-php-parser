@@ -22,7 +22,7 @@ class A {
     public static array $f = [];
 }
 ===errors <=7.4===
-Default value for parameters with a class type can only be NULL
+Cannot use string as default value for parameter $g of type mixed
 'union types' requires PHP 8.0 or higher
 'trailing comma in parameter list' requires PHP 8.0 or higher
 Default value for property of type mixed may not be null. Use the nullable type ?mixed to allow null default value

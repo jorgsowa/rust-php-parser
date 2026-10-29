@@ -5,10 +5,7 @@ $o->{1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
 ===errors <=7.4===
 Cannot use ::class with dynamic class name
 Method name must be a string
-===errors 8.0-8.2===
-Cannot use "::class" on value of type int
-Method name must be a string
-===errors >=8.3===
+===errors >=8.0===
 Cannot use "::class" on int
 Method name must be a string
 ===php_error <=7.4===

@@ -13,18 +13,7 @@ namespace N2 {
 }
 ===errors <=7.4===
 'union types' requires PHP 8.0 or higher
-===errors 8.1-8.3===
-Cannot use A\B as never because 'never' is a special class name
-Cannot use 'never' as class name as it is reserved
-Cannot use 'Never' as class name as it is reserved
-never cannot be used as a parameter type
-never can only be used as a standalone type
-never can only be used as a standalone type
-A never-returning function must not return
-Cannot use "N2\Foo\never" as a type name as it is reserved
-Type declaration 'never' must be unqualified
-Type declaration 'never' must be unqualified
-===errors >=8.4===
+===errors >=8.1===
 Cannot use A\B as never because 'never' is a special class name
 Cannot use "never" as a class name as it is reserved
 Cannot use "Never" as an interface name as it is reserved

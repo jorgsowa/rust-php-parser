@@ -1236,16 +1236,9 @@ pub(crate) fn check_generator_return_type(
     });
     if !admits_generator {
         let shown = parser.type_display(return_type);
-        let message = if parser.version >= PhpVersion::Php80 {
-            format!("Generator return type must be a supertype of Generator, {shown} given")
-        } else {
-            // PHP 7.4 names a nullable type without its `?`.
-            let shown = shown.trim_start_matches('?');
-            format!("Generators may only declare a return type of Generator, Iterator, Traversable, or iterable, {shown} is not permitted")
-        };
         parser.forbid(
             ForbiddenRule::GeneratorReturnType,
-            message,
+            format!("Generator return type must be a supertype of Generator, {shown} given"),
             return_type.span,
         );
     }
@@ -1262,10 +1255,10 @@ fn admits_null(ty: &TypeHint<'_, '_>) -> bool {
     }
 }
 
-/// How PHP names a function-like in its return errors: from 8.4, "method" for one compiled in a
-/// class, including a closure in a method.
-pub(crate) fn function_kind_word(parser: &Parser<'_, '_>, in_class: bool) -> &'static str {
-    if in_class && parser.version >= PhpVersion::Php84 {
+/// How PHP names a function-like in its return errors: "method" for one compiled in a class,
+/// including a closure in a method.
+pub(crate) fn function_kind_word(in_class: bool) -> &'static str {
+    if in_class {
         "method"
     } else {
         "function"
@@ -1304,7 +1297,7 @@ pub(crate) fn check_returns_against_type<'arena, 'src>(
         check_generator_return_type(parser, return_type);
         return;
     }
-    let what = function_kind_word(parser, in_class);
+    let what = function_kind_word(in_class);
     let bare_return_message: std::borrow::Cow<'static, str> = {
         let hint = if admits_null(return_type) {
             " (did you mean \"return null;\" instead of \"return;\"?)"

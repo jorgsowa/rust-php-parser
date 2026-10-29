@@ -5,7 +5,7 @@ class A {
 }
 ===errors <=8.3===
 'property hooks' requires PHP 8.4 or higher
-A function with return type must return a value
+A method with return type must return a value
 ===errors >=8.4===
 A method with return type must return a value
 ===php_error <=7.4===

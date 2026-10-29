@@ -169,17 +169,10 @@ fn parse_alias_rhs<'arena, 'src>(
         let error = match parser.current_kind() {
             TokenKind::Static | TokenKind::Abstract => Some((
                 ForbiddenRule::InvalidTraitAliasModifier,
-                if parser.version >= PhpVersion::Php83 {
-                    format!(
-                        "Cannot use \"{}\" as method modifier in trait alias",
-                        parser.current_text().to_ascii_lowercase()
-                    )
-                } else {
-                    format!(
-                        "Cannot use '{}' as method modifier",
-                        parser.current_text().to_ascii_lowercase()
-                    )
-                },
+                format!(
+                    "Cannot use \"{}\" as method modifier in trait alias",
+                    parser.current_text().to_ascii_lowercase()
+                ),
             )),
             TokenKind::Readonly => Some((
                 ForbiddenRule::ModifierNotAllowed,

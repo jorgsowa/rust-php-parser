@@ -6,12 +6,9 @@ enum E {
 }
 ===errors <=8.0===
 'enums' requires PHP 8.1 or higher
-Class E contains 2 abstract methods and must therefore be declared abstract or implement the remaining methods (E::f, E::g)
-===errors 8.1===
-Class E contains 2 abstract methods and must therefore be declared abstract or implement the remaining methods (E::f, E::g)
-===errors 8.2-8.4===
-Enum E must implement 2 abstract private methods (E::f, E::g)
-===errors >=8.5===
+Enum method E::f() must not be abstract
+Enum method E::g() must not be abstract
+===errors >=8.1===
 Enum method E::f() must not be abstract
 Enum method E::g() must not be abstract
 ===php_error <=7.4===

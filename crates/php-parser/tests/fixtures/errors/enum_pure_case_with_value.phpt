@@ -7,9 +7,7 @@ enum Direction {
 ===errors <=8.0===
 'enums' requires PHP 8.1 or higher
 Case North of non-backed enum Direction must not have a value
-===errors 8.1===
-Case North of non-backed enum Direction must not have a value, try adding ": int" to the enum declaration
-===errors >=8.2===
+===errors >=8.1===
 Case North of non-backed enum Direction must not have a value
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'Direction' (T_STRING) in Standard input code on line 2

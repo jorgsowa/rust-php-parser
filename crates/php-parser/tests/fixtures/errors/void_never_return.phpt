@@ -10,12 +10,8 @@ class A {
 ===errors <=8.0===
 A void function must not return a value
 A function with return type must return a value
-A void function must not return a value
-===errors 8.1-8.3===
-A void function must not return a value
-A never-returning function must not return
-A void function must not return a value
-===errors >=8.4===
+A void method must not return a value
+===errors >=8.1===
 A void function must not return a value
 A never-returning function must not return
 A void method must not return a value

@@ -4,10 +4,7 @@ const A = static function () { echo (1 < 2)::class; };
 ===errors <=7.4===
 Cannot use ::class with dynamic class name
 'closures in constant expressions' requires PHP 8.5 or higher
-===errors 8.0-8.2===
-Cannot use "::class" on value of type bool
-'closures in constant expressions' requires PHP 8.5 or higher
-===errors 8.3-8.4===
+===errors 8.0-8.4===
 Cannot use "::class" on true
 'closures in constant expressions' requires PHP 8.5 or higher
 ===errors >=8.5===

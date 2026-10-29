@@ -1,9 +1,7 @@
 ===source===
 <?php
 $f = fn(): int => yield 1;
-===errors <=7.4===
-Generators may only declare a return type of Generator, Iterator, Traversable, or iterable, int is not permitted
-===errors >=8.0===
+===errors===
 Generator return type must be a supertype of Generator, int given
 ===php_error <=7.4===
 PHP Fatal error:  Generators may only declare a return type of Generator, Iterator, Traversable, or iterable, int is not permitted in Standard input code on line 2

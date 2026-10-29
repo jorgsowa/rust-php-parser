@@ -16,13 +16,7 @@ Case X of non-backed enum C must not have a value
 Case X of non-backed enum D must not have a value
 'enums' requires PHP 8.1 or higher
 Case X of non-backed enum F must not have a value
-===errors 8.1===
-Case X of non-backed enum A must not have a value, try adding ": string" to the enum declaration
-Case X of non-backed enum B must not have a value
-Case X of non-backed enum C must not have a value, try adding ": string" to the enum declaration
-Case X of non-backed enum D must not have a value
-Case X of non-backed enum F must not have a value, try adding ": int" to the enum declaration
-===errors >=8.2===
+===errors >=8.1===
 Case X of non-backed enum A must not have a value
 Case X of non-backed enum B must not have a value
 Case X of non-backed enum C must not have a value

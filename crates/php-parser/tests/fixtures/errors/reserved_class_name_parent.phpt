@@ -1,8 +1,6 @@
 ===source===
 <?php class parent {}
-===errors <=8.3===
-Cannot use 'parent' as class name as it is reserved
-===errors >=8.4===
+===errors===
 Cannot use "parent" as a class name as it is reserved
 ===php_error <=8.3===
 PHP Fatal error:  Cannot use 'parent' as class name as it is reserved in Standard input code on line 1

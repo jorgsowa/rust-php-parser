@@ -5,7 +5,7 @@ class A {
 }
 ===errors <=7.4===
 'constructor property promotion' requires PHP 8.0 or higher
-Default value for parameters with a int type can only be int or NULL
+Cannot use string as default value for parameter $x of type int
 ===errors >=8.0===
 Cannot use string as default value for parameter $x of type int
 ===php_error <=7.4===

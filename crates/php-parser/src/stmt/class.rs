@@ -67,14 +67,10 @@ pub(crate) fn validate_class_ref<'arena, 'src>(
         } else {
             value
         };
-        let message = match parser.version {
-            v if v >= PhpVersion::Php84 => {
-                format!("Cannot use \"{value}\" as {kind} name, as it is reserved")
-            }
-            PhpVersion::Php74 => format!("Cannot use '{value}' as {kind} name as it is reserved"),
-            _ => format!("Cannot use '{value}' as {kind} name, as it is reserved"),
-        };
-        (ForbiddenRule::ReservedClassReference, message)
+        (
+            ForbiddenRule::ReservedClassReference,
+            format!("Cannot use \"{value}\" as {kind} name, as it is reserved"),
+        )
     } else {
         return;
     };
@@ -82,11 +78,7 @@ pub(crate) fn validate_class_ref<'arena, 'src>(
 }
 
 /// PHP's error for a class, interface, trait or enum declared with a reserved name.
-pub(super) fn reserved_decl_name_message(version: PhpVersion, name: &str, kind: &str) -> String {
-    // Before 8.4 PHP calls every kind of declaration a class.
-    if version < PhpVersion::Php84 {
-        return format!("Cannot use '{name}' as class name as it is reserved");
-    }
+pub(super) fn reserved_decl_name_message(name: &str, kind: &str) -> String {
     let article = if kind.starts_with(['a', 'e', 'i', 'o', 'u']) {
         "an"
     } else {
@@ -133,7 +125,7 @@ pub(super) fn parse_class<'arena, 'src>(
         if is_reserved_class_name(text, parser.version) {
             parser.forbid(
                 ForbiddenRule::ReservedClassName,
-                reserved_decl_name_message(parser.version, text, "class"),
+                reserved_decl_name_message(text, "class"),
                 name_span,
             );
         } else if name_is_reserved_kw {
@@ -478,7 +470,7 @@ pub(super) fn parse_property_hooks<'arena, 'src>(
                 (PropertyHookKind::Set, _) => super::check_returns(
                     parser,
                     &block.stmts,
-                    &super::ReturnRule::Void(super::function_kind_word(parser, true)),
+                    &super::ReturnRule::Void(super::function_kind_word(true)),
                 ),
                 _ => {}
             }
@@ -638,19 +630,10 @@ pub(super) fn check_virtual_set_visibility(
     span: Span,
 ) {
     let has = |kind| hooks.iter().any(|hook| hook.kind == kind);
-    let new_wording = parser.version >= PhpVersion::Php86;
     let access = if !has(PropertyHookKind::Get) {
-        if new_wording {
-            "set-only"
-        } else {
-            "Write-only"
-        }
+        "set-only"
     } else if !has(PropertyHookKind::Set) {
-        if new_wording {
-            "get-only"
-        } else {
-            "Read-only"
-        }
+        "get-only"
     } else {
         return;
     };
@@ -865,11 +848,8 @@ pub(crate) fn check_abstract_members(
             _ => {}
         }
     }
-    // From PHP 8.5 an anonymous class reports each abstract method where it is declared.
-    if is_anonymous && parser.version >= PhpVersion::Php85 {
-        methods.clear();
-    }
-    let (listed, plural_remaining) = if parser.version >= PhpVersion::Php85 {
+    // An anonymous class reports each abstract method where it is declared.
+    if !is_anonymous {
         if let Some((first, span)) = methods.first() {
             let message = format!(
                 "Class {class_name} declares abstract method {first}() and must therefore be declared abstract"
@@ -877,32 +857,26 @@ pub(crate) fn check_abstract_members(
             parser.forbid(ForbiddenRule::AbstractMemberInConcreteClass, message, *span);
             return;
         }
-        (hooks, false)
-    } else {
-        // Before 8.5 PHP lists the abstract methods, then the hooks, in one error.
-        methods.extend(hooks);
-        (methods, true)
-    };
-    let Some(&(_, span)) = listed.first() else {
+    }
+    let Some(&(_, span)) = hooks.first() else {
         return;
     };
-    let count = listed.len();
+    let count = hooks.len();
     let plural = if count == 1 { "" } else { "s" };
-    let remaining = if plural_remaining { "s" } else { plural };
-    let names: Vec<String> = listed
+    let names: Vec<String> = hooks
         .iter()
         .take(3)
         .map(|(name, _)| format!("{class_name}::{name}"))
         .collect();
     let more = if count > 3 { ", ..." } else { "" };
-    let message = if is_anonymous && parser.version >= PhpVersion::Php85 {
+    let message = if is_anonymous {
         format!(
             "Class {class_name} must implement {count} abstract method{plural} ({}{more})",
             names.join(", ")
         )
     } else {
         format!(
-        "Class {class_name} contains {count} abstract method{plural} and must therefore be declared abstract or implement the remaining method{remaining} ({}{more})",
+        "Class {class_name} contains {count} abstract method{plural} and must therefore be declared abstract or implement the remaining method{plural} ({}{more})",
         names.join(", ")
     )
     };
@@ -1500,7 +1474,7 @@ fn const_modifiers(mods: &Modifiers) -> Modifiers {
     const_modifiers_of(mods.visibility, mods.is_final)
 }
 
-/// Report `abstract` with `final` on a method or property, in PHP's words for the version.
+/// Report `abstract` with `final` on a method or property.
 fn reject_abstract_final(
     parser: &mut Parser<'_, '_>,
     mods: &Modifiers,
@@ -1510,14 +1484,11 @@ fn reject_abstract_final(
     if !(mods.is_abstract && mods.is_final) {
         return;
     }
-    let message = match parser.version {
-        v if v < PhpVersion::Php83 => {
-            "Cannot use the final modifier on an abstract class member".to_string()
-        }
-        PhpVersion::Php83 if member == "property" => {
-            "Cannot use the abstract modifier on a property".to_string()
-        }
-        _ => format!("Cannot use the final modifier on an abstract {member}"),
+    // Before 8.4 a property cannot be abstract at all.
+    let message = if member == "property" && parser.version < PhpVersion::Php84 {
+        "Cannot use the abstract modifier on a property".to_string()
+    } else {
+        format!("Cannot use the final modifier on an abstract {member}")
     };
     parser.forbid(
         ForbiddenRule::AbstractFinalConflict,
@@ -1657,18 +1628,12 @@ pub(super) fn check_typed_default(
             };
             format!("Default value for property of type {type_name} may not be null. Use the nullable type {nullable} to allow null default value")
         }
-        _ if parser.version < PhpVersion::Php80 => {
-            let Some(message) = default_type_message_74(parser, ty, &owner) else {
-                return;
-            };
-            message
-        }
         DefaultOwner::Param(name) | DefaultOwner::PromotedParam(name) => {
             format!("Cannot use {value_type} as default value for parameter ${name} of type {type_name}")
         }
         DefaultOwner::Property(name) => {
             let value_type = match &value.kind {
-                ExprKind::Bool(b) if parser.version >= PhpVersion::Php83 => {
+                ExprKind::Bool(b) => {
                     if *b {
                         "true"
                     } else {
@@ -1682,62 +1647,6 @@ pub(super) fn check_typed_default(
         }
     };
     parser.forbid(ForbiddenRule::DefaultValueType, message, value.span);
-}
-
-/// PHP 7.4's message for a non-null default value its single, possibly nullable, type rejects.
-fn default_type_message_74(
-    parser: &Parser<'_, '_>,
-    ty: &TypeHint<'_, '_>,
-    owner: &DefaultOwner<'_>,
-) -> Option<String> {
-    let ty = match &ty.kind {
-        TypeHintKind::Nullable(inner) => inner,
-        _ => ty,
-    };
-    let builtin = match &ty.kind {
-        TypeHintKind::Keyword(builtin, _) => Some(*builtin),
-        TypeHintKind::Named(_) => None,
-        _ => return None,
-    };
-    let is_class = matches!(
-        builtin,
-        None | Some(BuiltinType::Self_ | BuiltinType::Parent_)
-    );
-    Some(match owner {
-        DefaultOwner::Param(_) | DefaultOwner::PromotedParam(_) => {
-            let rule = match builtin {
-                _ if is_class => "a class type can only be NULL",
-                Some(BuiltinType::Int) => "a int type can only be int or NULL",
-                Some(BuiltinType::Float) => "a float type can only be float, integer, or NULL",
-                Some(BuiltinType::String) => "a string type can only be string or NULL",
-                Some(BuiltinType::Bool) => "a bool type can only be bool or NULL",
-                Some(BuiltinType::Array) => "array type can only be an array or NULL",
-                Some(BuiltinType::Iterable) => "iterable type can only be an array or NULL",
-                Some(BuiltinType::Callable) => "callable type can only be NULL",
-                Some(BuiltinType::Object) => "an object type can only be NULL",
-                _ => return None,
-            };
-            format!("Default value for parameters with {rule}")
-        }
-        DefaultOwner::Property(_) => {
-            let type_name = parser.type_display(ty);
-            if is_class {
-                return Some(format!(
-                    "Property of type {type_name} may not have default value"
-                ));
-            }
-            let allowed = match builtin {
-                Some(BuiltinType::Int) => "int",
-                Some(BuiltinType::Float) => "float or int",
-                Some(BuiltinType::String) => "string",
-                Some(BuiltinType::Bool) => "bool",
-                Some(BuiltinType::Array | BuiltinType::Iterable) => "an array",
-                Some(BuiltinType::Object) => "object",
-                _ => return None,
-            };
-            format!("Default value for property of type {type_name} can only be {allowed}")
-        }
-    })
 }
 
 /// Report a literal value that a typed class constant's type does not accept.
@@ -1786,11 +1695,7 @@ pub(super) fn parse_class_const_member<'arena, 'src>(
         (mods.is_readonly, "readonly"),
     ] {
         if present {
-            let message = if parser.version >= PhpVersion::Php83 {
-                format!("Cannot use the {modifier} modifier on a class constant")
-            } else {
-                format!("Cannot use '{modifier}' as constant modifier")
-            };
+            let message = format!("Cannot use the {modifier} modifier on a class constant");
             parser.forbid(
                 ForbiddenRule::InvalidConstantModifier,
                 message,
@@ -2076,8 +1981,7 @@ pub(super) fn parse_method_member<'arena, 'src>(
         );
     } else if mods.is_abstract {
         let is_anonymous = parser.class_scope.as_ref().is_some_and(|s| s.is_anonymous);
-        // Before 8.5 PHP reports them with the class's other abstract members.
-        if is_anonymous && parser.version >= PhpVersion::Php85 {
+        if is_anonymous {
             parser.forbid(
                 ForbiddenRule::AbstractAnonymousClassMethod,
                 format!("Anonymous class method {method_name}() must not be abstract"),
@@ -2103,14 +2007,9 @@ pub(super) fn parse_method_member<'arena, 'src>(
         }
     }
     if mods.is_readonly {
-        let message = if parser.version >= PhpVersion::Php83 {
-            "Cannot use the readonly modifier on a method"
-        } else {
-            "Cannot use 'readonly' as method modifier"
-        };
         parser.forbid(
             ForbiddenRule::ModifierNotAllowed,
-            message,
+            "Cannot use the readonly modifier on a method",
             parser.span_from(member_start),
         );
     }
@@ -2527,8 +2426,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
             ForbiddenRule::AbstractPropertyWithoutAbstractHook,
             match parser.version {
                 v if v >= PhpVersion::Php84 => "Only hooked properties may be declared abstract",
-                PhpVersion::Php83 => "Cannot use the abstract modifier on a property",
-                _ => "Properties cannot be declared abstract",
+                _ => "Cannot use the abstract modifier on a property",
             },
             parser.span_from(member_start),
         );
@@ -2638,8 +2536,7 @@ pub(super) fn parse_property_member<'arena, 'src>(
             ForbiddenRule::InterfacePropertyWithoutHooks,
             match parser.version {
                 v if v >= PhpVersion::Php84 => "Interfaces may only include hooked properties",
-                v if v >= PhpVersion::Php81 => "Interfaces may not include properties",
-                _ => "Interfaces may not include member variables",
+                _ => "Interfaces may not include properties",
             },
             parser.span_from(member_start),
         );
@@ -2806,7 +2703,7 @@ pub(super) fn parse_interface<'arena, 'src>(
         if is_reserved_class_name(text, parser.version) {
             parser.forbid(
                 ForbiddenRule::KeywordAsDeclarationName,
-                reserved_decl_name_message(parser.version, text, "interface"),
+                reserved_decl_name_message(text, "interface"),
                 name_span,
             );
         } else if name_is_reserved_kw {
@@ -2876,7 +2773,7 @@ pub(super) fn parse_trait<'arena, 'src>(
         if is_reserved_class_name(text, parser.version) {
             parser.forbid(
                 ForbiddenRule::KeywordAsDeclarationName,
-                reserved_decl_name_message(parser.version, text, "trait"),
+                reserved_decl_name_message(text, "trait"),
                 span,
             );
         } else if name_is_reserved_kw {

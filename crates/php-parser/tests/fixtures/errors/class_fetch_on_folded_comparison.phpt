@@ -11,13 +11,7 @@ Cannot use ::class with dynamic class name
 Cannot use ::class with dynamic class name
 Cannot use ::class with dynamic class name
 Cannot use ::class with dynamic class name
-===errors 8.0-8.2===
-Cannot use "::class" on value of type bool
-Cannot use "::class" on value of type bool
-Cannot use "::class" on value of type int
-Cannot use "::class" on value of type bool
-Cannot use "::class" on value of type bool
-===errors >=8.3===
+===errors >=8.0===
 Cannot use "::class" on true
 Cannot use "::class" on false
 Cannot use "::class" on int

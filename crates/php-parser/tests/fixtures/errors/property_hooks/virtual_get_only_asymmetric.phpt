@@ -6,10 +6,8 @@ class A {
 ===errors <=8.3===
 'asymmetric visibility' requires PHP 8.4 or higher
 'property hooks' requires PHP 8.4 or higher
-Read-only virtual property A::$x must not specify asymmetric visibility
-===errors 8.4-8.5===
-Read-only virtual property A::$x must not specify asymmetric visibility
-===errors >=8.6===
+get-only virtual property A::$x must not specify asymmetric visibility
+===errors >=8.4===
 get-only virtual property A::$x must not specify asymmetric visibility
 ===php_error <=8.3===
 PHP Fatal error:  Multiple access type modifiers are not allowed in Standard input code on line 3

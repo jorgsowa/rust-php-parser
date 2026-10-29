@@ -9,12 +9,7 @@ Cannot use ::class with dynamic class name
 Cannot use ::class with dynamic class name
 Cannot use ::class with dynamic class name
 Method name must be a string
-===errors 8.0-8.2===
-Cannot use "::class" on value of type int
-Cannot use "::class" on value of type int
-Cannot use "::class" on value of type bool
-Method name must be a string
-===errors >=8.3===
+===errors >=8.0===
 Cannot use "::class" on int
 Cannot use "::class" on int
 Cannot use "::class" on bool

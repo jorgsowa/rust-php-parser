@@ -1,9 +1,7 @@
 ===source===
 <?php
 function f(iterable $x = 1) {}
-===errors <=7.4===
-Default value for parameters with iterable type can only be an array or NULL
-===errors 8.0-8.1===
+===errors <=8.1===
 Cannot use int as default value for parameter $x of type iterable
 ===errors >=8.2===
 Cannot use int as default value for parameter $x of type Traversable|array

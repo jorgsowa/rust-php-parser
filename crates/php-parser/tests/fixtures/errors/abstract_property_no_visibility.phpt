@@ -1,8 +1,6 @@
 ===source===
 <?php class Foo { abstract string $bar; }
-===errors <=8.2===
-Properties cannot be declared abstract
-===errors 8.3===
+===errors <=8.3===
 Cannot use the abstract modifier on a property
 ===errors >=8.4===
 Only hooked properties may be declared abstract

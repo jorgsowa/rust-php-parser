@@ -3,9 +3,7 @@
 ===errors <=7.4===
 'named arguments' requires PHP 8.0 or higher
 Cannot use argument unpacking after named arguments
-===errors 8.0===
-Cannot combine named arguments and argument unpacking
-===errors >=8.1===
+===errors >=8.0===
 Cannot use argument unpacking after named arguments
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected ':', expecting ')' in Standard input code on line 1

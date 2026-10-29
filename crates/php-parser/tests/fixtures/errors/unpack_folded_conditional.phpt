@@ -8,16 +8,7 @@ $a = [...(null ?? 2)];
 $a = [...(1 ?? [])];
 $a = [...((1 ?: 2) + 1)];
 const C = [...(null ?? 1.5)];
-===errors <=8.3===
-Only arrays and Traversables can be unpacked
-Only arrays and Traversables can be unpacked
-Only arrays and Traversables can be unpacked
-Only arrays and Traversables can be unpacked
-Only arrays and Traversables can be unpacked
-Only arrays and Traversables can be unpacked
-Only arrays and Traversables can be unpacked
-Only arrays and Traversables can be unpacked
-===errors >=8.4===
+===errors===
 Only arrays and Traversables can be unpacked, int given
 Only arrays and Traversables can be unpacked, int given
 Only arrays and Traversables can be unpacked, int given

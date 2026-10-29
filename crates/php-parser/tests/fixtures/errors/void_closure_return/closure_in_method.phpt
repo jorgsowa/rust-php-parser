@@ -1,9 +1,7 @@
 ===source===
 <?php
 class A { function m() { return function(): void { return 1; }; } }
-===errors <=8.3===
-A void function must not return a value
-===errors >=8.4===
+===errors===
 A void method must not return a value
 ===php_error <=8.3===
 PHP Fatal error:  A void function must not return a value in Standard input code on line 2

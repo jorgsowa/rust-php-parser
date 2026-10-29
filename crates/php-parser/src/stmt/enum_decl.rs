@@ -25,7 +25,7 @@ pub(super) fn parse_enum<'arena, 'src>(
         } else if super::class::is_reserved_class_name(text, parser.version) {
             parser.forbid(
                 ForbiddenRule::ReservedEnumName,
-                super::class::reserved_decl_name_message(parser.version, text, "enum"),
+                super::class::reserved_decl_name_message(text, "enum"),
                 span,
             );
         }
@@ -155,16 +155,11 @@ pub(super) fn parse_enum<'arena, 'src>(
                 let span = equals_token
                     .expect("value.is_some() guarantees equals_token.is_some()")
                     .span;
-                let hint = value
-                    .as_ref()
-                    .filter(|_| parser.version == PhpVersion::Php81)
-                    .and_then(|value| expr::folded_case_value_type(parser, value))
-                    .map_or_else(String::new, |ty| {
-                        format!(", try adding \": {ty}\" to the enum declaration")
-                    });
                 parser.forbid(
                     ForbiddenRule::PureEnumCaseValue,
-                    format!("Case {case_name} of non-backed enum {enum_name} must not have a value{hint}"),
+                    format!(
+                        "Case {case_name} of non-backed enum {enum_name} must not have a value"
+                    ),
                     span,
                 );
             }
@@ -286,14 +281,10 @@ pub(super) fn parse_enum<'arena, 'src>(
                 Some(type_hint)
             };
             if parser.check(TokenKind::Variable) {
-                let message = if parser.version >= PhpVersion::Php82 {
-                    format!(
-                        "Enum {} cannot include properties",
-                        parser.class_scope.as_ref().map_or("", |scope| &scope.name)
-                    )
-                } else {
-                    "Enums may not include properties".to_string()
-                };
+                let message = format!(
+                    "Enum {} cannot include properties",
+                    parser.class_scope.as_ref().map_or("", |scope| &scope.name)
+                );
                 parser.forbid(ForbiddenRule::EnumProperty, message, parser.current_span());
                 let mut properties = parser.alloc_vec();
                 super::class::parse_property_member(
@@ -440,40 +431,17 @@ fn backing_type_display(
     parser.resolve_class_name(ty)
 }
 
-/// Report abstract enum methods, one by one from PHP 8.5 and as one error before.
+/// Report each abstract enum method where it is declared.
 fn report_abstract_methods(parser: &mut Parser<'_, '_>, methods: &[(String, Span)]) {
-    let Some((_, first_span)) = methods.first() else {
-        return;
-    };
     let enum_name = parser
         .class_scope
         .as_ref()
         .map_or_else(String::new, |scope| scope.name.clone());
-    if parser.version >= PhpVersion::Php85 {
-        for (name, span) in methods {
-            parser.forbid(
-                ForbiddenRule::AbstractEnumMethod,
-                format!("Enum method {enum_name}::{name}() must not be abstract"),
-                *span,
-            );
-        }
-        return;
+    for (name, span) in methods {
+        parser.forbid(
+            ForbiddenRule::AbstractEnumMethod,
+            format!("Enum method {enum_name}::{name}() must not be abstract"),
+            *span,
+        );
     }
-    let count = methods.len();
-    let plural = if count == 1 { "" } else { "s" };
-    let mut names: Vec<String> = methods
-        .iter()
-        .take(3)
-        .map(|(name, _)| format!("{enum_name}::{name}"))
-        .collect();
-    if count > 3 {
-        names.push("...".into());
-    }
-    let names = names.join(", ");
-    let message = if parser.version >= PhpVersion::Php82 {
-        format!("Enum {enum_name} must implement {count} abstract private method{plural} ({names})")
-    } else {
-        format!("Class {enum_name} contains {count} abstract method{plural} and must therefore be declared abstract or implement the remaining methods ({names})")
-    };
-    parser.forbid(ForbiddenRule::AbstractEnumMethod, message, *first_span);
 }

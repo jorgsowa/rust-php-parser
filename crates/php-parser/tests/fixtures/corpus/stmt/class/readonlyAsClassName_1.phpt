@@ -1,9 +1,7 @@
 ===source===
 <?php
 class ReadOnly {}
-===errors 8.1-8.3===
-Cannot use 'ReadOnly' as class name as it is reserved
-===errors >=8.4===
+===errors >=8.1===
 Cannot use "ReadOnly" as a class name as it is reserved
 ===php_error >=8.1===
 PHP Parse error:  syntax error, unexpected token "readonly", expecting identifier in Standard input code on line 2

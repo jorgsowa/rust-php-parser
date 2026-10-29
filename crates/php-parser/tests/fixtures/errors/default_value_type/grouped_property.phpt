@@ -3,9 +3,7 @@
 class A {
     public int $x = 1, $y = "a";
 }
-===errors <=7.4===
-Default value for property of type int can only be int
-===errors >=8.0===
+===errors===
 Cannot use string as default value for property A::$y of type int
 ===php_error <=7.4===
 PHP Fatal error:  Default value for property of type int can only be int in Standard input code on line 3

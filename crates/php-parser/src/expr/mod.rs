@@ -23,8 +23,6 @@ pub(crate) use atom::{
     ArgListResult, CAST_KEYWORDS,
 };
 
-pub(crate) use folded_value::folded_case_value_type;
-
 use atom::{parse_atom, parse_function_call};
 
 /// Returns the "chain group" binding power for a non-associative token, if applicable.
@@ -383,13 +381,9 @@ pub(crate) fn check_constant_unpack(
             ForbiddenRule::UnpackStringKeys,
             "Cannot unpack array with string keys".to_string(),
         ),
-        folded_value::UnpackError::NonArray(given) if parser.version >= PhpVersion::Php84 => (
+        folded_value::UnpackError::NonArray(given) => (
             ForbiddenRule::UnpackNonArray,
             format!("Only arrays and Traversables can be unpacked, {given} given"),
-        ),
-        folded_value::UnpackError::NonArray(_) => (
-            ForbiddenRule::UnpackNonArray,
-            "Only arrays and Traversables can be unpacked".to_string(),
         ),
     };
     parser.forbid(rule, message, span);
@@ -2707,11 +2701,7 @@ fn parse_expr_rest<'arena, 'src>(
                         lhs.span,
                     );
                 } else if let Some(value) = folded_value::folded_class_fetch_value(parser, &lhs) {
-                    let message = if parser.version >= PhpVersion::Php83 {
-                        format!("Cannot use \"::class\" on {value}")
-                    } else {
-                        format!("Cannot use \"::class\" on value of type {value}")
-                    };
+                    let message = format!("Cannot use \"::class\" on {value}");
                     parser.forbid(ForbiddenRule::ClassFetchOnFoldedValue, message, lhs.span);
                 }
                 let token = parser.advance();

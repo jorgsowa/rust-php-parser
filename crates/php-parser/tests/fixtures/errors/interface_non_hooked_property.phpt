@@ -5,9 +5,7 @@ PHP rejects a property without hooks in an interface with "Interfaces may only i
 interface I {
     public int $x;
 }
-===errors <=8.0===
-Interfaces may not include member variables
-===errors 8.1-8.3===
+===errors <=8.3===
 Interfaces may not include properties
 ===errors >=8.4===
 Interfaces may only include hooked properties

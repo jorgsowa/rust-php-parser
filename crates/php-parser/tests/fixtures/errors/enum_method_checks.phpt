@@ -6,17 +6,14 @@ enum E {
 }
 ===errors <=7.4===
 'enums' requires PHP 8.1 or higher
-A void function must not return a value
+A void method must not return a value
 'nullsafe operator (?->)' requires PHP 8.0 or higher
 Cannot take reference of a nullsafe chain
 ===errors 8.0===
 'enums' requires PHP 8.1 or higher
-A void function must not return a value
+A void method must not return a value
 Cannot take reference of a nullsafe chain
-===errors 8.1-8.3===
-A void function must not return a value
-Cannot take reference of a nullsafe chain
-===errors >=8.4===
+===errors >=8.1===
 A void method must not return a value
 Cannot take reference of a nullsafe chain
 ===php_error <=7.4===

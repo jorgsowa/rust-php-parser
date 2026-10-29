@@ -7,15 +7,7 @@ $a = array(...1.5);
 $a = [...PHP_INT_MAX];
 const C = [...true];
 function f($a = [...false]) {}
-===errors <=8.3===
-Only arrays and Traversables can be unpacked
-Only arrays and Traversables can be unpacked
-Only arrays and Traversables can be unpacked
-Only arrays and Traversables can be unpacked
-Only arrays and Traversables can be unpacked
-Only arrays and Traversables can be unpacked
-Only arrays and Traversables can be unpacked
-===errors >=8.4===
+===errors===
 Only arrays and Traversables can be unpacked, int given
 Only arrays and Traversables can be unpacked, string given
 Only arrays and Traversables can be unpacked, null given

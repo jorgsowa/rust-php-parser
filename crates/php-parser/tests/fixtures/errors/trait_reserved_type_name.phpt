@@ -5,18 +5,13 @@ trait Mixed {}
 trait never {}
 trait iterable {}
 ===errors <=7.4===
-Cannot use 'int' as class name as it is reserved
-Cannot use 'iterable' as class name as it is reserved
+Cannot use "int" as a trait name as it is reserved
+Cannot use "iterable" as a trait name as it is reserved
 ===errors 8.0===
-Cannot use 'int' as class name as it is reserved
-Cannot use 'Mixed' as class name as it is reserved
-Cannot use 'iterable' as class name as it is reserved
-===errors 8.1-8.3===
-Cannot use 'int' as class name as it is reserved
-Cannot use 'Mixed' as class name as it is reserved
-Cannot use 'never' as class name as it is reserved
-Cannot use 'iterable' as class name as it is reserved
-===errors >=8.4===
+Cannot use "int" as a trait name as it is reserved
+Cannot use "Mixed" as a trait name as it is reserved
+Cannot use "iterable" as a trait name as it is reserved
+===errors >=8.1===
 Cannot use "int" as a trait name as it is reserved
 Cannot use "Mixed" as a trait name as it is reserved
 Cannot use "never" as a trait name as it is reserved

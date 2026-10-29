@@ -2,9 +2,7 @@
 <?php class A { readonly const X = 1; }
 ===errors <=8.0===
 expected class member, found 'const'
-===errors 8.1-8.2===
-Cannot use 'readonly' as constant modifier
-===errors >=8.3===
+===errors >=8.1===
 Cannot use the readonly modifier on a class constant
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected 'readonly' (T_STRING), expecting function (T_FUNCTION) or const (T_CONST) in Standard input code on line 1

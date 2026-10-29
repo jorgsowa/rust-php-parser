@@ -4,9 +4,7 @@ namespace N;
 class A {
     public ?Foo $x = 1;
 }
-===errors <=7.4===
-Property of type N\Foo may not have default value
-===errors >=8.0===
+===errors===
 Cannot use int as default value for property N\A::$x of type ?N\Foo
 ===php_error <=7.4===
 PHP Fatal error:  Property of type N\Foo may not have default value in Standard input code on line 4
