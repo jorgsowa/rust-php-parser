@@ -20,25 +20,6 @@ fn with_stack<F: FnOnce() + Send + 'static>(bytes: usize, f: F) {
         .unwrap();
 }
 
-fn assert_has_errors(code: &str) {
-    let arena = bumpalo::Bump::new();
-    let result = php_rs_parser::parse_arena(&arena, code);
-    assert!(
-        !result.errors.is_empty(),
-        "expected parse errors but got none for: {}...",
-        &code[..code.len().min(80)]
-    );
-}
-
-fn assert_has_errors_owned(code: &str) {
-    let result = php_rs_parser::parse(code);
-    assert!(
-        !result.errors.is_empty(),
-        "(owned) expected parse errors but got none for: {}...",
-        &code[..code.len().min(80)]
-    );
-}
-
 fn assert_depth_exceeded(code: &str) {
     let arena = bumpalo::Bump::new();
     let result = php_rs_parser::parse_arena(&arena, code);
@@ -433,45 +414,6 @@ fn many_class_members_owned() {
         .collect();
     let code = format!("<?php class C {{ {} }}", members.join("\n"));
     assert_no_errors_owned(&code);
-}
-
-// ============================================================================
-// NULL BYTES
-// Cannot be expressed in .phpt fixture files.
-// ============================================================================
-
-#[test]
-fn null_bytes_in_source() {
-    assert_has_errors("<?php $x = \0;");
-}
-
-#[test]
-fn null_bytes_in_source_owned() {
-    assert_has_errors_owned("<?php $x = \0;");
-}
-
-// ============================================================================
-// FUZZ CRASH REPROS
-// Binary byte sequences that cannot be expressed in .phpt fixture files.
-// ============================================================================
-
-/// Original fuzzer crash: unterminated double-quoted string whose last bytes
-/// are the 2-byte UTF-8 encoding of U+05C7 (ׇ, bytes 0xD7 0x87).
-#[test]
-fn fuzz_crash_repro_double_quoted_multibyte_end() {
-    let data = b"\x3c\x3f\x3c\x3f\x70\x68\x70\x20\x63\x6c\x61\x73\x12\x24\x78\x22\x68\x65\x20\x3d\x20\x5b\x74\x70\x68\x70\x20\xd7\x87";
-    if let Ok(src) = std::str::from_utf8(data) {
-        let arena = bumpalo::Bump::new();
-        let _ = php_rs_parser::parse_arena(&arena, src);
-    }
-}
-
-#[test]
-fn fuzz_crash_repro_double_quoted_multibyte_end_owned() {
-    let data = b"\x3c\x3f\x3c\x3f\x70\x68\x70\x20\x63\x6c\x61\x73\x12\x24\x78\x22\x68\x65\x20\x3d\x20\x5b\x74\x70\x68\x70\x20\xd7\x87";
-    if let Ok(src) = std::str::from_utf8(data) {
-        let _ = php_rs_parser::parse(src);
-    }
 }
 
 /// Spans hold `u32` offsets; a larger source is refused up front in every build

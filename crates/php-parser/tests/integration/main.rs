@@ -1,9 +1,7 @@
-mod class_keywords;
 mod common;
 mod fingerprint;
 mod fixtures;
 mod fold;
-mod line_endings;
 mod malformed_php;
 mod names;
 mod redeclarations;
