@@ -16,6 +16,7 @@ use std::sync::Mutex;
 /// no_source=true
 /// strip_parens=true
 /// trailing_newline=true
+/// newline=crlf
 /// min_php=8.6           (parse at this version; skip php -l validation on older PHP)
 /// php_error=<message>   (compile_errors/ only: the error php -l must report)
 /// ===source===
@@ -81,6 +82,8 @@ fn parse_printer_fixture(content: &str) -> Result<PrinterFixture, String> {
             strip_parens = true;
         } else if line == "trailing_newline=true" {
             trailing_newline = true;
+        } else if line == "newline=crlf" {
+            config.newline = php_printer::Newline::CrLf;
         } else if let Some(val) = line.strip_prefix("min_php=") {
             let parsed = val
                 .split_once('.')
@@ -543,46 +546,6 @@ fn chain_operands_get_parentheses_from_precedence() {
     );
 }
 
-#[test]
-fn crlf_newline() {
-    let arena = bumpalo::Bump::new();
-    let result = php_rs_parser::parse_arena(&arena, "<?php if ($a) { echo 1; }");
-    let mut config = PrinterConfig::default();
-    config.newline = php_printer::Newline::CrLf;
-    let out = PrettyPrinter::new().config(config).print(&result.program);
-    assert_eq!(out, "<?php\r\nif ($a) {\r\n    echo 1;\r\n}");
-}
-
-/// The newline `?>` swallows prints in the configured style, so the HTML after it keeps its bytes.
-#[test]
-fn crlf_newline_after_close_tag() {
-    for (source, html) in [
-        ("<?php echo 1; ?>\r\nX\r\n", "X\r\n"),
-        ("<?php echo 1; ?>\n\r\nX", "\r\nX"),
-    ] {
-        let result = php_rs_parser::parse(source);
-        let mut config = PrinterConfig::default();
-        config.newline = php_printer::Newline::CrLf;
-        let out = PrettyPrinter::new()
-            .config(config)
-            .comments(&result.source, &result.comments)
-            .print(&result.program);
-        assert_eq!(
-            out,
-            format!("<?php\r\necho 1;\r\n?>\r\n{html}"),
-            "{source:?}"
-        );
-        let reparsed = php_rs_parser::parse(&out);
-        assert!(
-            matches!(
-                reparsed.program.stmts.last().map(|s| &s.kind),
-                Some(php_ast::owned::StmtKind::InlineHtml(h)) if &**h == html
-            ),
-            "{out:?}"
-        );
-    }
-}
-
 /// `<?= ?>` has no expression, so it must print as invalid PHP too.
 #[test]
 fn empty_short_echo_stays_invalid() {
@@ -630,54 +593,16 @@ fn owned_program_keeps_comments() {
     assert_eq!(out, "<?php\n// greet\necho 'hi';");
 }
 
-/// String literals are bytes: ones that are not valid UTF-8 print as `\xNN` and read back as the
-/// same bytes, and valid UTF-8 spelled with escapes (`"\xc3\xbf"`) prints as the character.
+/// Not a fixture: `php -l` on PHP 8.5+ accepts the empty statement this keeps for PHP 8.4.
 #[test]
-fn string_bytes_survive_printing() {
-    let code = r#"<?php
-$a = "\xff";
-$b = "a\x80b\xc3";
-$c = "\u{D800}";
-$d = "\xc3\xbf";
-$e = "\xffx$y\x80";
-$f = <<<EOT
-\xfe$y
-EOT;
-"#;
-    assert_round_trips(code);
-    let printed = php_printer::pretty_print(&php_rs_parser::parse(code).program);
-    assert!(printed.contains(r#""\xff""#), "{printed}");
-    assert!(printed.contains(r#""a\x80b\xc3""#), "{printed}");
-    assert!(printed.contains(r#""\xed\xa0\x80""#), "{printed}");
-    assert!(printed.contains("'ÿ'"), "{printed}");
-}
-
-/// An empty statement before `strict_types` is an error only before PHP 8.5, so it
-/// prints only for those versions.
-#[test]
-fn empty_statement_before_strict_types_depends_on_version() {
-    let source = "<?php ?>\n<?php declare(strict_types=1);";
-    for (version, expected) in [
-        (
-            php_rs_parser::PhpVersion::Php84,
-            "<?php\n;\ndeclare(strict_types=1);",
-        ),
-        (
-            php_rs_parser::PhpVersion::Php85,
-            "<?php\ndeclare(strict_types=1);",
-        ),
-    ] {
-        let options = php_rs_parser::ParseOptions::default().version(version);
-        let result = php_rs_parser::parse_with(source, &options);
-        let mut config = PrinterConfig::default();
-        config.php_version = version;
-        let printed = PrettyPrinter::new().config(config).print(&result.program);
-        assert_eq!(printed, expected, "PHP {version}");
-        let reparsed = php_rs_parser::parse_with(&printed, &options);
-        assert_eq!(
-            messages(&reparsed.errors),
-            messages(&result.errors),
-            "PHP {version}"
-        );
-    }
+fn empty_statement_before_strict_types_prints_before_php_85() {
+    let version = php_rs_parser::PhpVersion::Php84;
+    let options = php_rs_parser::ParseOptions::default().version(version);
+    let result = php_rs_parser::parse_with("<?php ?>\n<?php declare(strict_types=1);", &options);
+    let mut config = PrinterConfig::default();
+    config.php_version = version;
+    let printed = PrettyPrinter::new().config(config).print(&result.program);
+    assert_eq!(printed, "<?php\n;\ndeclare(strict_types=1);");
+    let reparsed = php_rs_parser::parse_with(&printed, &options);
+    assert_eq!(messages(&reparsed.errors), messages(&result.errors));
 }
