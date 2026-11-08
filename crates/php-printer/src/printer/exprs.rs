@@ -541,6 +541,9 @@ impl<'src> Printer<'src> {
             ExprKind::StaticMethodCall(call) => {
                 self.w("::");
                 self.print_member_name(call.method);
+                if lexes_as_set_visibility(call.method, &call.args) {
+                    self.w(" ");
+                }
                 self.w("(");
                 self.print_call_args(&call.args, call.method.span.end, expr.span.end);
                 self.w(")");
@@ -942,6 +945,34 @@ impl<'src> Printer<'src> {
                 self.w("\"");
             }
         }
+    }
+}
+
+/// Whether `::public(set)` and its siblings would lex as one `public(set)` token.
+fn lexes_as_set_visibility(method: &Expr, args: &[Arg]) -> bool {
+    let ExprKind::Identifier(name) = &method.kind else {
+        return false;
+    };
+    let name = name.as_str();
+    if !["public", "protected", "private"]
+        .iter()
+        .any(|v| name.eq_ignore_ascii_case(v))
+    {
+        return false;
+    }
+    match args {
+        [Arg {
+            name: None,
+            kind:
+                ArgKind::Value(Expr {
+                    kind: ExprKind::Name(arg),
+                    ..
+                }),
+            ..
+        }] => {
+            arg.kind() == NameKind::Unqualified && arg.to_string_repr().eq_ignore_ascii_case("set")
+        }
+        _ => false,
     }
 }
 
