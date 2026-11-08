@@ -161,6 +161,11 @@ impl<'src> Printer<'src> {
         self.output
     }
 
+    /// Whether the output ends in PHP code, where a further newline prints nothing.
+    pub fn ends_in_php(&self) -> bool {
+        !self.in_html_mode && !self.output.is_empty()
+    }
+
     /// Marks a node this printer version cannot print. The AST enums are
     /// `#[non_exhaustive]`; a marker keeps the output visibly wrong (and
     /// unparseable) instead of silently dropping the node.

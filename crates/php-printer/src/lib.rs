@@ -133,7 +133,8 @@ impl<'src> PrettyPrinter<'src> {
         self
     }
 
-    /// Whether to end the output with the configured newline.
+    /// Whether to end the output with the configured newline. Output that is empty or ends in
+    /// inline HTML gets none, since the script would print it.
     pub fn trailing_newline(mut self, trailing_newline: bool) -> Self {
         self.trailing_newline = trailing_newline;
         self
@@ -154,8 +155,9 @@ impl<'src> PrettyPrinter<'src> {
     fn print_arena(&self, program: &Program<'_, '_>) -> String {
         let mut p = printer::Printer::with_comments(&self.config, self.source, &self.comments);
         p.print_program(program, self.syntax_errors);
+        let trailing_newline = self.trailing_newline && p.ends_in_php();
         let mut out = p.into_output();
-        if self.trailing_newline {
+        if trailing_newline {
             out.push_str(self.config.newline.as_str());
         }
         out

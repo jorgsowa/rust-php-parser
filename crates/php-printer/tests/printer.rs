@@ -440,6 +440,23 @@ fn trailing_newline() {
     assert_eq!(output, "<?php\necho 'hello';\n");
 }
 
+#[test]
+fn trailing_newline_skipped_when_it_would_be_output() {
+    for (source, expected) in [
+        ("", ""),
+        ("Hello", "Hello"),
+        ("<?php echo 1; ?>\nHello", "<?php\necho 1;\n?>Hello"),
+        ("<?php echo 1; ?>\n", "<?php\necho 1;\n"),
+    ] {
+        let arena = bumpalo::Bump::new();
+        let result = php_rs_parser::parse_arena(&arena, source);
+        let output = PrettyPrinter::new()
+            .trailing_newline(true)
+            .print(&result.program);
+        assert_eq!(output, expected, "source: {source:?}");
+    }
+}
+
 // ============================================================================
 // Deep and long input
 // ============================================================================
