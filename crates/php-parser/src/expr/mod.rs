@@ -2105,6 +2105,21 @@ fn temporary_write_message(
 /// / ternary-else context. Callers must opt-in via an explicit
 /// `if parser.current_kind().is_assignment_op()` guard rather than relying on `min_bp`
 /// to block it.
+fn parse_assign_operand<'arena, 'src>(
+    parser: &mut Parser<'arena, 'src>,
+    lhs: Expr<'arena, 'src>,
+    min_bp: u8,
+) -> Expr<'arena, 'src> {
+    let expr = parse_assign_continuation(parser, lhs);
+    // `$a = &$b` ends at its variable, so a following tighter operator takes the whole
+    // assignment as its left operand: `$x == $a = &$b > 1` is `$x == (($a = &$b) > 1)`.
+    if matches!(expr.kind, ExprKind::Assign(AssignExpr { by_ref: true, .. })) {
+        parse_expr_continue(parser, expr, min_bp)
+    } else {
+        expr
+    }
+}
+
 fn parse_assign_continuation<'arena, 'src>(
     parser: &mut Parser<'arena, 'src>,
     lhs: Expr<'arena, 'src>,
@@ -2410,7 +2425,7 @@ fn parse_expr_rest<'arena, 'src>(
                 // e.g., $a ? $b : $c = $d  →  $a ? $b : ($c = $d)
                 let mut else_expr = parse_expr_bp(parser, TERNARY_BP + 1);
                 if parser.current_kind().is_assignment_op() {
-                    else_expr = parse_assign_continuation(parser, else_expr);
+                    else_expr = parse_assign_operand(parser, else_expr, TERNARY_BP + 1);
                 }
                 let span = lhs.span.merge(else_expr.span);
                 lhs = Expr {
@@ -2529,7 +2544,7 @@ fn parse_expr_rest<'arena, 'src>(
                 // e.g. `$a ?? $b ? $c : $d`  →  `($a ?? $b) ? $c : $d`
                 let mut rhs = parse_expr_bp(parser, TERNARY_BP + 1);
                 if parser.current_kind().is_assignment_op() {
-                    rhs = parse_assign_continuation(parser, rhs);
+                    rhs = parse_assign_operand(parser, rhs, TERNARY_BP + 1);
                 }
                 let span = lhs.span.merge(rhs.span);
                 lhs = Expr {
@@ -2951,7 +2966,7 @@ fn parse_expr_rest<'arena, 'src>(
                 parse_expr_bp(parser, right_bp)
             };
             if parser.current_kind().is_assignment_op() {
-                rhs = parse_assign_continuation(parser, rhs);
+                rhs = parse_assign_operand(parser, rhs, right_bp);
             }
             if may_skip {
                 parser.uncompiled_spans.push(rhs.span);

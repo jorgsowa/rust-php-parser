@@ -11,7 +11,7 @@ use crate::stmt;
 use crate::version::PhpVersion;
 
 use super::{
-    interpolation::heredoc_indent_len, parse_assign_continuation, parse_expr, parse_expr_bp,
+    interpolation::heredoc_indent_len, parse_assign_operand, parse_expr, parse_expr_bp,
     parse_expr_continue, parse_member_name,
 };
 
@@ -125,7 +125,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         let mut operand = parse_expr_bp(parser, precedence::HIGH_PREFIX_BP);
         // PHP grammar quirk: assignment binds tighter than @
         if parser.current_kind().is_assignment_op() {
-            operand = parse_assign_continuation(parser, operand);
+            operand = parse_assign_operand(parser, operand, precedence::HIGH_PREFIX_BP);
         }
         let span = token.span.merge(operand.span);
         return Expr {
@@ -144,7 +144,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
         }
         let mut operand = parse_expr_bp(parser, ops.last().unwrap().1);
         loop {
-            let (op_token, _) = ops.pop().expect("prefix operator stack is non-empty");
+            let (op_token, op_bp) = ops.pop().expect("prefix operator stack is non-empty");
             // PHP grammar quirk: assignment operators bind tighter than prefix unary.
             // e.g., -$x += 1  parses as  -(($x += 1)),  not  (-$x) += 1
             //
@@ -154,7 +154,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             if parser.current_kind().is_assignment_op()
                 && !matches!(op_token.kind, TokenKind::PlusPlus | TokenKind::MinusMinus)
             {
-                operand = parse_assign_continuation(parser, operand);
+                operand = parse_assign_operand(parser, operand, op_bp);
             }
             let op = match op_token.kind {
                 TokenKind::Minus => UnaryPrefixOp::Negate,
@@ -1064,7 +1064,8 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
                                 let mut operand =
                                     parse_expr_continue(parser, grouped, precedence::CLONE_BP);
                                 if parser.current_kind().is_assignment_op() {
-                                    operand = parse_assign_continuation(parser, operand);
+                                    operand =
+                                        parse_assign_operand(parser, operand, precedence::CLONE_BP);
                                 }
                                 let span = token.span.merge(operand.span);
                                 return Expr {
@@ -1119,7 +1120,7 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             } else {
                 let mut operand = parse_expr_bp(parser, precedence::CLONE_BP);
                 if parser.current_kind().is_assignment_op() {
-                    operand = parse_assign_continuation(parser, operand);
+                    operand = parse_assign_operand(parser, operand, precedence::CLONE_BP);
                 }
                 let span = token.span.merge(operand.span);
                 Expr {
@@ -2827,7 +2828,7 @@ fn try_parse_cast<'arena, 'src>(
     let mut operand = parse_expr_bp(parser, operand_bp);
     // PHP grammar quirk: assignment binds tighter than casts.
     if parser.current_kind().is_assignment_op() {
-        operand = parse_assign_continuation(parser, operand);
+        operand = parse_assign_operand(parser, operand, operand_bp);
     }
     let span = parser.span_to(start, operand.span);
     Some(Expr {
