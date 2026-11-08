@@ -300,6 +300,7 @@ impl<'src> Printer<'src> {
             StmtKind::HaltCompiler(data) => {
                 self.w("__halt_compiler();");
                 self.w(data);
+                self.halted = true;
             }
             StmtKind::Nop => {
                 self.w(";");

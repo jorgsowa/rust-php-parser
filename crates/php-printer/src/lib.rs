@@ -133,8 +133,8 @@ impl<'src> PrettyPrinter<'src> {
         self
     }
 
-    /// Whether to end the output with the configured newline. Output that is empty or ends in
-    /// inline HTML gets none, since the script would print it.
+    /// Whether to end the output with the configured newline. Output that is empty, ends in
+    /// inline HTML or ends in `__halt_compiler()` data gets none, since the script would see it.
     pub fn trailing_newline(mut self, trailing_newline: bool) -> Self {
         self.trailing_newline = trailing_newline;
         self

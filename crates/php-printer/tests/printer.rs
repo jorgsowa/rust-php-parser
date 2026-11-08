@@ -447,6 +447,11 @@ fn trailing_newline_skipped_when_it_would_be_output() {
         ("Hello", "Hello"),
         ("<?php echo 1; ?>\nHello", "<?php\necho 1;\n?>Hello"),
         ("<?php echo 1; ?>\n", "<?php\necho 1;\n"),
+        (
+            "<?php echo 1; __halt_compiler();data",
+            "<?php\necho 1;\n__halt_compiler();data",
+        ),
+        ("<?php __halt_compiler();", "<?php\n__halt_compiler();"),
     ] {
         let arena = bumpalo::Bump::new();
         let result = php_rs_parser::parse_arena(&arena, source);

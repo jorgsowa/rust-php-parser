@@ -110,6 +110,8 @@ pub(crate) struct Printer<'src> {
     /// True when at least one PHP statement has been emitted in the current PHP block.
     /// `?>` is only emitted when this is true — empty `<?php ?>` blocks are suppressed.
     has_php_content: bool,
+    /// Set after `__halt_compiler();`, whose raw data runs to the end of the file.
+    pub(crate) halted: bool,
     /// True while nothing follows the expression being printed before the end
     /// of its statement, argument or parentheses, so an arrow function, whose
     /// body runs as far right as it can, needs no parentheses there.
@@ -149,6 +151,7 @@ impl<'src> Printer<'src> {
             comments,
             comment_cursor: 0,
             in_html_mode: false,
+            halted: false,
             has_php_content: false,
             at_tail: true,
             doc_comment_node_start: None,
@@ -163,9 +166,9 @@ impl<'src> Printer<'src> {
         self.output
     }
 
-    /// Whether the output ends in PHP code, where a further newline prints nothing.
+    /// Whether the output ends in PHP code, where a further newline changes nothing.
     pub fn ends_in_php(&self) -> bool {
-        !self.in_html_mode && !self.output.is_empty()
+        !self.in_html_mode && !self.halted && !self.output.is_empty()
     }
 
     /// Marks a node this printer version cannot print. The AST enums are
