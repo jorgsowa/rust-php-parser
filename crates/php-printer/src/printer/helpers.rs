@@ -354,3 +354,11 @@ pub(crate) fn visibility_str(vis: Visibility) -> &'static str {
         _ => "/* unsupported visibility */",
     }
 }
+
+/// The `#!` line before the script, which the lexer skips and the tree does not keep.
+pub(crate) fn shebang(source: &str) -> &str {
+    if !source.starts_with("#!") {
+        return "";
+    }
+    source.find('\n').map_or(source, |p| &source[..=p])
+}

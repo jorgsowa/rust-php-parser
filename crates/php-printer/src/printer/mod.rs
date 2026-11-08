@@ -5,6 +5,8 @@ mod imports;
 mod stmts;
 mod types;
 
+pub(crate) use helpers::shebang;
+
 use php_ast::{Comment, PhpVersion};
 
 /// Configuration for the pretty printer.
@@ -462,9 +464,10 @@ impl<'src> Printer<'src> {
     pub fn print_program(&mut self, program: &php_ast::ast::Program, syntax_errors: bool) {
         // Check if first statement is InlineHtml at position 0 (truly starts with HTML, no PHP before it).
         // If span.start > 0, there was PHP content before this statement.
+        let start = helpers::shebang(self.source).len() as u32;
         let html_at_start = matches!(
             program.stmts.first().map(|s| (s.span.start, &s.kind)),
-            Some((0, php_ast::ast::StmtKind::InlineHtml(_)))
+            Some((offset, php_ast::ast::StmtKind::InlineHtml(_))) if offset == start
         );
         if html_at_start && !syntax_errors {
             self.in_html_mode = true;

@@ -157,6 +157,7 @@ impl<'src> PrettyPrinter<'src> {
         p.print_program(program, self.syntax_errors);
         let trailing_newline = self.trailing_newline && p.ends_in_php();
         let mut out = p.into_output();
+        out.insert_str(0, printer::shebang(self.source));
         if trailing_newline {
             out.push_str(self.config.newline.as_str());
         }
