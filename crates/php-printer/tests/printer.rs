@@ -15,6 +15,7 @@ use std::sync::Mutex;
 /// blank_lines_upper_bound=0
 /// no_source=true
 /// strip_parens=true
+/// trailing_newline=true
 /// min_php=8.6           (parse at this version; skip php -l validation on older PHP)
 /// php_error=<message>   (compile_errors/ only: the error php -l must report)
 /// ===source===
@@ -33,6 +34,7 @@ struct PrinterFixture {
     /// When true, `Parenthesized` nodes are removed before printing, as in a
     /// hand-built tree, so the printer must supply every parenthesis itself.
     strip_parens: bool,
+    trailing_newline: bool,
     php_error: Option<String>,
     version: php_rs_parser::PhpVersion,
 }
@@ -67,6 +69,7 @@ fn parse_printer_fixture(content: &str) -> Result<PrinterFixture, String> {
     let mut config = PrinterConfig::default();
     let mut no_source = false;
     let mut strip_parens = false;
+    let mut trailing_newline = false;
     let mut php_error = None;
     let mut version = php_rs_parser::PhpVersion::default();
     for line in raw_config.lines() {
@@ -76,6 +79,8 @@ fn parse_printer_fixture(content: &str) -> Result<PrinterFixture, String> {
             no_source = true;
         } else if line == "strip_parens=true" {
             strip_parens = true;
+        } else if line == "trailing_newline=true" {
+            trailing_newline = true;
         } else if let Some(val) = line.strip_prefix("min_php=") {
             let parsed = val
                 .split_once('.')
@@ -99,6 +104,7 @@ fn parse_printer_fixture(content: &str) -> Result<PrinterFixture, String> {
         config,
         no_source,
         strip_parens,
+        trailing_newline,
         php_error,
         version,
     })
@@ -178,6 +184,7 @@ fn print_fixture(fixture: &PrinterFixture, source: &str) -> (String, u64, Vec<Pa
     let syntax_errors = result.errors.iter().any(|e| e.phase() == Phase::Parse);
     let mut printer = PrettyPrinter::new()
         .config(fixture.config.clone())
+        .trailing_newline(fixture.trailing_newline)
         .syntax_errors(syntax_errors);
     if !fixture.no_source {
         printer = printer.comments(result.source, &result.comments);
@@ -424,42 +431,6 @@ fn parser_corpus_round_trip() {
         f.len(),
         f.join("\n\n")
     );
-}
-
-// =============================================================================
-// File output
-// =============================================================================
-
-#[test]
-fn trailing_newline() {
-    let arena = bumpalo::Bump::new();
-    let result = php_rs_parser::parse_arena(&arena, "<?php echo 'hello';");
-    let output = PrettyPrinter::new()
-        .trailing_newline(true)
-        .print(&result.program);
-    assert_eq!(output, "<?php\necho 'hello';\n");
-}
-
-#[test]
-fn trailing_newline_skipped_when_it_would_be_output() {
-    for (source, expected) in [
-        ("", ""),
-        ("Hello", "Hello"),
-        ("<?php echo 1; ?>\nHello", "<?php\necho 1;\n?>Hello"),
-        ("<?php echo 1; ?>\n", "<?php\necho 1;\n"),
-        (
-            "<?php echo 1; __halt_compiler();data",
-            "<?php\necho 1;\n__halt_compiler();data",
-        ),
-        ("<?php __halt_compiler();", "<?php\n__halt_compiler();"),
-    ] {
-        let arena = bumpalo::Bump::new();
-        let result = php_rs_parser::parse_arena(&arena, source);
-        let output = PrettyPrinter::new()
-            .trailing_newline(true)
-            .print(&result.program);
-        assert_eq!(output, expected, "source: {source:?}");
-    }
 }
 
 // ============================================================================
