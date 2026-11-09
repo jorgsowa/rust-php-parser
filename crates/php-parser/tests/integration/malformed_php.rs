@@ -1,6 +1,6 @@
 //! Programmatic tests that cannot be expressed as static fixture files.
 //!
-//! All other error-case tests live in `tests/fixtures/errors/*.phpt` and are
+//! All other error-case tests live in `tests/fixtures/errors/**/*.phpt` and are
 //! run automatically by `fixtures()`.
 
 use crate::common::format_errors;
