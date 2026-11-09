@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PHP Parser Playground</title>
     <meta name="description" content="Interactive PHP parser and formatter powered by a Rust parser compiled to WebAssembly." />
+    <script>
+      (function () {
+        var s = null
+        try { s = localStorage.getItem('color-scheme') } catch (e) {}
+        if (s !== 'light' && s !== 'dark') s = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+        document.documentElement.dataset.theme = s
+      })()
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,500&family=Geist+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />

@@ -27,6 +27,7 @@ const highlighter = tagHighlighter([
   { tag: [t.function(t.variableName), t.function(t.name), t.definition(t.name), t.propertyName, t.attributeName], class: 'tok-fn' },
   { tag: [t.className, t.typeName, t.namespace], class: 'tok-type' },
   { tag: [t.special(t.variableName), t.escape], class: 'tok-special' },
+  { tag: [t.variableName, t.special(t.propertyName)], class: 'tok-var' },
   { tag: [t.operator, t.punctuation, t.bracket, t.meta], class: 'tok-punct' },
 ])
 

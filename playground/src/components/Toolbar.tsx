@@ -1,5 +1,6 @@
 import { type Route } from '../router'
 import { Select } from './Select'
+import { COLOR_SCHEMES, type ColorScheme } from '../colorScheme'
 
 export const PHP_VERSIONS = ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6'] as const
 export type PhpVersion = (typeof PHP_VERSIONS)[number]
@@ -10,6 +11,8 @@ interface Props {
   onVersionChange: (v: PhpVersion) => void
   wasmStatus: WasmStatus
   route: Route
+  colorScheme: ColorScheme
+  onColorSchemeChange: (s: ColorScheme) => void
 }
 
 const WASM_LABEL: Record<WasmStatus, string> = {
@@ -18,7 +21,13 @@ const WASM_LABEL: Record<WasmStatus, string> = {
   mock:    'mock',
 }
 
-export function Toolbar({ version, onVersionChange, wasmStatus, route }: Props) {
+const SCHEME_LABEL: Record<ColorScheme, string> = {
+  system: 'System',
+  light:  'Light',
+  dark:   'Dark',
+}
+
+export function Toolbar({ version, onVersionChange, wasmStatus, route, colorScheme, onColorSchemeChange }: Props) {
   return (
     <header className="toolbar">
       <div className="toolbar-brand">
@@ -59,6 +68,14 @@ export function Toolbar({ version, onVersionChange, wasmStatus, route }: Props) 
           onChange={v => onVersionChange(v as PhpVersion)}
           aria-label="PHP version"
           options={PHP_VERSIONS.map(v => ({ value: v, label: `PHP ${v}` }))}
+        />
+
+        <Select
+          className="theme-select"
+          value={colorScheme}
+          onChange={v => onColorSchemeChange(v as ColorScheme)}
+          aria-label="Color scheme"
+          options={COLOR_SCHEMES.map(s => ({ value: s, label: SCHEME_LABEL[s] }))}
         />
 
         <span className={`wasm-pill ${wasmStatus}`} title={

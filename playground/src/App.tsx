@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { loadPhpWasm, type ParseResult } from './php_wasm'
 import { useRoute } from './router'
+import { useColorScheme } from './colorScheme'
 import { Toolbar, type PhpVersion, type WasmStatus } from './components/Toolbar'
 import { EditorPane, type EditorHandle } from './components/EditorPane'
 import { AstPane } from './components/AstPane'
@@ -134,6 +135,8 @@ export default function App() {
   const col2 = div2 - div1
   const col3 = 100 - div2
 
+  const [colorScheme, setColorScheme] = useColorScheme()
+
   const [astHighlight, setAstHighlight] = useState<{ start: number; end: number } | null>(null)
 
   return (
@@ -143,6 +146,8 @@ export default function App() {
         onVersionChange={setVersion}
         wasmStatus={wasmStatus}
         route={route}
+        colorScheme={colorScheme}
+        onColorSchemeChange={setColorScheme}
       />
 
       <div className="workspace" ref={workspaceRef} style={{ display: route.page === 'playground' ? 'flex' : 'none' }}>
