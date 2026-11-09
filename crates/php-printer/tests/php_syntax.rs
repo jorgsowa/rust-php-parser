@@ -104,8 +104,13 @@ fn printed_fixtures_keep_php_l_result() {
             let (printed, syntax_errors) = print(source, version);
             let expected = php_lint(source).map(|e| without_line(&e));
             let actual = php_lint(&printed).map(|e| without_line(&e));
+            // PHP quotes some keywords as spelled, and the printer lowercases them.
+            let same = match (&expected, &actual) {
+                (Some(e), Some(a)) => e.eq_ignore_ascii_case(a),
+                (e, a) => e == a,
+            };
             // Printing keeps a syntax error, though not its message.
-            if expected == actual || syntax_errors && expected.is_some() == actual.is_some() {
+            if same || syntax_errors && expected.is_some() == actual.is_some() {
                 return;
             }
             let verdict = |e: &Option<String>| e.clone().unwrap_or_else(|| "passes".to_string());
