@@ -106,7 +106,7 @@ body::after {
 }
 
 .brand-sub {
-  color: var(--text-3);
+  color: var(--text-2);
   font-size: 11px;
   font-weight: 300;
   letter-spacing: 0.09em;
@@ -130,7 +130,7 @@ body::after {
   appearance: none;
   background: transparent;
   border: none;
-  color: var(--text-3);
+  color: var(--text-2);
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 500;
@@ -142,7 +142,7 @@ body::after {
 }
 
 .nav-tab:hover {
-  color: var(--text-2);
+  color: var(--text);
   background: rgba(232, 148, 58, 0.05);
 }
 
@@ -1009,6 +1009,11 @@ body::after {
   cursor: text;
 }
 
+.example-code.is-clipped {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 40px), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 40px), transparent);
+}
+
 .example-code code { font: inherit; }
 
 .example-code::-webkit-scrollbar       { width: 4px; }
@@ -1230,7 +1235,7 @@ body::after {
 
 .docs-example {
   position: sticky;
-  top: 0;
+  top: 24px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -1332,6 +1337,16 @@ body::after {
   font-size: 12.5px;
   color: var(--tok-type);
 }
+
+.field-type a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  text-underline-offset: 3px;
+}
+
+.field-type a:hover { text-decoration-color: currentColor; }
+.field-type a:focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: 2px; }
 
 .field-optional {
   font-size: 11px;
@@ -2261,7 +2276,17 @@ body::after {
   .docs-article-head h1 { font-size: 32px; }
   .docs-pager           { grid-template-columns: 1fr; }
 
+  .toolbar           { flex-wrap: wrap; height: auto; padding: 0 16px; row-gap: 0; }
+  .toolbar-brand,
+  .toolbar-controls  { min-height: 46px; align-items: center; }
   .toolbar-nav {
-    display: none;
+    order: 3;
+    flex-basis: calc(100% + 32px);
+    margin: 0 -16px;
+    padding: 6px 10px;
+    border-top: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
   }
+  .nav-tab           { white-space: nowrap; }
 }

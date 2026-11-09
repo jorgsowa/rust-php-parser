@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, type ReactNode } from 'react'
 import { CodeExample, computeMarks } from './CodeExample'
 import { keywordLabel } from './NodeCard'
-import { orderedNodes, isAvailableIn, nodeHref } from './nodes'
+import { orderedNodes, isAvailableIn, nodeHref, nodeForTypeName } from './nodes'
 import type { PhpVersion } from '../Toolbar'
 
 interface Props {
@@ -11,6 +11,15 @@ interface Props {
 }
 
 type CopyState = 'idle' | 'copied' | 'failed'
+
+function linkedType(type: string, currentId: string): ReactNode[] {
+  return type.split(/([A-Z]\w*)/).map((part, i) => {
+    const target = i % 2 === 1 ? nodeForTypeName(part) : undefined
+    return target && target.id !== currentId
+      ? <a key={i} href={nodeHref(target)} title={`${target.name}: ${target.description}`}>{part}</a>
+      : part
+  })
+}
 
 export function NodeDetailPage({ nodeId, version, onVisualize }: Props) {
   const nodeIndex = orderedNodes.findIndex(n => n.id === nodeId)
@@ -155,7 +164,7 @@ export function NodeDetailPage({ nodeId, version, onVisualize }: Props) {
                       >
                         <div className="field-sig">
                           <code className="field-name">{f.name}</code>
-                          <code className="field-type">{f.type}</code>
+                          <code className="field-type">{linkedType(f.type, node.id)}</code>
                           {f.optional && <span className="field-optional">optional</span>}
                         </div>
                         {f.description && <p className="field-desc">{f.description}</p>}

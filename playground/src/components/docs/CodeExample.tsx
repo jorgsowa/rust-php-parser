@@ -1,4 +1,4 @@
-import { useMemo, type ReactNode } from 'react'
+import { useMemo, useRef, useState, useLayoutEffect, type ReactNode } from 'react'
 import { phpLanguage } from '@codemirror/lang-php'
 import { highlightTree, tagHighlighter, tags as t } from '@lezer/highlight'
 import type { AstNode } from '../../data/ast-nodes'
@@ -116,8 +116,29 @@ interface Props {
   className?: string
 }
 
+// Fades the bottom edge while more code sits below the scroll fold.
+function useClippedBottom() {
+  const ref = useRef<HTMLPreElement>(null)
+  const [clipped, setClipped] = useState(false)
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const update = () => setClipped(el.scrollTop + el.clientHeight < el.scrollHeight - 1)
+    update()
+    el.addEventListener('scroll', update, { passive: true })
+    const observer = new ResizeObserver(update)
+    observer.observe(el)
+    return () => {
+      el.removeEventListener('scroll', update)
+      observer.disconnect()
+    }
+  }, [])
+  return { ref, clipped }
+}
+
 export function CodeExample({ code, marks = [], className }: Props) {
   const tokens = useMemo(() => tokenize(code), [code])
+  const { ref, clipped } = useClippedBottom()
 
   const children: ReactNode[] = []
   let pos = 0
@@ -133,7 +154,7 @@ export function CodeExample({ code, marks = [], className }: Props) {
   children.push(...renderTokens(code, tokens, pos, code.length))
 
   return (
-    <pre className={`example-code${className ? ` ${className}` : ''}`}>
+    <pre ref={ref} className={`example-code${clipped ? ' is-clipped' : ''}${className ? ` ${className}` : ''}`}>
       <code>{children}</code>
     </pre>
   )
