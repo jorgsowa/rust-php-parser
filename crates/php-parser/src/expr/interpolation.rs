@@ -454,19 +454,12 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                     parts.push(StringPart::Literal(ByteStr::new_in(arena, &literal)));
                     literal.clear();
                 }
-                let brace_offset = body_offset + i as u32;
-                let close = interpolation_end(bytes, i, version >= PhpVersion::Php80);
-                let closed = close.is_some();
+                // The lexer ends a heredoc only after every `{$` in its body is closed.
+                let after =
+                    interpolation_end(bytes, i, version >= PhpVersion::Php80).unwrap_or(len);
                 let expr_start = i + 1;
-                let expr_end = close.map_or(len, |after| after - 1);
-                i = close.unwrap_or(len);
-                if !closed {
-                    errors.push(ParseError::Forbidden {
-                        rule: ForbiddenRule::UnclosedInterpolation,
-                        message: "unclosed '{' in string interpolation".into(),
-                        span: Span::new(brace_offset, body_offset + expr_end as u32),
-                    });
-                }
+                let expr_end = after - 1;
+                i = after;
                 // raw_body is a verbatim source slice, so body_offset + expr_start is the
                 // correct absolute position — use the fast sub-parser path directly.
                 let expr_offset = body_offset + expr_start as u32;
@@ -477,12 +470,10 @@ pub fn parse_interpolated_parts_indented<'arena, 'src>(
                     Span::new(expr_offset, end_offset),
                     version,
                     nesting_depth,
-                    closed,
+                    true,
                     errors,
                 );
-                if closed {
-                    check_curly_interpolation(&expr, errors);
-                }
+                check_curly_interpolation(&expr, errors);
                 parts.push(StringPart::Expr(expr));
             }
             _ => {
