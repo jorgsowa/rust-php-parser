@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.28.1] - 2026-11-09
+## [0.29.0] - 2026-11-09
 
 Parsing valid code takes about 19% less CPU time, and more invalid code is rejected as PHP rejects it.
 
@@ -918,8 +918,8 @@ No user-facing changes.
 
 Initial release: a recursive descent PHP parser for PHP 8.3 syntax with arena allocation, zero-copy string borrowing, error recovery and nikic/PHP-Parser corpus compatibility.
 
-[Unreleased]: https://github.com/jorgsowa/rust-php-parser/compare/v0.28.1...HEAD
-[0.28.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.28.0...v0.28.1
+[Unreleased]: https://github.com/jorgsowa/rust-php-parser/compare/v0.29.0...HEAD
+[0.29.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.28.0...v0.29.0
 [0.28.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.27.0...v0.28.0
 [0.27.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.26.0...v0.27.0
 [0.26.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.25.1...v0.26.0
