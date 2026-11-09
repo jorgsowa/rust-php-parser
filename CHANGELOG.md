@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A constant named like a cast and alone in call, condition or `match` parentheses, as in `foo(\nint\n)`, prints with a line break before `)`, so it does not print as the cast token `(int)` (`php-printer`).
 - A `(real)` cast from PHP 8.0 reports PHP's message, `The (real) cast has been removed, use (float) instead` (`php-rs-parser`).
 - From PHP 8.4, `C::public(set)` reports `unexpected token "public(set)"`, since PHP reads `public(set)` as one token after `::` too (`php-rs-parser`).
+- A reference assignment is complete after its variable, so a tighter operator after it takes the assignment as its left operand: `$x == $a =& $b > f()` parses as `$x == (($a =& $b) > f())`, as PHP evaluates it (`php-rs-parser`).
+- A static call named `public`, `protected` or `private` with `set` as its only argument prints as `C::public (set)`, so it does not print as the `public(set)` token (`php-printer`).
+- The shebang line is printed, and inline HTML right after it starts the output as HTML (`php-printer`).
+- `PrettyPrinter::trailing_newline` adds no newline after inline HTML, after `__halt_compiler()` data or to empty output, where the script would see it (`php-printer`).
 
 ## [0.28.0] - 2026-10-29
 
