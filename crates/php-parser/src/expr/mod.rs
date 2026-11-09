@@ -2596,6 +2596,7 @@ fn parse_expr_rest<'arena, 'src>(
             }
             check_dereferencable(parser, &lhs, kind);
             parser.advance(); // consume ::
+            check_set_visibility_token(parser);
             if matches!(lhs.kind, ExprKind::Parenthesized(_) | ExprKind::Array(_)) {
                 if parser.check(TokenKind::Class) {
                     check_class_name_fetch_literal(parser, &lhs);
@@ -3034,6 +3035,33 @@ fn parse_expr_rest<'arena, 'src>(
 }
 
 /// Parse a member name after -> or ?->. Accepts identifiers and semi-reserved keywords.
+/// From PHP 8.4 the lexer reads `public(set)` after `::` as one token, where no method name can be.
+fn check_set_visibility_token(parser: &mut Parser<'_, '_>) {
+    if parser.version < PhpVersion::Php84
+        || !matches!(
+            parser.current_kind(),
+            TokenKind::Public | TokenKind::Protected | TokenKind::Private
+        )
+    {
+        return;
+    }
+    let keyword = parser.current_span();
+    let end = keyword.end as usize + "(set)".len();
+    let is_token = parser
+        .source
+        .get(keyword.end as usize..end)
+        .is_some_and(|rest| rest.eq_ignore_ascii_case("(set)"));
+    if is_token {
+        let text = &parser.source[keyword.start as usize..keyword.end as usize];
+        let message = format!("unexpected token \"{}(set)\"", text.to_ascii_lowercase());
+        parser.forbid(
+            ForbiddenRule::UnexpectedSetVisibility,
+            message,
+            Span::new(keyword.start, end as u32),
+        );
+    }
+}
+
 pub(crate) fn parse_member_name<'arena, 'src>(
     parser: &'_ mut Parser<'arena, 'src>,
 ) -> Expr<'arena, 'src> {

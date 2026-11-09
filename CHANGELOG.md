@@ -7,12 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `ForbiddenRule::UnexpectedSetVisibility` (`php-rs-parser`).
+
 ### Fixed
 
 - `NameResolver` resolves a qualified name with one segment, which error recovery keeps for `Foo\` with nothing after the backslash, to `ResolvedName::Error` instead of a name ending in `\` (`php-ast`).
 - A nested ternary with a short `?:` on one side reports PHP's message for that form, as in ``Unparenthesized `a ? b : c ?: d` is not supported`` (`php-rs-parser`).
 - A constant named like a cast and alone in call, condition or `match` parentheses, as in `foo(\nint\n)`, prints with a line break before `)`, so it does not print as the cast token `(int)` (`php-printer`).
 - A `(real)` cast from PHP 8.0 reports PHP's message, `The (real) cast has been removed, use (float) instead` (`php-rs-parser`).
+- From PHP 8.4, `C::public(set)` reports `unexpected token "public(set)"`, since PHP reads `public(set)` as one token after `::` too (`php-rs-parser`).
 
 ## [0.28.0] - 2026-10-29
 

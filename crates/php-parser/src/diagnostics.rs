@@ -635,6 +635,8 @@ forbidden_rules! {
     UnexpectedCharacter = "unexpected-character", Parse;
     /// A cast token such as `(int)` where no cast can start, as in `foo(int)`.
     UnexpectedCast = "unexpected-cast", Parse;
+    /// A set visibility token such as `public(set)` where none can start, as in `C::public(set)`.
+    UnexpectedSetVisibility = "unexpected-set-visibility", Parse;
     /// A `try` block has neither a `catch` nor a `finally` clause.
     TryWithoutCatchOrFinally = "try-without-catch-or-finally", Compile;
     /// Not yet classified.
@@ -970,6 +972,7 @@ mod tests {
             ForbiddenRule::UnexpectedCharacter => &[("<?php $a\x01\x02 = 1;", "\x01\x02"), ("<?php $a =\x0c1;", "\x0c"),],
             ForbiddenRule::TryWithoutCatchOrFinally => &[("<?php try {}", "try {}"),],
             ForbiddenRule::UnexpectedCast => &[("<?php foo(int);", "(int)"), ("<?php if ( float ) {}", "( float )"),],
+            ForbiddenRule::UnexpectedSetVisibility => &[("<?php C::public(set);", "public(set)"), ("<?php $c::PRIVATE(Set);", "PRIVATE(Set)"),],
             ForbiddenRule::DynamicClassFetch
             | ForbiddenRule::UnpackStringKeys
             | ForbiddenRule::UnsupportedOperandTypes
