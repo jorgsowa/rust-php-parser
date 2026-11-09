@@ -2165,7 +2165,11 @@ fn magic_method_signature(lower_name: &str) -> Option<MagicSignature> {
 }
 
 /// Builtin types a declared type admits, and whether it also names a class (or `static`).
-fn type_members(ty: &TypeHint<'_, '_>, builtins: &mut Vec<BuiltinType>) -> bool {
+fn type_members(
+    ty: &TypeHint<'_, '_>,
+    version: PhpVersion,
+    builtins: &mut Vec<BuiltinType>,
+) -> bool {
     match &ty.kind {
         TypeHintKind::Keyword(
             BuiltinType::Self_ | BuiltinType::Parent_ | BuiltinType::Static,
@@ -2173,8 +2177,13 @@ fn type_members(ty: &TypeHint<'_, '_>, builtins: &mut Vec<BuiltinType>) -> bool 
         )
         | TypeHintKind::Named(_)
         | TypeHintKind::Intersection(_) => true,
+        // `iterable` is `array|Traversable` only from PHP 8.2.
         TypeHintKind::Keyword(BuiltinType::Iterable, _) => {
-            builtins.push(BuiltinType::Array);
+            builtins.push(if version >= PhpVersion::Php82 {
+                BuiltinType::Array
+            } else {
+                BuiltinType::Iterable
+            });
             true
         }
         TypeHintKind::Keyword(builtin, _) => {
@@ -2183,11 +2192,11 @@ fn type_members(ty: &TypeHint<'_, '_>, builtins: &mut Vec<BuiltinType>) -> bool 
         }
         TypeHintKind::Nullable(inner) => {
             builtins.push(BuiltinType::Null);
-            type_members(inner, builtins)
+            type_members(inner, version, builtins)
         }
-        TypeHintKind::Union(types) => types
-            .iter()
-            .fold(false, |has_class, t| type_members(t, builtins) | has_class),
+        TypeHintKind::Union(types) => types.iter().fold(false, |has_class, t| {
+            type_members(t, version, builtins) | has_class
+        }),
         _ => false,
     }
 }
@@ -2259,7 +2268,7 @@ fn check_magic_method(
             continue;
         };
         let mut builtins = Vec::new();
-        type_members(ty, &mut builtins);
+        type_members(ty, parser.version, &mut builtins);
         if !builtins.contains(required) && !builtins.contains(&BuiltinType::Mixed) {
             parser.forbid(ForbiddenRule::MagicMethodParameterType, format!(
                     "{method_label}: Parameter #{} (${}) must be of type {required_name} when declared",
@@ -2281,7 +2290,7 @@ fn check_magic_method(
         ),
         MagicReturn::Within(allowed, allowed_name) => {
             let mut builtins = Vec::new();
-            let has_class = type_members(rt, &mut builtins);
+            let has_class = type_members(rt, parser.version, &mut builtins);
             let fits = builtins.contains(&BuiltinType::Never)
                 || builtins.iter().all(|b| allowed.contains(b))
                     && (!has_class || allowed == [BuiltinType::Object]);

@@ -56,6 +56,7 @@ Clone method A::__clone() cannot declare a return type
 ===errors 8.0===
 A::__set(): Return type must be void when declared
 'true type' requires PHP 8.2 or higher
+A::__call(): Parameter #2 ($a) must be of type array when declared
 'null as standalone type' requires PHP 8.2 or higher
 'intersection types' requires PHP 8.1 or higher
 'DNF types' requires PHP 8.2 or higher
@@ -66,6 +67,7 @@ A::__sleep(): Return type must be array when declared
 'enums' requires PHP 8.1 or higher
 ===errors 8.1===
 'true type' requires PHP 8.2 or higher
+A::__call(): Parameter #2 ($a) must be of type array when declared
 'null as standalone type' requires PHP 8.2 or higher
 'DNF types' requires PHP 8.2 or higher
 'false as standalone type' requires PHP 8.2 or higher
