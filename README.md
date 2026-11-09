@@ -251,7 +251,7 @@ The arena-form `Visitor`, `ScopeVisitor`, and `Fold<'src>` traits operate direct
 ## Design principles
 
 - **Fast core, opt-in extras:** the parser does syntax and nothing more. Name resolution, constant evaluation and other analyses are separate visitors you run only when you need them.
-- **Errors match `php -l`:** an error iff `php -l` rejects the input, i.e. fatal, compile and syntax errors that can be found in a single file. Warnings, deprecations, ini-dependent diagnostics and cross-declaration analysis belong in a static analyzer.
+- **Errors where `php -l` rejects:** at least one error iff `php -l` rejects the input, i.e. fatal, compile and syntax errors that can be found in a single file. The messages, their number and their order need not match PHP's; parsing speed takes priority over reproducing PHP's diagnostics. Warnings, deprecations, ini-dependent diagnostics and cross-declaration analysis belong in a static analyzer.
 - **Always an AST:** errors come with a complete tree, so tools keep working on broken code.
 - **Semantic AST:** equivalent spellings (`array()`/`[]`, `exit`/`die`, `(integer)`/`(int)`) share one node; formatting is dropped.
 - **Version-checked:** too-new syntax is parsed and reported as `VersionTooLow`.
