@@ -2814,7 +2814,7 @@ fn try_parse_cast<'arena, 'src>(
     if kw_text.eq_ignore_ascii_case("real") && parser.version >= PhpVersion::Php80 {
         parser.forbid(
             ForbiddenRule::RealCast,
-            "the (real) cast is no longer supported, use (float) instead",
+            "The (real) cast has been removed, use (float) instead",
             kw_span,
         );
     }
