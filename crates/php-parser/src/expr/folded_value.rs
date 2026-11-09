@@ -98,7 +98,11 @@ pub(super) fn folded_class_fetch_value(
     class: &Expr<'_, '_>,
 ) -> Option<&'static str> {
     // A constant expression is not compiled as code, so PHP folds no `::class` operand in it.
-    if !matches!(class.kind, ExprKind::Parenthesized(_)) || parser.parsing_const_expr() {
+    let operand = matches!(
+        class.kind,
+        ExprKind::Parenthesized(_) | ExprKind::ClassConstAccess(_)
+    );
+    if !operand || parser.parsing_const_expr() {
         return None;
     }
     let expr = unparenthesized(class);
@@ -128,6 +132,26 @@ pub(super) fn folded_class_fetch_value(
         // PHP names the value, which may depend on the build, as for `ZEND_THREAD_SAFE`.
         Value::Bool(None) => "bool",
     })
+}
+
+/// Whether PHP resolves `name::class` at compile time: `self` and `parent` only where the class
+/// is known, outside traits and closures.
+fn resolves_at_compile_time(parser: &Parser<'_, '_>, name: &Name<'_, '_>) -> bool {
+    if !is_class_keyword_name(name) {
+        return true;
+    }
+    let Some(scope) = parser.class_scope.as_ref() else {
+        return false;
+    };
+    match name {
+        Name::Simple { value, .. } if value.eq_ignore_ascii_case("self") => {
+            scope.self_name.is_some()
+        }
+        Name::Simple { value, .. } if value.eq_ignore_ascii_case("parent") => {
+            scope.self_name.is_some() && scope.parent_name.is_some()
+        }
+        _ => false,
+    }
 }
 
 /// True if PHP folds `expr` to a value other than a string, as in the method name of `$o->{1}()`.
@@ -330,7 +354,7 @@ fn folded_value(
         ExprKind::Name(name) => constant_value(parser, name)?,
         ExprKind::ClassConstAccess(access) => {
             let resolved = matches!(&access.member.kind, ExprKind::Identifier(m) if m.eq_ignore_ascii_case("class"))
-                && matches!(&access.class.kind, ExprKind::Name(name) if !is_class_keyword_name(name));
+                && matches!(&access.class.kind, ExprKind::Name(name) if resolves_at_compile_time(parser, name));
             if !resolved {
                 return None;
             }
