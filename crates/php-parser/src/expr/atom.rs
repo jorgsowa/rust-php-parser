@@ -1173,6 +1173,9 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
 
         // readonly used as identifier (function name, etc.)
         TokenKind::Readonly => {
+            if parser.version >= PhpVersion::Php81 && !readonly_starts_call(parser) {
+                parser.error_expected("expression");
+            }
             let token = parser.advance();
             simple_name_expr("readonly", token.span)
         }
@@ -1193,6 +1196,17 @@ pub(super) fn parse_atom<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> 
             }
         }
     }
+}
+
+/// PHP 8.1 lexes `readonly` as a name only right before `(`, with whitespace alone between;
+/// from 8.2 the grammar takes `readonly` followed by an argument list.
+fn readonly_starts_call(parser: &mut Parser) -> bool {
+    parser.peek_kind() == Some(TokenKind::LeftParen)
+        && (parser.version >= PhpVersion::Php82
+            || parser
+                .gap_to_next()
+                .bytes()
+                .all(|b| matches!(b, b' ' | b'\t' | b'\n' | b'\r')))
 }
 
 /// Whether `kind` continues an expression after its first operand.

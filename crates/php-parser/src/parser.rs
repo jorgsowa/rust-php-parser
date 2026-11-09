@@ -902,6 +902,12 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         Some(&self.source[self.next.span.start as usize..self.next.span.end as usize])
     }
 
+    /// Source between the current token and the next one.
+    #[inline]
+    pub(crate) fn gap_to_next(&self) -> &'src str {
+        &self.source[self.current.span.end as usize..self.next.span.start as usize]
+    }
+
     // =========================================================================
     // Error handling
     // =========================================================================

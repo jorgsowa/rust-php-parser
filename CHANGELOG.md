@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The shebang line is printed, and inline HTML right after it starts the output as HTML (`php-printer`).
 - `PrettyPrinter::trailing_newline` adds no newline after inline HTML, after `__halt_compiler()` data or to empty output, where the script would see it (`php-printer`).
 - `new $a[]` reports `Cannot use [] for reading` without another `$a[]` elsewhere in the file (`php-rs-parser`).
+- From PHP 8.1, `readonly` in an expression is rejected unless it calls a function, as in `readonly::class`; on 8.1 a comment between `readonly` and `(` is rejected too (`php-rs-parser`).
 
 ## [0.28.0] - 2026-10-29
 
