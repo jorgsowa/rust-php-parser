@@ -174,7 +174,7 @@ export default function App() {
       {route.page !== 'playground' && (
         <div className="page-content">
           {route.page === 'docs' && <DocsPage version={version} />}
-          {route.page === 'docs-node' && <NodeDetailPage nodeId={route.nodeId} onVisualize={handleVisualize} />}
+          {route.page === 'docs-node' && <NodeDetailPage nodeId={route.nodeId} version={version} onVisualize={handleVisualize} />}
           {route.page === 'stats' && <ComparePage />}
           {route.page === 'stats-project' && <ProjectStatsPage slug={route.slug} />}
         </div>
