@@ -2397,12 +2397,26 @@ fn parse_expr_rest<'arena, 'src>(
                     if let ExprKind::Ternary(lhs_tern) = &lhs.kind {
                         let lhs_is_short = lhs_tern.then_expr.is_none();
                         let incoming_is_short = parser.peek_kind() == Some(TokenKind::Colon);
-                        if !(lhs_is_short && incoming_is_short) {
+                        let message = match (lhs_is_short, incoming_is_short) {
+                            (false, false) => Some(
+                                "Unparenthesized `a ? b : c ? d : e` is not supported. \
+                                 Use either `(a ? b : c) ? d : e` or `a ? b : (c ? d : e)`",
+                            ),
+                            (false, true) => Some(
+                                "Unparenthesized `a ? b : c ?: d` is not supported. \
+                                 Use either `(a ? b : c) ?: d` or `a ? b : (c ?: d)`",
+                            ),
+                            (true, false) => Some(
+                                "Unparenthesized `a ?: b ? c : d` is not supported. \
+                                 Use either `(a ?: b) ? c : d` or `a ?: (b ? c : d)`",
+                            ),
+                            (true, true) => None,
+                        };
+                        if let Some(message) = message {
                             let span = parser.current_span();
                             parser.forbid(
                                 ForbiddenRule::UnparenthesizedNestedTernary,
-                                "Unparenthesized `a ? b : c ? d : e` is not supported. \
-                                 Use either `(a ? b : c) ? d : e` or `a ? b : (c ? d : e)`",
+                                message,
                                 span,
                             );
                         }
