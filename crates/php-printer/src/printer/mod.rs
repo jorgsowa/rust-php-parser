@@ -181,6 +181,10 @@ impl<'src> Printer<'src> {
     }
 
     pub(crate) fn w(&mut self, s: &str) {
+        // `(int)` lexes as a cast; a line break keeps a constant named like one in parentheses.
+        if s.starts_with(')') && helpers::ends_with_open_paren_and_cast_name(&self.output) {
+            self.output.push_str(self.nl);
+        }
         self.output.push_str(s);
     }
 

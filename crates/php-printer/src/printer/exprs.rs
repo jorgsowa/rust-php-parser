@@ -399,11 +399,6 @@ impl<'src> Printer<'src> {
             ExprKind::Parenthesized(e) => {
                 self.w("(");
                 self.print_expr(e, PREC_LOWEST);
-                // `(int)` would lex as a cast; a line break keeps it a parenthesized constant.
-                if matches!(&e.kind, ExprKind::Name(Name::Simple { value, .. }) if is_cast_keyword(value))
-                {
-                    self.w("\n");
-                }
                 self.w(")");
             }
             ExprKind::Cast(kind, e) => {
@@ -1172,11 +1167,3 @@ fn chain_operand<'a, 'arena, 'src>(
     Some((operand, PREC_DEREFERENCE))
 }
 
-fn is_cast_keyword(name: &str) -> bool {
-    [
-        "int", "integer", "float", "double", "real", "string", "binary", "bool", "boolean",
-        "object", "void",
-    ]
-    .iter()
-    .any(|k| name.eq_ignore_ascii_case(k))
-}

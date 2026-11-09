@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `NameResolver` resolves a qualified name with one segment, which error recovery keeps for `Foo\` with nothing after the backslash, to `ResolvedName::Error` instead of a name ending in `\` (`php-ast`).
 - A nested ternary with a short `?:` on one side reports PHP's message for that form, as in ``Unparenthesized `a ? b : c ?: d` is not supported`` (`php-rs-parser`).
+- A constant named like a cast and alone in call, condition or `match` parentheses, as in `foo(\nint\n)`, prints with a line break before `)`, so it does not print as the cast token `(int)` (`php-printer`).
 
 ## [0.28.0] - 2026-10-29
 

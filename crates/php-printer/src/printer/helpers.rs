@@ -362,3 +362,21 @@ pub(crate) fn shebang(source: &str) -> &str {
     }
     source.find('\n').map_or(source, |p| &source[..=p])
 }
+
+/// Whether `out` ends in `(`, a name PHP lexes as a cast with it, and optional spaces or tabs.
+pub(crate) fn ends_with_open_paren_and_cast_name(out: &str) -> bool {
+    let rest = out.trim_end_matches([' ', '\t']);
+    let word_len = rest
+        .bytes()
+        .rev()
+        .take_while(u8::is_ascii_alphabetic)
+        .count();
+    let (before, word) = rest.split_at(rest.len() - word_len);
+    before.trim_end_matches([' ', '\t']).ends_with('(')
+        && [
+            "int", "integer", "float", "double", "real", "string", "binary", "bool", "boolean",
+            "object", "void",
+        ]
+        .iter()
+        .any(|k| word.eq_ignore_ascii_case(k))
+}
