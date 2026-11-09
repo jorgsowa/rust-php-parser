@@ -1,0 +1,87 @@
+===source===
+<?php
+function d(): mixed|int {}
+===errors <=7.4===
+'union types' requires PHP 8.0 or higher
+===errors >=8.0===
+Type mixed can only be used as a standalone type
+===php_error <=7.4===
+PHP Parse error:  syntax error, unexpected '|', expecting '{' in Standard input code on line 2
+===php_error >=8.0===
+PHP Fatal error:  Type mixed can only be used as a standalone type in Standard input code on line 2
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Function": {
+          "name": {
+            "name": "d",
+            "span": {
+              "start": 15,
+              "end": 16
+            }
+          },
+          "params": [],
+          "body": [],
+          "return_type": {
+            "kind": {
+              "Union": [
+                {
+                  "kind": {
+                    "Named": {
+                      "parts": [
+                        "mixed"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 20,
+                        "end": 25
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 20,
+                    "end": 25
+                  }
+                },
+                {
+                  "kind": {
+                    "Named": {
+                      "parts": [
+                        "int"
+                      ],
+                      "kind": "Unqualified",
+                      "span": {
+                        "start": 26,
+                        "end": 29
+                      }
+                    }
+                  },
+                  "span": {
+                    "start": 26,
+                    "end": 29
+                  }
+                }
+              ]
+            },
+            "span": {
+              "start": 20,
+              "end": 29
+            }
+          },
+          "by_ref": false,
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 32
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 32
+  }
+}

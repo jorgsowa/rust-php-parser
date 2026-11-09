@@ -1,0 +1,72 @@
+===source===
+<?php
+class A {
+    abstract function h();
+}
+===errors===
+Class A declares abstract method h() and must therefore be declared abstract
+===php_error <=8.4===
+PHP Fatal error:  Class A contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (A::h) in Standard input code on line 2
+===php_error >=8.5===
+PHP Fatal error:  Class A declares abstract method h() and must therefore be declared abstract in Standard input code on line 3
+===ast===
+{
+  "stmts": [
+    {
+      "kind": {
+        "Class": {
+          "name": {
+            "name": "A",
+            "span": {
+              "start": 12,
+              "end": 13
+            }
+          },
+          "modifiers": {
+            "is_abstract": false,
+            "is_final": false,
+            "is_readonly": false
+          },
+          "extends": null,
+          "implements": [],
+          "members": [
+            {
+              "kind": {
+                "Method": {
+                  "name": {
+                    "name": "h",
+                    "span": {
+                      "start": 38,
+                      "end": 39
+                    }
+                  },
+                  "modifiers": {
+                    "is_abstract": true
+                  },
+                  "by_ref": false,
+                  "params": [],
+                  "return_type": null,
+                  "body": null,
+                  "attributes": []
+                }
+              },
+              "span": {
+                "start": 20,
+                "end": 42
+              }
+            }
+          ],
+          "attributes": []
+        }
+      },
+      "span": {
+        "start": 6,
+        "end": 44
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 44
+  }
+}
