@@ -31,7 +31,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
         };
 
         if parser.eat(TokenKind::DoubleColon).is_some() {
-            super::validate_class_ref(parser, &first_name, "trait");
+            validate_adaptation_trait_ref(parser, &first_name);
             // Qualified: TraitName::method
             let method = if let Some((text, span)) = parser.eat_identifier_or_keyword() {
                 Name::Simple { value: text, span }
@@ -64,7 +64,7 @@ pub(super) fn parse_trait_adaptations<'arena, 'src>(
                     insteadof.push(parser.parse_class_ref_name());
                 }
                 for name in insteadof.iter() {
-                    super::validate_class_ref(parser, name, "trait");
+                    validate_adaptation_trait_ref(parser, name);
                 }
                 parser.expect_member_end();
                 let span = parser.span_from(start);
@@ -198,4 +198,18 @@ fn parse_alias_rhs<'arena, 'src>(
     }
 
     (new_modifier, is_final, invalid_modifier, new_name)
+}
+
+fn validate_adaptation_trait_ref<'arena, 'src>(
+    parser: &'_ mut Parser<'arena, 'src>,
+    name: &Name<'arena, 'src>,
+) {
+    // PHP 7.4 accepts `self` and `parent` as the trait of an adaptation; `\self` and `static` still fail.
+    if parser.version < PhpVersion::Php80
+        && matches!(name, Name::Simple { value, .. }
+            if value.eq_ignore_ascii_case("self") || value.eq_ignore_ascii_case("parent"))
+    {
+        return;
+    }
+    super::validate_class_ref(parser, name, "trait");
 }

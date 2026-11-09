@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - A parenthesized intersection type that is intersected again, as in `(A&B)&C`, is reported as a syntax error, as PHP does (`php-rs-parser`).
+- `self` and `parent` as the trait of an `insteadof` or alias rule in a trait use block are accepted on PHP 7.4, as PHP 7.4 does (`php-rs-parser`).
 
 ## [0.29.0] - 2026-11-09
 
