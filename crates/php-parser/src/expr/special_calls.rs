@@ -2,6 +2,7 @@ use php_ast::*;
 
 use super::folded_value;
 use crate::parser::Parser;
+use crate::seen_names::CaseInsensitive;
 use crate::version::PhpVersion;
 
 /// Functions PHP 8.6 calls without a frame, with the argument counts it does so for.
@@ -45,8 +46,10 @@ pub(super) fn is_special_builtin_call(
     let word = match (name.kind(), name.parts_slice()) {
         (NameKind::FullyQualified, [word]) => *word,
         (NameKind::Unqualified, [word]) => {
-            match parser.function_imports.get(&word.to_ascii_lowercase()) {
-                Some(target) => target.as_str(),
+            match parser.function_imports.get(&CaseInsensitive(word)) {
+                // An import of a namespaced function names no built-in.
+                Some([target]) => *target,
+                Some(_) => return false,
                 None if parser.namespace.is_none() => *word,
                 None => return false,
             }

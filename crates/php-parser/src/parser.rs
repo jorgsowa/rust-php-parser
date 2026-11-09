@@ -4,6 +4,7 @@ use php_lexer::{Lexer, LexerError, LexerErrorKind, Token, TokenKind};
 use crate::diagnostics::{ForbiddenRule, ParseError, Phase};
 use crate::expr;
 use crate::instrument;
+use crate::seen_names::{CaseInsensitive, SeenNames};
 use crate::stmt;
 use crate::version::PhpVersion;
 use std::borrow::Cow;
@@ -81,6 +82,10 @@ fn advance_lexer_skip_comments<'src>(
 /// Reported for every `list(...)` and retracted when it turns out to be a destructuring target.
 pub(crate) const LIST_OUTSIDE_DESTRUCTURING: &str =
     "list() can only be used as an assignment or foreach target";
+
+/// Imports keyed by their local alias, with the name parts each one stands for.
+pub(crate) type ImportMap<'arena, 'src> =
+    std::collections::HashMap<CaseInsensitive<'src>, &'arena [&'src str]>;
 
 pub struct Parser<'arena, 'src> {
     current: Token,
@@ -177,6 +182,8 @@ pub struct Parser<'arena, 'src> {
     /// Number of `$a[]` fetches parsed so far; the walk that reports reads of them only
     /// runs when there is one.
     pub(crate) empty_dim_count: u32,
+    /// Start of every `[]` fetch without an offset, including those that leave the count alone.
+    pub(crate) empty_dim_starts: Vec<u32>,
     /// Arguments that fetch from the result of a call PHP compiles as a built-in, as in
     /// `f(strlen($a)[0])`, which PHP rejects where it passes them by reference.
     pub(crate) builtin_fetch_args: Vec<Span>,
@@ -186,9 +193,9 @@ pub struct Parser<'arena, 'src> {
     /// The namespace of the code being parsed, as written in its declaration.
     pub(crate) namespace: Option<String>,
     /// Class imports (`use A\B as C`) of the current namespace, keyed by lowercase alias.
-    pub(crate) class_imports: std::collections::HashMap<String, String>,
+    pub(crate) class_imports: ImportMap<'arena, 'src>,
     /// Function imports (`use function A\b as c`) of the current namespace, keyed by lowercase alias.
-    pub(crate) function_imports: std::collections::HashMap<String, String>,
+    pub(crate) function_imports: ImportMap<'arena, 'src>,
     /// The class, interface, trait or enum whose body is being parsed.
     pub(crate) class_scope: Option<ClassScope>,
 }
@@ -302,11 +309,12 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             last_stmt_end: 0,
             void_cast_count: 0,
             empty_dim_count: 0,
+            empty_dim_starts: Vec::new(),
             builtin_fetch_args: Vec::new(),
             has_class_keyword_ref: false,
             namespace: None,
-            class_imports: std::collections::HashMap::new(),
-            function_imports: std::collections::HashMap::new(),
+            class_imports: ImportMap::new(),
+            function_imports: ImportMap::new(),
             class_scope: None,
         };
         parser.demote_initial_keywords();
@@ -370,11 +378,12 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             last_stmt_end: 0,
             void_cast_count: 0,
             empty_dim_count: 0,
+            empty_dim_starts: Vec::new(),
             builtin_fetch_args: Vec::new(),
             has_class_keyword_ref: false,
             namespace: None,
-            class_imports: std::collections::HashMap::new(),
-            function_imports: std::collections::HashMap::new(),
+            class_imports: ImportMap::new(),
+            function_imports: ImportMap::new(),
             class_scope: None,
         };
         parser.demote_initial_keywords();
@@ -489,7 +498,10 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         if self.next2.kind == TokenKind::Backslash && self.version < PhpVersion::Php80 {
             self.next.kind = self.unqualified_kind_before_80(self.next);
         }
-        if prev.kind == TokenKind::LeftParen && !std::mem::take(&mut self.reading_cast) {
+        if prev.kind == TokenKind::LeftParen
+            && !std::mem::take(&mut self.reading_cast)
+            && self.next.kind == TokenKind::RightParen
+        {
             self.check_stray_cast(prev.span);
         }
         prev
@@ -1063,10 +1075,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// such as above a closure argument nested in a call — from leaking forward.
     pub fn take_doc_comment(&mut self, before: u32) -> Option<Comment<'src>> {
         let floor = self.last_scope_close.max(self.last_stmt_end);
-        let idx = self.comments.iter().rposition(|c| {
-            c.kind == CommentKind::Doc && c.span.end <= before && c.span.start >= floor
-        })?;
-        Some(self.comments.remove(idx))
+        self.take_doc_comment_from(before, floor)
     }
 
     /// Like [`take_doc_comment`] but uses `from` as the lower bound instead of
@@ -1081,19 +1090,26 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// via its children, which would wrongly exclude this statement's own
     /// legitimate leading comment if read live here.
     pub fn take_doc_comment_from(&mut self, before: u32, from: u32) -> Option<Comment<'src>> {
-        let idx = self.comments.iter().rposition(|c| {
-            c.kind == CommentKind::Doc && c.span.end <= before && c.span.start >= from
-        })?;
-        Some(self.comments.remove(idx))
+        // Comments are in source order, so the search stops at the first one before `from`.
+        let back = self
+            .comments
+            .iter()
+            .rev()
+            .take_while(|c| c.span.start >= from)
+            .position(|c| c.kind == CommentKind::Doc && c.span.end <= before)?;
+        Some(self.comments.remove(self.comments.len() - 1 - back))
     }
 
     /// Take a doc comment (`/** ... */`) that appears strictly after `after`
     /// and ends at or before `before`. Used for a doc comment trailing a
     /// function parameter (PHP 8.6): `string $x /** ... */,`.
     pub fn take_doc_comment_after(&mut self, after: u32, before: u32) -> Option<Comment<'src>> {
-        let idx = self.comments.iter().position(|c| {
-            c.kind == CommentKind::Doc && c.span.start >= after && c.span.end <= before
-        })?;
+        let first = self.comments.partition_point(|c| c.span.start < after);
+        let idx = first
+            + self.comments[first..]
+                .iter()
+                .take_while(|c| c.span.start < before)
+                .position(|c| c.kind == CommentKind::Doc && c.span.end <= before)?;
         Some(self.comments.remove(idx))
     }
 
@@ -1667,17 +1683,17 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     /// The fully qualified name a class name refers to, without the leading `\`.
     pub(crate) fn resolve_class_name(&self, name: &Name<'_, '_>) -> String {
         let parts = name.parts_slice();
-        let (base, rest) = match name.kind() {
+        let namespace = || self.namespace.clone().unwrap_or_default();
+        let (mut resolved, rest) = match name.kind() {
             NameKind::FullyQualified => return parts.join("\\"),
-            NameKind::Relative => (self.namespace.as_deref(), parts),
+            NameKind::Relative => (namespace(), parts),
             _ => match parts.split_first().and_then(|(first, rest)| {
-                Some((self.class_imports.get(&first.to_ascii_lowercase())?, rest))
+                Some((self.class_imports.get(&CaseInsensitive(first))?, rest))
             }) {
-                Some((import, rest)) => (Some(import.as_str()), rest),
-                None => (self.namespace.as_deref(), parts),
+                Some((import, rest)) => (import.join("\\"), rest),
+                None => (namespace(), parts),
             },
         };
-        let mut resolved = base.unwrap_or_default().to_owned();
         for part in rest {
             if !resolved.is_empty() {
                 resolved.push('\\');
@@ -2942,7 +2958,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
     fn validate_use_scope(&mut self, stmts: &[Stmt<'arena, 'src>], top_level: bool) {
         use php_ast::UseKind;
         // Class and function names are case-insensitive, constant names are not.
-        let mut seen: std::collections::HashSet<(u8, String)> = std::collections::HashSet::new();
+        let mut seen_classes = SeenNames::case_insensitive();
+        let mut seen_functions = SeenNames::case_insensitive();
+        let mut seen_consts = SeenNames::case_sensitive();
 
         for stmt in stmts {
             // For top-level calls, track when we enter an unbraced namespace.
@@ -2950,7 +2968,9 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 if let StmtKind::Namespace(decl) = stmt.kind {
                     if matches!(decl.body, php_ast::NamespaceBody::Simple) {
                         // Each unbraced `namespace X;` opens a fresh import scope.
-                        seen.clear();
+                        seen_classes.clear();
+                        seen_functions.clear();
+                        seen_consts.clear();
                     }
                     continue;
                 }
@@ -2969,11 +2989,12 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                 if alias.is_empty() {
                     continue;
                 }
-                let key = match item_kind {
-                    UseKind::Const => alias.to_string(),
-                    _ => alias.to_ascii_lowercase(),
+                let seen = match item_kind {
+                    UseKind::Function => &mut seen_functions,
+                    UseKind::Const => &mut seen_consts,
+                    _ => &mut seen_classes,
                 };
-                if !seen.insert((item_kind as u8, key)) {
+                if !seen.insert(alias) {
                     let prefix = match item_kind {
                         UseKind::Function => "function ",
                         UseKind::Const => "const ",

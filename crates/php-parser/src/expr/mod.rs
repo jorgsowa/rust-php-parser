@@ -2827,6 +2827,7 @@ fn parse_expr_rest<'arena, 'src>(
             parser.advance(); // consume [
             let index = if parser.check(TokenKind::RightBracket) {
                 parser.empty_dim_count += 1;
+                parser.empty_dim_starts.push(lhs.span.start);
                 None
             } else {
                 let e = parse_expr(parser);
@@ -2857,6 +2858,7 @@ fn parse_expr_rest<'arena, 'src>(
                 if parser.version < PhpVersion::Php84 {
                     parser.error_expected("expression");
                 }
+                parser.empty_dim_starts.push(lhs.span.start);
                 None
             } else {
                 let e = parse_expr(parser);

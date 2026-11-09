@@ -101,6 +101,7 @@ pub(crate) mod parser;
 /// re-exported so callers use the same version as the AST types.
 pub use bumpalo;
 pub(crate) mod precedence;
+pub(crate) mod seen_names;
 /// Byte offset to line/column mapping.
 pub mod source_map;
 pub(crate) mod stmt;

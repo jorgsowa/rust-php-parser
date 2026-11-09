@@ -94,7 +94,7 @@ pub(super) fn parse_enum<'arena, 'src>(
     let outer_scope = parser.class_scope.replace(scope);
 
     let mut members = parser.alloc_vec_with_capacity(4);
-    let mut seen_methods = std::collections::HashSet::new();
+    let mut seen_methods = crate::seen_names::SeenNames::case_insensitive();
     let mut case_values = Vec::new();
     let mut abstract_methods = Vec::new();
     let is_backed = scalar_type.is_some() || invalid_scalar_type.is_some();

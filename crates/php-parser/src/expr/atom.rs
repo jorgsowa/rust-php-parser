@@ -1254,6 +1254,7 @@ fn parse_new_variable_tail<'arena, 'src>(
             TokenKind::LeftBracket => {
                 parser.advance();
                 let index = if parser.check(TokenKind::RightBracket) {
+                    parser.empty_dim_starts.push(base.span.start);
                     None
                 } else {
                     let e = parse_expr(parser);

@@ -58,10 +58,23 @@ pub struct SourceMap {
 impl SourceMap {
     /// Build an index from the given source text.
     pub fn new(source: &str) -> Self {
-        let mut line_starts = Vec::with_capacity(source.len() / 40 + 1);
+        let bytes = source.as_bytes();
+        let mut line_starts = Vec::with_capacity(bytes.len() / 32 + 1);
         line_starts.push(0u32);
-        for pos in memchr::memchr_iter(b'\n', source.as_bytes()) {
-            line_starts.push((pos + 1) as u32);
+        // Newlines are too dense for memchr to pay off; find them 64 bytes at a time.
+        let (blocks, rest) = bytes.as_chunks::<64>();
+        let mut base = 0u32;
+        for block in blocks {
+            let bits = newline_bits(block);
+            if bits != 0 {
+                push_line_starts(&mut line_starts, base, bits);
+            }
+            base += 64;
+        }
+        for (i, &b) in rest.iter().enumerate() {
+            if b == b'\n' {
+                line_starts.push(base + i as u32 + 1);
+            }
         }
         Self {
             line_starts,
@@ -126,9 +139,100 @@ impl SourceMap {
     }
 }
 
+/// Pushes the offset after each newline whose bit is set in `bits`, for the block at `base`.
+#[inline(always)]
+fn push_line_starts(line_starts: &mut Vec<u32>, base: u32, mut bits: u64) {
+    let count = bits.count_ones() as usize;
+    line_starts.reserve(count + 4);
+    // Four slots per step without a per-newline branch; slots past `count` get scratch values.
+    let slots = &mut line_starts.spare_capacity_mut()[..(count + 3) & !3];
+    for group in slots.as_chunks_mut::<4>().0 {
+        for slot in group {
+            slot.write(base.wrapping_add(bits.trailing_zeros() + 1));
+            bits &= bits.wrapping_sub(1);
+        }
+    }
+    let len = line_starts.len();
+    // SAFETY: the loop above initialized the first `count` spare slots.
+    unsafe { line_starts.set_len(len + count) };
+}
+
+/// Bit `i` is set when `block[i]` is a newline.
+#[cfg(target_arch = "aarch64")]
+#[inline(always)]
+fn newline_bits(block: &[u8; 64]) -> u64 {
+    use std::arch::aarch64::*;
+    const WEIGHTS: [u8; 16] = [1, 2, 4, 8, 16, 32, 64, 128, 1, 2, 4, 8, 16, 32, 64, 128];
+    // SAFETY: NEON is always available on aarch64, and every load reads 16 bytes within `block`.
+    unsafe {
+        let newline = vdupq_n_u8(b'\n');
+        let weights = vld1q_u8(WEIGHTS.as_ptr());
+        let p = block.as_ptr();
+        let lane = |offset: usize| vandq_u8(vceqq_u8(vld1q_u8(p.add(offset)), newline), weights);
+        let pairs = vpaddq_u8(vpaddq_u8(lane(0), lane(16)), vpaddq_u8(lane(32), lane(48)));
+        vgetq_lane_u64(vreinterpretq_u64_u8(vpaddq_u8(pairs, pairs)), 0)
+    }
+}
+
+#[cfg(not(target_arch = "aarch64"))]
+#[inline(always)]
+fn newline_bits(block: &[u8; 64]) -> u64 {
+    newline_bits_portable(block)
+}
+
+#[cfg_attr(target_arch = "aarch64", allow(dead_code))]
+#[inline(always)]
+fn newline_bits_portable(block: &[u8; 64]) -> u64 {
+    const LO: u64 = 0x0101_0101_0101_0101;
+    const HI: u64 = 0x8080_8080_8080_8080;
+    let mut bits = 0;
+    for (i, chunk) in block.as_chunks::<8>().0.iter().enumerate() {
+        let x = u64::from_le_bytes(*chunk) ^ (LO * 10);
+        // 0x80 in each zero byte; unlike `(x - LO) & !x & HI`, no borrow crosses bytes.
+        let zero = !(((x & !HI) + !HI) | x | !HI);
+        // Gather the eight 0x80 flags into the low byte.
+        let byte = ((zero >> 7).wrapping_mul(0x0102_0408_1020_4080)) >> 56;
+        bits |= byte << (i * 8);
+    }
+    bits
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn line_starts_match_every_newline() {
+        let pieces = ["\n", "a", "\r\n", "é", "\u{8a}", "\u{10a0a}", "\t", "\n\n"];
+        let mut source = String::new();
+        for i in 0..400 {
+            source.push_str(pieces[(i * 7 + i / 3) % pieces.len()]);
+            let expected: Vec<u32> = std::iter::once(0)
+                .chain(source.match_indices('\n').map(|(p, _)| p as u32 + 1))
+                .collect();
+            assert_eq!(SourceMap::new(&source).line_starts, expected, "{source:?}");
+        }
+    }
+
+    #[test]
+    fn newline_bits_match_portable() {
+        let mut block = [0u8; 64];
+        for seed in 0u64..2000 {
+            let mut x = seed.wrapping_mul(0x9e37_79b9_7f4a_7c15) | 1;
+            for b in &mut block {
+                x ^= x << 13;
+                x ^= x >> 7;
+                x ^= x << 17;
+                *b = [b'\n', b'a', 0x8a, 0x0a ^ 0x80, 0xff, 0, b'\r', b' '][(x % 8) as usize];
+            }
+            let expected = block
+                .iter()
+                .enumerate()
+                .fold(0u64, |acc, (i, &b)| acc | (u64::from(b == b'\n') << i));
+            assert_eq!(newline_bits_portable(&block), expected);
+            assert_eq!(newline_bits(&block), expected);
+        }
+    }
 
     #[test]
     fn empty_source() {

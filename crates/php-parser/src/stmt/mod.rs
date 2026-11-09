@@ -6,6 +6,7 @@ use crate::diagnostics::{ForbiddenRule, ParseError};
 use crate::expr;
 use crate::instrument;
 use crate::parser::Parser;
+use crate::seen_names::CaseInsensitive;
 use crate::version::PhpVersion;
 
 mod class;
@@ -1300,18 +1301,13 @@ pub(crate) fn check_returns_against_type<'arena, 'src>(
         return;
     }
     let what = function_kind_word(in_class);
-    let bare_return_message: std::borrow::Cow<'static, str> = {
-        let hint = if admits_null(return_type) {
-            " (did you mean \"return null;\" instead of \"return;\"?)"
-        } else {
-            ""
-        };
-        format!("A {what} with return type must return a value{hint}").into()
-    };
     let rule = match classify_void_or_never(return_type) {
         Some(true) => ReturnRule::Void(what),
         Some(false) => ReturnRule::Never(what),
-        None => ReturnRule::Value(bare_return_message),
+        None => ReturnRule::Value {
+            what,
+            admits_null: admits_null(return_type),
+        },
     };
     check_returns(parser, &body.stmts, &rule);
 }
@@ -1319,7 +1315,10 @@ pub(crate) fn check_returns_against_type<'arena, 'src>(
 pub(crate) enum ReturnRule {
     Void(&'static str),
     Never(&'static str),
-    Value(std::borrow::Cow<'static, str>),
+    Value {
+        what: &'static str,
+        admits_null: bool,
+    },
 }
 
 /// Report the `return` statements in `stmts` that break `rule`, skipping nested function-likes.
@@ -1334,14 +1333,21 @@ pub(crate) fn check_returns<'arena, 'src>(
                 let (rule, message) = match (rule, value) {
                     (ReturnRule::Void(what), Some(value)) => (
                         ForbiddenRule::VoidReturnValue,
-                        void_return_message(what, value).into(),
+                        void_return_message(what, value),
                     ),
-                    (ReturnRule::Never(what), _) => (
-                        ForbiddenRule::NeverReturn,
-                        never_return_message(what).into(),
-                    ),
-                    (ReturnRule::Value(message), None) => {
-                        (ForbiddenRule::MissingReturnValue, message.clone())
+                    (ReturnRule::Never(what), _) => {
+                        (ForbiddenRule::NeverReturn, never_return_message(what))
+                    }
+                    (ReturnRule::Value { what, admits_null }, None) => {
+                        let hint = if *admits_null {
+                            " (did you mean \"return null;\" instead of \"return;\"?)"
+                        } else {
+                            ""
+                        };
+                        (
+                            ForbiddenRule::MissingReturnValue,
+                            format!("A {what} with return type must return a value{hint}"),
+                        )
                     }
                     _ => continue,
                 };
@@ -2977,10 +2983,10 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
                 None => item.name.parts_slice().last().copied(),
             };
             if let Some(local) = local {
-                let target = item.name.parts_slice().join("\\");
+                let target = parser.arena.alloc_slice_copy(item.name.parts_slice());
                 parser
                     .function_imports
-                    .insert(local.to_ascii_lowercase(), target);
+                    .insert(CaseInsensitive(local), target);
             }
         }
         if item.kind.unwrap_or(kind) != UseKind::Normal {
@@ -3010,10 +3016,8 @@ fn parse_use<'arena, 'src>(parser: &'_ mut Parser<'arena, 'src>) -> Stmt<'arena,
             None => item.name.parts_slice().last().copied(),
         };
         if let Some(local) = local {
-            let target = item.name.parts_slice().join("\\");
-            parser
-                .class_imports
-                .insert(local.to_ascii_lowercase(), target);
+            let target = parser.arena.alloc_slice_copy(item.name.parts_slice());
+            parser.class_imports.insert(CaseInsensitive(local), target);
         }
     }
     parser.expect_statement_end();
@@ -3419,6 +3423,8 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         unknown_args_write: bool,
         version: PhpVersion,
         builtin_writes: Vec<Span>,
+        /// Sorted starts of the `[]` fetches and builtin fetch arguments; other subtrees are skipped.
+        marks: Vec<u32>,
     }
 
     /// A function declared unconditionally at the top level, which PHP knows once its body is compiled.
@@ -3501,6 +3507,12 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
 
         fn is_globals(&self, expr: &Expr<'_, '_>) -> bool {
             self.globals_read_only && is_globals(expr)
+        }
+
+        /// Whether a `[]` fetch or builtin fetch argument starts within `span`.
+        fn covers(&self, span: Span) -> bool {
+            let i = self.marks.partition_point(|&m| m < span.start);
+            self.marks.get(i).is_some_and(|&m| m < span.end)
         }
 
         fn returned(&mut self, value: &Expr<'_, '_>) {
@@ -3665,6 +3677,9 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
     impl<'a, 's> Visitor<'a, 's> for EmptyDims {
         type Break = ();
         fn visit_stmt(&mut self, stmt: &Stmt<'a, 's>) -> ControlFlow<()> {
+            if !self.covers(stmt.span) {
+                return ControlFlow::Continue(());
+            }
             match &stmt.kind {
                 StmtKind::Foreach(f) => {
                     let _ = self.visit_expr(&f.expr);
@@ -3693,6 +3708,9 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         }
 
         fn visit_class_member(&mut self, member: &ClassMember<'a, 's>) -> ControlFlow<()> {
+            if !self.covers(member.span) {
+                return ControlFlow::Continue(());
+            }
             let by_ref = matches!(&member.kind, ClassMemberKind::Method(m) if m.by_ref);
             self.by_ref.push(by_ref);
             let _ = walk_class_member(self, member);
@@ -3701,6 +3719,9 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         }
 
         fn visit_enum_member(&mut self, member: &EnumMember<'a, 's>) -> ControlFlow<()> {
+            if !self.covers(member.span) {
+                return ControlFlow::Continue(());
+            }
             let by_ref = matches!(&member.kind, EnumMemberKind::Method(m) if m.by_ref);
             self.by_ref.push(by_ref);
             let _ = walk_enum_member(self, member);
@@ -3716,6 +3737,9 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         }
 
         fn visit_expr(&mut self, expr: &Expr<'a, 's>) -> ControlFlow<()> {
+            if !self.covers(expr.span) {
+                return ControlFlow::Continue(());
+            }
             match &expr.kind {
                 // Interpolations are checked as they are parsed.
                 ExprKind::InterpolatedString(_)
@@ -3873,6 +3897,11 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         }
     }
 
+    let builtin_fetch_args = std::mem::take(&mut parser.builtin_fetch_args);
+    let mut marks = std::mem::take(&mut parser.empty_dim_starts);
+    marks.extend(builtin_fetch_args.iter().map(|span| span.start));
+    marks.sort_unstable();
+    marks.dedup();
     let mut finder = EmptyDims {
         read: Vec::new(),
         unset: Vec::new(),
@@ -3881,10 +3910,11 @@ pub(crate) fn check_empty_dims<'arena, 'src>(
         by_ref: Vec::new(),
         known_functions,
         namespace: None,
-        builtin_fetch_args: std::mem::take(&mut parser.builtin_fetch_args),
+        builtin_fetch_args,
         unknown_args_write: parser.version < PhpVersion::Php81,
         version: parser.version,
         builtin_writes: Vec::new(),
+        marks,
     };
     for stmt in stmts {
         if let StmtKind::Namespace(ns) = &stmt.kind {

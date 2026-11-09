@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `ForbiddenRule::UnexpectedSetVisibility` (`php-rs-parser`).
 
+### Changed
+
+- Parsing valid code takes about 19% less CPU time on the Laravel, Symfony and WordPress corpora: the line index is built 64 bytes at a time, the `$a[]` read check walks only the subtrees that contain one, and duplicate, import, doc comment and error message bookkeeping no longer allocates or scans per member, import or statement (`php-rs-parser`).
+
 ### Fixed
 
 - `NameResolver` resolves a qualified name with one segment, which error recovery keeps for `Foo\` with nothing after the backslash, to `ResolvedName::Error` instead of a name ending in `\` (`php-ast`).

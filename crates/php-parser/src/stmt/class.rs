@@ -7,6 +7,7 @@ use crate::diagnostics::{ForbiddenRule, ParseError};
 use crate::expr;
 use crate::instrument;
 use crate::parser::{ClassScope, Parser};
+use crate::seen_names::SeenNames;
 use crate::version::PhpVersion;
 
 // =============================================================================
@@ -893,9 +894,9 @@ pub fn parse_class_members<'arena, 'src>(
     let mut members = parser.alloc_vec_with_capacity(4);
     // Track method names (case-insensitive) to detect redeclarations.
     // PHP rejects with "Cannot redeclare A::f()".
-    let mut seen_methods: std::collections::HashSet<String> = std::collections::HashSet::new();
+    let mut seen_methods = SeenNames::case_insensitive();
     // Track property names (case-sensitive) for "Cannot redeclare A::$prop".
-    let mut seen_properties: std::collections::HashSet<String> = std::collections::HashSet::new();
+    let mut seen_properties = SeenNames::case_sensitive();
     while !parser.check(TokenKind::RightBrace) && !parser.check(TokenKind::Eof) {
         if parser.check(TokenKind::Semicolon) {
             parser.error_expected("class member");
@@ -999,7 +1000,7 @@ pub fn parse_class_members<'arena, 'src>(
                         let Some(name) = param.name.as_str() else {
                             continue;
                         };
-                        if params_seen.insert(name) && !seen_properties.insert(name.to_string()) {
+                        if params_seen.insert(name) && !seen_properties.insert(name) {
                             parser.forbid(
                                 ForbiddenRule::DuplicateProperty,
                                 format!("Cannot redeclare {}${name}", parser.class_member_prefix()),
@@ -1062,7 +1063,7 @@ pub fn parse_class_members<'arena, 'src>(
             for m in members.iter().skip(before) {
                 if let ClassMemberKind::Property(decl) = &m.kind {
                     if let Some(name) = decl.name.as_str() {
-                        if !seen_properties.insert(name.to_string()) {
+                        if !seen_properties.insert(name) {
                             parser.forbid(
                                 ForbiddenRule::DuplicateProperty,
                                 format!("Cannot redeclare {}${name}", parser.class_member_prefix()),
@@ -1182,14 +1183,14 @@ pub fn check_readonly_class_members(
 
 /// Report a method named like an earlier one of the same class; method names are
 /// case-insensitive.
-pub(super) fn report_redeclared_method(
-    parser: &mut Parser<'_, '_>,
-    seen_methods: &mut std::collections::HashSet<String>,
-    decl: &MethodDecl<'_, '_>,
+pub(super) fn report_redeclared_method<'src>(
+    parser: &mut Parser<'_, 'src>,
+    seen_methods: &mut SeenNames<'src>,
+    decl: &MethodDecl<'_, 'src>,
     span: Span,
 ) {
     if let Some(name) = decl.name.as_str() {
-        if !seen_methods.insert(name.to_ascii_lowercase()) {
+        if !seen_methods.insert(name) {
             parser.forbid(
                 ForbiddenRule::DuplicateMethod,
                 format!("Cannot redeclare {}{name}()", parser.class_member_prefix()),
@@ -1938,7 +1939,8 @@ pub(super) fn parse_method_member<'arena, 'src>(
     };
 
     let member_span = parser.span_from(member_start);
-    let method_label = format!("{}{}()", parser.class_member_prefix(), method_name);
+    let method_label =
+        |parser: &Parser<'_, '_>| format!("{}{}()", parser.class_member_prefix(), method_name);
     if in_interface {
         if matches!(
             mods.visibility,
@@ -1946,7 +1948,10 @@ pub(super) fn parse_method_member<'arena, 'src>(
         ) {
             parser.forbid(
                 ForbiddenRule::InvalidInterfaceMethodModifier,
-                format!("Access type for interface method {method_label} must be public"),
+                format!(
+                    "Access type for interface method {} must be public",
+                    method_label(parser)
+                ),
                 member_span,
             );
         }
@@ -1954,27 +1959,39 @@ pub(super) fn parse_method_member<'arena, 'src>(
         if mods.is_final && !mods.is_abstract {
             parser.forbid(
                 ForbiddenRule::InvalidInterfaceMethodModifier,
-                format!("Interface method {method_label} must not be final"),
+                format!(
+                    "Interface method {} must not be final",
+                    method_label(parser)
+                ),
                 member_span,
             );
         }
         if mods.is_abstract {
             parser.forbid(
                 ForbiddenRule::InvalidInterfaceMethodModifier,
-                format!("Interface method {method_label} must not be abstract"),
+                format!(
+                    "Interface method {} must not be abstract",
+                    method_label(parser)
+                ),
                 member_span,
             );
         } else if body.is_some() {
             parser.forbid(
                 ForbiddenRule::InterfaceMethodBody,
-                format!("Interface function {method_label} cannot contain body"),
+                format!(
+                    "Interface function {} cannot contain body",
+                    method_label(parser)
+                ),
                 member_span,
             );
         }
     } else if !mods.is_abstract && terminated_without_body {
         parser.forbid(
             ForbiddenRule::MissingMethodBody,
-            format!("Non-abstract method {method_label} must contain body"),
+            format!(
+                "Non-abstract method {} must contain body",
+                method_label(parser)
+            ),
             member_span,
         );
     } else if mods.is_abstract {
@@ -1992,14 +2009,20 @@ pub(super) fn parse_method_member<'arena, 'src>(
         {
             parser.forbid(
                 ForbiddenRule::PrivateAbstractMethod,
-                format!("Abstract function {method_label} cannot be declared private"),
+                format!(
+                    "Abstract function {} cannot be declared private",
+                    method_label(parser)
+                ),
                 member_span,
             );
         }
         if body.is_some() {
             parser.forbid(
                 ForbiddenRule::AbstractMethodBody,
-                format!("Abstract function {method_label} cannot contain body"),
+                format!(
+                    "Abstract function {} cannot contain body",
+                    method_label(parser)
+                ),
                 member_span,
             );
         }
@@ -2019,8 +2042,10 @@ pub(super) fn parse_method_member<'arena, 'src>(
 
     if let Some(signature) = method_name
         .as_str()
+        .filter(|name| name.starts_with("__"))
         .and_then(|name| magic_method_signature(&name.to_ascii_lowercase()))
     {
+        let method_label = method_label(parser);
         check_magic_method(
             parser,
             &signature,
@@ -2033,16 +2058,18 @@ pub(super) fn parse_method_member<'arena, 'src>(
         );
     }
 
-    let class_name = parser
-        .class_scope
-        .as_ref()
-        .map_or_else(String::new, |scope| scope.name.clone());
-    parser.check_attributes(
-        &member_attrs,
-        &AttrSite::new(AttrTarget::Method)
-            .with_return_type(return_type.as_ref())
-            .with_method_name(&class_name, method_name.as_str()),
-    );
+    if !member_attrs.is_empty() {
+        let class_name = parser
+            .class_scope
+            .as_ref()
+            .map_or_else(String::new, |scope| scope.name.clone());
+        parser.check_attributes(
+            &member_attrs,
+            &AttrSite::new(AttrTarget::Method)
+                .with_return_type(return_type.as_ref())
+                .with_method_name(&class_name, method_name.as_str()),
+        );
+    }
 
     let span = parser.span_from(member_start);
     ClassMember {
