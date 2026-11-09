@@ -14,8 +14,10 @@ PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in St
 PHP Fatal error:  Cannot use the abstract modifier on a property in Standard input code on line 2
 ===php_error 8.4===
 PHP Fatal error:  Class class@anonymous contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (class@anonymous::$p::get) in Standard input code on line 2
-===php_error >=8.5===
+===php_error 8.5===
 PHP Fatal error:  Class class@anonymous must implement 1 abstract method (class@anonymous::$p::get) in Standard input code on line 2
+===php_error >=8.6===
+PHP Fatal error:  Class class@anonymous in Standard input code on line 2
 ===ast===
 {
   "stmts": [

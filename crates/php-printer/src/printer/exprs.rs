@@ -1166,4 +1166,3 @@ fn chain_operand<'a, 'arena, 'src>(
     };
     Some((operand, PREC_DEREFERENCE))
 }
-
