@@ -1070,7 +1070,7 @@ fn parse_complex_interpolation<'arena, 'src>(
     let mut sub =
         crate::parser::Parser::new_at(arena, bounded, offset as usize, version, nesting_depth);
     let expr = crate::expr::parse_expr(&mut sub);
-    if sub.empty_dim_count > 0 {
+    if !sub.empty_dim_starts.is_empty() {
         crate::stmt::check_empty_dims(&mut sub, &[], &[&expr]);
     }
     if report_syntax_errors && !sub.check(TokenKind::Eof) {

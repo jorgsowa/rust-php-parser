@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A static call named `public`, `protected` or `private` with `set` as its only argument prints as `C::public (set)`, so it does not print as the `public(set)` token (`php-printer`).
 - The shebang line is printed, and inline HTML right after it starts the output as HTML (`php-printer`).
 - `PrettyPrinter::trailing_newline` adds no newline after inline HTML, after `__halt_compiler()` data or to empty output, where the script would see it (`php-printer`).
+- `new $a[]` reports `Cannot use [] for reading` without another `$a[]` elsewhere in the file (`php-rs-parser`).
 
 ## [0.28.0] - 2026-10-29
 

@@ -179,10 +179,8 @@ pub struct Parser<'arena, 'src> {
     /// Number of `(void)` casts parsed so far; the void-cast misuse walk over the
     /// program only runs when there is one (a rare PHP 8.5 feature).
     pub(crate) void_cast_count: u32,
-    /// Number of `$a[]` fetches parsed so far; the walk that reports reads of them only
-    /// runs when there is one.
-    pub(crate) empty_dim_count: u32,
-    /// Start of every `[]` fetch without an offset, including those that leave the count alone.
+    /// Start of every `[]` fetch without an offset; the walk that reports misuse of them
+    /// only runs when there is one.
     pub(crate) empty_dim_starts: Vec<u32>,
     /// Arguments that fetch from the result of a call PHP compiles as a built-in, as in
     /// `f(strlen($a)[0])`, which PHP rejects where it passes them by reference.
@@ -308,7 +306,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             last_scope_close: 0,
             last_stmt_end: 0,
             void_cast_count: 0,
-            empty_dim_count: 0,
             empty_dim_starts: Vec::new(),
             builtin_fetch_args: Vec::new(),
             has_class_keyword_ref: false,
@@ -377,7 +374,6 @@ impl<'arena, 'src> Parser<'arena, 'src> {
             last_scope_close: 0,
             last_stmt_end: 0,
             void_cast_count: 0,
-            empty_dim_count: 0,
             empty_dim_starts: Vec::new(),
             builtin_fetch_args: Vec::new(),
             has_class_keyword_ref: false,
@@ -2834,7 +2830,7 @@ impl<'arena, 'src> Parser<'arena, 'src> {
         if self.void_cast_count > 0 {
             crate::stmt::check_void_casts(self, &stmts);
         }
-        if self.empty_dim_count > 0 || !self.builtin_fetch_args.is_empty() {
+        if !self.empty_dim_starts.is_empty() || !self.builtin_fetch_args.is_empty() {
             crate::stmt::check_empty_dims(self, &stmts, &[]);
         }
         if self.has_goto_or_label {
