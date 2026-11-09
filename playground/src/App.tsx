@@ -49,7 +49,7 @@ echo Status::Active->label();
 
 export default function App() {
   const [code, setCode]             = useState(INITIAL_CODE)
-  const [version, setVersion]       = useState<PhpVersion>('8.4')
+  const [version, setVersion]       = useState<PhpVersion>('8.5')
   const [output, setOutput]         = useState<ParseResult | null>(null)
   const [wasmStatus, setWasmStatus]       = useState<WasmStatus>('loading')
   const [parserVersion, setParserVersion] = useState<string>('')
