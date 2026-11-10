@@ -7,12 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.29.1] - 2026-11-10
+
+Four more cases match `php -l`, and the playground has a light theme.
+
+### Added
+
+- The playground has a light color scheme with a theme selector, a navigation menu on mobile and links from field types to their AST node pages (`playground`).
+
+### Changed
+
+- The playground defaults to PHP 8.5 (`playground`).
+
 ### Fixed
 
-- Before PHP 8.0, `->` on `true`, `false` or `null`, as in `null->p`, reports that object access on a constant requires PHP 8.0, so the printer keeps it a syntax error (`php-rs-parser`).
-- A parenthesized intersection type that is intersected again, as in `(A&B)&C`, is reported as a syntax error, as PHP does (`php-rs-parser`).
-- `self` and `parent` as the trait of an `insteadof` or alias rule in a trait use block are accepted on PHP 7.4, as PHP 7.4 does (`php-rs-parser`).
-- An `iterable` parameter of a magic method that must take `array`, such as `__call()`, is rejected before PHP 8.2, where `iterable` is not yet `array|Traversable` (`php-rs-parser`).
+- Before PHP 8.0, `->` on `true`, `false` or `null`, as in `null->p`, is a syntax error (`php-rs-parser`).
+- A parenthesized intersection type intersected again, as in `(A&B)&C`, is a syntax error (`php-rs-parser`).
+- PHP 7.4 accepts `self` and `parent` as the trait in an `insteadof` or alias rule (`php-rs-parser`).
+- Before PHP 8.2, an `iterable` parameter is rejected where a magic method requires `array`, as in `__call()`, since `iterable` only means `array|Traversable` from PHP 8.2 (`php-rs-parser`).
 
 ## [0.29.0] - 2026-11-09
 
@@ -925,7 +937,8 @@ No user-facing changes.
 
 Initial release: a recursive descent PHP parser for PHP 8.3 syntax with arena allocation, zero-copy string borrowing, error recovery and nikic/PHP-Parser corpus compatibility.
 
-[Unreleased]: https://github.com/jorgsowa/rust-php-parser/compare/v0.29.0...HEAD
+[Unreleased]: https://github.com/jorgsowa/rust-php-parser/compare/v0.29.1...HEAD
+[0.29.1]: https://github.com/jorgsowa/rust-php-parser/compare/v0.29.0...v0.29.1
 [0.29.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.28.0...v0.29.0
 [0.28.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.27.0...v0.28.0
 [0.27.0]: https://github.com/jorgsowa/rust-php-parser/compare/v0.26.0...v0.27.0
