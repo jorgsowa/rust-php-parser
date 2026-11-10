@@ -4,8 +4,10 @@ namespace N;
 $x = new class { function __set(int $n, $v) {} };
 ===errors >=8.0===
 class@anonymous::__set(): Parameter #1 ($n) must be of type string when declared
-===php_error >=8.0===
+===php_error 8.0-8.5===
 PHP Fatal error:  class@anonymous::__set(): Parameter #1 ($n) must be of type string when declared in Standard input code on line 3
+===php_error >=8.6===
+PHP Fatal error:  class@anonymous in Standard input code on line 3
 ===ast===
 {
   "stmts": [

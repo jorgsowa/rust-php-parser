@@ -3,8 +3,10 @@
 $o = new class { function f(); };
 ===errors===
 Non-abstract method class@anonymous::f() must contain body
-===php_error===
+===php_error <=8.5===
 PHP Fatal error:  Non-abstract method class@anonymous::f() must contain body in Standard input code on line 2
+===php_error >=8.6===
+PHP Fatal error:  Non-abstract method class@anonymous in Standard input code on line 2
 ===ast===
 {
   "stmts": [

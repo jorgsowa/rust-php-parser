@@ -10,8 +10,10 @@ Private constant class@anonymous::X cannot be final as it is not visible to othe
 Private constant class@anonymous::X cannot be final as it is not visible to other classes
 ===php_error <=8.0===
 PHP Fatal error:  Cannot use 'final' as constant modifier in Standard input code on line 3
-===php_error >=8.1===
+===php_error 8.1-8.5===
 PHP Fatal error:  Private constant class@anonymous::X cannot be final as it is not visible to other classes in Standard input code on line 3
+===php_error >=8.6===
+PHP Fatal error:  Private constant class@anonymous in Standard input code on line 3
 ===ast===
 {
   "stmts": [

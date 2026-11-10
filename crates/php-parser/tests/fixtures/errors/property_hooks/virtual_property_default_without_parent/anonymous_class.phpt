@@ -12,8 +12,10 @@ Cannot specify default value for virtual hooked property class@anonymous::$c
 PHP Parse error:  syntax error, unexpected '{', expecting ';' or ',' in Standard input code on line 3
 ===php_error 8.0-8.3===
 PHP Parse error:  syntax error, unexpected token "{", expecting "," or ";" in Standard input code on line 3
-===php_error >=8.4===
+===php_error 8.4-8.5===
 PHP Fatal error:  Cannot specify default value for virtual hooked property class@anonymous::$c in Standard input code on line 3
+===php_error >=8.6===
+PHP Fatal error:  Cannot specify default value for virtual hooked property class@anonymous in Standard input code on line 3
 ===ast===
 {
   "stmts": [

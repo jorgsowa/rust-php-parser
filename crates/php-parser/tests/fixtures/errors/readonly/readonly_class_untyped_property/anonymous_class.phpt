@@ -12,8 +12,10 @@ PHP Parse error:  syntax error, unexpected 'class' (T_CLASS) in Standard input c
 PHP Parse error:  syntax error, unexpected token "class" in Standard input code on line 2
 ===php_error 8.1-8.2===
 PHP Parse error:  syntax error, unexpected token "readonly" in Standard input code on line 2
-===php_error >=8.3===
+===php_error 8.3-8.5===
 PHP Fatal error:  Readonly property class@anonymous::$f must have type in Standard input code on line 2
+===php_error >=8.6===
+PHP Fatal error:  Readonly property class@anonymous in Standard input code on line 2
 ===ast===
 {
   "stmts": [

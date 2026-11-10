@@ -5,8 +5,10 @@ $i = new class {
 };
 ===errors===
 Property class@anonymous::$i cannot have type callable
-===php_error===
+===php_error <=8.5===
 PHP Fatal error:  Property class@anonymous::$i cannot have type callable in Standard input code on line 3
+===php_error >=8.6===
+PHP Fatal error:  Property class@anonymous in Standard input code on line 3
 ===ast===
 {
   "stmts": [

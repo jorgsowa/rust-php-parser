@@ -12,8 +12,10 @@ Class constant class@anonymous::G cannot have type void
 PHP Parse error:  syntax error, unexpected 'G' (T_STRING), expecting '=' in Standard input code on line 3
 ===php_error 8.0-8.2===
 PHP Parse error:  syntax error, unexpected identifier "G", expecting "=" in Standard input code on line 3
-===php_error >=8.3===
+===php_error 8.3-8.5===
 PHP Fatal error:  Class constant class@anonymous::G cannot have type void in Standard input code on line 3
+===php_error >=8.6===
+PHP Fatal error:  Class constant class@anonymous in Standard input code on line 3
 ===ast===
 {
   "stmts": [
