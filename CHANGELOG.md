@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- A parenthesized intersection type that is intersected again, as in `(A&B)&C`, is reported as a syntax error, as PHP does (`php-rs-parser`).
+
 ## [0.29.0] - 2026-11-09
 
 Parsing valid code takes about 19% less CPU time, and more invalid code is rejected as PHP rejects it.

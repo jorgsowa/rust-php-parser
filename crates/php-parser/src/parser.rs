@@ -2226,6 +2226,14 @@ impl<'arena, 'src> Parser<'arena, 'src> {
                         first.span,
                     );
                 }
+                // `(A&B)&C`: a parenthesized intersection can only be followed by `|`.
+                if let TypeHintKind::Intersection(_) = &first.kind {
+                    self.error(ParseError::Expected {
+                        expected: "'|'".into(),
+                        found: self.current_kind().description().into(),
+                        span,
+                    });
+                }
 
                 let mut end = first.span.end;
                 let mut types = self.alloc_vec_one(first);
