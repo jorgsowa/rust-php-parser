@@ -323,7 +323,9 @@ fn check_dereferencable(parser: &mut Parser<'_, '_>, lhs: &Expr<'_, '_>, op: Tok
     } else if parser.version < PhpVersion::Php80 {
         let object_access = matches!(op, TokenKind::Arrow | TokenKind::NullsafeArrow);
         let feature = match lhs.kind {
-            ExprKind::Name(_) if object_access => "object access on a constant",
+            ExprKind::Name(_) | ExprKind::Bool(_) | ExprKind::Null if object_access => {
+                "object access on a constant"
+            }
             ExprKind::ClassConstAccess(_) if object_access || op == TokenKind::DoubleColon => {
                 "class constant dereferencing"
             }

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Before PHP 8.0, `->` on `true`, `false` or `null`, as in `null->p`, reports that object access on a constant requires PHP 8.0, so the printer keeps it a syntax error (`php-rs-parser`).
 - A parenthesized intersection type that is intersected again, as in `(A&B)&C`, is reported as a syntax error, as PHP does (`php-rs-parser`).
 - `self` and `parent` as the trait of an `insteadof` or alias rule in a trait use block are accepted on PHP 7.4, as PHP 7.4 does (`php-rs-parser`).
 - An `iterable` parameter of a magic method that must take `array`, such as `__call()`, is rejected before PHP 8.2, where `iterable` is not yet `array|Traversable` (`php-rs-parser`).

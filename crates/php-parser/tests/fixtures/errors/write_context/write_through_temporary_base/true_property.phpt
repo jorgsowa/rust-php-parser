@@ -1,7 +1,10 @@
 ===source===
 <?php
 TRUE->a = 1;
-===errors <=8.5===
+===errors <=7.4===
+'object access on a constant' requires PHP 8.0 or higher
+Cannot use temporary expression in write context
+===errors 8.0-8.5===
 Cannot use temporary expression in write context
 ===php_error <=7.4===
 PHP Parse error:  syntax error, unexpected '->' (T_OBJECT_OPERATOR) in Standard input code on line 2
