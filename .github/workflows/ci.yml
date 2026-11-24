@@ -96,7 +96,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: EmbarkStudios/cargo-deny-action@v2.1.1
+      - uses: EmbarkStudios/cargo-deny-action@v2.1.3
 
   php-syntax:
     name: PHP Syntax (${{ matrix.php-version }})
